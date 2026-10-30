@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "scope": "obr-receipts-v1",
+  "pinned_manifest_sha256": "871a749fa925f4a4135ff09c2667019ae3101fddafc11c23456fb60ade0b0522",
+  "catalogue_sha256": "5e7ebb343bee091960052b1727bf7bff6997216e8a5bf7805d18770aa7d5914a",
+  "sheets": [
+    {
+      "source_id": "obr_databank",
+      "source_file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+      "source_sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+      "publication": "Public finances databank, October 2026",
+      "published": "2026-10-28",
+      "retrieved": "2026-10-29",
+      "sheet": "Receipts (£bn)",
+      "ranges": [
+        "B1:AH52"
+      ],
+      "file": "obr_databank--receipts-gbp-bn.tsv",
+      "cells": 1716,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "d-mmm"
+      ],
+      "sha256": "dbf7ac4960a843ac6f1adabe2abadcecb33f29aaede6cfb26899a5ccf23dfd2f"
+    },
+    {
+      "source_id": "obr_databank",
+      "source_file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+      "source_sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+      "publication": "Public finances databank, October 2026",
+      "published": "2026-10-28",
+      "retrieved": "2026-10-29",
+      "sheet": "Aggregates (£bn)",
+      "ranges": [
+        "B1:AH106"
+      ],
+      "file": "obr_databank--aggregates-gbp-bn.tsv",
+      "cells": 3498,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "0",
+        "0.000",
+        "d-mmm",
+        "0.00%"
+      ],
+      "sha256": "302d647b77aba36522096387bf2a3d41bd341bae17645b31f7d313b38c90b580"
+    },
+    {
+      "source_id": "obr_databank",
+      "source_file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+      "source_sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+      "publication": "Public finances databank, October 2026",
+      "published": "2026-10-28",
+      "retrieved": "2026-10-29",
+      "sheet": "Aggregates (per cent of GDP)",
+      "ranges": [
+        "B1:AG104"
+      ],
+      "file": "obr_databank--aggregates-pct-gdp.tsv",
+      "cells": 3328,
+      "formats": [
+        "0.0",
+        "0.00",
+        "General",
+        "0",
+        "d-mmm"
+      ],
+      "sha256": "125d114ed0da71e66b0c1af33bfc5d826a150650652bff05a3494b5ef63cfe4e"
+    },
+    {
+      "source_id": "obr_databank",
+      "source_file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+      "source_sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+      "publication": "Public finances databank, October 2026",
+      "published": "2026-10-28",
+      "retrieved": "2026-10-29",
+      "sheet": "Glossary",
+      "ranges": [
+        "B1:E24"
+      ],
+      "file": "obr_databank--glossary.tsv",
+      "cells": 96,
+      "formats": [
+        "General"
+      ],
+      "sha256": "086952037e1326c54a1224bc88fdec1f433185fd37fcec1f6458e6248432e5af"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Receipts (£m)",
+      "ranges": [
+        "A1:Z332"
+      ],
+      "file": "obr_hist--receipts-gbp-m.tsv",
+      "cells": 8632,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "0",
+        "d-mmm"
+      ],
+      "sha256": "12ca37f8093ce585d6a3b89a5717a525dd575defc104578415bdf2978361830d"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Receipts (per cent of GDP)",
+      "ranges": [
+        "A1:Z332"
+      ],
+      "file": "obr_hist--receipts-pct-gdp.tsv",
+      "cells": 8632,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "d-mmm"
+      ],
+      "sha256": "658a17e02291456affccacd9faaed0467a41c45df7bed8c7980d302d75d5b945"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Aggregates (£m)",
+      "ranges": [
+        "A1:F331"
+      ],
+      "file": "obr_hist--aggregates-gbp-m.tsv",
+      "cells": 1986,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "0"
+      ],
+      "sha256": "5b1eaac46ab7392873679b9b04d585409d4bd1dbca82f3041c0a18680fa7abf7"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Aggregates (per cent of GDP)",
+      "ranges": [
+        "A1:F332"
+      ],
+      "file": "obr_hist--aggregates-pct-gdp.tsv",
+      "cells": 1992,
+      "formats": [
+        "0.0",
+        "General",
+        "0.00",
+        "0"
+      ],
+      "sha256": "a33c0c4cb275e4bb57d6a4397d675f9fd3f37597ecfe9426d73cb63361ea436f"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Contents",
+      "ranges": [
+        "D4:D4",
+        "A30:D74"
+      ],
+      "file": "obr_hist--contents-notes.tsv",
+      "cells": 181,
+      "formats": [
+        "General"
+      ],
+      "sha256": "95e87f5ff1b2c2b99346c9c81d40863a4bf3b77fc62263d7bbaff6532f43ed36"
+    }
+  ]
+}

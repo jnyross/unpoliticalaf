@@ -124,3 +124,8 @@ The factory controller owns Git, independent review, exact-candidate checks and
 publication to https://unpoliticalaf.vercel.app . Workers return file edits only.
 
 `make setup` creates the local `.venv` and installs dependencies there. Build and check commands use that environment, leaving system Python unchanged.
+
+Receipt source evidence for the next extraction is separately scoped in
+[data/audit/receipts](data/audit/receipts/README.md). `make verify` reopens both
+audit scopes independently. This prerequisite adds no public receipt dataset;
+all issue #5 extraction, reconciliation and fiscal-review acceptance remains open.
