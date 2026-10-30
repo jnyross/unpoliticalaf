@@ -109,6 +109,16 @@ class PayerSourceTests(unittest.TestCase):
                 shutil.copy2(ROOT / checker.DIRECTORY / "audit" / filename, self.base / "audit" / filename)
                 shutil.copy2(ROOT / checker.DIRECTORY / "audit/index.json", self.base / "audit/index.json")
 
+    def test_rehashed_stripped_odf_spaces_rejected(self):
+        def change(rows):
+            row = next(r for r in rows if r["sheet"] == "Contents" and r["cell"] == "A3")
+            exact = row["published_text"]
+            row["published_text"] = exact.replace("  ", "")
+            self.assertNotEqual(exact, row["published_text"])
+        self.mutate_csv("hmrc-cells.csv", change)
+        with self.assertRaisesRegex(ValueError, "Payer source cell mismatch: .*Contents!A3"):
+            checker.validate(self.root)
+
     def test_rehashed_note_change_rejected_by_original(self):
         def change(rows):
             next(r for r in rows if r["sheet"] == "Notes" and r["cell"] == "B16")["published_value"] = "Expenditure equals gross income"
