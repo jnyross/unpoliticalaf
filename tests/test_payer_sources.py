@@ -97,11 +97,11 @@ class PayerSourceTests(unittest.TestCase):
 
     def test_rehashed_wrong_numeric_cells_rejected_by_originals(self):
         for filename, sheet, cell, field in (
-                ("hmrc-cells.csv", "2_4_Taxpayer_share_tax", "F27", "published_text"),
+                ("hmrc-cells.csv", "2_4_Taxpayer_share_tax", "F27", "published_text_json"),
                 ("ons-cells.csv", "Table 8", "D15", "published_value")):
             with self.subTest(filename=filename):
                 def change(rows):
-                    next(r for r in rows if r["sheet"] == sheet and r["cell"] == cell)[field] = "0"
+                    next(r for r in rows if r["sheet"] == sheet and r["cell"] == cell)[field] = json.dumps("0") if field.endswith("_json") else "0"
                 self.mutate_csv(filename, change)
                 with self.assertRaisesRegex(ValueError, "Payer source cell mismatch"):
                     checker.validate(self.root)
@@ -112,9 +112,10 @@ class PayerSourceTests(unittest.TestCase):
     def test_rehashed_stripped_odf_spaces_rejected(self):
         def change(rows):
             row = next(r for r in rows if r["sheet"] == "Contents" and r["cell"] == "A3")
-            exact = row["published_text"]
-            row["published_text"] = exact.replace("  ", "")
-            self.assertNotEqual(exact, row["published_text"])
+            exact = json.loads(row["published_text_json"])
+            changed = exact.replace("  ", "")
+            self.assertNotEqual(exact, changed)
+            row["published_text_json"] = json.dumps(changed)
         self.mutate_csv("hmrc-cells.csv", change)
         with self.assertRaisesRegex(ValueError, "Payer source cell mismatch: .*Contents!A3"):
             checker.validate(self.root)

@@ -53,7 +53,7 @@ ONS_SCOPE = {
     "Table 2a": cells("C6:H6", "B41:H41", "B48:H49", "B70:H70"),
 }
 AUDITS = {
-    "hmrc-cells.csv": (HMRC, "published_text", HMRC_SCOPE),
+    "hmrc-cells.csv": (HMRC, "published_text_json", HMRC_SCOPE),
     "ons-cells.csv": (ONS, "published_value", ONS_SCOPE),
 }
 
@@ -220,7 +220,12 @@ def validate(root=ROOT):
         source = BytesIO(originals[snapshot])
         actual = ods_cells(source, scope) if snapshot == HMRC else xlsx_cells(source, scope)
         for row in rows:
-            if actual[row["sheet"]][row["cell"]] != row[value_field]:
+            value = row[value_field]
+            if value_field == "published_text_json":
+                value = json.loads(value)
+                if not isinstance(value, str):
+                    raise ValueError("HMRC displayed text must decode to a string")
+            if actual[row["sheet"]][row["cell"]] != value:
                 raise ValueError(f"Payer source cell mismatch: {snapshot} {row['sheet']}!{row['cell']}")
             count += 1
     print(f"Payer source evidence: 7 original responses and {count} audit cells verified; no fiscal sign-off")
