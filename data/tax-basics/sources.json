@@ -73,6 +73,18 @@
       "stored_bytes": 77943,
       "stored_sha256": "d1e8632fb81204a8ff03a72ab376c885eae62d50f0bbf295bc1e5db01b930279",
       "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "file": "data/tax-basics/raw/basics-corporation-tax.html.json",
+      "url": "https://www.gov.uk/corporation-tax",
+      "bytes": 79009,
+      "sha256": "fa9276683b8e1ac2a3ef3fc6bf6f0c39267bdb0a0caef763bc490f5eb7c30dc8",
+      "publication_or_update_date": null,
+      "date_note": "Living guidance retrieved2026-10-30; no publication date established; use no current rates.",
+      "format_status": "Complete unchanged original official HTTP response body stored losslessly.",
+      "stored_bytes": 84497,
+      "stored_sha256": "19041a45f1e13e84d4d3f156a8d63fd57029dbd76d0e33f35fdd7eb86cf5e37a",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
     }
   ]
 }

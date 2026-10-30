@@ -77,4 +77,11 @@ The guidance pages are living official guidance. Their bodies do not display a p
 
 
 ## Seed scope
-Only the6register-listed living guidance responses are retained in this seed. ONS methodology and HMRC/ONS numeric sources belong to the separate payer seed; references here are not evidence of their inclusion in this seed. Use no current tax rates or numerical examples from living guidance for2023/24. No product test, independent candidate review, or deployment is claimed by this acquisition.
+Only the7register-listed living guidance responses are retained in this seed. ONS methodology and HMRC/ONS numeric sources belong to the separate payer seed; references here are not evidence of their inclusion in this seed. Use no current tax rates or numerical examples from living guidance for2023/24. No product test, independent candidate review, or deployment is claimed by this acquisition.
+
+## Corporation Tax definition
+
+Retained complete official guidance https://www.gov.uk/corporation-tax, Overview:
+“Corporation Tax is a tax your company or association pays to HM Revenue and Customs (HMRC) on profits in an ‘accounting period’.”
+
+Suggested short explanation: Corporation Tax applies to taxable company or association profits, including trading, investments and chargeable gains. The OBR revenue group also contains separately named related charges, so it is broader than this definition. The source does not establish who ultimately bears the economic cost. No rate or universal shareholder/consumer burden claim.
