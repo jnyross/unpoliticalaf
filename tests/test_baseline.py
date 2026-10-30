@@ -22,13 +22,30 @@ class Document(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.tags = []
         self.text = []
+        self.nodes = []
+        self._stack = []
         self.feed(text)
 
     def handle_starttag(self, tag, attrs):
         self.tags.append((tag, dict(attrs)))
+        node = {"tag": tag, "attrs": dict(attrs), "children": [], "text": []}
+        self.nodes.append(node)
+        if self._stack:
+            self._stack[-1]["children"].append(node)
+        if tag not in {"area", "base", "br", "col", "embed", "hr", "img",
+                       "input", "link", "meta", "param", "source", "track", "wbr"}:
+            self._stack.append(node)
+
+    def handle_endtag(self, tag):
+        for index in range(len(self._stack) - 1, -1, -1):
+            if self._stack[index]["tag"] == tag:
+                del self._stack[index:]
+                break
 
     def handle_data(self, data):
         self.text.append(data)
+        for node in self._stack:
+            node["text"].append(data)
 
     def elements(self, tag):
         return [attrs for name, attrs in self.tags if name == tag]
@@ -119,6 +136,48 @@ class BaselineTests(unittest.TestCase):
                 value = attrs.get(key, "")
                 self.assertFalse(value.startswith(("http:", "https:", "//")),
                                  "Baseline must not load external resources")
+
+    def test_figure_check_navigation_and_reader_guidance(self):
+        doc = Document((self.output / "index.html").read_text(encoding="utf-8"))
+
+        def visible(node):
+            return " ".join(" ".join(node["text"]).split())
+
+        navigation = [node for node in doc.nodes if node["tag"] == "nav"
+                      and node["attrs"].get("aria-label") == "On this page"]
+        self.assertEqual(len(navigation), 1)
+        links = [node for node in navigation[0]["children"]
+                 if node["tag"] == "a" and visible(node) == "How to check a figure"]
+        self.assertEqual(len(links), 1, "Reader guidance needs an on-page navigation link")
+        href = links[0]["attrs"].get("href", "")
+        self.assertTrue(href.startswith("#") and len(href) > 1)
+        targets = [node for node in doc.nodes if node["attrs"].get("id") == href[1:]]
+        self.assertEqual(len(targets), 1, "Navigation must resolve to one unique target")
+        section = targets[0]
+        self.assertEqual(section["tag"], "section")
+        headings = [node for node in section["children"] if node["tag"] == "h2"]
+        self.assertEqual(len(headings), 1)
+        self.assertEqual(visible(headings[0]), "How to check a figure")
+        heading_id = headings[0]["attrs"].get("id")
+        self.assertTrue(heading_id)
+        self.assertEqual(section["attrs"].get("aria-labelledby"), heading_id)
+        self.assertEqual(sum(node["attrs"].get("id") == heading_id for node in doc.nodes), 1)
+
+        lists = [node for node in section["children"] if node["tag"] == "ul"]
+        self.assertEqual(len(lists), 1, "Checking steps must be a readable list")
+        steps = [visible(node).lower() for node in lists[0]["children"]
+                 if node["tag"] == "li"]
+        for concepts in (("official source", "publication", "table", "version"),
+                         ("fiscal year", "unit", "scale", "definitions"),
+                         ("actual", "estimate", "forecast", "observed"),
+                         ("reconciliation", "published total", "rounding",
+                          "exclusions", "differences")):
+            with self.subTest(guidance=concepts):
+                self.assertTrue(any(all(concept in step for concept in concepts)
+                                    for step in steps),
+                                "Missing reader guidance within the linked section")
+        self.assertIn("when figures are published", visible(section).lower())
+        self.assertIn("rounded parts may not add up exactly", visible(section).lower())
 
     def test_honest_status_and_product_intentions(self):
         doc = Document((self.output / "index.html").read_text(encoding="utf-8"))
