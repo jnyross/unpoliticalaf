@@ -502,7 +502,8 @@ summary{padding:10px 0}
 .tax-scroll code{white-space:normal}
 .tax-bars{margin:1em 0}
 .tax-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.88rem;margin:10px 0}
-.tax-track{position:relative;height:22px;background:linear-gradient(to right,#fff 49.6%,#6b7280 49.6%,#6b7280 50.4%,#fff 50.4%)}
+.tax-track{position:relative;height:22px;background:#fff;border-left:1px solid #6b7280}
+.tax-bars[data-tax-scale=signed] .tax-track{border-left:0;background:linear-gradient(to right,#fff 49.6%,#6b7280 49.6%,#6b7280 50.4%,#fff 50.4%)}
 .tax-fill{position:absolute;top:2px;height:18px;background:var(--ink)}
 .tax-bar data{font-size:.85rem;white-space:nowrap}
 #tax-sources code{overflow-wrap:anywhere}
@@ -773,14 +774,13 @@ PESA is a different vintage and presentation. We do not subtract OBR receipts fr
 Debt X is a stock at end March; borrowing is an annual accrual flow.
 Debt changes need not equal borrowing.
 Published debt shares use March-centred GDP. We keep them as published, even when a cash ratio differs.</p>
-<p>The tax history starts in the first year of the current receipt table.
+<p>The history shows total receipts, spending, borrowing and debt, not history by tax type.
+It starts in 1999-00, the first year of the current receipt table.
 It does not splice in the older historical receipt data.
 Outturn can be revised. Later forecasts are shown apart from outturn, with their own source notes.
 No inflation-adjusted tax view has been verified.
 A GDP share is not a real-terms measure, and can rise when GDP falls.</p>
-<p>Collections by tax type do not tell us who bears the cost.
-An employer or firm can send money on someone else's behalf.
-These tables give no payer shares or incidence estimates.</p>
+<p>This page does not show who pays.</p>
 </section>
 <h2>Words used on this site</h2>
 <dl>

@@ -181,7 +181,9 @@ The private seven-table receipt dataset, audits, raw workbooks and scripts are
 not public files. `tax_projection.project` selects only current OBR values:
 annual aggregate C/D/O/X cash and published GDP shares from 1999-00 onwards,
 and the latest outturn's ten source component rows, six groups, six shares
-and same-table D−C balance. It retains the selected source's complete hash,
+and same-table D−C balance. A strict `source_labels` selection retains only
+current receipt U4/V4/W4/X4/Y4 for the corporation-tax scope explanation;
+it adds no extra receipt values or breakdown. It retains the selected source's complete hash,
 official download/version metadata, exact note locators, identities, units,
 contexts and ordered operands. It excludes historical receipt tables and
 private catalogue/runtime paths. No receipt source splice or historical debt
@@ -191,8 +193,14 @@ The tax page shows current OBR outturn apart from forecasts. Each numeric node
 is rendered as a `data` element with its exact ID, source cells, unit, year,
 status, ordered formula operands and source version. Missing values retain an
 empty value attribute and visible “not given”; negative source values keep
-their signs, including other income tax. Each chart has a nearby semantic
-table in a labelled keyboard scroll region. Native source disclosures, direct
+their signs, including other income tax. Visible cash uses one decimal £bn
+and a typographic negative prefix, such as −£5.2bn. Exact numeric attributes
+and JSON retain their stored values. Shares retain two decimal places.
+The main chart uses share nodes and a fixed £100-of-all-receipts denominator,
+with a zero-left baseline. Component charts use a centred signed axis when
+an actual component is negative. The two residual groups have no component
+bars: their full formula tables retain each source value and signed multiplier.
+Each chart has a nearby semantic table in a labelled keyboard scroll region. Native source disclosures, direct
 official links and the JSON download work without JavaScript. The page has no
 PESA real-price toggle and does not claim a verified inflation-adjusted tax view.
 
@@ -202,11 +210,23 @@ approval. The VAT refund classification limit, related corporation charges,
 mixed other-tax residual, AG−AH difference, AG denominator, stock/flow
 distinction and published March-centred debt share remain visible.
 Collections by tax type do not establish payer distributions or incidence.
+The page removes unsupported employer/PAYE and business/VAT remitter claims.
+The current VAT grouping adds the source's net VAT and VAT refunds rows;
+it does not label those refunds as government refunds or establish who pays.
+All six component disclosures follow the basic story under Check the sources.
+Our explanation is distinct from OBR notes (original wording). Exact source
+labels retain their footnotes in tables; plain chart labels omit the markers.
+History is explicitly total receipts, spending, borrowing and debt, not tax-type
+history. Negative borrowing means receipts exceeded spending.
 
 `scripts/check_taxes.py` is a separately mapped checker. It reopens the pinned
 current workbook and catalogue, reconstructs the exact public schema and
 ordered nodes, checks same-vintage borrowing with a raw-operand storage budget,
-and validates all signed HTML values and bar geometry. It rejects extra or
+and validates all signed HTML values and bar geometry. It separately binds
+the corporation-tax explanation to U4/V4, note C42 and excluded W4/X4/Y4
+labels. Corruption tests cover share identities, the £100 denominator, zero-left
+and signed geometry, visible rounding/signs, residual bar removal, exact scope
+labels/notes, table multipliers and disclosure order. It rejects extra or
 missing nodes/fields, changed identities, year/status/unit swaps, different
 denominators, formula overlap, missing-to-zero substitution, modified source
 notes and hashes. Tax forecast prose is source-bound in exact marked snippets;

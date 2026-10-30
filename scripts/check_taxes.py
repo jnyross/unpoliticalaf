@@ -32,6 +32,19 @@ GROUPS = {
                     ("AB", -1), ("C", -1), ("D", -1), ("U", -1), ("V", -1)],
     "non_tax": [("AG", 1), ("AH", -1)],
 }
+GROUP_LABELS = {
+    "income_tax": "Income tax",
+    "nic": "National Insurance contributions",
+    "vat": "VAT including refunds (net VAT plus refunds)",
+    "corporation_tax": "Corporation tax and related charges",
+    "other_taxes": "Other National Accounts taxes",
+    "non_tax": "Receipts outside National Accounts taxes",
+}
+CT_EXPLANATION = (
+    "Adds the source's onshore and offshore corporation tax rows. "
+    "The onshore label includes Bank Surcharge and EGL. "
+    "OBR note 3 also includes residential property developers tax and Pillar 2 taxes. "
+    "Petroleum revenue tax, energy profits levy and bank levy stay in other taxes.")
 NOTES = {
     RECEIPTS: ("C1", "C40", "C41", "C42", "C43"),
     CASH: ("C1", "D7", "O7", "C94", "C95"),
@@ -133,6 +146,19 @@ def expected_data(root=ROOT):
                  for sheet, cells in NOTES.items() for cell in cells}
         for ref, text in notes.items():
             require(isinstance(text, str) and text, "source note is missing: " + ref)
+        # Independently establish the names behind the corporation-tax scope prose.
+        source_labels = {RECEIPTS + "!" + c + "4": raw.cell(RECEIPTS + "!" + c + "4")
+                         for c in ("U", "V", "W", "X", "Y")}
+        compare(source_labels, {
+            RECEIPTS + "!U4": "Onshore corporation tax (includes Bank Surcharge and EGL)3",
+            RECEIPTS + "!V4": "Offshore corporation tax",
+            RECEIPTS + "!W4": "Petroleum revenue tax",
+            RECEIPTS + "!X4": "Energy profits levy",
+            RECEIPTS + "!Y4": "Bank levy",
+        }, "corporation-tax scope labels")
+        require(notes[RECEIPTS + "!C42"] ==
+                "1 Includes road lorry user charge. 2 Also includes capacity markets, green gas levy and warm home discount. 3 Also includes, residential property developers tax and Pillar 2 taxes",
+                "corporation-tax inclusion note changed")
         # The explicit note pairs independently establish the outturn boundary.
         outturn = "22 September 2026"
         forecast = "2026-27"
@@ -228,7 +254,8 @@ def expected_data(root=ROOT):
                 budget = 4 * sum(math.ulp(value) for value in (spending, receipts, borrowing))
                 require(abs(residual) <= budget, "same-vintage borrowing identity changed: " + year)
         return {"schema_version": 1, "source": {key: source[key] for key in SOURCE_FIELDS},
-                "latest_year": latest, "years": years, "notes": notes, "nodes": nodes}
+                "latest_year": latest, "years": years, "notes": notes,
+                "source_labels": source_labels, "nodes": nodes}
     finally:
         raw.close()
 
@@ -264,9 +291,11 @@ def display(node):
         return "not given"
     if node["unit"] == "percent GDP":
         return f'{node["v"]:,.1f}%'
+    magnitude = abs(node["v"])
+    prefix = "−£" if node["v"] < 0 else "£"
     if node["unit"] == "GBP per 100 GBP receipts":
-        return f'£{node["v"]:,.2f}'
-    return f'£{node["v"]:,.3f}bn'
+        return prefix + format(magnitude, ",.2f")
+    return prefix + format(magnitude, ",.1f") + "bn"
 
 
 def source_refs(node, nodes):
@@ -289,6 +318,9 @@ class TaxPage(HTMLParser):
         self.table = None
         self.table_row = None
         self.table_cell = None
+        self.bar_label = False
+        self.bound = {}
+        self.binding = None
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
@@ -298,10 +330,21 @@ class TaxPage(HTMLParser):
             self.stack.append((tag, classes))
         if tag == "div" and "tax-bars" in classes:
             require(self.bar_group is None, "nested tax chart groups")
-            self.bar_group = []
+            self.bar_group = {"scale": attributes.get("data-tax-scale"), "rows": []}
         if tag == "div" and "tax-bar" in classes:
             require(self.bar_group is not None and self.bar_row is None, "unbound tax chart row")
             self.bar_row = {}
+        if tag == "span" and self.bar_row is not None and "label" not in self.bar_row:
+            self.bar_row["label"] = ""
+            self.bar_label = True
+        bindings = [(key, attributes[key]) for key in
+                    ("data-tax-explanation", "data-tax-note-ref", "data-tax-label-ref") if key in attributes]
+        if bindings:
+            require(len(bindings) == 1 and self.binding is None, "nested/ambiguous source prose")
+            key = bindings[0]
+            require(tag == "dd" and key not in self.bound, "duplicate/misplaced source prose")
+            self.bound[key] = ""
+            self.binding = key
         if tag == "span" and "tax-fill" in classes:
             require(self.bar_row is not None and "style" not in self.bar_row, "duplicate/unbound chart fill")
             self.bar_row["style"] = attributes.get("style")
@@ -326,6 +369,10 @@ class TaxPage(HTMLParser):
             self.bar_row["identity"] = attributes.get("data-tax-id")
 
     def handle_endtag(self, tag):
+        if tag == "span":
+            self.bar_label = False
+        if tag == "dd":
+            self.binding = None
         if tag == "data":
             require(self.current is not None, "unmatched data element")
             self.figures.append(self.current)
@@ -349,7 +396,7 @@ class TaxPage(HTMLParser):
         require(opened == tag, "unbalanced tax HTML elements")
         if tag == "div" and "tax-bar" in classes:
             require(self.bar_group is not None and self.bar_row is not None, "unclosed chart row")
-            self.bar_group.append(self.bar_row)
+            self.bar_group["rows"].append(self.bar_row)
             self.bar_row = None
         if tag == "div" and "tax-bars" in classes:
             require(self.bar_group is not None, "unclosed chart group")
@@ -357,6 +404,10 @@ class TaxPage(HTMLParser):
             self.bar_group = None
 
     def handle_data(self, text):
+        if self.bar_label:
+            self.bar_row["label"] += text
+        if self.binding is not None:
+            self.bound[self.binding] += text
         if self.current is not None:
             self.current["text"] += text
         if self.table_cell is not None:
@@ -365,21 +416,29 @@ class TaxPage(HTMLParser):
 
 def validate_bars(groups, data):
     year = data["latest_year"]
-    # Independently selected main partition and component charts, in display order.
-    selections = [[f"group/{name}/{year}" for name in GROUPS]]
+    # Shares use a fixed £100 denominator, not the largest cash group.
+    selections = [[f"share/{name}/{year}" for name in GROUPS]]
     selections += [[f"component/{column}/{year}" for column in columns] for columns in
-                   (("Q", "R", "S"), ("AB",), ("C", "D"), ("U", "V"),
-                    ("AH", "Q", "R", "S", "AB", "C", "D", "U", "V"), ("AG", "AH"))]
+                   (("Q", "R", "S"), ("AB",), ("C", "D"), ("U", "V"))]
     require(len(groups) == len(selections), "missing/extra tax chart groups")
-    for rows, identities in zip(groups, selections):
+    for index, (group, identities) in enumerate(zip(groups, selections)):
+        rows = group["rows"]
         require([row.get("identity") for row in rows] == identities,
                 "chart identities do not match source partition/components")
-        extent = max((abs(data["nodes"][identity]["v"]) for identity in identities
-                      if data["nodes"][identity]["v"] is not None), default=0)
-        for row, identity in zip(rows, identities):
+        values = [data["nodes"][identity]["v"] for identity in identities]
+        negative = any(value is not None and value < 0 for value in values)
+        require(index != 0 or not negative, "main partition must be nonnegative")
+        scale = "receipts-100" if index == 0 else "signed" if negative else "positive"
+        require(group["scale"] == scale, "wrong chart denominator/baseline")
+        extent = 100 if index == 0 else max((abs(v) for v in values if v is not None), default=0)
+        labels = list(GROUP_LABELS.values()) if index == 0 else [
+            re.sub(r"[123]$", "", data["nodes"][identity]["label"]) for identity in identities]
+        for row, identity, label in zip(rows, identities, labels):
             value = data["nodes"][identity]["v"]
-            width = 0 if value is None or extent == 0 else abs(value) / extent * 50
-            left = 50 - width if value is not None and value < 0 else 50
+            width = 0 if value is None or extent == 0 else abs(value) / extent * (50 if negative else 100)
+            origin = 50 if negative else 0
+            left = origin - width if value is not None and value < 0 else origin
+            require(row.get("label") == label, identity + ": incorrect plain chart label")
             require(row.get("style") == f"left:{left:.4f}%;width:{width:.4f}%",
                     identity + ": chart magnitude/sign position differs from raw value")
 
@@ -387,14 +446,7 @@ def validate_bars(groups, data):
 def validate_tables(tables, data):
     """Bind visible column labels, years/statuses and group names to their nodes."""
     year = data["latest_year"]
-    labels = {
-        "income_tax": "Income tax",
-        "nic": "National Insurance contributions",
-        "vat": "VAT including refunds (net VAT plus refunds)",
-        "corporation_tax": "Corporation tax and related charges",
-        "other_taxes": "Other National Accounts taxes",
-        "non_tax": "Receipts outside National Accounts taxes",
-    }
+    labels = GROUP_LABELS
     def text(value):
         return {"text": " ".join(value.split()), "ids": []}
     def figure(identity):
@@ -429,7 +481,53 @@ def validate_tables(tables, data):
             row.append(text(status))
             rows.append(row)
         expected.append(rows)
+    # The basic story and its history precede all 6 source-detail tables.
+    expected = expected[:1] + expected[-2:] + expected[1:-2]
     compare(tables, expected, "rendered tax table labels/years/statuses/columns")
+
+
+def validate_story(raw, bound, data):
+    """Bind source wording and keep technical depth after the basic story."""
+    normalize = lambda text: " ".join(text.split())
+    for ref, note in data["notes"].items():
+        require(bound.get(("data-tax-note-ref", ref)) == note,
+                "missing/changed original OBR note: " + ref)
+    for ref, label in data["source_labels"].items():
+        require(bound.get(("data-tax-label-ref", ref)) == label,
+                "missing/changed scope source label: " + ref)
+    require(bound.get(("data-tax-explanation", "corporation_tax")) == CT_EXPLANATION,
+            "corporation-tax explanation differs from checked scope")
+    require({key[1] for key in bound if key[0] == "data-tax-explanation"} == set(GROUPS),
+            "all 6 group explanations must remain available")
+    sources = re.search(r'<section id="tax-sources"[^>]*>(.*?)</section>', raw, re.S)
+    require(sources is not None, "missing source section")
+    positions = []
+    for name in GROUPS:
+        marker = f'<details data-pid="tax-source-{name}">'
+        require(raw.count(marker) == 1 and sources[1].count(marker) == 1,
+                "source detail must follow story inside Check the sources: " + name)
+        positions.append(raw.index(marker))
+    require(raw.index('id="who-pays"') < min(positions), "source depth interrupts basic story")
+    require('<h3>Our explanation</h3>' in raw and
+            raw.count('OBR note (original wording):') == len(data["notes"]),
+            "source notes and our explanation must have distinct labels")
+    for text in (
+            "<h1>Taxes and other receipts</h1>",
+            "Not all receipts are tax.",
+            "The whole is all current public receipts: taxes plus other receipts.",
+            "They are not shares of tax.",
+            "Total receipts, spending, borrowing and debt since 1999-00",
+            "Tax-type history is not shown.",
+            "Negative borrowing means receipts were greater than spending.",
+            "This page does not show who pays.",
+            "That bulletin date is not the later forecast vintage."):
+        require(text in normalize(raw), "missing plain-language scope: " + text)
+    require(not re.search(r"Employers can send PAYE|Businesses remit VAT|Basics guidance will follow", raw),
+            "unsupported remitter claim")
+    require('data-tax-scale="receipts-100"' in raw, "missing £100 chart denominator")
+    # Exact-note bindings do not allow a second, unverified source claim.
+    require(len(bound) == len(data["notes"]) + len(data["source_labels"]) + len(GROUPS),
+            "unexpected source prose binding")
 
 
 def validate_html(raw, data, require_all=True):
@@ -472,6 +570,7 @@ def validate_html(raw, data, require_all=True):
         require(seen == set(nodes), "missing rendered public tax nodes")
         validate_bars(parser.bar_groups, data)
         validate_tables(parser.tables, data)
+        validate_story(raw, parser.bound, data)
     return seen
 
 

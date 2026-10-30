@@ -204,7 +204,129 @@ class TaxSourceTests(unittest.TestCase):
         identity = f"component/S/{self.latest}"
         self.assertLess(self.expected["nodes"][identity]["v"], 0)
         self.check_bad_html(self.changed_element(
-            identity, lambda element: element.replace("£-", "£")))
+            identity, lambda element: element.replace("−£", "£")))
+
+    def test_cash_rounding_and_negative_prefix_preserve_exact_attributes(self):
+        cases = ((5.246, "£5.2bn"), (-5.246, "−£5.2bn"),
+                 (1234.56, "£1,234.6bn"), (0, "£0.0bn"),
+                 (1.25, "£1.2bn"), (1.75, "£1.8bn"),
+                 (-1.25, "−£1.2bn"), (-1.75, "−£1.8bn"))
+        for value, expected in cases:
+            with self.subTest(value=value):
+                node = {"v": value, "unit": "GBP billion"}
+                self.assertEqual(build_taxes.shown(node), expected)
+                self.assertEqual(check_taxes.display(node), expected)
+        identity = f"component/S/{self.latest}"
+        markup = build_taxes.figure(self.expected, identity)
+        self.assertIn(f'value="{self.expected["nodes"][identity]["v"]}"', markup)
+        self.assertIn("−£5.2bn", markup)
+        for wrong in ("£-5.2bn", "−£5.246bn", "£5.2bn", "−£5.3bn"):
+            self.check_bad_html(self.changed_element(
+                identity, lambda element, text=wrong: re.sub(r">[^<]*</data>",
+                                                            ">" + text + "</data>", element)))
+
+    def test_main_chart_uses_share_nodes_fixed_100_and_zero_left(self):
+        parser = check_taxes.TaxPage()
+        parser.feed(self.page)
+        chart = parser.bar_groups[0]
+        self.assertEqual(chart["scale"], "receipts-100")
+        for row, name in zip(chart["rows"], check_taxes.GROUPS):
+            identity = f"share/{name}/{self.latest}"
+            self.assertEqual(row["identity"], identity)
+            value = self.expected["nodes"][identity]["v"]
+            self.assertEqual(row["style"], f"left:0.0000%;width:{value:.4f}%")
+        mutations = (
+            lambda chart: chart.update(scale="positive"),
+            lambda chart: chart["rows"][0].update(style="left:0.0000%;width:100.0000%"),
+            lambda chart: chart["rows"][0].update(identity=f"group/income_tax/{self.latest}"),
+            lambda chart: chart["rows"][0].update(style="left:50.0000%;width:50.0000%"),
+            lambda chart: chart["rows"][0].update(label="Income tax of each £100 of taxes"),
+        )
+        for mutate in mutations:
+            groups = copy.deepcopy(parser.bar_groups)
+            mutate(groups[0])
+            with self.assertRaises(ValueError):
+                check_taxes.validate_bars(groups, self.expected)
+        # Replace the chart's visible share with cash while retaining the valid
+        # share identity elsewhere in the table. The chart binding must reject it.
+        identity = f"share/income_tax/{self.latest}"
+        self.check_bad_html(self.changed_element(
+            identity, lambda element: build_taxes.figure(self.expected, f"group/income_tax/{self.latest}")))
+        self.check_bad_html(self.changed_element(
+            identity, lambda element: re.sub(r">[^<]*</data>", ">£99.99</data>", element)))
+        self.check_bad_html(self.changed_element(
+            identity, lambda element: element.replace("component/AG/", "component/AH/")))
+
+    def test_residual_details_keep_signed_tables_without_bars(self):
+        for name in ("other_taxes", "non_tax"):
+            detail = build_taxes.component_detail(self.expected, name)
+            self.assertNotIn('class="tax-bars"', detail)
+            self.assertIn("<td>-1</td>", detail)
+            self.assertIn("Formula multiplier", detail)
+            self.assertIn("Ordered formula", detail)
+        parser = check_taxes.TaxPage()
+        parser.feed(self.page)
+        self.assertEqual(len(parser.bar_groups), 5)
+        income = parser.bar_groups[1]
+        self.assertEqual(income["scale"], "signed")
+        other_income = income["rows"][2]
+        self.assertEqual(other_income["identity"], f"component/S/{self.latest}")
+        negative = self.expected["nodes"][other_income["identity"]]["v"]
+        positive = self.expected["nodes"][income["rows"][0]["identity"]]["v"]
+        width = abs(negative) / positive * 50
+        self.assertEqual(other_income["style"], f"left:{50 - width:.4f}%;width:{width:.4f}%")
+        for chart in parser.bar_groups[2:]:
+            self.assertEqual(chart["scale"], "positive")
+            self.assertTrue(all(row["style"].startswith("left:0.0000%;") for row in chart["rows"]))
+        extra = copy.deepcopy(parser.bar_groups) + [copy.deepcopy(parser.bar_groups[-1])]
+        with self.assertRaises(ValueError):
+            check_taxes.validate_bars(extra, self.expected)
+
+    def test_chart_footnote_is_removed_but_exact_source_table_label_remains(self):
+        source_label = "Onshore corporation tax (includes Bank Surcharge and EGL)3"
+        parser = check_taxes.TaxPage()
+        parser.feed(self.page)
+        self.assertEqual(parser.bar_groups[4]["rows"][0]["label"], source_label[:-1])
+        self.assertIn('<th scope="row">' + source_label + '</th>', self.page)
+        groups = copy.deepcopy(parser.bar_groups)
+        groups[4]["rows"][0]["label"] = source_label
+        with self.assertRaises(ValueError):
+            check_taxes.validate_bars(groups, self.expected)
+
+    def test_corporation_scope_prose_note_and_excluded_source_labels_are_bound(self):
+        for ref in ("U4", "V4", "W4", "X4", "Y4"):
+            self.reject(lambda data, ref=ref: data["source_labels"].update(
+                {"Receipts (£bn)!" + ref: "Wrong scope"}))
+        self.reject(lambda data: data["source_labels"].update({"Receipts (£bn)!Z4": "Extra"}))
+        self.reject(lambda data: data["notes"].update({"Receipts (£bn)!C42": "Wrong scope"}))
+        for old, new in (
+                (html.escape(check_taxes.CT_EXPLANATION, quote=True), "Corporation tax excludes related charges."),
+                ("3 Also includes, residential property developers tax", "3 Excludes residential property developers tax"),
+                ('data-tax-label-ref="Receipts (£bn)!W4">Petroleum revenue tax',
+                 'data-tax-label-ref="Receipts (£bn)!W4">Corporation tax')):
+            with self.subTest(old=old):
+                changed = self.page.replace(old, new, 1)
+                self.assertNotEqual(changed, self.page)
+                self.check_bad_html(changed)
+
+    def test_basic_story_scope_and_source_disclosure_order_are_required(self):
+        for old, new in (
+                ("<h3>Our explanation</h3>", "<h3>OBR explanation</h3>"),
+                ("OBR note (original wording):", "Our source summary:"),
+                ("Tax-type history is not shown.", "Tax-type history is shown."),
+                ("Negative borrowing means receipts were greater than spending.", "Negative borrowing means spending was greater."),
+                ("They are not shares of tax.", "They are shares of tax."),
+                ("This page does not show who pays.", "Businesses remit VAT.")):
+            with self.subTest(old=old):
+                changed = self.page.replace(old, new, 1)
+                self.assertNotEqual(changed, self.page)
+                self.check_bad_html(changed)
+        pattern = r'<details data-pid="tax-source-income_tax">.*?</details>'
+        match = re.search(pattern, self.page, re.S)
+        self.assertIsNotNone(match)
+        moved = self.page.replace(match[0], "", 1).replace(
+            '<section id="balance"', match[0] + '<section id="balance"', 1)
+        self.check_bad_html(moved)
 
     def test_missing_rendered_node_is_rejected_even_when_data_remains(self):
         identity = f"cash/C/1999-00"
@@ -249,6 +371,20 @@ class TaxProjectionBoundaryTests(unittest.TestCase):
         encoded = tax_projection.encode(tax_projection.project(receipts))
         self.assertNotIn(sentinel.encode(), encoded)
         self.assertLess(len(encoded), 500_000)
+
+    def test_projection_selects_only_the_five_scope_labels_without_extra_nodes(self):
+        receipts = copy.deepcopy(self.receipts)
+        table = receipts["tables"]["current_receipts"]
+        table["series"]["W"]["private_scope_note"] = "private sentinel"
+        data = tax_projection.project(receipts)
+        expected_labels = {
+            "Receipts (£bn)!" + col + "4": table["series"][col]["label"]
+            for col in ("U", "V", "W", "X", "Y")}
+        self.assertEqual(data["source_labels"], expected_labels)
+        self.assertEqual(len(data["nodes"]), 287)
+        self.assertNotIn("private sentinel", tax_projection.encode(data).decode())
+        for column in ("W", "X", "Y"):
+            self.assertNotIn(f"component/{column}/2025-26", data["nodes"])
 
     def test_missing_numerator_and_zero_denominator_stay_missing(self):
         year = "2025-26"
