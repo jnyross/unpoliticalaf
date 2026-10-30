@@ -23,7 +23,10 @@ import payer_projection
 def shell(title, body):
     return ('<!doctype html><html lang="en-GB"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{title}</title></head><body>{body}</body></html>')
+            f'<title>{title}</title></head><body><nav aria-label="Main pages">'
+            '<a href="index.html">Spending</a><a href="taxes.html">Taxes</a>'
+            '<a href="who-pays.html" aria-current="page">Who pays</a><a href="methods.html">Methods</a>'
+            f'</nav>{body}</body></html>')
 
 
 class PayerTests(unittest.TestCase):
@@ -162,11 +165,108 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_page('<table>', '<table hidden>')
         self.assert_bad_page('<div class="payer-note" id="bottom-group">', '<details id="bottom-group">')
         self.assert_bad_page('<div class="payer-note" id="bottom-group">', '<div class="payer-note" id="bottom-group" hidden>')
-        self.assert_bad_page('overlapping groups. Do not add their shares', 'groups are disjoint. Add their shares')
+        self.assert_bad_page('The top 1% is part of the top 10%.', 'The groups are disjoint.')
+        self.assert_bad_page('The bottom 50% and top 10% do not overlap.', 'The top 10% is inside the top 50%.')
         self.assert_bad_page('high gross income but low disposable income', 'no caveat')
         self.assert_bad_page('href="data/payers.json"', 'href="data/missing.json"')
         self.assert_bad_page('href="' + check_payers.URLS[1] + '"', 'href="#missing"')
         self.assert_bad_page('aria-labelledby="ons-income-table"', 'aria-labelledby="missing"')
+
+    def test_source_links_bind_to_panels_and_details_not_global_href_set(self):
+        for sid, index, label in (("hmrc", 1, "HMRC Table 2.4 (ODS)"),
+                                   ("ons", 4, "ONS reference tables (XLSX), Table 8")):
+            url = check_payers.URLS[index]
+            adjacent = f'<a data-payer-source="{sid}" href="{url}">{label}</a>'
+            detail = f'<a data-payer-source="{sid}" href="{url}">Download the original workbook</a>'
+            for anchor in (adjacent, detail):
+                with self.subTest(sid=sid, anchor=anchor):
+                    self.assertIn(anchor, self.page)
+                    mutated = self.page.replace(anchor, anchor.replace(url, "#missing"), 1)
+                    # Other valid links remain. They must not mask a broken contextual link.
+                    self.assertIn(f'href="{url}"', mutated)
+                    with self.assertRaisesRegex(ValueError, "workbook link"):
+                        check_payers.validate_page(ROOT, self.data, mutated)
+            self.assert_bad_page(f'id="{sid}-source-note"', 'id="misplaced-source-note"')
+            self.assert_bad_page(f'id="{sid}-sources"', 'id="misplaced-source-details"')
+            self.assert_bad_page(adjacent, adjacent.replace(f'data-payer-source="{sid}"', 'data-payer-source="wrong"'))
+            self.assert_bad_page(detail, detail.replace('Download the original workbook', 'Unrelated source'))
+        self.assert_bad_page('Source SHA-256: <code>' + self.data["sources"]["hmrc"]["sha256"],
+                             'Source SHA-256: <code>' + '0' * 64)
+        self.assert_bad_page('<code>2_4_Taxpayer_share_tax!F27</code>. Denominator:',
+                             '<code>2_4_Taxpayer_share_tax!F28</code>. Denominator:')
+        self.assert_bad_page('<code>Table 8!D5</code>. Denominator:',
+                             '<code>Table 8!E5</code>. Denominator:')
+
+    def test_council_reading_order_plain_definitions_and_callback_navigation(self):
+        document = check_payers.Page(self.page)
+        nodes = document.nodes
+        main = next(n for n in nodes if n["tag"] == "main")
+        navs = [n for n in nodes if n["tag"] == "nav" and n["attrs"].get("aria-label") == "Main pages"]
+        self.assertEqual(len(navs), 1)
+        self.assertNotIn(main, navs[0]["parents"])
+        source_section = next(n for n in nodes if n["attrs"].get("id") == "payer-sources")
+        tables = [n for n in nodes if n["tag"] == "table"]
+        details = [n for n in nodes if n["tag"] == "details"]
+        self.assertEqual(len(tables), 3)
+        self.assertEqual(len(details), 2)
+        self.assertTrue(all(source_section in n["parents"] for n in details))
+        self.assertTrue(all(nodes.index(t) < nodes.index(d) for t in tables for d in details))
+        bottom = next(n for n in nodes if n["attrs"].get("id") == "bottom-group")
+        ons_bars = [n for n in nodes if n["attrs"].get("data-payer-bar", "").startswith("ons-")]
+        self.assertTrue(all(nodes.index(bottom) < nodes.index(n) for n in ons_bars))
+        self.assert_bad_page('equivalised household disposable income.', 'household wealth.')
+        self.assert_bad_page('household size and needs.', 'household size only.')
+        self.assert_bad_page('tax year 2023 to 2024, estimated outturn', 'financial year ending 2024, estimated outturn')
+        self.assert_bad_page('<main id="main" class="payers">',
+                             '<main id="main" class="payers"><nav aria-label="Main pages"></nav>')
+        # Move the complete warning after the ONS bars, with every warning word intact.
+        start = self.page.index('<div class="payer-note" id="bottom-group">')
+        end = self.page.index('</div>', start) + len('</div>')
+        warning = self.page[start:end]
+        candidate = self.page[:start] + self.page[end:]
+        target = '<div class="payer-scroll" role="region" aria-labelledby="ons-income-table"'
+        candidate = candidate.replace(target, warning + target, 1)
+        with self.assertRaisesRegex(ValueError, "precede the bars"):
+            check_payers.validate_page(ROOT, self.data, candidate)
+        # Move both complete source details before the data. Their source links remain intact.
+        moved = self.page
+        blocks = []
+        for sid in ("hmrc", "ons"):
+            start = moved.index(f'<details id="{sid}-sources">')
+            end = moved.index('</details>', start) + len('</details>')
+            blocks.append(moved[start:end])
+            moved = moved[:start] + moved[end:]
+        moved = moved.replace('<section id="income-tax">', ''.join(blocks) + '<section id="income-tax">', 1)
+        with self.assertRaisesRegex(ValueError, "Source details moved"):
+            check_payers.validate_page(ROOT, self.data, moved)
+        # Keep each adjacent source anchor intact, but move its note to the source section.
+        for sid in ("hmrc", "ons"):
+            start = self.page.index(f'<p class="source-links" id="{sid}-source-note">')
+            end = self.page.index('</p>', start) + len('</p>')
+            note = self.page[start:end]
+            moved = self.page[:start] + self.page[end:]
+            moved = moved.replace('<section id="payer-sources">', '<section id="payer-sources">' + note, 1)
+            with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "source note moved"):
+                check_payers.validate_page(ROOT, self.data, moved)
+
+    def test_public_aliases_are_bound_to_raw_labels_independently(self):
+        from unittest.mock import patch
+        real_reader = check_payers.raw_cells(ROOT)
+        # Keep numeric cells unchanged, but change labels in the independent raw reader.
+        labels = (("hmrc", "2_4_Taxpayer_share_tax", "F2"),
+                  ("hmrc", "2_4_Taxpayer_share_tax", "I2"),
+                  ("hmrc", "2_4_Taxpayer_share_tax", "K2")) + tuple(
+                      ("ons", "Table 8", cell) for cell in
+                      ("D4", "E4", "F4", "G4", "H4", "B5", "B9", "B15", "B22", "A5", "A22"))
+        for target in labels:
+            def altered(sid, sheet, address):
+                raw = real_reader(sid, sheet, address)
+                if (sid, sheet, address) == target:
+                    raw["value"] = "Wrong semantic label"
+                return raw
+            with self.subTest(target=target), patch.object(check_payers, "raw_cells", return_value=altered):
+                with self.assertRaisesRegex(ValueError, "Source label does not support"):
+                    check_payers.validate_data(ROOT, self.data)
 
     def test_public_data_extra_raw_response_and_count_are_rejected(self):
         self.assert_bad_data(lambda d: d.update(original_response="raw HTML"))
