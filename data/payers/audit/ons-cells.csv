@@ -1,0 +1,498 @@
+snapshot,sheet,cell,published_value
+ons-etb-fye2024.xlsx,Cover sheet,A1,"The effects of taxes and benefits on household income, UK, 2023/24 - Reference Tables"
+ons-etb-fye2024.xlsx,Cover sheet,A5,2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years.
+ons-etb-fye2024.xlsx,Cover sheet,A6,All tables show unequivalised income unless otherwise stated. Equivalised income has been used in the ranking process to produce the quintile/decile groups (and to produce the percentage shares and Gini coefficients).
+ons-etb-fye2024.xlsx,Cover sheet,A9,Figures may not sum due to rounding.
+ons-etb-fye2024.xlsx,Cover sheet,A17,"To ensure quality and align with the Code of Practice for Statistics, all tables have been reviewed for robustness and as a result some cash benefits data have been suppressed, based upon sample size. Resultingly we would recommend that analysis of cash benefits is carried out using Total Cash benefits rather than individual components of cash benefits. This affects Tables 2a, 2b, 2c, 3a, 3b, 4a, 4b, 10, 11, 13, 15 and 17."
+ons-etb-fye2024.xlsx,Cover sheet,A20,Household Finances Survey and Living Costs and Food Survey from the Office for National Statistics
+ons-etb-fye2024.xlsx,Cover sheet,A23,Date published: 25th September 2025
+ons-etb-fye2024.xlsx,Notes,A4,note 1
+ons-etb-fye2024.xlsx,Notes,B4,"Where income has been equivalised, it has been equivalised using the modified Organisation for Economic Co-operation and Development (OECD) scale with a reference point of a two adult with no children household."
+ons-etb-fye2024.xlsx,Notes,A6,note 3
+ons-etb-fye2024.xlsx,Notes,B6,"The quantile groups, unless otherwise stated, have been calculated after ranking individuals by equivalised household disposable income."
+ons-etb-fye2024.xlsx,Notes,A8,note 5
+ons-etb-fye2024.xlsx,Notes,B8,"For the direct tax components of Income Tax, National Insurance contributions and student loan repayments, figures include amounts liable on income earned in the specified financial year and compulsory and voluntary lump sum payments made in relation to income earned in a previous financial year(s) when the payment of the direct tax component(s) was deferred."
+ons-etb-fye2024.xlsx,Notes,A9,note 6
+ons-etb-fye2024.xlsx,Notes,B9,Note that the inclusion of lump sum tax payments deferred from a previous financial year(s) can lead to high estimates of direct taxes paid for the lowest deciles or quintiles determined by ranking disposable income (gross income minus direct taxes) as people with high gross incomes can end up towards the lower end of the income distribution by virtue of large deferred direct tax payments which are not reflective of their direct tax liabilities for a typical financial year.
+ons-etb-fye2024.xlsx,Notes,A11,note 8
+ons-etb-fye2024.xlsx,Notes,B11,The category 'Council Tax and Northern Ireland rates' is after the deduction of discounts.
+ons-etb-fye2024.xlsx,Notes,A12,note 9
+ons-etb-fye2024.xlsx,Notes,B12,"The category 'Stamp Duty on house purchase' includes Stamp Duty Land Tax in England and Northern Ireland, Land and Buildings Transaction Tax in Scotland and Land Transaction Tax in Wales."
+ons-etb-fye2024.xlsx,Notes,A14,note 11
+ons-etb-fye2024.xlsx,Notes,B14,Estimates of income from 2001/02 onwards have been adjusted for the under-coverage and under-reporting of the top earners.
+ons-etb-fye2024.xlsx,Notes,A19,note 16
+ons-etb-fye2024.xlsx,Notes,B19,Benefits are counted as the sum of total cash benefits and total benefits in kind. Taxes are counted as the sum of total direct taxes and total indirect taxes.
+ons-etb-fye2024.xlsx,Notes,A31,note 28
+ons-etb-fye2024.xlsx,Notes,B31,'Average' refers to the mean unless explicitly stated otherwise.
+ons-etb-fye2024.xlsx,Notes,A34,note 46
+ons-etb-fye2024.xlsx,Notes,B34,"Cost of Living Payment for those on means tested benefits, Disability Cost of Living Payment, Pensioner Cost of Living Payment are classified as cash benefits."
+ons-etb-fye2024.xlsx,Notes,A35,note 47
+ons-etb-fye2024.xlsx,Notes,B35,"As a result of low sample size for FYE 2024, some cash benefits data have been suppressed.  Resultingly, we would recommend that analysis of cash benefits is carried out using Total cash benefits rather than individual cash benefits"
+ons-etb-fye2024.xlsx,Table 2b,A1,"Table 2b: Average household incomes, taxes and benefits (£ per year) of all individuals by equivalised household disposable income decile group, UK, 2023/24"
+ons-etb-fye2024.xlsx,Table 2b,A2,"See [note1], [note2], [note3], [note4], [note5], [note6], [note7], [note8], [note9], [note10], [note11], [note28], [note46] and [note47] on Notes tab."
+ons-etb-fye2024.xlsx,Table 2b,A4,This table is under review for future publications.
+ons-etb-fye2024.xlsx,Table 2b,C6,Bottom
+ons-etb-fye2024.xlsx,Table 2b,D6,2nd
+ons-etb-fye2024.xlsx,Table 2b,E6,3rd
+ons-etb-fye2024.xlsx,Table 2b,F6,4th
+ons-etb-fye2024.xlsx,Table 2b,G6,5th
+ons-etb-fye2024.xlsx,Table 2b,H6,6th
+ons-etb-fye2024.xlsx,Table 2b,I6,7th
+ons-etb-fye2024.xlsx,Table 2b,J6,8th
+ons-etb-fye2024.xlsx,Table 2b,K6,9th
+ons-etb-fye2024.xlsx,Table 2b,L6,Top
+ons-etb-fye2024.xlsx,Table 2b,M6,All individuals
+ons-etb-fye2024.xlsx,Table 2b,A7,Average received/paid (£ per year)
+ons-etb-fye2024.xlsx,Table 2b,B7,Decile points (equivalised £)
+ons-etb-fye2024.xlsx,Table 2b,D7,16874
+ons-etb-fye2024.xlsx,Table 2b,E7,22366
+ons-etb-fye2024.xlsx,Table 2b,F7,27380
+ons-etb-fye2024.xlsx,Table 2b,G7,31869
+ons-etb-fye2024.xlsx,Table 2b,H7,36663
+ons-etb-fye2024.xlsx,Table 2b,I7,42040
+ons-etb-fye2024.xlsx,Table 2b,J7,48355
+ons-etb-fye2024.xlsx,Table 2b,K7,56456
+ons-etb-fye2024.xlsx,Table 2b,L7,71077
+ons-etb-fye2024.xlsx,Table 2b,B8,Number of individuals in the population (thousands)
+ons-etb-fye2024.xlsx,Table 2b,C8,6709
+ons-etb-fye2024.xlsx,Table 2b,D8,6695
+ons-etb-fye2024.xlsx,Table 2b,E8,6728
+ons-etb-fye2024.xlsx,Table 2b,F8,6720
+ons-etb-fye2024.xlsx,Table 2b,G8,6710
+ons-etb-fye2024.xlsx,Table 2b,H8,6717
+ons-etb-fye2024.xlsx,Table 2b,I8,6709
+ons-etb-fye2024.xlsx,Table 2b,J8,6717
+ons-etb-fye2024.xlsx,Table 2b,K8,6712
+ons-etb-fye2024.xlsx,Table 2b,L8,6716
+ons-etb-fye2024.xlsx,Table 2b,M8,67135
+ons-etb-fye2024.xlsx,Table 2b,B9,Number of households in the population (thousands)
+ons-etb-fye2024.xlsx,Table 2b,C9,2971
+ons-etb-fye2024.xlsx,Table 2b,D9,2904
+ons-etb-fye2024.xlsx,Table 2b,E9,2977
+ons-etb-fye2024.xlsx,Table 2b,F9,2925
+ons-etb-fye2024.xlsx,Table 2b,G9,2802
+ons-etb-fye2024.xlsx,Table 2b,H9,2757
+ons-etb-fye2024.xlsx,Table 2b,I9,2654
+ons-etb-fye2024.xlsx,Table 2b,J9,2645
+ons-etb-fye2024.xlsx,Table 2b,K9,2774
+ons-etb-fye2024.xlsx,Table 2b,L9,3032
+ons-etb-fye2024.xlsx,Table 2b,M9,28440
+ons-etb-fye2024.xlsx,Table 2b,B16,Total original income
+ons-etb-fye2024.xlsx,Table 2b,C16,8740
+ons-etb-fye2024.xlsx,Table 2b,D16,17815
+ons-etb-fye2024.xlsx,Table 2b,E16,25130
+ons-etb-fye2024.xlsx,Table 2b,F16,33327
+ons-etb-fye2024.xlsx,Table 2b,G16,44450
+ons-etb-fye2024.xlsx,Table 2b,H16,53717
+ons-etb-fye2024.xlsx,Table 2b,I16,65578
+ons-etb-fye2024.xlsx,Table 2b,J16,82261
+ons-etb-fye2024.xlsx,Table 2b,K16,97334
+ons-etb-fye2024.xlsx,Table 2b,L16,181860
+ons-etb-fye2024.xlsx,Table 2b,M16,61021
+ons-etb-fye2024.xlsx,Table 2b,B40,Total cash benefits
+ons-etb-fye2024.xlsx,Table 2b,C40,9198
+ons-etb-fye2024.xlsx,Table 2b,D40,11237
+ons-etb-fye2024.xlsx,Table 2b,E40,11461
+ons-etb-fye2024.xlsx,Table 2b,F40,10664
+ons-etb-fye2024.xlsx,Table 2b,G40,8690
+ons-etb-fye2024.xlsx,Table 2b,H40,8069
+ons-etb-fye2024.xlsx,Table 2b,I40,7233
+ons-etb-fye2024.xlsx,Table 2b,J40,4400
+ons-etb-fye2024.xlsx,Table 2b,K40,4376
+ons-etb-fye2024.xlsx,Table 2b,L40,3120
+ons-etb-fye2024.xlsx,Table 2b,M40,7845
+ons-etb-fye2024.xlsx,Table 2b,A41,Gross income
+ons-etb-fye2024.xlsx,Table 2b,B41,Gross income
+ons-etb-fye2024.xlsx,Table 2b,C41,17938
+ons-etb-fye2024.xlsx,Table 2b,D41,29053
+ons-etb-fye2024.xlsx,Table 2b,E41,36591
+ons-etb-fye2024.xlsx,Table 2b,F41,43991
+ons-etb-fye2024.xlsx,Table 2b,G41,53140
+ons-etb-fye2024.xlsx,Table 2b,H41,61786
+ons-etb-fye2024.xlsx,Table 2b,I41,72812
+ons-etb-fye2024.xlsx,Table 2b,J41,86662
+ons-etb-fye2024.xlsx,Table 2b,K41,101710
+ons-etb-fye2024.xlsx,Table 2b,L41,184980
+ons-etb-fye2024.xlsx,Table 2b,M41,68866
+ons-etb-fye2024.xlsx,Table 2b,B42,Equivalised gross income
+ons-etb-fye2024.xlsx,Table 2b,C42,13654
+ons-etb-fye2024.xlsx,Table 2b,D42,22515
+ons-etb-fye2024.xlsx,Table 2b,E42,29164
+ons-etb-fye2024.xlsx,Table 2b,F42,35052
+ons-etb-fye2024.xlsx,Table 2b,G42,41391
+ons-etb-fye2024.xlsx,Table 2b,H42,47937
+ons-etb-fye2024.xlsx,Table 2b,I42,56122
+ons-etb-fye2024.xlsx,Table 2b,J42,66690
+ons-etb-fye2024.xlsx,Table 2b,K42,82291
+ons-etb-fye2024.xlsx,Table 2b,L42,157600
+ons-etb-fye2024.xlsx,Table 2b,M42,55242
+ons-etb-fye2024.xlsx,Table 2b,A43,Direct taxes
+ons-etb-fye2024.xlsx,Table 2b,B43,Income Tax
+ons-etb-fye2024.xlsx,Table 2b,C43,1783
+ons-etb-fye2024.xlsx,Table 2b,D43,1565
+ons-etb-fye2024.xlsx,Table 2b,E43,2603
+ons-etb-fye2024.xlsx,Table 2b,F43,3721
+ons-etb-fye2024.xlsx,Table 2b,G43,5265
+ons-etb-fye2024.xlsx,Table 2b,H43,6450
+ons-etb-fye2024.xlsx,Table 2b,I43,8944
+ons-etb-fye2024.xlsx,Table 2b,J43,11721
+ons-etb-fye2024.xlsx,Table 2b,K43,15609
+ons-etb-fye2024.xlsx,Table 2b,L43,48289
+ons-etb-fye2024.xlsx,Table 2b,M43,10595
+ons-etb-fye2024.xlsx,Table 2b,B44,National Insurance contributions
+ons-etb-fye2024.xlsx,Table 2b,C44,493
+ons-etb-fye2024.xlsx,Table 2b,D44,812
+ons-etb-fye2024.xlsx,Table 2b,E44,1362
+ons-etb-fye2024.xlsx,Table 2b,F44,1766
+ons-etb-fye2024.xlsx,Table 2b,G44,2580
+ons-etb-fye2024.xlsx,Table 2b,H44,3094
+ons-etb-fye2024.xlsx,Table 2b,I44,3865
+ons-etb-fye2024.xlsx,Table 2b,J44,5188
+ons-etb-fye2024.xlsx,Table 2b,K44,5595
+ons-etb-fye2024.xlsx,Table 2b,L44,7802
+ons-etb-fye2024.xlsx,Table 2b,M44,3256
+ons-etb-fye2024.xlsx,Table 2b,B45,Student loan repayments
+ons-etb-fye2024.xlsx,Table 2b,C45,..
+ons-etb-fye2024.xlsx,Table 2b,D45,..
+ons-etb-fye2024.xlsx,Table 2b,E45,50
+ons-etb-fye2024.xlsx,Table 2b,F45,74
+ons-etb-fye2024.xlsx,Table 2b,G45,71
+ons-etb-fye2024.xlsx,Table 2b,H45,97
+ons-etb-fye2024.xlsx,Table 2b,I45,152
+ons-etb-fye2024.xlsx,Table 2b,J45,290
+ons-etb-fye2024.xlsx,Table 2b,K45,..
+ons-etb-fye2024.xlsx,Table 2b,L45,..
+ons-etb-fye2024.xlsx,Table 2b,M45,158
+ons-etb-fye2024.xlsx,Table 2b,B46,Council Tax and Northern Ireland rates
+ons-etb-fye2024.xlsx,Table 2b,C46,1544
+ons-etb-fye2024.xlsx,Table 2b,D46,1546
+ons-etb-fye2024.xlsx,Table 2b,E46,1612
+ons-etb-fye2024.xlsx,Table 2b,F46,1685
+ons-etb-fye2024.xlsx,Table 2b,G46,1747
+ons-etb-fye2024.xlsx,Table 2b,H46,1784
+ons-etb-fye2024.xlsx,Table 2b,I46,1915
+ons-etb-fye2024.xlsx,Table 2b,J46,2002
+ons-etb-fye2024.xlsx,Table 2b,K46,2070
+ons-etb-fye2024.xlsx,Table 2b,L46,2293
+ons-etb-fye2024.xlsx,Table 2b,M46,1820
+ons-etb-fye2024.xlsx,Table 2b,B47,less: Council Tax benefit/Rates rebates
+ons-etb-fye2024.xlsx,Table 2b,C47,..
+ons-etb-fye2024.xlsx,Table 2b,D47,..
+ons-etb-fye2024.xlsx,Table 2b,E47,145
+ons-etb-fye2024.xlsx,Table 2b,F47,113
+ons-etb-fye2024.xlsx,Table 2b,G47,68
+ons-etb-fye2024.xlsx,Table 2b,H47,55
+ons-etb-fye2024.xlsx,Table 2b,I47,31
+ons-etb-fye2024.xlsx,Table 2b,J47,21
+ons-etb-fye2024.xlsx,Table 2b,K47,..
+ons-etb-fye2024.xlsx,Table 2b,L47,..
+ons-etb-fye2024.xlsx,Table 2b,M47,86
+ons-etb-fye2024.xlsx,Table 2b,B48,Total direct taxes
+ons-etb-fye2024.xlsx,Table 2b,C48,3640
+ons-etb-fye2024.xlsx,Table 2b,D48,3753
+ons-etb-fye2024.xlsx,Table 2b,E48,5483
+ons-etb-fye2024.xlsx,Table 2b,F48,7133
+ons-etb-fye2024.xlsx,Table 2b,G48,9595
+ons-etb-fye2024.xlsx,Table 2b,H48,11369
+ons-etb-fye2024.xlsx,Table 2b,I48,14846
+ons-etb-fye2024.xlsx,Table 2b,J48,19179
+ons-etb-fye2024.xlsx,Table 2b,K48,23742
+ons-etb-fye2024.xlsx,Table 2b,L48,58688
+ons-etb-fye2024.xlsx,Table 2b,M48,15743
+ons-etb-fye2024.xlsx,Table 2b,A49,Disposable income
+ons-etb-fye2024.xlsx,Table 2b,B49,Disposable income
+ons-etb-fye2024.xlsx,Table 2b,C49,14298
+ons-etb-fye2024.xlsx,Table 2b,D49,25300
+ons-etb-fye2024.xlsx,Table 2b,E49,31109
+ons-etb-fye2024.xlsx,Table 2b,F49,36858
+ons-etb-fye2024.xlsx,Table 2b,G49,43545
+ons-etb-fye2024.xlsx,Table 2b,H49,50417
+ons-etb-fye2024.xlsx,Table 2b,I49,57966
+ons-etb-fye2024.xlsx,Table 2b,J49,67482
+ons-etb-fye2024.xlsx,Table 2b,K49,77968
+ons-etb-fye2024.xlsx,Table 2b,L49,126292
+ons-etb-fye2024.xlsx,Table 2b,M49,53123
+ons-etb-fye2024.xlsx,Table 2b,B50,Equivalised disposable income
+ons-etb-fye2024.xlsx,Table 2b,C50,10725
+ons-etb-fye2024.xlsx,Table 2b,D50,19647
+ons-etb-fye2024.xlsx,Table 2b,E50,25009
+ons-etb-fye2024.xlsx,Table 2b,F50,29627
+ons-etb-fye2024.xlsx,Table 2b,G50,34244
+ons-etb-fye2024.xlsx,Table 2b,H50,39270
+ons-etb-fye2024.xlsx,Table 2b,I50,44887
+ons-etb-fye2024.xlsx,Table 2b,J50,52196
+ons-etb-fye2024.xlsx,Table 2b,K50,63025
+ons-etb-fye2024.xlsx,Table 2b,L50,108205
+ons-etb-fye2024.xlsx,Table 2b,M50,42684
+ons-etb-fye2024.xlsx,Table 2b,A51,Indirect taxes (taxes on final goods and services)
+ons-etb-fye2024.xlsx,Table 2b,B51,Value Added Tax (VAT)
+ons-etb-fye2024.xlsx,Table 2b,C51,2217
+ons-etb-fye2024.xlsx,Table 2b,D51,2270
+ons-etb-fye2024.xlsx,Table 2b,E51,3073
+ons-etb-fye2024.xlsx,Table 2b,F51,2655
+ons-etb-fye2024.xlsx,Table 2b,G51,2994
+ons-etb-fye2024.xlsx,Table 2b,H51,3426
+ons-etb-fye2024.xlsx,Table 2b,I51,3621
+ons-etb-fye2024.xlsx,Table 2b,J51,4637
+ons-etb-fye2024.xlsx,Table 2b,K51,4747
+ons-etb-fye2024.xlsx,Table 2b,L51,5887
+ons-etb-fye2024.xlsx,Table 2b,M51,3553
+ons-etb-fye2024.xlsx,Table 2b,A65,Indirect taxes (Intermediate goods and services)
+ons-etb-fye2024.xlsx,Table 2b,B65,Commercial and industrial rates
+ons-etb-fye2024.xlsx,Table 2b,C65,243
+ons-etb-fye2024.xlsx,Table 2b,D65,232
+ons-etb-fye2024.xlsx,Table 2b,E65,265
+ons-etb-fye2024.xlsx,Table 2b,F65,247
+ons-etb-fye2024.xlsx,Table 2b,G65,261
+ons-etb-fye2024.xlsx,Table 2b,H65,306
+ons-etb-fye2024.xlsx,Table 2b,I65,284
+ons-etb-fye2024.xlsx,Table 2b,J65,351
+ons-etb-fye2024.xlsx,Table 2b,K65,370
+ons-etb-fye2024.xlsx,Table 2b,L65,441
+ons-etb-fye2024.xlsx,Table 2b,M65,300
+ons-etb-fye2024.xlsx,Table 2b,B66,Employers' NI contributions
+ons-etb-fye2024.xlsx,Table 2b,C66,670
+ons-etb-fye2024.xlsx,Table 2b,D66,639
+ons-etb-fye2024.xlsx,Table 2b,E66,728
+ons-etb-fye2024.xlsx,Table 2b,F66,679
+ons-etb-fye2024.xlsx,Table 2b,G66,717
+ons-etb-fye2024.xlsx,Table 2b,H66,841
+ons-etb-fye2024.xlsx,Table 2b,I66,782
+ons-etb-fye2024.xlsx,Table 2b,J66,966
+ons-etb-fye2024.xlsx,Table 2b,K66,1017
+ons-etb-fye2024.xlsx,Table 2b,L66,1214
+ons-etb-fye2024.xlsx,Table 2b,M66,825
+ons-etb-fye2024.xlsx,Table 2b,B70,Total indirect taxes
+ons-etb-fye2024.xlsx,Table 2b,C70,4854
+ons-etb-fye2024.xlsx,Table 2b,D70,5004
+ons-etb-fye2024.xlsx,Table 2b,E70,6440
+ons-etb-fye2024.xlsx,Table 2b,F70,5704
+ons-etb-fye2024.xlsx,Table 2b,G70,6647
+ons-etb-fye2024.xlsx,Table 2b,H70,7066
+ons-etb-fye2024.xlsx,Table 2b,I70,7286
+ons-etb-fye2024.xlsx,Table 2b,J70,9251
+ons-etb-fye2024.xlsx,Table 2b,K70,9267
+ons-etb-fye2024.xlsx,Table 2b,L70,12109
+ons-etb-fye2024.xlsx,Table 2b,M70,7363
+ons-etb-fye2024.xlsx,Table 2b,A71,Post-tax income
+ons-etb-fye2024.xlsx,Table 2b,B71,Post-tax income
+ons-etb-fye2024.xlsx,Table 2b,C71,9444
+ons-etb-fye2024.xlsx,Table 2b,D71,20296
+ons-etb-fye2024.xlsx,Table 2b,E71,24669
+ons-etb-fye2024.xlsx,Table 2b,F71,31154
+ons-etb-fye2024.xlsx,Table 2b,G71,36898
+ons-etb-fye2024.xlsx,Table 2b,H71,43351
+ons-etb-fye2024.xlsx,Table 2b,I71,50680
+ons-etb-fye2024.xlsx,Table 2b,J71,58231
+ons-etb-fye2024.xlsx,Table 2b,K71,68701
+ons-etb-fye2024.xlsx,Table 2b,L71,114183
+ons-etb-fye2024.xlsx,Table 2b,M71,45760
+ons-etb-fye2024.xlsx,Table 8,A1,"Table 8: Taxes as a percentage of gross income, disposable income and expenditure for all individuals by equivalised household disposable income quintile group, UK, 2023/24"
+ons-etb-fye2024.xlsx,Table 8,A2,"See [note3], [note5], [note6], [note11] and [note13] on Notes tab."
+ons-etb-fye2024.xlsx,Table 8,A3,This worksheet contains 6 columns and 23 rows with data values. The second or third column from row five downwards provides the name of the category for which data values are provided in the fourth to the ninth column.
+ons-etb-fye2024.xlsx,Table 8,D4,Bottom
+ons-etb-fye2024.xlsx,Table 8,E4,2nd
+ons-etb-fye2024.xlsx,Table 8,F4,3rd
+ons-etb-fye2024.xlsx,Table 8,G4,4th
+ons-etb-fye2024.xlsx,Table 8,H4,Top
+ons-etb-fye2024.xlsx,Table 8,I4,All individuals
+ons-etb-fye2024.xlsx,Table 8,A5,Percentages of gross income
+ons-etb-fye2024.xlsx,Table 8,B5,Direct taxes
+ons-etb-fye2024.xlsx,Table 8,D5,15.7
+ons-etb-fye2024.xlsx,Table 8,E5,15.7
+ons-etb-fye2024.xlsx,Table 8,F5,18.2
+ons-etb-fye2024.xlsx,Table 8,G5,21.3
+ons-etb-fye2024.xlsx,Table 8,H5,28.8
+ons-etb-fye2024.xlsx,Table 8,I5,22.9
+ons-etb-fye2024.xlsx,Table 8,C6,Income Tax
+ons-etb-fye2024.xlsx,Table 8,D6,7.1
+ons-etb-fye2024.xlsx,Table 8,E6,7.8
+ons-etb-fye2024.xlsx,Table 8,F6,10.2
+ons-etb-fye2024.xlsx,Table 8,G6,13
+ons-etb-fye2024.xlsx,Table 8,H6,22.3
+ons-etb-fye2024.xlsx,Table 8,I6,15.4
+ons-etb-fye2024.xlsx,Table 8,C7,National Insurance contributions
+ons-etb-fye2024.xlsx,Table 8,D7,2.8
+ons-etb-fye2024.xlsx,Table 8,E7,3.9
+ons-etb-fye2024.xlsx,Table 8,F7,4.9
+ons-etb-fye2024.xlsx,Table 8,G7,5.7
+ons-etb-fye2024.xlsx,Table 8,H7,4.7
+ons-etb-fye2024.xlsx,Table 8,I7,4.7
+ons-etb-fye2024.xlsx,Table 8,C8,Council Tax and Northern Ireland rates
+ons-etb-fye2024.xlsx,Table 8,D8,5.7
+ons-etb-fye2024.xlsx,Table 8,E8,3.8
+ons-etb-fye2024.xlsx,Table 8,F8,3
+ons-etb-fye2024.xlsx,Table 8,G8,2.4
+ons-etb-fye2024.xlsx,Table 8,H8,1.5
+ons-etb-fye2024.xlsx,Table 8,I8,2.5
+ons-etb-fye2024.xlsx,Table 8,B9,Indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D9,21
+ons-etb-fye2024.xlsx,Table 8,E9,15.1
+ons-etb-fye2024.xlsx,Table 8,F9,11.9
+ons-etb-fye2024.xlsx,Table 8,G9,10.4
+ons-etb-fye2024.xlsx,Table 8,H9,7.5
+ons-etb-fye2024.xlsx,Table 8,I9,10.7
+ons-etb-fye2024.xlsx,Table 8,C10,Value Added Tax (VAT)
+ons-etb-fye2024.xlsx,Table 8,D10,9.6
+ons-etb-fye2024.xlsx,Table 8,E10,7.1
+ons-etb-fye2024.xlsx,Table 8,F10,5.6
+ons-etb-fye2024.xlsx,Table 8,G10,5.2
+ons-etb-fye2024.xlsx,Table 8,H10,3.7
+ons-etb-fye2024.xlsx,Table 8,I10,5.2
+ons-etb-fye2024.xlsx,Table 8,C11,Duty on alcohol
+ons-etb-fye2024.xlsx,Table 8,D11,1.1
+ons-etb-fye2024.xlsx,Table 8,E11,0.7
+ons-etb-fye2024.xlsx,Table 8,F11,0.6
+ons-etb-fye2024.xlsx,Table 8,G11,0.5
+ons-etb-fye2024.xlsx,Table 8,H11,0.5
+ons-etb-fye2024.xlsx,Table 8,I11,0.6
+ons-etb-fye2024.xlsx,Table 8,C12,Duty on tobacco
+ons-etb-fye2024.xlsx,Table 8,D12,0.9
+ons-etb-fye2024.xlsx,Table 8,E12,0.9
+ons-etb-fye2024.xlsx,Table 8,F12,0.5
+ons-etb-fye2024.xlsx,Table 8,G12,0.4
+ons-etb-fye2024.xlsx,Table 8,H12,0.2
+ons-etb-fye2024.xlsx,Table 8,I12,0.4
+ons-etb-fye2024.xlsx,Table 8,C13,Duty on hydrocarbon oils and Vehicle Excise Duty
+ons-etb-fye2024.xlsx,Table 8,D13,2.2
+ons-etb-fye2024.xlsx,Table 8,E13,1.5
+ons-etb-fye2024.xlsx,Table 8,F13,1.3
+ons-etb-fye2024.xlsx,Table 8,G13,1.1
+ons-etb-fye2024.xlsx,Table 8,H13,0.6
+ons-etb-fye2024.xlsx,Table 8,I13,1.1
+ons-etb-fye2024.xlsx,Table 8,C14,Other indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D14,7.3
+ons-etb-fye2024.xlsx,Table 8,E14,4.9
+ons-etb-fye2024.xlsx,Table 8,F14,3.9
+ons-etb-fye2024.xlsx,Table 8,G14,3.2
+ons-etb-fye2024.xlsx,Table 8,H14,2.5
+ons-etb-fye2024.xlsx,Table 8,I14,3.5
+ons-etb-fye2024.xlsx,Table 8,B15,All taxes
+ons-etb-fye2024.xlsx,Table 8,D15,36.7
+ons-etb-fye2024.xlsx,Table 8,E15,30.7
+ons-etb-fye2024.xlsx,Table 8,F15,30.2
+ons-etb-fye2024.xlsx,Table 8,G15,31.7
+ons-etb-fye2024.xlsx,Table 8,H15,36.2
+ons-etb-fye2024.xlsx,Table 8,I15,33.6
+ons-etb-fye2024.xlsx,Table 8,A16,Percentages of disposable income
+ons-etb-fye2024.xlsx,Table 8,B16,Indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D16,24.9
+ons-etb-fye2024.xlsx,Table 8,E16,17.9
+ons-etb-fye2024.xlsx,Table 8,F16,14.6
+ons-etb-fye2024.xlsx,Table 8,G16,13.2
+ons-etb-fye2024.xlsx,Table 8,H16,10.5
+ons-etb-fye2024.xlsx,Table 8,I16,13.9
+ons-etb-fye2024.xlsx,Table 8,C17,Value Added Tax (VAT)
+ons-etb-fye2024.xlsx,Table 8,D17,11.3
+ons-etb-fye2024.xlsx,Table 8,E17,8.4
+ons-etb-fye2024.xlsx,Table 8,F17,6.8
+ons-etb-fye2024.xlsx,Table 8,G17,6.6
+ons-etb-fye2024.xlsx,Table 8,H17,5.2
+ons-etb-fye2024.xlsx,Table 8,I17,6.7
+ons-etb-fye2024.xlsx,Table 8,C18,Duty on alcohol
+ons-etb-fye2024.xlsx,Table 8,D18,1.3
+ons-etb-fye2024.xlsx,Table 8,E18,0.9
+ons-etb-fye2024.xlsx,Table 8,F18,0.8
+ons-etb-fye2024.xlsx,Table 8,G18,0.7
+ons-etb-fye2024.xlsx,Table 8,H18,0.6
+ons-etb-fye2024.xlsx,Table 8,I18,0.7
+ons-etb-fye2024.xlsx,Table 8,C19,Duty on tobacco
+ons-etb-fye2024.xlsx,Table 8,D19,1
+ons-etb-fye2024.xlsx,Table 8,E19,1.1
+ons-etb-fye2024.xlsx,Table 8,F19,0.6
+ons-etb-fye2024.xlsx,Table 8,G19,0.5
+ons-etb-fye2024.xlsx,Table 8,H19,0.2
+ons-etb-fye2024.xlsx,Table 8,I19,0.5
+ons-etb-fye2024.xlsx,Table 8,C20,Duty on hydrocarbon oils and Vehicle Excise Duty
+ons-etb-fye2024.xlsx,Table 8,D20,2.6
+ons-etb-fye2024.xlsx,Table 8,E20,1.7
+ons-etb-fye2024.xlsx,Table 8,F20,1.6
+ons-etb-fye2024.xlsx,Table 8,G20,1.4
+ons-etb-fye2024.xlsx,Table 8,H20,0.9
+ons-etb-fye2024.xlsx,Table 8,I20,1.4
+ons-etb-fye2024.xlsx,Table 8,C21,Other indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D21,8.6
+ons-etb-fye2024.xlsx,Table 8,E21,5.8
+ons-etb-fye2024.xlsx,Table 8,F21,4.8
+ons-etb-fye2024.xlsx,Table 8,G21,4.1
+ons-etb-fye2024.xlsx,Table 8,H21,3.5
+ons-etb-fye2024.xlsx,Table 8,I21,4.5
+ons-etb-fye2024.xlsx,Table 8,A22,Percentages of expenditure
+ons-etb-fye2024.xlsx,Table 8,B22,Indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D22,16.5
+ons-etb-fye2024.xlsx,Table 8,E22,17.4
+ons-etb-fye2024.xlsx,Table 8,F22,17.2
+ons-etb-fye2024.xlsx,Table 8,G22,16.6
+ons-etb-fye2024.xlsx,Table 8,H22,15.4
+ons-etb-fye2024.xlsx,Table 8,I22,16.4
+ons-etb-fye2024.xlsx,Table 8,C23,Value Added Tax (VAT)
+ons-etb-fye2024.xlsx,Table 8,D23,7.5
+ons-etb-fye2024.xlsx,Table 8,E23,8.2
+ons-etb-fye2024.xlsx,Table 8,F23,8
+ons-etb-fye2024.xlsx,Table 8,G23,8.3
+ons-etb-fye2024.xlsx,Table 8,H23,7.7
+ons-etb-fye2024.xlsx,Table 8,I23,7.9
+ons-etb-fye2024.xlsx,Table 8,C24,Duty on alcohol
+ons-etb-fye2024.xlsx,Table 8,D24,0.8
+ons-etb-fye2024.xlsx,Table 8,E24,0.8
+ons-etb-fye2024.xlsx,Table 8,F24,0.9
+ons-etb-fye2024.xlsx,Table 8,G24,0.8
+ons-etb-fye2024.xlsx,Table 8,H24,0.9
+ons-etb-fye2024.xlsx,Table 8,I24,0.9
+ons-etb-fye2024.xlsx,Table 8,C25,Duty on tobacco
+ons-etb-fye2024.xlsx,Table 8,D25,0.7
+ons-etb-fye2024.xlsx,Table 8,E25,1
+ons-etb-fye2024.xlsx,Table 8,F25,0.7
+ons-etb-fye2024.xlsx,Table 8,G25,0.6
+ons-etb-fye2024.xlsx,Table 8,H25,0.3
+ons-etb-fye2024.xlsx,Table 8,I25,0.6
+ons-etb-fye2024.xlsx,Table 8,C26,Duty on hydrocarbon oils and Vehicle Excise Duty
+ons-etb-fye2024.xlsx,Table 8,D26,1.7
+ons-etb-fye2024.xlsx,Table 8,E26,1.7
+ons-etb-fye2024.xlsx,Table 8,F26,1.9
+ons-etb-fye2024.xlsx,Table 8,G26,1.7
+ons-etb-fye2024.xlsx,Table 8,H26,1.3
+ons-etb-fye2024.xlsx,Table 8,I26,1.6
+ons-etb-fye2024.xlsx,Table 8,C27,Other indirect taxes
+ons-etb-fye2024.xlsx,Table 8,D27,5.7
+ons-etb-fye2024.xlsx,Table 8,E27,5.6
+ons-etb-fye2024.xlsx,Table 8,F27,5.6
+ons-etb-fye2024.xlsx,Table 8,G27,5.1
+ons-etb-fye2024.xlsx,Table 8,H27,5.2
+ons-etb-fye2024.xlsx,Table 8,I27,5.4
+ons-etb-fye2024.xlsx,Table 2a,C6,Bottom
+ons-etb-fye2024.xlsx,Table 2a,D6,2nd
+ons-etb-fye2024.xlsx,Table 2a,E6,3rd
+ons-etb-fye2024.xlsx,Table 2a,F6,4th
+ons-etb-fye2024.xlsx,Table 2a,G6,Top
+ons-etb-fye2024.xlsx,Table 2a,H6,All individuals
+ons-etb-fye2024.xlsx,Table 2a,B41,Gross income
+ons-etb-fye2024.xlsx,Table 2a,C41,23495
+ons-etb-fye2024.xlsx,Table 2a,D41,40291
+ons-etb-fye2024.xlsx,Table 2a,E41,57463
+ons-etb-fye2024.xlsx,Table 2a,F41,79737
+ons-etb-fye2024.xlsx,Table 2a,G41,143345
+ons-etb-fye2024.xlsx,Table 2a,H41,68866
+ons-etb-fye2024.xlsx,Table 2a,B48,Total direct taxes
+ons-etb-fye2024.xlsx,Table 2a,C48,3696
+ons-etb-fye2024.xlsx,Table 2a,D48,6308
+ons-etb-fye2024.xlsx,Table 2a,E48,10482
+ons-etb-fye2024.xlsx,Table 2a,F48,17012
+ons-etb-fye2024.xlsx,Table 2a,G48,41215
+ons-etb-fye2024.xlsx,Table 2a,H48,15743
+ons-etb-fye2024.xlsx,Table 2a,B49,Disposable income
+ons-etb-fye2024.xlsx,Table 2a,C49,19799
+ons-etb-fye2024.xlsx,Table 2a,D49,33983
+ons-etb-fye2024.xlsx,Table 2a,E49,46981
+ons-etb-fye2024.xlsx,Table 2a,F49,62724
+ons-etb-fye2024.xlsx,Table 2a,G49,102130
+ons-etb-fye2024.xlsx,Table 2a,H49,53123
+ons-etb-fye2024.xlsx,Table 2a,B70,Total indirect taxes
+ons-etb-fye2024.xlsx,Table 2a,C70,4929
+ons-etb-fye2024.xlsx,Table 2a,D70,6072
+ons-etb-fye2024.xlsx,Table 2a,E70,6856
+ons-etb-fye2024.xlsx,Table 2a,F70,8268
+ons-etb-fye2024.xlsx,Table 2a,G70,10688
+ons-etb-fye2024.xlsx,Table 2a,H70,7363
+ons-etb-fye2024.xlsx,Notes,A16,note 13
+ons-etb-fye2024.xlsx,Notes,B16,Expenditure has been calculated to be consistent with disposable income. Data not available prior to 1995/96.

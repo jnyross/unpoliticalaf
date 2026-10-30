@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "retrieved_date_utc": "2026-10-30",
+  "scope": "Original unchanged official source response bodies for independently checked payer presentation. Not public files and not approved extraction.",
+  "sources": [
+    {
+      "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
+      "bytes": 76341,
+      "sha256": "bb6ec060b31ea763be441ac6e1b14954b853c06d917f1e823d9f7354d592ef1e",
+      "publication_or_update_date": "2026-07-15",
+      "format_status": "unchanged original official HTTP response body",
+      "file": "data/payers/raw/hmrc-latest-release.html.json",
+      "storage": "Lossless ASCII JSON: decode original_response as UTF-8 to recover complete original HTTP body. No source bytes removed.",
+      "stored_bytes": 81497,
+      "stored_sha256": "80b26b666e449cf6f8c4161808dbb4cc7d31f3d8ece4c25d40203cad8c3d8836"
+    },
+    {
+      "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+      "bytes": 18791,
+      "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+      "publication_or_update_date": "2026-07-15",
+      "format_status": "unchanged original official HTTP response body",
+      "status": "2023/24 final survey-based outturn estimates; 2024/25 to 2026/27 projected estimates.",
+      "file": "data/payers/raw/hmrc-table24-july2026.ods"
+    },
+    {
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024",
+      "bytes": 96972,
+      "sha256": "3ea7d0ca5d0461f9f8f1759ec96b0203358fdebd10a59afc60c3b4eb3582bfcc",
+      "publication_or_update_date": "2025-09-25",
+      "format_status": "unchanged original official HTTP response body",
+      "file": "data/payers/raw/ons-bulletin-2024.html.json",
+      "storage": "Lossless ASCII JSON: decode original_response as UTF-8 to recover complete original HTTP body. No source bytes removed.",
+      "stored_bytes": 102228,
+      "stored_sha256": "438d846bff86d243b4b0d9aca02a60a730e8356eeba2ea99dd92322497c77566"
+    },
+    {
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014",
+      "bytes": 79070,
+      "sha256": "13069b94e2a005f77ad75e97d076bf61c76ceeba9dcc7f045d8aa91517b2befb",
+      "publication_or_update_date": "2025-09-25",
+      "format_status": "unchanged original official HTTP response body",
+      "file": "data/payers/raw/ons-dataset-page.html.json",
+      "storage": "Lossless ASCII JSON: decode original_response as UTF-8 to recover complete original HTTP body. No source bytes removed.",
+      "stored_bytes": 82089,
+      "stored_sha256": "72d9a514afb25653ee15b41360bd4fe10227e64984038cef34620605823d4f42"
+    },
+    {
+      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+      "bytes": 247472,
+      "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+      "publication_or_update_date": "2025-09-25",
+      "format_status": "unchanged original official HTTP response body",
+      "status": "Completed-year 2023/24 survey-based estimates; not a forecast.",
+      "file": "data/payers/raw/ons-etb-fye2024.xlsx"
+    },
+    {
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/methodologies/theeffectsoftaxesandbenefitsonukhouseholdincome",
+      "bytes": 122882,
+      "sha256": "84bd2949ad4d453155a9b27714e6bf41f6634075317b5bbbc5a0a7668f972e7f",
+      "publication_or_update_date": "2018-06-15",
+      "format_status": "unchanged original official HTTP response body",
+      "file": "data/payers/raw/ons-qmi.html.json",
+      "storage": "Lossless ASCII JSON: decode original_response as UTF-8 to recover complete original HTTP body. No source bytes removed.",
+      "stored_bytes": 129005,
+      "stored_sha256": "e4d4c73363d52bf11141c0df79a736b6012dadae15782bbf768b9acc45b07de4"
+    },
+    {
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/articles/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2019",
+      "bytes": 176769,
+      "sha256": "2822bc0a9f9f1c214f9fdf37d5aa1c2a4c31122fd09919af7324c3c95f1b2f15",
+      "publication_or_update_date": "2020-06-25",
+      "format_status": "unchanged original official HTTP response body",
+      "file": "data/payers/raw/ons-technical-2019.html.json",
+      "storage": "Lossless ASCII JSON: decode original_response as UTF-8 to recover complete original HTTP body. No source bytes removed.",
+      "stored_bytes": 183056,
+      "stored_sha256": "333f37418a495e5f46b724f6366001330f1d5b42462e2954bd2749ab1907f8f1"
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+snapshot,sheet,cell,published_text
+hmrc-table24-july2026.ods,Contents,A3,"Table 2.4 shows how the distributions of income and Income Tax liabilities have changed between 1999 to 2000 to the current tax year. Income distribution provides one measure of income inequality, while the shares of total Income Tax liabilities reflect the progressivity of the Income Tax system. The table also shows the income breakpoints for each percentile group, meaning the point at which the next percentile group begins. Table 2.4 does not provide a complete picture of individual income inequality in the UK due to the exclusion of those who don’t pay Income Tax, and because the SPI records only include incomes that are assessable for tax (for example, a range of non-taxable social security benefits, some tax credits and non-taxable savings from ISAs are not included).
+
+Income Tax payers are ranked based on total income assessable for tax (earnings, savings and dividend income) before any deductions and tax allowances (such as pension contributions), and then divided into percentile groups ranged on income. For projection estimates for tax years 2023 and 2024 onwards each income component is grown at the same rate for all individuals in each projection year except for pay, where differential earnings growth across the pay distribution is consistent with past trends including the impact of forestalling from previous policy changes (for more details see the Supporting Documentation).
+
+Prior to 2016 to 2017, total income includes the amount of dividends plus dividend tax credit (one ninth of the dividend), the grossed dividend, and Income Tax is charged on the grossed dividend. The tax due can be satisfied (in part) by the notional tax credit (10% of the grossed dividend). The table reflects the grossed dividend in total income and shows the income tax liability before the tax credit is offset. From 2016 to 2017 the dividend tax credit was abolished and effective dividend tax rates were increased by 7.5% and a £5,000 Dividend Allowance was introduced. This affects the measure of total income and leads to a discontinuity in the basis on which tax liabilities are presented between the years up to and including 2015 to 2016 and 2016 to 2017. As a result the share of incomes and tax liabilities are not directly comparable. Data shown refers to taxpayers only. Figures for the 2008 to 2009 tax year are not currently available."
+hmrc-table24-july2026.ods,Contents,A4,Source: Survey of Personal Incomes 2023 to 2024
+hmrc-table24-july2026.ods,Contents,A5,Time period: 1990 to 1991 tax year to 2026 to 2027 tax year. All years to 2023 to 2024 tax year are outturn data with tax years 2023 to 2024 using the Survey of Personal Income 2023 to 2024 data. Tax years 2024 to 2025 up to 2026 to 2027 are projected estimates using the Survey of Personal Incomes 2023 to 2024 data. SPI years are final outturns and projection years are provisional and will be revised until they become superceded by the SPI data for that year.
+hmrc-table24-july2026.ods,Contents,A6,Table last updatedJuly 2026.Follow this link for the published Commentary and Supporting Documentation:https://www.gov.uk/government/collections/income-tax-statistics-and-distributions
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A1,Table 2.4 Percentage shares of total income before Income Tax shown for percentile groups ranged on total income before tax
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A2,Tax year
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B2,Bottom 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C2,Bottom 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D2,Bottom 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E2,Bottom 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F2,Bottom 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G2,Top 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H2,Top 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I2,Top 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J2,Top 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K2,Top 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L2,Total income before tax for all Income Tax payers in £ billion
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A26,2022 to 2023
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B26,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C26,1.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D26,3.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E26,10.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F26,24.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G26,75.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H26,53.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I26,34.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J26,25.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K26,12.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L26,"1,390"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A27,2023 to 2024
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B27,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C27,1.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D27,3.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E27,9.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F27,24.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G27,75.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H27,53.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I27,34.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J27,24.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K27,12.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L27,"1,530"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A28,2024 to 2025
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B28,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C28,1.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D28,3.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E28,9.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F28,24.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G28,75.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H28,53.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I28,34.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J28,24.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K28,12.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L28,"1,660"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A29,2025 to 2026
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B29,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C29,1.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D29,3.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E29,9.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F29,24.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G29,75.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H29,53.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I29,34.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J29,24.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K29,12.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L29,"1,760"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,A30,2026 to 2027
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,B30,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,C30,1.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,D30,3.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,E30,9.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,F30,24.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,G30,75.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,H30,53.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,I30,34.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,J30,25.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,K30,12.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_pretax,L30,"1,830"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A1,Table 2.4 Percentage shares of total income after Income Tax shown for percentile groups ranged on total income before tax
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A2,Tax year
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B2,Bottom 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C2,Bottom 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D2,Bottom 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E2,Bottom 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F2,Bottom 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G2,Top 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H2,Top 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I2,Top 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J2,Top 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K2,Top 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L2,Total income after tax for all Income Tax payers in £ billion
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A26,2022 to 2023
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B26,0.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C26,2.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D26,4.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E26,11.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F26,28.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G26,71.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H26,48.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I26,28.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J26,20.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K26,9.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L26,"1,150"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A27,2023 to 2024
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B27,0.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C27,1.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D27,4.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E27,11.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F27,28.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G27,71.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H27,48.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I27,28.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J27,19.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K27,9.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L27,"1,260"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A28,2024 to 2025
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B28,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C28,1.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D28,3.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E28,11.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F28,28.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G28,72.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H28,48.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I28,28.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J28,19.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K28,9.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L28,"1,350"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A29,2025 to 2026
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B29,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C29,1.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D29,3.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E29,11.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F29,27.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G29,72.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H29,48.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I29,28.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J29,19.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K29,9.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L29,"1,430"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,A30,2026 to 2027
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,B30,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,C30,1.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,D30,3.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,E30,11.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,F30,27.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,G30,72.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,H30,48.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,I30,28.7
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,J30,19.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,K30,9.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_inc_posttax,L30,"1,480"
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A1,Table 2.4 Percentage shares of total Income Tax liabilities shown for percentile groups ranged on total income before tax
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A2,Tax year
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B2,Bottom 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C2,Bottom 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D2,Bottom 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E2,Bottom 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F2,Bottom 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G2,Top 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H2,Top 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I2,Top 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J2,Top 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K2,Top 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L2,Total Income Tax for all Income Tax payers in £ billion
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A26,2022 to 2023
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B26,0.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C26,0.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D26,0.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E26,2.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F26,9.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G26,90.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H26,76.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I26,60.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J26,48.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K26,28.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L26,245
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A27,2023 to 2024
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B27,0.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C27,0.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D27,0.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E27,2.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F27,9.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G27,90.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H27,75.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I27,59.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J27,47.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K27,27.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L27,274
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A28,2024 to 2025
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B28,0.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C28,0.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D28,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E28,2.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F28,9.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G28,90.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H28,75.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I28,59.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J28,47.5
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K28,27.2
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L28,304
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A29,2025 to 2026
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B29,0.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C29,0.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D29,0.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E29,2.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F29,10.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G29,90.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H29,75.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I29,58.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J29,47.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K29,26.8
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L29,329
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,A30,2026 to 2027
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,B30,0.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,C30,0.1
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,D30,0.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,E30,2.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,F30,10.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,G30,90.0
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,H30,75.3
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,I30,58.4
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,J30,46.9
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,K30,26.6
+hmrc-table24-july2026.ods,2_4_Taxpayer_share_tax,L30,347
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A1,Table 2.4 Breakpoints for percentile groups ranged on total income before tax
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A2,Tax year
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B2,Bottom 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C2,Bottom 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D2,Bottom 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E2,Bottom 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F2,Bottom 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G2,Top 50% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H2,Top 25% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I2,Top 10% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J2,Top 5% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K2,Top 1% percentile group
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L2,Mean Income in £
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A26,2022 to 2023
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B26,"12,800"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C26,"14,100"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D26,"15,500"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E26,"20,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F26,"28,400"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G26,"28,400"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H26,"43,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I26,"64,800"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J26,"90,500"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K26,"201,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L26,"40,400"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A27,2023 to 2024
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B27,"12,800"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C27,"14,100"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D27,"15,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E27,"20,800"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F27,"29,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G27,"29,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H27,"45,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I27,"67,400"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J27,"93,600"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K27,"207,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L27,"41,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A28,2024 to 2025
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B28,"12,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C28,"14,100"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D28,"15,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E28,"21,200"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F28,"30,600"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G28,"30,600"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H28,"46,200"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I28,"69,300"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J28,"96,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K28,"217,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L28,"42,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A29,2025 to 2026
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B29,"12,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C29,"14,300"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D29,"15,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E29,"21,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F29,"31,600"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G29,"31,600"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H29,"47,700"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I29,"71,500"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J29,"98,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K29,"225,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L29,"44,200"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,A30,2026 to 2027
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,B30,"12,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,C30,"14,300"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,D30,"15,900"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,E30,"21,800"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,F30,"32,100"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,G30,"32,100"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,H30,"48,300"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,I30,"72,500"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,J30,"101,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,K30,"230,000"
+hmrc-table24-july2026.ods,2_4_Taxpayer_inc_quantiles,L30,"44,900"
