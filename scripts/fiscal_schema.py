@@ -12,12 +12,12 @@ import re
 from pathlib import Path
 
 from audit_scope import SHEETS
-from fiscal_contract import (BASE, YEARS, FUNCTION_ROWS, DETAIL_ROWS, selections)
+from fiscal_contract import (BASE, YEARS, FUNCTION_ROWS, BASE_PRICE_ROWS, DETAIL_ROWS, selections)
 
 ROOT = Path(__file__).resolve().parent.parent
 STATUS = {
     "pesa_outturn": {"kind": "actual", "label": "PESA outturn; subject to revision"},
-    "pesa_forecast": {"kind": "forecast", "label": "PESA forecast; OBR 3 March 2026"},
+    "pesa_forecast": {"kind": "forecast", "label": "PESA forecast; OBR"},
     "obr_databank_historical": {"kind": "uncertain", "candidates": ["actual", "estimate"],
         "label": "Historical OBR value; outturn/estimate status uncertain; notes conflict"},
     "obr_databank_forecast": {"kind": "forecast", "label": "OBR forecast; March/October vintage conflict unresolved"},
@@ -72,6 +72,29 @@ def audit_reader(root=ROOT):
 def normal(text):
     text = re.sub(r"\s*\(\d+\)(,\s*\(\d+\))*", "", str(text).replace("\u00a0", " "))
     return " ".join(text.split())
+
+
+def status_definitions(read):
+    dates = [re.search(r"Economic and fiscal outlook - (\d{1,2} [A-Za-z]+ \d{4})", str(read(ref)["value"]))
+             for ref in ("4_1!B51", "4_1!B52")]
+    if any(date is None for date in dates) or dates[0].group(1) != dates[1].group(1):
+        raise ValueError("PESA forecast dates missing or conflicting")
+    return {**STATUS, "pesa_forecast": {"kind": "forecast",
+            "label": "PESA forecast; OBR " + dates[0].group(1)}}
+
+
+def base_price_evidence(read):
+    """Require the complete cash/real semantic identities before arithmetic."""
+    evidence = {}
+    for sheet in ("4_2", "4_3"):
+        expected = {f"{sheet}!A{row}": label for row, label in BASE_PRICE_ROWS.values()}
+        expected.update({f"{sheet}!X3": "£ billion", f"{sheet}!X5": BASE,
+                         f"{sheet}!B4": "outturn"})
+        for ref, label in expected.items():
+            if normal(read(ref)["value"]) != normal(label):
+                raise ValueError(f"Base-price semantic identity mismatch: {ref}")
+            evidence[ref] = read(ref)
+    return evidence
 
 
 def numeric(cell):
@@ -176,7 +199,7 @@ def reconciliation_specs():
             [], "TES plus separately retained accounting adjustments; excludes temporary bank-classification effects (4_2 A35)")
         yield (f"TME-tables/{y}", y, "GBP billion",
             [(f"4_2!{c}27", 1, 0.1), (f"4_1!M{ar}", -1, 0.1)], [], "Same PESA TME basis, Tables 4.1 and 4.2")
-    for key, (r, _) in FUNCTION_ROWS.items():
+    for key, (r, _) in BASE_PRICE_ROWS.items():
         yield (f"base-price/{key}", BASE, "GBP billion",
                [(f"4_2!X{r}", 1, 0.1), (f"4_3!X{r}", -1, 0.1)], [],
                "Same nominal and real price base; 4_3 A28")
@@ -251,6 +274,7 @@ def partition(refs):
 
 
 def reconciliations(read):
+    base_price_evidence(read)
     reports = []
     for name, period, unit, terms, exclusions, reason in reconciliation_specs():
         refs = [ref for ref, _, _ in terms]
@@ -357,11 +381,12 @@ def enrich(data, root=ROOT):
         for ref in [p["ref"]] + [v[0] for v in p["identity"].values()] + meta["status_refs"] + meta["scope_refs"]:
             evidence[ref] = read(ref)
     reports = reconciliations(read)
+    evidence.update(base_price_evidence(read))
     for report in reports:
         for ref in [o["ref"] for o in report["operands"]] + report["excluded_refs"] + report["status_refs"]:
             evidence[ref] = read(ref)
     data.update({"fiscal_schema_version": 2, "provenance": provenance, "source_cells": evidence,
-                 "status_definitions": STATUS, "formulae": FORMULAE, "dash_semantics": DASH,
+                 "status_definitions": status_definitions(read), "formulae": FORMULAE, "dash_semantics": DASH,
                  "sheet_sources": {sheet: sid for sid, sheets in SHEETS.items() for sheet in sheets},
                  "reconciliations": reports})
     data["derived"] = derived(data)

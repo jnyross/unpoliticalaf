@@ -51,11 +51,16 @@ settings/build image. The controller owns that deployment check.
 Readable source evidence for the spending recovery is in [data/audit](data/audit/README.md).
 `make verify` reopens all selected raw cells with a reader separate from the
 exporter, including labels, units, blanks, literal dashes and number formats.
-The [recovery scope](docs/issue-4-recovery-seed.md) records unresolved fiscal
-interpretation and remaining issue #4 acceptance; passing software checks does
-not complete that issue. The [fiscal schema](docs/fiscal-schema.md) describes the
+The [original audit seed](docs/issue-4-recovery-seed.md) is historical preparation,
+with its then-outstanding work preserved. The [fiscal schema](docs/fiscal-schema.md) describes the
 recovery implementation, per-value records, source-specific rounding models,
-explicit OBR status uncertainty, residuals and controller verification still due.
+explicit OBR status uncertainty, residuals, and #22's full-row/date repair.
+The #21 worker edited source only; the controller generated the committed
+artifacts in deployed `8e60e9e03707ec38cb274468306e95085bb0bee3` on
+30 October 2026 (private receipts: `receipts/21/1793368898495164182/`).
+Passing seed software checks does not complete #4/#20/#22: independent fiscal
+and product review, official candidate gates and canonical live verification
+remain the existing controller's responsibility.
 
 ## Public and generated files
 
