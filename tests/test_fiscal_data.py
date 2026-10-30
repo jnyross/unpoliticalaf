@@ -471,5 +471,201 @@ class FiscalBoundaryTests(unittest.TestCase):
             self.check()
 
 
+class ReceiptProductBoundaryTests(unittest.TestCase):
+    """Product corruptions must fail independently of producer metadata."""
+
+    @classmethod
+    def setUpClass(cls):
+        import check_receipts
+        cls.receipt_checker = check_receipts
+        cls.original = check_receipts.read_json(ROOT / "data/receipts.json")
+        cls.reader = check_receipts.Raw(ROOT)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.reader.close()
+
+    def setUp(self):
+        self.data = copy.deepcopy(self.original)
+
+    def check(self):
+        # Share independently reopened, pinned raw sheets across corruption
+        # cases; production validate() constructs and closes its own reader.
+        with patch.object(self.receipt_checker, "Raw", return_value=self.reader):
+            with patch.object(self.reader, "close"):
+                return self.receipt_checker.validate(self.data)
+
+    def table(self, key="current_receipts"):
+        return self.data["tables"][key]
+
+    def leaf(self, column, year="2025-26", key="current_receipts"):
+        return self.table(key)["series"][column]["values"][year]
+
+    def test_all_receipt_and_debt_values_match_independent_raw_sources(self):
+        self.assertGreater(self.check(), 20000)
+
+    def test_equal_numeric_value_cannot_move_to_another_source_cell(self):
+        values = self.table()["series"]
+        seen = {}
+        for series in values.values():
+            for leaf in series["values"].values():
+                if leaf["v"] is None:
+                    continue
+                if leaf["v"] in seen:
+                    # Both references are real and numerically equal. Identity
+                    # must still bind the particular tax, period and unit.
+                    leaf["ref"] = seen[leaf["v"]]
+                    with self.assertRaisesRegex(ValueError, "wrong source/year cell"):
+                        self.check()
+                    return
+                seen[leaf["v"]] = leaf["ref"]
+        self.fail("Pinned evidence has no equal-valued cells for this probe")
+
+    def test_self_consistent_changed_raw_and_product_number_is_rejected(self):
+        leaf = self.leaf("Q")
+        leaf["v"] += 1
+        leaf["raw"] = str(leaf["v"])
+        with self.assertRaisesRegex(ValueError, "raw value differs"):
+            self.check()
+
+    def test_units_roles_accounting_scope_and_status_are_independently_bound(self):
+        mutations = (
+            ("unit", "GBP million", "series"),
+            ("role", "receipts_total", "series"),
+            ("status", "forecast", "leaf"),
+            ("basis", "cash", "leaf"),
+            ("scope", "central_government", "leaf"),
+            ("geography", "Great Britain", "leaf"),
+        )
+        for field, wrong, target in mutations:
+            with self.subTest(field=field):
+                self.data = copy.deepcopy(self.original)
+                record = self.table()["series"]["Q"] if target == "series" else self.leaf("Q")
+                record[field] = wrong
+                with self.assertRaises(ValueError):
+                    self.check()
+
+    def test_dash_missing_negative_and_zero_remain_distinct(self):
+        missing = self.leaf("K", "2022-23", "historical_receipts_cash")
+        self.assertEqual((missing["kind"], missing["raw"], missing["v"]), ("text", "-", None))
+        self.assertLess(self.leaf("J", "2022-23", "historical_receipts_cash")["v"], 0)
+        self.assertTrue(any(v["v"] == 0 for s in self.table()["series"].values()
+                            for v in s["values"].values() if v["kind"] == "number"))
+        missing.update(kind="number", raw="0", v=0)
+        with self.assertRaisesRegex(ValueError, "kind changed"):
+            self.check()
+
+    def test_forecast_boundary_last_forecast_and_historical_vintage_are_preserved(self):
+        self.assertEqual(self.leaf("AG")["status"], "outturn")
+        self.assertEqual(self.leaf("AG", "2026-27")["status"], "forecast")
+        self.assertEqual(self.leaf("AG", "2031-32")["status"], "forecast")
+        hist = self.leaf("Y", "2022-23", "historical_receipts_cash")
+        self.assertEqual(hist["status"], "historical_status_uncertain")
+        hist["status"] = "forecast"
+        with self.assertRaisesRegex(ValueError, "wrong status"):
+            self.check()
+
+    def test_year_alignment_and_missing_year_cannot_be_hidden(self):
+        debt = self.leaf("D", "2022-23", "historical_aggregates_cash")
+        self.assertEqual(debt["ref"], "Aggregates (£m)!D331")
+        debt["year_ref"] = "Aggregates (£m)!B329"
+        with self.assertRaisesRegex(ValueError, "wrong source/year cell"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        del self.table()["series"]["AG"]["values"]["2031-32"]
+        with self.assertRaisesRegex(ValueError, "unexpected or missing fields"):
+            self.check()
+
+    def test_refunds_and_income_tax_subtypes_are_not_double_counted(self):
+        vat = self.table()["derived"]["vat"]["2025-26"]
+        self.assertEqual([o["ref"] for o in vat["operands"]],
+                         ["Receipts (£bn)!C33", "Receipts (£bn)!D33"])
+        income = self.table()["derived"]["income_tax"]["2025-26"]
+        self.assertEqual(len(income["operands"]), 3)
+        vat["operands"].append(copy.deepcopy(vat["operands"][1]))
+        with self.assertRaisesRegex(ValueError, "operand count changed"):
+            self.check()
+
+    def test_parent_total_or_mixed_residual_cannot_replace_a_tax_operand(self):
+        self.table()["derived"]["other_taxes"]["2025-26"]["operands"][0]["ref"] = "Receipts (£bn)!AG33"
+        with self.assertRaisesRegex(ValueError, "wrong, duplicate or overlapping"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        self.table()["series"]["AF"]["role"] = "non_tax_component"
+        with self.assertRaisesRegex(ValueError, "role disagrees"):
+            self.check()
+
+    def test_derived_result_and_operand_order_are_checked_against_raw_data(self):
+        self.table()["derived"]["non_tax"]["2025-26"]["v"] += 1
+        with self.assertRaisesRegex(ValueError, "numeric value mismatch"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        self.table()["derived"]["non_tax"]["2025-26"]["operands"].reverse()
+        with self.assertRaisesRegex(ValueError, "wrong, duplicate or overlapping"):
+            self.check()
+
+    def test_real_historical_overlap_is_unresolved_with_no_invented_error_bound(self):
+        reports = self.table("historical_receipts_cash")["reconciliations"]
+        report = next(r for r in reports if r["id"] == "central" and r["year"] == "1998-99")
+        self.assertAlmostEqual(report["residual"], 2179)
+        self.assertEqual(report["outcome"], "unresolved_source_difference")
+        self.assertLess(report["budget"], 0.000001)
+        report["outcome"] = "reconciled_storage_precision"
+        with self.assertRaisesRegex(ValueError, "outcome changed"):
+            self.check()
+
+    def test_missing_business_operands_never_earn_a_reconciliation_pass(self):
+        reports = self.table("historical_receipts_cash")["reconciliations"]
+        report = next(r for r in reports if r["id"] == "business" and r["year"] == "2022-23")
+        self.assertEqual(report["outcome"], "not_testable_missing")
+        self.assertIsNone(report["residual"])
+        self.assertTrue(report["missing_operands"])
+        report.update(residual=0, budget=0, outcome="reconciled_storage_precision", missing_operands=[])
+        with self.assertRaises(ValueError):
+            self.check()
+
+    def test_report_omissions_duplicates_and_inflated_budget_fail(self):
+        reports = self.table()["reconciliations"]
+        reports[0]["budget"] = 1
+        with self.assertRaisesRegex(ValueError, "storage arithmetic allowance"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        self.table()["reconciliations"].append(copy.deepcopy(self.table()["reconciliations"][0]))
+        with self.assertRaisesRegex(ValueError, "duplicate or unknown"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        self.table()["reconciliations"].pop()
+        with self.assertRaisesRegex(ValueError, "report omitted"):
+            self.check()
+
+    def test_debt_stock_denominator_and_historical_scope_are_explicit(self):
+        debt = self.leaf("X", "2025-26", "current_aggregates_cash")
+        borrow = self.leaf("O", "2025-26", "current_aggregates_cash")
+        self.assertEqual((debt["basis"], borrow["basis"]), ("cash_stock", "annual_accrual"))
+        gdp = self.leaf("AF", "2025-26", "current_aggregates_gdp")
+        self.assertEqual(gdp["basis"], "march_centred")
+        self.assertEqual(self.table("current_aggregates_gdp")["series"]["AF"]["unit"], "GBP billion")
+        early = self.leaf("C", "1899-00", "historical_aggregates_cash")
+        self.assertEqual((early["scope"], early["basis"]),
+                         ("central_government_proxy", "historical_basis_uncertain"))
+        self.assertIn("Uncertain", self.leaf("Y", "1800-01", "historical_receipts_cash")["geography"])
+        debt["basis"] = "annual_accrual"
+        with self.assertRaisesRegex(ValueError, "wrong basis"):
+            self.check()
+
+    def test_unknown_fields_and_removed_limitations_fail(self):
+        self.table()["private_runtime_data"] = "sentinel"
+        with self.assertRaisesRegex(ValueError, "unexpected or missing fields"):
+            self.check()
+        self.data = copy.deepcopy(self.original)
+        self.data["limitations"].pop()
+        with self.assertRaisesRegex(ValueError, "limitations changed"):
+            self.check()
+
+    def test_duplicate_json_keys_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Duplicate JSON key"):
+            json.loads('{"v": 0, "v": 1}', object_pairs_hook=self.receipt_checker.unique_object)
+
+
 if __name__ == "__main__":
     unittest.main()

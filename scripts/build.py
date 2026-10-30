@@ -7,6 +7,8 @@ from pathlib import Path
 import tempfile
 
 from build_data import build_data
+from build_receipts import build_receipts, encode as encode_receipts
+from check_receipts import validate as validate_receipts
 from fiscal_contract import public_fields
 import build_site
 
@@ -83,7 +85,13 @@ def build(output, *, write_data=True):
         raise ValueError("data/spending.json must be a regular file")
     if (ROOT / "data").is_symlink():
         raise ValueError("data directory must not be a symlink")
-    # All source validation and rendering finishes before any public file changes.
+    receipts_path = ROOT / "data/receipts.json"
+    if write_data and (receipts_path.is_symlink() or (receipts_path.exists() and not receipts_path.is_file())):
+        raise ValueError("data/receipts.json must be a regular file")
+    # Validate both fiscal families before changing any generated or public file.
+    receipts = build_receipts(root=ROOT)
+    validate_receipts(receipts, root=ROOT)
+    receipt_bytes = encode_receipts(receipts)
     data = build_data()
     public = payloads(data)
     if set(public) != PUBLIC_FILES:
@@ -93,6 +101,7 @@ def build(output, *, write_data=True):
             raise ValueError(f"{name}: over the HTML size limit")
     validate_output(output)
     if write_data:
+        atomic_write(receipts_path, receipt_bytes)
         atomic_write(data_path, public["data/spending.json"])
     for name, content in public.items():
         atomic_write(output / name, content)
