@@ -18,6 +18,7 @@ from openpyxl import load_workbook
 from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 from check_taxes import validate as validate_taxes, checked_forecast_prose
+from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -87,7 +88,7 @@ class Page(HTMLParser):
             self._names.append(tag == "cite" or "name" in classes or "official" in classes)
         if tag == "data":
             self._fig = {"value": a.get("value"), "ref": a.get("data-ref"), "calc": a.get("data-calc"),
-                         "tax_id": a.get("data-tax-id"), "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
+                         "tax_id": a.get("data-tax-id"), "payer_id": a.get("data-payer-id"), "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
                          "report_id": a.get("data-report-id"), "report_field": a.get("data-report-field"),
                          "title": a.get("title"), "text": ""}
         if tag in ("p", "dd", "li") and not self._skip:
@@ -214,6 +215,8 @@ def validate(site=SITE):
         raise ValueError("index.html: missing spending page")
     independent_data_checks(site, read)
     tax_data = validate_taxes(site)
+    payer_data = independent_payer_checks(site)
+    payer_ids = {v["id"] for v in payer_data["values"]}
     data = json.loads((site / "data/spending.json").read_text())
     raw_fiscal = RawReader()
     nodes = {node["value_id"]: node for node, _ in selections(data)}
@@ -228,7 +231,7 @@ def validate(site=SITE):
         p = Page()
         p.feed(raw)
         if name == "methods.html":
-            for section_id in ("about", "corrections"):
+            for section_id in ("about", "corrections", "payer-methods"):
                 if section_id not in p.section_ids:
                     errors.append(f"{name}: missing section id={section_id!r}")
 
@@ -244,6 +247,14 @@ def validate(site=SITE):
                 errors.append(f"{name}: no sourced figures")
 
         for f in p.figures:
+            if f["payer_id"]:
+                # The independent payer checker binds exact attributes, visible
+                # text, table labels and bar widths to reopened original cells.
+                if name != "who-pays.html" or f["payer_id"] not in payer_ids or any(
+                        f[key] is not None for key in
+                        ("tax_id", "value_id", "derived_id", "report_id", "report_field", "calc")):
+                    errors.append(f"{name}: payer figure outside its verified page or mixed fiscal identities")
+                continue
             if f["tax_id"]:
                 # validate_taxes has independently reopened the current workbook
                 # and checked every tax figure's exact attributes AND signed text.
@@ -313,6 +324,33 @@ def validate(site=SITE):
         print("\n".join("FAIL " + e for e in errors))
         sys.exit(1)
     print("all checks passed")
+
+
+def independent_payer_checks(site):
+    """Validate published bytes independently of build-time producer checks."""
+    paths = (site / "data/payers.json", site / "who-pays.html")
+    for path in paths:
+        if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
+            raise ValueError("Payer publication must contain regular files")
+        if path.stat().st_size >= MAX_BYTES:
+            raise ValueError("Payer publication exceeds size limit")
+
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("Duplicate public payer JSON key: " + key)
+            result[key] = value
+        return result
+
+    def invalid(value):
+        raise ValueError("Non-finite public payer JSON: " + value)
+
+    data = json.loads(paths[0].read_text(encoding="utf-8"),
+                      object_pairs_hook=unique, parse_constant=invalid)
+    validate_payer_data(ROOT, data)
+    validate_payer_page(ROOT, data, paths[1].read_text(encoding="utf-8"))
+    return data
 
 
 def independent_data_checks(site, read):

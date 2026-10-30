@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Who pays tax? | UnpoliticalAF</title>
+<link rel="icon" href="icon.svg">
+<style>
+:root{--ink:#1f2937;--soft:#4b5563;--line:#e5e7eb}
+*{box-sizing:border-box}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+[id]{scroll-margin-top:12rem}
+.skip{position:absolute;left:18px;top:8px;z-index:2;background:#fff;padding:8px;transform:translateY(-200%)}
+.skip:focus{transform:none}
+body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
+header,main,footer{max-width:760px;margin:0 auto;padding:0 18px;overflow-wrap:anywhere}
+main,section,.card{min-width:0}
+header{padding-top:28px}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0}
+h2{font-size:1.45rem;margin:2.2em 0 .4em;border-top:2px solid var(--ink);padding-top:.6em}
+h3{font-size:1.1rem;margin:1.2em 0 .2em}
+.lead{font-size:1.2rem}
+.small,.note,.official{font-size:.88rem;color:var(--soft)}
+.note{border-left:3px solid var(--line);padding-left:10px}
+data{border-bottom:1px dotted var(--soft);cursor:help;font-weight:600}
+.chart{width:100%;height:auto;display:block;margin:.6em 0}
+.chart text{font-size:13px;fill:var(--ink)}
+.chart .axis{font-size:11px;fill:var(--soft)}
+.bars{margin:.8em 0}
+.bar{display:grid;grid-template-columns:minmax(0,38%) 1fr;gap:10px;align-items:center;margin:5px 0;font-size:.9rem}
+.bl{text-align:right}
+.bt{display:flex;align-items:center;gap:6px}
+.bf{display:block;height:20px;background:var(--ink);min-width:2px}
+.bv{white-space:nowrap;font-weight:600}
+@media (max-width:560px){.bar{grid-template-columns:1fr;gap:2px;margin:9px 0}.bl{text-align:left}}
+.legend{font-size:.9rem}.key{display:inline-block;width:12px;height:12px;margin:0 4px 0 10px;vertical-align:-1px}
+.chart.small .axis{font-size:12px}
+.steps{margin:.2em 0}
+.narrow{display:none}
+@media (max-width:560px){.wide{display:none}.narrow{display:block}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.card{border-top:1px solid var(--line)}
+.card .chart .axis{font-size:12px}
+.v{display:none}
+body.view-real .v-real,body.view-nominal .v-nominal,body.view-gdp .v-gdp{display:inline}
+.views{position:sticky;top:0;background:#fff;padding:8px max(18px,calc((100% - 724px)/2));border-bottom:1px solid var(--line);z-index:1}
+.views button{font:inherit;font-size:.9rem;padding:4px 10px;margin:2px 4px 2px 0;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer}
+.views button[aria-pressed=true]{background:var(--ink);color:#fff}
+.nojs .views button,.nojs .views br{display:none}
+.tip{position:fixed;left:12px;right:12px;bottom:12px;max-width:600px;margin:0 auto;background:var(--ink);color:#fff;padding:10px 14px;border-radius:6px;font-size:.9rem;cursor:pointer}
+.tbl{max-width:100%}
+.table-scroll{overflow-x:auto;max-width:100%}
+code{overflow-wrap:anywhere}
+nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
+.site-nav{max-width:760px;margin:0 auto;padding:8px 18px;display:flex;flex-wrap:wrap;gap:4px 16px;border-bottom:1px solid var(--line)}
+.site-nav .brand{flex-basis:100%;font-weight:700;font-size:1.15rem;text-decoration:none}
+.site-nav a,.page-links a,summary,.views button{min-height:44px;min-width:44px}
+.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 4px}
+summary{padding:10px 0}
+.tax-scroll{overflow-x:auto;max-width:100%;margin:.8em 0}
+.tax-scroll table{width:100%}
+.tax-scroll th,.tax-scroll td{min-width:7rem}
+.tax-scroll th:first-child{min-width:12rem}
+.tax-scroll code{white-space:normal}
+.tax-bars{margin:1em 0}
+.tax-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.88rem;margin:10px 0}
+.tax-track{position:relative;height:22px;background:#fff;border-left:1px solid #6b7280}
+.tax-bars[data-tax-scale=signed] .tax-track{border-left:0;background:linear-gradient(to right,#fff 49.6%,#6b7280 49.6%,#6b7280 50.4%,#fff 50.4%)}
+.tax-fill{position:absolute;top:2px;height:18px;background:var(--ink)}
+.tax-bar data{font-size:.85rem;white-space:nowrap}
+#tax-sources code{overflow-wrap:anywhere}
+@media(max-width:560px){.tax-bar{grid-template-columns:minmax(0,1fr) auto}.tax-bar>span:first-child{grid-column:1 / -1}}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.5em 0}
+th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;vertical-align:top}
+th[scope=row],caption{text-align:left}
+caption{font-weight:600;padding:4px 0}
+details{margin:.4em 0}
+summary{cursor:pointer;color:var(--ink);font-weight:600}
+.tbl summary{font-weight:400;font-size:.9rem;color:var(--soft)}
+#answers details{border-bottom:1px solid var(--line);padding:6px 0}
+a{color:var(--ink)}
+footer{margin-top:3em;padding:1.5em 18px 3em;font-size:.85rem;color:var(--soft);border-top:1px solid var(--line)}
+@media (max-width:480px){body{font-size:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body class="view-real nojs">
+<a class="skip" href="#main">Skip to content</a>
+<nav class="site-nav" aria-label="Primary" data-pid="primary-nav">
+<span class="brand">UnpoliticalAF</span>
+<a href="index.html">Spending</a><a href="taxes.html">Taxes</a><a href="who-pays.html" aria-current="page">Who pays</a><a href="methods.html">Methods</a>
+</nav>
+
+<style>
+.payers{overflow-wrap:anywhere}.payers section{margin-block:2rem}
+.payers .payer-scroll{max-width:100%;overflow-x:auto}
+.payers table{width:100%;min-width:0;table-layout:auto}
+.payers .payer-scroll[aria-labelledby="hmrc-table"] table,
+.payers .payer-scroll[aria-labelledby="ons-expenditure-table"] table{width:100%;min-width:0;table-layout:auto}
+.payers .payer-scroll[aria-labelledby="ons-income-table"] table{min-width:34rem}
+.payers caption{white-space:normal;text-align:left;overflow-wrap:anywhere}
+.payers th,.payers td{padding:.6rem;vertical-align:top;white-space:normal;overflow-wrap:anywhere}
+.payers .payer-note{background:#f3f4f6;padding:1rem;border-radius:8px}
+.payers nav{display:flex;flex-wrap:wrap;gap:.4rem 1rem}
+.payers a,.payers summary{min-height:44px;padding-block:10px}
+.payers nav a,.payers .source-links a{display:inline-block}
+.payers summary{cursor:pointer}.payers :focus-visible{outline:3px solid #1f2937;outline-offset:3px}
+.payer-chart{display:grid;gap:.6rem}.payer-chart p{margin:0}
+.payer-bar-heading{display:flex;justify-content:space-between;gap:.75rem;align-items:baseline}
+.payer-bar-value{white-space:nowrap;font-weight:600;flex-shrink:0}
+.payer-track{display:block;background:#f3f4f6;height:16px;width:100%}
+.payer-fill{display:block;height:100%;background:#4b5563}
+.payer-source-cell{margin-block:.5rem}.payer-source-cell code{overflow-wrap:anywhere}
+</style><header><h1>Who pays tax?</h1>
+<p class="lead">Two official views answer different questions. Do not join them into one tax bill.</p></header>
+<main id="main" class="payers">
+<section id="income-tax"><h2>Who owed Income Tax in 2023/24?</h2>
+<p>Share of Income Tax due for tax year 2023 to 2024, estimated outturn. HMRC published these estimates on 15 July 2026.
+They cover UK people with a positive Income Tax bill. People with no Income Tax bill are excluded.</p>
+<p>HMRC ranks people by income assessable for tax, before deductions and allowances.
+This is not a rank of wealth or all income.</p>
+<p class="payer-note" id="overlap">The top 1% is part of the top 10%. The top 10% is part of the top 50%.
+The bottom 50% and top 10% do not overlap.
+These groups refer to taxpayers with a positive Income Tax bill, not all adults.
+Do not add their shares. Tax due is not cash collected. This is Income Tax only, not all UK taxes.</p>
+<div class="payer-chart" aria-hidden="true" data-chart-denominator="Total Income Tax liabilities"><p>Each bar runs from 0% to 100%.</p><div><span class="payer-bar-heading"><span>Bottom 50%</span><span class="payer-bar-value" data-payer-bar-label="hmrc-bottom50">9.9%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="hmrc-bottom50" style="width:9.9%"></span></span></div><div><span class="payer-bar-heading"><span>Top 10%</span><span class="payer-bar-value" data-payer-bar-label="hmrc-top10">59.1%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="hmrc-top10" style="width:59.1%"></span></span></div><div><span class="payer-bar-heading"><span>Top 1%</span><span class="payer-bar-value" data-payer-bar-label="hmrc-top1">27.2%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="hmrc-top1" style="width:27.2%"></span></span></div></div>
+<div class="payer-scroll" role="region" aria-labelledby="hmrc-table" tabindex="0"><table><caption id="hmrc-table">HMRC: shares of total Income Tax liabilities, 2023/24 estimated outturn</caption><thead><tr><th scope="col">Income group</th><th scope="col">Share of Income Tax due</th></tr></thead><tbody><tr><th scope="row">Bottom 50%</th><td><data value="9.9" data-payer-id="hmrc-bottom50" data-ref="2_4_Taxpayer_share_tax!F27" data-source-sha256="8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7" data-period="2023/24" data-status="Estimated outturn" data-denominator="Total Income Tax liabilities" data-unit="%" data-population="UK individuals with positive Income Tax liability" data-ranking="Income assessable for tax before deductions and allowances" data-group="Bottom 50%" data-measure="Share of Income Tax due" data-formula="published source cell">9.9%</data></td></tr><tr><th scope="row">Top 10%</th><td><data value="59.1" data-payer-id="hmrc-top10" data-ref="2_4_Taxpayer_share_tax!I27" data-source-sha256="8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7" data-period="2023/24" data-status="Estimated outturn" data-denominator="Total Income Tax liabilities" data-unit="%" data-population="UK individuals with positive Income Tax liability" data-ranking="Income assessable for tax before deductions and allowances" data-group="Top 10%" data-measure="Share of Income Tax due" data-formula="published source cell">59.1%</data></td></tr><tr><th scope="row">Top 1%</th><td><data value="27.2" data-payer-id="hmrc-top1" data-ref="2_4_Taxpayer_share_tax!K27" data-source-sha256="8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7" data-period="2023/24" data-status="Estimated outturn" data-denominator="Total Income Tax liabilities" data-unit="%" data-population="UK individuals with positive Income Tax liability" data-ranking="Income assessable for tax before deductions and allowances" data-group="Top 1%" data-measure="Share of Income Tax due" data-formula="published source cell">27.2%</data></td></tr></tbody></table></div>
+<p class="source-links" id="hmrc-source-note">Source: <a data-payer-source="hmrc" href="https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods">HMRC Table 2.4 (ODS)</a>.
+The denominator is total Income Tax liabilities.</p></section>
+<section id="household-taxes"><h2>How do taxes compare with household income?</h2>
+<p>ONS estimates for 2023/24, the financial year ending 2024. Published 25 September 2025.
+These are completed-year survey/model estimates, not a forecast. They cover UK people in private households.</p>
+<p>ONS ranks people by equivalised household disposable income.
+This means household income after direct taxes, adjusted for household size and needs.
+It makes five groups with about equal numbers of people, not households.
+These are not the HMRC taxpayer groups.</p>
+<p>Gross income includes cash benefits. Disposable income is gross income after direct taxes.
+The table shows taxes as a percentage of gross household income for each group.</p>
+<h3>Direct and indirect taxes counted in this ONS analysis</h3>
+<div class="payer-note" id="bottom-group"><h3>Why the bottom group needs care</h3>
+<p>Deferred lump-sum tax payments can leave people with high gross income but low disposable income.
+They can enter the bottom group. These payments need not reflect a typical year's tax bill.</p>
+<p>Spending can exceed current income through savings or borrowing. Temporary low income, sampling and measurement issues also matter.
+A high indirect-tax share of income is not a tax rate on purchases or a lifetime tax burden.
+Compare the spending measure below too.</p></div>
+<p>The bars show the published combined share of gross household income. The table gives both parts as well.</p>
+<div class="payer-chart" aria-hidden="true" data-chart-denominator="Gross household income"><p>Each bar runs from 0% to 100%.</p><div><span class="payer-bar-heading"><span>Bottom fifth</span><span class="payer-bar-value" data-payer-bar-label="ons-1-combined">36.7%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="ons-1-combined" style="width:36.7%"></span></span></div><div><span class="payer-bar-heading"><span>Second fifth</span><span class="payer-bar-value" data-payer-bar-label="ons-2-combined">30.7%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="ons-2-combined" style="width:30.7%"></span></span></div><div><span class="payer-bar-heading"><span>Middle fifth</span><span class="payer-bar-value" data-payer-bar-label="ons-3-combined">30.2%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="ons-3-combined" style="width:30.2%"></span></span></div><div><span class="payer-bar-heading"><span>Fourth fifth</span><span class="payer-bar-value" data-payer-bar-label="ons-4-combined">31.7%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="ons-4-combined" style="width:31.7%"></span></span></div><div><span class="payer-bar-heading"><span>Top fifth</span><span class="payer-bar-value" data-payer-bar-label="ons-5-combined">36.2%</span></span><span class="payer-track"><span class="payer-fill" data-payer-bar="ons-5-combined" style="width:36.2%"></span></span></div></div>
+<div class="payer-scroll" role="region" aria-labelledby="ons-income-table" tabindex="0"><table><caption id="ons-income-table">ONS: percentages of gross household income, 2023/24 completed-year estimates</caption><thead><tr><th scope="col">Income group</th><th scope="col">Direct / gross income</th><th scope="col">Indirect / gross income</th><th scope="col">Combined / gross income</th></tr></thead><tbody><tr><th scope="row">Bottom fifth</th><td><data value="15.7" data-payer-id="ons-1-direct" data-ref="Table 8!D5" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Bottom fifth" data-measure="Direct taxes" data-formula="published source cell">15.7%</data></td><td><data value="21.0" data-payer-id="ons-1-indirect" data-ref="Table 8!D9" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Bottom fifth" data-measure="Indirect taxes" data-formula="published source cell">21.0%</data></td><td><data value="36.7" data-payer-id="ons-1-combined" data-ref="Table 8!D15" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Bottom fifth" data-measure="Direct and indirect taxes counted in this ONS analysis" data-formula="published source cell">36.7%</data></td></tr><tr><th scope="row">Second fifth</th><td><data value="15.7" data-payer-id="ons-2-direct" data-ref="Table 8!E5" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Second fifth" data-measure="Direct taxes" data-formula="published source cell">15.7%</data></td><td><data value="15.1" data-payer-id="ons-2-indirect" data-ref="Table 8!E9" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Second fifth" data-measure="Indirect taxes" data-formula="published source cell">15.1%</data></td><td><data value="30.7" data-payer-id="ons-2-combined" data-ref="Table 8!E15" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Second fifth" data-measure="Direct and indirect taxes counted in this ONS analysis" data-formula="published source cell">30.7%</data></td></tr><tr><th scope="row">Middle fifth</th><td><data value="18.2" data-payer-id="ons-3-direct" data-ref="Table 8!F5" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Middle fifth" data-measure="Direct taxes" data-formula="published source cell">18.2%</data></td><td><data value="11.9" data-payer-id="ons-3-indirect" data-ref="Table 8!F9" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Middle fifth" data-measure="Indirect taxes" data-formula="published source cell">11.9%</data></td><td><data value="30.2" data-payer-id="ons-3-combined" data-ref="Table 8!F15" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Middle fifth" data-measure="Direct and indirect taxes counted in this ONS analysis" data-formula="published source cell">30.2%</data></td></tr><tr><th scope="row">Fourth fifth</th><td><data value="21.3" data-payer-id="ons-4-direct" data-ref="Table 8!G5" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Fourth fifth" data-measure="Direct taxes" data-formula="published source cell">21.3%</data></td><td><data value="10.4" data-payer-id="ons-4-indirect" data-ref="Table 8!G9" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Fourth fifth" data-measure="Indirect taxes" data-formula="published source cell">10.4%</data></td><td><data value="31.7" data-payer-id="ons-4-combined" data-ref="Table 8!G15" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Fourth fifth" data-measure="Direct and indirect taxes counted in this ONS analysis" data-formula="published source cell">31.7%</data></td></tr><tr><th scope="row">Top fifth</th><td><data value="28.8" data-payer-id="ons-5-direct" data-ref="Table 8!H5" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Top fifth" data-measure="Direct taxes" data-formula="published source cell">28.8%</data></td><td><data value="7.5" data-payer-id="ons-5-indirect" data-ref="Table 8!H9" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Top fifth" data-measure="Indirect taxes" data-formula="published source cell">7.5%</data></td><td><data value="36.2" data-payer-id="ons-5-combined" data-ref="Table 8!H15" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Gross household income" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Top fifth" data-measure="Direct and indirect taxes counted in this ONS analysis" data-formula="published source cell">36.2%</data></td></tr></tbody></table></div>
+<p>Combined values come from published Table 8 row 15. Rounded parts may not add to that total.</p>
+<h3>How do indirect taxes compare with spending?</h3>
+<p>The denominator here is household expenditure, not income. It gives another view of the same indirect taxes.</p>
+<div class="payer-scroll" role="region" aria-labelledby="ons-expenditure-table" tabindex="0"><table><caption id="ons-expenditure-table">ONS: indirect taxes as a percentage of household expenditure, 2023/24 completed-year estimates</caption><thead><tr><th scope="col">Income group</th><th scope="col">Indirect / expenditure</th></tr></thead><tbody><tr><th scope="row">Bottom fifth</th><td><data value="16.5" data-payer-id="ons-1-expenditure" data-ref="Table 8!D22" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Household expenditure" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Bottom fifth" data-measure="Indirect taxes" data-formula="published source cell">16.5%</data></td></tr><tr><th scope="row">Second fifth</th><td><data value="17.4" data-payer-id="ons-2-expenditure" data-ref="Table 8!E22" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Household expenditure" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Second fifth" data-measure="Indirect taxes" data-formula="published source cell">17.4%</data></td></tr><tr><th scope="row">Middle fifth</th><td><data value="17.2" data-payer-id="ons-3-expenditure" data-ref="Table 8!F22" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Household expenditure" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Middle fifth" data-measure="Indirect taxes" data-formula="published source cell">17.2%</data></td></tr><tr><th scope="row">Fourth fifth</th><td><data value="16.6" data-payer-id="ons-4-expenditure" data-ref="Table 8!G22" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Household expenditure" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Fourth fifth" data-measure="Indirect taxes" data-formula="published source cell">16.6%</data></td></tr><tr><th scope="row">Top fifth</th><td><data value="15.4" data-payer-id="ons-5-expenditure" data-ref="Table 8!H22" data-source-sha256="2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73" data-period="2023/24" data-status="Completed-year survey/model estimates, not a forecast" data-denominator="Household expenditure" data-unit="%" data-population="UK people in private households" data-ranking="Equivalised household disposable income" data-group="Top fifth" data-measure="Indirect taxes" data-formula="published source cell">15.4%</data></td></tr></tbody></table></div>
+<p>ONS makes expenditure consistent with disposable income (note 13). Neither measure is a rate on each purchase.</p>
+<p class="source-links" id="ons-source-note">Source: <a data-payer-source="ons" href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx">ONS reference tables (XLSX), Table 8</a>.
+Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households in this analysis.
+This is not a measure of all UK taxes. Suppressed components stay suppressed; we do not fill them in.</p>
+</section>
+<section id="burden"><h2>Who sends the tax, and who bears its cost?</h2>
+<p>A business that sends money to HMRC is not always the person who bears the cost.
+ONS assigns final and intermediate indirect taxes fully to consumers in this model.
+This includes employer National Insurance. Employee and self-employed National Insurance are direct taxes.</p>
+<p>Actual costs can fall on producers, workers, buyers and others in varying shares.
+Full consumer allocation is an assumption, not a settled fact. A combined National Insurance receipts total
+must not be mapped wholly to either ONS group.</p>
+<p>The linked technical report covers FYE 2019. It was published on 25 June 2020.
+Sections 7 and 10 explain these assumptions and limits. The QMI is dated 15 June 2018.
+These are the latest linked reports we found in the sources we kept.
+They are older reports. Some details may have changed. Current workbook notes take priority.</p>
+<p>HMRC and ONS use different populations and tax measures. Do not combine them into a top-1% all-tax burden,
+an average across the panels, or a match to tax receipts.</p></section>
+<section id="payer-sources"><h2>Where can I check the numbers?</h2>
+<p><a href="data/payers.json">Download the selected payer data (JSON)</a>.
+It keeps the exact source cells, hashes, labels, units and notes. No next release date is recorded here.</p>
+<ul class="source-links"><li><a href="https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027">Income Tax liabilities, July 2026 release</a> (2026-07-15)</li><li><a href="https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods">Income Tax liabilities, Table 2.4</a> (2026-07-15)</li><li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024">Effects of taxes and benefits, FYE 2024 bulletin</a> (2025-09-25)</li><li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014">Effects of taxes and benefits dataset</a> (2025-09-25)</li><li><a href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx">Effects of taxes and benefits, FYE 2024 reference tables</a> (2025-09-25)</li><li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/methodologies/theeffectsoftaxesandbenefitsonukhouseholdincome">Effects of taxes and benefits QMI</a> (2018-06-15)</li><li><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/articles/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2019">Effects of taxes and benefits, FYE 2019 technical report</a> (2020-06-25)</li></ul>
+<details id="hmrc-sources"><summary>Source cells and notes: HM Revenue &amp; Customs</summary>
+<p>Income Tax liabilities, Table 2.4; published 2026-07-15.
+Unit: %. Geography: UK. Values use the published cells, not sums of rounded parts.</p>
+<p><a data-payer-source="hmrc" href="https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods">Download the original workbook</a></p>
+<p>Source SHA-256: <code>8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7</code></p><ul><li>Bottom 50%: Share of Income Tax due — <code>2_4_Taxpayer_share_tax!F27</code>. Denominator: Total Income Tax liabilities.</li><li>Top 10%: Share of Income Tax due — <code>2_4_Taxpayer_share_tax!I27</code>. Denominator: Total Income Tax liabilities.</li><li>Top 1%: Share of Income Tax due — <code>2_4_Taxpayer_share_tax!K27</code>. Denominator: Total Income Tax liabilities.</li></ul><p class="payer-source-cell"><code>Contents!A5</code>: Time period: 1990 to 1991 tax year to 2026 to 2027 tax year. All years to 2023 to 2024 tax year are outturn data with tax years 2023 to 2024 using the Survey of Personal Income 2023 to 2024 data. Tax years 2024 to 2025 up to 2026 to 2027 are projected estimates using the Survey of Personal Incomes 2023 to 2024 data. SPI years are final outturns and projection years are provisional and will be revised until they become superceded by the SPI data for that year.</p><p class="payer-source-cell"><code>Contents!A4</code>: Source: Survey of Personal Incomes 2023 to 2024</p></details><details id="ons-sources"><summary>Source cells and notes: Office for National Statistics</summary>
+<p>Effects of taxes and benefits, FYE 2024 reference tables; published 2025-09-25.
+Unit: %. Geography: UK. Values use the published cells, not sums of rounded parts.</p>
+<p><a data-payer-source="ons" href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx">Download the original workbook</a></p>
+<p>Source SHA-256: <code>2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73</code></p><ul><li>Bottom fifth: Direct taxes — <code>Table 8!D5</code>. Denominator: Gross household income.</li><li>Bottom fifth: Indirect taxes — <code>Table 8!D9</code>. Denominator: Gross household income.</li><li>Bottom fifth: Direct and indirect taxes counted in this ONS analysis — <code>Table 8!D15</code>. Denominator: Gross household income.</li><li>Bottom fifth: Indirect taxes — <code>Table 8!D22</code>. Denominator: Household expenditure.</li><li>Second fifth: Direct taxes — <code>Table 8!E5</code>. Denominator: Gross household income.</li><li>Second fifth: Indirect taxes — <code>Table 8!E9</code>. Denominator: Gross household income.</li><li>Second fifth: Direct and indirect taxes counted in this ONS analysis — <code>Table 8!E15</code>. Denominator: Gross household income.</li><li>Second fifth: Indirect taxes — <code>Table 8!E22</code>. Denominator: Household expenditure.</li><li>Middle fifth: Direct taxes — <code>Table 8!F5</code>. Denominator: Gross household income.</li><li>Middle fifth: Indirect taxes — <code>Table 8!F9</code>. Denominator: Gross household income.</li><li>Middle fifth: Direct and indirect taxes counted in this ONS analysis — <code>Table 8!F15</code>. Denominator: Gross household income.</li><li>Middle fifth: Indirect taxes — <code>Table 8!F22</code>. Denominator: Household expenditure.</li><li>Fourth fifth: Direct taxes — <code>Table 8!G5</code>. Denominator: Gross household income.</li><li>Fourth fifth: Indirect taxes — <code>Table 8!G9</code>. Denominator: Gross household income.</li><li>Fourth fifth: Direct and indirect taxes counted in this ONS analysis — <code>Table 8!G15</code>. Denominator: Gross household income.</li><li>Fourth fifth: Indirect taxes — <code>Table 8!G22</code>. Denominator: Household expenditure.</li><li>Top fifth: Direct taxes — <code>Table 8!H5</code>. Denominator: Gross household income.</li><li>Top fifth: Indirect taxes — <code>Table 8!H9</code>. Denominator: Gross household income.</li><li>Top fifth: Direct and indirect taxes counted in this ONS analysis — <code>Table 8!H15</code>. Denominator: Gross household income.</li><li>Top fifth: Indirect taxes — <code>Table 8!H22</code>. Denominator: Household expenditure.</li></ul><p class="payer-source-cell"><code>Cover sheet!A1</code>: The effects of taxes and benefits on household income, UK, 2023/24 - Reference Tables</p><p class="payer-source-cell"><code>Cover sheet!A5</code>: 2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years.</p><p class="payer-source-cell"><code>Cover sheet!A6</code>: All tables show unequivalised income unless otherwise stated. Equivalised income has been used in the ranking process to produce the quintile/decile groups (and to produce the percentage shares and Gini coefficients).</p><p class="payer-source-cell"><code>Cover sheet!A9</code>: Figures may not sum due to rounding.</p><p class="payer-source-cell"><code>Cover sheet!A20</code>: Household Finances Survey and Living Costs and Food Survey from the Office for National Statistics</p><p class="payer-source-cell"><code>Cover sheet!A23</code>: Date published: 25th September 2025</p><p class="payer-source-cell"><code>Table 8!A2</code>: See [note3], [note5], [note6], [note11] and [note13] on Notes tab.</p><p class="payer-source-cell"><code>Notes!B4</code>: Where income has been equivalised, it has been equivalised using the modified Organisation for Economic Co-operation and Development (OECD) scale with a reference point of a two adult with no children household.</p><p class="payer-source-cell"><code>Notes!B6</code>: The quantile groups, unless otherwise stated, have been calculated after ranking individuals by equivalised household disposable income.</p><p class="payer-source-cell"><code>Notes!B8</code>: For the direct tax components of Income Tax, National Insurance contributions and student loan repayments, figures include amounts liable on income earned in the specified financial year and compulsory and voluntary lump sum payments made in relation to income earned in a previous financial year(s) when the payment of the direct tax component(s) was deferred.</p><p class="payer-source-cell"><code>Notes!B9</code>: Note that the inclusion of lump sum tax payments deferred from a previous financial year(s) can lead to high estimates of direct taxes paid for the lowest deciles or quintiles determined by ranking disposable income (gross income minus direct taxes) as people with high gross incomes can end up towards the lower end of the income distribution by virtue of large deferred direct tax payments which are not reflective of their direct tax liabilities for a typical financial year.</p><p class="payer-source-cell"><code>Notes!B16</code>: Expenditure has been calculated to be consistent with disposable income. Data not available prior to 1995/96.</p><p class="payer-source-cell"><code>Notes!B31</code>: &#x27;Average&#x27; refers to the mean unless explicitly stated otherwise.</p></details>
+
+</section></main>
+<footer>
+<p class="name">Data: HM Revenue &amp; Customs, <a href="https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027">Income Tax liabilities, July 2026 release</a> (2026-07-15); HM Revenue &amp; Customs, <a href="https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods">Income Tax liabilities, Table 2.4</a> (2026-07-15); HM Treasury, <a href="https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2026">Public Expenditure Statistical Analyses 2026</a> (2026-07-16); Office for Budget Responsibility, <a href="https://obr.uk/data/">Historical public finances database</a> (2023-08-03); Office for Budget Responsibility, <a href="https://obr.uk/data/">Public finances databank, October 2026</a> (2026-10-28); Office for National Statistics, <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/methodologies/theeffectsoftaxesandbenefitsonukhouseholdincome">Effects of taxes and benefits QMI</a> (2018-06-15); Office for National Statistics, <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014">Effects of taxes and benefits dataset</a> (2025-09-25); Office for National Statistics, <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/articles/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2019">Effects of taxes and benefits, FYE 2019 technical report</a> (2020-06-25); Office for National Statistics, <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024">Effects of taxes and benefits, FYE 2024 bulletin</a> (2025-09-25); Office for National Statistics, <a href="https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx">Effects of taxes and benefits, FYE 2024 reference tables</a> (2025-09-25).
+Contains public sector information licensed under the
+<a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="who-pays.html">Who pays</a> · <a href="methods.html">Methods</a> ·
+<a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
+<a href="data/spending.json">Download spending data (JSON)</a></p>
+</footer>
+<p id="tip" class="tip" role="status" hidden></p>
+<script>
+document.body.classList.remove('nojs');
+var bs=document.querySelectorAll('.views button');
+bs.forEach(function(b){b.addEventListener('click',function(){
+  document.body.className='view-'+b.dataset.view;
+  bs.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});
+  document.getElementById('view-label').textContent=b.textContent;
+})});
+var tip=document.getElementById('tip');
+document.querySelectorAll('data[title]:not([data-tax-id])').forEach(function(d){
+  d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-controls','tip');
+  function showSource(){if(!tip)return;tip.textContent=d.title;tip.hidden=false;}
+  d.addEventListener('click',showSource);
+  d.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();showSource();}
+  });
+});
+if(tip)tip.addEventListener('click',function(){tip.hidden=true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&tip){tip.hidden=true;}});
+</script>
+</body>
+</html>
