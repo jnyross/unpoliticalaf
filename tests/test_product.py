@@ -231,6 +231,8 @@ class PublicationSafetyTests(unittest.TestCase):
             (output / name).write_text("last good")
         before = snapshot(output)
         with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}), patch.object(
+                builder, "validate_receipts"), patch.object(
                 builder, "build_data", side_effect=ValueError("source hash mismatch")):
             with self.assertRaisesRegex(ValueError, "source hash mismatch"):
                 builder.build(output)
@@ -243,18 +245,141 @@ class PublicationSafetyTests(unittest.TestCase):
         (output / "styles.css").write_text("old baseline")
         public = {name: f"public {name}".encode() for name in builder.PUBLIC_FILES}
         before = snapshot(self.project)
-        with patch.object(builder, "ROOT", self.project), patch.object(builder, "build_data", return_value={}), patch.object(
+        receipts = {"private_receipt_sentinel": "only in the private build root"}
+        self.assertEqual(builder.PUBLIC_FILES, {
+            "index.html", "methods.html", "icon.svg", "data/spending.json"})
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value=receipts) as receipt_read, patch.object(
+                builder, "validate_receipts") as receipt_check, patch.object(
+                builder, "build_data", return_value={}), patch.object(
                 builder, "payloads", return_value=public):
             builder.build(output)
             self.assertEqual(snapshot(output), public)
             for path in (output / name for name in builder.PUBLIC_FILES):
                 self.assertEqual(path.stat().st_mode & 0o777, 0o644)
-            self.assertEqual((self.project / "data/spending.json").stat().st_mode & 0o777, 0o644)
+            for name in ("spending", "receipts"):
+                self.assertEqual((self.project / f"data/{name}.json").stat().st_mode & 0o777, 0o644)
+            self.assertEqual((self.project / "data/spending.json").read_bytes(), public["data/spending.json"])
+            self.assertEqual((self.project / "data/receipts.json").read_bytes(), builder.encode_receipts(receipts))
+            self.assertTrue(all(b"private_receipt_sentinel" not in content for content in snapshot(output).values()))
             builder.build(output)
             self.assertEqual(snapshot(output), public)
-        self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json"})
+            self.assertEqual(receipt_read.call_count, 2)
+            self.assertEqual(receipt_check.call_count, 2)
+            for call in receipt_read.call_args_list:
+                self.assertEqual(call.args, ())
+                self.assertEqual(call.kwargs, {"root": self.project})
+            for call in receipt_check.call_args_list:
+                self.assertEqual(call.args, (receipts,))
+                self.assertEqual(call.kwargs, {"root": self.project})
+        self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json", "data/receipts.json"})
         for name, content in before.items():
             self.assertEqual((self.project / name).read_bytes(), content)
+
+
+    def test_foreign_receipt_sources_cannot_fill_an_empty_build_root(self):
+        # Real producer: the module's repository has valid inputs, this root
+        # does not. Falling back to module defaults would import private data.
+        output = self.work / "public"
+        before = snapshot(self.project)
+        repository = snapshot(ROOT / "data")
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_data", return_value={}) as spending, patch.object(
+                builder, "payloads", return_value={name: b"public" for name in builder.PUBLIC_FILES}):
+            with self.assertRaises((FileNotFoundError, ValueError)):
+                builder.build(output)
+            spending.assert_not_called()
+        self.assertFalse(output.exists())
+        self.assertEqual(snapshot(self.project), before)
+        self.assertEqual(snapshot(ROOT / "data"), repository)
+
+    def test_foreign_receipt_validator_cannot_use_repository_catalogue(self):
+        # Real validator: a valid receipt object from elsewhere must still be
+        # checked against this build root, whose catalogue is deliberately bad.
+        (self.project / "data/sources.json").write_text("{}")
+        receipts = json.loads((ROOT / "data/receipts.json").read_text())
+        output = self.work / "public"
+        before = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value=receipts), patch.object(
+                builder, "build_data", return_value={}) as spending, patch.object(
+                builder, "payloads", return_value={name: b"public" for name in builder.PUBLIC_FILES}):
+            with self.assertRaisesRegex(ValueError, "Source catalogue hash changed"):
+                builder.build(output)
+            spending.assert_not_called()
+        self.assertFalse(output.exists())
+        self.assertEqual(snapshot(self.project), before)
+
+    def test_receipt_validation_failure_preserves_private_and_public_files(self):
+        output = self.work / "public"
+        (output / "data").mkdir(parents=True)
+        for name in builder.PUBLIC_FILES | builder.LEGACY_FILES:
+            (output / name).write_text("last good")
+        for name in ("spending", "receipts"):
+            (self.project / f"data/{name}.json").write_text("last good private")
+        before, private = snapshot(output), snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}), patch.object(
+                builder, "validate_receipts", side_effect=ValueError("bad receipt source")) as check, patch.object(
+                builder, "build_data") as spending:
+            with self.assertRaisesRegex(ValueError, "bad receipt source"):
+                builder.build(output)
+            check.assert_called_once_with({}, root=self.project)
+            spending.assert_not_called()
+        self.assertEqual(snapshot(output), before)
+        self.assertEqual(snapshot(self.project), private)
+
+    def test_receipt_private_target_rejects_symlink_and_directory(self):
+        foreign = self.work / "foreign.json"
+        foreign.write_text("foreign private sentinel")
+        target = self.project / "data/receipts.json"
+        for kind in ("symlink", "directory"):
+            with self.subTest(kind=kind):
+                if kind == "symlink":
+                    target.symlink_to(foreign)
+                else:
+                    target.mkdir()
+                before = snapshot(self.project)
+                with patch.object(builder, "ROOT", self.project), patch.object(
+                        builder, "build_receipts") as read:
+                    with self.assertRaisesRegex(ValueError, "receipts.json must be a regular file"):
+                        builder.build(self.work / "public")
+                    read.assert_not_called()
+                self.assertEqual(snapshot(self.project), before)
+                self.assertEqual(foreign.read_text(), "foreign private sentinel")
+                self.assertFalse((self.work / "public").exists())
+                if kind == "symlink":
+                    target.unlink()
+                else:
+                    target.rmdir()
+
+    def test_receipts_do_not_extend_public_payload_contract(self):
+        output = self.work / "public"
+        public = {name: b"public" for name in builder.PUBLIC_FILES}
+        public["data/receipts.json"] = b"private receipt sentinel"
+        before = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}), patch.object(
+                builder, "validate_receipts"), patch.object(builder, "build_data", return_value={}), patch.object(
+                builder, "payloads", return_value=public):
+            with self.assertRaisesRegex(ValueError, "unexpected public payload"):
+                builder.build(output)
+        self.assertEqual(snapshot(self.project), before)
+        self.assertFalse(output.exists())
+
+    def test_no_private_writes_still_validates_receipts_in_build_root(self):
+        output = self.work / "public"
+        public = {name: b"public" for name in builder.PUBLIC_FILES}
+        before = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}) as read, patch.object(
+                builder, "validate_receipts") as check, patch.object(
+                builder, "build_data", return_value={}), patch.object(builder, "payloads", return_value=public):
+            builder.build(output, write_data=False)
+            read.assert_called_once_with(root=self.project)
+            check.assert_called_once_with({}, root=self.project)
+        self.assertEqual(snapshot(output), public)
+        self.assertEqual(snapshot(self.project), before)
 
     def test_missing_is_not_zero(self):
         for marker in (None, "", "-", " - "):

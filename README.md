@@ -124,3 +124,14 @@ The factory controller owns Git, independent review, exact-candidate checks and
 publication to https://unpoliticalaf.vercel.app . Workers return file edits only.
 
 `make setup` creates the local `.venv` and installs dependencies there. Build and check commands use that environment, leaving system Python unchanged.
+
+Receipt evidence is separately scoped in
+[data/audit/receipts](data/audit/receipts/README.md). The controller build now
+creates the private `data/receipts.json` working dataset, with seven source
+receipt/debt tables, original missingness and explicit reconciliation limits.
+`make verify` independently reopens its raw workbooks and checks deterministic
+regeneration, in addition to both audit scopes. See
+[receipt methods](docs/receipts-methods.md) for the tax/non-tax residual formulas,
+historical licence-fee overlap and debt/GDP limits. The four public files stay
+the same; receipt presentation is a separate ticket. Source edits are not a
+passing check, fiscal approval or completed issue #5/#26 acceptance.

@@ -1,8 +1,11 @@
 """Check source cells, reconciliations and exact deterministic public output."""
 from build import PUBLIC_FILES, ROOT, payloads, validate_output
 from build_data import build_data
+from build_receipts import build_receipts, encode as encode_receipts
+from check_receipts import validate as validate_receipts
 from check_site import validate
 from check_audit import validate as validate_audit
+from check_receipt_audit import validate as validate_receipt_audit
 
 
 def snapshot(directory):
@@ -12,6 +15,14 @@ def snapshot(directory):
 
 def main():
     validate_audit()
+    validate_receipt_audit()
+    validate_receipts()
+    receipt_bytes = (ROOT / "data/receipts.json").read_bytes()
+    first_receipts = encode_receipts(build_receipts())
+    if first_receipts != encode_receipts(build_receipts()):
+        raise AssertionError("Receipt regeneration is not deterministic")
+    if receipt_bytes != first_receipts:
+        raise AssertionError("Generated receipt data is stale or changed; run make build")
     site = validate_output(ROOT / "site")
     observed = snapshot(site)
     if set(observed) != PUBLIC_FILES:
