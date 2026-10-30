@@ -761,20 +761,24 @@ def section_basics_methods():
         validate_sources(ROOT)
         sources = json.loads((ROOT / "data/tax-basics/sources.json").read_text(encoding="utf-8"))
     # These headings identify the retained text used for the qualitative copy.
-    locators = (
-        "Income Tax: Overview; Income Tax allowances and reliefs",
-        "National Insurance: Overview; Who pays National Insurance; National Insurance classes",
-        "PAYE for employers: Introduction to PAYE; Deductions from their pay; Reporting pay and deductions; Paying HMRC",
-        "Scottish Government: Income Tax",
-        "How VAT works: Overview; Your responsibilities as a VAT-registered business; What VAT is charged on; How much VAT you must charge",
-        "Welsh Income Tax: Income Tax in Wales; Who pays the Welsh rates; How you pay",
-        "Corporation Tax: Overview; Profits you pay Corporation Tax on",
-    )
+    locators = {
+        "income-tax": "Income Tax: Overview; Income Tax allowances and reliefs",
+        "national-insurance": "National Insurance: Overview; Who pays National Insurance; National Insurance classes",
+        "paye-remitter": "PAYE for employers: Introduction to PAYE; Deductions from their pay; Reporting pay and deductions; Paying HMRC",
+        "scottish-powers": "Scottish Government: Income Tax",
+        "vat": "How VAT works: Overview; Your responsibilities as a VAT-registered business; What VAT is charged on; How much VAT you must charge",
+        "welsh-income-tax": "Welsh Income Tax: Income Tax in Wales; Who pays the Welsh rates; How you pay",
+        "corporation-tax": "Corporation Tax: Overview; Profits you pay Corporation Tax on",
+    }
+    by_id = {Path(s["file"]).name.removeprefix("basics-").removesuffix(".html.json"): s
+             for s in sources["sources"]}
+    if len(sources["sources"]) != 7 or set(by_id) != set(locators):
+        raise ValueError("Guidance methods source IDs changed")
     rows = "".join(
-        f'<li><a href="{esc(s["url"])}">{esc(locator)}</a>'
-        f'<p class="small">Original response SHA-256: <code>{esc(s["sha256"])}</code>. '
-        f'Retained copy SHA-256: <code>{esc(s["stored_sha256"])}</code>.</p></li>'
-        for s, locator in zip(sources["sources"], locators))
+        f'<li data-guidance-source="{sid}"><a href="{esc(by_id[sid]["url"])}">{esc(locator)}</a>'
+        f'<p class="small">Original response SHA-256: <code>{esc(by_id[sid]["sha256"])}</code>. '
+        f'Retained copy SHA-256: <code>{esc(by_id[sid]["stored_sha256"])}</code>.</p></li>'
+        for sid, locator in locators.items())
     return f'''<section id="tax-guidance" data-pid="tax-guidance-methods">
 <h2>Where the tax definitions come from</h2>
 <p>Official guidance explains the tax rules. It is not the source of the household percentages or receipt totals.

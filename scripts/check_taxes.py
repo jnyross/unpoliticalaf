@@ -528,6 +528,14 @@ def validate_story(raw, bound, data):
     require(len(basics) == 1 and basics[0]["tag"] == "section" and
             basics[0]["parents"][-1]["tag"] == "main", "missing unique tax basics section")
     basics = basics[0]
+    def concealed(node):
+        return any(p["tag"] == "details" or "hidden" in p["attrs"] or
+                   p["attrs"].get("aria-hidden", "").lower() == "true" or
+                   set(p["attrs"].get("class", "").split()) & {"v", "narrow", "wide"} or
+                   re.search(r"display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse)",
+                             p["attrs"].get("style", ""), re.I)
+                   for p in [node] + node["parents"])
+    require(not concealed(basics) and "class" not in basics["attrs"], "tax basics container hidden")
     groups = next((n for n in story.nodes if n["attrs"].get("id") == "receipt-groups"), None)
     require(groups is not None and story.nodes.index(basics) < story.nodes.index(groups) and
             all(story.nodes.index(n) < story.nodes.index(groups) for n in story.nodes

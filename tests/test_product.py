@@ -352,6 +352,81 @@ class ProductTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, error):
                         verify.main()
 
+    def test_tax_basics_container_and_ancestors_cannot_hide_the_story(self):
+        data = check_taxes.expected_data(ROOT)
+        raw = self.files["taxes.html"].decode("utf-8")
+        marker = re.search(r'<section\b[^>]*data-basics="taxes"[^>]*>', raw).group(0)
+        for attribute in ('hidden', 'aria-hidden="true"', 'style="display:none"',
+                          'style="visibility:hidden"', 'style="visibility:collapse"',
+                          'class="v"', 'class="narrow"', 'class="wide"'):
+            for target in (marker, '<main id="main">'):
+                with self.subTest(attribute=attribute, target=target):
+                    self.assertIn(target, raw)
+                    changed = raw.replace(target, target[:-1] + ' ' + attribute + '>', 1)
+                    with self.assertRaisesRegex(ValueError, "tax basics container hidden"):
+                        check_taxes.validate_html(changed, data)
+
+    def test_guidance_methods_are_independently_bound_to_the_retained_sources(self):
+        raw = self.files["methods.html"].decode("utf-8")
+        self.assertTrue(check_site.check_guidance_methods(raw, root=ROOT))
+        section = re.search(r'<section id="tax-guidance".*?</section>', raw, re.S).group(0)
+        register = json.loads((ROOT / "data/tax-basics/sources.json").read_text())
+        source = register["sources"][0]
+        mutations = (
+            (source["url"], "https://example.org/incorrect"),
+            (source["sha256"], "0" * 64),
+            (source["stored_sha256"], "1" * 64),
+            ("Income Tax: Overview; Income Tax allowances and reliefs", "Income Tax: Unknown heading"),
+            ('data-guidance-source="income-tax"', 'data-guidance-source="vat"'),
+            ("30 October 2026", "31 October 2026"),
+            ("no publication date is established", "published today"),
+            ('id="tax-guidance"', 'id="wrong-guidance"'),
+        )
+        for before, after in mutations:
+            with self.subTest(mutation=before):
+                self.assertIn(before, section)
+                changed = raw.replace(section, section.replace(before, after, 1), 1)
+                with self.assertRaisesRegex(ValueError, "Guidance methods:"):
+                    check_site.check_guidance_methods(changed, root=ROOT)
+        rows = re.findall(r'<li data-guidance-source=.*?</li>', section, re.S)
+        self.assertEqual(len(rows), 7)
+        reordered = section.replace(rows[0] + rows[1], rows[1] + rows[0], 1)
+        self.assertNotEqual(reordered, section)
+        with self.assertRaisesRegex(ValueError, "source IDs/order"):
+            check_site.check_guidance_methods(raw.replace(section, reordered, 1), root=ROOT)
+        for attribute in ('hidden', 'aria-hidden="true"', 'style="visibility:hidden"', 'class="v"'):
+            with self.subTest(attribute=attribute), self.assertRaisesRegex(ValueError, "Guidance methods:"):
+                check_site.check_guidance_methods(raw.replace(
+                    '<section id="tax-guidance"', '<section ' + attribute + ' id="tax-guidance"', 1), root=ROOT)
+        # Prove the published-byte entry point includes the methods page.
+        with tempfile.TemporaryDirectory() as directory:
+            site = Path(directory)
+            for name in ("taxes.html", "who-pays.html", "methods.html"):
+                (site / name).write_bytes(self.files[name])
+            (site / "methods.html").write_text(raw.replace(section, section.replace(source["sha256"], "0" * 64, 1), 1))
+            with self.assertRaisesRegex(ValueError, "Guidance methods:"):
+                independent_basics_checks(site, root=ROOT)
+
+    def test_guidance_method_locator_mapping_uses_ids_not_register_position(self):
+        register = json.loads((ROOT / "data/tax-basics/sources.json").read_text())
+        with patch.object(build_site, "BASICS_SOURCES", register):
+            original = build_site.section_basics_methods()
+        reordered = json.loads(json.dumps(register))
+        reordered["sources"].reverse()
+        with patch.object(build_site, "BASICS_SOURCES", reordered):
+            self.assertEqual(original, build_site.section_basics_methods())
+        for mutation in ("missing", "extra", "duplicate"):
+            changed = json.loads(json.dumps(register))
+            if mutation == "missing":
+                changed["sources"].pop()
+            elif mutation == "extra":
+                changed["sources"].append(dict(changed["sources"][0], file="data/tax-basics/raw/basics-extra.html.json"))
+            else:
+                changed["sources"][-1] = changed["sources"][0]
+            with self.subTest(mutation=mutation), patch.object(build_site, "BASICS_SOURCES", changed):
+                with self.assertRaisesRegex(ValueError, "Guidance methods source IDs changed"):
+                    build_site.section_basics_methods()
+
     def test_basics_disclosure_exception_does_not_allow_unmarked_early_depth(self):
         from check_taxes import validate_html, expected_data
         from check_payers import validate_page

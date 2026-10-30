@@ -461,6 +461,22 @@ class PayerTests(unittest.TestCase):
             with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "source note moved"):
                 check_payers.validate_page(ROOT, self.data, moved)
 
+    def test_basics_container_and_ancestors_cannot_hide_collection_explanation(self):
+        marker = next(n for n in check_payers.Page(self.page).nodes
+                      if n["attrs"].get("data-basics") == "payers")
+        import re
+        opening = re.search(r'<aside\b[^>]*data-basics="payers"[^>]*>', self.page).group(0)
+        self.assertEqual(marker["tag"], "aside")
+        for attribute in ('hidden', 'aria-hidden="true"', 'style="display:none"',
+                          'style="visibility:hidden"', 'style="visibility:collapse"',
+                          'class="v"', 'class="narrow"', 'class="wide"'):
+            for target in (opening, '<section id="burden">'):
+                with self.subTest(attribute=attribute, target=target):
+                    self.assertIn(target, self.page)
+                    changed = self.page.replace(target, target[:-1] + ' ' + attribute + '>', 1)
+                    with self.assertRaisesRegex(ValueError, "Payer basics container hidden"):
+                        check_payers.validate_page(ROOT, self.data, changed)
+
     def test_public_aliases_are_bound_to_raw_labels_independently(self):
         from unittest.mock import patch
         real_reader = check_payers.raw_cells(ROOT)

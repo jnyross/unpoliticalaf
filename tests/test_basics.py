@@ -5,6 +5,7 @@ Run with the project's existing unittest discovery. No network or dependencies.
 import hashlib
 import json
 from pathlib import Path
+import re
 import shutil
 import tempfile
 import unittest
@@ -213,6 +214,140 @@ class BasicsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "hidden or active"):
             self.validate(payer=changed)
 
+    def test_root_and_inner_attributes_cannot_conceal_or_activate_basics(self):
+        attributes = (
+            "hidden", 'aria-hidden="true"', 'aria-hidden="false"',
+            'style="display:none"', 'style="visibility:hidden"',
+            'onclick="return false"', 'onpointerdown="return false"',
+            'class="v"', 'class="wide"', 'class="narrow"', 'class="unknown"',
+        )
+        for page, html, root_tag, field in (
+            ("tax", self.tax, "section", "ni-rules"),
+            ("payer", self.payer, "aside", "burden"),
+        ):
+            for target in (f"<{root_tag} ", f'<p data-basics-claim="{field}"',
+                           "<details>", "<summary>"):
+                for attribute in attributes:
+                    with self.subTest(page=page, target=target, attribute=attribute):
+                        # Insert the attribute before all original attributes.
+                        end = target.find(" ")
+                        if end < 0:
+                            end = target.index(">")
+                        replacement = target[:end] + " " + attribute + target[end:]
+                        changed = self.replace(html, target, replacement)
+                        with self.assertRaisesRegex(ValueError, "hidden or active"):
+                            self.validate(tax=changed) if page == "tax" else self.validate(payer=changed)
+
+    def official_body(self, name):
+        path = self.root / f"data/tax-basics/raw/basics-{name}.html.json"
+        return json.loads(path.read_bytes())["original_response"]
+
+    def test_official_headings_must_be_elements_not_retained_prose(self):
+        # Call the semantic layer directly: acquisition hashes independently
+        # reject changed bytes first. Do not repin any retained source for this test.
+        urls = {pin[0]: pin[1] for pin in check_basics.PINS}
+        for name, headings in check_basics.MAIN_HEADINGS.items():
+            original = self.official_body(name)
+            for heading in headings:
+                found = []
+                def demote(match):
+                    parser = check_basics._Text()
+                    parser.feed(match.group())
+                    if parser.headings == [heading]:
+                        found.append(match.group())
+                        return re.sub(r"<(\/?)h[123]\b", r"<\1p", match.group())
+                    return match.group()
+                changed = re.sub(r"<h[123]\b[^>]*>.*?</h[123]>", demote, original, flags=re.S)
+                with self.subTest(source=name, heading=heading):
+                    self.assertEqual(len(found), 1, "mutation must demote one actual heading")
+                    self.assertNotEqual(changed, original)
+                    with self.assertRaisesRegex(ValueError, "official heading"):
+                        check_basics._validate_official(name, urls[name], changed)
+
+    def test_official_heading_identity_and_main_position_are_bound(self):
+        original = self.official_body("welsh-income-tax")
+        url = "https://www.gov.uk/welsh-income-tax"
+        heading = '<h2 id="who-pays-the-welsh-rates">Who pays the Welsh rates</h2>'
+        for replacement in (
+            heading.replace('id="who-pays-the-welsh-rates"', 'id="wrong-locator"'),
+            heading.replace("h2", "h3"),
+            heading + heading,
+        ):
+            with self.subTest(replacement=replacement):
+                changed = self.replace(original, heading, replacement)
+                with self.assertRaisesRegex(ValueError, "official heading"):
+                    check_basics._validate_official("welsh-income-tax", url, changed)
+        changed = self.replace(original, heading, "") + heading
+        with self.assertRaisesRegex(ValueError, "official heading"):
+            check_basics._validate_official("welsh-income-tax", url, changed)
+
+    def test_vat_faq_headings_bind_question_and_answer_urls(self):
+        original = self.official_body("vat")
+        url = "https://www.gov.uk/how-vat-works"
+        for title, page_url, quote in check_basics.FAQ_HEADINGS["vat"]:
+            for mutation in ("name", "question-url", "answer-url", "quote"):
+                found = []
+                def change_script(match):
+                    data = json.loads(match[1])
+                    if data.get("@type") != "FAQPage":
+                        return match.group()
+                    for question in data.get("mainEntity", []):
+                        if question.get("name") != title:
+                            continue
+                        found.append(title)
+                        if mutation == "name":
+                            question["name"] = "Unbound heading"
+                        elif mutation == "question-url":
+                            question["url"] = page_url + "-wrong"
+                        elif mutation == "answer-url":
+                            question["acceptedAnswer"]["url"] = page_url + "-wrong"
+                        else:
+                            answer = question["acceptedAnswer"]
+                            # Keep the quotation elsewhere, but not in this answer.
+                            answer["text"] = "<p>Unrelated answer.</p>"
+                            data["description"] = quote
+                    return '<script type="application/ld+json">' + json.dumps(data) + '</script>'
+                changed = re.sub(r'<script\s+type="application/ld\+json"[^>]*>(.*?)</script>',
+                                 change_script, original, flags=re.S)
+                with self.subTest(title=title, mutation=mutation):
+                    self.assertEqual(found, [title])
+                    with self.assertRaisesRegex(ValueError, "official FAQ"):
+                        check_basics._validate_official("vat", url, changed)
+
+    def test_ni_period_quotes_are_full_visible_list_items(self):
+        original = self.official_body("national-insurance")
+        url = "https://www.gov.uk/national-insurance"
+        for quote in (
+            "an employee earning more than £242 per week from one job",
+            "self-employed and making a profit of more than £12,570 a year",
+        ):
+            self.assertIn(quote, build_basics.source_assertions["ni-rules"]["quotedanchor"])
+            self.assertIn(quote, check_basics.ANCHORS["national-insurance"])
+            # Change the actual visible LI, while preserving JSON-LD quotations.
+            before = "<li>" + quote + "</li>"
+            for after in ("<li>unrelated per week from one job; a year</li>",
+                          "<p>" + quote + "</p>"):
+                with self.subTest(quote=quote, mutation=after):
+                    changed = self.replace(original, before, after)
+                    with self.assertRaisesRegex(ValueError, "official NI period quotation"):
+                        check_basics._validate_official("national-insurance", url, changed)
+        assertion = build_basics.source_assertions["ni-rules"]
+        self.assertNotIn("a year", assertion["quotedanchor"])
+        self.assertNotIn("per week from one job", assertion["quotedanchor"])
+        self.assertNotIn("£242", self.tax + self.payer)
+        self.assertNotIn("£12,570", self.tax + self.payer)
+
+    def test_welsh_claim_uses_only_welsh_guidance(self):
+        assertion = build_basics.source_assertions["wales"]
+        self.assertEqual(assertion["source_ids"], ["basics-welsh-income-tax"])
+        self.assertEqual(assertion["officialheading"],
+                         "Income Tax in Wales; Who pays the Welsh rates; How you pay")
+        self.assertEqual(assertion["quotedanchor"], [
+            "You pay Welsh Income Tax rates if you live in Wales. These rates have been set by the Welsh Government.",
+            "the same tax as the rest of the UK on dividends and savings interest.",
+            "HMRC will add a ‘C’ to the start of your tax code",
+        ])
+
     def test_assertions_cover_all_derived_qualitative_claims(self):
         self.assertEqual(set(build_basics.source_assertions), set(check_basics.EXPECTED) - {"age"})
         retained_ids = {"basics-" + pin[0] for pin in check_basics.PINS}
@@ -222,6 +357,16 @@ class BasicsTests(unittest.TestCase):
                 self.assertTrue(set(assertion["source_ids"]) <= retained_ids)
                 self.assertTrue(assertion["officialheading"])
                 self.assertTrue(assertion["quotedanchor"])
+                headings = {
+                    heading[2] for source in assertion["source_ids"]
+                    for heading in check_basics.MAIN_HEADINGS[source.removeprefix("basics-")]
+                }
+                headings.update(
+                    heading[0] for source in assertion["source_ids"]
+                    for heading in check_basics.FAQ_HEADINGS.get(source.removeprefix("basics-"), ())
+                )
+                for heading in assertion["officialheading"].split("; "):
+                    self.assertIn(heading, headings)
                 # Every producer anchor must occur in the independently selected
                 # source anchors, not merely in a navigation label or whole file.
                 anchors = [anchor for source in assertion["source_ids"]

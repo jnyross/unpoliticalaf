@@ -1,87 +1,108 @@
-# Minimum qualitative source evidence
+# Retained qualitative tax-guidance evidence
 
-These statements need no current tax-rate table. Use them to explain the numeric displays. Do not merge 2026/27 guidance rates with 2023/24 distribution data.
+## Scope and versions
 
-## Why can a person below the Income Tax allowance still pay tax?
+Only the 7 official guidance responses listed below belong to this guidance seed.
+`data/tax-basics/sources.json` records retrieval on **30 October 2026**, original
+response hashes and lossless-envelope hashes. Each file is an ASCII JSON envelope:
+decode `original_response` as UTF-8 to recover the unchanged original response.
+No publication date is established for these living pages. The next update is
+unknown. Do not apply their current rates to the payer distribution year or turn
+these definitions into personal tax examples.
 
-Suggested copy:
+The locators below are source headings, not invented reading-text line numbers.
+GOV.UK guide responses can retain linked guide-part text in structured article
+content. The independent source checker must verify meaningful heading elements
+and the companion body text in the retained response. A heading word elsewhere
+in the page is not sufficient evidence.
 
-> The Personal Allowance applies to Income Tax. It is not an exemption from every tax. A person can owe no Income Tax and still pay VAT through purchases. Some goods and services have no VAT or a different VAT treatment. Household circumstances also affect other taxes.
+## The 7 retained responses
 
-Evidence:
+1. **Income Tax** — https://www.gov.uk/income-tax
+   - Envelope: `data/tax-basics/raw/basics-income-tax.html.json`.
+   - Headings: **Overview**; **Income Tax allowances and reliefs**.
+   - Evidence: Income Tax is a tax on income; not all income is taxable. Most
+     people get a Personal Allowance of tax-free income.
+   - Limit: this allowance concerns Income Tax, not exemption from every tax.
 
-- `https://www.gov.uk/income-tax`, heading **Income Tax allowances and reliefs**: defines the Personal Allowance as income a person can have before paying Income Tax. The overview says some income is not taxable. Snapshot `basics-income-tax.html`; reading text `basics-income-tax.md`, lines 67–98.
-- `https://www.gov.uk/how-vat-works`, **Overview** and **Your responsibilities as a VAT-registered business**: VAT is added to most products and services sold by VAT-registered businesses. Businesses include it in prices and report it to HMRC. Snapshot `basics-vat.html`; reading text lines 67–82.
-- The ONS technical report, section **7. Post-tax income**, says VAT is imputed from expenditure on goods and services subject to VAT. It distinguishes exempt, zero-rated, reduced-rate and standard-rate goods. Do not reuse its historical rates or example products as current guidance.
+2. **National Insurance** — https://www.gov.uk/national-insurance
+   - Envelope: `data/tax-basics/raw/basics-national-insurance.html.json`.
+   - Headings: **Overview**; **Who pays National Insurance**;
+     **National Insurance classes**.
+   - Evidence: contributions qualify people for certain benefits and the State
+     Pension. The type depends on employment status and earnings. The retained
+     Who pays section distinguishes employment earnings per week from one job
+     and self-employed profits per year; its full clauses, not isolated time
+     words, support the different-rules and payment-period explanation.
+   - Limit: it is not a personal savings account. Do not infer that a person
+     below the annual Income Tax allowance can never owe National Insurance.
 
-This is a direct synthesis of the first 2 official explanations. Do not say every purchase attracts VAT or that every person pays it.
+3. **PAYE for employers** — https://www.gov.uk/paye-for-employers
+   - Envelope: `data/tax-basics/raw/basics-paye-remitter.html.json`.
+   - Headings: **Introduction to PAYE**; **Deductions from their pay**;
+     **Reporting pay and deductions**; **Paying HMRC**.
+   - Evidence: PAYE collects Income Tax and National Insurance from employment.
+     Employers deduct these from most employees' pay, report deductions and pay
+     HMRC. Employers can also owe employer National Insurance.
+   - Limit: collection duties do not establish ultimate economic burden.
 
-## What are Income Tax, National Insurance and VAT?
+4. **Scottish Government Income Tax** — https://www.gov.scot/policies/taxes/income-tax/
+   - Envelope: `data/tax-basics/raw/basics-scottish-powers.html.json`.
+   - Heading: **Income Tax**.
+   - Evidence: Scottish powers cover rates and band thresholds, excluding the
+     Personal Allowance, for non-savings, non-dividend income of Scottish
+     taxpayers. HMRC collects and manages Scottish Income Tax.
+   - Limit: this does not supply a Welsh rule or a universal UK rate example.
+     The separate GOV.UK Scottish Income Tax response is not retained here.
 
-Suggested copy:
+5. **How VAT works** — https://www.gov.uk/how-vat-works
+   - Envelope: `data/tax-basics/raw/basics-vat.html.json`.
+   - Headings: **Overview**; **Your responsibilities as a VAT-registered business**;
+     **What VAT is charged on**; **How much VAT you must charge**.
+   - Evidence: VAT is added to most products and services sold by VAT-registered
+     businesses. If charged VAT exceeds paid VAT, the business pays the difference
+     to HMRC. Some goods and services are exempt, unaffected, reduced-rated or
+     zero-rated.
+   - Limit: not every purchase attracts VAT. The remittance is not the entire
+     VAT-inclusive sale price or necessarily every VAT amount charged.
 
-> Income Tax applies to taxable income. National Insurance is a separate contribution system linked to employment, self-employment and eligibility for certain benefits. VAT is a tax included in many purchase prices.
+6. **Welsh Income Tax** — https://www.gov.uk/welsh-income-tax
+   - Envelope: `data/tax-basics/raw/basics-welsh-income-tax.html.json`.
+   - Headings: **Income Tax in Wales**; **Who pays the Welsh rates**; **How you pay**.
+   - Evidence: the Welsh Government sets Welsh rates for people living in Wales.
+     The page states that dividends and savings interest use the same tax as the
+     rest of the UK. HMRC adds a C to the tax code.
+   - Limit: use this Welsh source for Welsh claims, not a Scottish source quote.
 
-Evidence:
+7. **Corporation Tax** — https://www.gov.uk/corporation-tax
+   - Envelope: `data/tax-basics/raw/basics-corporation-tax.html.json`.
+   - Headings: **Overview**; **Profits you pay Corporation Tax on**.
+   - Evidence: companies or associations pay Corporation Tax to HMRC on profits
+     in an accounting period. Taxable profits include trading, investments and
+     chargeable gains.
+   - Limit: this definition does not establish who ultimately bears the cost.
+     The OBR receipt grouping contains separately named related charges and is
+     broader than the basic definition.
 
-- Income Tax overview above: **Overview**.
-- `https://www.gov.uk/national-insurance`, **Overview**, **Who pays National Insurance**, **National Insurance classes**: contributions support qualification for certain benefits and the State Pension. Mandatory liability depends on age, employment status and earnings or profits. Do not present it as a personal savings account. Snapshot `basics-national-insurance.html`; reading text lines 69–92.
-- VAT overview above: **Overview**.
+## Separation from the fiscal sources
 
-Do not infer that National Insurance never applies when annual income falls below an Income Tax allowance. Their periods and rules differ. This evidence pack does not support a personal calculator.
+These guidance sources explain rules and collection, not the fiscal figures.
+The HMRC liability shares, ONS household percentages, older ONS technical report
+and OBR receipts have their own retained datasets and independent checkers.
+They are not extra responses in this 7-file guidance register. In particular,
+there is no `ons-technical-2019.html` or Markdown reading-text file in this seed.
+The payer methods record owns the older methodology, workbook notes and their
+limits. The current workbook takes priority where older methods differ.
 
-## Who sends the money, and who bears the cost?
+Income Tax liability shares do not become shares of all tax. ONS income and
+expenditure denominators stay separate. Collection does not establish burden.
+The numeric source contracts, population limits, suppressed cells and source
+notes must remain in force when these qualitative explanations are inserted.
 
-Suggested copy:
+## Evidence status
 
-> The person or business that sends tax to HMRC is not always the person who bears its economic cost. Employers send payroll deductions to HMRC. VAT-registered businesses send net VAT to HMRC. The household analysis estimates tax costs under stated assumptions.
-
-Evidence:
-
-- `https://www.gov.uk/paye-for-employers`, **Introduction to PAYE**, **Deductions from their pay**, **Paying HMRC**: employers deduct Income Tax and National Insurance from most employees' pay and pay HMRC. The employer can also owe employer National Insurance. Snapshot `basics-paye-remitter.html`; reading text lines 62–87.
-- VAT overview, paragraphs after **Your responsibilities as a VAT-registered business**: businesses normally pay the difference between VAT charged to customers and VAT paid to suppliers. Do not say the business sends the entire VAT-inclusive sales price, or every VAT amount charged, to HMRC.
-- ONS technical report `https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/articles/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2019`, published **25 June 2020**, sections **7. Post-tax income** and **10. Background notes**, subsection **1. General assumptions**. The model assumes final and intermediate indirect taxes fall on consumers. It also assumes direct taxes fall on the person from whose income they are deducted. It does not establish these assumptions as universal economic facts. Snapshot `ons-technical-2019.html`.
-
-The current workbook also places employer NI in intermediate indirect taxes: `Table 2b!B66` and `C66:L66`. This is an allocation method, not a claim that consumers legally owe employer NI.
-
-## Why is a large Income Tax share not a share of all tax?
-
-Suggested copy:
-
-> A share needs a named total. The top 1% figure uses total Income Tax liability as its denominator. It excludes VAT, National Insurance and other taxes. Household tax percentages use a different denominator: household income or expenditure. Neither display gives a complete estimate of every UK tax's economic burden.
-
-Evidence:
-
-- HMRC `2_4_Taxpayer_share_tax!A1`, `L2`, `K27`: Income Tax liability denominator and 27.2% top-1% value.
-- ONS `Table 8!A5,A16,A22`: gross-income, disposable-income and expenditure denominators.
-- ONS current Table 2b components and older QMI **5. About the output**, **Relevance**, explain partial coverage. Corporation Tax is not allocated to households. The current direct-tax total includes student loan repayments (`B45`).
-
-## Does this cover Scotland and the devolved nations?
-
-Suggested copy:
-
-> These distribution tables cover the UK. Do not use one England-style tax-band example for everyone. Scotland sets different Income Tax rates and bands on non-savings, non-dividend income. The UK still sets the Personal Allowance and taxes on savings and dividends. Wales also has devolved Income Tax rates. HMRC collects these taxes.
-
-Evidence:
-
-- Scottish Government `https://www.gov.scot/policies/taxes/income-tax/`, **Income Tax**: the Scottish Parliament sets rates and bands for non-savings, non-dividend income. The powers exclude the Personal Allowance. HMRC collects and manages the tax. Snapshot `basics-scottish-powers.html`; reading text lines 58–64.
-- `https://www.gov.uk/scottish-income-tax`, **Current rates**: residence in Scotland determines Scottish Income Tax; savings and dividends use the same tax as the rest of the UK. Snapshot `basics-scottish-income-tax.html`; lines 67–70. The adjacent current rate table is not required.
-- `https://www.gov.uk/welsh-income-tax`, introductory text and **Who pays the Welsh rates**: Welsh Government sets Welsh rates; residence matters; savings and dividends use UK treatment. **How you pay** explains HMRC tax codes and PAYE. Snapshot `basics-welsh-income-tax.html`; lines 57–89.
-- HMRC latest commentary sections 2 and 4 establish UK coverage. Scottish marginal rates are grouped for the published national classifications. The Income Tax share display does not need a separate rate calculation.
-
-Do not claim this short set describes every devolved tax. Property transaction taxes, local taxes and devolved spending need separate source-backed explanations if added.
-
-## Source age and page dates
-
-The guidance pages are living official guidance. Their bodies do not display a publication date. Record retrieval on **30 October 2026**, not an invented release date. Their current rate examples refer to 2026/27, but the proposed copy above uses no rates. The ONS technical report is historical methodology, not current numerical guidance. Prefer current workbook notes where they conflict.
-
-
-## Seed scope
-Only the7register-listed living guidance responses are retained in this seed. ONS methodology and HMRC/ONS numeric sources belong to the separate payer seed; references here are not evidence of their inclusion in this seed. Use no current tax rates or numerical examples from living guidance for2023/24. No product test, independent candidate review, or deployment is claimed by this acquisition.
-
-## Corporation Tax definition
-
-Retained complete official guidance https://www.gov.uk/corporation-tax, Overview:
-“Corporation Tax is a tax your company or association pays to HM Revenue and Customs (HMRC) on profits in an ‘accounting period’.”
-
-Suggested short explanation: Corporation Tax applies to taxable company or association profits, including trading, investments and chargeable gains. The OBR revenue group also contains separately named related charges, so it is broader than this definition. The source does not establish who ultimately bears the economic cost. No rate or universal shareholder/consumer burden claim.
+The native review of candidate `d5baa129eb7bc8ef924e2fe631a00b9473a3093d`
+blocked hidden basics containers and recorded methods/provenance advisories.
+This record corrects unretained snapshot names and unsupported line locators.
+The repair still needs exact-candidate checks and independent review. This
+source record does not claim a new build, test, review approval or deployment.

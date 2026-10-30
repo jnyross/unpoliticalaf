@@ -55,13 +55,34 @@ PINNED_REGISTER_SHA256 = hashlib.sha256(_pinned_register()).hexdigest()
 # Exact meaningful source-body quotes, NOT obtained from the producer mapping.
 ANCHORS = {
     "income-tax": ("Overview", "Income Tax is a tax you pay on your income.", "You do not have to pay tax on all types of income.", "Income Tax allowances and reliefs", "Most people in the UK get a Personal Allowance of tax-free income."),
-    "national-insurance": ("Overview", "You pay National Insurance contributions to qualify for certain benefits and the State Pension.", "Who pays National Insurance", "per week from one job", "a year", "Your contributions are treated as having been paid to protect your National Insurance record.", "National Insurance classes", "The type you pay depends on your employment status and how much you earn."),
+    "national-insurance": ("Overview", "You pay National Insurance contributions to qualify for certain benefits and the State Pension.", "Who pays National Insurance", "an employee earning more than £242 per week from one job", "self-employed and making a profit of more than £12,570 a year", "Your contributions are treated as having been paid to protect your National Insurance record.", "National Insurance classes", "The type you pay depends on your employment status and how much you earn."),
     "paye-remitter": ("Introduction to PAYE", "Deductions from their pay", "deduct tax and National Insurance for most employees.", "Reporting pay and deductions", "including an employer’s National Insurance contribution", "Paying HMRC", "You then have to pay HMRC, usually every month.", "system to collect Income Tax and National Insurance from employment."),
     "scottish-powers": ("Income Tax", "set the tax band thresholds (excluding the personal allowance) as well as the rates.", "This applies to all non-savings, non-dividend income of Scottish taxpayers", "HMRC is responsible for the collection and management of Scottish Income Tax"),
     "vat": ("Overview", "is a tax added to most products and services sold by VAT-registered businesses.", "Your responsibilities as a VAT-registered business", "If you’ve charged more VAT than you’ve paid, you must pay the difference to HMRC.", "What VAT is charged on", "goods or services that are exempt from VAT or are unaffected by VAT", "How much VAT you must charge", "classed as reduced or zero-rated"),
     "welsh-income-tax": ("Income Tax in Wales", "You pay Welsh Income Tax rates if you live in Wales. These rates have been set by the Welsh Government.", "Who pays the Welsh rates", "the same tax as the rest of the UK on dividends and savings interest.", "How you pay", "HMRC will add a ‘C’ to the start of your tax code"),
     "corporation-tax": ("Overview", "Corporation Tax is a tax your company or association pays to HM Revenue and Customs (HMRC) on profits", "Profits you pay Corporation Tax on", "Taxable profits for Corporation Tax include the money your company or association makes from:"),
 }
+
+
+# Actual visible heading identities, not strings found in prose/navigation. Some
+# guide pages are retained only as URL-bound FAQ Question/Answer pairs below.
+MAIN_HEADINGS = {
+    "income-tax": (("h1", None, "Overview"), ("h2", "income-tax-allowances-and-reliefs", "Income Tax allowances and reliefs")),
+    "national-insurance": (("h1", None, "Overview"), ("h2", "who-pays-national-insurance", "Who pays National Insurance"), ("h2", "national-insurance-classes", "National Insurance classes")),
+    "paye-remitter": (("h1", None, "Introduction to PAYE"), ("h3", "deductions-from-their-pay", "Deductions from their pay"), ("h3", "reporting-pay-and-deductions", "Reporting pay and deductions"), ("h3", "paying-hmrc", "Paying HMRC")),
+    "scottish-powers": (("h2", None, "Income Tax"),),
+    "vat": (("h1", None, "Overview"), ("h2", "your-responsibilities-as-a-vat-registered-business", "Your responsibilities as a VAT-registered business")),
+    "welsh-income-tax": (("h1", None, "Income Tax in Wales"), ("h2", "who-pays-the-welsh-rates", "Who pays the Welsh rates"), ("h2", "how-you-pay", "How you pay")),
+    "corporation-tax": (("h1", None, "Overview"), ("h2", "profits-you-pay-corporation-tax-on", "Profits you pay Corporation Tax on")),
+}
+FAQ_HEADINGS = {
+    "vat": (("What VAT is charged on", "https://www.gov.uk/how-vat-works/what-vat-charged-on", "goods or services that are exempt from VAT or are unaffected by VAT"),
+            ("How much VAT you must charge", "https://www.gov.uk/how-vat-works/how-much-vat-you-must-charge", "classed as reduced or zero-rated")),
+}
+NI_PERIOD_QUOTES = (
+    "an employee earning more than £242 per week from one job",
+    "self-employed and making a profit of more than £12,570 a year",
+)
 
 
 def _require(condition, message):
@@ -82,6 +103,7 @@ class _Official(HTMLParser):
         self.parts = []
         self.canonicals = []
         self.structured = []
+        self.content = _Text()
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -91,6 +113,8 @@ class _Official(HTMLParser):
             self.canonicals.append(a.get("href"))
         if tag == "script":
             self.script = [a.get("type"), []]
+        if self.main and self.script is None:
+            self.content.handle_starttag(tag, attrs)
         if self.main and tag in {"p", "h1", "h2", "h3", "li", "td", "th", "div"}:
             self.parts.append(" ")
 
@@ -99,8 +123,11 @@ class _Official(HTMLParser):
             self.script[1].append(data)
         elif self.main:
             self.parts.append(data)
+            self.content.handle_data(data)
 
     def handle_endtag(self, tag):
+        if self.main and self.script is None:
+            self.content.handle_endtag(tag)
         if tag == "script" and self.script is not None:
             if self.script[0] == "application/ld+json":
                 self.structured.append(json.loads("".join(self.script[1])))
@@ -114,17 +141,34 @@ class _Official(HTMLParser):
 class _Text(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.parts = []
+        self.parts, self.headings, self.items = [], [], []
+        self.heading, self.item = None, None
 
     def handle_data(self, data):
         self.parts.append(data)
+        if self.heading is not None:
+            self.heading[2].append(data)
+        if self.item is not None:
+            self.item.append(data)
 
     def handle_starttag(self, tag, attrs):
+        if tag in {"h1", "h2", "h3"}:
+            self.heading = [tag, dict(attrs).get("id"), []]
+        if tag == "li":
+            self.item = []
         if tag in {"p", "li", "h1", "h2", "h3", "div", "td", "th"}:
             self.parts.append(" ")
 
     def handle_endtag(self, tag):
-        self.handle_starttag(tag, [])
+        if self.heading is not None and tag == self.heading[0]:
+            level, ident, parts = self.heading
+            self.headings.append((level, ident, _norm("".join(parts))))
+            self.heading = None
+        if tag == "li" and self.item is not None:
+            self.items.append(_norm("".join(self.item)))
+            self.item = None
+        if tag in {"p", "li", "h1", "h2", "h3", "div", "td", "th"}:
+            self.parts.append(" ")
 
 
 def _article_parts(node):
@@ -140,6 +184,48 @@ def _article_parts(node):
     elif isinstance(node, list):
         for value in node:
             yield from _article_parts(value)
+
+
+def _faq_questions(node):
+    if isinstance(node, list):
+        for child in node:
+            yield from _faq_questions(child)
+    elif isinstance(node, dict):
+        if node.get("@type") == "FAQPage":
+            for question in node.get("mainEntity", []):
+                if isinstance(question, dict) and question.get("@type") == "Question":
+                    yield question
+        # Do not accept arbitrary nested names, article metadata or descriptions.
+        if "@graph" in node:
+            yield from _faq_questions(node["@graph"])
+
+
+def _validate_official(name, url, html):
+    parser = _Official()
+    parser.feed(html)
+    parser.close()
+    _require(parser.canonicals == [url], f"official canonical mismatch: {name}")
+    for heading in MAIN_HEADINGS[name]:
+        _require(parser.content.headings.count(heading) == 1,
+                 f"missing or duplicate official heading: {name}: {heading}")
+    for title, page_url, quote in FAQ_HEADINGS.get(name, ()):
+        questions = [q for q in _faq_questions(parser.structured)
+                     if q.get("name") == title and q.get("url") == page_url]
+        _require(len(questions) == 1, f"missing or duplicate official FAQ heading: {name}: {title}")
+        answer = questions[0].get("acceptedAnswer", {})
+        _require(isinstance(answer, dict) and answer.get("@type") == "Answer"
+                 and answer.get("url") == page_url and isinstance(answer.get("text"), str),
+                 f"wrong official FAQ answer binding: {name}: {title}")
+        content = _Text()
+        content.feed(answer["text"])
+        _require(quote in _norm("".join(content.parts)), f"missing official FAQ quote: {name}: {title}")
+    if name == "national-insurance":
+        for quote in NI_PERIOD_QUOTES:
+            _require(parser.content.items.count(quote) == 1,
+                     f"missing or duplicate official NI period quotation: {quote}")
+    text = _norm(" ".join(parser.parts) + " " + " ".join(_article_parts(parser.structured)))
+    for anchor in ANCHORS[name]:
+        _require(anchor in text, f"missing official heading/quote: {name}: {anchor}")
 
 
 def validate_sources(root=ROOT):
@@ -158,12 +244,7 @@ def validate_sources(root=ROOT):
         body = envelope["original_response"].encode("utf-8")
         _require(len(body) == size and hashlib.sha256(body).hexdigest() == digest, f"original response changed: {name}")
         _require(entry["url"] == url, f"official URL changed: {name}")
-        parser = _Official()
-        parser.feed(body.decode("utf-8"))
-        _require(parser.canonicals == [url], f"official canonical mismatch: {name}")
-        text = _norm(" ".join(parser.parts) + " " + " ".join(_article_parts(parser.structured)))
-        for anchor in ANCHORS[name]:
-            _require(anchor in text, f"missing official heading/quote: {name}: {anchor}")
+        _validate_official(name, url, body.decode("utf-8"))
     return True
 
 
@@ -215,6 +296,11 @@ class _Fragment(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        # Check the root BEFORE its early return. Classes can conceal content
+        # through the host stylesheet, so no class is allowed in this module.
+        if self.stack or a.get("data-basics") == self.scope:
+            _require(not any(k in {"hidden", "style", "aria-hidden", "class"} or k.startswith("on")
+                             for k, _ in attrs), "hidden or active basics content")
         if a.get("data-basics") == self.scope:
             _require(not self.stack and tag == self.tag, "wrong or nested basics container")
             self.count += 1
@@ -229,7 +315,6 @@ class _Fragment(HTMLParser):
             _require(tag == expected_tag and self.stack == [self.tag] and a.get("id") == expected_id,
                      "wrong basics heading level or position")
             self.headings += 1
-        _require(not any(k in {"hidden", "style", "aria-hidden"} or k.startswith("on") for k in a), "hidden or active basics content")
         self.stack.append(tag)
         markers = [key for key in ("data-basics-claim", "data-basics-scope") if key in a]
         if markers:
