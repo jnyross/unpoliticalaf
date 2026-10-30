@@ -317,18 +317,45 @@ class BasicsTests(unittest.TestCase):
     def test_ni_period_quotes_are_full_visible_list_items(self):
         original = self.official_body("national-insurance")
         url = "https://www.gov.uk/national-insurance"
+        baseline = check_basics._Official()
+        baseline.feed(original)
+        baseline.close()
+        main = re.search(r"<main\b[^>]*>.*?</main>", original, flags=re.S)
+        self.assertIsNotNone(main, "mutation needs the retained main element")
+        scripts = [match.span() for match in re.finditer(
+            r"<script\b[^>]*>.*?</script>", original, flags=re.S)]
         for quote in (
             "an employee earning more than £242 per week from one job",
             "self-employed and making a profit of more than £12,570 a year",
         ):
             self.assertIn(quote, build_basics.source_assertions["ni-rules"]["quotedanchor"])
             self.assertIn(quote, check_basics.ANCHORS["national-insurance"])
-            # Change the actual visible LI, while preserving JSON-LD quotations.
+            # FAQ JSON-LD also contains literal LI strings. Select the one in
+            # main but outside every script, rather than replacing the first hit.
             before = "<li>" + quote + "</li>"
+            targets = [match for match in re.finditer(re.escape(before), original)
+                       if main.start() < match.start() < main.end()
+                       and not any(start <= match.start() < end for start, end in scripts)]
+            self.assertEqual(len(targets), 1, "mutation needs exactly one visible LI")
+            self.assertEqual(baseline.content.items.count(quote), 1)
+            target = targets[0]
             for after in ("<li>unrelated per week from one job; a year</li>",
                           "<p>" + quote + "</p>"):
                 with self.subTest(quote=quote, mutation=after):
-                    changed = self.replace(original, before, after)
+                    changed = original[:target.start()] + after + original[target.end():]
+                    observed = check_basics._Official()
+                    observed.feed(changed)
+                    observed.close()
+                    expected_items = list(baseline.content.items)
+                    index = expected_items.index(quote)
+                    if after.startswith("<li>"):
+                        expected_items[index] = "unrelated per week from one job; a year"
+                    else:
+                        del expected_items[index]
+                    self.assertEqual(observed.content.items, expected_items)
+                    self.assertNotIn(quote, observed.content.items)
+                    self.assertEqual(observed.structured, baseline.structured)
+                    self.assertEqual(observed.content.headings, baseline.content.headings)
                     with self.assertRaisesRegex(ValueError, "official NI period quotation"):
                         check_basics._validate_official("national-insurance", url, changed)
         assertion = build_basics.source_assertions["ni-rules"]
