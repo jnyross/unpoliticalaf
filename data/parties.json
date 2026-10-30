@@ -1,0 +1,3839 @@
+{
+  "schema_version": 1,
+  "status": "candidate",
+  "as_of": "2026-10-30",
+  "reason": null,
+  "roster_sources": [
+    "commons"
+  ],
+  "parties": [
+    {
+      "id": "1",
+      "name": "Alliance",
+      "official_domain": "allianceparty.org",
+      "mp_count": 1,
+      "publication_sources": [
+        "alliance-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "alliance-2024-fiscal-p16-1",
+          "title": "Fiscal rules, share buybacks and funding: extract 16.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 16; do not aggregate overlapping records.",
+          "geography": "UK and Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "alliance-2024",
+            "start": 48656,
+            "end": 49593,
+            "quote": "We believe that UK Fiscal Rules should\nrecognise the impact of spending on UK\n                                                   Taxation\nGovernment’s overall asset base in terms of\nbroader economic infrastructure, natural           Alliance maintains that there is potential for a\nresources and the quality of our environment       fairer, more redistributive system without any\n– not merely the impact on debt and deficit,       additional tax being levied on ordinary\nas is currently the case. If public sector         working households. We believe the current\nspending creates additional net wealth, albeit     UK taxation policy fails to adequately capture\non the basis of interim debt incurrence, then it   and reflect wealth and should be revised to\ncould and should be deemed fiscally prudent.       ensure a more progressive tax system.\n                                                   Loopholes in the tax system accommodate"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "alliance-2024-fiscal-p16-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "alliance-2024-fiscal-p17-1",
+          "title": "Fiscal rules, share buybacks and funding: extract 17.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 17; do not aggregate overlapping records.",
+          "geography": "UK and Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "alliance-2024",
+            "start": 52538,
+            "end": 54185,
+            "quote": "We would also like to see a tax on share           Welfare Support\nbuybacks, as has recently been implemented\n                                                   The UK continues to face a very significant\nin the US, to incentivise productive business\n                                                   cost of living crisis, with many households –\ninvestment, support the transition to net zero\n                                                   including both those with and without people\nand raise much-needed public funds for\n                                                   in employment – struggling to meet the basic\ninvestment in public services. These buybacks\n                                                   standard of living. The use of food banks\noccur when huge corporations use their\n                                                   continues to increase every year and\nprofits to inflate their own share price –\n                                                   pressures on households with children are\nusually this involves oil and gas giants and big\n                                                   particularly acute.\nbanks; the same corporations who are\nprofiting the most from the cost-of-living         Alliance will work to end to the callous\ncrisis. It is estimated that a tax on share        approach to welfare reform, which has\nbuybacks would raise around £1.4bn per year.       severely harmed low-income households. We\n                                                   support ending the Benefits Cap, Bedroom\n                                                   Tax and two-child limit on Child Benefit on a"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "alliance-2024-fiscal-p17-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "alliance-2024-fiscal-p19-1",
+          "title": "Fiscal rules, share buybacks and funding: extract 19.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 19; do not aggregate overlapping records.",
+          "geography": "UK and Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "alliance-2024",
+            "start": 64405,
+            "end": 64717,
+            "quote": "Alliance is committed to securing a base-lined      For further details on what we would do in\nfiscal floor, set at a level in excess of 124, as   these areas, please see our 2022 Assembly\npart of the next UK Spending Review. This           Manifesto.\nprocess should be informed by external\nindependent analysis."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "alliance-2024-fiscal-p19-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Conservative",
+      "official_domain": "conservatives.com",
+      "mp_count": 118,
+      "publication_sources": [
+        "conservative-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "conservative-2024-fiscal-p16-1",
+          "title": "National Insurance and pension uprating: extract 16.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 16; do not aggregate overlapping records.",
+          "geography": "UK; devolved remits differ",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "conservative-2024",
+            "start": 52261,
+            "end": 53535,
+            "quote": "Our long-term ambition, when it is afordable\n                                                   We introduced the National Living Wage in\nto do so, is to keep cutting National Insurance\n                                                   2016 and this year achieved our ambition of\nuntil it’s gone, as part of our plan to make the\n                                                   raising it to two thirds of median earnings –\ntax system simpler and fairer. As the next step\n                                                   increasing it to £11.44 per hour and extending it\nin that plan, we will cut employee National\n                                                   to cover all workers aged over 21. This ended\nInsurance to 6% by April 2027 – meaning\n                                                   low pay for those on the National Living Wage,\nthat we will have halved it from 12% at the\n                                                   with someone working full-time receiving a pay\nbeginning of this year, a total tax cut of\n                                                   rise worth £1,800. As a result of our personal\n£1,350 for the average worker on £35,000.\n                                                   tax cuts and increases in the minimum wage,"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "conservative-2024-fiscal-p16-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "conservative-2024-fiscal-p17-1",
+          "title": "National Insurance and pension uprating: extract 17.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 17; do not aggregate overlapping records.",
+          "geography": "UK; devolved remits differ",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "conservative-2024",
+            "start": 58744,
+            "end": 59893,
+            "quote": "1.   Continuing to uprate the State Pension in       Clamping down on tax\n                            line with the highest of prices, earnings       avoidance\n                            or 2.5%. On current forecasts, this will\n                            mean the new State Pension increases by         It is vital we make sure people and companies\n                                                                            are paying the tax they owe. That’s why,\n                            a further £430 in April next year to £11,970;\n                                                                            since 2010, Conservative Governments have\n                            and increases by £1,685 a year to £13,200\n                                                                            introduced over 200 measures to tackle tax\n                            by the end of the Parliament.\n                                                                            non-compliance. In total across all the fscal\n                                                                            events we have delivered since 2010, the OBR"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "conservative-2024-fiscal-p17-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Democratic Unionist Party",
+      "official_domain": "mydup.com",
+      "mp_count": 5,
+      "publication_sources": [
+        "dup-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "dup-2024-fiscal-p18-1",
+          "title": "Needs-based funding framework: extract 18.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 18; do not aggregate overlapping records.",
+          "geography": "Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "dup-2024",
+            "start": 41567,
+            "end": 42870,
+            "quote": "In the next Parliament, DUP MPs will          access for women seeking surgery for\npress the next Government to ensure that      endometriosis, campaigning on rare diseases\nfunding cannot drop below the definition of   and ensuring Cystic Fibrosis sufferers have\nassessed need in NI - £124 for every £100     access to wonder drug Orkambi.\nspent in England.                             We have also recognised the need to\nWe will also campaign for Northern            end disparities between arrangements\nIreland’s baseline funding to be increased    benefiting health staff working in Northern\nproportionately by the same amount            Ireland and the rest of the United\nabove need as the Government applied          Kingdom. This is essential for the delivery\nto Wales with a new needs-based factor        of primary care in particular, for skills\nand 5% transitional uplift. Collectively      retention, as well as for wider reforms of\nthis will be worth hundreds of millions       health and social care.\nof pounds in additional resources for         Going forward, DUP MPs will campaign to:\nour government departments every year\nmoving forward.                               3 drive waiting lists down - fostering\n                                                large-scale partnerships between"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "dup-2024-fiscal-p18-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "44",
+      "name": "Green Party",
+      "official_domain": "greenparty.org.uk",
+      "mp_count": 5,
+      "publication_sources": [
+        "green-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "green-2024-borrowing-1",
+          "title": "Borrowing: Additional debt (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 281614,
+            "end": 281709,
+            "quote": "Deficit - funded by additional debt              85.3        44.7        52.6     62.9     79.5"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "79.5",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 281614,
+                  "end": 281709,
+                  "quote": "Deficit - funded by additional debt              85.3        44.7        52.6     62.9     79.5"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-borrowing-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-2",
+          "title": "Capital: Green economic transformation (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 279514,
+            "end": 279609,
+            "quote": "Green economic transformation                    9.9         19.1        46.7     56.7     72.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "72.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 279514,
+                  "end": 279609,
+                  "quote": "Green economic transformation                    9.9         19.1        46.7     56.7     72.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-2",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-1",
+          "title": "Capital: Health and education (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 279303,
+            "end": 279397,
+            "quote": "Health and education                             9.2         6.6         6.6      6.6      6.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "6.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 279303,
+                  "end": 279397,
+                  "quote": "Health and education                             9.2         6.6         6.6      6.6      6.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-4",
+          "title": "Capital: Other (2) (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 279938,
+            "end": 280032,
+            "quote": "Other (2)                                        7.0         16.5        6.7      6.8      6.9"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "6.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 279938,
+                  "end": 280032,
+                  "quote": "Other (2)                                        7.0         16.5        6.7      6.8      6.9"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-4",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-6",
+          "title": "Capital: Published subtotal (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 280474,
+            "end": 280520,
+            "quote": "22.8        40.0        56.6     69.0     90.3"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "90.3",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 280474,
+                  "end": 280520,
+                  "quote": "22.8        40.0        56.6     69.0     90.3"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-6",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-5",
+          "title": "Capital: Savings (3) (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 280200,
+            "end": 280296,
+            "quote": "Savings (3)                                      -5.6        -6.8        -9.2     -11.6    -13.9"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "-13.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 280200,
+                  "end": 280296,
+                  "quote": "Savings (3)                                      -5.6        -6.8        -9.2     -11.6    -13.9"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-5",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-capital-3",
+          "title": "Capital: Social housing (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 279726,
+            "end": 279821,
+            "quote": "Social housing                                   2.2         4.6         5.8      10.5     18.1"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "18.1",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 279726,
+                  "end": 279821,
+                  "quote": "Social housing                                   2.2         4.6         5.8      10.5     18.1"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-capital-3",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-4",
+          "title": "Revenue: Education (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 277847,
+            "end": 277942,
+            "quote": "Education                                        13.9        13.4        12.9     13.2     13.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "13.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 277847,
+                  "end": 277942,
+                  "quote": "Education                                        13.9        13.4        12.9     13.2     13.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-4",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-1",
+          "title": "Revenue: Health and social care (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 277212,
+            "end": 277307,
+            "quote": "Health and social care                           30.7        35.4        40.6     46.4     52.9"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "52.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 277212,
+                  "end": 277307,
+                  "quote": "Health and social care                           30.7        35.4        40.6     46.4     52.9"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-2",
+          "title": "Revenue: Income support (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 277424,
+            "end": 277519,
+            "quote": "Income support                                   17.6        23.0        25.1     27.2     29.4"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "29.4",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 277424,
+                  "end": 277519,
+                  "quote": "Income support                                   17.6        23.0        25.1     27.2     29.4"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-2",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-3",
+          "title": "Revenue: Nature, food and farming (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 277636,
+            "end": 277730,
+            "quote": "Nature, food and farming                         3.6         4.2         4.5      4.5      4.5"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "4.5",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 277636,
+                  "end": 277730,
+                  "quote": "Nature, food and farming                         3.6         4.2         4.5      4.5      4.5"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-3",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-7",
+          "title": "Revenue: Other (1) (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 278651,
+            "end": 278746,
+            "quote": "Other (1)                                        19.4        21.2        21.3     21.7     22.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "22.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 278651,
+                  "end": 278746,
+                  "quote": "Other (1)                                        19.4        21.2        21.3     21.7     22.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-7",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-6",
+          "title": "Revenue: Overseas aid (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 278393,
+            "end": 278488,
+            "quote": "Overseas aid                                     8.3         12.2        16.1     20.1     24.0"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "24.0",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 278393,
+                  "end": 278488,
+                  "quote": "Overseas aid                                     8.3         12.2        16.1     20.1     24.0"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-6",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-8",
+          "title": "Revenue: Published subtotal (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 278962,
+            "end": 279009,
+            "quote": "99.2        119.8       131.4    145.1    161.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "161.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 278962,
+                  "end": 279009,
+                  "quote": "99.2        119.8       131.4    145.1    161.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-8",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-revenue-5",
+          "title": "Revenue: Transport (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 278137,
+            "end": 278232,
+            "quote": "Transport                                        5.7         10.5        10.8     11.9     14.6"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "14.6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 278137,
+                  "end": 278232,
+                  "quote": "Transport                                        5.7         10.5        10.8     11.9     14.6"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-revenue-5",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-appendix-notes",
+          "title": "Statistical appendix definitions and constraints (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 281828,
+            "end": 282951,
+            "quote": "Notes\n                                                                                                                    1. Includes debt interest and increased spending in Wales, Scotland and Northern Ireland\n                                                                                                                       on devolved function..\n                                                                                                                    2. 2027 includes £10bn funding for regional banks.\n                                                                                                                    3. Includes savings from cancellation of Trident replacement and reduction in road building.\n                                                                                                                    4. These estimates are part of a 10-year programme. What is achievable in the first five years\n                                                                                                                       may be constrained by inflation risks and supply-side shortages."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-appendix-notes",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-tax-2",
+          "title": "Tax: Business taxes (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 280976,
+            "end": 281070,
+            "quote": "Business taxes                                   7.0         9.1         9.5      9.6      8.2"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "8.2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 280976,
+                  "end": 281070,
+                  "quote": "Business taxes                                   7.0         9.1         9.5      9.6      8.2"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-tax-2",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-tax-3",
+          "title": "Tax: Carbon taxes (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 281187,
+            "end": 281282,
+            "quote": "Carbon taxes                                     1.2         40.6        57.0     69.7     91.3"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "91.3",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 281187,
+                  "end": 281282,
+                  "quote": "Carbon taxes                                     1.2         40.6        57.0     69.7     91.3"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-tax-3",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-tax-4",
+          "title": "Tax: Published subtotal (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 281448,
+            "end": 281495,
+            "quote": "36.7        115.1       135.4    151.2    172.4"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "172.4",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 281448,
+                  "end": 281495,
+                  "quote": "36.7        115.1       135.4    151.2    172.4"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-tax-4",
+          "overlaps_with": []
+        },
+        {
+          "id": "green-2024-tax-1",
+          "title": "Tax: Taxes on personal income and wealth (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2029-30",
+          "fiscal_year_reason": null,
+          "baseline": "OBR March 2024 baseline. Five columns: years ended March 2026–2030. Scalar ONLY for 2030 (2029-30); all years quoted. Ten-year programme; inflation/supply constraints; party estimates.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "green-2024",
+            "start": 280764,
+            "end": 280859,
+            "quote": "Taxes on personal income and wealth              28.5        65.3        68.9     71.9     72.9"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "72.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "green-2024",
+                  "start": 280764,
+                  "end": 280859,
+                  "quote": "Taxes on personal income and wealth              28.5        65.3        68.9     71.9     72.9"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "green-2024-tax-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Labour",
+      "official_domain": "labour.org.uk",
+      "mp_count": 404,
+      "publication_sources": [
+        "labour-fiscal-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "labour-public-services-2024",
+          "title": "Additional public services spending (2024 manifesto)",
+          "proposal_date": "2024-06-13",
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Source uses the last year of the most recent OBR forecast (2028-29); additional spending, not total departmental budgets.",
+          "scope": "Public Services table including Barnett consequentials. Excludes Green Prosperity Plan and reallocations. Not all revenue is allocated to spending.",
+          "geography": "Mixed service remits; source footnotes distinguish England and Wales, UK-wide costs and Barnett allocations to Scotland, Wales and Northern Ireland.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "labour-fiscal-2024",
+            "start": 2929,
+            "end": 4547,
+            "quote": "Public Services\n1\nREVENUE (2028-29)\n£M\nPOLICIES FUNDED (2028-29)\n£M\nRevenue from closing further non-dom tax loopholes and investment in reducing tax avoidance\n2\n5,230\n40,000 more operations, scans and appointments every week\n1,010\nDouble the number of NHS CT and MRI scanners\n250\nDentistry package including 700,000 urgent appointments every year\n125\nFree breakfast clubs in every primary school\n315\nInvestment in HMRC to reduce tax avoidance\n855\nRevenue from applying VAT and business rates to private schools\n1,510\n6,500 new expert teachers\n450\nIncreased teacher and headteacher training\n270\nDelivering work experience and careers advice for all young people\n85\nEarly language development in primary schools\n5\nOfsted reform\n45\nOver 3,000 new nurseries\n35\nMental health support for every school\n175\nYoung Futures Hubs\n95\nRevenue from closing carried interest tax loophole\n565\nRecruit 8,500 new mental health staff\n410\nLegal aid for victims of disasters or state-related deaths\n3\n30\nWaive visa costs for non-UK veterans who have served four years or more in the British forces\n4\n10\nRevenue from increasing stamp duty on purchases of residential property by non-UK residents by 1%\n40\nAppoint 300 new planning officers\n20\nBarnett consequentials\n5\n650\nTotal\n7,350\nTotal including Barnett consequentials\n4,835\n1\nMay not sum due to rounding.\n2\nRevenue from tax avoidance driven by additional £855m per year investment in HMRC. Does not include £600m revenue from removing non-dom discount loophole in 2025-26.\n3\nCosts are England and Wales.\n4\nCosts are UK wide.\n5\nScotland (£320m), Wales (£195m), Northern Ireland (£135m)."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "4835",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "labour-fiscal-2024",
+                  "start": 4191,
+                  "end": 4235,
+                  "quote": "Total including Barnett consequentials\n4,835"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "7350",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "labour-fiscal-2024",
+                  "start": 4179,
+                  "end": 4190,
+                  "quote": "Total\n7,350"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "publisher": "Resolution Foundation",
+                "assessed_on": "2024-06-14",
+                "scope": "Overall Conservative and Labour spending plans; not verification of this individual table or of a 2026 plan.",
+                "evidence": {
+                  "source_id": "resolution-comparison-2024",
+                  "start": 7353,
+                  "end": 8280,
+                  "quote": "Neither of the manifestos have much to say about how they would deliver the current tax and spending plans, announced in the last parliament, and which both parties are implicitly signed up to. No party has said what these overall spending totals mean for different departments, but under plausible assumptions about the parties’ plans for defence, health and education, then they could mean\nat least £18 billion of cuts to unprotected departments\n(including Justice, the Home Office and local government) – a bigger sum than the changes the two parties focus on in their respective manifestos. The existing fiscal forecast also banks on squeezing working-age benefits, through the continued roll-out of the two-child limit on support and freezes to Local Housing Allowances. These sorts of cuts will also be extremely challenging to deliver given the current state of public services and levels of hardship around the country."
+                }
+              }
+            ]
+          },
+          "overlap_key": "labour-public-services-2024",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Liberal Democrat",
+      "official_domain": "libdems.org.uk",
+      "mp_count": 71,
+      "publication_sources": [
+        "libdem-2024-costings"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "libdem-2024-costings-row-12",
+          "title": "Asylum processing and employment (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 6085,
+            "end": 6281,
+            "quote": "12. Cut the asylum backlog and allow asylum seekers to work after\n   three months: Extra tax and national insurance revenue, savings in\n   asylum support and accommodation and healthcare spending."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "-4290",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2642,
+                  "end": 2779,
+                  "quote": "Cut the asylum backlog and allow asylum\n12                                                 -4,290\n     seekers to work after three months"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-12",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-22",
+          "title": "Aviation taxes (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8794,
+            "end": 9018,
+            "quote": "22. Fairly reform aviation taxes: Reform the taxation of international\n   ﬂights to focus on those who ﬂy the most, while reducing costs for\n   ordinary households who take one or two international return ﬂights\n   per year."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "3620",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 7114,
+                  "end": 7168,
+                  "quote": "22   Fairly reform aviation taxes                3,620"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-22",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-14",
+          "title": "Bank taxes (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 7362,
+            "end": 7539,
+            "quote": "14. Reverse Conservative cuts to bank taxes: Reverse Conservative tax\n   cuts for the big banks, restoring Bank Surcharge and Bank Levy\n   revenues to 2016 levels in real terms."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "4250",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6553,
+                  "end": 6607,
+                  "quote": "14   Reverse Conservative cuts to bank taxes     4,250"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-14",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-15",
+          "title": "Capital gains tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 7540,
+            "end": 7857,
+            "quote": "15. Fairly reform Capital Gains Tax: Close loopholes exploited by the\n   super-wealthy by adjusting the rates and basing them solely on capital\n   gains while increasing the tax-free allowance from £3,000 to £5,000, on\n   top of a new tax-free allowance for inﬂation, and introducing a relief for\n   small businesses."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "5210",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6609,
+                  "end": 6663,
+                  "quote": "15   Fairly reform Capital Gains Tax             5,210"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-15",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-13",
+          "title": "Consultancy spending (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 6282,
+            "end": 6421,
+            "quote": "13. Crack down on Conservative waste by halving consultancy\n   spending: Halve the amount the government spends on external\n   consultants."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "-630",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2786,
+                  "end": 2912,
+                  "quote": "Crack down on Conservative waste by\n13                                                  -630\n     halving consultancy spending"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-13",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-current-spending-total",
+          "title": "Current spending total (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Published net table total; overlaps component records, do not add it to those rows.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 3; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 2919,
+            "end": 2971,
+            "quote": "Total                                         26,800"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "26800",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2919,
+                  "end": 2971,
+                  "quote": "Total                                         26,800"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-current-spending-total",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-11",
+          "title": "Devolved allocations (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 5870,
+            "end": 6084,
+            "quote": "11. Additional funding for Scotland, Wales and Northern Ireland: An\n   additional £1,480m for Scotland, £760m for Wales and £650m for\n   Northern Ireland would be available for them to spend on their\n   priorities."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "2890",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2500,
+                  "end": 2621,
+                  "quote": "Additional funding for Scotland, Wales\n11                                                 2,890\n     and Northern Ireland"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-11",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-17",
+          "title": "Digital services tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8090,
+            "end": 8235,
+            "quote": "17. Raise the Digital Services Tax on tech giants: Increase the Digital\n   Services Tax on social media ﬁrms and other tech giants from 2% to 6%."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "2090",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6786,
+                  "end": 6891,
+                  "quote": "Raise the Digital Services Tax on tech\n17                                               2,090\n     giants"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-17",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-3",
+          "title": "Early years and childcare (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 3816,
+            "end": 4223,
+            "quote": "3. Invest in early years and childcare: Give disadvantaged three- and\n   four-year-olds an extra ﬁve free hours a week; increase the Early Years\n   Pupil Premium; increase Statutory Maternity Pay, Shared Parental Pay\n   and paternity pay; introduce a use-it-or-lose-it month of leave for fathers\n   and partners; pay an enhanced rate of Child Beneﬁt for one-year-olds;\n   introduce paid neonatal care leave."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "2960",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 1792,
+                  "end": 1847,
+                  "quote": "3   Invest in early years and childcare           2,960"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-3",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-7",
+          "title": "Farming and environment (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 5093,
+            "end": 5280,
+            "quote": "7. Support farmers, rural communities and the environment: Boost\n   British farming; provide more funding for the Environment Agency and\n   Natural England; expand Rural Fuel Duty Relief."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "970",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2153,
+                  "end": 2268,
+                  "quote": "Support farmers, rural communities and\n 7                                                  970\n     the environment"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-7",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-5",
+          "title": "Higher education and lifelong learning (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 4630,
+            "end": 4746,
+            "quote": "5. Invest in higher education and lifelong learning: Reinstate\n   maintenance grants; create Lifelong Skills Grants."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "1500",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 1912,
+                  "end": 2022,
+                  "quote": "Invest in higher education and lifelong\n 5                                                 1,500\n     learning"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-5",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-9",
+          "title": "International, defence and borders (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 5543,
+            "end": 5702,
+            "quote": "9. International, defence and borders funding: Reverse Conservative\n   cuts to Army troop numbers; return international development\n   spending to 0.7% of GNI."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "6700",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2332,
+                  "end": 2436,
+                  "quote": "International, defence and borders\n 9                                                 6,700\n     funding"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-9",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-1",
+          "title": "NHS and social care (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 3053,
+            "end": 3648,
+            "quote": "1. End the crisis in the NHS and social care: 8,000 more GPs; invest in\n   cancer research and treatment; guarantee access to an NHS dentist for\n   everyone needing urgent and emergency care; invest in mental health\n   services, including talking therapies and walk-in hubs for young people;\n   make chronic mental health prescriptions free; increase the public\n   health grant; supervised toothbrushing for children; scrap VAT on\n   children’s toothbrushes and toothpaste; increase the number of staﬀed\n   hospital beds; introduce free personal care; introduce a higher Carer’s\n   Minimum Wage."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "8350",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 1676,
+                  "end": 1731,
+                  "quote": "1   End the crisis in the NHS and social care     8,350"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-16",
+          "title": "Oil and gas windfall tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 7858,
+            "end": 8089,
+            "quote": "16. A proper windfall tax on oil & gas super-proﬁts: Scrap the\n   ‘investment allowance’ loophole, increase the headline rate and extend it\n   to proﬁts since October 2021 when Liberal Democrats ﬁrst called for its\n   introduction."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "2120",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6670,
+                  "end": 6779,
+                  "quote": "A proper windfall tax on oil and gas\n16                                               2,120\n     super-proﬁts"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-16",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-10",
+          "title": "Other current spending (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 5703,
+            "end": 5869,
+            "quote": "10. Other: Support small employers with Statutory Sick Pay costs; establish\n   creative enterprise zones; end period poverty; reform the Child\n   Maintenance Service."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "100",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2438,
+                  "end": 2493,
+                  "quote": "10   Other                                          100"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-10",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-21",
+          "title": "Private jet flight tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8659,
+            "end": 8793,
+            "quote": "21. Super tax on private jet ﬂights: Introduce a new tax on each private jet\n   ﬂight and remove the VAT exemption for private ﬂights."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "380",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 7059,
+                  "end": 7112,
+                  "quote": "21   Super tax on private jet ﬂights              380"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-21",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-capital",
+          "title": "Public investment allocation (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Average annual additional investment over the next Parliament. £0.9bn schools reallocation is included in the £1.9bn schools line. Devolved allocations must not be added twice.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 9312,
+            "end": 10751,
+            "quote": "PUBLIC INVESTMENT\nWe will invest an additional £19.7 billion a year on average over the next\nParliament in public assets, to boost growth and improve our public\nservices.\n\n\nThis includes:\n   £1.1 billion of investment in hospitals and other NHS infrastructure and\n   equipment.\n   £1.9 billion to build new schools and clearing the backlog of repairs, £0.9\n   billion of which will be funded by redirecting capital funding for\n   unnecessary new free schools.\n   £8.4 billion to tackle climate change and protect the natural\n   environment, including:\n        • An emergency Home Energy Upgrade programme.\n        • Investment in renewable power, grid infrastructure and energy\n            storage.\n        • Protecting habitats and wildlife, restoring peatlands and planting\n            60 million trees a year.\n   £1.2 billion of investment in better transport, including:\n        • Rolling out more electric vehicle charging points.\n        • Creating new cycling and walking networks.\n        • Signiﬁcantly extending the electriﬁcation of the rail network.\n   £6.2 billion to support our target of building 150,000 social homes a year\n   and ensure that gigabit broadband is available to every home and\n   business.\n   An additional £1.9 billion would be made available for Scotland, Wales\n   and Northern Ireland to spend on their priorities: £1 billion for Scotland,\n   £0.5 billion for Wales, and £0.4 billion for Northern Ireland."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "19.7",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 9348,
+                  "end": 9390,
+                  "quote": "additional £19.7 billion a year on average"
+                }
+              },
+              {
+                "amount": "1.1",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 9503,
+                  "end": 9542,
+                  "quote": "£1.1 billion of investment in hospitals"
+                }
+              },
+              {
+                "amount": "1.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 9593,
+                  "end": 9626,
+                  "quote": "£1.9 billion to build new schools"
+                }
+              },
+              {
+                "amount": "8.4",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 9775,
+                  "end": 9812,
+                  "quote": "£8.4 billion to tackle climate change"
+                }
+              },
+              {
+                "amount": "1.2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 10128,
+                  "end": 10174,
+                  "quote": "£1.2 billion of investment in better transport"
+                }
+              },
+              {
+                "amount": "6.2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 10377,
+                  "end": 10411,
+                  "quote": "£6.2 billion to support our target"
+                }
+              },
+              {
+                "amount": "1.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 10539,
+                  "end": 10586,
+                  "quote": "additional £1.9 billion would be made available"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "0.9",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 9664,
+                  "end": 9734,
+                  "quote": "£0.9\n   billion of which will be funded by redirecting capital funding"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-capital",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-revenue-total",
+          "title": "Revenue total (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Published net table total; overlaps component records, do not add it to those rows.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 6; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 7231,
+            "end": 7281,
+            "quote": "Total                                       26,870"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "26870",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 7231,
+                  "end": 7281,
+                  "quote": "Total                                       26,870"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-revenue-total",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-4",
+          "title": "Schools (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 4224,
+            "end": 4629,
+            "quote": "4. Invest in schools: Put a dedicated mental health professional in every\n   school; extend free school meals to all children in poverty; introduce a\n   Tutoring Guarantee; fund teacher training properly; introduce a Young\n   People’s Premium; extend Pupil Premium Plus funding to children in\n   kinship care; reduce the amount schools pay towards EHCPs; expand\n   provision of extracurricular activities."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "2170",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 1850,
+                  "end": 1905,
+                  "quote": "4   Invest in schools                             2,170"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-4",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-18",
+          "title": "Share buyback tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8236,
+            "end": 8433,
+            "quote": "18. Introduce a 4% tax on share buybacks: Introduce a 4% tax on the\n   share buyback schemes of FTSE-100 listed companies, to incentivise\n   productive investment, job creation and economic growth."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "1420",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6893,
+                  "end": 6947,
+                  "quote": "18   Introduce a 4% tax on share buybacks        1,420"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-18",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-23",
+          "title": "Tax compliance (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 9019,
+            "end": 9228,
+            "quote": "23. Tackle tax avoidance and evasion: Narrow the £36 billion annual tax\n   gap by investing an extra £1 billion a year in HMRC to improve customer\n   support and boost compliance and anti-avoidance activities."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "7230",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 7170,
+                  "end": 7224,
+                  "quote": "23   Tackle tax avoidance and evasion            7,230"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-23",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-20",
+          "title": "Tobacco company levy (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8530,
+            "end": 8658,
+            "quote": "20. Tobacco company proﬁts levy: Set up a new levy on tobacco company\n   proﬁt margins with an inbuilt anti-avoidance mechanism."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "290",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 7004,
+                  "end": 7057,
+                  "quote": "20   Tobacco company proﬁts levy                  290"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-20",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-8",
+          "title": "Transport (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 5; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 5362,
+            "end": 5542,
+            "quote": "8. Cut the cost of transport: Reintroduce the plug-in car grant; cut VAT on\n   public charging; extend half fares on buses, trams and trains; introduce\n   a Young Person’s Buscard."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "570",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2271,
+                  "end": 2325,
+                  "quote": "8   Cut the cost of transport                      570"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-8",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-2",
+          "title": "Unpaid carers (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 3649,
+            "end": 3815,
+            "quote": "2. Support unpaid carers: Boost Carer’s Allowance by £20 per week, raise\n   the amount carers can earn and introduce an earnings taper to end the\n   unfair cliﬀ edge."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "1450",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 1734,
+                  "end": 1789,
+                  "quote": "2   Support unpaid carers                         1,450"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-2",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-19",
+          "title": "Water company profit tax (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 8434,
+            "end": 8529,
+            "quote": "19. Sewage tax on water company proﬁts: Apply an additional 16% tax on\n   water company proﬁts."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "260",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 6949,
+                  "end": 7002,
+                  "quote": "19   Sewage tax on water company proﬁts           260"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-19",
+          "overlaps_with": []
+        },
+        {
+          "id": "libdem-2024-costings-row-6",
+          "title": "Welfare changes (2024)",
+          "proposal_date": null,
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Additional current spending/revenue, £m 2028-29. Evidence pairs each numbered row with its complete policy note. Negative spending is claimed savings.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 4; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "libdem-2024-costings",
+            "start": 4747,
+            "end": 5092,
+            "quote": "6. Tackle child poverty and make the welfare system fairer: Scrap the\n   two-child limit, the beneﬁt cap and the bedroom tax; reverse cuts to\n   bereavement support; restore the full rate of Universal Credit for all\n   parents regardless of age. Includes Housing Beneﬁt and Local Housing\n   Allowance savings from the increase in social housing."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "4060",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "libdem-2024-costings",
+                  "start": 2029,
+                  "end": 2146,
+                  "quote": "Tackle child poverty and make the\n 6                                                 4,060\n     welfare system fairer"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "libdem-2024-costings-row-6",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "name": "Plaid Cymru",
+      "official_domain": "partyof.wales",
+      "mp_count": 4,
+      "publication_sources": [
+        "plaid-2024-pdf"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "plaid-2024-pdf-fiscal-p8-1",
+          "title": "Needs-based replacement for Barnett: extract 8.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "Wales",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "plaid-2024-pdf",
+            "start": 6729,
+            "end": 8131,
+            "quote": "A Fair Funding Formula               be appropriately taxed,         phrase, rather than a political\n                                     particularly where there is     slogan, ensuring that the\nPlaid Cymru believes                 an effective monopoly or        impact of fiscal decisions are\nthat Wales should be                 cartel which controls the       considered on a wider level\nfunded according to our              product. In particular, we      than just what is best for the\nneeds, not the out-dated             think that energy companies     City of London.\nBarnett Formula which                should be subject to an\ninstead provides funding             increased windfall tax, and     Recognising the challenge of\nproportionate to spending on         will close loopholes which      regional inequalities within\nEngland’s needs. We want             they currently exploit to       Wales, we will also ensure\nto see a new needs-based             avoid this. At the same time,   that the same consideration\nfunding formula introduced           we will promote renewable       is given to all parts of Wales\nin place of the Barnett              energy investment as an         to be sure that everybody\nFormula.                             alternative.                    benefits from Welsh\n                                                                     Government investment"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "plaid-2024-pdf-fiscal-p8-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "1036",
+      "name": "Reform UK",
+      "official_domain": "reformparty.uk",
+      "mp_count": 8,
+      "publication_sources": [
+        "reform-2024-pdf"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "reform-2024-pdf-growth",
+          "title": "Additional growth revenue assumption (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Annualised over five-year electoral term; no single fiscal year. Items include total AND components: never sum together. Growth is assumed revenue, not outturn. Party estimates, no endorsement.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "reform-2024-pdf",
+            "start": 69970,
+            "end": 70347,
+            "quote": "EXTRA GROWTH ASSUMPTION\n  Policy Area\n  Economy - Personal Pledges\n  Economy - Business Pledges\n  Energy Pledges\n  Brexit Pledges\n\n\n  Overall\n  Proposals will create 1 - 1.5% extra growth pa\n  Extra 1% pa GDP = £25 bn\n  Tax @ 40% spend = £10 bn\n\n  Total Extra Growth Assumption = £10 billion pa of extra tax revenues\n  TOTAL SAVINGS and EXTRA GROWTH POTENTIAL = £160 BILLION PA"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "10",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70250,
+                  "end": 70286,
+                  "quote": "£10 billion pa of extra tax revenues"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "reform-2024-pdf",
+          "overlaps_with": [
+            "reform-2024-pdf-costs",
+            "reform-2024-pdf-savings"
+          ]
+        },
+        {
+          "id": "reform-2024-pdf-costs",
+          "title": "Annualised cost table (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Annualised over five-year electoral term; no single fiscal year. Items include total AND components: never sum together. Growth is assumed revenue, not outturn. Party estimates, no endorsement.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 26; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "reform-2024-pdf",
+            "start": 70497,
+            "end": 71242,
+            "quote": "COST PLEDGES\n\n                                                Annualised Cost Over 5 Year\n      Policy Area\n                                                Electoral Term Amount in £ billions\n\n      Economy – Personal Pledges                £70\n\n      Economy – Business Pledges                £18\n\n      NHS Pledges                               £17\n\n      Policing Pledges                          £3\n\n      Justice Pledges                           £2\n\n      Education Pledges                         £5\n\n      Defence Pledges                           £14\n\n      Children and Families Pledges             £8\n\n      Agriculture Pledges                       £2\n\n      Fishing and Coastal Communities Pledges   £2\n\n\n  TOTAL COST = £141 BILLION"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "141",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 71230,
+                  "end": 71242,
+                  "quote": "£141 BILLION"
+                }
+              },
+              {
+                "amount": "70",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70696,
+                  "end": 70741,
+                  "quote": "Economy – Personal Pledges                £70"
+                }
+              },
+              {
+                "amount": "18",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70749,
+                  "end": 70794,
+                  "quote": "Economy – Business Pledges                £18"
+                }
+              },
+              {
+                "amount": "17",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70802,
+                  "end": 70847,
+                  "quote": "NHS Pledges                               £17"
+                }
+              },
+              {
+                "amount": "3",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70855,
+                  "end": 70899,
+                  "quote": "Policing Pledges                          £3"
+                }
+              },
+              {
+                "amount": "2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70907,
+                  "end": 70951,
+                  "quote": "Justice Pledges                           £2"
+                }
+              },
+              {
+                "amount": "5",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 70959,
+                  "end": 71003,
+                  "quote": "Education Pledges                         £5"
+                }
+              },
+              {
+                "amount": "14",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 71011,
+                  "end": 71056,
+                  "quote": "Defence Pledges                           £14"
+                }
+              },
+              {
+                "amount": "8",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 71064,
+                  "end": 71108,
+                  "quote": "Children and Families Pledges             £8"
+                }
+              },
+              {
+                "amount": "2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 71116,
+                  "end": 71160,
+                  "quote": "Agriculture Pledges                       £2"
+                }
+              },
+              {
+                "amount": "2",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 71168,
+                  "end": 71212,
+                  "quote": "Fishing and Coastal Communities Pledges   £2"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "reform-2024-pdf",
+          "overlaps_with": [
+            "reform-2024-pdf-growth",
+            "reform-2024-pdf-savings"
+          ]
+        },
+        {
+          "id": "reform-2024-pdf-savings",
+          "title": "Annualised savings table (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Annualised over five-year electoral term; no single fiscal year. Items include total AND components: never sum together. Growth is assumed revenue, not outturn. Party estimates, no endorsement.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 25; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "reform-2024-pdf",
+            "start": 69025,
+            "end": 69965,
+            "quote": "SAVINGS PLEDGES\n\n                                                        Annualised Savings Over 5 Year\n      Policy Area\n                                                        Electoral Term Amount in £ billions\n\n      Immigration Savings                               £5\n\n      Employer Immigration Tax                          £4\n\n      Energy Savings - tax subsidies & scrap Net\n                                                        £30\n      Zero\n\n      Benefit Saving - 1 million plus back to work      £15\n\n      Transport & Utilities Savings                     £5\n\n      Slash wasteful Government spending\n\n      Save £5 in 100 incl govt depts. quangos,\n                                                        £50\n      commissions\n\n      Stop bank interest on QE reserves                 £35\n\n      Cut foreign aid by 50%                            £6\n\n\n  Sub-Total Potential Savings = £150 billion pa = Almost £3,000 per Adult"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "150",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69924,
+                  "end": 69939,
+                  "quote": "£150 billion pa"
+                }
+              },
+              {
+                "amount": "5",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69246,
+                  "end": 69298,
+                  "quote": "Immigration Savings                               £5"
+                }
+              },
+              {
+                "amount": "4",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69306,
+                  "end": 69358,
+                  "quote": "Employer Immigration Tax                          £4"
+                }
+              },
+              {
+                "amount": "30",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69366,
+                  "end": 69468,
+                  "quote": "Energy Savings - tax subsidies & scrap Net\n                                                        £30"
+                }
+              },
+              {
+                "amount": "15",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69487,
+                  "end": 69540,
+                  "quote": "Benefit Saving - 1 million plus back to work      £15"
+                }
+              },
+              {
+                "amount": "5",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69548,
+                  "end": 69600,
+                  "quote": "Transport & Utilities Savings                     £5"
+                }
+              },
+              {
+                "amount": "50",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69650,
+                  "end": 69750,
+                  "quote": "Save £5 in 100 incl govt depts. quangos,\n                                                        £50"
+                }
+              },
+              {
+                "amount": "35",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69776,
+                  "end": 69829,
+                  "quote": "Stop bank interest on QE reserves                 £35"
+                }
+              },
+              {
+                "amount": "6",
+                "unit": "GBP billion",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "reform-2024-pdf",
+                  "start": 69837,
+                  "end": 69889,
+                  "quote": "Cut foreign aid by 50%                            £6"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "reform-2024-pdf",
+          "overlaps_with": [
+            "reform-2024-pdf-costs",
+            "reform-2024-pdf-growth"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1117",
+      "name": "Restore Britain",
+      "official_domain": "restorebritain.org.uk",
+      "mp_count": 1,
+      "publication_sources": [
+        "restore-economic-plan-pdf"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "restore-economic-plan-pdf-small-taxes",
+          "title": "Abolish named taxes: summary estimates (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 9810,
+            "end": 10222,
+            "quote": "●​ Abolish small taxes: Abolition of stamp duty in all forms (approximately\n      £18 billion), inheritance tax (approximately £9 billion), insurance\n      premium tax (approximately £9 billion), air passenger duty\n      (approximately £4 billion), the emissions trading scheme (approximately\n      £3 billion), and the climate change levy (approximately £1-2 billion).\n\n                                        6"
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-small-taxes",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-cgt-detail",
+          "title": "Capital gains allowance: detailed proposal (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Detailed chapter; differs from executive-summary scope or rounding. Income tax: summary £49bn, table £49.2bn, prose around £50bn. Corporation: initial £24bn at 19%, later cuts £4bn/point; summary £41bn. CGT: summary £20k–£40k allowance; detail £20k. Unresolved, not reconciled.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 55; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 76167,
+            "end": 76762,
+            "quote": "Capital Gains Tax (CGT) – Increase the allowance\nmaterially\nFor non-residential property, gains are taxed at a basic rate of 18% and a top rate\nof 24%. The major issue here is that allowances have been dramatically reduced\nover the last 20 years. Indeed, if the £10,100 tax-free limit had been indexed since\n2008-9, the current allowance would stand at over £16,000. We propose to keep\nnon-residential and residential rates unchanged, but raise the tax-free allowance\nto £20,000 per annum. This will cost the Exchequer around £700 million per\nannum.\n\n\n                                         53"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "700",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 76693,
+                  "end": 76715,
+                  "quote": "£700 million per\nannum"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-cgt",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-cgt"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-cgt",
+          "title": "Capital gains allowance: summary proposal (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 9; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 10227,
+            "end": 10346,
+            "quote": "●​ Capital gains tax: raise the annual allowance substantially (to\n      £20,000-£40,000; estimated cost £0.7 billion)."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "0.7",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 10317,
+                  "end": 10344,
+                  "quote": "estimated cost £0.7 billion"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-cgt",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-cgt-detail"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-tax-total",
+          "title": "Conditional tax reduction envelope (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 8906,
+            "end": 9303,
+            "quote": "Tax Proposals\nBy the end of the first Parliament, before assuming any growth multiplier, tax\ncuts of approximately £155 billion per annum are proposed. They would be\nmatched to spending savings and introduced only when fully funded, with the\nambition of reducing the overall tax burden. Our emphasis is on simplicity,\nfairness, transparency, predictability, and growth. The principal measures are:"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "155",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 9007,
+                  "end": 9043,
+                  "quote": "approximately £155 billion per annum"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-tax-total",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-corporation-detail",
+          "title": "Corporation tax changes: initial stage (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Detailed chapter; differs from executive-summary scope or rounding. Income tax: summary £49bn, table £49.2bn, prose around £50bn. Corporation: initial £24bn at 19%, later cuts £4bn/point; summary £41bn. CGT: summary £20k–£40k allowance; detail £20k. Unresolved, not reconciled.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 51; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 72205,
+            "end": 73126,
+            "quote": "We propose a major overhaul. We would abolish Corporation Tax on the first\n£50,000 of profits for all companies. This takes 95% of all companies outside the\ncorporation tax regime. With profits over £50,000 we propose an immediate\nrestoration of the 19% rate, with an aspiration to reduce this to 15% as soon as\n\n\n                                         49\n\ffiscal conditions allow.\n\nIn time we will abolish the Bank Levy, Bank Surcharge, Residential Property\nDeveloper Tax, Energy Profits Levy, and Electricity Generator Levy. The OBR\nestimates that Corporation Tax will raise £96.7 billion in 2025/26 under the\ncurrent regime. We estimate the cost to the Exchequer of increasing the\nthreshold before corporation tax is paid and restoring the 19% rate to be around\n£24 billion, with an additional £4 billion cost for each additional percentage\npoint’s worth of decline. These estimates are before any growth multiplier."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "24",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 72972,
+                  "end": 72983,
+                  "quote": "£24 billion"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-corporation-tax",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-corporation-tax"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-corporation-tax",
+          "title": "Corporation tax changes: summary estimate (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 9497,
+            "end": 9806,
+            "quote": "●​ Corporation tax: introduce a zero rate on the first £50,000 of profits,\n      thereby removing approximately 95% of companies from the regime;\n      restore the 19% rate above that threshold (with an aspiration of 15% later);\n      and phase out various sector-specific levies (estimated cost £41 billion)."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "41",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 9778,
+                  "end": 9804,
+                  "quote": "estimated cost £41 billion"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-corporation-tax",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-corporation-detail"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-freeze",
+          "title": "Departmental budget freeze (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 8716,
+            "end": 8903,
+            "quote": "●​ Budget Freeze: We will freeze most departmental budgets (excluding\n      defence, health, and debt interest) for three years, generating further\n      savings of £3-4 billion per year."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-freeze",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-energy",
+          "title": "End net-zero public expenditure (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 8526,
+            "end": 8712,
+            "quote": "●​ Energy: We will end all net-zero-related public expenditure, saving\n      approximately £15-20 billion annually to the public purse and a multiple\n      of that to the private sector."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-energy",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-health",
+          "title": "Health charging and tax deductions (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 7822,
+            "end": 8207,
+            "quote": "●​ Healthcare: The National Health Service will remain free at the point of\n\n                                         5\n\f      use for citizens; non-citizens will be charged at market rates; and private\n      health costs will become tax-deductible, a measure we expect to prove\n      fiscally positive through reduced NHS demand. We estimate a net annual\n      benefit of £20 billion."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "20",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 8167,
+                  "end": 8206,
+                  "quote": "net annual\n      benefit of £20 billion"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-health",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-income-detail",
+          "title": "Income tax changes: detailed estimate (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Detailed chapter; differs from executive-summary scope or rounding. Income tax: summary £49bn, table £49.2bn, prose around £50bn. Corporation: initial £24bn at 19%, later cuts £4bn/point; summary £41bn. CGT: summary £20k–£40k allowance; detail £20k. Unresolved, not reconciled.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 47; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 66255,
+            "end": 67085,
+            "quote": "We propose to make work pay.\n  a)​ We will increase the threshold before income tax is liable from £12,571 to\n      £16,000.\n  b)​ We propose to increase the 20% rate from £50,271 to £100,000.\n  c)​ Leave the higher tax bands unaltered in the first Parliament.\n  d)​ Create tax equality – all receive zero band to £16,000.\nOur proposals to make income tax fairer will cost around £50 billion.\n\n\n    Figure 21: Income Tax estimated cost of proposed measures\nMeasure                                                             cost (£bn)\n\nIncrease threshold before tax from £12579 to £16k                   24.7\n\nRaise 40% allowance from £50270 to £100k                            19.6\n\nRestore tax-free threshold to all taxpayers                         4.9\n\nCost of measures                                                    49.2"
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "49.2",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 67081,
+                  "end": 67085,
+                  "quote": "49.2"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-income-tax",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-income-tax"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-income-tax",
+          "title": "Income tax changes: summary estimate (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 9308,
+            "end": 9493,
+            "quote": "●​ Income tax: raise the personal allowance to £16,000; extend the basic-rate\n      band to £100,000; and restore the full allowance to all taxpayers\n      (estimated cost £49 billion)."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "49",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 9465,
+                  "end": 9491,
+                  "quote": "estimated cost £49 billion"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-income-tax",
+          "overlaps_with": [
+            "restore-economic-plan-pdf-income-detail"
+          ]
+        },
+        {
+          "id": "restore-economic-plan-pdf-welfare",
+          "title": "Pension and working-age benefit changes (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 6716,
+            "end": 7489,
+            "quote": "●​ Welfare: Given our belief in the pressing need for inter-generational\n      fairness, we will secure the state pension but end the triple lock, linking it\n      instead to CPI. As for how pensions operate, we would again pursue\n      fairness by bringing our overly generous public sector schemes in line\n      with those available in the private sector. We would freeze working-age\n      benefits at 2025-26 levels for the duration of the Parliament; and restrict\n      all working-age benefits to British citizens only, with no access for\n      temporary visa holders, those with Indefinite Leave to Remain, or illegal\n      migrants. We estimate savings of £70-80 billion per annum from the full\n      range of working-age benefits by the end of the first Parliament."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-welfare",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-quangos",
+          "title": "Public body budget freeze (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 7493,
+            "end": 7818,
+            "quote": "●​ QUANGOs: We will freeze aggregate budgets, generating savings of\n      approximately £8 billion per annum compound or £40-45 billion by the\n      end of the first Parliament, and review all bodies for abolition, scaling\n      back, or full ministerial oversight (currently some 438 bodies spending\n      £376-391 billion)."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-quangos",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-education",
+          "title": "School funding and tax deductions (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 8; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 8211,
+            "end": 8522,
+            "quote": "●​ Education: State education will remain free, with schools operating\n      independently at the institutional level and funded according to pupil\n      numbers; private school fees will become tax-deductible and education\n      will be exempt from VAT. We estimate an annual contribution of £10\n      billion."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "10",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 8481,
+                  "end": 8521,
+                  "quote": "annual contribution of £10\n      billion"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-education",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-framework",
+          "title": "Spending framework and savings target (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 7; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 6028,
+            "end": 6661,
+            "quote": "Fiscal Framework\nFiscal stability constitutes the cornerstone of our approach: balancing the\nbudget and gradually reducing the debt-to-GDP ratio. We aim to claw back as\nmuch of the £300 billion in excess post-2019 spending through incremental, fully\nfunded adjustments. We estimate total savings of around £178 billion by the end\nof the first Parliament – approximately two-thirds of the post-2019 excess –\nequivalent to about £35 billion per annum compound or 3% of the budget\nannually. Our guiding principles, as shall be seen in due course, are fiscal\nfairness, fiscal pragmatism, fiscal responsibility, and fiscal accountability."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "178",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "restore-economic-plan-pdf",
+                  "start": 6327,
+                  "end": 6346,
+                  "quote": "around £178 billion"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-framework",
+          "overlaps_with": []
+        },
+        {
+          "id": "restore-economic-plan-pdf-vat",
+          "title": "VAT rate and threshold: summary estimate (2026)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "First Parliament, with no fixed fiscal year established. Rates/ranges and approximate figures are party claims. Detailed chapter differences remain unresolved; no summation or reconciliation asserted.",
+          "scope": "2026 philosophy paper; implementation/current coverage unverified. Physical PDF page 9; do not aggregate overlapping records.",
+          "geography": "UK; individual services may have devolved remits.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "restore-economic-plan-pdf",
+            "start": 10350,
+            "end": 10486,
+            "quote": "●​ VAT: reduce the standard rate to 18% and raise the registration threshold\n      to £150,000 (combined estimated cost £20-22 billion)."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "restore-economic-plan-pdf-vat",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "29",
+      "name": "Scottish National Party",
+      "official_domain": "snp.org",
+      "mp_count": 8,
+      "publication_sources": [
+        "snp-speech-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "snp-nhs-scotland-2024",
+          "title": "NHS funding in Scotland (2024 launch speech)",
+          "proposal_date": "2024-06-19",
+          "fiscal_year": null,
+          "fiscal_year_reason": "The retained speech does not state a fiscal year for the extra NHS allocation.",
+          "baseline": "Additional funding in the 2024 launch speech; a quantified comparison baseline is unavailable in this passage.",
+          "scope": "Additional NHS allocation in Scotland described in a Westminster manifesto launch speech; not a full plan costing.",
+          "geography": "Scotland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "snp-speech-2024",
+            "start": 3092,
+            "end": 4666,
+            "quote": "The SNP manifesto argues for new, sensible fiscal rules – rules that will:\nEnd the cuts, reverse the 1.3 billion pounds cut to Scotland’s capital budget, and invest in public services, starting with the Health Service.\nWe will join with progressive politicians south of the border to press for greater funding for the NHS and for the UK government to match the pay deals we have given our health staff in Scotland.\nThat would see an extra £1.6 billion for the NHS in Scotland.\nAnd we would introduce a “Keep the NHS in Public Hands Bill” at Westminster.\nA legal guarantee for a publicly owned, publicly operated health service.\nThe SNP message on the health services is clear, it is simple and it will never change…\nThe NHS is not for sale.\nVoting SNP is a vote to protect our public services and our precious NHS.\nFriends, I have made clear the focus of my Government will be to eradicate child poverty.\nThe 2-child benefit cap makes things worse.\nIt is the exact opposite of what the UK government should be doing.\nIntroduced by an uncaring Conservative Government, it is frankly beyond me that the prospective Labour Government plan to keep this deeply damaging policy.\nSNP MPs will press for the 2-child benefit cap to be scrapped.\nColleagues, the future of the 2 child cap is a simple test.\nAre you in government to help children out of poverty?\nOr are you so morally lost, that you push more kids into poverty?\nOur choice – to abolish the cap – is obvious and it is driven by our values.\nThe same values that drive the SNP on so many issues, not least nuclear weapons."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "1.6",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "snp-speech-2024",
+                  "start": 3507,
+                  "end": 3568,
+                  "quote": "That would see an extra £1.6 billion for the NHS in Scotland."
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No specific revenue amount tied to this allocation established in the retained speech.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No assessment of this allocation from a rubric-named body retained in this seed.",
+            "items": []
+          },
+          "overlap_key": "snp-nhs-scotland-2024",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "name": "Sinn Féin",
+      "official_domain": null,
+      "mp_count": 7,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "31",
+      "name": "Social Democratic & Labour Party",
+      "official_domain": null,
+      "mp_count": 2,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "158",
+      "name": "Traditional Unionist Voice",
+      "official_domain": "tuv.org.uk",
+      "mp_count": 1,
+      "publication_sources": [
+        "tuv-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "tuv-2024-fiscal-p15-1",
+          "title": "Personal and business taxation: extract 15.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 15; do not aggregate overlapping records.",
+          "geography": "UK, including Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "tuv-2024",
+            "start": 21256,
+            "end": 22625,
+            "quote": "THE ECONOMY – PERSONAL\nTUV shares the Reform UK approach to our economy. We quote from their 2024\nManifesto:\n\nReform UK will make work pay and help the unemployed to escape the\nbeneﬁts trap.\n\n• Make Work Pay. Lift the Income Tax Start Point to £20,000 Per Year.\n\nThis frees up to 7 million people from paying Income Tax and saves every\nworker almost £1,500 per year. Basic Tax rate stays at 20%. The higher rate\nshould begin at £70,000.\n\n• Cut Energy Taxes, Beat the Cost-of-Living Crisis\n\nSave households over £500 per year. Lower fuel duty by 20p per litre for both\nresidential and business users. Scrap VAT on energy bills. Scrap environmental\nlevies.\n\n• Cut Residential Stamp Duty\n\nSubstantially boost economic activity and housebuilding by cutting Stamp\nDuty to 0% below £750k. Cut it to 2% from £750k - £1.5m and cut it to 4% over\n£1.5m.\n\n• Abolish the VAT Tourist Tax\n\nThe government has cost our economy over £10 billion when they stopped the\nVAT refund scheme for tourist shopping. This also deterred up to 2 million\ntourists.\n\n\n\n\nTHE ECONOMY – BUSINESS\nReform UK will back risk takers and wealth creators and make sure that Britain\nis open for business.\n\n• Free Over 1.2 Million Small and Medium Sized Businesses from Corporation\n  Tax\n\nRaise the minimum proﬁt threshold to £100k. Reduce the main Corporation Tax\nRate from 25% to 20%, then to 15% from Year 3."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "tuv-2024-fiscal-p15-1",
+          "overlaps_with": []
+        },
+        {
+          "id": "tuv-2024-fiscal-p16-1",
+          "title": "Personal and business taxation: extract 16.1 (2024)",
+          "proposal_date": null,
+          "fiscal_year": null,
+          "fiscal_year_reason": "No single fiscal year verified; retain the stated period in baseline and quotation.",
+          "baseline": "Historical fiscal extract; cost/funding not verified. Original columns retained. TUV quotes Reform 2024, not its 2026 plan.",
+          "scope": "Historical 2024; current adoption unverified. Physical PDF page 16; do not aggregate overlapping records.",
+          "geography": "UK, including Northern Ireland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "tuv-2024",
+            "start": 22713,
+            "end": 23624,
+            "quote": "• Abolish IR35 Rules to Support Sole Traders\n\nBritain’s self-employed often work longer hours and take more risks. Many have\nno pension and receive no sick pay.\n\n• Raise the VAT Threshold to £150,000\n\nFree up small entrepreneurs from red tape.\n\n• Support Small and Medium Sized Enterprises (SMEs)\n\nAbolish Business Rates for high street based SMEs. Offset this with Online\nDelivery Tax at 4% for large, multinational enterprises to create a fairer playing\nﬁeld for high streets. Cut entrepreneurs’ tax to 5%.\n\n• Reform the Planning System\n\nFast-track new housing on brownﬁeld sites and infrastructure projects to boost\nbusinesses.\n\n• Slash Red Tape to Boost Industry and Exports\n\nScrap thousands of laws that hold back British business and damage\nproductivity.\n\n• Reform the Tax System\n\nMajor simpliﬁcation is needed. At over 21,000 pages, the UK’s tax code is a\nburden. Hong Kong’s tax code is under 500 pages."
+          },
+          "costs_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar cost verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No separate scalar funding verified; quoted ranges/targets retained.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No permitted independent assessment verified for this claim.",
+            "items": []
+          },
+          "overlap_key": "tuv-2024-fiscal-p16-1",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "38",
+      "name": "Ulster Unionist Party",
+      "official_domain": null,
+      "mp_count": 1,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "1115",
+      "name": "Your Party",
+      "official_domain": "yourparty.uk",
+      "mp_count": 2,
+      "publication_sources": [
+        "yourparty-statement"
+      ],
+      "coverage": "unavailable",
+      "unavailable_reason": "Retained Political Statement landing describes principles and links to a printable draft. It supplies no costed fiscal plan here; linked documents and current plan coverage remain unverified.",
+      "proposals": []
+    }
+  ],
+  "non_party_members": [
+    {
+      "parliament_id": "47",
+      "name": "Speaker",
+      "classification": "speaker",
+      "mp_count": 1
+    },
+    {
+      "parliament_id": "8",
+      "name": "Independent",
+      "classification": "independent",
+      "mp_count": 11
+    }
+  ],
+  "reviews": {
+    "fiscal": null,
+    "editorial": null
+  }
+}

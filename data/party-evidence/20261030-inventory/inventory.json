@@ -1,0 +1,935 @@
+{
+  "schema_version": 1,
+  "pinned_revision": "7e4fb4b6f476e21f6579ea55b7540dd8aa9fce0c",
+  "pinned_snapshot_sha256": "c0f0ef8359610c616fc9b8b0829758303cf85fb279005c2b58faab72e1e81840",
+  "as_of": "2026-10-30",
+  "roster_source_id": "commons-state-2026-10-30",
+  "documents": [
+    {
+      "source_id": "alliance-2024",
+      "party_id": "1",
+      "url": "https://assets.nationbuilder.com/allianceparty/pages/11234/attachments/original/1718832706/2024WestminsterManifesto.pdf?1718832706=",
+      "retrieved_at": "2026-10-30T11:22:42.317020+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/alliance-2024.pdf",
+      "raw_sha256": "dfdbd70aa71316989f8e10657a29a6b2123705721416e271a71c219c9e050693",
+      "raw_bytes": 5650809,
+      "text_sha256": "24d6f08cf9b3a268e66078a91067102f8711e6a819356d729419e35e935cda4c",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "Official party landing links to this PDF",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 137,
+        "pdf_page": 1,
+        "quote": "ALLIANCE PARTY WESTMINSTER MANIFESTO 2024\n\n\n\n\n       Alliance\n   Leading Change\n             for Everyone\n\n\n\n\n                 JULY 2024\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "conservative-2024",
+      "party_id": "4",
+      "url": "https://public.conservatives.com/publicweb/GE2024/Accessible-Manifesto/Accessible-PDF-Conservative-Manifesto-2024.pdf",
+      "retrieved_at": "2026-10-30T11:22:40.942064+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/conservative-2024.pdf",
+      "raw_sha256": "8ad78888e33725b520deece616548f200dafeb3fa11f028165f7235fed0ff5c8",
+      "raw_bytes": 1231055,
+      "text_sha256": "077346f5da21a030d53de75a7fd3221af9bc2e65028f2173594b426944242acb",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "UK general election 2024",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 110,
+        "pdf_page": 1,
+        "quote": "The Conservative and Unionist Party\n         Manifesto 2024\n\n\n\n\n   CLEAR PLAN\n   BOLD ACTION\n   SECURE FUTURE\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "dup-2024",
+      "party_id": "7",
+      "url": "https://s3.eu-west-1.amazonaws.com/my-dup/2024-Manifesto-Final.pdf",
+      "retrieved_at": "2026-10-30T11:22:10.988616+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/dup-2024.pdf",
+      "raw_sha256": "2d0439bd6cbdf2b842b4e1e9c0557807444856678e2e249e09f5c115e8f8eefa",
+      "raw_bytes": 3822442,
+      "text_sha256": "72f3c5e5be9792f2ccecefcae61b4e93d782ea5eb6ac170466cb90b32e45abe5",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "Official party launch links to this PDF",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 5,
+        "end": 179,
+        "pdf_page": 1,
+        "quote": "SPEAKING UP FOR\n     NORTHERN\n     IRELAND\n\n\n\n\n       G AND\n    KIN     YOU\nWOR ING FOR\nWINN\n             GENERAL ELECTION MANIFESTO\n                               JUNE 2024\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "fullfact-manifestos",
+      "party_id": null,
+      "url": "https://fullfact.org/manifestos/",
+      "retrieved_at": "2026-10-30T11:22:11.810092+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/fullfact-manifestos.html",
+      "raw_sha256": "c82d2164f6ca8babafe76893e451f9e123f5689ecb19301d4a1a441614922792",
+      "raw_bytes": 51552,
+      "text_sha256": "818829b3ae083c5f53c1d3cff5e087b9013798558be9e4712be62f82924e70f8",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "assessment_index",
+      "scope": "Seven 2024 manifestos; claim-specific checks, not complete fiscal certification",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "Manifestos – Full Fact\nMenu\nDonate\nArticles\nArticles\nEverything we publish, from fact checks, investigations and in-depth analysis to comment blogs and our Government Tracker.\nLatest\nFact checks\nAnalysis\nComment\nGovernment Tracker\nTopics\nTopics\nBrowse our fact checks, explainers and analysis by topic.\nPolitics\nHealth\nImmigration\nBudget 2026\nEconomy, Business & Finance\nCulture & Society\nScience & Technology\nEnvironment\nCrime\nEducation\nConflict\nHoaxes\nUS\nEurope\nWorld\nLearn\nLearn\nBuild the skills t"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "green-2024",
+      "party_id": "44",
+      "url": "https://greenparty.org.uk/app/uploads/2024/06/Green-Party-2024-General-Election-Manifesto-Long-version-with-cover.pdf",
+      "retrieved_at": "2026-10-30T11:22:10.120273+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/green-2024.pdf",
+      "raw_sha256": "4cfa29bd877b1b0ed46528684349eb6fb9bdeaaa5451897a5cace43f062f8537",
+      "raw_bytes": 561016,
+      "text_sha256": "ba7a10ee5567011ba2438d07f3d6c44e23baca81624a12c35aeb3bca6ccb1768",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 general election; direct party PDF",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 12,
+        "end": 148,
+        "pdf_page": 1,
+        "quote": "Manifesto for a Fairer,\n                Greener Country\n\n\n\n\nR e a l Hop e.\nRe  a l C h a n g e .\n\n\n\n                               2024\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "ifs-2024-finances",
+      "party_id": null,
+      "url": "https://ifs.org.uk/sites/default/files/2024-06/The%20public%20finances%20in%20the%20coming%20Parliament.pdf",
+      "retrieved_at": "2026-10-30T11:22:43.118910+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/ifs-2024-finances.pdf",
+      "raw_sha256": "1a3f864f3d7e7d8fb5788fc78b04d9c102078a29a1432c6daea46126f9c561d4",
+      "raw_bytes": 302585,
+      "text_sha256": "8bc7d631ed657a95568f5eb955cd999ed8cbcebc15de0493b1e3941a408667b8",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "assessment_2024",
+      "scope": "2024 comparison; Reform averages differ from 2029-30 figures",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 17,
+        "end": 146,
+        "pdf_page": 1,
+        "quote": "Carl Emmerson\n\n\n\n\n                 The public\n▪ 24 June 2024\n                 finances in the\n    @TheIFS      coming parliament\n"
+      },
+      "limitations": "Dated 2024 assessment only; not an endorsement, verification of all figures or assessment of any 2026 plan. Exact publication day needs its own official locator where absent."
+    },
+    {
+      "source_id": "labour-2024",
+      "party_id": "15",
+      "url": "https://labour.org.uk/wp-content/uploads/2024/06/Change-Labour-manifesto-2024-screen-reader.pdf",
+      "retrieved_at": "2026-10-30T11:22:41.642353+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/labour-2024.pdf",
+      "raw_sha256": "87970e781853125779fb1df42a99fd836cc8e8420eb2bde9e47f3e5b1d936b25",
+      "raw_bytes": 8047265,
+      "text_sha256": "b4e77b5f86b4b2bd425ac6371c26659ac5ed1c7be522888ac65b0d4ad99ac3bd",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "UK general election 2024; fiscal plan begins printed p126",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 7,
+        "pdf_page": 1,
+        "quote": "Change\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "libdem-2024-costings",
+      "party_id": "17",
+      "url": "https://www.libdems.org.uk/fileadmin/groups/2_Federal_Party/Documents/PolicyPapers/Manifesto_2024/Funding_a_Fair_Deal_-_Liberal_Democrat_Manifesto_Costings_2024.pdf",
+      "retrieved_at": "2026-10-30T11:22:10.332509+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/libdem-2024-costings.pdf",
+      "raw_sha256": "378f7ccaafcd18eea51a86b422db98462602f22fabd1418d48180a46a5f68ff3",
+      "raw_bytes": 3303719,
+      "text_sha256": "287e894bfbf6d9c8e68a3b845aeecacc2911124a61bfdd215589f0781447f1d3",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 costings; linked from /sums",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 81,
+        "end": 581,
+        "pdf_page": 2,
+        "quote": "1\n\nFUNDING A FAIR DEAL\nThe Liberal Democrat manifesto is a bold, ambitious and fully-costed plan to\ngive the British people the fair deal they deserve. And we will pay for it fairly,\ntoo.\n\n\nAfter years of Conservative chaos and neglect, there is no doubt that our\nNHS, social care, schools and other public services desperately need more\ninvestment. GPs are overstretched, hospitals are overcrowded and school\nbuildings are crumbling.\n\n\nAt the same time, families and pensioners are struggling in the"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "libdem-2024-plain-text",
+      "party_id": "17",
+      "url": "https://www.libdems.org.uk/fileadmin/groups/2_Federal_Party/Documents/PolicyPapers/Manifesto_2024/For_a_Fair_Deal_-_Liberal_Democrat_Manifesto_2024_-_Plain_Text.txt",
+      "retrieved_at": "2026-10-30T11:23:11.648451+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/libdem-2024-plain-text.txt",
+      "raw_sha256": "30a2c9aec9c0f8810f44df2345192e58c02dba6a7011bbe1dc1b99c81df4e230",
+      "raw_bytes": 156239,
+      "text_sha256": "c6f475eca667d6e33a66f9e92281cddd8ce23cd6fb472fbe0082889d82e2e8de",
+      "text_method": "latin1_byte_view_encoding_unverified",
+      "extraction_tool": null,
+      "classification": "historical_2024",
+      "scope": "Official accessible plain text; linked from manifesto landing page",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "ÿContents\r\n\r\n\r\n1         Foreword        5\r\n\r\n\r\n2         Our Fair Deal        7\r\n\r\n\r\n3         The Economy        11\r\n\r\n\r\n4         Business and Jobs        17\r\n\r\n\r\n5         Climate Change and Energy        23\r\n\r\n\r\n6         Health        29\r\n\r\n\r\n7         Care        37\r\n\r\n\r\n8         Education        41\r\n\r\n\r\n9         Families, Children and Young People        47\r\n\r\n\r\n10         Pensions and Safety Net        51\r\n\r\n\r\n11         Crime and Policing        55\r\n\r\n\r\n12         Natural Environment"
+      },
+      "limitations": "Source encoding is unverified: a lone leading 0xff is not a UTF-16 BOM. Reader exposes a reversible Latin-1 byte view, preserving control bytes. Use the original and alternative publications for independent verification; do not treat this byte view as corrected text."
+    },
+    {
+      "source_id": "libdem-manifesto",
+      "party_id": "17",
+      "url": "https://www.libdems.org.uk/manifesto",
+      "retrieved_at": "2026-10-30T11:22:10.220729+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/libdem-manifesto.html",
+      "raw_sha256": "7f2a2aefa37fe93d4bb7f26d4e02e2540b70a908a7b9a1a890ee0bc209896ead",
+      "raw_bytes": 581206,
+      "text_sha256": "66a705882aa85793e9e147993ed1fe8558a1c3b4a71717d630152d3815ac0711",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "historical_2024",
+      "scope": "2024 labelled manifesto landing page",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "For a Fair Deal - Liberal Democrats Manifesto 2024 - Liberal Democrats\nSkip to main content\nTake Action\nExplore\nDonate\nJoin\nFor Everyone\nAttend\nEvents\nBack our\ncampaigns\nBecome a\nvolunteer\nVote for\nus\nSign up for email\nupdates\nWork for\nus\nFor Members\nJoin from £15/year\nAttend\nConference\nBecome an\nactivist\nBecome a\ncandidate\nMembers'\nArea\nDonate\nJoin\nAbout Us\nOur\nparty\nOur\npeople\nLatest\nnews\nIn your\ncommunity\nWhat we stand for\nFor a Fair Deal - Manifesto 2024\nOur values\nOur campaigning victories\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "nao-remit",
+      "party_id": null,
+      "url": "https://www.nao.org.uk/support-for-parliament/",
+      "retrieved_at": "2026-10-30T11:22:11.802225+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/nao-remit.html",
+      "raw_sha256": "c6d14ef96df99e557228ccd7b699de4e27df0a36cdd999078984e061f311c7ad",
+      "raw_bytes": 104813,
+      "text_sha256": "e8af7ddbe1a768b45faab8bb0cc321e59d906346f91b8b81c72c59f3e1006023",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "remit",
+      "scope": "Audits spending and policy delivery; not policy objectives",
+      "published_on": "2022-04-14",
+      "publication_locator": "\"datePublished\":\"2022-04-14",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "Support for Parliament - National Audit Office\nSkip to main content\nMenu\nOur work\nOur work\nExplore our catalogue of published and future work\nReports\nAudits of accounts and reviews of how well government is delivering value for money\nInsights\nLearning and best practice to help people across government and the wider public sector\nOverviews\nFactual overviews of government departments, sectors and services\nWork in progress\nOur schedule of future publications\nRecommendations tracker\nAll our report r"
+      },
+      "limitations": "Institutional remit, not a party-plan assessment or endorsement. Do not infer independent fiscal approval from this source."
+    },
+    {
+      "source_id": "plaid-2024",
+      "party_id": "22",
+      "url": "https://www.partyof.wales/2024",
+      "retrieved_at": "2026-10-30T11:22:41.380656+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/plaid-2024.html",
+      "raw_sha256": "c8c5d031c1d877aba13ae71d3af936237f7b695702e8d5d2b239f3eb96e08a7c",
+      "raw_bytes": 38489,
+      "text_sha256": "ccb3b101f05d31f7f12a64c3f5c4cf86c94224801c97182e3723463cd2296938",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "historical_2024",
+      "scope": "Westminster and PCC explicitly separated",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "2024 Manifestos - The Party of Wales\nAbout\nLeader\nElected Members\nNational Sections\nGovernance\nWork for us\nContact\nUpdates\nNews\nGet involved\nVolunteer\nDonate\nSupport\nClwb 500\nWills and Legacies\nJoin\nEvents\nEvents\nConference\nMore\nLog in\nElected Members\nCymraeg\nHome\nAbout\nManifestos Archive\n2024 Manifestos\n2024 Manifestos\nWestminster Election\n2024 Manifesto (.pdf)\n2024 Manifesto - Easy read (.pdf)\n2024 Manifesto - Large print (.docx)\n2024 Manifesto - BSL interpretation:\n2024 Manifesto - Audio vers"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "plaid-2024-pdf",
+      "party_id": "22",
+      "url": "https://assets.nationbuilder.com/plaid2016/pages/13170/attachments/original/1721133624/Plaid_Cymru_Maniffesto_2024_ENGLISH.pdf?1721133624=",
+      "retrieved_at": "2026-10-30T11:23:11.391368+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/plaid-2024-pdf.pdf",
+      "raw_sha256": "e00bf848cef0fcf655f4741598bce812a3e73d4b0a317f0f1c4da338c4e52fed",
+      "raw_bytes": 2557031,
+      "text_sha256": "4b2c5172e50578e0420ed01602ba1c9a02d1a88ee27b93f4a992b5b033e07aba",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 Westminster; linked from official /2024",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 214,
+        "pdf_page": 1,
+        "quote": "FOR FAIRNESS,\nFOR AMBITION,\nFOR WALES\nPlaid Cymru Manifesto for the\nWestminster General Election 2024\n\n\n\n\n                                    partyof.wales\n\n\n\n\n partyof.wales                                      1\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "reform-2024-pdf",
+      "party_id": "1036",
+      "url": "https://assets.nationbuilder.com/reformuk/pages/253/attachments/original/1718625371/Reform_UK_Our_Contract_with_You.pdf",
+      "retrieved_at": "2026-10-30T11:23:11.242191+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/reform-2024-pdf.pdf",
+      "raw_sha256": "500dca6b808f47e271394c803dc36ca4b5681fffb1bae41276385f224ba03eb3",
+      "raw_bytes": 6683218,
+      "text_sha256": "00f74ad4107985f226bdfc6e446def71d13cf9fff363281643d1a9ff5320d22e",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 Contract; historical snapshot, NOT current Economic Rescue Plan",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 22,
+        "pdf_page": 1,
+        "quote": "Our Contract\nwith You\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "resolution-2024-comparison",
+      "party_id": null,
+      "url": "https://www.resolutionfoundation.org/publications/the-economic-battle-lines-of-the-general-election/",
+      "retrieved_at": "2026-10-30T11:22:11.607014+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/resolution-2024-comparison.html",
+      "raw_sha256": "70eab57f49710c0c2c5cb1231540af12a2bcd6874be8025cc4f7f2e4eea717eb",
+      "raw_bytes": 146874,
+      "text_sha256": "72b9bb4c931dca596182cd892a5d02de60ab83514a8350f580b8d32653ef4368",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "assessment_2024",
+      "scope": "Conservative and Labour 2024 comparison",
+      "published_on": "2024-06-14",
+      "publication_locator": "\"datePublished\":\"2024-06-14",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "The economic battle lines of the general election • Resolution Foundation\nSkip to main content\nSearch site\nKeywords\nSearch for:\nContent type\nAll content\nPublications\nBlog\nEvents\nNews coverage\nPress Releases\nSearch\nSign up to our mailing list\nAnalysis and action on living standards\nOur work\nMajor programmes\nRecurring publications\nData\nPublications\nEvents\nComment\nArticles\nTop of the charts\nMedia\nAbout us\nOur mission\nOur team\nOpportunities\nEconomy 2030\nMenu\nOur work\nMajor programmes\nRecurring publi"
+      },
+      "limitations": "Dated 2024 assessment only; not an endorsement, verification of all figures or assessment of any 2026 plan. Exact publication day needs its own official locator where absent."
+    },
+    {
+      "source_id": "resolution-growing-for-gold",
+      "party_id": null,
+      "url": "https://www.resolutionfoundation.org/publications/growing-for-gold/",
+      "retrieved_at": "2026-10-30T11:23:12.162004+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/resolution-growing-for-gold.html",
+      "raw_sha256": "2c42e9035ff5d4f1e4cb8e69ad61e0e2b6c7f2602b06090c063926d4ea10d3bc",
+      "raw_bytes": 153390,
+      "text_sha256": "d3f2deb0ad3141eaed06d3ac41d82446eead3760038748409539c13966d68a76",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "assessment_2024",
+      "scope": "2024 Labour manifesto tax and spend package",
+      "published_on": "2024-06-14",
+      "publication_locator": "\"datePublished\":\"2024-06-14",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "Growing for gold? • Resolution Foundation\nSkip to main content\nSearch site\nKeywords\nSearch for:\nContent type\nAll content\nPublications\nBlog\nEvents\nNews coverage\nPress Releases\nSearch\nSign up to our mailing list\nAnalysis and action on living standards\nOur work\nMajor programmes\nRecurring publications\nData\nPublications\nEvents\nComment\nArticles\nTop of the charts\nMedia\nAbout us\nOur mission\nOur team\nOpportunities\nEconomy 2030\nMenu\nOur work\nMajor programmes\nRecurring publications\nData\nPublications\nEvents"
+      },
+      "limitations": "Dated 2024 assessment only; not an endorsement, verification of all figures or assessment of any 2026 plan. Exact publication day needs its own official locator where absent."
+    },
+    {
+      "source_id": "restore-economic-plan-launch",
+      "party_id": "1117",
+      "url": "https://www.restorebritain.org.uk/the_wealth_of_our_nation",
+      "retrieved_at": "2026-10-30T11:23:11.649204+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/restore-economic-plan-launch.html",
+      "raw_sha256": "353bf42e4b388795bb84a15d38db808aed677781780a5167648d7c90e76f57d7",
+      "raw_bytes": 26264,
+      "text_sha256": "23588411c01146916e85d40079050ac86c270f87e7b462acaac5c1e07593a9b1",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "dated_2026_publication",
+      "scope": "Official launch and source PDF link",
+      "published_on": "2026-08-03",
+      "publication_locator": "August 03, 2026",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "The Wealth of Our Nation - Restore Britain\nSkip to main content\nHome\nPolicies\nPolicies\nOur Objectives\nPolicy Papers\nInvestigations\nInvestigations\nWhistleblowing\nFOI Investigations\nContact\nGet Involved\nDonate\nJoin Us\nHome\nPolicies\nPolicy Papers\nThe Wealth of Our Nation\nAugust 03, 2026\nRestore Britain has today published The Wealth of Our Nation, a paper diagnosing four decades of political choices behind Britain's economic decline, and setting out a costed path to reversing it.\nBritain's GDP per "
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "restore-economic-plan-pdf",
+      "party_id": "1117",
+      "url": "https://assets.nationbuilder.com/restorebritain/pages/1255/attachments/original/1785930638/The_Wealth_of_Our_Nation__Restore_Britain%E2%80%99s_Economic_Philosophy.pdf?1785930638=",
+      "retrieved_at": "2026-10-30T11:23:11.649708+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/restore-economic-plan-pdf.pdf",
+      "raw_sha256": "be8ddfe9c3c9310de59ebb7468b93a940cd4743d3f311571f398495d9b1119bb",
+      "raw_bytes": 2133238,
+      "text_sha256": "5dcc1444e97de74a1327c8a4752dd1947423d862014627bcdb1af6434d6e81de",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "dated_2026_publication",
+      "scope": "64-page economic philosophy; date from official launch",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 47,
+        "end": 547,
+        "pdf_page": 3,
+        "quote": "Contents\nContents...............................................................................................................1\nForeword.............................................................................................................. 2\nExecutive Summary.............................................................................................. 4\nIntroduction.........................................................................................................8\nOur Economic Pri"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "restore-policy-index",
+      "party_id": "1117",
+      "url": "https://www.restorebritain.org.uk/papers",
+      "retrieved_at": "2026-10-30T11:22:43.626673+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/restore-policy-index.html",
+      "raw_sha256": "d39ef4ceafc1ceae11b5b4e020641b0436c93a1df3e9b445878d4ceafef21620",
+      "raw_bytes": 55752,
+      "text_sha256": "1a114468e6e79d4663540af7a264089a6c34732d0c632e12dc1ea6d1c01a4581",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "rolling_index",
+      "scope": "Rolling policy papers, individual publication dates",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 683,
+        "end": 1183,
+        "pdf_page": null,
+        "quote": "The Wealth of Our Nation\nRestore Britain\nAug 03, 2026\nPolicy on School Fines\nRestore Britain\nJul 24, 2026\nPolicing Policy Paper\nRestore Britain\nJul 01, 2026\nEnergy Policy Paper\nRestore Britain\nMay 20, 2026\nAbolish Inheritance Tax\nRestore Britain\nMar 17, 2026\nRetaking the English Castle\nRestore Britain\nFeb 25, 2026\nRestoring the British Pub\nRestore Britain\nJan 07, 2026\nMass Deportations\nRestore Britain\nOct 09, 2025\nGeneral Enquiries:\n[email protected]\nPress Enquiries:\n[email protected]\nPrivacy Po"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "sdlp-2024",
+      "party_id": "31",
+      "url": "https://assets.nationbuilder.com/sdlp/pages/753/attachments/original/1719422488/SDLP_Manifesto_2024.pdf",
+      "retrieved_at": "2026-10-30T11:22:43.075573+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/sdlp-2024.pdf",
+      "raw_sha256": "7ef5e87c28794db273b37a9734983a4b89af387542fefb02017e3ed19e573442",
+      "raw_bytes": 1979594,
+      "text_sha256": "436d798e411b1c35b0539eda30c5d0e89e4b6347e68b2e5f3e1f3e281ce1fbae",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 Westminster; party-namespaced CDN, landing provenance still to capture",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 32,
+        "pdf_page": 1,
+        "quote": "SDLP\nMANIFESTO\nWESTMINSTER 2024\n"
+      },
+      "limitations": "Party-namespaced CDN source candidate. Official landing-page link and exact publication day remain unverified. Current adoption, costs, funding, years and independent assessments remain unverified."
+    },
+    {
+      "source_id": "sinnfein-2024-launch",
+      "party_id": "30",
+      "url": "https://sinnfein.ie/news/sinn-fein-launches-manifesto-for-positive-change/",
+      "retrieved_at": "2026-10-30T11:22:42.485764+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/sinnfein-2024-launch.html",
+      "raw_sha256": "b4b65d83b6c777f16a48a2bf28f56c5306e4fed1bc3145fdab3ede78dbb4ab52",
+      "raw_bytes": 181265,
+      "text_sha256": "071b21ac7945926e55a927afb1cab62c728a929f668cf1b90f8abb8a6aa9d227",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "historical_2024",
+      "scope": "Westminster election; distinguish from November 2024 Irish election manifesto",
+      "published_on": "2024-06-19",
+      "publication_locator": "\"datePublished\":\"2024-06-19",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "Sinn Féin launches manifesto for positive change - Sinn Féin\nEnglish\nEnglish\nGaeilge\nShop\nDonate\nJoin Us\nSinn Féin\nEnglish\nEnglish\nGaeilge\nMembers\nShop\nDonate\nJoin Us\nMenu\nRepresentatives\nDáil\nAssembly\nWestminster\nEuropean Parliament\nSeanad\nCouncillors\nView All\nPolicies\nIrish Unity\nThe Commission on the Future of Ireland\nÓgra Shinn Féin\nNews\nAn Phoblacht\nSearch the website\nClose\nRepresentatives\nDáil\nAssembly\nWestminster\nEuropean Parliament\nSeanad\nCouncillors\nPolicies\nIrish Unity\nThe Commission o"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "snp-2024-launch",
+      "party_id": "29",
+      "url": "https://www.snp.org/snp-leader-john-swinneys-2024-manifesto-speech/",
+      "retrieved_at": "2026-10-30T11:22:10.877325+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/snp-2024-launch.html",
+      "raw_sha256": "06a63b74f076fedc1d67ff5f41b32816310dd0b9a9ebbd2fcd83952e0085855b",
+      "raw_bytes": 119534,
+      "text_sha256": "d5edaaf0c557982656b8314abf35f839f6d3a02a0304cae7bf9aa3f8b031e5fc",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "historical_2024",
+      "scope": "Westminster election launch speech; not full manifesto",
+      "published_on": "2024-06-19",
+      "publication_locator": "\"datePublished\":\"2024-06-19",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "SNP Leader John Swinney’s 2024 Manifesto speech — Scottish National Party\nSkip to content\nScottish National Party\nNews\nVideos\nEvents\nAbout\nRecord\nIndependence\nContact\nSearch\nSearch\nSearch\nNews\nVideos\nEvents\nAbout\nRecord\nIndependence\nContact\nFollow Scottish National Party on Facebook\nFollow Scottish National Party on Instagram\nFollow Scottish National Party on Twitter\nFollow Scottish National Party on Youtube\nFollow Scottish National Party on Linkedin\nSNP Leader John Swinney’s 2024 Manifesto spee"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "snp-2024-pdf",
+      "party_id": "29",
+      "url": "https://s3-eu-west-2.amazonaws.com/www.snp.org/uploads/2024/06/2024-06-20b-SNP-General-Election-Manifesto-2024_interactive.pdf",
+      "retrieved_at": "2026-10-30T11:23:11.886166+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/snp-2024-pdf.pdf",
+      "raw_sha256": "82a5b60680c2e7eb6f304c78555b5d8019100ee6b58115dcdd67d7133ca82715",
+      "raw_bytes": 3559498,
+      "text_sha256": "cbc70981570cee226289b8280ef8518a4ff47700223660f2e3f38bce1087bb6f",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 Westminster; official CDN; independently linked by Lancaster",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 75,
+        "pdf_page": 1,
+        "quote": "“A FUTURE\n MADE IN\n SCOTLAND.”\n\n\n\n\n          VOTE SNP\n        FOR SCOTLAND\n"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "snp-2026",
+      "party_id": "29",
+      "url": "https://www.snp.org/manifesto/",
+      "retrieved_at": "2026-10-30T11:22:10.574188+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/snp-2026.html",
+      "raw_sha256": "9a9377e884eccb6dda0ad21bed5ff5fd4d6fa4da54911abb95f7922f19490fa8",
+      "raw_bytes": 118915,
+      "text_sha256": "8aecb39be47f4901eb38254c2ee369046d6be1cb3064f09c38ea6a1dbb21018f",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "devolved_2026",
+      "scope": "2026 Scottish Parliament; DO NOT substitute for UK fiscal plan",
+      "published_on": "2026-04-16",
+      "publication_locator": "\"datePublished\":\"2026-04-16",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "SNP 2026 Manifesto: Always on Scotland’s side — Scottish National Party\nSkip to content\nScottish National Party\nNews\nVideos\nEvents\nAbout\nRecord\nIndependence\nContact\nSearch\nSearch\nSearch\nNews\nVideos\nEvents\nAbout\nRecord\nIndependence\nContact\nFollow Scottish National Party on Facebook\nFollow Scottish National Party on Instagram\nFollow Scottish National Party on Twitter\nFollow Scottish National Party on Youtube\nFollow Scottish National Party on Linkedin\nSNP 2026 Manifesto: Always on Scotland’s side\nb"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "tuv-2024",
+      "party_id": "158",
+      "url": "https://tuv.org.uk/wp-content/uploads/2024/06/Proof2.pdf",
+      "retrieved_at": "2026-10-30T11:22:42.424184+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/tuv-2024.pdf",
+      "raw_sha256": "34348b03685b68d00724c786b2615f9849b5fba14b3af7413b78337529c51753",
+      "raw_bytes": 3298126,
+      "text_sha256": "ac30c3e30242621211409ea3b58dc2404f1a0528c24e85921c5f436ceb799cbf",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 manifesto; includes quoted Reform fiscal policy",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 5,
+        "end": 282,
+        "pdf_page": 1,
+        "quote": "RESTORE\n    THE UNION\n\n\n\n                 THE REALITY:\nOur union with GB has been splintered by the Protocol\n\n                 OUR MISSION:\n             The reuniﬁcation of the UK\n\n\n\n         T U V M A N I F E STO 2 024\n                        PAGE\n                          1\n"
+      },
+      "limitations": "Historical source includes quoted Reform policies. This cannot establish adoption of Reform changes in 2026. Exact day, current status and full fiscal interpretation remain unverified."
+    },
+    {
+      "source_id": "uup-2024",
+      "party_id": "38",
+      "url": "https://assets.nationbuilder.com/uup/pages/40/attachments/original/1719233594/General_Election_Manifesto_2024-compressed.pdf?1719233594=",
+      "retrieved_at": "2026-10-30T11:22:42.872675+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/uup-2024.pdf",
+      "raw_sha256": "130e71cef7ba64ccc9ebccfb0ca079c9b0d517242da3107cb5e2a4b731d5fba8",
+      "raw_bytes": 4032516,
+      "text_sha256": "6917ed4d06efccf500df0e1d4d5842cb0dae2ba1c4c29ae0a493e041940ffea7",
+      "text_method": "retained_pdftotext_layout",
+      "extraction_tool": "pdftotext version 26.01.0",
+      "classification": "historical_2024",
+      "scope": "2024 general election; party-namespaced CDN, landing provenance still to capture",
+      "published_on": null,
+      "publication_locator": null,
+      "evidence": {
+        "start": 0,
+        "end": 154,
+        "pdf_page": 1,
+        "quote": "MAKING\nNORTHERN\nIRELAND\nWORK.\nVOTE FOR CHANGE. VOTE ULSTER UNIONIST.\n\n\n\n\n                  2024\n                  WESTMINSTER\n                  MANIFESTO\n"
+      },
+      "limitations": "Party-namespaced CDN source candidate. Official landing-page link and exact publication day remain unverified. Current adoption, costs, funding, years and independent assessments remain unverified."
+    },
+    {
+      "source_id": "yourparty-explainer-observed",
+      "party_id": "1115",
+      "url": "https://www.yourparty.uk/political-statement-explainer/",
+      "retrieved_at": "2026-10-30T18:17:45.615707+00:00",
+      "raw_path": "data/party-evidence/20261030-inventory/yourparty-explainer-observed-response.json",
+      "raw_sha256": "8542d622823d324d1ed7d5c0ff54a419c59ce2130ab16bc9f402c296eb3dd5c7",
+      "raw_bytes": 70521,
+      "text_sha256": "5e623f01f30ba579b9541f14bc34b2c93f493f31630aa3c93843957a7c305e67",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "principles",
+      "scope": "New complete official response; statement of principles, not a manifesto or a complete fiscal inventory.",
+      "published_on": "2025-11-25",
+      "publication_locator": "\"datePublished\":\"2025-11-25",
+      "evidence": {
+        "start": 2442,
+        "end": 2942,
+        "pdf_page": null,
+        "quote": "not a manifesto but a statement of principles. Once approved, it will become clause 2 of the Party’s constitution. If policies were to be included in the constitution, it would complicate the Party’s ability to adopt different policies in future.\nAt the regional assemblies and through the crowd-editing tool, many members suggested adding specific policies to the political statement. It is natural that members should want to express policy positions, and some very good policies were suggested. Bu"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "yourparty-statement",
+      "party_id": "1115",
+      "url": "https://www.yourparty.uk/political-statement/",
+      "retrieved_at": "2026-10-30T11:22:42.871487+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/yourparty-statement.html",
+      "raw_sha256": "33f35232ff2aea5909d2892bc6893a5ac806be886a10ae9b17f8655c407fa469",
+      "raw_bytes": 53038,
+      "text_sha256": "ed2468bf8a06a7545d0d21c9445b7073f5746d39cafdcc5fe0afd7bb6a2d55c2",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "principles",
+      "scope": "Principles not manifesto; current page describes evolved draft",
+      "published_on": "2025-11-25",
+      "publication_locator": "\"datePublished\":\"2025-11-25",
+      "evidence": {
+        "start": 0,
+        "end": 500,
+        "pdf_page": null,
+        "quote": "Political Statement | Your Party\nMember login\nAbout\nFAQs\nDemocracy\nCEC\nCEC Elections\nCEC Reports\nDocuments\nNations\nCymru\nScotland\nGet involved\nCampaigns\nBranches\nEvents\nDonate\nJoin\nMenu\nClose\nAbout\nFAQs\nDemocracy\nCEC\nCEC Elections\nCEC Reports\nDocuments\nNations\nCymru\nScotland\nGet involved\nCampaigns\nBranches\nEvents\nDonate\nJoin\nPOLITICAL STATEMENT\nThe evolved draft Political Statement has been revised in line with the views expressed by thousands of members at assemblies and via our digital crowd-e"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    },
+    {
+      "source_id": "yourparty-statement-explainer",
+      "party_id": "1115",
+      "url": "https://www.yourparty.uk/political-statement-explainer/",
+      "retrieved_at": "2026-10-30T11:22:42.861413+00:00",
+      "raw_path": "reference/party-sources/2026-10-30/yourparty-statement-explainer.html",
+      "raw_sha256": "9e2fa30be328cd4beb55196ff926ce0f228269f087b13d4585727572ee606916",
+      "raw_bytes": 70521,
+      "text_sha256": "5e623f01f30ba579b9541f14bc34b2c93f493f31630aa3c93843957a7c305e67",
+      "text_method": "complete_html_readable_v1",
+      "extraction_tool": null,
+      "classification": "principles",
+      "scope": "Explicitly says statement is not manifesto; do not fabricate costed plan",
+      "published_on": "2025-11-25",
+      "publication_locator": "\"datePublished\":\"2025-11-25",
+      "evidence": {
+        "start": 2442,
+        "end": 2942,
+        "pdf_page": null,
+        "quote": "not a manifesto but a statement of principles. Once approved, it will become clause 2 of the Party’s constitution. If policies were to be included in the constitution, it would complicate the Party’s ability to adopt different policies in future.\nAt the regional assemblies and through the crowd-editing tool, many members suggested adding specific policies to the political statement. It is natural that members should want to express policy positions, and some very good policies were suggested. Bu"
+      },
+      "limitations": "Source candidate only. Exact publication day not established here unless publication_locator is present. Current adoption, costings, fiscal years and independent assessment coverage remain unverified."
+    }
+  ],
+  "parties": [
+    {
+      "id": "1",
+      "name": "Alliance",
+      "current_status": "not_verified",
+      "documents": [
+        "alliance-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Conservative",
+      "current_status": "not_verified",
+      "documents": [
+        "conservative-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "7",
+      "name": "Democratic Unionist Party",
+      "current_status": "not_verified",
+      "documents": [
+        "dup-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "44",
+      "name": "Green Party",
+      "current_status": "not_verified",
+      "documents": [
+        "green-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "15",
+      "name": "Labour",
+      "current_status": "not_verified",
+      "documents": [
+        "labour-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Liberal Democrat",
+      "current_status": "not_verified",
+      "documents": [
+        "libdem-2024-costings",
+        "libdem-2024-plain-text",
+        "libdem-manifesto"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "22",
+      "name": "Plaid Cymru",
+      "current_status": "not_verified",
+      "documents": [
+        "plaid-2024",
+        "plaid-2024-pdf"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "1036",
+      "name": "Reform UK",
+      "current_status": "not_verified",
+      "documents": [
+        "reform-2024-pdf"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "1117",
+      "name": "Restore Britain",
+      "current_status": "not_verified",
+      "documents": [
+        "restore-economic-plan-launch",
+        "restore-economic-plan-pdf",
+        "restore-policy-index"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "29",
+      "name": "Scottish National Party",
+      "current_status": "not_verified",
+      "documents": [
+        "snp-2024-launch",
+        "snp-2024-pdf",
+        "snp-2026"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "30",
+      "name": "Sinn Féin",
+      "current_status": "not_verified",
+      "documents": [
+        "sinnfein-2024-launch"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "31",
+      "name": "Social Democratic & Labour Party",
+      "current_status": "not_verified",
+      "documents": [
+        "sdlp-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "158",
+      "name": "Traditional Unionist Voice",
+      "current_status": "not_verified",
+      "documents": [
+        "tuv-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "38",
+      "name": "Ulster Unionist Party",
+      "current_status": "not_verified",
+      "documents": [
+        "uup-2024"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    },
+    {
+      "id": "1115",
+      "name": "Your Party",
+      "current_status": "not_verified",
+      "documents": [
+        "yourparty-explainer-observed",
+        "yourparty-statement",
+        "yourparty-statement-explainer"
+      ],
+      "missing": [
+        "complete_current_westminster_inventory",
+        "current_status_verification",
+        "complete_proposal_extraction",
+        "cost_funding_year_baseline_verification",
+        "independent_fiscal_review",
+        "independent_editorial_review"
+      ]
+    }
+  ],
+  "limitations": [
+    "All 15 current Westminster inventories are incomplete. This is a source inventory, not a proposal dataset or approval. Two historical proposal examples remain in data/parties.json.",
+    "Retrieval time and page metadata do not establish that a publication is current, adopted, implemented or exhaustive. Publication dates are null unless an exact original metadata or visible date locator is verified.",
+    "PDF text is the complete pinned layout extraction. Physical PDF page numbers start at 1 and may differ from printed page labels. Exact quotes are character offsets in that extraction.",
+    "Reform 2026 plan and launch lack complete retained official responses; browser excerpts are discovery only. Sinn Féin full Westminster PDF is missing; launch HTML is retained.",
+    "Independent and Speaker are separate roster groups, not parties with shared manifestos. SNP 2026 devolved manifesto cannot replace Westminster fiscal evidence.",
+    "No 2026 independent assessment coverage or fiscal/editorial approval is claimed. The IFS comparison uses different time bases for Reform and other parties; no cross-party sums are made."
+  ]
+}
