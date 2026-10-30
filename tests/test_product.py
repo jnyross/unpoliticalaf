@@ -22,6 +22,9 @@ import build_data
 from check_site import independent_data_checks, independent_payer_checks, independent_basics_checks, cells, check_pesa_dates
 import check_site
 import verify
+import build_site
+import check_payers
+import payer_projection
 from check_fiscal import RawReader
 
 HTML_PAGES = ("index.html", "taxes.html", "who-pays.html", "methods.html")
@@ -186,6 +189,44 @@ class ProductTests(unittest.TestCase):
                 return table in node["children"] or any(contains(child) for child in node["children"])
             self.assertTrue(any(contains(region) for region in regions),
                             "Tax table needs a labelled, keyboard-focusable scroll region")
+
+    def test_spending_only_configure_keeps_validated_payer_methods_and_determinism(self):
+        # Legacy callers do not pass the new optional payer argument.
+        with patch.object(payer_projection, "project", wraps=payer_projection.project) as project, patch.object(
+                check_payers, "validate_data", wraps=check_payers.validate_data) as validate:
+            build_site.configure(self.data)
+            self.assertIsNone(build_site.PAYERS)
+            first = build_site.methods()
+            payers = build_site.PAYERS
+            self.assertIsNotNone(payers)
+            project.assert_called_once_with(build_site.ROOT)
+            validate.assert_called_once_with(build_site.ROOT, payers)
+            self.assertEqual(first, build_site.methods())
+            self.assertEqual(project.call_count, 1, "Repeated rendering must reuse validated data")
+            self.assertEqual(validate.call_count, 1)
+            doc = Document(first)
+            section = next(node for node in doc.nodes if node["attrs"].get("id") == "payer-methods")
+            source_links = {a.get("href") for a in Document(
+                build_site.section_payer_methods()).elements("a")}
+            self.assertTrue({source["url"] for source in payers["sources"].values()} <= source_links)
+            self.assertIn("data/payers.json", source_links)
+            self.assertIn("positive Income Tax bill", " ".join(section["text"]))
+            self.assertIn("not households", " ".join(section["text"]))
+            build_site.configure(self.data)
+            self.assertIsNone(build_site.PAYERS)
+            self.assertEqual(first, build_site.methods())
+            self.assertEqual(project.call_count, 2)
+            self.assertEqual(validate.call_count, 2)
+
+    def test_spending_only_methods_fail_closed_before_caching_invalid_payers(self):
+        build_site.configure(self.data)
+        with patch.object(payer_projection, "project", return_value={}) as project, patch.object(
+                check_payers, "validate_data", side_effect=ValueError("bad payer source")) as validate:
+            with self.assertRaisesRegex(ValueError, "bad payer source"):
+                build_site.methods()
+            project.assert_called_once_with(build_site.ROOT)
+            validate.assert_called_once_with(build_site.ROOT, {})
+            self.assertIsNone(build_site.PAYERS)
 
     def test_payer_public_projection_and_rendered_page_are_independently_verified(self):
         public = independent_payer_checks(self.site)
