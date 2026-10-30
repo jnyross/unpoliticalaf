@@ -480,6 +480,86 @@ class PayerTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "Source label does not support"):
                     check_payers.validate_data(ROOT, self.data)
 
+    def test_period_and_year_basis_aliases_are_bound_to_original_cells(self):
+        from unittest.mock import patch
+        reader = check_payers.raw_cells(ROOT)
+        targets = (
+            ("hmrc", "2_4_Taxpayer_share_tax", "A27", "2024 to 2025"),
+            ("hmrc", "2_4_Taxpayer_share_tax", "A2", "Financial year"),
+            ("ons", "Table 8", "A1", reader("ons", "Table 8", "A1")["value"].replace("2023/24", "2024/25")),
+            ("ons", "Cover sheet", "A5", reader("ons", "Cover sheet", "A5")["value"].replace("financial year", "tax year")),
+        )
+        for sid, sheet, cell, wrong in targets:
+            def altered(source, tab, address):
+                raw = reader(source, tab, address)
+                if (source, tab, address) == (sid, sheet, cell):
+                    raw["value"] = wrong
+                return raw
+            with self.subTest(cell=cell, sheet=sheet), patch.object(check_payers, "raw_cells", return_value=altered):
+                with self.assertRaisesRegex(ValueError, "Source label does not support"):
+                    check_payers.validate_data(ROOT, self.data)
+        for sid in ("hmrc", "ons"):
+            for field, wrong in (("period", "2024/25"), ("year_basis", "Calendar year")):
+                def mutate(data):
+                    next(v for v in data["values"] if v["source_id"] == sid)[field] = wrong
+                with self.subTest(source=sid, field=field):
+                    self.assert_bad_data(mutate)
+        for value in self.data["values"]:
+            expected = ("hmrc:2_4_Taxpayer_share_tax!A2" if value["source_id"] == "hmrc"
+                        else "ons:Cover sheet!A5")
+            self.assertIn(expected, value["label_cells"])
+        # A different cell with identical text still has the wrong identity.
+        self.assert_bad_data(lambda d: d["source_cells"]["ons:Cover sheet!A5"].update(cell="A6"))
+        self.assert_bad_data(lambda d: d["values"][0]["label_cells"].__setitem__(-1, "hmrc:Contents!A5"))
+
+    def test_producer_refuses_an_unbound_hmrc_period_or_year_basis(self):
+        from unittest.mock import patch
+        original = payer_projection.ods_cells(ROOT / "data/payers/raw/hmrc-table24-july2026.ods")
+        for address, wrong in (("A27", "2024 to 2025"), ("A2", "Calendar year")):
+            changed = deepcopy(original)
+            changed[("2_4_Taxpayer_share_tax", address)]["value"] = wrong
+            with self.subTest(address=address), patch.object(payer_projection, "ods_cells", return_value=changed):
+                with self.assertRaisesRegex(ValueError, "HMRC source period/year basis changed"):
+                    payer_projection.project(ROOT)
+
+    def test_note_numbers_and_text_are_bound_independently_as_pairs(self):
+        from unittest.mock import patch
+        reader = check_payers.raw_cells(ROOT)
+        for label, text, number in (("A8", "B8", "note 5"), ("A9", "B9", "note 6"), ("A16", "B16", "note 13")):
+            reference = "ons:Notes!" + label
+            self.assertEqual(self.data["source_cells"][reference]["value"], number)
+            self.assert_bad_data(lambda d: d["source_cells"][reference].update(value="note 99"))
+            # Retain the same text but assign the label cell another identity.
+            self.assert_bad_data(lambda d: d["source_cells"][reference].update(cell="A4"))
+            for target, wrong in ((label, "note 99"), (text, "Wrong source note text")):
+                def altered(sid, sheet, address):
+                    raw = reader(sid, sheet, address)
+                    if (sid, sheet, address) == ("ons", "Notes", target):
+                        raw["value"] = wrong
+                    return raw
+                with self.subTest(cell=target), patch.object(check_payers, "raw_cells", return_value=altered):
+                    with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                        check_payers.validate_data(ROOT, self.data)
+        for marker in ("[note5]", "[note6]", "[note13]"):
+            def missing_reference(sid, sheet, address):
+                raw = reader(sid, sheet, address)
+                if (sid, sheet, address) == ("ons", "Table 8", "A2"):
+                    raw["value"] = raw["value"].replace(marker, "[note99]")
+                return raw
+            with self.subTest(marker=marker), patch.object(check_payers, "raw_cells", return_value=missing_reference):
+                with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                    check_payers.validate_data(ROOT, self.data)
+        # Swap valid source labels, leaving every numeric value and B-cell intact.
+        def swapped(sid, sheet, address):
+            if sid == "ons" and sheet == "Notes" and address in {"A8", "A9"}:
+                raw = reader(sid, sheet, address)
+                raw["value"] = reader(sid, sheet, "A9" if address == "A8" else "A8")["value"]
+                return raw
+            return reader(sid, sheet, address)
+        with patch.object(check_payers, "raw_cells", return_value=swapped):
+            with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                check_payers.validate_data(ROOT, self.data)
+
     def test_public_data_extra_raw_response_and_count_are_rejected(self):
         self.assert_bad_data(lambda d: d.update(original_response="raw HTML"))
         self.assert_bad_data(lambda d: d["values"].append({"id": "taxpayer-count", "value": 36700000}))

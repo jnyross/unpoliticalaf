@@ -185,7 +185,7 @@ def expected_values():
     sheet = "2_4_Taxpayer_share_tax"
     for gid, column, group in (("bottom50", "F", "Bottom 50%"), ("top10", "I", "Top 10%"), ("top1", "K", "Top 1%")):
         specs.append(("hmrc-" + gid, "hmrc", sheet, column + "27", group, "Share of Income Tax due",
-                      "Total Income Tax liabilities", [(sheet, "A1"), (sheet, "A27"), (sheet, column + "2"), ("Contents", "A5")]))
+                      "Total Income Tax liabilities", [(sheet, "A1"), (sheet, "A27"), (sheet, column + "2"), ("Contents", "A5"), (sheet, "A2")]))
     measures = (("direct", 5, "Direct taxes", "Gross household income"),
                 ("indirect", 9, "Indirect taxes", "Gross household income"),
                 ("combined", 15, "Direct and indirect taxes counted in this ONS analysis", "Gross household income"),
@@ -195,7 +195,7 @@ def expected_values():
         for key, row, measure, denominator in measures:
             specs.append((f"ons-{index}-{key}", "ons", "Table 8", f"{column}{row}", group, measure, denominator,
                           [("Table 8", "A1"), ("Table 8", column + "4"), ("Table 8", f"B{row}"),
-                           ("Table 8", "A22" if row == 22 else "A5")]))
+                           ("Table 8", "A22" if row == 22 else "A5"), ("Cover sheet", "A5")]))
     return specs
 
 
@@ -236,7 +236,7 @@ def validate_data(root, data):
         retain("hmrc", "Contents", address)
     for sheet, addresses in {
         "Cover sheet": ("A1", "A5", "A6", "A9", "A20", "A23"), "Table 8": ("A2",),
-        "Notes": ("B4", "B6", "B8", "B9", "B16", "B31"),
+        "Notes": ("B4", "B6", "A8", "B8", "A9", "B9", "A16", "B16", "B31"),
         "Table 2b": ("A43", "B44", "B45", "A65", "B66", "C45"),
     }.items():
         for address in addresses:
@@ -267,13 +267,41 @@ def validate_data(root, data):
         ("ons", "Table 8", "A22", "Percentages of expenditure", "denominator", "Household expenditure",
          [f"ons-{i}-expenditure" for i in range(1, 6)]),
     )
+    # These are source-label aliases, not new time series. Check both period
+    # and year basis against raw labels independently of the producer's parsing.
+    hmrc_ids = ["hmrc-bottom50", "hmrc-top10", "hmrc-top1"]
+    ons_ids = [f"ons-{i}-{m}" for i in range(1, 6)
+               for m in ("direct", "indirect", "combined", "expenditure")]
+    label_aliases += (
+        ("hmrc", "2_4_Taxpayer_share_tax", "A27", "2023 to 2024", "period", "2023/24", hmrc_ids),
+        ("hmrc", "2_4_Taxpayer_share_tax", "A2", "Tax year", "year_basis", "Tax year", hmrc_ids),
+        ("ons", "Table 8", "A1",
+         "Table 8: Taxes as a percentage of gross income, disposable income and expenditure for all individuals by equivalised household disposable income quintile group, UK, 2023/24",
+         "period", "2023/24", ons_ids),
+        ("ons", "Cover sheet", "A5",
+         "2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years.",
+         "year_basis", "Financial year ending 2024", ons_ids),
+    )
     public_values = {v["id"]: v for v in data["values"]}
     for sid, sheet, address, source_label, field, alias, value_ids in label_aliases:
         actual = read(sid, sheet, address)["value"]
         require(isinstance(actual, str) and actual.strip() == source_label,
                 "Source label does not support the public alias: " + sheet + "!" + address)
         require(all(public_values.get(vid, {}).get(field) == alias for vid in value_ids),
-                "Public group/measure/denominator alias differs from its source label")
+                "Public group/measure/denominator/period/year-basis alias differs from its source label")
+    # Bind note numbers to their exact companion text, not just a B-column cell.
+    note_bindings = (
+        ("A8", "note 5", "B8", "For the direct tax components of Income Tax, National Insurance contributions and student loan repayments, figures include amounts liable on income earned in the specified financial year and compulsory and voluntary lump sum payments made in relation to income earned in a previous financial year(s) when the payment of the direct tax component(s) was deferred."),
+        ("A9", "note 6", "B9", "Note that the inclusion of lump sum tax payments deferred from a previous financial year(s) can lead to high estimates of direct taxes paid for the lowest deciles or quintiles determined by ranking disposable income (gross income minus direct taxes) as people with high gross incomes can end up towards the lower end of the income distribution by virtue of large deferred direct tax payments which are not reflective of their direct tax liabilities for a typical financial year."),
+        ("A16", "note 13", "B16", "Expenditure has been calculated to be consistent with disposable income. Data not available prior to 1995/96."),
+    )
+    table_notes = read("ons", "Table 8", "A2")["value"]
+    require(isinstance(table_notes, str), "Source note label/text binding changed: Table 8!A2")
+    for label_cell, label, text_cell, note in note_bindings:
+        require(read("ons", "Notes", label_cell)["value"] == label and
+                read("ons", "Notes", text_cell)["value"] == note and
+                "[" + label.replace(" ", "") + "]" in table_notes,
+                "Source note label/text binding changed: " + label_cell + "/" + text_cell)
     require(data["values"] == expected, "Public values or semantic provenance differ from original cells")
     require(data["source_cells"] == expected_cells, "Public source labels, notes, scalars or formulas differ")
     require("2023 to 2024" in expected_cells["hmrc:Contents!A5"]["value"] and

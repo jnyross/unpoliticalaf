@@ -185,10 +185,28 @@ def project(root):
     def add(vid, sid, sheet, address, group, measure, denominator, labels):
         reference = retain(sid, sheet, address)
         value = number(evidence[reference]["value"])
+        # Display aliases must be supported by the selected source year labels.
+        if sid == "hmrc":
+            period_ref = retain(sid, sheet, "A27")
+            basis_ref = retain(sid, sheet, "A2")
+            match = re.fullmatch(r"(\d{4}) to (\d{4})", str(evidence[period_ref]["value"]).strip())
+            if not match or match.groups() != ("2023", "2024") or evidence[basis_ref]["value"] != "Tax year":
+                raise ValueError("HMRC source period/year basis changed")
+            period, basis = match[1] + "/" + match[2][-2:], evidence[basis_ref]["value"]
+        else:
+            period_ref = retain(sid, "Table 8", "A1")
+            basis_ref = retain(sid, "Cover sheet", "A5")
+            match = re.search(r", UK, (\d{4}/\d{2})$", str(evidence[period_ref]["value"]))
+            basis_note = evidence[basis_ref]["value"]
+            if (not match or match[1] != "2023/24" or basis_note !=
+                    "2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years."):
+                raise ValueError("ONS source period/year basis changed")
+            period, basis = match[1], "Financial year ending 2024"
+        labels = labels + ([(sheet, "A2")] if sid == "hmrc" else [("Cover sheet", "A5")])
         values.append({"id": vid, "value": value, "group": group, "measure": measure,
                        "source_id": sid, "sheet": sheet, "cell": address,
                        "source_sha256": src[sid]["sha256"], "published": src[sid]["published"],
-                       "period": "2023/24", "year_basis": "Tax year" if sid == "hmrc" else "Financial year ending 2024",
+                       "period": period, "year_basis": basis,
                        "status": HMRC_STATUS if sid == "hmrc" else ONS_STATUS,
                        "unit": "%", "denominator": denominator, "geography": "UK",
                        "population": HMRC_POPULATION if sid == "hmrc" else ONS_POPULATION,
@@ -212,7 +230,7 @@ def project(root):
         for sheet, addresses in {
             "Cover sheet": ("A1", "A5", "A6", "A9", "A20", "A23"),
             "Table 8": ("A2",),
-            "Notes": ("B4", "B6", "B8", "B9", "B16", "B31"),
+            "Notes": ("B4", "B6", "A8", "B8", "A9", "B9", "A16", "B16", "B31"),
             "Table 2b": ("A43", "B44", "B45", "A65", "B66", "C45"),
         }.items():
             for address in addresses:
