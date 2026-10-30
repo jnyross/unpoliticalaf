@@ -103,6 +103,42 @@ def check_payer_browser(page, data):
         raise RuntimeError("Payer browser selected-data download missing")
 
 
+def check_basics_browser(page, *, expanded=False):
+    """Check actual visibility, including opacity which is_visible alone misses."""
+    modules = page.locator('[data-basics]')
+    for index in range(modules.count()):
+        module = modules.nth(index)
+        if not module.is_visible():
+            raise RuntimeError("Basics container is not visible")
+        targets = module.locator('[data-basics-claim], h2, h3, summary')
+        for target_index in range(targets.count()):
+            target = targets.nth(target_index)
+            closed = target.evaluate("""node => {
+                for (let p = node.parentElement; p; p = p.parentElement) {
+                    if (p.tagName === 'DETAILS' && !p.open &&
+                        !p.querySelector(':scope > summary')?.contains(node)) return true;
+                }
+                return false;
+            }""")
+            if closed and not expanded:
+                continue
+            if not target.is_visible():
+                raise RuntimeError("Basics claim/heading is not visible")
+            visible = target.evaluate("""node => {
+                for (let p = node; p; p = p.parentElement) {
+                    const css = getComputedStyle(p);
+                    if (p.inert || p.hasAttribute('hidden') || p.hasAttribute('popover') ||
+                        p.getAttribute('aria-hidden') === 'true' || Number(css.opacity) <= 0 ||
+                        css.display === 'none' || css.visibility !== 'visible' ||
+                        css.clipPath !== 'none' || css.contentVisibility === 'hidden') return false;
+                }
+                const box = node.getBoundingClientRect();
+                return box.width > 0 && box.height > 0;
+            }""")
+            if not visible:
+                raise RuntimeError("Basics claim/heading is concealed by an ancestor")
+
+
 def check():
     pages = sorted(SITE.glob("*.html"))
     if {path.name for path in pages} != {"index.html", "taxes.html", "who-pays.html", "methods.html"}:
@@ -193,6 +229,8 @@ def check():
                             )
                         if page.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                             raise RuntimeError(f"Page overflow: {path.name}, {width}px, {state}")
+                        if path.name in ("taxes.html", "who-pays.html"):
+                            check_basics_browser(page, expanded=state == "expanded")
                         if path.name == "who-pays.html":
                             check_payer_browser(page, payer_data)
                         table_failures = page.locator("table").evaluate_all("""tables =>
@@ -255,6 +293,8 @@ def check():
                         raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript default overflow: {path.name}, {width}px")
+                    if path.name in ("taxes.html", "who-pays.html"):
+                        check_basics_browser(reader)
                     if path.name in ("taxes.html", "who-pays.html") and not reader.locator("details").count():
                         raise RuntimeError(f"Source detail is missing without JavaScript: {path.name}")
                     for index in range(reader.locator("details").count()):
@@ -278,6 +318,8 @@ def check():
                         raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript expanded overflow: {path.name}, {width}px")
+                    if path.name in ("taxes.html", "who-pays.html"):
+                        check_basics_browser(reader, expanded=True)
                     if path.name == "who-pays.html":
                         check_payer_browser(reader, payer_data)
             plain.close()

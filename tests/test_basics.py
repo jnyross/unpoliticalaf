@@ -220,6 +220,8 @@ class BasicsTests(unittest.TestCase):
             'style="display:none"', 'style="visibility:hidden"',
             'onclick="return false"', 'onpointerdown="return false"',
             'class="v"', 'class="wide"', 'class="narrow"', 'class="unknown"',
+            "popover", 'popover="auto"', "inert", 'role="none"',
+            'tabindex="-1"', 'data-unknown="conceal"', 'unknown="value"',
         )
         for page, html, root_tag, field in (
             ("tax", self.tax, "section", "ni-rules"),
@@ -237,6 +239,13 @@ class BasicsTests(unittest.TestCase):
                         changed = self.replace(html, target, replacement)
                         with self.assertRaisesRegex(ValueError, "hidden or active"):
                             self.validate(tax=changed) if page == "tax" else self.validate(payer=changed)
+
+    def test_native_details_open_remains_allowed(self):
+        for value in ("open", 'open=""', 'open="open"'):
+            with self.subTest(attribute=value):
+                tax = self.replace(self.tax, "<details>", f"<details {value}>")
+                payer = self.replace(self.payer, "<details>", f"<details {value}>")
+                self.assertTrue(self.validate(tax=tax, payer=payer))
 
     def official_body(self, name):
         path = self.root / f"data/tax-basics/raw/basics-{name}.html.json"

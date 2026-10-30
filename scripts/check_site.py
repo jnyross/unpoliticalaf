@@ -384,7 +384,28 @@ def check_guidance_methods(raw, root=None):
             section["parents"] and section["parents"][-1]["tag"] == "main" and
             not concealed(section) and not any(p["tag"] == "details" for p in section["parents"]),
             "section hidden or misplaced")
+    shell = {"html": {"lang": {"en-GB"}},
+             "body": {"class": {"view-real nojs", "view-real"}}, "main": {"id": {"main"}}}
+    for ancestor in section["parents"]:
+        allowed = shell.get(ancestor["tag"])
+        require(allowed is not None and set(ancestor["attrs"]) <= set(allowed) and
+                all(value in allowed[key] for key, value in ancestor["attrs"].items()),
+                "ancestor attributes changed")
+    require(section["attrs"] == {"id": "tax-guidance", "data-pid": "tax-guidance-methods"},
+            "section attributes changed")
     nodes = [n for n in document.nodes if section in n["parents"]]
+    # Every methods descendant has a small explicit attribute contract too.
+    for node in nodes:
+        attrs, tag = node["attrs"], node["tag"]
+        if tag == "li":
+            allowed = set(attrs) == {"data-guidance-source"} and attrs["data-guidance-source"] in locators
+        elif tag == "a":
+            allowed = set(attrs) == {"href"}
+        elif tag in {"p", "ul"}:
+            allowed = not attrs or attrs == {"class": "small" if tag == "p" else "name"}
+        else:
+            allowed = tag in {"h2", "details", "summary", "code"} and not attrs
+        require(allowed, "descendant attributes changed")
     headings = [n for n in nodes if n["tag"] in {"h1", "h2", "h3"}]
     require(len(headings) == 1 and headings[0]["tag"] == "h2" and
             text(headings[0]) == "Where the tax definitions come from" and not concealed(headings[0]),

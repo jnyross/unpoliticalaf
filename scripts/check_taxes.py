@@ -535,7 +535,20 @@ def validate_story(raw, bound, data):
                    re.search(r"display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse)",
                              p["attrs"].get("style", ""), re.I)
                    for p in [node] + node["parents"])
-    require(not concealed(basics) and "class" not in basics["attrs"], "tax basics container hidden")
+    shell = {
+        "html": ({"lang"}, {"lang": {"en-GB"}}),
+        "body": ({"class"}, {"class": {"view-real nojs", "view-real"}}),
+        "main": ({"id"}, {"id": {"main"}}),
+    }
+    for ancestor in basics["parents"]:
+        require(ancestor["tag"] in shell, "tax basics container hidden or ancestor attributes changed")
+        allowed, values = shell[ancestor["tag"]]
+        require(set(ancestor["attrs"]) <= allowed and all(
+            value in values[key] for key, value in ancestor["attrs"].items()),
+            "tax basics container hidden or ancestor attributes changed")
+    require(set(basics["attrs"]) == {"data-basics", "aria-labelledby"} and
+            basics["attrs"]["aria-labelledby"] == "tax-basics-title" and not concealed(basics),
+            "tax basics container hidden or attributes changed")
     groups = next((n for n in story.nodes if n["attrs"].get("id") == "receipt-groups"), None)
     require(groups is not None and story.nodes.index(basics) < story.nodes.index(groups) and
             all(story.nodes.index(n) < story.nodes.index(groups) for n in story.nodes

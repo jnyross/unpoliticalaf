@@ -296,11 +296,12 @@ class _Fragment(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
-        # Check the root BEFORE its early return. Classes can conceal content
-        # through the host stylesheet, so no class is allowed in this module.
+        # Check the root BEFORE its early return. Reject every attribute outside
+        # this bounded contract, including native concealment/access blockers.
         if self.stack or a.get("data-basics") == self.scope:
-            _require(not any(k in {"hidden", "style", "aria-hidden", "class"} or k.startswith("on")
-                             for k, _ in attrs), "hidden or active basics content")
+            allowed = {"data-basics", "aria-labelledby", "id", "data-basics-claim",
+                       "data-basics-scope", "href", "open"}
+            _require(all(k in allowed for k, _ in attrs), "hidden or active basics content")
         if a.get("data-basics") == self.scope:
             _require(not self.stack and tag == self.tag, "wrong or nested basics container")
             self.count += 1

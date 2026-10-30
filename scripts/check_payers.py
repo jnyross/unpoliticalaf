@@ -538,7 +538,21 @@ def validate_page(root, data, text):
                              p["attrs"].get("style", ""), re.I)
                    for p in [node] + node["parents"])
 
-    require(not concealed(basics) and "class" not in basics["attrs"], "Payer basics container hidden")
+    shell = {
+        "html": ({"lang"}, {"lang": {"en-GB"}}),
+        "body": ({"class"}, {"class": {"view-real nojs", "view-real"}}),
+        "main": ({"id", "class"}, {"id": {"main"}, "class": {"payers"}}),
+        "section": ({"id"}, {"id": {"burden"}}),
+    }
+    for ancestor in basics["parents"]:
+        require(ancestor["tag"] in shell, "Payer basics container hidden or ancestor attributes changed")
+        allowed, values = shell[ancestor["tag"]]
+        require(set(ancestor["attrs"]) <= allowed and all(
+            value in values[key] for key, value in ancestor["attrs"].items()),
+            "Payer basics container hidden or ancestor attributes changed")
+    require(set(basics["attrs"]) == {"data-basics", "aria-labelledby"} and
+            basics["attrs"]["aria-labelledby"] == "payer-basics-title" and not concealed(basics),
+            "Payer basics container hidden or attributes changed")
 
     # Independent full-copy contracts preserve each causal warning after its
     # plain-language rewrite. Correct keywords elsewhere cannot mask a reversal.

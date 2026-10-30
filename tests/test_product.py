@@ -358,13 +358,39 @@ class ProductTests(unittest.TestCase):
         marker = re.search(r'<section\b[^>]*data-basics="taxes"[^>]*>', raw).group(0)
         for attribute in ('hidden', 'aria-hidden="true"', 'style="display:none"',
                           'style="visibility:hidden"', 'style="visibility:collapse"',
-                          'class="v"', 'class="narrow"', 'class="wide"'):
-            for target in (marker, '<main id="main">'):
+                          'class="v"', 'class="narrow"', 'class="wide"', 'popover', 'inert',
+                          'style="opacity:0"', 'style="clip-path:inset(100%)"',
+                          'data-unapproved="yes"', 'class="unknown"'):
+            for target in (marker, '<main id="main">', '<body class="view-real nojs">', '<html lang="en-GB">'):
                 with self.subTest(attribute=attribute, target=target):
                     self.assertIn(target, raw)
                     changed = raw.replace(target, target[:-1] + ' ' + attribute + '>', 1)
                     with self.assertRaisesRegex(ValueError, "tax basics container hidden"):
                         check_taxes.validate_html(changed, data)
+
+    def test_basics_browser_visibility_checks_opacity_and_disclosure_state(self):
+        from unittest.mock import MagicMock
+        from a11y_check import check_basics_browser
+        page, modules, module, targets, target = (MagicMock() for _ in range(5))
+        page.locator.return_value = modules
+        modules.count.return_value = 1
+        modules.nth.return_value = module
+        module.is_visible.return_value = True
+        module.locator.return_value = targets
+        targets.count.return_value = 1
+        targets.nth.return_value = target
+        target.is_visible.return_value = True
+        # Playwright's is_visible can be true for opacity-zero content.
+        target.evaluate.side_effect = [False, False]
+        with self.assertRaisesRegex(RuntimeError, "concealed by an ancestor"):
+            check_basics_browser(page)
+        target.evaluate.side_effect = [True]
+        check_basics_browser(page)  # Optional closed native disclosure.
+        target.evaluate.side_effect = [True, False]
+        with self.assertRaisesRegex(RuntimeError, "concealed by an ancestor"):
+            check_basics_browser(page, expanded=True)
+        target.evaluate.side_effect = [False, True]
+        check_basics_browser(page, expanded=True)
 
     def test_guidance_methods_are_independently_bound_to_the_retained_sources(self):
         raw = self.files["methods.html"].decode("utf-8")
@@ -394,10 +420,13 @@ class ProductTests(unittest.TestCase):
         self.assertNotEqual(reordered, section)
         with self.assertRaisesRegex(ValueError, "source IDs/order"):
             check_site.check_guidance_methods(raw.replace(section, reordered, 1), root=ROOT)
-        for attribute in ('hidden', 'aria-hidden="true"', 'style="visibility:hidden"', 'class="v"'):
-            with self.subTest(attribute=attribute), self.assertRaisesRegex(ValueError, "Guidance methods:"):
-                check_site.check_guidance_methods(raw.replace(
-                    '<section id="tax-guidance"', '<section ' + attribute + ' id="tax-guidance"', 1), root=ROOT)
+        for attribute in ('hidden', 'aria-hidden="true"', 'style="visibility:hidden"', 'class="v"',
+                          'popover', 'inert', 'style="opacity:0"', 'style="clip-path:inset(100%)"',
+                          'data-unapproved="yes"', 'class="unknown"'):
+            for target in ('<section id="tax-guidance"', '<main id="main"',
+                           '<body class="view-real nojs"', '<html lang="en-GB"'):
+                with self.subTest(attribute=attribute, target=target), self.assertRaisesRegex(ValueError, "Guidance methods:"):
+                    check_site.check_guidance_methods(raw.replace(target, target + ' ' + attribute, 1), root=ROOT)
         # Prove the published-byte entry point includes the methods page.
         with tempfile.TemporaryDirectory() as directory:
             site = Path(directory)

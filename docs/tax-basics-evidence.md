@@ -89,10 +89,11 @@ in the page is not sufficient evidence.
 These guidance sources explain rules and collection, not the fiscal figures.
 The HMRC liability shares, ONS household percentages, older ONS technical report
 and OBR receipts have their own retained datasets and independent checkers.
-They are not extra responses in this 7-file guidance register. In particular,
-there is no `ons-technical-2019.html` or Markdown reading-text file in this seed.
-The payer methods record owns the older methodology, workbook notes and their
-limits. The current workbook takes priority where older methods differ.
+They are not extra responses in this 7-file tax-guidance register. In particular,
+`ons-technical-2019.html` is not in this tax-guidance register; the payer register
+retains the older ONS technical report in a JSON envelope. The guidance register
+also lists no Markdown reading-text files. The payer methods record owns the
+older methodology, workbook notes and their limits. The current workbook takes priority where older methods differ.
 
 Income Tax liability shares do not become shares of all tax. ONS income and
 expenditure denominators stay separate. Collection does not establish burden.

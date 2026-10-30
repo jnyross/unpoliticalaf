@@ -55,9 +55,12 @@ inaccurate evidence records.
 The bounded shared repair adds independent container and ancestor visibility
 checks in the tax and payer validators. They reject hidden, aria-hidden, inline
 hiding styles and known responsive/view hiding classes. Root basics containers
-must not acquire classes. The fragment module owner separately owns strict
-fragment attributes/classes, source-heading checks and Welsh anchor correction.
-This document does not claim that separate work passed.
+must not acquire classes. The fragment checker applies an exact 7-attribute
+allowlist to roots and descendants before the root branch returns: `data-basics`,
+`aria-labelledby`, `id`, `data-basics-claim`, `data-basics-scope`, `href` and `open`.
+Every other attribute is rejected, including `popover`, `inert`, `role`,
+`tabindex`, classes, styles and event handlers. Native open details remain valid.
+Source-heading checks and the Welsh anchor correction remain unchanged.
 
 Guidance methods now use an explicit source-ID-to-locator map, not zip position.
 The renderer requires exactly the 7 source IDs and renders a fixed order. Each
@@ -92,9 +95,17 @@ by this repair.
 
 ## Handoff and evidence limits
 
-This repair uses file read/write/edit tools only. No execution, Git, network,
-build, test or deployment result is claimed. Previous preparation results belong
-to their exact older candidates and do not establish a pass for this repair.
+The parent reports that candidate `9dc` passed the full Boat check run with
+231 tests. Its sandbox `bx_skdybngs` was deleted. That result belongs only to
+that candidate; it does not cover the later attribute-allowlist repair.
+
+The later repair replaces the incomplete attribute blacklist after review finding
+B1 identified native `popover` concealment and `inert` access removal. Added
+mutations cover both roots, claims, details and summaries, including unknown
+attributes. A positive test retains native open details. This bounded repair
+uses source-file read/edit tools only, with no execution or Git actions. Its
+resulting exact candidate and check outcome are not yet established. No new
+build, test pass, review approval or deployment is claimed.
 
 The parent must combine the 2 non-overlapping repairs and run the full declared
 pipeline on the resulting exact candidate. This includes source checks, build,

@@ -469,12 +469,15 @@ class PayerTests(unittest.TestCase):
         self.assertEqual(marker["tag"], "aside")
         for attribute in ('hidden', 'aria-hidden="true"', 'style="display:none"',
                           'style="visibility:hidden"', 'style="visibility:collapse"',
-                          'class="v"', 'class="narrow"', 'class="wide"'):
-            for target in (opening, '<section id="burden">'):
+                          'class="v"', 'class="narrow"', 'class="wide"', 'popover', 'inert',
+                          'style="opacity:0"', 'style="clip-path:inset(100%)"',
+                          'data-unapproved="yes"', 'class="unknown"'):
+            for target in (opening, '<section id="burden">', '<main id="main" class="payers">',
+                           '<body>', '<html lang="en-GB">'):
                 with self.subTest(attribute=attribute, target=target):
                     self.assertIn(target, self.page)
                     changed = self.page.replace(target, target[:-1] + ' ' + attribute + '>', 1)
-                    with self.assertRaisesRegex(ValueError, "Payer basics container hidden"):
+                    with self.assertRaisesRegex(ValueError, "Payer basics container hidden|Core payer value hidden"):
                         check_payers.validate_page(ROOT, self.data, changed)
 
     def test_public_aliases_are_bound_to_raw_labels_independently(self):
