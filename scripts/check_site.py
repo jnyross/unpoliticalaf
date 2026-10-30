@@ -183,11 +183,22 @@ def check_pesa_dates(raw, data, read, name):
     # Date spans and tooltips are not the only places a stale literal can appear.
     # Check visible prose on every page, including pages with no required spans.
     unmarked = "".join(page.unmarked_text)
-    full_date = r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b"
-    if date in " ".join(unmarked.split()) or any(
-            re.search(r"\bforecasts?\b", sentence, re.I) and re.search(full_date, sentence)
-            for sentence in re.split(r"(?<=[.!?])\s+", unmarked)):
-        raise ValueError(f"Independent PESA unmarked forecast date/vintage: {name}")
+    prose_date = r"\b(?:\d{1,2}\s+)?(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b"
+    for sentence in re.split(r"(?<=[.!?])\s+", unmarked):
+        if not re.search(prose_date, sentence, re.I):
+            continue
+        # On these spending pages, forecast-note / Economic and fiscal outlook
+        # dates are PESA claims and must use the independently checked markers.
+        # Publication, retrieval and historical dates alone are not such claims.
+        # Explicit OBR historical/databank notes retain their separate vintages;
+        # mentioning those notes cannot exempt a PESA or outlook date claim.
+        pesa = re.search(r"\bPESA\b|\bTreasury\b", sentence, re.I)
+        outlook = re.search(r"\beconomic\s+and\s+fiscal\s+outlook\b", sentence, re.I)
+        obr_history = (re.search(r"\bOBR\b", sentence, re.I) and
+                       re.search(r"\bhistorical\b|\bdatabank\b", sentence, re.I))
+        forecast = re.search(r"\bforecasts?\b", sentence, re.I)
+        if outlook or (forecast and (pesa or not obr_history)):
+            raise ValueError(f"Independent PESA unmarked forecast date/vintage: {name}")
     forecast_ids = {key for key, meta in data["provenance"].items() if meta["status"] == "pesa_forecast"}
     label = "PESA forecast; OBR " + date + "."
     for figure in page.figures:
