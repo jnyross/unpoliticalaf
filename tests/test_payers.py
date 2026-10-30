@@ -461,6 +461,116 @@ class PayerTests(unittest.TestCase):
             with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "source note moved"):
                 check_payers.validate_page(ROOT, self.data, moved)
 
+    def test_tax_definitions_bind_copy_examples_and_model_assumption(self):
+        for old, new in (
+            ("ONS takes direct taxes,", "ONS never takes direct taxes,"),
+            ("from household income.", "from wages only."),
+            ("Council Tax after benefits or rebates", "Corporation Tax after benefits or rebates"),
+            ("Indirect taxes are paid through spending", "Indirect taxes are not paid through spending"),
+            ("such as VAT and duty on alcohol or fuel", "such as Income Tax and duty on alcohol or fuel"),
+            ("Final taxes are on goods and services bought for household use.", "Final taxes are on firms' profits."),
+            ("Final taxes are on goods and services bought for household use.", ""),
+            ("Final taxes are on", "Final taxes are not on"),
+            ("Final taxes are on goods and services", "Final taxes are on goods only"),
+            ("Final taxes are on goods and services", "Final taxes are on services only"),
+            ("bought for household use", "bought for business use"),
+            ("goods and services firms use to make other goods and services", "goods buyers use at home"),
+            ("Intermediate taxes are on", "Intermediate taxes are not on"),
+            ("Intermediate taxes are on goods and services", "Intermediate taxes are on goods only"),
+            ("Intermediate taxes are on goods and services", "Intermediate taxes are on services only"),
+            ("In this model, ONS assumes", "In every case, ONS proves"),
+            ("ONS assumes firms pass the full cost", "Firms always pass the full cost"),
+            ("ONS assumes firms pass the full cost", "ONS assumes firms pass none of the cost"),
+        ):
+            with self.subTest(old=old):
+                self.assert_bad_page(old, new)
+        self.assertEqual(len([n for n in check_payers.Page(self.page).nodes if n["tag"] == "data"]), 23)
+
+    def test_tax_definitions_require_unique_visible_paragraph_in_exact_order(self):
+        opening = '<p data-payer-definition="tax-types">'
+        start = self.page.index(opening)
+        end = self.page.index('</p>', start) + len('</p>')
+        paragraph = self.page[start:end]
+        self.assert_bad_page(paragraph, '')
+        self.assert_bad_page(paragraph, paragraph + paragraph)
+        self.assert_bad_page(paragraph, paragraph + paragraph.replace(opening, '<p>'))
+        for attr in ('hidden', 'aria-hidden="true"', 'style="display:none"',
+                     'style="opacity:0"', 'style="clip-path:inset(100%)"',
+                     'class="narrow"', 'popover', 'inert'):
+            for target in (opening, '<section id="household-taxes">'):
+                with self.subTest(attr=attr, target=target):
+                    self.assert_bad_page(target, target[:-1] + ' ' + attr + '>')
+        self.assert_bad_page(paragraph, '<div>' + paragraph + '</div>')
+        self.assert_bad_page(paragraph, '<p>Unrelated copy</p>' + paragraph)
+        self.assert_bad_page(paragraph, paragraph + '<p>Unrelated copy</p>')
+        heading = '<h3>Direct and indirect taxes counted in this ONS analysis</h3>'
+        self.assert_bad_page(heading + '\n' + paragraph, paragraph + '\n' + heading)
+        removed = self.page[:start] + self.page[end:]
+        warning_start = removed.index('<div class="payer-note" id="bottom-group">')
+        warning_end = removed.index('</div>', warning_start) + len('</div>')
+        reordered = removed[:warning_end] + paragraph + removed[warning_end:]
+        with self.assertRaises(ValueError):
+            check_payers.validate_page(ROOT, self.data, reordered)
+
+    def test_tax_definition_source_and_heading_locators_are_independent(self):
+        for sid, index, fragment, locator in (
+            ('ons_bulletin', 2, 'glossary', 'Glossary: Stages in the redistribution of income'),
+            ('ons_method', 6, 'post-tax-income', '7. Post-tax income'),
+        ):
+            anchor = (f'<a data-definition-source="{sid}" data-locator="{locator}" '
+                      f'href="{check_payers.URLS[index]}#{fragment}">')
+            for old, new in (
+                (f'data-definition-source="{sid}"', 'data-definition-source="ons"'),
+                (f'data-locator="{locator}"', 'data-locator="Wrong heading"'),
+                (check_payers.URLS[index], check_payers.URLS[4]),
+                ('#' + fragment, '#wrong-section'),
+                ('>', ' hidden>'),
+                ('>', ' style="opacity:0">'),
+            ):
+                with self.subTest(sid=sid, old=old):
+                    self.assert_bad_page(anchor, anchor.replace(old, new, 1))
+        self.assert_bad_page('<span>Sources: <a data-definition-source=',
+                             '<span hidden>Sources: <a data-definition-source=')
+
+    def test_tax_definitions_reopen_original_html_anchors_headings_and_evidence(self):
+        from unittest.mock import patch
+        read_text = Path.read_text
+        for filename, old in (
+            ('ons-bulletin-2024.html.json', 'id="glossary"'),
+            ('ons-bulletin-2024.html.json', 'Stages in the redistribution of income'),
+            ('ons-bulletin-2024.html.json', 'indirect taxes are then paid via expenditure'),
+            ('ons-technical-2019.html.json', 'id="post-tax-income"'),
+            ('ons-technical-2019.html.json', 'Final goods and services are those that are sold to final users'),
+            ('ons-technical-2019.html.json', 'In this analysis only taxes on goods and services consumed by households are included'),
+            ('ons-technical-2019.html.json', 'We assume that companies pass on the full cost of intermediate taxes'),
+        ):
+            def altered(path, *args, **kwargs):
+                text = read_text(path, *args, **kwargs)
+                if path.name == filename:
+                    envelope = json.loads(text)
+                    self.assertIn(old, envelope['original_response'])
+                    envelope['original_response'] = envelope['original_response'].replace(old, 'Changed evidence')
+                    return json.dumps(envelope)
+                return text
+            with self.subTest(filename=filename, old=old), patch.object(Path, 'read_text', altered):
+                # Keep original bytes for pinned-source validation. Change only
+                # the independent prose reader to prove its evidence binding.
+                with self.assertRaisesRegex(ValueError, 'ONS definition source'):
+                    check_payers.validate_page(ROOT, self.data, self.page)
+
+    def test_tax_definition_examples_reopen_raw_table8_labels(self):
+        from unittest.mock import patch
+        reader = check_payers.raw_cells(ROOT)
+        for cell in ('C6', 'C8', 'C10', 'C11', 'C13'):
+            def altered(sid, sheet, address):
+                raw = reader(sid, sheet, address)
+                if (sid, sheet, address) == ('ons', 'Table 8', cell):
+                    raw['value'] = 'Wrong tax example'
+                return raw
+            with self.subTest(cell=cell), patch.object(check_payers, 'raw_cells', return_value=altered):
+                with self.assertRaisesRegex(ValueError, 'definition example does not match Table 8'):
+                    check_payers.validate_page(ROOT, self.data, self.page)
+
     def test_basics_container_and_ancestors_cannot_hide_collection_explanation(self):
         marker = next(n for n in check_payers.Page(self.page).nodes
                       if n["attrs"].get("data-basics") == "payers")

@@ -93,7 +93,61 @@ limit, all tables, 44px controls and the strict 8-file allowlist remain unchange
 No raw sources, registers, audit CSVs, dependencies or factory files are changed
 by this repair.
 
-## Handoff and evidence limits
+## Delivered successor and round-3 reader repair
+
+The parent reports that successor #37 delivered revision `2af`. This supersedes
+this document's earlier preparation-only live-state description. It does not
+alter the original #33 attempt, claim or needs-john receipt.
+
+The parent reports whole-product council round 2 as Opus 9.3, Grok 9.3 and Muse
+9.6. Muse was satisfied; the round was not satisfied overall. These are attributed
+reports, not new worker-observed scores or approval of this candidate.
+
+The bounded round-3 reader repair changes no financial values or retained sources:
+
+- The decade spending headline is immediately followed by a comparison note,
+  before the first money chart. Both OBR October 2026 and HM Treasury PESA 2026
+  GDP shares use existing source-backed `<data>` values. The note says that the
+  vintages and GDP bases differ, the figures are not directly comparable, and
+  their gap is not a spending change. Independent checks bind position, both
+  identities, visible copy and the headline; mutations cannot move the note
+  elsewhere and leave the guard satisfied. Exact attribute contracts cover the
+  known shell ancestors, both paragraphs, citations and data elements. Unknown
+  classes and attributes, native concealment attributes and unknown wrappers
+  are rejected, rather than relying on a concealment blacklist. Added mutations
+  cover these routes. The parent owns browser paint checks for the new note.
+- The decade comparison uses neutral language, keeps the warning that a GDP
+  share can rise when GDP falls, and calls the money received receipts in its
+  heading, legend, prose and table. The Methods source description does too.
+- The Corporation Tax scope now identifies this site's receipts group. It stays
+  separate from the GOV.UK profits definition and retains the U4/C42 locator.
+- Both basics modules say “Our summary of official guidance” before their claims.
+  Methods explicitly calls them summaries, not quotations. Independent copy
+  contracts and mutations cover these labels.
+- The retained Welsh “How you pay” text describes PAYE, pension deductions, the
+  HMRC tax-code prefix and Self Assessment. It does not explicitly state the
+  broader collection claim. The Welsh summary therefore omits “HMRC collects
+  the tax”; the Scottish statement and all retained-source pins stay unchanged.
+
+The parent supplied the approved 5-sentence payer definition. The Methods
+`fiscal-glossary` now repeats that exact direct, indirect, final and intermediate
+tax copy, including household scope and the explicit ONS model assumption.
+It uses the same official bulletin glossary and technical-report section 7 URLs,
+fragments and locators. Independent Methods checks bind the copy, exact attribute
+contracts, source envelope/body hashes, heading quotations and Table 8 example
+labels from the retained workbook. Mutations cover meaning, links, locators,
+visibility, missing/duplicate definitions, retained bytes and example labels.
+The public-byte basics gate checks this glossary as well as guidance Methods.
+Another worker retains ownership of the payer definitions and source bindings.
+
+This worker used source-file tools only. No build, tests, browser checks, Git,
+network, review approval or publication were performed for this repair. The
+parent must regenerate output, run targeted and full checks, retain all 24
+original bindings and the exact 8-file public boundary, and obtain exact-candidate
+review before making a new pass claim. The grade limit remains 7.0. Existing
+attribute allowlists, ancestor guards and browser checks are not relaxed.
+
+## Historical handoff and evidence limits
 
 The parent reports that candidate `9dc` passed the full Boat check run with
 231 tests. Its sandbox `bx_skdybngs` was deleted. That result belongs only to
@@ -114,10 +168,11 @@ no-JavaScript content, no overflow and unchanged reading-grade limits. A new
 independent review must resolve the blocking finding and advisories with evidence.
 Human and same-live-product council evidence remain separate requirements.
 
-The existing live product is revision `168a7ad9cfe0305c12a3e891f1961bd8439536ac`.
-This preparation is not ticket #33 publication. Preserve the original claim,
-attempt and needs-john receipt. Only a new controller-owned successor can proceed
-after preparation passes. No factory state or issue body is edited here.
+At that historical handoff, the live product was revision
+`168a7ad9cfe0305c12a3e891f1961bd8439536ac`. The preparation was not ticket #33
+publication. The parent subsequently reported #37 delivery as noted above.
+Preserve the original claim, attempt and needs-john receipt. No factory state
+or issue body is edited here.
 
 ## Successor browser visibility completion
 

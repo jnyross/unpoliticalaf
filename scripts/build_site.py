@@ -313,7 +313,7 @@ def section_decades():
     t = {x["id"]: x for x in H["totals"]}
     sp, rc = t["spending"]["values"], t["receipts"]["values"]
     legend = (f'<p class="legend"><span class="key" style="background:{INK}"></span> Spending '
-              f'<span class="key" style="background:{SOFT}"></span> Income</p>')
+              f'<span class="key" style="background:{SOFT}"></span> Receipts</p>')
     def both(series, height):
         # A wide chart for big screens and a compact one for phones; CSS shows one.
         return (f'<div class="wide">{columns(dec, series, height=height)}</div>'
@@ -337,25 +337,29 @@ def section_decades():
 <section id="decades">
 <h2>Every ten years since 1945</h2>
 <p>These charts step back ten years at a time from {last}, to {first}, the first year after the Second World War.
-They always show each amount as a share of GDP. That is the fairest way to compare years so far apart.</p>
-<h3>Spending and income</h3>
-<p>In {first}, spending was {pct(sp[first])} of GDP. In {last} it was {pct(sp[last])}.
-When spending is more than income, the government borrows the gap.</p>
+They show each amount as a share of GDP, a common way to compare years far apart.
+A GDP share can rise when GDP falls. It is not an inflation-adjusted amount.</p>
+<h3>Spending and receipts</h3>
+<p id="decade-spending-headline">In {first}, spending was {pct(sp[first])} of GDP. In {last} it was {pct(sp[last])}.
+When spending is more than receipts, the government borrows the gap.</p>
+<p id="spending-vintage-note">For {last}, <cite>OBR, October 2026</cite> shows {pct(sp[last])} of GDP.
+<cite>HM Treasury, PESA 2026</cite> shows {fig(total["gdp"], kind="gdp")}.
+These use different vintages and GDP bases. They are not directly comparable.
+The gap is not a change in spending.</p>
 {legend}
 {money_chart}
 <h3>Total debt</h3>
 <p>This measure of debt takes off the liquid assets counted by the source. In {first} it was {pct(t["debt"]["values"][first])} of GDP.
 In {last} it was {pct(t["debt"]["values"][last])}.</p>
 {debt_chart}
-{table(f"Spending, income, borrowing and debt, share of GDP, {first} to {last}",
-       ["Year", "Spending", "Income", "Borrowing", "Debt"], trows)}
+{table(f"Spending, receipts, borrowing and debt, share of GDP, {first} to {last}",
+       ["Year", "Spending", "Receipts", "Borrowing", "Debt"], trows)}
 <p class="small">Source: <cite>{esc(SRC["obr_databank"]["publisher"])}, {esc(SRC["obr_databank"]["publication"])}</cite>.
 This file is newer than the Treasury tables used above, so it can differ a little.
 Each value has an uncertain actual/estimate status in the data file. The notes do not give a clear final status.
 The <span data-pesa-forecast-date="1">{esc(D["pesa_context"]["forecast_date"])}</span> forecast note above applies to the Treasury totals, not this OBR file.
 The OBR sheet's own notes name both March and October forecasts. The registry keeps these conflicts and each series' update notes
 (<cite>Public finances since 1900, B2 and B139 to B148</cite>).
-For {last} it gives spending of {pct(sp[last])} of GDP; the Treasury gives {fig(total["gdp"], kind="gdp")}.
 Missing figures are shown as “not given”, not zero.</p>
 <h3>Spending on five areas</h3>
 <p>Here is the spend on five big areas, every ten years.
@@ -784,7 +788,8 @@ def section_basics_methods():
 <p>Official guidance explains the tax rules. It is not the source of the household percentages or receipt totals.
 We checked these guidance pages on 30 October 2026. They are living guidance; no publication date is established.
 The next update is unknown. We use no current rates or personal tax examples.</p>
-<p>The short definitions link to the official page and name the relevant heading.
+<p>These are our summaries of official guidance, not quotations.
+The short definitions link to the official page and name the relevant heading.
 The OBR group limits and ONS model limits remain beside their own figures.
 These definitions do not describe who bears every tax cost.</p>
 <details><summary>Guidance headings and retained file hashes</summary>
@@ -829,7 +834,7 @@ They cover all public bodies across the whole UK.
 That means central government, local councils and firms the state owns.</p>
 <p>The figures every ten years since 1945 come from the <cite>Office for Budget Responsibility</cite> (OBR).
 The OBR is the official body that checks the government's figures.
-Its <cite>{esc(SRC["obr_databank"]["publication"])}</cite> gives spending, income, borrowing and debt.
+Its <cite>{esc(SRC["obr_databank"]["publication"])}</cite> gives spending, receipts, borrowing and debt.
 Its <cite>{esc(SRC["obr_hist"]["publication"])}</cite> gives spending on five areas.
 The OBR says the second one is not National Statistics.
 It joins up old sources, and it made its own choices to do that.</p>
@@ -925,7 +930,15 @@ or who ultimately bears the cost.</p>
 {section_payer_methods()}
 {section_basics_methods()}
 <h2>Words used on this site</h2>
-<dl>
+<dl id="fiscal-glossary">
+<dt>Direct and indirect taxes in this ONS analysis</dt>
+<dd id="ons-tax-definitions"><p>ONS takes direct taxes, such as Income Tax and Council Tax after benefits or rebates, from household income.
+Indirect taxes are paid through spending, such as VAT and duty on alcohol or fuel.
+Final taxes are on goods and services bought for household use.
+Intermediate taxes are on goods and services firms use to make other goods and services.
+In this model, ONS assumes firms pass the full cost of intermediate taxes to buyers in prices.</p>
+<p>Sources: <a data-definition-source="ons_bulletin" data-locator="Glossary: Stages in the redistribution of income" href="{esc(PAYERS['sources']['ons_bulletin']['url'])}#glossary">ONS FYE 2024 glossary</a>;
+<a data-definition-source="ons_method" data-locator="7. Post-tax income" href="{esc(PAYERS['sources']['ons_method']['url'])}#post-tax-income">ONS FYE 2019 technical report, section 7</a></p></dd>
 <dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.
 It is all the public sector spends, including building work and interest.</dd>
 <dt><strong>Spending on services</strong></dt><dd>Total spending split into areas such as health and defence.

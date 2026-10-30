@@ -152,7 +152,7 @@ class BasicsTests(unittest.TestCase):
     def test_corporation_definition_and_obr_scope_have_separate_source_contracts(self):
         definition = ('<p data-basics-claim="ct">Corporation Tax applies to taxable company or association profits. '
                       '<a href="https://www.gov.uk/corporation-tax">Corporation Tax guidance: Overview</a></p>')
-        scope = ('<p data-basics-scope="ct">The OBR group also includes related charges. '
+        scope = ('<p data-basics-scope="ct">This site’s Corporation Tax receipts group also includes related charges. '
                  'See the OBR group scope and source note. '
                  '<a href="#tax-sources">OBR Receipts (£bn): U4 and note C42</a></p>')
         self.assertIn(definition, self.tax)
@@ -176,6 +176,24 @@ class BasicsTests(unittest.TestCase):
         self.assertEqual(assertion["source_ids"], ["basics-corporation-tax"])
         self.assertTrue(all("profits" in anchor for anchor in assertion["quotedanchor"]))
         self.assertNotIn("OBR", " ".join(assertion["quotedanchor"]))
+
+    def test_guidance_summaries_are_labelled_and_welsh_claim_stays_within_source(self):
+        label = '<p>Our summary of official guidance</p>'
+        for page, html, following in (("tax", self.tax, "<dl>"),
+                                      ("payer", self.payer, '<p data-basics-claim="paye">')):
+            self.assertEqual(html.count(label), 1)
+            self.assertLess(html.index(label), html.index(following))
+            with self.subTest(page=page), self.assertRaisesRegex(ValueError, "added unverified copy"):
+                changed = self.replace(html, label, "")
+                self.validate(tax=changed) if page == "tax" else self.validate(payer=changed)
+        self.assertEqual(build_basics.COPY["wales"],
+                         "Wales also has devolved Income Tax rates. Where you live matters. "
+                         "Savings and dividends follow UK rules, outside these devolved rate powers.")
+        self.assertIn("Those powers exclude the Personal Allowance; HMRC collects the tax.", self.tax)
+        changed = self.replace(self.tax, "Where you live matters.",
+                               "Where you live matters; HMRC collects the tax.")
+        with self.assertRaisesRegex(ValueError, "changed meaning for wales"):
+            self.validate(tax=changed)
 
     def test_collection_heading_is_one_subheading_not_a_repeated_section_title(self):
         heading = '<h3 id="payer-basics-title">How is the tax collected?</h3>'

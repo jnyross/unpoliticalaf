@@ -258,7 +258,7 @@ EXPECTED = {
     "allowance": "The Personal Allowance applies to Income Tax, not every tax. You can owe no Income Tax and still pay VAT through purchases.",
     "ni-rules": "National Insurance has its own rules and payment periods. Being below the annual Income Tax allowance does not by itself mean you owe no National Insurance.",
     "scotland": "Scotland sets Income Tax rates and bands on non-savings, non-dividend income of Scottish taxpayers. Those powers exclude the Personal Allowance; HMRC collects the tax.",
-    "wales": "Wales also has devolved Income Tax rates. Where you live matters; HMRC collects the tax. Savings and dividends follow UK rules, outside these devolved rate powers.",
+    "wales": "Wales also has devolved Income Tax rates. Where you live matters. Savings and dividends follow UK rules, outside these devolved rate powers.",
     "paye": "Employers normally deduct Income Tax from employees' pay. They also deduct National Insurance. They send this money to HMRC. They can also owe employer National Insurance.",
     "net-vat": "VAT-registered businesses normally pay HMRC the difference between VAT charged to customers and VAT paid to suppliers. They do not send the whole purchase price as VAT.",
     "burden": "Who sends the tax is not the same question as who bears its cost. These rules explain how tax is sent. They do not tell us who bears the cost.",
@@ -279,7 +279,7 @@ LINKS = {
 }
 # This claim is not GOV.UK guidance. check_taxes independently binds its OBR
 # group explanation, source label U4 and inclusion note C42 at this destination.
-CT_SCOPE = "The OBR group also includes related charges. See the OBR group scope and source note."
+CT_SCOPE = "This site’s Corporation Tax receipts group also includes related charges. See the OBR group scope and source note."
 CT_SCOPE_LINK = ("#tax-sources", "OBR Receipts (£bn): U4 and note C42")
 TAX_FIELDS = ("income", "ni", "vat", "ct", "scope:ct", "allowance", "ni-rules", "scotland", "wales", "age")
 PAYER_FIELDS = ("paye", "net-vat", "burden", "age")
@@ -396,7 +396,7 @@ def _validate_fragment(html, scope, tag, fields, extra):
 def validate_fragments(tax_html, payer_html, root=ROOT):
     validate_sources(root)
     _validate_fragment(tax_html, "taxes", "section", TAX_FIELDS,
-        "What are the main taxes? Income Tax National Insurance VAT Corporation Tax Where you live can change the rules These are not personal tax calculations or a guide to every devolved tax.")
+        "What are the main taxes? Our summary of official guidance Income Tax National Insurance VAT Corporation Tax Where you live can change the rules These are not personal tax calculations or a guide to every devolved tax.")
     _validate_fragment(payer_html, "payers", "aside", PAYER_FIELDS,
-        "How is the tax collected? What these sources can tell us These sources explain how tax is sent. They do not model tax costs. Read the household analysis for the model's assumptions and limits. It has its own sources.")
+        "How is the tax collected? Our summary of official guidance What these sources can tell us These sources explain how tax is sent. They do not model tax costs. Read the household analysis for the model's assumptions and limits. It has its own sources.")
     return True

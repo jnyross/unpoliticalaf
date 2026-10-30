@@ -615,8 +615,76 @@ def validate_page(root, data, text):
     scope_index = nodes.index(ons_scope)
     scope_siblings = [n for n in nodes[scope_index + 1:] if n["parents"] and
                       n["parents"][-1] is ons_scope["parents"][-1]]
-    require(scope_siblings and scope_siblings[0] is bottom,
-            "Bottom-group warning must directly follow ONS scope")
+    # One visible definition paragraph, then the warning: no wider placement exemption.
+    definitions = [n for n in document.nodes if "data-payer-definition" in n["attrs"]]
+    require(len(definitions) == 1, "Missing or duplicate ONS tax definitions")
+    definition = definitions[0]
+    require(definition["tag"] == "p" and definition["attrs"] ==
+            {"data-payer-definition": "tax-types"} and not concealed(definition) and
+            any(n is definition for n in nodes) and len(scope_siblings) >= 2 and
+            scope_siblings[:2] == [definition, bottom],
+            "ONS tax definitions and bottom-group warning must directly follow ONS scope")
+    definition_copy = (
+        "ONS takes direct taxes, such as Income Tax and Council Tax after benefits or rebates, from household income. "
+        "Indirect taxes are paid through spending, such as VAT and duty on alcohol or fuel. "
+        "Final taxes are on goods and services bought for household use. "
+        "Intermediate taxes are on goods and services firms use to make other goods and services. "
+        "In this model, ONS assumes firms pass the full cost of intermediate taxes to buyers in prices. "
+        "Sources: ONS FYE 2024 glossary; ONS FYE 2019 technical report, section 7")
+    require(" ".join("".join(definition["text"]).split()) == definition_copy,
+            "ONS tax definitions meaning, scope or examples changed")
+    document_text = " ".join("".join(value for value, _ in document.text_runs).split())
+    prose = definition_copy.split(" Sources:", 1)[0]
+    require(document_text.count(prose) == 1, "Duplicated ONS tax definition copy")
+    descendants = [n for n in document.nodes if definition in n["parents"]]
+    require([n["tag"] for n in descendants] == ["span", "a", "a"] and
+            descendants[0]["attrs"] == {} and descendants[0]["parents"][-1] is definition,
+            "ONS tax definitions markup changed")
+    for ancestor in definition["parents"]:
+        allowed, values = ({"id"}, {"id": {"household-taxes"}}) if ancestor["tag"] == "section" else shell.get(
+            ancestor["tag"], (set(), {}))
+        require(ancestor["tag"] in shell and set(ancestor["attrs"]) <= allowed and all(
+            value in values[key] for key, value in ancestor["attrs"].items()),
+            "ONS tax definitions ancestor attributes changed")
+    definition_sources = (
+        ("ons_bulletin", 2, "glossary", "Glossary: Stages in the redistribution of income", "ONS FYE 2024 glossary"),
+        ("ons_method", 6, "post-tax-income", "7. Post-tax income", "ONS FYE 2019 technical report, section 7"),
+    )
+    for anchor, (sid, index, fragment, locator, label) in zip(descendants[1:], definition_sources):
+        require(anchor["parents"][-1] is descendants[0] and not concealed(anchor) and
+                anchor["attrs"] == {"data-definition-source": sid, "data-locator": locator,
+                                    "href": URLS[index] + "#" + fragment} and
+                "".join(anchor["text"]) == label, "ONS tax definitions source or locator changed")
+    # Reopen pinned original HTML, not the producer's copy or a reading extract.
+    for filename, fragment, heading, quotations in (
+        ("ons-bulletin-2024.html.json", "glossary", "Stages in the redistribution of income", (
+            "direct taxes include deductions such as Income Tax, National Insurance contributions, student loan repayments and Council Tax (less Council Tax benefits or rebates)",
+            "indirect taxes are then paid via expenditure",
+            "indirect taxes refer to those on goods and services such as Value Added Tax (VAT), duty on tobacco, alcohol and fuel, and Stamp Duty")),
+        ("ons-technical-2019.html.json", "post-tax-income", "7. Post-tax income", (
+            "Final goods and services are those that are sold to final users (in this case household consumers)",
+            "intermediate goods are those that are used in the production of final goods",
+            "In this analysis only taxes on goods and services consumed by households are included",
+            "We assume that companies pass on the full cost of intermediate taxes to the consumer in the price of the final good")),
+    ):
+        original = json.loads(input_path(root, "data/payers/raw/" + filename).read_text())["original_response"]
+        evidence = Page(original)
+        sections = [n for n in evidence.nodes if n["attrs"].get("id") == fragment]
+        require(len(sections) == 1, "ONS definition source anchor changed")
+        section = sections[0]
+        headings = [" ".join("".join(n["text"]).split()) for n in evidence.nodes
+                    if section in n["parents"] and n["tag"] in {"h2", "h3", "h4"}]
+        source_text = " ".join("".join(section["text"]).split())
+        require(heading in headings and all(quote in source_text for quote in quotations),
+                "ONS definition source heading or evidence changed")
+    read_definition_cell = raw_cells(root)
+    for address, label in (("B5", "Direct taxes"), ("C6", "Income Tax"),
+                           ("C8", "Council Tax and Northern Ireland rates"),
+                           ("B9", "Indirect taxes"), ("C10", "Value Added Tax (VAT)"),
+                           ("C11", "Duty on alcohol"),
+                           ("C13", "Duty on hydrocarbon oils and Vehicle Excise Duty")):
+        require(read_definition_cell("ons", "Table 8", address)["value"] == label,
+                "ONS definition example does not match Table 8!" + address)
     overlaps = [n for n in document.nodes if n["attrs"].get("id") == "overlap"]
     require(len(overlaps) == 1, "Missing or duplicated HMRC group relationship")
     overlap = overlaps[0]
