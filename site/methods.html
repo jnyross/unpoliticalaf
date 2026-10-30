@@ -50,6 +50,23 @@ body.view-real .v-real,body.view-nominal .v-nominal,body.view-gdp .v-gdp{display
 .tbl{overflow-x:auto;max-width:100%}
 code{overflow-wrap:anywhere}
 nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
+.site-nav{max-width:760px;margin:0 auto;padding:8px 18px;display:flex;flex-wrap:wrap;gap:4px 16px;border-bottom:1px solid var(--line)}
+.site-nav .brand{flex-basis:100%;font-weight:700;font-size:1.15rem;text-decoration:none}
+.site-nav a,.page-links a,summary,.views button{min-height:44px}
+.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 0}
+summary{padding:10px 0}
+.tax-scroll{overflow-x:auto;max-width:100%;margin:.8em 0}
+.tax-scroll table{width:100%}
+.tax-scroll th,.tax-scroll td{min-width:7rem}
+.tax-scroll th:first-child{min-width:12rem}
+.tax-scroll code{white-space:normal}
+.tax-bars{margin:1em 0}
+.tax-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.88rem;margin:10px 0}
+.tax-track{position:relative;height:22px;background:linear-gradient(to right,#fff 49.6%,#6b7280 49.6%,#6b7280 50.4%,#fff 50.4%)}
+.tax-fill{position:absolute;top:2px;height:18px;background:var(--ink)}
+.tax-bar data{font-size:.85rem;white-space:nowrap}
+#tax-sources code{overflow-wrap:anywhere}
+@media(max-width:560px){.tax-bar{grid-template-columns:minmax(0,1fr) auto}.tax-bar>span:first-child{grid-column:1 / -1}}
 table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.5em 0}
 th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;vertical-align:top}
 th[scope=row],caption{text-align:left}
@@ -65,6 +82,10 @@ footer{margin-top:3em;padding:1.5em 18px 3em;font-size:.85rem;color:var(--soft);
 </head>
 <body class="view-real nojs">
 <a class="skip" href="#main">Skip to content</a>
+<nav class="site-nav" aria-label="Primary" data-pid="primary-nav">
+<span class="brand">UnpoliticalAF</span>
+<a href="index.html">Spending</a><a href="taxes.html">Taxes</a><a href="methods.html">Methods</a>
+</nav>
 
 <header><h1>How this site works</h1></header>
 <main id="main">
@@ -155,6 +176,38 @@ We show its difference with no pass/fail bound. There is no established half-poi
 has all years, signed operands, budgets, residuals and exclusions.
 Selected items sit inside function totals. They are never added to those totals.
 The historical pensioner subsets are excluded from the function sum to avoid counting them twice.</p>
+<section id="tax-methods" data-pid="tax-methods">
+<h2>Taxes, receipts and debt</h2>
+<p>The <a href="taxes.html">Taxes page</a> uses the OBR's current receipts and aggregate tables.
+The source version is <cite>Public finances databank, October 2026</cite>.
+<a href="data/taxes.json">Download the selected tax data</a> for full hashes, exact cells, years, units, status and formulas.
+The official <a href="https://obr.uk/download/public-finances-databank-october-2026-efo/">OBR workbook download</a> is the source.
+The <a href="taxes.html#tax-sources">source notes</a> keep each table's own status and GDP notes.</p>
+<p>The six receipt groups use ordered source rows:
+income tax Q+R+S; National Insurance AB; VAT C+D; corporation tax U+V;
+other taxes AH minus those named groups; and receipts outside taxes AG−AH.
+Their shares use all current public receipts AG as the whole, not tax AH.
+No total is added to its own parts. Negative source values keep their signs.</p>
+<p>VAT includes refunds and is a source-based grouping, not household VAT burden.
+The notes do not explicitly settle refund classification within National Accounts taxes.
+Corporation tax includes related charges.
+Other taxes is a remainder, partly from a mixed line that is not itemised.
+Non-tax is a difference, not the mixed AF line relabelled.
+A sum that closes does not prove these classifications.</p>
+<p>The balance uses spending D minus receipts C and checks borrowing O in the same OBR aggregate table.
+PESA is a different vintage and presentation. We do not subtract OBR receipts from PESA spending.
+Debt X is a stock at end March; borrowing is an annual accrual flow.
+Debt changes need not equal borrowing.
+Published debt shares use March-centred GDP. We keep them as published, even when a cash ratio differs.</p>
+<p>The tax history starts in the first year of the current receipt table.
+It does not splice in the older historical receipt data.
+Outturn can be revised. Later forecasts are shown apart from outturn, with their own source notes.
+No inflation-adjusted tax view has been verified.
+A GDP share is not a real-terms measure, and can rise when GDP falls.</p>
+<p>Collections by tax type do not tell us who bears the cost.
+An employer or firm can send money on someone else's behalf.
+These tables give no payer shares or incidence estimates.</p>
+</section>
 <h2>Words used on this site</h2>
 <dl>
 <dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.
@@ -173,7 +226,7 @@ We give each one a plain name next to its official name.</dd>
 </dl>
 <h2>What this site does not cover yet</h2>
 <ul>
-<li>Which taxes the money comes from.</li>
+<li>Who pays tax and who bears its cost.</li>
 <li>What each party plans to do.</li>
 <li>Spending per person or per home.</li>
 </ul>
@@ -185,9 +238,9 @@ We give each one a plain name next to its official name.</dd>
 <p class="name">Data: HM Treasury, <a href="https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2026">Public Expenditure Statistical Analyses 2026</a> (2026-07-16); Office for Budget Responsibility, <a href="https://obr.uk/data/">Historical public finances database</a> (2023-08-03); Office for Budget Responsibility, <a href="https://obr.uk/data/">Public finances databank, October 2026</a> (2026-10-28).
 Contains public sector information licensed under the
 <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
-<p><a href="index.html">Where the money goes</a> · <a href="methods.html">How this site works</a> ·
+<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="methods.html">Methods</a> ·
 <a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
-<a href="data/spending.json">Download all the data (JSON)</a></p>
+<a href="data/spending.json">Download spending data (JSON)</a></p>
 </footer>
 <p id="tip" class="tip" role="status" hidden></p>
 <script>
@@ -199,16 +252,16 @@ bs.forEach(function(b){b.addEventListener('click',function(){
   document.getElementById('view-label').textContent=b.textContent;
 })});
 var tip=document.getElementById('tip');
-document.querySelectorAll('data[title]').forEach(function(d){
+document.querySelectorAll('data[title]:not([data-tax-id])').forEach(function(d){
   d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-controls','tip');
-  function showSource(){tip.textContent=d.title;tip.hidden=false;}
+  function showSource(){if(!tip)return;tip.textContent=d.title;tip.hidden=false;}
   d.addEventListener('click',showSource);
   d.addEventListener('keydown',function(e){
     if(e.key==='Enter'||e.key===' '){e.preventDefault();showSource();}
   });
 });
-tip.addEventListener('click',function(){tip.hidden=true});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){tip.hidden=true;}});
+if(tip)tip.addEventListener('click',function(){tip.hidden=true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&tip){tip.hidden=true;}});
 </script>
 </body>
 </html>

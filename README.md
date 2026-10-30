@@ -1,10 +1,11 @@
 # UnpoliticalAF
 
-A plain-English guide to UK public spending, with cash, inflation-adjusted and
-GDP-share views, spending by area, quick answers, long-run comparisons, source
-notes and methods. Core text and tables work without JavaScript; JavaScript
-adds view buttons and source pop-ups. Taxes and party proposals remain later
-product tickets in [the specification](docs/product-spec.md).
+A plain-English guide to UK public spending, taxes, receipts, borrowing and debt.
+Spending has cash, inflation-adjusted and GDP-share views, area histories and
+quick answers. Taxes has current OBR receipt groups, cash and published GDP-share
+history, and separate forecasts. Core text, source details and tables work
+without JavaScript. Party proposals and payer evidence remain separate tickets
+in [the specification](docs/product-spec.md).
 
 ## Build and check
 
@@ -69,8 +70,10 @@ The only public outputs are:
 ```text
 site/index.html
 site/methods.html
+site/taxes.html
 site/icon.svg
 site/data/spending.json
+site/data/taxes.json
 ```
 
 `data/spending.json` is the generated working dataset; the public JSON must be
@@ -132,6 +135,11 @@ receipt/debt tables, original missingness and explicit reconciliation limits.
 `make verify` independently reopens its raw workbooks and checks deterministic
 regeneration, in addition to both audit scopes. See
 [receipt methods](docs/receipts-methods.md) for the tax/non-tax residual formulas,
-historical licence-fee overlap and debt/GDP limits. The four public files stay
-the same; receipt presentation is a separate ticket. Source edits are not a
-passing check, fiscal approval or completed issue #5/#26 acceptance.
+historical licence-fee overlap and debt/GDP limits. Only the selected CURRENT
+tables enter `site/data/taxes.json`; the private receipt dataset is never published.
+The explicit public allowlist has six files. Tax output is checked by
+`scripts/check_taxes.py`, which separately reopens the pinned current workbook
+and binds every public node, signed rendered value and chart encoding to exact
+cells, ordered formulas, units, years and status. This adds no historical receipt
+splice or debt repair. Source edits are not a passing check, fiscal approval,
+live deployment or completed issue #5/#26/#29 acceptance.

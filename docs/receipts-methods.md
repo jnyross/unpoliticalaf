@@ -5,8 +5,8 @@ The receipt data is a separate, private working dataset. The controller's
 it against the pinned workbooks and compares two regenerated copies byte for
 byte. Workers edit source only. No generated receipt file, passing check,
 independent fiscal approval or deployed receipt feature is claimed by these
-source edits. The four public files and spending data contract remain unchanged.
-Receipt presentation belongs to the separate renderer ticket.
+source edits. The spending data contract remains unchanged.
+The public current-tax projection and renderer are described below.
 
 ## Source identity and value records
 
@@ -52,8 +52,8 @@ National Accounts tax total, with the following exact operands:
 | --- | --- | --- |
 | Income tax | Q + R + S (PAYE, self-assessed, other) | C |
 | National Insurance | AB | D |
-| VAT including government refunds | C + D | Q |
-| Corporation tax, as defined in source | U + V | I |
+| VAT including refunds (net VAT plus refunds) | C + D | Q |
+| Corporation tax and related charges | U + V | I |
 | Other National Accounts taxes, residual | AH - Q - R - S - AB - C - D - U - V | Z - C - D - Q - I |
 | Receipts outside National Accounts taxes | AG - AH | Y - Z |
 
@@ -172,3 +172,50 @@ independent fiscal and product reviews, deploy and compare canonical live bytes.
 No reviewer should approve the residual tax classification or historical
 limitations merely because arithmetic checks pass. Original #5 and successor
 acceptance remain open until their actual controller evidence exists.
+
+## Current public presentation
+
+The public allowlist now contains exactly six files: spending, taxes and methods
+HTML, the icon, spending JSON and the small `data/taxes.json` projection.
+The private seven-table receipt dataset, audits, raw workbooks and scripts are
+not public files. `tax_projection.project` selects only current OBR values:
+annual aggregate C/D/O/X cash and published GDP shares from 1999-00 onwards,
+and the latest outturn's ten source component rows, six groups, six shares
+and same-table D−C balance. It retains the selected source's complete hash,
+official download/version metadata, exact note locators, identities, units,
+contexts and ordered operands. It excludes historical receipt tables and
+private catalogue/runtime paths. No receipt source splice or historical debt
+change is part of this increment.
+
+The tax page shows current OBR outturn apart from forecasts. Each numeric node
+is rendered as a `data` element with its exact ID, source cells, unit, year,
+status, ordered formula operands and source version. Missing values retain an
+empty value attribute and visible “not given”; negative source values keep
+their signs, including other income tax. Each chart has a nearby semantic
+table in a labelled keyboard scroll region. Native source disclosures, direct
+official links and the JSON download work without JavaScript. The page has no
+PESA real-price toggle and does not claim a verified inflation-adjusted tax view.
+
+The current classification was independently accepted with display limits in
+the ticket's council evidence. This is not a new raw-workbook or renderer
+approval. The VAT refund classification limit, related corporation charges,
+mixed other-tax residual, AG−AH difference, AG denominator, stock/flow
+distinction and published March-centred debt share remain visible.
+Collections by tax type do not establish payer distributions or incidence.
+
+`scripts/check_taxes.py` is a separately mapped checker. It reopens the pinned
+current workbook and catalogue, reconstructs the exact public schema and
+ordered nodes, checks same-vintage borrowing with a raw-operand storage budget,
+and validates all signed HTML values and bar geometry. It rejects extra or
+missing nodes/fields, changed identities, year/status/unit swaps, different
+denominators, formula overlap, missing-to-zero substitution, modified source
+notes and hashes. Tax forecast prose is source-bound in exact marked snippets;
+all remaining page prose still goes through the existing PESA date guards.
+Legacy spending and private-receipt checks remain in place.
+
+The controller must regenerate the six outputs and run setup/build/verify/smoke
+on the exact candidate, obtain independent candidate review, then verify the
+deployed SHA and all six live artifact bytes. This document records design and
+required gates, not observed passing checks or delivery. Original attempts and
+historical receipt acceptance stay separate; this ticket does not establish the
+overall 31/32 product target.

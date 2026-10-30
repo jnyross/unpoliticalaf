@@ -67,8 +67,8 @@ def serve_site():
 
 def check():
     pages = sorted(SITE.glob("*.html"))
-    if not pages:
-        raise RuntimeError("No site/*.html pages found; build the site first.")
+    if {path.name for path in pages} != {"index.html", "taxes.html", "methods.html"}:
+        raise RuntimeError("Expected exactly spending, taxes and methods HTML pages; build the site first.")
     chrome = find_chrome()
     axe_source = bundled_axe()
     from playwright.sync_api import sync_playwright
@@ -93,12 +93,22 @@ def check():
             context.route("**/*", local_assets_only)
             page = context.new_page()
             page.set_default_timeout(30_000)
+            script_errors = []
+            page.on("pageerror", lambda error: script_errors.append(str(error)))
             for path in pages:
                 for width in WIDTHS:
+                    script_errors.clear()
                     page.set_viewport_size({"width": width, "height": 900})
                     response = page.goto(f"{origin}/{quote(path.name)}", wait_until="load")
                     if response is None or response.status != 200:
                         raise RuntimeError(f"Could not load {path.name} at {width}px.")
+                    if script_errors:
+                        raise RuntimeError(f"Page script error: {path.name}: {script_errors}")
+                    nav = page.locator("nav")
+                    for target in ("index.html", "taxes.html", "methods.html"):
+                        link = nav.locator(f'a[href="{target}"]')
+                        if link.count() != 1 or not link.is_visible():
+                            raise RuntimeError(f"Missing visible top navigation to {target}: {path.name}")
                     # Exercise the progressive view controls before the audit.
                     buttons = page.locator(".views button")
                     for index in range(buttons.count()):
@@ -136,6 +146,29 @@ def check():
                             )
                         if page.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                             raise RuntimeError(f"Page overflow: {path.name}, {width}px, {state}")
+                        if path.name == "taxes.html":
+                            table_failures = page.locator("table").evaluate_all("""tables =>
+                                tables.flatMap(table => {
+                                    const region = table.closest('[role="region"]');
+                                    return !region || region.tabIndex !== 0 ||
+                                        !(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby')) ||
+                                        getComputedStyle(region).overflowX !== 'auto'
+                                        ? ['Tax table lacks labelled keyboard scroll region'] : [];
+                                })""")
+                            if table_failures:
+                                raise RuntimeError("; ".join(table_failures))
+                            small_targets = page.locator("nav a, summary, button").evaluate_all("""nodes =>
+                                nodes.filter(node => {
+                                    const box = node.getBoundingClientRect();
+                                    return box.width > 0 && box.height > 0 &&
+                                        (box.width < 44 || box.height < 44);
+                                }).map(node => node.textContent.trim())""")
+                            if small_targets:
+                                raise RuntimeError(f"Tax controls below 44px: {small_targets}")
+                            if page.locator("data[tabindex='0']").count():
+                                raise RuntimeError("Tax figures must not each be a keyboard tab stop")
+                        if script_errors:
+                            raise RuntimeError(f"Page script error: {path.name}: {script_errors}")
                         result = page.evaluate("""async tags => await axe.run(document, {
                             runOnly: {type: 'tag', values: tags},
                             rules: {'color-contrast': {enabled: true}}
@@ -161,9 +194,29 @@ def check():
                     raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
                 for index in range(reader.locator("details").count()):
                     detail = reader.locator("details").nth(index)
-                    detail.locator("summary").click()
+                    if detail.get_attribute("open") is None:
+                        detail.locator(":scope > summary").click()
                     if detail.get_attribute("open") is None:
                         raise RuntimeError(f"No-JavaScript disclosure failed: {path.name}")
+                if path.name == "taxes.html":
+                    summary = reader.locator("details summary").first
+                    if not summary.count():
+                        raise RuntimeError("Tax source detail is missing without JavaScript")
+                    # Native disclosure must respond to keyboard, not a click handler.
+                    detail = summary.locator("..")
+                    was_open = detail.get_attribute("open") is not None
+                    summary.focus()
+                    reader.keyboard.press("Enter")
+                    if (detail.get_attribute("open") is not None) == was_open:
+                        raise RuntimeError("Tax source detail failed keyboard activation")
+                    for region in reader.locator("table").evaluate_all("""tables =>
+                        tables.map(table => {
+                            const region = table.closest('[role="region"]');
+                            return !!region && region.tabIndex === 0 &&
+                                !!(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby'));
+                        })"""):
+                        if not region:
+                            raise RuntimeError("No-JavaScript tax table lacks keyboard scroll access")
                 if not reader.locator("table").count():
                     raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
                 if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
