@@ -147,15 +147,14 @@ The taxes are the same. The whole used to work out the share has changed.</p>
 Neither measure is a tax rate on each purchase.</p>
 <p class="source-links" id="ons-source-note">Source: <a data-payer-source="ons" href="{esc(osrc['url'])}">ONS reference tables (XLSX), Table 8</a>.
 Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households here.
-This is not a measure of all UK taxes. Some source parts are suppressed. They stay suppressed.
-We do not fill them in.</p>
+This is not a measure of all UK taxes. <span data-payer-limit="suppressed">Some source parts are suppressed. They stay suppressed. We do not fill them in.</span></p>
 </section>
 <section id="burden"><h2>Who sends the tax, and who bears its cost?</h2>
 {payer_basics()}
 <p>ONS assigns final and intermediate indirect taxes fully to consumers in this model.
 This includes employer National Insurance. Employee and self-employed National Insurance are direct taxes.</p>
-<p data-payer-limit="model-costs">Real costs can fall on producers, workers, buyers and others. Their shares can vary.
-ONS assumes that consumers bear the full cost. This is an assumption. It is not a settled fact.
+<p data-payer-limit="model-costs">The actual cost can fall on producers, workers, buyers and others. Their shares can vary.
+ONS assumes that consumers bear the full cost of indirect taxes. This is an assumption. It is not a settled fact.
 The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.</p>
 <p>The linked technical report covers FYE 2019. It was published on 25 June 2020.
 Sections 7 and 10 explain these assumptions and limits. The QMI is dated 15 June 2018.

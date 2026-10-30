@@ -133,7 +133,8 @@ class PayerTests(unittest.TestCase):
 
     def test_plain_language_rewrite_keeps_full_causal_limits_and_negations(self):
         document = check_payers.Page(self.page)
-        limits = [n for n in document.nodes if "data-payer-limit" in n["attrs"]]
+        limits = [n for n in document.nodes if "data-payer-limit" in n["attrs"] and
+                  n["attrs"]["data-payer-limit"] != "suppressed"]
         self.assertEqual({n["attrs"]["data-payer-limit"] for n in limits},
                          {"deferred", "low-income", "model-costs", "separate-views"})
         self.assertEqual(len(limits), 4)
@@ -141,6 +142,10 @@ class PayerTests(unittest.TestCase):
             ("These payments need not match a typical year's tax bill.", "These payments match a typical year's tax bill."),
             ("They can use savings or borrowing.", "They cannot use savings or borrowing."),
             ("This is an assumption. It is not a settled fact.", "This is a settled fact."),
+            ("The actual cost can fall on producers, workers, buyers and others.",
+             "The actual cost can fall on buyers alone."),
+            ("ONS assumes that consumers bear the full cost of indirect taxes.",
+             "ONS assumes that consumers bear the full cost of all taxes."),
             ("It must not be mapped wholly to either ONS group.", "It must be mapped wholly to either ONS group."),
             ("They cannot give a top-1% all-tax burden.", "They give a top-1% all-tax burden."),
             ("Do not take an average across the panels.", "Take an average across the panels."),
@@ -153,6 +158,34 @@ class PayerTests(unittest.TestCase):
                     check_payers.validate_page(ROOT, self.data, changed)
         self.assert_bad_page('data-payer-limit="model-costs"', 'data-payer-limit="model-costs" hidden')
         self.assert_bad_page('data-payer-limit="low-income"', 'data-payer-limit="model-costs"')
+
+    def test_suppression_warning_is_unique_visible_and_bound_to_ons_source_note(self):
+        marker = '<span data-payer-limit="suppressed">'
+        copy = "Some source parts are suppressed. They stay suppressed. We do not fill them in."
+        warning = marker + copy + '</span>'
+        self.assertEqual(self.page.count(warning), 1)
+        document = check_payers.Page(self.page)
+        nodes = [n for n in document.nodes if n["attrs"].get("data-payer-limit") == "suppressed"]
+        self.assertEqual(len(nodes), 1)
+        self.assertEqual(nodes[0]["tag"], "span")
+        self.assertEqual(nodes[0]["parents"][-1]["attrs"].get("id"), "ons-source-note")
+        mutations = (
+            warning.replace("We do not fill them in.", "We fill them in."),
+            "",
+            warning + warning,
+            warning.replace(marker, marker.replace('>', ' hidden>', 1)),
+            warning.replace(marker, marker.replace('>', ' aria-hidden="true">', 1)),
+            warning.replace(marker, marker.replace('>', ' style="display:none">', 1)),
+            warning.replace(marker, marker.replace('>', ' style="visibility:hidden">', 1)),
+        )
+        for replacement in mutations:
+            with self.subTest(replacement=replacement):
+                candidate = self.page.replace(warning, replacement, 1)
+                with self.assertRaisesRegex(ValueError, "suppression warning"):
+                    check_payers.validate_page(ROOT, self.data, candidate)
+        moved = self.page.replace(warning, '', 1).replace('</header>', warning + '</header>', 1)
+        with self.assertRaisesRegex(ValueError, "suppression warning"):
+            check_payers.validate_page(ROOT, self.data, moved)
 
     def test_period_status_population_denominator_and_overlap(self):
         for field, value in (("period", "2024/25"), ("status", "Forecast"),

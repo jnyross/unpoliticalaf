@@ -513,10 +513,21 @@ def validate_page(root, data, text):
     limit_copy = {
         "deferred": "Deferred lump-sum tax payments can distort the groups. They can leave people with high gross income but low disposable income. These people can enter the bottom group. These payments need not match a typical year's tax bill.",
         "low-income": "People can spend more than their current income. They can use savings or borrowing. Temporary low income, sampling and measurement issues also matter. A high indirect-tax share of income is not a tax rate on purchases or a lifetime tax burden. Compare it with the spending view below.",
-        "model-costs": "Real costs can fall on producers, workers, buyers and others. Their shares can vary. ONS assumes that consumers bear the full cost. This is an assumption. It is not a settled fact. The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.",
+        "model-costs": "The actual cost can fall on producers, workers, buyers and others. Their shares can vary. ONS assumes that consumers bear the full cost of indirect taxes. This is an assumption. It is not a settled fact. The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.",
         "separate-views": "HMRC and ONS cover different people. They measure different taxes. Do not combine them. They cannot give a top-1% all-tax burden. Do not take an average across the panels. Do not match them to tax receipts.",
     }
-    marked_limits = [n for n in nodes if "data-payer-limit" in n["attrs"]]
+    suppression = [n for n in document.nodes if n["attrs"].get("data-payer-limit") == "suppressed"]
+    require(len(suppression) == 1, "Missing or duplicate suppression warning")
+    suppression = suppression[0]
+    require(suppression["tag"] == "span" and suppression["parents"] and
+            suppression["parents"][-1]["tag"] == "p" and
+            suppression["parents"][-1]["attrs"].get("id") == "ons-source-note" and
+            any(n is suppression for n in nodes) and not concealed(suppression) and
+            " ".join("".join(suppression["text"]).split()) ==
+            "Some source parts are suppressed. They stay suppressed. We do not fill them in.",
+            "Changed, hidden or misplaced suppression warning")
+    marked_limits = [n for n in nodes if "data-payer-limit" in n["attrs"] and
+                     n["attrs"]["data-payer-limit"] != "suppressed"]
     require(len(marked_limits) == len(limit_copy) and
             {n["attrs"]["data-payer-limit"] for n in marked_limits} == set(limit_copy),
             "Missing or duplicate plain-language payer limit")
