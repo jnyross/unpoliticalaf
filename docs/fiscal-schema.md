@@ -69,13 +69,16 @@ The forecast status label is constructed from both notes rather than a dated
 STATUS constant. The independent raw reader parses those fixed cells separately
 and checks the JSON context and status label. The HTML checker checks both
 marked date passages and every PESA forecast value tooltip against the raw date.
+Any unmarked occurrence of the current raw-note-derived full date is rejected,
+regardless of wording, including archive, publication, projection or outturn prose.
 Unmarked full-date and month-year forecast-note or “Economic and fiscal outlook”
 prose is rejected on every page, including methods, even after both source notes
 move consistently to a later date. These PESA claims must use the checked date
-markers, rather than an unverified literal. Publication, retrieval and unrelated
-historical dates are outside this boundary. Explicit OBR historical/databank
-forecast notes retain their separate vintages; a PESA or outlook claim in the same
-sentence still requires checked markers.
+markers, rather than an unverified literal. OBR, history and databank mentions
+grant no exemption, including headings or captions before the dated prose.
+Other publication, retrieval and historical dates are allowed only when they
+meet neither mandatory guard. The real generated OBR mixed-vintage prose passes
+these checks without an exemption; synthetic dates are not source-vintage evidence.
 The prose check preserves block and line-break boundaries while joining inline
 text; marked dates allow inline descendants but reject nested date markers that
 could discard stale wording. Regressions also simulate both notes moving to a

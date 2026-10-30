@@ -69,23 +69,64 @@ class ForecastDate24Tests(unittest.TestCase):
                             with self.assertRaisesRegex(ValueError, "PESA.*date|PESA.*vintage"):
                                 self.check(self.inject(page, "<p>" + text + ".</p>"), name)
 
-    def test_unrelated_dates_and_obr_mixed_vintages_remain_allowed(self):
+    def test_unrelated_dates_outside_the_mandatory_guards_remain_allowed(self):
         fragments = (
             "<p>PESA was published on 21 July 2026 and retrieved in October 2026.</p>",
             "<p>The archive records 3 <em>March</em> 2026 and March 2026.</p>",
-            "<p>The archive records 1 April 2027.</p>",
-            "<p>The OBR historical databank notes name March 2026 and October 2026 forecasts.</p>",
-            "<p>The OBR historical</p><p>databank names the March 2026 forecast.</p>",
+            "<p>The archive records 2 April 2027.</p>",
         )
         for name, page in self.pages.items():
             for fragment in fragments:
                 with self.subTest(page=name, fragment=fragment):
                     self.check(self.inject(page, fragment), name)
 
+    def test_unmarked_current_date_fails_regardless_of_wording_or_markup(self):
+        # The actual source date and a consistently moved note pair must obey
+        # the same unconditional guard. These contain no forecast/outlook word.
+        original_data = json.loads((ROOT / "data/spending.json").read_text())
+        build_site.configure(original_data)
+        original_pages = {"index.html": build_site.index(), "methods.html": build_site.methods()}
+        for date, data, reader, pages in (
+                (self.original, original_data, self.raw, original_pages),
+                (self.future, self.data, self.moved(self.raw), self.pages)):
+            for name, page in pages.items():
+                for wording in ("Treasury totals use OBR {} projections.",
+                                "PESA aggregate values are dated {}.",
+                                "The archive records {}.",
+                                "PESA outturn notes were dated {}."):
+                    month = date.split()[1]
+                    for rendered_date in (date, date.replace(month, "<em>" + month + "</em>"),
+                                          "</p><p>" + date, date.replace(month, "<br>" + month)):
+                        fragment = "<p>" + wording.format(rendered_date) + "</p>"
+                        with self.subTest(page=name, date=date, fragment=fragment):
+                            with self.assertRaisesRegex(ValueError, "PESA.*date|PESA.*vintage"):
+                                check_site.check_pesa_dates(self.inject(page, fragment), data, reader, name)
+
+    def test_obr_mentions_never_exempt_stale_forecast_prose(self):
+        # No PESA/Treasury keyword is needed. OBR headings and captions without
+        # punctuation must not grant an exemption to a following paragraph.
+        for name, page in self.pages.items():
+            for date in ("3 March 2026", "March 2026"):
+                fragments = [
+                    "<p>The {} forecast note above applies to these totals, not the OBR historical databank.</p>".format(d)
+                    for d in (date, date.replace("March", "<em>March</em>"),
+                              "</p><p>" + date, date.replace("March", "<br>March"))
+                ]
+                fragments.extend(prefix + "<p>The " + date + " forecast note applies to these totals.</p>"
+                                 for prefix in ("<h2>OBR historical databank</h2>",
+                                                "<figure><figcaption>OBR historical databank</figcaption></figure>",
+                                                "<p>The OBR historical</p><p>databank</p>"))
+                fragments.append("<p>The OBR historical</p><p>databank names the " + date + " forecast.</p>")
+                for fragment in fragments:
+                    with self.subTest(page=name, fragment=fragment):
+                        with self.assertRaisesRegex(ValueError, "PESA.*date|PESA.*vintage"):
+                            self.check(self.inject(page, fragment), name)
+
     def test_obr_history_cannot_hide_a_pesa_or_outlook_claim(self):
         fragments = (
             "<p>The OBR historical databank differs from the PESA March 2026 forecast.</p>",
             "<p>The OBR historical notes cite Economic and fiscal outlook of 3 March 2026.</p>",
+            "<p>The OBR historical databank notes name March 2026 and October 2026 forecasts.</p>",
         )
         for name, page in self.pages.items():
             for fragment in fragments:
