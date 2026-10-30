@@ -2,6 +2,7 @@
 import html
 import json
 import re
+from decimal import Decimal, ROUND_HALF_UP
 
 LABELS = {
     "income_tax": "Income tax",
@@ -33,12 +34,13 @@ def shown(node):
     value = node["v"]
     if value is None:
         return "not given"
-    if node["unit"] == "percent GDP":
-        return f"{value:,.1f}%"
     sign = "−" if value < 0 else ""
+    if node["unit"] == "percent GDP":
+        return f"{sign}{abs(value):,.1f}%"
     if node["unit"] == "GBP per 100 GBP receipts":
         return f"{sign}£{abs(value):,.2f}"
-    return f"{sign}£{abs(value):,.1f}bn"
+    rounded = Decimal(str(value)).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)
+    return f"{sign}£{abs(rounded):,.1f}bn"
 
 
 def refs(data, node):

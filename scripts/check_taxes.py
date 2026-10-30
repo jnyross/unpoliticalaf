@@ -9,6 +9,7 @@ import html
 import json
 import math
 import re
+from decimal import Decimal, ROUND_HALF_UP
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -45,6 +46,10 @@ CT_EXPLANATION = (
     "The onshore label includes Bank Surcharge and EGL. "
     "OBR note 3 also includes residential property developers tax and Pillar 2 taxes. "
     "Petroleum revenue tax, energy profits levy and bank levy stay in other taxes.")
+NON_TAX_EXPLANATION = (
+    "A calculated difference: all receipts minus National Accounts taxes. "
+    "It is not the mixed source row relabelled as non-tax. "
+    "Do not add the source's interest, dividend or operating surplus rows again.")
 NOTES = {
     RECEIPTS: ("C1", "C40", "C41", "C42", "C43"),
     CASH: ("C1", "D7", "O7", "C94", "C95"),
@@ -146,16 +151,19 @@ def expected_data(root=ROOT):
                  for sheet, cells in NOTES.items() for cell in cells}
         for ref, text in notes.items():
             require(isinstance(text, str) and text, "source note is missing: " + ref)
-        # Independently establish the names behind the corporation-tax scope prose.
+        # Independently establish the names behind the tax and non-tax scope prose.
         source_labels = {RECEIPTS + "!" + c + "4": raw.cell(RECEIPTS + "!" + c + "4")
-                         for c in ("U", "V", "W", "X", "Y")}
+                         for c in ("U", "V", "W", "X", "Y", "AD", "AE", "AF")}
         compare(source_labels, {
             RECEIPTS + "!U4": "Onshore corporation tax (includes Bank Surcharge and EGL)3",
             RECEIPTS + "!V4": "Offshore corporation tax",
             RECEIPTS + "!W4": "Petroleum revenue tax",
             RECEIPTS + "!X4": "Energy profits levy",
             RECEIPTS + "!Y4": "Bank levy",
-        }, "corporation-tax scope labels")
+            RECEIPTS + "!AD4": "Public sector interest and dividend receipts",
+            RECEIPTS + "!AE4": "Public sector gross operating surplus (GOS)",
+            RECEIPTS + "!AF4": "Other public sector taxes and receipts",
+        }, "tax and non-tax scope labels")
         require(notes[RECEIPTS + "!C42"] ==
                 "1 Includes road lorry user charge. 2 Also includes capacity markets, green gas levy and warm home discount. 3 Also includes, residential property developers tax and Pillar 2 taxes",
                 "corporation-tax inclusion note changed")
@@ -290,12 +298,13 @@ def display(node):
     if node["v"] is None:
         return "not given"
     if node["unit"] == "percent GDP":
-        return f'{node["v"]:,.1f}%'
+        return ("−" if node["v"] < 0 else "") + format(abs(node["v"]), ",.1f") + "%"
     magnitude = abs(node["v"])
     prefix = "−£" if node["v"] < 0 else "£"
     if node["unit"] == "GBP per 100 GBP receipts":
         return prefix + format(magnitude, ",.2f")
-    return prefix + format(magnitude, ",.1f") + "bn"
+    cash = Decimal(str(node["v"])).quantize(Decimal('0.1'), rounding=ROUND_HALF_UP)
+    return prefix + format(abs(cash), ",.1f") + "bn"
 
 
 def source_refs(node, nodes):
@@ -432,7 +441,7 @@ def validate_bars(groups, data):
         require(group["scale"] == scale, "wrong chart denominator/baseline")
         extent = 100 if index == 0 else max((abs(v) for v in values if v is not None), default=0)
         labels = list(GROUP_LABELS.values()) if index == 0 else [
-            re.sub(r"[123]$", "", data["nodes"][identity]["label"]) for identity in identities]
+            re.sub(r"(?<=\D)[123]$", "", data["nodes"][identity]["label"]) for identity in identities]
         for row, identity, label in zip(rows, identities, labels):
             value = data["nodes"][identity]["v"]
             width = 0 if value is None or extent == 0 else abs(value) / extent * (50 if negative else 100)
@@ -497,6 +506,8 @@ def validate_story(raw, bound, data):
                 "missing/changed scope source label: " + ref)
     require(bound.get(("data-tax-explanation", "corporation_tax")) == CT_EXPLANATION,
             "corporation-tax explanation differs from checked scope")
+    require(bound.get(("data-tax-explanation", "non_tax")) == NON_TAX_EXPLANATION,
+            "non-tax explanation differs from checked scope")
     require({key[1] for key in bound if key[0] == "data-tax-explanation"} == set(GROUPS),
             "all 6 group explanations must remain available")
     sources = re.search(r'<section id="tax-sources"[^>]*>(.*?)</section>', raw, re.S)

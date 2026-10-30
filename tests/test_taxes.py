@@ -209,8 +209,9 @@ class TaxSourceTests(unittest.TestCase):
     def test_cash_rounding_and_negative_prefix_preserve_exact_attributes(self):
         cases = ((5.246, "£5.2bn"), (-5.246, "−£5.2bn"),
                  (1234.56, "£1,234.6bn"), (0, "£0.0bn"),
-                 (1.25, "£1.2bn"), (1.75, "£1.8bn"),
-                 (-1.25, "−£1.2bn"), (-1.75, "−£1.8bn"))
+                 (1.25, "£1.3bn"), (1.75, "£1.8bn"),
+                 (-1.25, "−£1.3bn"), (-1.75, "−£1.8bn"),
+                 (1.15, "£1.2bn"), (-1.15, "−£1.2bn"))
         for value, expected in cases:
             with self.subTest(value=value):
                 node = {"v": value, "unit": "GBP billion"}
@@ -224,6 +225,11 @@ class TaxSourceTests(unittest.TestCase):
             self.check_bad_html(self.changed_element(
                 identity, lambda element, text=wrong: re.sub(r">[^<]*</data>",
                                                             ">" + text + "</data>", element)))
+
+    def test_negative_gdp_text_uses_the_same_typographic_minus(self):
+        node = {"v": -1.2, "unit": "percent GDP"}
+        self.assertEqual(build_taxes.shown(node), "−1.2%")
+        self.assertEqual(check_taxes.display(node), "−1.2%")
 
     def test_main_chart_uses_share_nodes_fixed_100_and_zero_left(self):
         parser = check_taxes.TaxPage()
@@ -292,6 +298,33 @@ class TaxSourceTests(unittest.TestCase):
         groups[4]["rows"][0]["label"] = source_label
         with self.assertRaises(ValueError):
             check_taxes.validate_bars(groups, self.expected)
+
+    def test_chart_footnote_rules_match_for_numbered_names_and_real_digits(self):
+        identity = f"component/U/{self.latest}"
+        for label, plain in (("Example)3", "Example)"), ("Year 2023", "Year 2023"),
+                             ("Pillar 2 taxes", "Pillar 2 taxes"), ("Example1", "Example")):
+            with self.subTest(label=label):
+                data = copy.deepcopy(self.expected)
+                data["nodes"][identity]["label"] = label
+                page = build_taxes.render(data, lambda title, body: body)
+                parser = check_taxes.TaxPage()
+                parser.feed(page)
+                self.assertEqual(parser.bar_groups[4]["rows"][0]["label"], plain)
+                check_taxes.validate_bars(parser.bar_groups, data)
+
+    def test_non_tax_scope_labels_and_explanation_are_bound(self):
+        for ref in ("AD4", "AE4", "AF4"):
+            key = "Receipts (£bn)!" + ref
+            self.reject(lambda data, key=key: data["source_labels"].update({key: "Wrong scope"}))
+            self.reject(lambda data, key=key: data["source_labels"].pop(key))
+            old = f'data-tax-label-ref="{key}">{html.escape(self.expected["source_labels"][key], quote=True)}'
+            changed = self.page.replace(old, f'data-tax-label-ref="{key}">Wrong scope', 1)
+            self.assertNotEqual(changed, self.page)
+            self.check_bad_html(changed)
+        explanation = html.escape(check_taxes.NON_TAX_EXPLANATION, quote=True)
+        changed = self.page.replace(explanation, "Non-tax is the mixed source row.", 1)
+        self.assertNotEqual(changed, self.page)
+        self.check_bad_html(changed)
 
     def test_corporation_scope_prose_note_and_excluded_source_labels_are_bound(self):
         for ref in ("U4", "V4", "W4", "X4", "Y4"):
@@ -372,18 +405,18 @@ class TaxProjectionBoundaryTests(unittest.TestCase):
         self.assertNotIn(sentinel.encode(), encoded)
         self.assertLess(len(encoded), 500_000)
 
-    def test_projection_selects_only_the_five_scope_labels_without_extra_nodes(self):
+    def test_projection_selects_only_the_eight_scope_labels_without_extra_nodes(self):
         receipts = copy.deepcopy(self.receipts)
         table = receipts["tables"]["current_receipts"]
         table["series"]["W"]["private_scope_note"] = "private sentinel"
         data = tax_projection.project(receipts)
         expected_labels = {
             "Receipts (£bn)!" + col + "4": table["series"][col]["label"]
-            for col in ("U", "V", "W", "X", "Y")}
+            for col in ("U", "V", "W", "X", "Y", "AD", "AE", "AF")}
         self.assertEqual(data["source_labels"], expected_labels)
         self.assertEqual(len(data["nodes"]), 287)
         self.assertNotIn("private sentinel", tax_projection.encode(data).decode())
-        for column in ("W", "X", "Y"):
+        for column in ("W", "X", "Y", "AD", "AE", "AF"):
             self.assertNotIn(f"component/{column}/2025-26", data["nodes"])
 
     def test_missing_numerator_and_zero_denominator_stay_missing(self):

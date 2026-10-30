@@ -182,7 +182,8 @@ not public files. `tax_projection.project` selects only current OBR values:
 annual aggregate C/D/O/X cash and published GDP shares from 1999-00 onwards,
 and the latest outturn's ten source component rows, six groups, six shares
 and same-table D−C balance. A strict `source_labels` selection retains only
-current receipt U4/V4/W4/X4/Y4 for the corporation-tax scope explanation;
+current receipt U4/V4/W4/X4/Y4 and AD4/AE4/AF4 for the corporation-tax
+and non-tax scope explanations;
 it adds no extra receipt values or breakdown. It retains the selected source's complete hash,
 official download/version metadata, exact note locators, identities, units,
 contexts and ordered operands. It excludes historical receipt tables and
@@ -194,7 +195,9 @@ is rendered as a `data` element with its exact ID, source cells, unit, year,
 status, ordered formula operands and source version. Missing values retain an
 empty value attribute and visible “not given”; negative source values keep
 their signs, including other income tax. Visible cash uses one decimal £bn
-and a typographic negative prefix, such as −£5.2bn. Exact numeric attributes
+and decimal half-up rounding from the stored value's string, with a typographic
+negative prefix, such as −£5.2bn. A midpoint of 1.25 displays as £1.3bn;
+−1.25 displays as −£1.3bn. Exact numeric attributes
 and JSON retain their stored values. Shares retain two decimal places.
 The main chart uses share nodes and a fixed £100-of-all-receipts denominator,
 with a zero-left baseline. Component charts use a centred signed axis when
@@ -224,7 +227,11 @@ current workbook and catalogue, reconstructs the exact public schema and
 ordered nodes, checks same-vintage borrowing with a raw-operand storage budget,
 and validates all signed HTML values and bar geometry. It separately binds
 the corporation-tax explanation to U4/V4, note C42 and excluded W4/X4/Y4
-labels. Corruption tests cover share identities, the £100 denominator, zero-left
+labels. The non-tax explanation also binds to raw AD4/AE4/AF4 labels for
+interest/dividend receipts, gross operating surplus and the mixed source row.
+The checker and renderer separately implement decimal half-up cash formatting
+and use the same footnote-marker rule. Negative GDP text uses a typographic minus.
+Corruption tests cover share identities, the £100 denominator, zero-left
 and signed geometry, visible rounding/signs, residual bar removal, exact scope
 labels/notes, table multipliers and disclosure order. It rejects extra or
 missing nodes/fields, changed identities, year/status/unit swaps, different

@@ -20,7 +20,7 @@ def project(receipts):
         "source": {k: receipts["sources"]["obr_databank"][k] for k in SOURCE_KEYS},
         "latest_year": latest, "years": years, "notes": {},
         "source_labels": {rt["series"][c]["label_ref"]: rt["series"][c]["label"]
-                          for c in ("U", "V", "W", "X", "Y")}, "nodes": {},
+                          for c in ("U", "V", "W", "X", "Y", "AD", "AE", "AF")}, "nodes": {},
     }
     for table in (rt, cash, gdp):
         result["notes"].update({ref: cell["raw"] for ref, cell in table["notes"].items()})
