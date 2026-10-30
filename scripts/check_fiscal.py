@@ -59,13 +59,18 @@ def independent_base_rows(read):
     )
     def clean(value):
         return " ".join(re.sub(r"\(\d+\)|,\s*(?=\(|$)", "", str(value)).split())
+    def text(ref):
+        cell = read(ref)
+        if cell["kind"] != "text" or not isinstance(cell["value"], str) or not cell["value"].strip():
+            raise ValueError(f"Independent base-price text identity missing: {ref}")
+        return cell["value"]
     rows, evidence = {}, set()
     for sheet in ("4_2", "4_3"):
-        labels = {r: clean(read(f"{sheet}!A{r}")["value"]) for r in range(6, 28)}
+        labels = {r: clean(text(f"{sheet}!A{r}")) for r in range(6, 28)}
         if set(labels.values()) != {label for _, label in identities} or len(set(labels.values())) != 22:
             raise ValueError(f"Independent base-price identity missing/duplicate: {sheet}")
         for ref, want in (("X3", "£ billion"), ("X5", BASE), ("B4", "outturn")):
-            if read(f"{sheet}!{ref}")["value"] != want:
+            if text(f"{sheet}!{ref}") != want:
                 raise ValueError(f"Independent base-price unit/period/status identity: {sheet}!{ref}")
             evidence.add(f"{sheet}!{ref}")
         for key, label in identities:

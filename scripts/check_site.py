@@ -49,6 +49,7 @@ class Page(HTMLParser):
         self._para = None
         self.date_labels = []
         self._date_label = None
+        self.unmarked_text = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -89,6 +90,8 @@ class Page(HTMLParser):
             self._date_label.append(data)
         if self._skip:
             return
+        if self._date_label is None:
+            self.unmarked_text.append(data)
         self.text.append(data)
         if self._fig is not None:
             self._fig["text"] += data
@@ -152,6 +155,14 @@ def check_pesa_dates(raw, data, read, name):
     page.feed(raw)
     if page.date_labels != ([date, date] if name == "index.html" else []):
         raise ValueError(f"Independent PESA rendered date/vintage mismatch: {name}")
+    # Date spans and tooltips are not the only places a stale literal can appear.
+    # Check visible prose on every page, including pages with no required spans.
+    unmarked = "".join(page.unmarked_text)
+    full_date = r"\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b"
+    if date in " ".join(unmarked.split()) or any(
+            re.search(r"\bforecasts?\b", sentence, re.I) and re.search(full_date, sentence)
+            for sentence in re.split(r"(?<=[.!?])\s+", unmarked)):
+        raise ValueError(f"Independent PESA unmarked forecast date/vintage: {name}")
     forecast_ids = {key for key, meta in data["provenance"].items() if meta["status"] == "pesa_forecast"}
     label = "PESA forecast; OBR " + date + "."
     for figure in page.figures:

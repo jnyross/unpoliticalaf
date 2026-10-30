@@ -56,6 +56,36 @@ class Recovery22Tests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "[Uu]nit|[Ii]dentity|[Ss]emantic"):
                 verify(wrong)
 
+    def test_blank_required_base_price_headers_fail_both_readers(self):
+        for sheet in ("4_2", "4_3"):
+            for header in ("X3", "X5", "B4"):
+                ref = f"{sheet}!{header}"
+                for reader, verify in (
+                    (self.audit, fiscal_schema.reconciliations),
+                    (self.raw, lambda read: check_fiscal.check_reports(self.data, read)),
+                ):
+                    def missing(key):
+                        cell = reader(key)
+                        return dict(cell, kind="blank", value=None) if key == ref else cell
+                    with self.subTest(ref=ref, reader=type(reader).__name__):
+                        with self.assertRaisesRegex(ValueError, "identity|semantic|period missing"):
+                            verify(missing)
+
+    def test_base_price_identity_requires_present_text_kind_and_value(self):
+        refs = [f"{sheet}!{cell}" for sheet in ("4_2", "4_3")
+                for cell in [*(f"A{row}" for row in range(6, 28)), "X3", "X5", "B4"]]
+        for reader, boundary in ((self.audit, fiscal_schema.base_price_evidence),
+                                 (self.raw, check_fiscal.independent_base_rows)):
+            for ref in refs:
+                original = reader(ref)
+                for changes in ({"kind": "blank"}, {"kind": "number"},
+                                {"kind": "text", "value": None}, {"kind": "text", "value": ""}):
+                    def malformed(key):
+                        return dict(original, **changes) if key == ref else reader(key)
+                    with self.subTest(ref=ref, reader=type(reader).__name__, changes=changes):
+                        with self.assertRaisesRegex(ValueError, "identity"):
+                            boundary(malformed)
+
     def test_equal_valued_wrong_subcategory_identity_fails(self):
         specs = list(fiscal_schema.reconciliation_specs())
         index = next((i for i, s in enumerate(specs) if any(t[0] == "4_2!X7" for t in s[3])), None)
@@ -146,6 +176,25 @@ class Recovery22Tests(unittest.TestCase):
         self.assertNotIn("The March 2026 forecast note above", rendered)
         self.assertIn("PESA forecast; OBR 1 April 2026", rendered)
         self.assertEqual(rendered.count('data-pesa-forecast-date="1"'), 2)
+        def changed_raw(ref):
+            cell = self.raw(ref)
+            if ref in ("4_1!B51", "4_1!B52"):
+                return dict(cell, value=cell["value"].replace("3 March 2026", "1 April 2026"))
+            return cell
+        check_site.check_pesa_dates(rendered, data, changed_raw, "index.html")
+        methods = build_site.methods()
+        self.assertNotIn("3 March 2026", methods)
+        check_site.check_pesa_dates(methods, data, changed_raw, "methods.html")
+
+    def test_unmarked_forecast_date_prose_fails_on_every_page(self):
+        build_site.configure(copy.deepcopy(self.data))
+        for name, rendered in (("index.html", build_site.index()), ("methods.html", build_site.methods())):
+            check_site.check_pesa_dates(rendered, self.data, self.raw, name)
+            for date in ("3 March 2026", "1 April 2026", "3 <em>March</em> 2026"):
+                injected = rendered.replace("</main>", f"<p>The PESA forecast is dated {date}.</p></main>")
+                self.assertNotEqual(injected, rendered)
+                with self.subTest(name=name, date=date), self.assertRaisesRegex(ValueError, "PESA.*date|PESA.*vintage"):
+                    check_site.check_pesa_dates(injected, self.data, self.raw, name)
 
     def test_rendered_date_and_tooltip_mutations_fail_raw_checker(self):
         build_site.configure(copy.deepcopy(self.data))

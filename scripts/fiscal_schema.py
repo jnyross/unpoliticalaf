@@ -15,6 +15,8 @@ from audit_scope import SHEETS
 from fiscal_contract import (BASE, YEARS, FUNCTION_ROWS, BASE_PRICE_ROWS, DETAIL_ROWS, selections)
 
 ROOT = Path(__file__).resolve().parent.parent
+# Templates only: consumers must use status_definitions(read) for the complete,
+# source-dated PESA forecast label, never render STATUS directly.
 STATUS = {
     "pesa_outturn": {"kind": "actual", "label": "PESA outturn; subject to revision"},
     "pesa_forecast": {"kind": "forecast", "label": "PESA forecast; OBR"},
@@ -91,9 +93,11 @@ def base_price_evidence(read):
         expected.update({f"{sheet}!X3": "£ billion", f"{sheet}!X5": BASE,
                          f"{sheet}!B4": "outturn"})
         for ref, label in expected.items():
-            if normal(read(ref)["value"]) != normal(label):
+            cell = read(ref)
+            if (cell["kind"] != "text" or not isinstance(cell["value"], str)
+                    or not cell["value"].strip() or normal(cell["value"]) != normal(label)):
                 raise ValueError(f"Base-price semantic identity mismatch: {ref}")
-            evidence[ref] = read(ref)
+            evidence[ref] = cell
     return evidence
 
 
