@@ -1,0 +1,109 @@
+{
+  "as_of_requested": "2026-10-30T00:00:00",
+  "source": "https://members-api.parliament.uk/api/Parties/StateOfTheParties/1/2026-10-30",
+  "rows": [
+    {
+      "party_id": 15,
+      "name": "Labour",
+      "abbreviation": "Lab",
+      "seats": 404
+    },
+    {
+      "party_id": 4,
+      "name": "Conservative",
+      "abbreviation": "Con",
+      "seats": 118
+    },
+    {
+      "party_id": 17,
+      "name": "Liberal Democrat",
+      "abbreviation": "LD",
+      "seats": 71
+    },
+    {
+      "party_id": 8,
+      "name": "Independent",
+      "abbreviation": "Ind",
+      "seats": 11
+    },
+    {
+      "party_id": 1036,
+      "name": "Reform UK",
+      "abbreviation": "RUK",
+      "seats": 8
+    },
+    {
+      "party_id": 29,
+      "name": "Scottish National Party",
+      "abbreviation": "SNP",
+      "seats": 8
+    },
+    {
+      "party_id": 30,
+      "name": "Sinn Féin",
+      "abbreviation": "SF",
+      "seats": 7
+    },
+    {
+      "party_id": 7,
+      "name": "Democratic Unionist Party",
+      "abbreviation": "DUP",
+      "seats": 5
+    },
+    {
+      "party_id": 44,
+      "name": "Green Party",
+      "abbreviation": "Green",
+      "seats": 5
+    },
+    {
+      "party_id": 22,
+      "name": "Plaid Cymru",
+      "abbreviation": "PC",
+      "seats": 4
+    },
+    {
+      "party_id": 31,
+      "name": "Social Democratic & Labour Party",
+      "abbreviation": "SDLP",
+      "seats": 2
+    },
+    {
+      "party_id": 1115,
+      "name": "Your Party",
+      "abbreviation": "YP",
+      "seats": 2
+    },
+    {
+      "party_id": 1,
+      "name": "Alliance",
+      "abbreviation": "APNI",
+      "seats": 1
+    },
+    {
+      "party_id": 1117,
+      "name": "Restore Britain",
+      "abbreviation": "RB",
+      "seats": 1
+    },
+    {
+      "party_id": 47,
+      "name": "Speaker",
+      "abbreviation": "Spk",
+      "seats": 1
+    },
+    {
+      "party_id": 158,
+      "name": "Traditional Unionist Voice",
+      "abbreviation": "TUV",
+      "seats": 1
+    },
+    {
+      "party_id": 38,
+      "name": "Ulster Unionist Party",
+      "abbreviation": "UUP",
+      "seats": 1
+    }
+  ],
+  "total_seats": 650
+}

@@ -1,0 +1,118 @@
+{
+  "tool": "pdftotext version 26.01.0",
+  "note": "Layout-preserving text for model inspection; retain PDF as source. Fiscal table accuracy still needs independent verification.",
+  "records": [
+    {
+      "input": "alliance-2024.pdf",
+      "output": "alliance-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "dfdbd70aa71316989f8e10657a29a6b2123705721416e271a71c219c9e050693",
+      "output_sha256": "24d6f08cf9b3a268e66078a91067102f8711e6a819356d729419e35e935cda4c",
+      "bytes": 144427
+    },
+    {
+      "input": "conservative-2024.pdf",
+      "output": "conservative-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "8ad78888e33725b520deece616548f200dafeb3fa11f028165f7235fed0ff5c8",
+      "output_sha256": "077346f5da21a030d53de75a7fd3221af9bc2e65028f2173594b426944242acb",
+      "bytes": 252613
+    },
+    {
+      "input": "dup-2024.pdf",
+      "output": "dup-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "2d0439bd6cbdf2b842b4e1e9c0557807444856678e2e249e09f5c115e8f8eefa",
+      "output_sha256": "72f3c5e5be9792f2ccecefcae61b4e93d782ea5eb6ac170466cb90b32e45abe5",
+      "bytes": 145600
+    },
+    {
+      "input": "green-2024.pdf",
+      "output": "green-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "4cfa29bd877b1b0ed46528684349eb6fb9bdeaaa5451897a5cace43f062f8537",
+      "output_sha256": "ba7a10ee5567011ba2438d07f3d6c44e23baca81624a12c35aeb3bca6ccb1768",
+      "bytes": 285900
+    },
+    {
+      "input": "ifs-2024-finances.pdf",
+      "output": "ifs-2024-finances.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "1a3f864f3d7e7d8fb5788fc78b04d9c102078a29a1432c6daea46126f9c561d4",
+      "output_sha256": "8bc7d631ed657a95568f5eb955cd999ed8cbcebc15de0493b1e3941a408667b8",
+      "bytes": 55293
+    },
+    {
+      "input": "labour-2024.pdf",
+      "output": "labour-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "87970e781853125779fb1df42a99fd836cc8e8420eb2bde9e47f3e5b1d936b25",
+      "output_sha256": "b4e77b5f86b4b2bd425ac6371c26659ac5ed1c7be522888ac65b0d4ad99ac3bd",
+      "bytes": 230736
+    },
+    {
+      "input": "libdem-2024-costings.pdf",
+      "output": "libdem-2024-costings.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "378f7ccaafcd18eea51a86b422db98462602f22fabd1418d48180a46a5f68ff3",
+      "output_sha256": "287e894bfbf6d9c8e68a3b845aeecacc2911124a61bfdd215589f0781447f1d3",
+      "bytes": 10871
+    },
+    {
+      "input": "plaid-2024-pdf.pdf",
+      "output": "plaid-2024-pdf.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "e00bf848cef0fcf655f4741598bce812a3e73d4b0a317f0f1c4da338c4e52fed",
+      "output_sha256": "4b2c5172e50578e0420ed01602ba1c9a02d1a88ee27b93f4a992b5b033e07aba",
+      "bytes": 149428
+    },
+    {
+      "input": "reform-2024-pdf.pdf",
+      "output": "reform-2024-pdf.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "500dca6b808f47e271394c803dc36ca4b5681fffb1bae41276385f224ba03eb3",
+      "output_sha256": "00f74ad4107985f226bdfc6e446def71d13cf9fff363281643d1a9ff5320d22e",
+      "bytes": 72084
+    },
+    {
+      "input": "restore-economic-plan-pdf.pdf",
+      "output": "restore-economic-plan-pdf.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "be8ddfe9c3c9310de59ebb7468b93a940cd4743d3f311571f398495d9b1119bb",
+      "output_sha256": "5dcc1444e97de74a1327c8a4752dd1947423d862014627bcdb1af6434d6e81de",
+      "bytes": 88902
+    },
+    {
+      "input": "sdlp-2024.pdf",
+      "output": "sdlp-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "7ef5e87c28794db273b37a9734983a4b89af387542fefb02017e3ed19e573442",
+      "output_sha256": "436d798e411b1c35b0539eda30c5d0e89e4b6347e68b2e5f3e1f3e281ce1fbae",
+      "bytes": 76866
+    },
+    {
+      "input": "snp-2024-pdf.pdf",
+      "output": "snp-2024-pdf.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "82a5b60680c2e7eb6f304c78555b5d8019100ee6b58115dcdd67d7133ca82715",
+      "output_sha256": "cbc70981570cee226289b8280ef8518a4ff47700223660f2e3f38bce1087bb6f",
+      "bytes": 64498
+    },
+    {
+      "input": "tuv-2024.pdf",
+      "output": "tuv-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "34348b03685b68d00724c786b2615f9849b5fba14b3af7413b78337529c51753",
+      "output_sha256": "ac30c3e30242621211409ea3b58dc2404f1a0528c24e85921c5f436ceb799cbf",
+      "bytes": 49932
+    },
+    {
+      "input": "uup-2024.pdf",
+      "output": "uup-2024.extracted.txt",
+      "exit_code": 0,
+      "source_sha256": "130e71cef7ba64ccc9ebccfb0ca079c9b0d517242da3107cb5e2a4b731d5fba8",
+      "output_sha256": "6917ed4d06efccf500df0e1d4d5842cb0dae2ba1c4c29ae0a493e041940ffea7",
+      "bytes": 78114
+    }
+  ]
+}

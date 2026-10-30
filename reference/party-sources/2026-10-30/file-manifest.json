@@ -1,0 +1,250 @@
+{
+  "created_at": "2026-10-30T11:23:51.649843+00:00",
+  "files": [
+    {
+      "path": "additional-sources.json",
+      "bytes": 4336,
+      "sha256": "b1460330dfa9942ae1aa065a6090c5590dfad002aa235ac5fbfc5be500f76b44"
+    },
+    {
+      "path": "alliance-2024.pdf",
+      "bytes": 5650809,
+      "sha256": "dfdbd70aa71316989f8e10657a29a6b2123705721416e271a71c219c9e050693"
+    },
+    {
+      "path": "browser-assessments.json",
+      "bytes": 35092,
+      "sha256": "69a82aac90258422e4708970d65b73f7f792013f0ba12b927e04c2afac6d806a"
+    },
+    {
+      "path": "browser-current-plans.json",
+      "bytes": 14770,
+      "sha256": "fa27a454f2256951dc83e82beb3f434abcd1685218d8abe7922718d3a7c65f31"
+    },
+    {
+      "path": "browser-landings.json",
+      "bytes": 29359,
+      "sha256": "37a17ac0126611882b627ac58455099afdc039cad2617de2e9f67da39bae1349"
+    },
+    {
+      "path": "browser-more-sources.json",
+      "bytes": 15317,
+      "sha256": "1f4c247314d6cb7f309a430613f403e2e8ec2aaec4dade456993c23b5d20d596"
+    },
+    {
+      "path": "browser-pdf-links.json",
+      "bytes": 12352,
+      "sha256": "69f3394940ee612eda3236fd2c438ed34637ca2a07de5c65e454e87e041c54dc"
+    },
+    {
+      "path": "browser-roster-and-remit.json",
+      "bytes": 916,
+      "sha256": "2bc7c9caed0511bc79cc6783caeb5c1ed71c9b93f2975ed07eeae0c628ba623f"
+    },
+    {
+      "path": "commons-party-api.json",
+      "bytes": 4987,
+      "sha256": "06a19f7a538e4a129503bddd67304d7fda668827ecd7054f747187cc4d00039e"
+    },
+    {
+      "path": "commons-state-2026-10-30.json",
+      "bytes": 5095,
+      "sha256": "2639833852727be3a07c282701b3e86a833d4768bd168f59154c05440f49a02d"
+    },
+    {
+      "path": "conservative-2024.pdf",
+      "bytes": 1231055,
+      "sha256": "8ad78888e33725b520deece616548f200dafeb3fa11f028165f7235fed0ff5c8"
+    },
+    {
+      "path": "discovery-primary.json",
+      "bytes": 35449,
+      "sha256": "b7f0c5aae6be11379d0a66315bd431ad325cc36d432d9d39b03dbbb5610401b2"
+    },
+    {
+      "path": "dup-2024.pdf",
+      "bytes": 3822442,
+      "sha256": "2d0439bd6cbdf2b842b4e1e9c0557807444856678e2e249e09f5c115e8f8eefa"
+    },
+    {
+      "path": "fullfact-manifestos.html",
+      "bytes": 51552,
+      "sha256": "c82d2164f6ca8babafe76893e451f9e123f5689ecb19301d4a1a441614922792"
+    },
+    {
+      "path": "fullfact-manifestos.txt",
+      "bytes": 4016,
+      "sha256": "6814406830455b40d46073e2b727ad0f2bcbb35d9cd3335246f54eb5c2eed5fa"
+    },
+    {
+      "path": "green-2024.pdf",
+      "bytes": 561016,
+      "sha256": "4cfa29bd877b1b0ed46528684349eb6fb9bdeaaa5451897a5cace43f062f8537"
+    },
+    {
+      "path": "ifs-2024-finances.pdf",
+      "bytes": 302585,
+      "sha256": "1a3f864f3d7e7d8fb5788fc78b04d9c102078a29a1432c6daea46126f9c561d4"
+    },
+    {
+      "path": "labour-2024.pdf",
+      "bytes": 8047265,
+      "sha256": "87970e781853125779fb1df42a99fd836cc8e8420eb2bde9e47f3e5b1d936b25"
+    },
+    {
+      "path": "libdem-2024-costings.pdf",
+      "bytes": 3303719,
+      "sha256": "378f7ccaafcd18eea51a86b422db98462602f22fabd1418d48180a46a5f68ff3"
+    },
+    {
+      "path": "libdem-2024-plain-text.txt",
+      "bytes": 156239,
+      "sha256": "30a2c9aec9c0f8810f44df2345192e58c02dba6a7011bbe1dc1b99c81df4e230"
+    },
+    {
+      "path": "libdem-manifesto.html",
+      "bytes": 581206,
+      "sha256": "7f2a2aefa37fe93d4bb7f26d4e02e2540b70a908a7b9a1a890ee0bc209896ead"
+    },
+    {
+      "path": "libdem-manifesto.txt",
+      "bytes": 9785,
+      "sha256": "227ba026766bdcfc2462054d986af934f590f657f01e68bd094aa4d7034a7c4e"
+    },
+    {
+      "path": "members-api-openapi.json",
+      "bytes": 126393,
+      "sha256": "26f2e69c0d2415a3ef24129701474bcfa1e3f6e062dcd914c54b7ff951c3868f"
+    },
+    {
+      "path": "nao-remit.html",
+      "bytes": 104813,
+      "sha256": "c6d14ef96df99e557228ccd7b699de4e27df0a36cdd999078984e061f311c7ad"
+    },
+    {
+      "path": "nao-remit.txt",
+      "bytes": 5976,
+      "sha256": "ff45bccdd1e71c3cebbdc7a445aae4f85fab1a74d0b0c9a3dd12a3c002e0e40f"
+    },
+    {
+      "path": "plaid-2024-pdf.pdf",
+      "bytes": 2557031,
+      "sha256": "e00bf848cef0fcf655f4741598bce812a3e73d4b0a317f0f1c4da338c4e52fed"
+    },
+    {
+      "path": "plaid-2024.html",
+      "bytes": 38489,
+      "sha256": "c8c5d031c1d877aba13ae71d3af936237f7b695702e8d5d2b239f3eb96e08a7c"
+    },
+    {
+      "path": "reform-2024-pdf.pdf",
+      "bytes": 6683218,
+      "sha256": "500dca6b808f47e271394c803dc36ca4b5681fffb1bae41276385f224ba03eb3"
+    },
+    {
+      "path": "resolution-2024-comparison.html",
+      "bytes": 146874,
+      "sha256": "70eab57f49710c0c2c5cb1231540af12a2bcd6874be8025cc4f7f2e4eea717eb"
+    },
+    {
+      "path": "resolution-2024-comparison.txt",
+      "bytes": 13946,
+      "sha256": "0ab310e2be4c55e5f605c91c896552fe3ffa67446e7b828377453dfa002ac991"
+    },
+    {
+      "path": "resolution-growing-for-gold.html",
+      "bytes": 153390,
+      "sha256": "2c42e9035ff5d4f1e4cb8e69ad61e0e2b6c7f2602b06090c063926d4ea10d3bc"
+    },
+    {
+      "path": "restore-economic-plan-launch.html",
+      "bytes": 26264,
+      "sha256": "353bf42e4b388795bb84a15d38db808aed677781780a5167648d7c90e76f57d7"
+    },
+    {
+      "path": "restore-economic-plan-pdf.pdf",
+      "bytes": 2133238,
+      "sha256": "be8ddfe9c3c9310de59ebb7468b93a940cd4743d3f311571f398495d9b1119bb"
+    },
+    {
+      "path": "restore-policy-index.html",
+      "bytes": 55752,
+      "sha256": "d39ef4ceafc1ceae11b5b4e020641b0436c93a1df3e9b445878d4ceafef21620"
+    },
+    {
+      "path": "retrievals.json",
+      "bytes": 34817,
+      "sha256": "15db91d1c2691dd12922412b5f1aad61ab69cee8d2f33be16cb8327ac36844ab"
+    },
+    {
+      "path": "roster.json",
+      "bytes": 2120,
+      "sha256": "d357137e05e418d0e86424bcd5af114cffff6cbc6a81cadfb802ee95718f8db5"
+    },
+    {
+      "path": "sdlp-2024.pdf",
+      "bytes": 1979594,
+      "sha256": "7ef5e87c28794db273b37a9734983a4b89af387542fefb02017e3ed19e573442"
+    },
+    {
+      "path": "sinnfein-2024-launch.html",
+      "bytes": 181265,
+      "sha256": "b4b65d83b6c777f16a48a2bf28f56c5306e4fed1bc3145fdab3ede78dbb4ab52"
+    },
+    {
+      "path": "snp-2024-launch.html",
+      "bytes": 119534,
+      "sha256": "06a63b74f076fedc1d67ff5f41b32816310dd0b9a9ebbd2fcd83952e0085855b"
+    },
+    {
+      "path": "snp-2024-launch.txt",
+      "bytes": 13106,
+      "sha256": "a3ff7ce9a8c9b623b8818063a6e1c55e973de65cc34e6606f85f81b7c45c46e9"
+    },
+    {
+      "path": "snp-2024-pdf.pdf",
+      "bytes": 3559498,
+      "sha256": "82a5b60680c2e7eb6f304c78555b5d8019100ee6b58115dcdd67d7133ca82715"
+    },
+    {
+      "path": "snp-2026.html",
+      "bytes": 118915,
+      "sha256": "9a9377e884eccb6dda0ad21bed5ff5fd4d6fa4da54911abb95f7922f19490fa8"
+    },
+    {
+      "path": "snp-2026.txt",
+      "bytes": 4427,
+      "sha256": "c41f1b4f10cfbbef0e43be1a59cb00cf68556b8b203d7a40a7a11b112c5c475c"
+    },
+    {
+      "path": "source-index.md",
+      "bytes": 14175,
+      "sha256": "7b9a7f1dba6da552984e2253683790c4924583cca9011d4afde2fff56e1028d0"
+    },
+    {
+      "path": "source-seeds.json",
+      "bytes": 6304,
+      "sha256": "d24826663b2b32edb26ce70ef40eb56fa3697e654fd33cafca0afd01154f150d"
+    },
+    {
+      "path": "tuv-2024.pdf",
+      "bytes": 3298126,
+      "sha256": "34348b03685b68d00724c786b2615f9849b5fba14b3af7413b78337529c51753"
+    },
+    {
+      "path": "uup-2024.pdf",
+      "bytes": 4032516,
+      "sha256": "130e71cef7ba64ccc9ebccfb0ca079c9b0d517242da3107cb5e2a4b731d5fba8"
+    },
+    {
+      "path": "yourparty-statement-explainer.html",
+      "bytes": 70521,
+      "sha256": "9e2fa30be328cd4beb55196ff926ce0f228269f087b13d4585727572ee606916"
+    },
+    {
+      "path": "yourparty-statement.html",
+      "bytes": 53038,
+      "sha256": "33f35232ff2aea5909d2892bc6893a5ac806be886a10ae9b17f8655c407fa469"
+    }
+  ]
+}
