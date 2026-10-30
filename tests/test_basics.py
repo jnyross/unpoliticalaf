@@ -129,6 +129,47 @@ class BasicsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "source URL/locator"):
             self.validate(tax=changed)
 
+    def test_corporation_definition_and_obr_scope_have_separate_source_contracts(self):
+        definition = ('<p data-basics-claim="ct">Corporation Tax applies to taxable company or association profits. '
+                      '<a href="https://www.gov.uk/corporation-tax">Corporation Tax guidance: Overview</a></p>')
+        scope = ('<p data-basics-scope="ct">The OBR group also includes related charges. '
+                 'See the OBR group scope and source note. '
+                 '<a href="#tax-sources">OBR Receipts (£bn): U4 and note C42</a></p>')
+        self.assertIn(definition, self.tax)
+        self.assertIn(scope, self.tax)
+        self.assertTrue(self.validate())
+        cases = (
+            ('href="#tax-sources"', 'href="https://www.gov.uk/corporation-tax"', "OBR scope URL/locator"),
+            ("U4 and note C42", "U4 and note C41", "OBR scope URL/locator"),
+            ("also includes related charges", "excludes related charges", "OBR scope meaning"),
+            ('href="https://www.gov.uk/corporation-tax"', 'href="#tax-sources"', "source URL/locator for ct"),
+            ('data-basics-scope="ct"', 'data-basics-scope="vat"', "OBR scope marker"),
+            (scope, "", "missing or reordered"),
+            (scope, scope + scope, "duplicate or nested claim"),
+        )
+        for before, after, error in cases:
+            with self.subTest(mutation=before), self.assertRaisesRegex(ValueError, error):
+                self.validate(tax=self.replace(self.tax, before, after))
+        self.assertEqual(build_basics.COPY["ct"],
+                         "Corporation Tax applies to taxable company or association profits.")
+        assertion = build_basics.source_assertions["ct"]
+        self.assertEqual(assertion["source_ids"], ["basics-corporation-tax"])
+        self.assertTrue(all("profits" in anchor for anchor in assertion["quotedanchor"]))
+        self.assertNotIn("OBR", " ".join(assertion["quotedanchor"]))
+
+    def test_collection_heading_is_one_subheading_not_a_repeated_section_title(self):
+        heading = '<h3 id="payer-basics-title">How is the tax collected?</h3>'
+        self.assertEqual(self.payer.count(heading), 1)
+        self.assertNotIn("<h2", self.payer)
+        self.assertNotIn("Who sends the tax?", self.payer)
+        for replacement in (
+            '<h2 id="payer-basics-title">How is the tax collected?</h2>',
+            '<h3 id="payer-basics-title">Who sends the tax?</h3>',
+            heading + heading,
+        ):
+            with self.subTest(replacement=replacement), self.assertRaises(ValueError):
+                self.validate(payer=self.replace(self.payer, heading, replacement))
+
     def test_selection_is_not_rates_or_source_metadata(self):
         self.assertNotIn("scottish-income-tax\"", self.tax)
         self.assertNotIn("%", self.tax + self.payer)

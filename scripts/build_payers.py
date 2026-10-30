@@ -141,10 +141,9 @@ Compare the spending measure below too.</p></div>
 Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households in this analysis.
 This is not a measure of all UK taxes. Suppressed components stay suppressed; we do not fill them in.</p>
 </section>
-{payer_basics()}
 <section id="burden"><h2>Who sends the tax, and who bears its cost?</h2>
-<p>A business that sends money to HMRC is not always the person who bears the cost.
-ONS assigns final and intermediate indirect taxes fully to consumers in this model.
+{payer_basics()}
+<p>ONS assigns final and intermediate indirect taxes fully to consumers in this model.
 This includes employer National Insurance. Employee and self-employed National Insurance are direct taxes.</p>
 <p>Actual costs can fall on producers, workers, buyers and others in varying shares.
 Full consumer allocation is an assumption, not a settled fact. A combined National Insurance receipts total

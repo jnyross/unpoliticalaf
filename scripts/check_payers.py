@@ -360,26 +360,31 @@ def validate_page(root, data, text):
         actual_ids = [n["attrs"].get("data-payer-id") for n in descendants if n["tag"] == "data"]
         require(captions == [caption] and headers == heads and actual_ids == value_ids,
                 "Table year, status, denominator, group order or measure changed")
+    burden = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "burden"]
+    require(len(burden) == 1 and burden[0]["parents"][-1] is main,
+            "Missing unique burden section")
+    burden = burden[0]
     basics = [n for n in nodes if n["attrs"].get("data-basics") == "payers"]
     require(len(basics) == 1 and basics[0]["tag"] == "aside" and
-            basics[0]["parents"][-1] is main, "Missing unique payer basics aside")
+            basics[0]["parents"][-1] is burden, "Missing unique payer basics aside inside burden")
     basics = basics[0]
-    basics_headings = [n for n in nodes if n["tag"] == "h2" and basics in n["parents"]]
-    require(len(basics_headings) == 1 and basics_headings[0]["parents"][-1] is basics and
+    basics_headings = [n for n in nodes if n["tag"] in {"h2", "h3"} and basics in n["parents"]]
+    require(len(basics_headings) == 1 and basics_headings[0]["tag"] == "h3" and
+            basics_headings[0]["parents"][-1] is basics and
             basics_headings[0]["attrs"].get("id") == "payer-basics-title" and
-            "".join(basics_headings[0]["text"]) == "Who sends the tax?",
+            "".join(basics_headings[0]["text"]) == "How is the tax collected?",
             "Payer basics heading changed")
-    # Do not ignore arbitrary aside headings: the exact marked heading is the only addition.
     headings = ["".join(n["text"]) for n in nodes if n["tag"] == "h2"]
     require(headings == ["Who owed Income Tax in 2023/24?", "How do taxes compare with household income?",
-                         "Who sends the tax?", "Who sends the tax, and who bears its cost?",
-                         "Where can I check the numbers?"], "Payer heading scope/year changed")
-    burden = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "burden"]
-    require(len(burden) == 1 and nodes.index(basics) < nodes.index(burden[0]) and
-            all(nodes.index(n) < nodes.index(burden[0]) for n in nodes if basics in n["parents"]) and
-            all(nodes.index(n) < nodes.index(basics) for n in nodes
+                         "Who sends the tax, and who bears its cost?", "Where can I check the numbers?"],
+            "Payer heading scope/year changed")
+    siblings = [n for n in nodes if n["parents"] and n["parents"][-1] is burden]
+    require(len(siblings) >= 3 and siblings[0]["tag"] == "h2" and siblings[1] is basics and
+            siblings[2]["tag"] == "p" and " ".join("".join(siblings[2]["text"]).split()).startswith(
+                "ONS assigns final and intermediate indirect taxes fully to consumers in this model.") and
+            all(nodes.index(n) < nodes.index(burden) for n in nodes
                 if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
-            "Payer collection basics must follow the tables and precede burden methodology")
+            "Payer collection basics must follow the burden heading and precede ONS assumptions after all tables")
     for table in tables:
         regions = [p for p in table["parents"] if p["attrs"].get("role") == "region"]
         captions = [n for n in nodes if n["tag"] == "caption" and table in n["parents"]]

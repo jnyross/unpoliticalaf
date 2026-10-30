@@ -260,9 +260,37 @@ class PayerTests(unittest.TestCase):
         tables = [n for n in nodes if n["tag"] == "table"]
         details = [n for n in nodes if n["tag"] == "details"]
         self.assertEqual(len(tables), 3)
-        self.assertEqual(len(details), 2)
-        self.assertTrue(all(source_section in n["parents"] for n in details))
-        self.assertTrue(all(nodes.index(t) < nodes.index(d) for t in tables for d in details))
+        self.assertEqual(len(details), 3)
+        source_details = [n for n in details if n["attrs"].get("id") in {"hmrc-sources", "ons-sources"}]
+        self.assertEqual(len(source_details), 2)
+        self.assertEqual({n["attrs"]["id"] for n in source_details}, {"hmrc-sources", "ons-sources"})
+        self.assertTrue(all(n["parents"][-1] is source_section for n in source_details))
+        self.assertTrue(all(nodes.index(t) < nodes.index(d) for t in tables for d in source_details))
+        burden = next(n for n in nodes if n["attrs"].get("id") == "burden")
+        basics = [n for n in nodes if n["attrs"].get("data-basics") == "payers"]
+        self.assertEqual(len(basics), 1)
+        basics = basics[0]
+        self.assertEqual(basics["tag"], "aside")
+        self.assertIs(basics["parents"][-1], burden)
+        basics_details = [n for n in details if basics in n["parents"]]
+        self.assertEqual(len(basics_details), 1)
+        self.assertIs(basics_details[0]["parents"][-1], basics)
+        self.assertTrue(all(nodes.index(t) < nodes.index(basics) for t in tables))
+        self.assertTrue(all(nodes.index(n) < nodes.index(d) for n in nodes
+                            if n is burden or burden in n["parents"] for d in source_details))
+        self.assertEqual(len([n for n in nodes if n["tag"] == "h2"]), 4)
+        collection_headings = [n for n in nodes if n["tag"] in {"h2", "h3"} and basics in n["parents"]]
+        self.assertEqual(len(collection_headings), 1)
+        self.assertEqual(collection_headings[0]["tag"], "h3")
+        self.assertEqual("".join(collection_headings[0]["text"]), "How is the tax collected?")
+        siblings = [n for n in nodes if n["parents"] and n["parents"][-1] is burden]
+        self.assertEqual(siblings[0]["tag"], "h2")
+        self.assertIs(siblings[1], basics)
+        self.assertTrue(" ".join("".join(siblings[2]["text"]).split()).startswith(
+            "ONS assigns final and intermediate indirect taxes fully to consumers in this model."))
+        self.assert_bad_page('<h3 id="payer-basics-title">How is the tax collected?</h3>',
+                             '<h2 id="payer-basics-title">How is the tax collected?</h2>')
+        self.assert_bad_page('data-basics="payers"', 'data-basics="unmarked"')
         bottom = next(n for n in nodes if n["attrs"].get("id") == "bottom-group")
         ons_bars = [n for n in nodes if n["attrs"].get("data-payer-bar", "").startswith("ons-")]
         self.assertTrue(all(nodes.index(bottom) < nodes.index(n) for n in ons_bars))
@@ -289,7 +317,7 @@ class PayerTests(unittest.TestCase):
             blocks.append(moved[start:end])
             moved = moved[:start] + moved[end:]
         moved = moved.replace('<section id="income-tax">', ''.join(blocks) + '<section id="income-tax">', 1)
-        with self.assertRaisesRegex(ValueError, "Source details moved"):
+        with self.assertRaisesRegex(ValueError, "Only the marked basics disclosure"):
             check_payers.validate_page(ROOT, self.data, moved)
         # Keep each adjacent source anchor intact, but move its note to the source section.
         for sid in ("hmrc", "ons"):

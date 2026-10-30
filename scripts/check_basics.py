@@ -173,7 +173,7 @@ EXPECTED = {
     "income": "Income Tax applies to taxable income. Not all income is taxable.",
     "ni": "National Insurance is a separate system linked to employment and self-employment. Contributions help you qualify for certain benefits and the State Pension; they are not a personal savings pot.",
     "vat": "VAT is a tax in many purchase prices, not all. Goods and services can have different rates, be zero-rated or be exempt.",
-    "ct": "Corporation Tax applies to taxable company or association profits. This definition does not describe the related charges in the OBR group.",
+    "ct": "Corporation Tax applies to taxable company or association profits.",
     "allowance": "The Personal Allowance applies to Income Tax, not every tax. You can owe no Income Tax and still pay VAT through purchases.",
     "ni-rules": "National Insurance has its own rules and payment periods. Being below the annual Income Tax allowance does not by itself mean you owe no National Insurance.",
     "scotland": "Scotland sets Income Tax rates and bands on non-savings, non-dividend income of Scottish taxpayers. Those powers exclude the Personal Allowance; HMRC collects the tax.",
@@ -196,7 +196,11 @@ LINKS = {
     "paye": ("https://www.gov.uk/paye-for-employers#deductions-from-their-pay", "PAYE: deductions and paying HMRC"),
     "net-vat": ("https://www.gov.uk/how-vat-works#your-responsibilities-as-a-vat-registered-business", "VAT: business responsibilities"),
 }
-TAX_FIELDS = ("income", "ni", "vat", "ct", "allowance", "ni-rules", "scotland", "wales", "age")
+# This claim is not GOV.UK guidance. check_taxes independently binds its OBR
+# group explanation, source label U4 and inclusion note C42 at this destination.
+CT_SCOPE = "The OBR group also includes related charges. See the OBR group scope and source note."
+CT_SCOPE_LINK = ("#tax-sources", "OBR Receipts (£bn): U4 and note C42")
+TAX_FIELDS = ("income", "ni", "vat", "ct", "scope:ct", "allowance", "ni-rules", "scotland", "wales", "age")
 PAYER_FIELDS = ("paye", "net-vat", "burden", "age")
 
 
@@ -207,7 +211,7 @@ class _Fragment(HTMLParser):
         self.stack, self.claims, self.links = [], {}, {}
         self.text, self.outside_claim = [], []
         self.current, self.link = None, None
-        self.count = self.details = self.summaries = 0
+        self.count = self.details = self.summaries = self.headings = 0
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -218,11 +222,26 @@ class _Fragment(HTMLParser):
             return
         if not self.stack:
             return
-        _require(tag in {"h2", "dl", "dt", "dd", "p", "a", "details", "summary"}, "unexpected element in basics")
+        _require(tag in {"h2", "h3", "dl", "dt", "dd", "p", "a", "details", "summary"}, "unexpected element in basics")
+        if tag in {"h2", "h3"}:
+            expected_tag, expected_id = (("h2", "tax-basics-title") if self.scope == "taxes"
+                                         else ("h3", "payer-basics-title"))
+            _require(tag == expected_tag and self.stack == [self.tag] and a.get("id") == expected_id,
+                     "wrong basics heading level or position")
+            self.headings += 1
         _require(not any(k in {"hidden", "style", "aria-hidden"} or k.startswith("on") for k in a), "hidden or active basics content")
         self.stack.append(tag)
-        if "data-basics-claim" in a:
-            field = a["data-basics-claim"]
+        markers = [key for key in ("data-basics-claim", "data-basics-scope") if key in a]
+        if markers:
+            _require(len(markers) == 1, "mixed guidance and scope claim")
+            marker = markers[0]
+            field = a[marker]
+            if marker == "data-basics-scope":
+                _require(self.scope == "taxes" and field == "ct" and self.stack == ["section", "p"],
+                         "wrong or misplaced OBR scope marker")
+                field = "scope:ct"
+            else:
+                _require(field in EXPECTED, "unknown guidance claim")
             _require(tag == "p" and self.current is None and field not in self.claims, "duplicate or nested claim")
             self.current = field
             self.claims[field], self.links[field] = [], []
@@ -270,8 +289,14 @@ def _validate_fragment(html, scope, tag, fields, extra):
     _require(parser.count == 1 and not parser.stack, f"missing, duplicate or unclosed {scope} fragment")
     _require(tuple(parser.claims) == fields, f"missing or reordered {scope} claims")
     _require(parser.details == parser.summaries == 1, f"missing native details in {scope}")
+    _require(parser.headings == 1, f"missing or duplicate {scope} heading")
     _require(_norm("".join(parser.outside_claim)) == extra, f"changed {scope} headings or added unverified copy")
     for field in fields:
+        if field == "scope:ct":
+            _require(parser.links[field] == [CT_SCOPE_LINK], "wrong OBR scope URL/locator")
+            _require(_norm("".join(parser.claims[field])) == CT_SCOPE + " " + CT_SCOPE_LINK[1],
+                     "changed OBR scope meaning")
+            continue
         links = [LINKS[field]] if field in LINKS else []
         _require(parser.links[field] == links, f"wrong source URL/locator for {field}")
         expected = EXPECTED[field] + (" " + LINKS[field][1] if links else "")
@@ -287,5 +312,5 @@ def validate_fragments(tax_html, payer_html, root=ROOT):
     _validate_fragment(tax_html, "taxes", "section", TAX_FIELDS,
         "What are the main taxes? Income Tax National Insurance VAT Corporation Tax Where you live can change the rules These are not personal tax calculations or a guide to every devolved tax.")
     _validate_fragment(payer_html, "payers", "aside", PAYER_FIELDS,
-        "Who sends the tax? What these sources can tell us This is collection guidance, not a model of tax costs. Read the separately sourced household analysis for its assumptions and limits.")
+        "How is the tax collected? What these sources can tell us This is collection guidance, not a model of tax costs. Read the separately sourced household analysis for its assumptions and limits.")
     return True

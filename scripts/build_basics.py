@@ -20,7 +20,7 @@ COPY = {
     "income": "Income Tax applies to taxable income. Not all income is taxable.",
     "ni": "National Insurance is a separate system linked to employment and self-employment. Contributions help you qualify for certain benefits and the State Pension; they are not a personal savings pot.",
     "vat": "VAT is a tax in many purchase prices, not all. Goods and services can have different rates, be zero-rated or be exempt.",
-    "ct": "Corporation Tax applies to taxable company or association profits. This definition does not describe the related charges in the OBR group.",
+    "ct": "Corporation Tax applies to taxable company or association profits.",
     "allowance": "The Personal Allowance applies to Income Tax, not every tax. You can owe no Income Tax and still pay VAT through purchases.",
     "ni-rules": "National Insurance has its own rules and payment periods. Being below the annual Income Tax allowance does not by itself mean you owe no National Insurance.",
     "scotland": "Scotland sets Income Tax rates and bands on non-savings, non-dividend income of Scottish taxpayers. Those powers exclude the Personal Allowance; HMRC collects the tax.",
@@ -33,7 +33,7 @@ COPY = {
 
 # Every derived qualitative claim has explicit retained-source anchors. Multiple
 # anchors are a synthesis. OBR scope and ONS allocations still need their separate
-# numeric-seed evidence; the CT sentence only limits this guidance definition.
+# numeric-seed evidence. The separate CT group-scope paragraph points to that evidence.
 source_assertions = {
     "income": {"field": "income", "source_ids": ["basics-income-tax"], "officialheading": "Overview", "quotedanchor": ["Income Tax is a tax you pay on your income.", "You do not have to pay tax on all types of income."]},
     "ni": {"field": "ni", "source_ids": ["basics-national-insurance"], "officialheading": "Overview; Who pays National Insurance; National Insurance classes", "quotedanchor": ["You pay National Insurance contributions to qualify for certain benefits and the State Pension.", "The type you pay depends on your employment status and how much you earn.", "Your contributions are treated as having been paid to protect your National Insurance record."]},
@@ -72,6 +72,8 @@ def tax_basics():
         '<section data-basics="taxes" aria-labelledby="tax-basics-title">',
         '<h2 id="tax-basics-title">What are the main taxes?</h2>',
         '<dl>' + '\n'.join(definitions) + '</dl>',
+        '<p data-basics-scope="ct">The OBR group also includes related charges. See the OBR group scope and source note. '
+        '<a href="#tax-sources">OBR Receipts (£bn): U4 and note C42</a></p>',
         _claim("allowance", _link("income", "Personal Allowance: allowances and reliefs", "#income-tax-allowances-and-reliefs")),
         _claim("ni-rules", _link("ni", "National Insurance: Who pays", "#who-pays-national-insurance")),
         '<details><summary>Where you live can change the rules</summary>',
@@ -88,7 +90,7 @@ def payer_basics():
     """Collection only. Keep the separately sourced ONS module next to this aside."""
     return '\n'.join([
         '<aside data-basics="payers" aria-labelledby="payer-basics-title">',
-        '<h2 id="payer-basics-title">Who sends the tax?</h2>',
+        '<h3 id="payer-basics-title">How is the tax collected?</h3>',
         _claim("paye", _link("paye", "PAYE: deductions and paying HMRC", "#deductions-from-their-pay")),
         _claim("net-vat", _link("vat", "VAT: business responsibilities", "#your-responsibilities-as-a-vat-registered-business")),
         _claim("burden"),
