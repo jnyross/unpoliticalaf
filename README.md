@@ -110,9 +110,9 @@ Each sourced figure carries the sheet and cell reference; calculated shares and
 changes retain both operands. The download retains publication dates and hashes.
 
 PESA outturns, forecasts and OBR historical vintages must be read separately.
-The March 2026 forecast note applies to the PESA aggregate forecast, not the
-October 2026 OBR databank. The port does not assert a checked actual/estimate
-classification for every OBR historical cell. Definition breaks and missing
+The forecast date in PESA Table 4.1 notes B51/B52 applies to the PESA aggregate
+forecast, not the separately vintaged OBR databank. The port does not assert a
+checked actual/estimate classification for every OBR historical cell. Definition breaks and missing
 values stay visible. No next release date is recorded by this port.
 
 The repository remains private. Historical scores from the original product
