@@ -505,6 +505,64 @@ def validate_tables(tables, data):
 def validate_story(raw, bound, data):
     """Bind source wording and keep technical depth after the basic story."""
     normalize = lambda text: " ".join(text.split())
+
+    class Story(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.stack, self.nodes = [], []
+
+        def handle_starttag(self, tag, attrs):
+            node = {"tag": tag, "attrs": dict(attrs), "parents": list(self.stack)}
+            self.nodes.append(node)
+            if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+                           "meta", "param", "source", "track", "wbr"}:
+                self.stack.append(node)
+
+        def handle_endtag(self, tag):
+            if self.stack and self.stack[-1]["tag"] == tag:
+                self.stack.pop()
+
+    story = Story()
+    story.feed(raw)
+    basics = [n for n in story.nodes if n["attrs"].get("data-basics") == "taxes"]
+    require(len(basics) == 1 and basics[0]["tag"] == "section" and
+            basics[0]["parents"][-1]["tag"] == "main", "missing unique tax basics section")
+    basics = basics[0]
+    def concealed(node):
+        return any(p["tag"] == "details" or "hidden" in p["attrs"] or
+                   p["attrs"].get("aria-hidden", "").lower() == "true" or
+                   set(p["attrs"].get("class", "").split()) & {"v", "narrow", "wide"} or
+                   re.search(r"display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse)",
+                             p["attrs"].get("style", ""), re.I)
+                   for p in [node] + node["parents"])
+    shell = {
+        "html": ({"lang"}, {"lang": {"en-GB"}}),
+        "body": ({"class"}, {"class": {"view-real nojs", "view-real"}}),
+        "main": ({"id"}, {"id": {"main"}}),
+    }
+    for ancestor in basics["parents"]:
+        require(ancestor["tag"] in shell, "tax basics container hidden or ancestor attributes changed")
+        allowed, values = shell[ancestor["tag"]]
+        require(set(ancestor["attrs"]) <= allowed and all(
+            value in values[key] for key, value in ancestor["attrs"].items()),
+            "tax basics container hidden or ancestor attributes changed")
+    require(set(basics["attrs"]) == {"data-basics", "aria-labelledby"} and
+            basics["attrs"]["aria-labelledby"] == "tax-basics-title" and not concealed(basics),
+            "tax basics container hidden or attributes changed")
+    groups = next((n for n in story.nodes if n["attrs"].get("id") == "receipt-groups"), None)
+    require(groups is not None and story.nodes.index(basics) < story.nodes.index(groups) and
+            all(story.nodes.index(n) < story.nodes.index(groups) for n in story.nodes
+                if basics in n["parents"]), "tax basics must precede first receipt groups")
+    basic_details = [n for n in story.nodes if n["tag"] == "details" and basics in n["parents"]]
+    require(len(basic_details) == 1 and basic_details[0]["parents"][-1] is basics,
+            "tax basics must have one native devolved-rules disclosure")
+    for detail in (n for n in story.nodes if n["tag"] == "details"):
+        if detail is basic_details[0]:
+            continue
+        require(any(p["attrs"].get("id") == "tax-sources" for p in detail["parents"]) or
+                (detail["attrs"].get("data-pid") == "tax-forecasts" and
+                 any(p["attrs"].get("id") == "tax-history" for p in detail["parents"])),
+                "unmarked source depth interrupts tax story")
     for ref, note in data["notes"].items():
         require(bound.get(("data-tax-note-ref", ref)) == note,
                 "missing/changed original OBR note: " + ref)

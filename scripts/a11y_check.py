@@ -103,6 +103,137 @@ def check_payer_browser(page, data):
         raise RuntimeError("Payer browser selected-data download missing")
 
 
+def check_basics_browser(page, *, expanded=False):
+    """Check required guidance text, including clipping and ancestor concealment."""
+    modules = page.locator('[data-basics], #tax-guidance')
+    for index in range(modules.count()):
+        module = modules.nth(index)
+        if not module.is_visible():
+            raise RuntimeError("Basics container is not visible")
+        targets = module.locator('p, dt, h2, h3, summary, a, code, [data-guidance-source]')
+        for target_index in range(targets.count()):
+            target = targets.nth(target_index)
+            closed = target.evaluate("""node => {
+                for (let p = node.parentElement; p; p = p.parentElement) {
+                    if (p.tagName === 'DETAILS' && !p.open &&
+                        !p.querySelector(':scope > summary')?.contains(node)) return true;
+                }
+                return false;
+            }""")
+            if closed and not expanded:
+                continue
+            if not target.is_visible():
+                raise RuntimeError("Basics claim/heading is not visible")
+            visible = target.evaluate("""node => {
+                const box = node.getBoundingClientRect();
+                const tolerance = 1;
+                if (box.width <= 0 || box.height <= 0 ||
+                    box.left < -tolerance ||
+                    box.right > document.documentElement.clientWidth + tolerance ||
+                    box.top + window.scrollY < -tolerance) return false;
+                for (let p = node; p; p = p.parentElement) {
+                    const css = getComputedStyle(p);
+                    if (p.inert || p.hasAttribute('hidden') || p.hasAttribute('popover') ||
+                        p.getAttribute('aria-hidden') === 'true' || Number(css.opacity) <= 0 ||
+                        css.display === 'none' || css.visibility !== 'visible' ||
+                        css.clip !== 'auto' || css.clipPath !== 'none' ||
+                        css.contentVisibility === 'hidden') return false;
+                    const clips = value => /^(hidden|clip|auto|scroll)$/.test(value);
+                    if (p === node &&
+                        ((clips(css.overflowX) && p.scrollWidth > p.clientWidth + tolerance) ||
+                         (clips(css.overflowY) && p.scrollHeight > p.clientHeight + tolerance))) return false;
+                    if (p !== node) {
+                        // Positive layout boxes can still be outside an
+                        // ancestor's painted scroll/clip area. Do not compare
+                        // vertical bounds to the viewport: readers may scroll.
+                        const bounds = p.getBoundingClientRect();
+                        const left = bounds.left + p.clientLeft;
+                        const top = bounds.top + p.clientTop;
+                        if ((clips(css.overflowX) &&
+                             (box.left < left - tolerance ||
+                              box.right > left + p.clientWidth + tolerance)) ||
+                            (clips(css.overflowY) &&
+                             (box.top < top - tolerance ||
+                              box.bottom > top + p.clientHeight + tolerance))) return false;
+                    }
+                }
+                return true;
+            }""")
+            if not visible:
+                raise RuntimeError("Basics claim/heading is concealed by an ancestor")
+
+
+def check_basics_browser_guards(browser):
+    """Real-layout regressions; mocks cannot establish CSS clipping behaviour."""
+    fixture = """<!doctype html><html lang="en-GB"><body><main>
+<section data-basics="taxes"><h2>Tax definitions</h2>
+<dl><dt>Income Tax</dt><dd><p data-basics-claim="income">Tax on income.
+<a href="#income-source">Guidance: Overview</a></p></dd></dl>
+<p data-basics-scope="ct">The OBR group also includes related charges.</p>
+<details><summary>More rules</summary><p>Required disclosure explanation.</p></details>
+</section>
+<section id="tax-guidance"><h2>Guidance sources</h2>
+<details><summary>Source records</summary>
+<ul><li data-guidance-source="income-tax"><a href="#source">Retained source locator</a>
+Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
+</details></section>
+</main></body></html>"""
+    mutations = (
+        ("main", "node.style.opacity = '0'"),
+        ("main", "node.inert = true"),
+        ("main", "node.setAttribute('popover', 'auto')"),
+        ("main", "node.style.cssText = 'height:1px;overflow:hidden'"),
+        ("main", "node.style.cssText = 'max-height:1px;overflow:clip'"),
+        ("main", "node.style.cssText = 'position:absolute;clip:rect(0px,1px,1px,0px)'"),
+        ("main", "node.style.clipPath = 'inset(100%)'"),
+        ("main", "node.style.transform = 'translateX(-200vw)'"),
+        ("main", "node.style.transform = 'translateX(200vw)'"),
+        ("[data-basics-scope]", "node.style.opacity = '0'"),
+        ("[data-basics-scope]", "node.style.cssText = 'height:1px;overflow:hidden'"),
+        ("dt", "node.style.cssText = 'max-height:1px;overflow:clip'"),
+        ("dt", "node.style.opacity = '0'"),
+        ("[data-basics] details p", "node.style.opacity = '0'"),
+        ("#tax-guidance li", "node.style.opacity = '0'"),
+        ("[data-basics] a", "node.style.opacity = '0'"),
+        ("#tax-guidance code", "node.style.visibility = 'hidden'"),
+    )
+    for scripts_enabled in (True, False):
+        context = browser.new_context(java_script_enabled=scripts_enabled,
+                                      viewport={"width": 360, "height": 900})
+        try:
+            page = context.new_page()
+            page.set_content(fixture)
+            check_basics_browser(page)
+            # Closed native disclosure text is optional until it is opened.
+            page.locator('[data-basics] details p').evaluate(
+                "node => { node.style.opacity = '0'; }")
+            check_basics_browser(page)
+            for selector, mutation in mutations:
+                for expanded in (False, True):
+                    page.set_content(fixture)
+                    if expanded:
+                        page.locator("details").evaluate_all(
+                            "nodes => nodes.forEach(node => { node.open = true; })")
+                    check_basics_browser(page, expanded=expanded)
+                    target = page.locator(selector)
+                    if target.count() != 1:
+                        raise RuntimeError("Basics browser mutation target is not unique")
+                    target.evaluate("node => { " + mutation + "; }")
+                    closed_content = selector in (
+                        "[data-basics] details p", "#tax-guidance li", "#tax-guidance code")
+                    if closed_content and not expanded:
+                        check_basics_browser(page)
+                        continue
+                    try:
+                        check_basics_browser(page, expanded=expanded)
+                    except RuntimeError:
+                        pass
+                    else:
+                        raise RuntimeError("Basics browser accepted concealment: " + selector + ": " + mutation)
+        finally:
+            context.close()
+
+
 def check():
     pages = sorted(SITE.glob("*.html"))
     if {path.name for path in pages} != {"index.html", "taxes.html", "who-pays.html", "methods.html"}:
@@ -121,6 +252,7 @@ def check():
                   "--disable-background-networking"],
         )
         try:
+            check_basics_browser_guards(browser)
             context = browser.new_context()
             # The audit is entirely local, even if a later page adds an external
             # asset. Never fetch axe-core, fonts or other assets from the network.
@@ -193,6 +325,8 @@ def check():
                             )
                         if page.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                             raise RuntimeError(f"Page overflow: {path.name}, {width}px, {state}")
+                        if path.name in ("taxes.html", "who-pays.html", "methods.html"):
+                            check_basics_browser(page, expanded=state == "expanded")
                         if path.name == "who-pays.html":
                             check_payer_browser(page, payer_data)
                         table_failures = page.locator("table").evaluate_all("""tables =>
@@ -255,6 +389,8 @@ def check():
                         raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript default overflow: {path.name}, {width}px")
+                    if path.name in ("taxes.html", "who-pays.html", "methods.html"):
+                        check_basics_browser(reader)
                     if path.name in ("taxes.html", "who-pays.html") and not reader.locator("details").count():
                         raise RuntimeError(f"Source detail is missing without JavaScript: {path.name}")
                     for index in range(reader.locator("details").count()):
@@ -278,6 +414,8 @@ def check():
                         raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript expanded overflow: {path.name}, {width}px")
+                    if path.name in ("taxes.html", "who-pays.html", "methods.html"):
+                        check_basics_browser(reader, expanded=True)
                     if path.name == "who-pays.html":
                         check_payer_browser(reader, payer_data)
             plain.close()
