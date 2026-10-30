@@ -153,6 +153,46 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_page('style="width:9.9%"', 'style="width:99.0%"')
         self.assert_bad_page('data-chart-denominator="Gross household income"', 'data-chart-denominator="Household expenditure"')
 
+    def test_bar_value_labels_match_sources_without_extra_data_elements(self):
+        document = check_payers.Page(self.page)
+        labels = [n for n in document.nodes if "data-payer-bar-label" in n["attrs"]]
+        self.assertEqual(len(labels), 8)
+        self.assertEqual(len([n for n in document.nodes if n["tag"] == "data"]), 23)
+        values = {v["id"]: v for v in self.data["values"]}
+        for label in labels:
+            vid = label["attrs"]["data-payer-bar-label"]
+            self.assertEqual("".join(label["text"]), f'{values[vid]["value"]:.1f}%')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50">9.9%</span>',
+                             'data-payer-bar-label="hmrc-bottom50">99.9%</span>')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50"',
+                             'data-payer-bar-label="hmrc-top10"')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50"',
+                             'data-payer-bar-label="hmrc-bottom50" hidden')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50"',
+                             'data-payer-bar-label="hmrc-bottom50" style="display:none"')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50"',
+                             'data-payer-bar-label="hmrc-bottom50" aria-hidden="true"')
+        self.assert_bad_page('data-payer-bar-label="hmrc-bottom50"',
+                             'data-wrong-bar-label="hmrc-bottom50"')
+        # Swap equal-format labels without changing the approved table figures.
+        a = 'data-payer-bar-label="hmrc-bottom50">9.9%</span>'
+        b = 'data-payer-bar-label="hmrc-top10">59.1%</span>'
+        swapped = self.page.replace(a, '__BAR_LABEL__', 1).replace(b, a, 1).replace('__BAR_LABEL__', b, 1)
+        with self.assertRaisesRegex(ValueError, "moved away"):
+            check_payers.validate_page(ROOT, self.data, swapped)
+
+    def test_only_four_column_table_has_a_wide_minimum(self):
+        # Static CSS regression contract. Real 360px layout still needs the browser gate.
+        css = build_payers.STYLE
+        self.assertIn('.payers table{width:100%;min-width:0;table-layout:auto}', css)
+        self.assertNotIn('.payers table{min-width:34rem}', css)
+        self.assertIn('.payers .payer-scroll[aria-labelledby="hmrc-table"] table,', css)
+        self.assertIn('.payers .payer-scroll[aria-labelledby="ons-expenditure-table"] table'
+                      '{width:100%;min-width:0;table-layout:auto}', css)
+        self.assertIn('.payers .payer-scroll[aria-labelledby="ons-income-table"] table{min-width:34rem}', css)
+        self.assertIn('.payers caption{white-space:normal;text-align:left;', css)
+        self.assertIn('white-space:normal;overflow-wrap:anywhere}', css)
+
     def test_headings_tables_and_groups_cannot_mix_measures(self):
         self.assert_bad_page('Who owed Income Tax in 2023/24?', 'Who paid all taxes in 2023/24?')
         self.assert_bad_page('Direct / gross income', 'Direct / expenditure')

@@ -14,13 +14,20 @@ def esc(value):
 STYLE = """<style>
 .payers{overflow-wrap:anywhere}.payers section{margin-block:2rem}
 .payers .payer-scroll{max-width:100%;overflow-x:auto}
-.payers table{min-width:34rem}.payers th,.payers td{padding:.6rem;vertical-align:top}
+.payers table{width:100%;min-width:0;table-layout:auto}
+.payers .payer-scroll[aria-labelledby="hmrc-table"] table,
+.payers .payer-scroll[aria-labelledby="ons-expenditure-table"] table{width:100%;min-width:0;table-layout:auto}
+.payers .payer-scroll[aria-labelledby="ons-income-table"] table{min-width:34rem}
+.payers caption{white-space:normal;text-align:left;overflow-wrap:anywhere}
+.payers th,.payers td{padding:.6rem;vertical-align:top;white-space:normal;overflow-wrap:anywhere}
 .payers .payer-note{background:#f3f4f6;padding:1rem;border-radius:8px}
 .payers nav{display:flex;flex-wrap:wrap;gap:.4rem 1rem}
 .payers a,.payers summary{min-height:44px;padding-block:10px}
 .payers nav a,.payers .source-links a{display:inline-block}
 .payers summary{cursor:pointer}.payers :focus-visible{outline:3px solid #1f2937;outline-offset:3px}
 .payer-chart{display:grid;gap:.6rem}.payer-chart p{margin:0}
+.payer-bar-heading{display:flex;justify-content:space-between;gap:.75rem;align-items:baseline}
+.payer-bar-value{white-space:nowrap;font-weight:600;flex-shrink:0}
 .payer-track{display:block;background:#f3f4f6;height:16px;width:100%}
 .payer-fill{display:block;height:100%;background:#4b5563}
 .payer-source-cell{margin-block:.5rem}.payer-source-cell code{overflow-wrap:anywhere}
@@ -44,7 +51,9 @@ def bars(entries, label):
     # Each independent bar starts at zero. HMRC is not an additive chart.
     return (f'<div class="payer-chart" aria-hidden="true" data-chart-denominator="{esc(label)}">'
             '<p>Each bar runs from 0% to 100%.</p>' + "".join(
-                f'<div><span>{esc(v["group"])}</span><span class="payer-track">'
+                f'<div><span class="payer-bar-heading"><span>{esc(v["group"])}</span>'
+                f'<span class="payer-bar-value" data-payer-bar-label="{esc(v["id"])}">{v["value"]:.1f}%</span>'
+                '</span><span class="payer-track">'
                 f'<span class="payer-fill" data-payer-bar="{esc(v["id"])}" style="width:{v["value"]}%"></span>'
                 '</span></div>' for v in entries) + '</div>')
 
