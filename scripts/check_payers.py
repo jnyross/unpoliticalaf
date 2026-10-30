@@ -360,10 +360,31 @@ def validate_page(root, data, text):
         actual_ids = [n["attrs"].get("data-payer-id") for n in descendants if n["tag"] == "data"]
         require(captions == [caption] and headers == heads and actual_ids == value_ids,
                 "Table year, status, denominator, group order or measure changed")
+    burden = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "burden"]
+    require(len(burden) == 1 and burden[0]["parents"][-1] is main,
+            "Missing unique burden section")
+    burden = burden[0]
+    basics = [n for n in nodes if n["attrs"].get("data-basics") == "payers"]
+    require(len(basics) == 1 and basics[0]["tag"] == "aside" and
+            basics[0]["parents"][-1] is burden, "Missing unique payer basics aside inside burden")
+    basics = basics[0]
+    basics_headings = [n for n in nodes if n["tag"] in {"h2", "h3"} and basics in n["parents"]]
+    require(len(basics_headings) == 1 and basics_headings[0]["tag"] == "h3" and
+            basics_headings[0]["parents"][-1] is basics and
+            basics_headings[0]["attrs"].get("id") == "payer-basics-title" and
+            "".join(basics_headings[0]["text"]) == "How is the tax collected?",
+            "Payer basics heading changed")
     headings = ["".join(n["text"]) for n in nodes if n["tag"] == "h2"]
     require(headings == ["Who owed Income Tax in 2023/24?", "How do taxes compare with household income?",
                          "Who sends the tax, and who bears its cost?", "Where can I check the numbers?"],
             "Payer heading scope/year changed")
+    siblings = [n for n in nodes if n["parents"] and n["parents"][-1] is burden]
+    require(len(siblings) >= 3 and siblings[0]["tag"] == "h2" and siblings[1] is basics and
+            siblings[2]["tag"] == "p" and " ".join("".join(siblings[2]["text"]).split()).startswith(
+                "ONS assigns final and intermediate indirect taxes fully to consumers in this model.") and
+            all(nodes.index(n) < nodes.index(burden) for n in nodes
+                if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
+            "Payer collection basics must follow the burden heading and precede ONS assumptions after all tables")
     for table in tables:
         regions = [p for p in table["parents"] if p["attrs"].get("role") == "region"]
         captions = [n for n in nodes if n["tag"] == "caption" and table in n["parents"]]
@@ -374,6 +395,15 @@ def validate_page(root, data, text):
     source_sections = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "payer-sources"]
     require(len(source_sections) == 1, "Missing unique payer source section")
     source_section = source_sections[0]
+    basics_details = [n for n in nodes if n["tag"] == "details" and basics in n["parents"]]
+    require(len(basics_details) == 1 and basics_details[0]["parents"][-1] is basics,
+            "Payer basics must have one native disclosure")
+    for detail in (n for n in nodes if n["tag"] == "details"):
+        if detail is basics_details[0]:
+            continue
+        require(detail["parents"][-1] is source_section and
+                detail["attrs"].get("id") in {"hmrc-sources", "ons-sources"},
+                "Only the marked basics disclosure can precede final source details")
     require(source_section["parents"][-1] is main and
             all(nodes.index(n) < nodes.index(source_section) for n in nodes
                 if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
@@ -470,6 +500,23 @@ def validate_page(root, data, text):
                    re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", p["attrs"].get("style", ""))
                    for p in [node] + node["parents"])
 
+    # Independent full-copy contracts preserve each causal warning after its
+    # plain-language rewrite. Correct keywords elsewhere cannot mask a reversal.
+    limit_copy = {
+        "deferred": "Deferred lump-sum tax payments can distort the groups. They can leave people with high gross income but low disposable income. These people can enter the bottom group. These payments need not match a typical year's tax bill.",
+        "low-income": "People can spend more than their current income. They can use savings or borrowing. Temporary low income, sampling and measurement issues also matter. A high indirect-tax share of income is not a tax rate on purchases or a lifetime tax burden. Compare it with the spending view below.",
+        "model-costs": "Real costs can fall on producers, workers, buyers and others. Their shares can vary. ONS assumes that consumers bear the full cost. This is an assumption. It is not a settled fact. The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.",
+        "separate-views": "HMRC and ONS cover different people. They measure different taxes. Do not combine them. They cannot give a top-1% all-tax burden. Do not take an average across the panels. Do not match them to tax receipts.",
+    }
+    marked_limits = [n for n in nodes if "data-payer-limit" in n["attrs"]]
+    require(len(marked_limits) == len(limit_copy) and
+            {n["attrs"]["data-payer-limit"] for n in marked_limits} == set(limit_copy),
+            "Missing or duplicate plain-language payer limit")
+    for node in marked_limits:
+        identity = node["attrs"]["data-payer-limit"]
+        require(node["tag"] == "p" and not concealed(node) and
+                " ".join("".join(node["text"]).split()) == limit_copy[identity],
+                "Changed visible payer limit: " + identity)
     visible = " ".join(" ".join(n["text"]) for n in nodes if n["tag"] == "p" and not concealed(n))
     visible = " ".join(visible.split())
     for phrase in (

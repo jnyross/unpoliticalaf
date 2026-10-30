@@ -2,10 +2,10 @@
 
 ## Status and boundary
 
-This is an unpublished UI candidate. Source preparation does not approve its
-renderer. The controller must adopt the normal UI ticket only after source #35
-and tax #34 succeed. This document records the integration; it does not claim a
-build, review, browser check or deployment passed.
+This document records the integrated payer page. Source preparation does not
+approve its renderer. The source and tax prerequisites remain separate from
+exact-candidate review, browser checks and deployment evidence. This methods
+document is not a receipt that any of those gates passed.
 
 The public allowlist is exactly eight files: `index.html`, `taxes.html`,
 `who-pays.html`, `methods.html`, `icon.svg`, `data/spending.json`,
@@ -100,8 +100,8 @@ The shared page callback supplies Spending / Taxes / Who pays / Methods and a
 current-page indicator. It retains the tax checker's exact scope paragraph and
 adds a separate onward link. Shared tables have labelled, keyboard-focusable
 scroll regions. The payer module supplies its existing monochrome bars and
-always-visible tables. Correction `a65e255` removes its duplicate inner page
-navigation and binds adjacent source links to their context. The shared callback
+always-visible tables. The module omits duplicate inner page navigation and
+binds adjacent source links to their context. The shared callback
 removes the exact module OGL paragraph and retains one attribution footer. An
 unexpected licence paragraph fails closed rather than silently duplicating it.
 
