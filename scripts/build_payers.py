@@ -102,10 +102,11 @@ def render(data, page_callback):
 <p class="lead">Two official views answer different questions. Do not join them into one tax bill.</p></header>
 <main id="main" class="payers">
 <section id="income-tax"><h2>Who owed Income Tax in 2023/24?</h2>
-<p>Share of Income Tax due for tax year 2023 to 2024, estimated outturn. HMRC published these estimates on 15 July 2026.
-They cover UK people with a positive Income Tax bill. People with no Income Tax bill are excluded.</p>
-<p>HMRC ranks people by income assessable for tax, before deductions and allowances.
-This is not a rank of wealth or all income.</p>
+<p>These shares are for tax year 2023 to 2024, estimated outturn. They show Income Tax due, not cash received.
+HMRC published these estimates on 15 July 2026. They cover UK people with a positive Income Tax bill.
+People with no Income Tax bill are excluded.</p>
+<p>HMRC ranks people by income assessable for tax. This is before deductions and allowances.
+It is not a rank of wealth. It does not count all income.</p>
 <p class="payer-note" id="overlap">The top 1% is part of the top 10%. The bottom 50% and top 10% do not overlap.
 These groups refer to taxpayers with a positive Income Tax bill, not all adults.
 Do not add their shares. Tax due is not cash collected. This is Income Tax only, not all UK taxes.</p>
@@ -114,49 +115,58 @@ Do not add their shares. Tax due is not cash collected. This is Income Tax only,
 <p class="source-links" id="hmrc-source-note">Source: <a data-payer-source="hmrc" href="{esc(hsrc['url'])}">HMRC Table 2.4 (ODS)</a>.
 The denominator is total Income Tax liabilities.</p></section>
 <section id="household-taxes"><h2>How do taxes compare with household income?</h2>
-<p>ONS estimates for 2023/24, the financial year ending 2024. Published 25 September 2025.
+<p>ONS uses 2023/24: the financial year ending 2024. It published these figures on 25 September 2025.
 These are completed-year survey/model estimates, not a forecast. They cover UK people in private households.</p>
 <p>ONS ranks people by equivalised household disposable income.
-This means household income after direct taxes, adjusted for household size and needs.
-It makes five groups with about equal numbers of people, not households.
+This starts with household income after direct taxes. ONS adjusts it for household size and needs.
+It then forms five groups. Each has about the same number of people, not households.
 These are not the HMRC taxpayer groups.</p>
 <p>Gross income includes cash benefits. Disposable income is gross income after direct taxes.
-The table shows taxes as a percentage of gross household income for each group.</p>
+Each row shows one group's taxes. The shares use that group's gross household income as the whole.</p>
 <h3>Direct and indirect taxes counted in this ONS analysis</h3>
 <div class="payer-note" id="bottom-group"><h3>Why the bottom group needs care</h3>
-<p>Deferred lump-sum tax payments can leave people with high gross income but low disposable income.
-They can enter the bottom group. These payments need not reflect a typical year's tax bill.</p>
-<p>Spending can exceed current income through savings or borrowing. Temporary low income, sampling and measurement issues also matter.
+<p data-payer-limit="deferred">Deferred lump-sum tax payments can distort the groups.
+They can leave people with high gross income but low disposable income. These people can enter the bottom group.
+These payments need not match a typical year's tax bill.</p>
+<p data-payer-limit="low-income">People can spend more than their current income. They can use savings or borrowing.
+Temporary low income, sampling and measurement issues also matter.
 A high indirect-tax share of income is not a tax rate on purchases or a lifetime tax burden.
-Compare the spending measure below too.</p></div>
-<p>The bars show the published combined share of gross household income. The table gives both parts as well.</p>
+Compare it with the spending view below.</p></div>
+<p>The bars show direct and indirect taxes together. Each bar uses gross household income as the whole.
+The table shows both parts too.</p>
 {bars([entries[f'ons-{i}-combined'] for i in range(1, 6)], 'Gross household income')}
 {table('ONS: percentages of gross household income, 2023/24 completed-year estimates', ['Income group', 'Direct / gross income', 'Indirect / gross income', 'Combined / gross income'], ons_rows, 'ons-income-table')}
-<p>Combined values come from published Table 8 row 15. Rounded parts may not add to that total.</p>
+<p>We use the combined values from published Table 8 row 15. We do not add the rounded parts.
+Their sum may differ from the published total.</p>
 <h3>How do indirect taxes compare with spending?</h3>
-<p>The denominator here is household expenditure, not income. It gives another view of the same indirect taxes.</p>
+<p>The whole here is household expenditure, not income. Expenditure means spending.
+The taxes are the same. The whole used to work out the share has changed.</p>
 {table('ONS: indirect taxes as a percentage of household expenditure, 2023/24 completed-year estimates', ['Income group', 'Indirect / expenditure'], alt_rows, 'ons-expenditure-table')}
-<p>ONS makes expenditure consistent with disposable income (note 13). Neither measure is a rate on each purchase.</p>
+<p>ONS adjusts expenditure to be consistent with disposable income. See note 13.
+Neither measure is a tax rate on each purchase.</p>
 <p class="source-links" id="ons-source-note">Source: <a data-payer-source="ons" href="{esc(osrc['url'])}">ONS reference tables (XLSX), Table 8</a>.
-Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households in this analysis.
-This is not a measure of all UK taxes. Suppressed components stay suppressed; we do not fill them in.</p>
+Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households here.
+This is not a measure of all UK taxes. Some source parts are suppressed. They stay suppressed.
+We do not fill them in.</p>
 </section>
 <section id="burden"><h2>Who sends the tax, and who bears its cost?</h2>
 {payer_basics()}
 <p>ONS assigns final and intermediate indirect taxes fully to consumers in this model.
 This includes employer National Insurance. Employee and self-employed National Insurance are direct taxes.</p>
-<p>Actual costs can fall on producers, workers, buyers and others in varying shares.
-Full consumer allocation is an assumption, not a settled fact. A combined National Insurance receipts total
-must not be mapped wholly to either ONS group.</p>
+<p data-payer-limit="model-costs">Real costs can fall on producers, workers, buyers and others. Their shares can vary.
+ONS assumes that consumers bear the full cost. This is an assumption. It is not a settled fact.
+The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.</p>
 <p>The linked technical report covers FYE 2019. It was published on 25 June 2020.
 Sections 7 and 10 explain these assumptions and limits. The QMI is dated 15 June 2018.
 These are the latest linked reports we found in the sources we kept.
 They are older reports. Some details may have changed. Current workbook notes take priority.</p>
-<p>HMRC and ONS use different populations and tax measures. Do not combine them into a top-1% all-tax burden,
-an average across the panels, or a match to tax receipts.</p></section>
+<p data-payer-limit="separate-views">HMRC and ONS cover different people. They measure different taxes. Do not combine them.
+They cannot give a top-1% all-tax burden. Do not take an average across the panels.
+Do not match them to tax receipts.</p></section>
 <section id="payer-sources"><h2>Where can I check the numbers?</h2>
 <p><a href="data/payers.json">Download the selected payer data (JSON)</a>.
-It keeps the exact source cells, hashes, labels, units and notes. No next release date is recorded here.</p>
+It keeps the exact source cells. It also gives the hashes, labels, units and notes.
+No next release date is recorded here.</p>
 <ul class="source-links">{source_links}</ul>
 {source_details(data, 'hmrc')}{source_details(data, 'ons')}
 <p>Contains public sector information licensed under the

@@ -500,6 +500,23 @@ def validate_page(root, data, text):
                    re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", p["attrs"].get("style", ""))
                    for p in [node] + node["parents"])
 
+    # Independent full-copy contracts preserve each causal warning after its
+    # plain-language rewrite. Correct keywords elsewhere cannot mask a reversal.
+    limit_copy = {
+        "deferred": "Deferred lump-sum tax payments can distort the groups. They can leave people with high gross income but low disposable income. These people can enter the bottom group. These payments need not match a typical year's tax bill.",
+        "low-income": "People can spend more than their current income. They can use savings or borrowing. Temporary low income, sampling and measurement issues also matter. A high indirect-tax share of income is not a tax rate on purchases or a lifetime tax burden. Compare it with the spending view below.",
+        "model-costs": "Real costs can fall on producers, workers, buyers and others. Their shares can vary. ONS assumes that consumers bear the full cost. This is an assumption. It is not a settled fact. The National Insurance receipts total joins several parts. It must not be mapped wholly to either ONS group.",
+        "separate-views": "HMRC and ONS cover different people. They measure different taxes. Do not combine them. They cannot give a top-1% all-tax burden. Do not take an average across the panels. Do not match them to tax receipts.",
+    }
+    marked_limits = [n for n in nodes if "data-payer-limit" in n["attrs"]]
+    require(len(marked_limits) == len(limit_copy) and
+            {n["attrs"]["data-payer-limit"] for n in marked_limits} == set(limit_copy),
+            "Missing or duplicate plain-language payer limit")
+    for node in marked_limits:
+        identity = node["attrs"]["data-payer-limit"]
+        require(node["tag"] == "p" and not concealed(node) and
+                " ".join("".join(node["text"]).split()) == limit_copy[identity],
+                "Changed visible payer limit: " + identity)
     visible = " ".join(" ".join(n["text"]) for n in nodes if n["tag"] == "p" and not concealed(n))
     visible = " ".join(visible.split())
     for phrase in (

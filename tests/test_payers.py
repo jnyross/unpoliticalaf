@@ -131,6 +131,29 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_data(lambda d: d["source_cells"]["ons:Table 2b!C45"].update(value=0))
         self.assert_bad_data(lambda d: d["values"][0].update(value=None))
 
+    def test_plain_language_rewrite_keeps_full_causal_limits_and_negations(self):
+        document = check_payers.Page(self.page)
+        limits = [n for n in document.nodes if "data-payer-limit" in n["attrs"]]
+        self.assertEqual({n["attrs"]["data-payer-limit"] for n in limits},
+                         {"deferred", "low-income", "model-costs", "separate-views"})
+        self.assertEqual(len(limits), 4)
+        for old, new in (
+            ("These payments need not match a typical year's tax bill.", "These payments match a typical year's tax bill."),
+            ("They can use savings or borrowing.", "They cannot use savings or borrowing."),
+            ("This is an assumption. It is not a settled fact.", "This is a settled fact."),
+            ("It must not be mapped wholly to either ONS group.", "It must be mapped wholly to either ONS group."),
+            ("They cannot give a top-1% all-tax burden.", "They give a top-1% all-tax burden."),
+            ("Do not take an average across the panels.", "Take an average across the panels."),
+            ("Do not match them to tax receipts.", "Match them to tax receipts."),
+        ):
+            with self.subTest(negation=old):
+                self.assertIn(old, self.page)
+                changed = self.page.replace(old, new, 1)
+                with self.assertRaisesRegex(ValueError, "Changed visible payer limit"):
+                    check_payers.validate_page(ROOT, self.data, changed)
+        self.assert_bad_page('data-payer-limit="model-costs"', 'data-payer-limit="model-costs" hidden')
+        self.assert_bad_page('data-payer-limit="low-income"', 'data-payer-limit="model-costs"')
+
     def test_period_status_population_denominator_and_overlap(self):
         for field, value in (("period", "2024/25"), ("status", "Forecast"),
                              ("population", "All UK residents"), ("unit", "£"),

@@ -101,7 +101,11 @@ class BasicsTests(unittest.TestCase):
             ("tax", "does not by itself mean", "means"),
             ("tax", "not all", "all"),
             ("tax", "exclude the Personal Allowance", "include the Personal Allowance"),
+            ("tax", "They are not a personal savings pot.", "They are a personal savings pot."),
             ("payer", "normally deduct", "never deduct"),
+            ("payer", "They also deduct National Insurance.", "They do not deduct National Insurance."),
+            ("payer", "They send this money to HMRC.", "They keep this money."),
+            ("payer", "They do not tell us who bears the cost.", "They tell us who bears the cost."),
             ("payer", "the difference between VAT charged", "all VAT charged"),
             ("payer", "not the same question", "the same question"),
             ("payer", "They do not send the whole", "They send the whole"),
@@ -112,6 +116,21 @@ class BasicsTests(unittest.TestCase):
                 changed = self.replace(html, before, after)
                 with self.assertRaisesRegex(ValueError, "changed meaning"):
                     self.validate(tax=changed) if page == "tax" else self.validate(payer=changed)
+
+    def test_shorter_guidance_preserves_ni_payroll_and_cost_boundaries(self):
+        self.assertIn("Contributions help you qualify for certain benefits and the State Pension. "
+                      "They are not a personal savings pot.", self.tax)
+        self.assertIn("Employers normally deduct Income Tax from employees&#x27; pay. "
+                      "They also deduct National Insurance. They send this money to HMRC. "
+                      "They can also owe employer National Insurance.", self.payer)
+        self.assertIn("These rules explain how tax is sent. They do not tell us who bears the cost.", self.payer)
+        for before, after in (
+            ("They do not model tax costs.", "They model tax costs."),
+            ("Read the household analysis for the model's assumptions and limits.",
+             "The collection rules prove the model's assumptions."),
+        ):
+            with self.subTest(mutation=before), self.assertRaisesRegex(ValueError, "added unverified copy"):
+                self.validate(payer=self.replace(self.payer, before, after))
 
     def test_source_href_and_locator_are_bound_to_claim(self):
         changed = self.replace(self.tax, 'href="https://www.gov.uk/income-tax"',

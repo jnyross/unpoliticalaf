@@ -18,16 +18,16 @@ URLS = {
 
 COPY = {
     "income": "Income Tax applies to taxable income. Not all income is taxable.",
-    "ni": "National Insurance is a separate system linked to employment and self-employment. Contributions help you qualify for certain benefits and the State Pension; they are not a personal savings pot.",
+    "ni": "National Insurance has its own rules for work and self-employment. Contributions help you qualify for certain benefits and the State Pension. They are not a personal savings pot.",
     "vat": "VAT is a tax in many purchase prices, not all. Goods and services can have different rates, be zero-rated or be exempt.",
     "ct": "Corporation Tax applies to taxable company or association profits.",
     "allowance": "The Personal Allowance applies to Income Tax, not every tax. You can owe no Income Tax and still pay VAT through purchases.",
     "ni-rules": "National Insurance has its own rules and payment periods. Being below the annual Income Tax allowance does not by itself mean you owe no National Insurance.",
     "scotland": "Scotland sets Income Tax rates and bands on non-savings, non-dividend income of Scottish taxpayers. Those powers exclude the Personal Allowance; HMRC collects the tax.",
     "wales": "Wales also has devolved Income Tax rates. Where you live matters; HMRC collects the tax. Savings and dividends follow UK rules, outside these devolved rate powers.",
-    "paye": "Employers normally deduct Income Tax and National Insurance from employees' pay and send the money to HMRC. They can also owe employer National Insurance.",
+    "paye": "Employers normally deduct Income Tax from employees' pay. They also deduct National Insurance. They send this money to HMRC. They can also owe employer National Insurance.",
     "net-vat": "VAT-registered businesses normally pay HMRC the difference between VAT charged to customers and VAT paid to suppliers. They do not send the whole purchase price as VAT.",
-    "burden": "Who sends the tax is not the same question as who bears its cost. These collection rules do not tell us who ultimately bears the cost.",
+    "burden": "Who sends the tax is not the same question as who bears its cost. These rules explain how tax is sent. They do not tell us who bears the cost.",
     "age": "Current official guidance retrieved 30 October 2026. No publication date is established. No rates are used here. This guidance is not the 2023/24 distribution data. The next guidance update is unknown.",
 }
 
@@ -95,7 +95,7 @@ def payer_basics():
         _claim("net-vat", _link("vat", "VAT: business responsibilities", "#your-responsibilities-as-a-vat-registered-business")),
         _claim("burden"),
         '<details><summary>What these sources can tell us</summary>',
-        '<p>This is collection guidance, not a model of tax costs. Read the separately sourced household analysis for its assumptions and limits.</p>',
+        '<p>These sources explain how tax is sent. They do not model tax costs. Read the household analysis for the model\'s assumptions and limits. It has its own sources.</p>',
         _claim("age"),
         '</details>',
         '</aside>',
