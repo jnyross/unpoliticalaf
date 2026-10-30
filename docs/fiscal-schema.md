@@ -53,7 +53,8 @@ The retained source-cell formulas are preserved independently of source cached
 values. These eight extracts contain no Excel formulas; the historical residual
 derivations instead appear as text at E6 and N6 and in Contents D49/D58. The
 ledger names those derivations and operands. It does not manufacture Excel
-formulas. The source's historical “other” residual is explicitly distinguished
+formulas. The E6/N6 source derivation text is retained with the ledger's evidence.
+The source's historical “other” residual is explicitly distinguished
 from an independent accuracy check.
 
 PESA status is outturn through 2025-26 (4_1 B3), with subsequent aggregate years
@@ -75,7 +76,9 @@ Contents D51/D52/D53/D56/D57 notes and D31/D64 period/geography notes. The fixed
 displayed decades end at 2015-16. D51:D56's 2022-23 extrapolations are explicitly
 estimates and do not extend the displayed decades as observed data. Historical
 reconciliation records preserve changing geographic coverage rather than
-assigning modern UK boundaries to all years.
+assigning modern UK boundaries to all years. The 2022-23 function reconciliation
+explicitly includes extrapolated components alongside the joined historical
+series; its status is not uniformly observed or historical outturn.
 
 Shares use same-period TES as denominator; changes use the same series, unit,
 price basis and geography at two periods. They use the published operand values,
@@ -107,24 +110,32 @@ latest-year and selected historical residuals; the download contains all records
 
 `fiscal_contract.py` is the declarative semantic schema. `fiscal_schema.py`
 constructs metadata and the ledger from readable, hashed extracts.
-`check_fiscal.py` does not import the fiscal builder, renderer or audit reader:
+`check_fiscal.py` does not call the producer's metadata, reconciliation,
+partition or context constructors, renderer or audit reader:
 it reopens retained raw workbooks with openpyxl, checks source identities and
-labels/units/periods, independently recomputes numeric transformations, derived
-arithmetic and residuals, and compares every retained raw operand. The checker
-shares declarative schema/status policy with the producer; this is not a claim
-of independent model review or fiscal interpretation approval.
+labels/units/periods, separately derives metadata and reconciliation operands
+(including raw-label and period lookups), recomputes numeric transformations,
+derived arithmetic and residuals, and compares every retained raw operand.
+The checker shares declarative series/status/formula policy with the producer;
+this is not independent model review or fiscal interpretation approval.
 
 The existing separate ZIP/XML exporter versus openpyxl audit check remains in
 `make verify`. Fiscal corruption tests additionally cover equal-valued wrong
 cells, units/scales/scopes/status/periods, missing required values, duplicate and
 missing categories, overlapping totals, broken raw identities, changed budgets,
 wrong derived operand order, fabricated missing values and changed source metadata.
+Producer-mutation tests also prove that wrong producer metadata and an
+equal-valued cash/real ledger-cell substitution fail separate checker expectations.
 
-The bounded worker did not execute programs, install packages, run tests, change
-Git, access credentials or network, or operate deployment. Generated
-`data/spending.json` and `site/` are deliberately left to the existing controller.
-It must regenerate them and run the unchanged `make setup build verify smoke`
-pipeline in credential-free Boat, obtain independent product/fiscal review on
-the exact candidate, and verify the deployed bytes at
-https://unpoliticalaf.vercel.app. No check result, human review, deployment,
-source-publication date, freshness history or rubric score is invented here.
+The original worker timed out before executing checks; its partial work and
+failure evidence are preserved. The bounded integration repair moves enrichment
+from the aggregate-list parser to the completed dataset, separates verifier
+expectations, and regenerates `data/spending.json` and `site/` in credential-free
+Boat. Exact-seed execution receipts belong in the private recovery handoff,
+not in public output. Product programs and tests are never run on the host.
+
+The existing controller must still obtain independent product/fiscal review,
+repeat its exact-candidate gates, and verify the deployed bytes at
+https://unpoliticalaf.vercel.app. Passing seed checks cannot close #20 or #4.
+Human reviews, source-publication approval, a year of freshness history and
+rubric scores remain unobserved until their owning gates supply evidence.

@@ -8,6 +8,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -16,7 +17,7 @@ from check_audit import validate
 from build_data import grid, pesa_context, aggregates
 from check_site import cells, independent_data_checks
 from check_fiscal import RawReader, validate_fiscal, check_reports
-from fiscal_schema import missingness, numeric, partition
+from fiscal_schema import missingness, numeric, partition, enrich, reconciliation_specs
 import build_site
 
 
@@ -227,6 +228,29 @@ class FiscalBoundaryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "semantic cell mismatch"):
             self.check()
 
+    def test_producer_metadata_bug_cannot_supply_checker_expectations(self):
+        import fiscal_schema
+        original = fiscal_schema.metadata
+        def wrong(contract, read):
+            return dict(original(contract, read), scale=1000)
+        with patch("fiscal_schema.metadata", side_effect=wrong):
+            enrich(self.data)
+            with self.assertRaisesRegex(ValueError, "unit/status/scope/period mismatch"):
+                self.check()
+
+    def test_producer_equal_valued_wrong_ledger_cell_is_independently_rejected(self):
+        specs = list(reconciliation_specs())
+        index = next(i for i, s in enumerate(specs) if s[0] == "functions/2025-26")
+        name, year, unit, terms, exclusions, basis = specs[index]
+        terms = [("4_3!X20" if ref == "4_2!X20" else ref, coef, quantum)
+                 for ref, coef, quantum in terms]
+        self.assertEqual(self.read("4_2!X20")["value"], self.read("4_3!X20")["value"])
+        specs[index] = name, year, unit, terms, exclusions, basis
+        with patch("fiscal_schema.reconciliation_specs", return_value=iter(specs)):
+            enrich(self.data)
+            with self.assertRaisesRegex(ValueError, "Wrong or overlapping reconciliation source cells"):
+                self.check()
+
     def test_wrong_unit_scale_scope_status_and_period_are_rejected(self):
         key = next(a for a in self.data["functions"] if a["id"] == "health")["series"]["2025-26"]["nominal"]["value_id"]
         for field, wrong in (("unit", "GBP million"), ("scale", 1000), ("scope", "TME"),
@@ -348,6 +372,9 @@ class FiscalBoundaryTests(unittest.TestCase):
             self.assertIn("Public finances since 1900!" + cell, debt["status_refs"])
         self.assertEqual(max(self.data["history"]["areas"][0]["values"]), "2015-16")
         self.assertEqual(self.data["status_definitions"]["obr_extrapolated"]["kind"], "estimate")
+        report = next(r for r in self.data["reconciliations"] if r["id"] == "history-functions/2022-23")
+        self.assertIn("obr_extrapolated", report["statuses"])
+        self.assertIn("Spending (per cent of GDP)!N6", report["status_refs"])
 
     def test_retained_missing_value_and_raw_unit_cannot_be_fabricated(self):
         cell = self.data["source_cells"]["Public finances since 1900!E82"]

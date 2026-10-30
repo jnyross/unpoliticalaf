@@ -214,8 +214,12 @@ def report_context(name, period):
         geography = ("Great Britain" if period < "1800-01" else "historical boundary uncertain" if period == "1800-01"
                      else "Great Britain and Ireland" if period < "1922-23" else "UK")
         refs = ["Contents!" + c for c in ("D31", "D48", "D49", "D50", "D51", "D52", "D53", "D56", "D57", "D58", "D64")]
+        refs.append("Spending (per cent of GDP)!" + ("E6" if name.startswith("history-current/") else "N6"))
+        statuses = ["obr_joined_historical"]
+        if name.startswith("history-functions/") and period == "2022-23":
+            statuses.append("obr_extrapolated")
         return {"formula": "signed_sum", "geography": geography,
-                "statuses": ["obr_joined_historical"], "status_refs": refs}
+                "statuses": statuses, "status_refs": refs}
     if name.startswith("OBR-"):
         return {"formula": "signed_sum", "geography": "UK" if period >= "1922-23" else "historical UK incl. Ireland",
                 "statuses": ["obr_databank_forecast" if period > BASE else "obr_databank_historical"],
