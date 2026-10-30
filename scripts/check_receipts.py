@@ -99,9 +99,9 @@ def context(tid, column, start):
     geography = ("Great Britain" if start < 1800 else "Uncertain: Great Britain or Great Britain and Ireland" if start == 1800 else "Great Britain and Ireland" if start <= 1921 else "UK") if historical else "UK"
     if "receipts" in tid:
         basis = "cash" if historical and start <= 1998 else "annual_accrual"
-    elif historical and column == "C":
+    elif historical and column in ("C", "D"):
         basis = "historical_basis_uncertain"
-    elif (historical and column == "D") or (not historical and column == "X"):
+    elif not historical and column == "X":
         basis = "cash_stock"
     elif (historical and column in ("E", "F")) or (not historical and column in ("AE", "AF")):
         basis = "march_centred" if column in ("F", "AF") else "financial_year"
@@ -109,6 +109,8 @@ def context(tid, column, start):
         basis = "annual_accrual"
     if role(tid, column) == "gdp_denominator":
         scope = "whole_economy"
+    elif historical and "aggregates" in tid and column == "D":
+        scope = "historical_scope_uncertain"
     elif historical and "aggregates" in tid and column == "C" and start < 1900:
         scope = "central_government_proxy"
     elif historical and "receipts" in tid and column in ("U", "V"):
@@ -269,6 +271,27 @@ def check_operands(actual, expected, location):
                 f"{location}: wrong, duplicate or overlapping formula operand")
 
 
+def check_historical_debt(record, raw, start):
+    """Limit inference to the historical source note, outside context mapping.
+
+    D63 names two suppliers only. Neither the PSND label nor the different
+    workbook's cash definition establishes historical accounting or scope.
+    This guard must still reject unsupported labels if context() is wrong too.
+    It is a conservative evidence boundary, not independent fiscal approval.
+    """
+    note = raw.cell("obr_hist", "Contents!D63")[1]
+    require(note == "2 PSND sourced from Bank of England (2017) from 1700-01 to 1899-00, then from OBR (2023) for 1900-01 onwards. ",
+            "Historical debt source regime note changed")
+    require(record["basis"] == "historical_basis_uncertain" and
+            record["scope"] == "historical_scope_uncertain",
+            "Historical debt basis/scope unsupported by Contents!D63")
+    # Read the two supplier names from the reopened historical note, rather
+    # than accepting a producer-supplied or rehashed provenance assignment.
+    expected = note.split(" sourced from ", 1)[1].split(" from ", 1)[0] if start < 1900 else note.split("then from ", 1)[1].split(" for ", 1)[0]
+    require(record["source_regime"] == expected,
+            "Historical debt source regime disagrees with Contents!D63")
+
+
 def validate(data=None, root=ROOT):
     root = Path(root)
     require(digest(root / "data/sources.json") == CATALOGUE_HASH, "Source catalogue hash changed")
@@ -316,12 +339,18 @@ def validate(data=None, root=ROOT):
                     ref, year_ref = f"{sheet}!{col}{row}", f"{sheet}!{year_col}{row}"
                     require(raw.cell(sid, year_ref)[1] == year, f"{tid}: source fiscal-year alignment changed")
                     record = series["values"][year]
-                    fields(record, {"v", "ref", "year_ref", "kind", "raw", "format", "source_formula", "status", "basis", "geography", "scope"}, f"{tid}/{col}/{year}")
+                    debt_history = tid.startswith("historical_aggregates") and col == "D"
+                    expected_fields = {"v", "ref", "year_ref", "kind", "raw", "format", "source_formula", "status", "basis", "geography", "scope"}
+                    if debt_history:
+                        expected_fields.add("source_regime")
+                    fields(record, expected_fields, f"{tid}/{col}/{year}")
                     require(record["ref"] == ref and record["year_ref"] == year_ref, f"{tid}/{col}/{year}: wrong source/year cell")
                     value = raw.check_cell({k: record[k] for k in ("kind", "raw", "format", "source_formula")}, sid, ref)
                     same_number(record["v"], value, ref)
                     for key, expected in context(tid, col, start).items():
                         require(record[key] == expected, f"{ref}: wrong {key}")
+                    if debt_history:
+                        check_historical_debt(record, raw, start)
                     count += 1
             specs = derived_specs(tid.startswith("current")) if "receipts" in tid else {}
             fields(table["derived"], specs, f"{tid} derived")
@@ -353,10 +382,11 @@ LIMITATIONS = [
     "Other taxes are an explicit residual after named taxes; retained notes do not separately establish refund classification within National Accounts taxes.",
     "Historical receipts are cash through 1998-99 and accruals thereafter; do not splice vintages or compare across this break without a bridge.",
     "Historical central-government components can overlap licence fees before 1999-00 despite the U6 derivation; unresolved differences are retained, not assigned a rounding tolerance.",
-    "Debt is a cash stock at end March, borrowing an annual accrual flow. Changes in debt need not equal borrowing.",
-    "Debt shares use March-centred GDP; separately sourced published shares need not reproduce cash-stock ratios exactly. No discrepancy error bound is established.",
+    "In the October 2026 databank debt is a cash stock at end March, borrowing an annual accrual flow. Changes in debt need not equal borrowing.",
+    "Debt shares use March-centred GDP; separately sourced published shares need not reproduce currency-unit stock ratios exactly. No discrepancy error bound is established.",
     "Historical actual/estimate status is uncertain. May 2023 series are not October 2026 forecasts; no next release date is established here.",
     "Historical borrowing uses a central-government proxy before 1900-01; the retained notes do not establish its accounting basis, so historical borrowing basis remains uncertain.",
+    "Historical debt remains a stock with uncertain accounting basis and scope in both source regimes: Bank of England (2017) through 1899-00 and OBR (2023) from 1900-01, as named in Contents!D63. The October 2026 glossary is not evidence for this historical series.",
     "The historical geography note overlaps at 1800-01; that year is marked uncertain rather than choosing one boundary.",
 ]
 
@@ -404,8 +434,8 @@ def check_reconciliations(raw, tid, table, spec):
         if missing:
             budget, outcome = None, "not_testable_missing"
         else:
-            # IEEE-754 storage arithmetic allowance only. Decimal display
-            # formats cannot justify a fiscal/source error tolerance.
+            # Fixed empirical allowance; not derived from source summation
+            # order, display precision or an established source error bound.
             budget = 4 * sum(abs(o["coefficient"]) * math.ulp(float(raw.value(sid, o["ref"]))) for o in ops)
             if abs(residual) <= budget:
                 outcome = "reconciled_storage_precision"
@@ -415,9 +445,9 @@ def check_reconciliations(raw, tid, table, spec):
         same_number(report["residual"], residual, location + " residual")
         same_number(report["budget"], budget, location + " storage arithmetic allowance")
         require(report["outcome"] == outcome, f"{location}: reconciliation outcome changed")
-        explanation = ("Joined historical source identity; differences outside storage arithmetic allowance remain unresolved."
+        explanation = ("Joined historical source identity; differences outside the chosen empirical storage arithmetic allowance remain unresolved."
                        if tid.startswith("historical") else
-                       "Storage arithmetic allowance only; displayed formats are not source error bounds.")
+                       "Chosen empirical storage arithmetic allowance only; not a derived source error bound. Displayed formats are not source error bounds.")
         require(report["explanation"] == explanation, f"{location}: reconciliation explanation changed")
     require(observed == expected, f"{tid}: reconciliation report omitted")
 

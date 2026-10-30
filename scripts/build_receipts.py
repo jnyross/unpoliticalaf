@@ -18,10 +18,11 @@ LIMITATIONS = [
     "Other taxes are an explicit residual after named taxes; retained notes do not separately establish refund classification within National Accounts taxes.",
     "Historical receipts are cash through 1998-99 and accruals thereafter; do not splice vintages or compare across this break without a bridge.",
     "Historical central-government components can overlap licence fees before 1999-00 despite the U6 derivation; unresolved differences are retained, not assigned a rounding tolerance.",
-    "Debt is a cash stock at end March, borrowing an annual accrual flow. Changes in debt need not equal borrowing.",
-    "Debt shares use March-centred GDP; separately sourced published shares need not reproduce cash-stock ratios exactly. No discrepancy error bound is established.",
+    "In the October 2026 databank debt is a cash stock at end March, borrowing an annual accrual flow. Changes in debt need not equal borrowing.",
+    "Debt shares use March-centred GDP; separately sourced published shares need not reproduce currency-unit stock ratios exactly. No discrepancy error bound is established.",
     "Historical actual/estimate status is uncertain. May 2023 series are not October 2026 forecasts; no next release date is established here.",
     "Historical borrowing uses a central-government proxy before 1900-01; the retained notes do not establish its accounting basis, so historical borrowing basis remains uncertain.",
+    "Historical debt remains a stock with uncertain accounting basis and scope in both source regimes: Bank of England (2017) through 1899-00 and OBR (2023) from 1900-01, as named in Contents!D63. The October 2026 glossary is not evidence for this historical series.",
     "The historical geography note overlaps at 1800-01; that year is marked uncertain rather than choosing one boundary.",
 ]
 
@@ -75,7 +76,7 @@ def context(historical, year, role, column):
                  "Great Britain and Ireland" if year < "1922-23" else "UK") if historical else "UK"
     if historical and year == "1800-01":
         geography = "Uncertain: Great Britain or Great Britain and Ireland"
-    if historical and role == "borrowing_flow":
+    if historical and role in ("borrowing_flow", "debt_stock"):
         basis = "historical_basis_uncertain"
     elif role == "debt_stock":
         basis = "cash_stock"
@@ -89,6 +90,8 @@ def context(historical, year, role, column):
 def scope(historical, year, role, column, receipts):
     if role == "gdp_denominator":
         return "whole_economy"
+    if historical and role == "debt_stock":
+        return "historical_scope_uncertain"
     if historical and role == "borrowing_flow" and year < "1900-01":
         return "central_government_proxy"
     if historical and receipts and column in ("U", "V"):
@@ -182,8 +185,9 @@ def arithmetic(table, terms, year):
     if missing:
         return None, None, missing
     residual = math.fsum(v["v"] * coefficient for v, coefficient in values)
-    # IEEE-754 storage/arithmetic allowance. Never use display formats as an
-    # error bound, or invent a budget to make an incompatible vintage reconcile.
+    # Chosen empirical binary64 storage/arithmetic allowance, not a bound
+    # derived from the source's summation order or a fiscal/source tolerance.
+    # Keep the factor fixed; never widen it to make an identity reconcile.
     budget = 4 * sum(abs(coefficient) * math.ulp(v["v"]) for v, coefficient in values)
     return residual, budget, []
 
@@ -231,6 +235,11 @@ def build_receipts(root=ROOT):
                 series["values"][year] = dict(cell, v=numeric(cell), ref=sheet + "!" + column + str(row),
                     year_ref=sheet + "!" + year_column + str(row), status=status, basis=basis, geography=geography,
                     scope=scope(historical, year, role, column, receipts))
+                if historical and role == "debt_stock":
+                    # D63 establishes this provenance split, not a basis or
+                    # scope bridge. Do not borrow the current glossary.
+                    series["values"][year]["source_regime"] = (
+                        "Bank of England (2017)" if year < "1900-01" else "OBR (2023)")
             table["series"][column] = series
         if receipts:
             for name, terms in derived_specs(historical).items():
@@ -253,8 +262,8 @@ def build_receipts(root=ROOT):
                 table["reconciliations"].append({
                     "id": name, "year": year, "operands": operands(table, terms, year),
                     "residual": residual, "budget": budget, "outcome": outcome, "missing_operands": missing,
-                    "explanation": ("Joined historical source identity; differences outside storage arithmetic allowance remain unresolved."
-                                    if historical else "Storage arithmetic allowance only; displayed formats are not source error bounds."),
+                    "explanation": ("Joined historical source identity; differences outside the chosen empirical storage arithmetic allowance remain unresolved."
+                                    if historical else "Chosen empirical storage arithmetic allowance only; not a derived source error bound. Displayed formats are not source error bounds."),
                 })
         data["tables"][kind] = table
     return data

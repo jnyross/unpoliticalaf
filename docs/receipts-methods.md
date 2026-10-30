@@ -3,9 +3,9 @@
 The receipt data is a separate, private working dataset. The controller's
 `make build` creates `data/receipts.json`; `make verify` independently checks
 it against the pinned workbooks and compares two regenerated copies byte for
-byte. Workers edit source only. No generated receipt file, passing check,
-independent fiscal approval or deployed receipt feature is claimed by these
-source edits. The four public files and spending data contract remain unchanged.
+byte. Generated private data and preparation checks do not establish
+independent fiscal approval or a deployed receipt feature. The four public
+files and spending data contract remain unchanged.
 Receipt presentation belongs to the separate renderer ticket.
 
 ## Source identity and value records
@@ -96,8 +96,11 @@ May 2023 history. No cross-vintage subtraction is asserted.
 Each report records the exact signed operands, independently recomputed
 residual, missing operands and outcome. For a complete identity the budget is
 four times the sum of each operand's binary64 spacing (`math.ulp`), weighted
-by the absolute coefficient. This covers storage/arithmetic effects only; it
-is not a fiscal/source error bound. The one-decimal Excel display format is
+by the absolute coefficient. The factor four is a chosen empirical
+storage-arithmetic allowance, not a bound derived from the source's summation
+order or intermediate rounding. It is not a fiscal/source error bound or a
+guarantee that every source computation fits. The allowance is unchanged and
+fails closed for current identities. The one-decimal Excel display format is
 not used as an error allowance. A current identity outside that budget stops
 the build.
 
@@ -107,7 +110,11 @@ The source definitions `U6 = v-b-g-p-t` and `X6 = y-w-v` make the
 central/public closures largely definitional too. Neither these residual-based
 closures nor a small arithmetic residual independently validates fiscal accuracy
 or classification. An incomplete sum is `not_testable_missing`, never zero or a
-pass. Differences
+pass. Literal dashes remain missing even when a source subtotal suggests nil:
+for example, the 2022-23 business identity has dashes at K329/L329/N329 and
+is not testable, while the derived other-tax group is null if any of its
+C/D/Q/I operands is a dash. This reflects missing operands, not an absent
+published total. No dash is substituted with zero. Differences
 beyond storage arithmetic remain `unresolved_source_difference`; no convenient
 source tolerance is invented.
 
@@ -129,10 +136,18 @@ rather than silently choosing one geography.
 
 ## Debt stock and GDP denominators
 
-Debt is a cash stock at end March; borrowing is an annual accrual flow in the
-current databank (`Glossary!C11,C14:C15`). Changes in debt need not equal
-borrowing. No debt accumulation formula is asserted. Historic borrowing retains
-the more conservative accounting status described above.
+In the October 2026 databank debt is a cash stock at end March and borrowing
+is an annual accrual flow (`Glossary!C11,C14:C15`). That glossary does not
+establish the basis or scope of the May 2023 historical debt series.
+Historical `Contents!D63` names Bank of England (2017) through 1899-00 and
+OBR (2023) from 1900-01. Each historical debt value records that supplier as
+`source_regime`, bound to the retained D63 note. Both regimes retain the
+`debt_stock` role but use `historical_basis_uncertain` and
+`historical_scope_uncertain`. Even the later PSND heading does not establish
+compatibility with the October 2026 definition. No scope or accounting bridge
+is inferred at 1900-01. Historical borrowing retains its distinct proxy scope
+and uncertain basis described above. Changes in debt need not equal borrowing;
+no debt accumulation formula is asserted.
 
 Published debt GDP shares are retained separately. Debt uses March-centred GDP
 (current AF, historical F), whereas annual borrowing uses financial-year GDP
@@ -150,11 +165,14 @@ their hashes separately. It does not import the producer, audit exporter or
 producer mapping. It reopens and binds all seven table selections, fiscal
 years, labels/codes, units, declared roles, statuses, accounting bases,
 geographies, scopes, ordered operands, missingness, residuals and budgets.
-The checker transcribes the producer's classification and context rules,
+The checker transcribes most of the producer's classification and context rules,
 including VAT C+D, corporation tax U+V, residual other taxes and AG-AH non-tax.
 It can detect a product that departs from those rules; it does not independently
 justify the rules themselves. Fiscal review must assess those choices against
-the pinned source notes and populated calculations.
+the pinned source notes and populated calculations. A separate historical-debt
+guard reopens D63 and restricts inference to its two suppliers: unsupported
+basis/scope labels fail even if the general producer and checker context rules
+make the same mistake. This conservative guard is not fiscal approval.
 Unknown fields, duplicate JSON keys, omissions and duplicate reports fail.
 The existing receipt audit gate continues checking the full TSV evidence.
 

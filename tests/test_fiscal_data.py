@@ -662,6 +662,77 @@ class ReceiptProductBoundaryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "limitations changed"):
             self.check()
 
+    def test_historical_debt_source_boundary_does_not_establish_basis_or_scope(self):
+        # Assertions come from the reopened historical note, not producer or
+        # checker context helpers. No current glossary is attached here.
+        note = self.reader.cell("obr_hist", "Contents!D63")[1]
+        self.assertEqual(note, "2 PSND sourced from Bank of England (2017) from 1700-01 to 1899-00, then from OBR (2023) for 1900-01 onwards. ")
+        for tid in ("historical_aggregates_cash", "historical_aggregates_gdp"):
+            self.assertNotIn("Glossary!C14", self.table(tid)["notes"])
+            self.assertEqual(self.table(tid)["series"]["D"]["role"], "debt_stock")
+            for year, supplier in (("1700-01", "Bank of England (2017)"),
+                                   ("1899-00", "Bank of England (2017)"),
+                                   ("1900-01", "OBR (2023)"), ("2022-23", "OBR (2023)")):
+                record = self.leaf("D", year, tid)
+                self.assertEqual((record["basis"], record["scope"], record["source_regime"]),
+                                 ("historical_basis_uncertain", "historical_scope_uncertain", supplier))
+
+    def test_reencoded_historical_debt_false_semantics_are_rejected(self):
+        for tid in ("historical_aggregates_cash", "historical_aggregates_gdp"):
+            for year in ("1899-00", "1900-01"):
+                for field, wrong in (("basis", "cash_stock"), ("scope", "public_sector"),
+                                     ("scope", "central_government_proxy"),
+                                     ("source_regime", "October 2026 databank")):
+                    with self.subTest(table=tid, year=year, field=field, wrong=wrong):
+                        self.data = copy.deepcopy(self.original)
+                        self.leaf("D", year, tid)[field] = wrong
+                        # A fresh self-consistent serialization cannot confer
+                        # evidence on an unsupported semantic assignment.
+                        self.data = json.loads(json.dumps(self.data))
+                        with self.assertRaises(ValueError):
+                            self.check()
+
+    def test_same_wrong_producer_and_checker_context_cannot_approve_historical_debt(self):
+        import build_receipts as producer
+        producer_context, producer_scope = producer.context, producer.scope
+        checker_context = self.receipt_checker.context
+
+        def wrong_context(historical, year, role, column):
+            status, basis, geography = producer_context(historical, year, role, column)
+            return status, "cash_stock" if historical and role == "debt_stock" else basis, geography
+
+        def wrong_scope(historical, year, role, column, receipts):
+            return "public_sector" if historical and role == "debt_stock" else producer_scope(historical, year, role, column, receipts)
+
+        def agreeing_checker(tid, column, start):
+            result = checker_context(tid, column, start)
+            if tid.startswith("historical_aggregates") and column == "D":
+                result.update(basis="cash_stock", scope="public_sector")
+            return result
+
+        with patch.object(producer, "context", side_effect=wrong_context), patch.object(producer, "scope", side_effect=wrong_scope):
+            self.data = producer.build_receipts()
+        with patch.object(self.receipt_checker, "context", side_effect=agreeing_checker):
+            with self.assertRaisesRegex(ValueError, "Historical debt basis/scope unsupported"):
+                self.check()
+
+    def test_rewritten_historical_note_or_shifted_supplier_boundary_fails(self):
+        self.table("historical_aggregates_cash")["notes"]["Contents!D63"]["raw"] += " Cash public-sector scope."
+        with self.assertRaisesRegex(ValueError, "raw text/missingness differs"):
+            self.check()
+        for year, wrong in (("1899-00", "OBR (2023)"), ("1900-01", "Bank of England (2017)")):
+            self.data = copy.deepcopy(self.original)
+            self.leaf("D", year, "historical_aggregates_cash")["source_regime"] = wrong
+            with self.assertRaisesRegex(ValueError, "source regime disagrees"):
+                self.check()
+
+    def test_empirical_allowance_cannot_claim_a_derived_source_error_bound(self):
+        report = self.table()["reconciliations"][0]
+        self.assertIn("Chosen empirical", report["explanation"])
+        report["explanation"] = "Derived source error bound; independent fiscal accuracy established."
+        with self.assertRaisesRegex(ValueError, "explanation changed"):
+            self.check()
+
     def test_duplicate_json_keys_are_rejected(self):
         with self.assertRaisesRegex(ValueError, "Duplicate JSON key"):
             json.loads('{"v": 0, "v": 1}', object_pairs_hook=self.receipt_checker.unique_object)
