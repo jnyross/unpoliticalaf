@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "retrieved_date_utc": "2026-10-30",
+  "sources": [
+    {
+      "url": "https://www.gov.uk/income-tax",
+      "bytes": 86695,
+      "sha256": "0d2891b45e0cb8f2776ba06d62e112c92e5bb2479c06f2e4c15bd39b42d99c39",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-income-tax.html.json",
+      "stored_bytes": 92743,
+      "stored_sha256": "806eb118ad06aa332b60838e1f67d6882e8ed31a9e7c730570b358a3f46e123a",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "url": "https://www.gov.uk/national-insurance",
+      "bytes": 95069,
+      "sha256": "54c01cdf6a363b583e16e6a13e11c1a0cbf9812b88ca5914f6291bf1f91f42ee",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-national-insurance.html.json",
+      "stored_bytes": 101712,
+      "stored_sha256": "0c44195957f6d7f3e9281ff5764f3577000aaee62f7578bfc3150d01ba193b1d",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "url": "https://www.gov.uk/paye-for-employers",
+      "bytes": 101690,
+      "sha256": "e51a38793ec86ec99d487ff1999380b7abb06511edd01a436cb33eb14bef8c0e",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-paye-remitter.html.json",
+      "stored_bytes": 108510,
+      "stored_sha256": "1b9a98597cba8c2060e0ae2dcc113e24bb6e66f92581f079fd134ac29520e8be",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "url": "https://www.gov.scot/policies/taxes/income-tax/",
+      "bytes": 32915,
+      "sha256": "42617815a40e6b3014ed06b2db8aae082b4229c7055b3fd0216d9269b4705229",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-scottish-powers.html.json",
+      "stored_bytes": 34741,
+      "stored_sha256": "4bae9e3f2115c3b09659b2c9a9b17c745f7127cfbe2b1055b957101e5823bbcb",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "url": "https://www.gov.uk/how-vat-works",
+      "bytes": 87451,
+      "sha256": "6fb25ac7e89c3489d0e48128c172db28a28f66e02ef641ce56bb9a19148d4156",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-vat.html.json",
+      "stored_bytes": 93798,
+      "stored_sha256": "6ecad5ab8a92e05da0d61b5e7f1f01878491e0a26f7d5fac08218790d770cb5c",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "url": "https://www.gov.uk/welsh-income-tax",
+      "bytes": 72627,
+      "sha256": "10ff63cd8a504459a7c5b6611759ba9a2ab86f9eefabfb76732165ed276664ff",
+      "publication_or_update_date": null,
+      "format_status": "unchanged original official HTTP response body",
+      "date_note": "Living guidance; no visible publication date established. Retrieved 2026-10-30. Do not adopt current rates for 2023/24.",
+      "file": "data/tax-basics/raw/basics-welsh-income-tax.html.json",
+      "stored_bytes": 77943,
+      "stored_sha256": "d1e8632fb81204a8ff03a72ab376c885eae62d50f0bbf295bc1e5db01b930279",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    },
+    {
+      "file": "data/tax-basics/raw/basics-corporation-tax.html.json",
+      "url": "https://www.gov.uk/corporation-tax",
+      "bytes": 79009,
+      "sha256": "fa9276683b8e1ac2a3ef3fc6bf6f0c39267bdb0a0caef763bc490f5eb7c30dc8",
+      "publication_or_update_date": null,
+      "date_note": "Living guidance retrieved2026-10-30; no publication date established; use no current rates.",
+      "format_status": "Complete unchanged original official HTTP response body stored losslessly.",
+      "stored_bytes": 84497,
+      "stored_sha256": "19041a45f1e13e84d4d3f156a8d63fd57029dbd76d0e33f35fdd7eb86cf5e37a",
+      "storage": "Lossless original_response UTF8 in ASCII JSON; original bytes unchanged when decoded."
+    }
+  ]
+}

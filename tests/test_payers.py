@@ -131,6 +131,62 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_data(lambda d: d["source_cells"]["ons:Table 2b!C45"].update(value=0))
         self.assert_bad_data(lambda d: d["values"][0].update(value=None))
 
+    def test_plain_language_rewrite_keeps_full_causal_limits_and_negations(self):
+        document = check_payers.Page(self.page)
+        limits = [n for n in document.nodes if "data-payer-limit" in n["attrs"] and
+                  n["attrs"]["data-payer-limit"] != "suppressed"]
+        self.assertEqual({n["attrs"]["data-payer-limit"] for n in limits},
+                         {"deferred", "low-income", "model-costs", "separate-views"})
+        self.assertEqual(len(limits), 4)
+        for old, new in (
+            ("These payments need not match a typical year's tax bill.", "These payments match a typical year's tax bill."),
+            ("They can use savings or borrowing.", "They cannot use savings or borrowing."),
+            ("This is an assumption. It is not a settled fact.", "This is a settled fact."),
+            ("The actual cost can fall on producers, workers, buyers and others.",
+             "The actual cost can fall on buyers alone."),
+            ("ONS assumes that consumers bear the full cost of indirect taxes.",
+             "ONS assumes that consumers bear the full cost of all taxes."),
+            ("It must not be mapped wholly to either ONS group.", "It must be mapped wholly to either ONS group."),
+            ("They cannot give a top-1% all-tax burden.", "They give a top-1% all-tax burden."),
+            ("Do not take an average across the panels.", "Take an average across the panels."),
+            ("Do not match them to tax receipts.", "Match them to tax receipts."),
+        ):
+            with self.subTest(negation=old):
+                self.assertIn(old, self.page)
+                changed = self.page.replace(old, new, 1)
+                with self.assertRaisesRegex(ValueError, "Changed visible payer limit"):
+                    check_payers.validate_page(ROOT, self.data, changed)
+        self.assert_bad_page('data-payer-limit="model-costs"', 'data-payer-limit="model-costs" hidden')
+        self.assert_bad_page('data-payer-limit="low-income"', 'data-payer-limit="model-costs"')
+
+    def test_suppression_warning_is_unique_visible_and_bound_to_ons_source_note(self):
+        marker = '<span data-payer-limit="suppressed">'
+        copy = "Some source parts are suppressed. They stay suppressed. We do not fill them in."
+        warning = marker + copy + '</span>'
+        self.assertEqual(self.page.count(warning), 1)
+        document = check_payers.Page(self.page)
+        nodes = [n for n in document.nodes if n["attrs"].get("data-payer-limit") == "suppressed"]
+        self.assertEqual(len(nodes), 1)
+        self.assertEqual(nodes[0]["tag"], "span")
+        self.assertEqual(nodes[0]["parents"][-1]["attrs"].get("id"), "ons-source-note")
+        mutations = (
+            warning.replace("We do not fill them in.", "We fill them in."),
+            "",
+            warning + warning,
+            warning.replace(marker, marker.replace('>', ' hidden>', 1)),
+            warning.replace(marker, marker.replace('>', ' aria-hidden="true">', 1)),
+            warning.replace(marker, marker.replace('>', ' style="display:none">', 1)),
+            warning.replace(marker, marker.replace('>', ' style="visibility:hidden">', 1)),
+        )
+        for replacement in mutations:
+            with self.subTest(replacement=replacement):
+                candidate = self.page.replace(warning, replacement, 1)
+                with self.assertRaisesRegex(ValueError, "suppression warning"):
+                    check_payers.validate_page(ROOT, self.data, candidate)
+        moved = self.page.replace(warning, '', 1).replace('</header>', warning + '</header>', 1)
+        with self.assertRaisesRegex(ValueError, "suppression warning"):
+            check_payers.validate_page(ROOT, self.data, moved)
+
     def test_period_status_population_denominator_and_overlap(self):
         for field, value in (("period", "2024/25"), ("status", "Forecast"),
                              ("population", "All UK residents"), ("unit", "£"),
@@ -336,9 +392,37 @@ class PayerTests(unittest.TestCase):
         tables = [n for n in nodes if n["tag"] == "table"]
         details = [n for n in nodes if n["tag"] == "details"]
         self.assertEqual(len(tables), 3)
-        self.assertEqual(len(details), 2)
-        self.assertTrue(all(source_section in n["parents"] for n in details))
-        self.assertTrue(all(nodes.index(t) < nodes.index(d) for t in tables for d in details))
+        self.assertEqual(len(details), 3)
+        source_details = [n for n in details if n["attrs"].get("id") in {"hmrc-sources", "ons-sources"}]
+        self.assertEqual(len(source_details), 2)
+        self.assertEqual({n["attrs"]["id"] for n in source_details}, {"hmrc-sources", "ons-sources"})
+        self.assertTrue(all(n["parents"][-1] is source_section for n in source_details))
+        self.assertTrue(all(nodes.index(t) < nodes.index(d) for t in tables for d in source_details))
+        burden = next(n for n in nodes if n["attrs"].get("id") == "burden")
+        basics = [n for n in nodes if n["attrs"].get("data-basics") == "payers"]
+        self.assertEqual(len(basics), 1)
+        basics = basics[0]
+        self.assertEqual(basics["tag"], "aside")
+        self.assertIs(basics["parents"][-1], burden)
+        basics_details = [n for n in details if basics in n["parents"]]
+        self.assertEqual(len(basics_details), 1)
+        self.assertIs(basics_details[0]["parents"][-1], basics)
+        self.assertTrue(all(nodes.index(t) < nodes.index(basics) for t in tables))
+        self.assertTrue(all(nodes.index(n) < nodes.index(d) for n in nodes
+                            if n is burden or burden in n["parents"] for d in source_details))
+        self.assertEqual(len([n for n in nodes if n["tag"] == "h2"]), 4)
+        collection_headings = [n for n in nodes if n["tag"] in {"h2", "h3"} and basics in n["parents"]]
+        self.assertEqual(len(collection_headings), 1)
+        self.assertEqual(collection_headings[0]["tag"], "h3")
+        self.assertEqual("".join(collection_headings[0]["text"]), "How is the tax collected?")
+        siblings = [n for n in nodes if n["parents"] and n["parents"][-1] is burden]
+        self.assertEqual(siblings[0]["tag"], "h2")
+        self.assertIs(siblings[1], basics)
+        self.assertTrue(" ".join("".join(siblings[2]["text"]).split()).startswith(
+            "ONS assigns final and intermediate indirect taxes fully to consumers in this model."))
+        self.assert_bad_page('<h3 id="payer-basics-title">How is the tax collected?</h3>',
+                             '<h2 id="payer-basics-title">How is the tax collected?</h2>')
+        self.assert_bad_page('data-basics="payers"', 'data-basics="unmarked"')
         bottom = next(n for n in nodes if n["attrs"].get("id") == "bottom-group")
         ons_bars = [n for n in nodes if n["attrs"].get("data-payer-bar", "").startswith("ons-")]
         self.assertTrue(all(nodes.index(bottom) < nodes.index(n) for n in ons_bars))
@@ -365,7 +449,7 @@ class PayerTests(unittest.TestCase):
             blocks.append(moved[start:end])
             moved = moved[:start] + moved[end:]
         moved = moved.replace('<section id="income-tax">', ''.join(blocks) + '<section id="income-tax">', 1)
-        with self.assertRaisesRegex(ValueError, "Source details moved"):
+        with self.assertRaisesRegex(ValueError, "Only the marked basics disclosure"):
             check_payers.validate_page(ROOT, self.data, moved)
         # Keep each adjacent source anchor intact, but move its note to the source section.
         for sid in ("hmrc", "ons"):
@@ -395,6 +479,86 @@ class PayerTests(unittest.TestCase):
             with self.subTest(target=target), patch.object(check_payers, "raw_cells", return_value=altered):
                 with self.assertRaisesRegex(ValueError, "Source label does not support"):
                     check_payers.validate_data(ROOT, self.data)
+
+    def test_period_and_year_basis_aliases_are_bound_to_original_cells(self):
+        from unittest.mock import patch
+        reader = check_payers.raw_cells(ROOT)
+        targets = (
+            ("hmrc", "2_4_Taxpayer_share_tax", "A27", "2024 to 2025"),
+            ("hmrc", "2_4_Taxpayer_share_tax", "A2", "Financial year"),
+            ("ons", "Table 8", "A1", reader("ons", "Table 8", "A1")["value"].replace("2023/24", "2024/25")),
+            ("ons", "Cover sheet", "A5", reader("ons", "Cover sheet", "A5")["value"].replace("financial year", "tax year")),
+        )
+        for sid, sheet, cell, wrong in targets:
+            def altered(source, tab, address):
+                raw = reader(source, tab, address)
+                if (source, tab, address) == (sid, sheet, cell):
+                    raw["value"] = wrong
+                return raw
+            with self.subTest(cell=cell, sheet=sheet), patch.object(check_payers, "raw_cells", return_value=altered):
+                with self.assertRaisesRegex(ValueError, "Source label does not support"):
+                    check_payers.validate_data(ROOT, self.data)
+        for sid in ("hmrc", "ons"):
+            for field, wrong in (("period", "2024/25"), ("year_basis", "Calendar year")):
+                def mutate(data):
+                    next(v for v in data["values"] if v["source_id"] == sid)[field] = wrong
+                with self.subTest(source=sid, field=field):
+                    self.assert_bad_data(mutate)
+        for value in self.data["values"]:
+            expected = ("hmrc:2_4_Taxpayer_share_tax!A2" if value["source_id"] == "hmrc"
+                        else "ons:Cover sheet!A5")
+            self.assertIn(expected, value["label_cells"])
+        # A different cell with identical text still has the wrong identity.
+        self.assert_bad_data(lambda d: d["source_cells"]["ons:Cover sheet!A5"].update(cell="A6"))
+        self.assert_bad_data(lambda d: d["values"][0]["label_cells"].__setitem__(-1, "hmrc:Contents!A5"))
+
+    def test_producer_refuses_an_unbound_hmrc_period_or_year_basis(self):
+        from unittest.mock import patch
+        original = payer_projection.ods_cells(ROOT / "data/payers/raw/hmrc-table24-july2026.ods")
+        for address, wrong in (("A27", "2024 to 2025"), ("A2", "Calendar year")):
+            changed = deepcopy(original)
+            changed[("2_4_Taxpayer_share_tax", address)]["value"] = wrong
+            with self.subTest(address=address), patch.object(payer_projection, "ods_cells", return_value=changed):
+                with self.assertRaisesRegex(ValueError, "HMRC source period/year basis changed"):
+                    payer_projection.project(ROOT)
+
+    def test_note_numbers_and_text_are_bound_independently_as_pairs(self):
+        from unittest.mock import patch
+        reader = check_payers.raw_cells(ROOT)
+        for label, text, number in (("A8", "B8", "note 5"), ("A9", "B9", "note 6"), ("A16", "B16", "note 13")):
+            reference = "ons:Notes!" + label
+            self.assertEqual(self.data["source_cells"][reference]["value"], number)
+            self.assert_bad_data(lambda d: d["source_cells"][reference].update(value="note 99"))
+            # Retain the same text but assign the label cell another identity.
+            self.assert_bad_data(lambda d: d["source_cells"][reference].update(cell="A4"))
+            for target, wrong in ((label, "note 99"), (text, "Wrong source note text")):
+                def altered(sid, sheet, address):
+                    raw = reader(sid, sheet, address)
+                    if (sid, sheet, address) == ("ons", "Notes", target):
+                        raw["value"] = wrong
+                    return raw
+                with self.subTest(cell=target), patch.object(check_payers, "raw_cells", return_value=altered):
+                    with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                        check_payers.validate_data(ROOT, self.data)
+        for marker in ("[note5]", "[note6]", "[note13]"):
+            def missing_reference(sid, sheet, address):
+                raw = reader(sid, sheet, address)
+                if (sid, sheet, address) == ("ons", "Table 8", "A2"):
+                    raw["value"] = raw["value"].replace(marker, "[note99]")
+                return raw
+            with self.subTest(marker=marker), patch.object(check_payers, "raw_cells", return_value=missing_reference):
+                with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                    check_payers.validate_data(ROOT, self.data)
+        # Swap valid source labels, leaving every numeric value and B-cell intact.
+        def swapped(sid, sheet, address):
+            if sid == "ons" and sheet == "Notes" and address in {"A8", "A9"}:
+                raw = reader(sid, sheet, address)
+                raw["value"] = reader(sid, sheet, "A9" if address == "A8" else "A8")["value"]
+                return raw
+            return reader(sid, sheet, address)
+        with patch.object(check_payers, "raw_cells", return_value=swapped):
+            with self.assertRaisesRegex(ValueError, "Source note label/text binding changed"):
+                check_payers.validate_data(ROOT, self.data)
 
     def test_public_data_extra_raw_response_and_count_are_rejected(self):
         self.assert_bad_data(lambda d: d.update(original_response="raw HTML"))
