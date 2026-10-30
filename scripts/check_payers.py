@@ -584,12 +584,20 @@ def validate_page(root, data, text):
                 "Direct and indirect taxes counted in this ONS analysis" and not concealed(n) for n in nodes),
             "ONS tax scope heading changed or hidden")
     require(all(not concealed(n) for n in nodes if n["tag"] == "h2"), "Payer heading hidden")
-    # Check visible claims across the whole document, not just main paragraphs.
-    # Keep inline text contiguous, exclude hidden ancestors and non-page content.
+    # Check claims across the whole document in default and expanded states.
+    # aria-hidden removes content from assistive technology, not the screen.
+    # Disclosure summaries are visible, and their contents can be expanded.
+    # Keep the stricter concealed() checks above for accessible core content.
+    def claim_hidden(parents):
+        return any("hidden" in p["attrs"] or
+                   p["tag"] in {"head", "script", "style", "template"} or
+                   re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", p["attrs"].get("style", ""))
+                   for p in parents)
+
     # Exempt one sentence only within the exact, uniquely checked overlap note.
     claims = "".join(value for value, parents in document.text_runs
-                     if parents and not concealed(parents[-1]) and
-                     not any(p is overlap or p["tag"] in {"head", "script", "style"} for p in parents))
+                     if parents and not claim_hidden(parents) and
+                     not any(p is overlap for p in parents))
     claims += " " + " ".join("".join(overlap["text"]).split()).replace(
         "The top 10% is part of the top 50%.", "", 1)
     claims = " ".join(claims.split())

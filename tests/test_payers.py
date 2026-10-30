@@ -316,12 +316,35 @@ class PayerTests(unittest.TestCase):
             '<script type="application/json">{"claim":"' + claim + '"}</script>',
             '<style>/* ' + claim + ' */</style>',
             '<div hidden><p>' + claim + '</p></div>',
-            '<div aria-hidden="true"><p>' + claim + '</p></div>',
+            '<template><p>' + claim + '</p></template>',
             '<div style="display:none"><h3>' + claim + '</h3></div>',
         ):
             with self.subTest(fragment=fragment):
                 candidate = self.page.replace('</body>', fragment + '</body>', 1)
                 self.assertTrue(check_payers.validate_page(ROOT, self.data, candidate))
+
+    def test_claim_scan_includes_visible_aria_hidden_and_disclosure_text(self):
+        claims = (
+            "The top 50% pays 90.1%.",
+            "The top 10% is part of the top 50%.",
+            "This is a share of all UK taxes.",
+            "The groups are disjoint.",
+            "The top <em>50%</em> pays 90.1%.",
+        )
+        for claim in claims:
+            for fragment in (
+                '<div aria-hidden="true"><p>' + claim + '</p></div>',
+                '<details><summary>' + claim + '</summary><p>Source context.</p></details>',
+                '<details><summary>More context</summary><p>' + claim + '</p></details>',
+                '<details open><summary>More context</summary><p>' + claim + '</p></details>',
+                '<details aria-hidden="true"><summary>More context</summary>' + claim + '</details>',
+            ):
+                for marker in ("</header>", "</body>"):
+                    with self.subTest(claim=claim, fragment=fragment, marker=marker):
+                        candidate = self.page.replace(marker, fragment + marker, 1)
+                        self.assertNotEqual(candidate, self.page)
+                        with self.assertRaisesRegex(ValueError, "Unsupported overlap or all-tax claim"):
+                            check_payers.validate_page(ROOT, self.data, candidate)
 
     def test_each_scroll_region_names_its_own_caption(self):
         for caption_id in ("hmrc-table", "ons-income-table", "ons-expenditure-table"):

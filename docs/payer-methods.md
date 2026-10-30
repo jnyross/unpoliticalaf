@@ -93,8 +93,12 @@ HTML against reopened source files, not just regenerated output. Duplicate JSON
 keys and non-finite values are rejected. Payer figures cannot acquire legacy or
 tax identities or appear on another page. Palette, reading grade, page size and
 unmarked forecast-date rules still apply to the payer page. No broad exemption
-was added. New prose markers, if later needed, require exact independent checker
-support and negative tests before adoption.
+was added. The whole-page claim scan includes visually shown `aria-hidden`
+text, disclosure summaries and expandable disclosure content. Assistive-technology
+hiding is not a visual hiding rule. The exact checked overlap note retains the
+single nesting-sentence exception; copies elsewhere are rejected. New prose
+markers, if later needed, require exact independent checker support and negative
+tests before adoption.
 
 The shared page callback supplies Spending / Taxes / Who pays / Methods and a
 current-page indicator. It retains the tax checker's exact scope paragraph and
