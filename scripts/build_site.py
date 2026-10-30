@@ -191,22 +191,25 @@ def view_chart(make, width=680, height=260):
 
 
 def table(caption, head, rows):
-    out = [f'<details class="tbl"><summary>Show the numbers in a table</summary><table><caption>{esc(caption)}</caption><thead><tr>']
+    out = [f'<details class="tbl"><summary>Show the numbers in a table</summary>'
+           f'<div class="table-scroll" role="region" aria-label="{esc(caption)}" tabindex="0">'
+           f'<table><caption>{esc(caption)}</caption><thead><tr>']
     out += [f'<th scope="col">{esc(h)}</th>' for h in head]
     out.append("</tr></thead><tbody>")
     for row in rows:
         out.append("<tr>" + "".join(f'<th scope="row">{c}</th>' if i == 0 else f"<td>{c}</td>" for i, c in enumerate(row)) + "</tr>")
-    out.append("</tbody></table></details>")
+    out.append("</tbody></table></div></details>")
     return "".join(out)
 
 
 # ---------------------------------------------------------------- page sections
 
-def configure(data, corrections=None):
+def configure(data, corrections=None, payers=None):
     """Bind a validated in-memory dataset; importing this module reads no files."""
-    global D, SRC, LATEST, BASE, SHEET_SOURCE, VIEWS, CORRECTIONS
+    global D, SRC, LATEST, BASE, SHEET_SOURCE, VIEWS, CORRECTIONS, PAYERS
     global agg, funcs, total, services, interest, latest, ranked, years, agg_years, TEN, TWENTY, H, first_forecast
     D = data
+    PAYERS = payers
     CORRECTIONS = [] if corrections is None else corrections
     SRC = D["sources"]
     LATEST, BASE = D["latest_year"], D["base_year"]
@@ -453,7 +456,8 @@ CSS = """
 .skip{position:absolute;left:18px;top:8px;z-index:2;background:#fff;padding:8px;transform:translateY(-200%)}
 .skip:focus{transform:none}
 body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
-header,main,footer{max-width:760px;margin:0 auto;padding:0 18px}
+header,main,footer{max-width:760px;margin:0 auto;padding:0 18px;overflow-wrap:anywhere}
+main,section,.card{min-width:0}
 header{padding-top:28px}
 h1{font-size:2rem;line-height:1.2;margin:.2em 0}
 h2{font-size:1.45rem;margin:2.2em 0 .4em;border-top:2px solid var(--ink);padding-top:.6em}
@@ -487,13 +491,14 @@ body.view-real .v-real,body.view-nominal .v-nominal,body.view-gdp .v-gdp{display
 .views button[aria-pressed=true]{background:var(--ink);color:#fff}
 .nojs .views button,.nojs .views br{display:none}
 .tip{position:fixed;left:12px;right:12px;bottom:12px;max-width:600px;margin:0 auto;background:var(--ink);color:#fff;padding:10px 14px;border-radius:6px;font-size:.9rem;cursor:pointer}
-.tbl{overflow-x:auto;max-width:100%}
+.tbl{max-width:100%}
+.table-scroll{overflow-x:auto;max-width:100%}
 code{overflow-wrap:anywhere}
 nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
 .site-nav{max-width:760px;margin:0 auto;padding:8px 18px;display:flex;flex-wrap:wrap;gap:4px 16px;border-bottom:1px solid var(--line)}
 .site-nav .brand{flex-basis:100%;font-weight:700;font-size:1.15rem;text-decoration:none}
 .site-nav a,.page-links a,summary,.views button{min-height:44px;min-width:44px}
-.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 0}
+.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 4px}
 summary{padding:10px 0}
 .tax-scroll{overflow-x:auto;max-width:100%;margin:.8em 0}
 .tax-scroll table{width:100%}
@@ -545,18 +550,46 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&tip){tip.hi
 
 def footer():
     pubs = {(s["publisher"], s["publication"], s["page"], s["published"]) for s in SRC.values()}
+    if PAYERS is not None:
+        pubs.update((s["publisher"], s["publication"], s["url"], s["published"])
+                    for s in PAYERS["sources"].values())
     data = "; ".join(f'{esc(a)}, <a href="{esc(c)}">{esc(b)}</a> ({esc(d)})' for a, b, c, d in sorted(pubs))
     return f"""<footer>
 <p class="name">Data: {data}.
 Contains public sector information licensed under the
 <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
-<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="methods.html">Methods</a> ·
+<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="who-pays.html">Who pays</a> · <a href="methods.html">Methods</a> ·
 <a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
 <a href="data/spending.json">Download spending data (JSON)</a></p>
 </footer>"""
 
 
 def page(title, body, views=False):
+    if title == "Who pays tax? | UnpoliticalAF":
+        # The shared footer owns the single licence notice on integrated pages.
+        licence = ('<p>Contains public sector information licensed under the\n'
+                   '<a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">'
+                   'Open Government Licence v3.0</a>.</p>')
+        if body.count(licence) != 1:
+            raise ValueError("Payer licence notice changed; check shared footer attribution")
+        body = body.replace(licence, "")
+    # Keep the tax renderer/checker contract intact. Add a distinct onward route
+    # after its exact scope paragraph, without inventing remitter examples.
+    if title == "Taxes, receipts and borrowing | UnpoliticalAF":
+        marker = ('<p data-pid="who-pays-limit">This page does not show who pays.\n'
+                  'These tables show receipts by tax type. They do not show how payments are split between people,\n'
+                  'or who ultimately bears the cost. They give no percentages for who bears that cost.</p>')
+        if body.count(marker) != 1:
+            raise ValueError("Tax who-pays route anchor changed")
+        body = body.replace(marker, marker + '<p><a href="who-pays.html">Who pays tax?</a> '
+                            'shows separate Income Tax and household views. '
+                            'Receipts and household tax costs are different measures.</p>')
+    current = ("index.html" if views else "taxes.html" if title.startswith("Taxes,")
+               else "who-pays.html" if title.startswith("Who pays tax?") else "methods.html")
+    navigation = "".join(
+        f'<a href="{target}"' + (' aria-current="page"' if target == current else '') + f'>{label}</a>'
+        for target, label in (("index.html", "Spending"), ("taxes.html", "Taxes"),
+                              ("who-pays.html", "Who pays"), ("methods.html", "Methods")))
     switch = ""
     if views:
         buttons = "".join(f'<button type="button" data-view="{k}" aria-pressed="{"true" if k == "real" else "false"}">{esc(t)}</button>'
@@ -576,7 +609,7 @@ def page(title, body, views=False):
 <a class="skip" href="#main">Skip to content</a>
 <nav class="site-nav" aria-label="Primary" data-pid="primary-nav">
 <span class="brand">UnpoliticalAF</span>
-<a href="index.html">Spending</a><a href="taxes.html">Taxes</a><a href="methods.html">Methods</a>
+{navigation}
 </nav>
 {switch}
 {body}
@@ -656,6 +689,60 @@ def reconciliation_table():
                  ["Check and scope", "Signed residual", "Rounding budget", "Unit and result", "Source cells"], rows)
 
 
+def section_payer_methods():
+    global PAYERS
+    if PAYERS is None:
+        # Compatibility callers bind spending with configure(data). Resolve the
+        # missing family from this root, and cache it only after validation.
+        from payer_projection import project
+        from check_payers import validate_data
+        payers = project(ROOT)
+        validate_data(ROOT, payers)
+        PAYERS = payers
+    sources = PAYERS["sources"]
+    by_source = {sid: next(v for v in PAYERS["values"] if v["source_id"] == sid)
+                 for sid in ("hmrc", "ons")}
+    links = "".join(
+        f'<li><a href="{esc(s["url"])}"><cite>{esc(s["publication"])}</cite></a>. '
+        f'Published or updated: {esc(s["published"])}.</li>' for s in sources.values())
+    return f'''<section id="payer-methods" data-pid="payer-methods">
+<h2>Who pays: two different views</h2>
+<p>The <a href="who-pays.html">Who pays page</a> keeps the two views apart.
+<a href="data/payers.json">Download the selected payer data</a> for source cells, hashes, notes and labels.
+No next release date is recorded in this source set.</p>
+<p>HMRC Table 2.4 uses {esc(by_source['hmrc']['period'])}, {esc(by_source['hmrc']['status'].lower())}.
+It covers UK people with a positive Income Tax bill, not people with no bill.
+It ranks their income assessable for tax before deductions and allowances. This is not a rank of wealth.
+Shares are of Income Tax due, not cash received or all UK taxes.
+The top group sits inside a wider top group. The bottom half and top groups are separate.
+Do not add the shares.</p>
+<p>ONS uses {esc(by_source['ons']['period'])}, {esc(by_source['ons']['status'].lower())}.
+It covers people in UK private households. It ranks them by household income after direct taxes,
+adjusted for household size and needs. The fifths hold about equal numbers of people, not households.
+They are not the HMRC groups.</p>
+<p>Gross income includes cash benefits. Direct taxes are taken off to give disposable income.
+The income table uses gross income as the whole. Its combined shares are published values,
+not sums of rounded parts. The other table uses household spending as the whole for indirect taxes.
+Neither is a tax rate on each purchase.</p>
+<p>Deferred lump-sum direct-tax payments can put people with high gross income in a low disposable-income group.
+Spending can exceed current income through savings or borrowing. Low income can be short-lived.
+Sampling and measurement also affect the results. The spending view helps show why an income ratio needs care.
+Neither view gives a lifetime tax burden.</p>
+<p>Sending tax to HMRC is not the same as bearing its cost. ONS assigns final and intermediate indirect taxes
+fully to consumers in this model. That includes employer National Insurance.
+Employee and self-employed National Insurance are direct taxes. The OBR receipts total for National Insurance
+cannot be put wholly in either group. Actual costs can fall on firms, workers, buyers and others.</p>
+<p>The technical report covers FYE 2019; sections 7 and 10 explain the model's limits.
+Its publication date is {esc(sources['ons_method']['published'])}. The QMI date is {esc(sources['ons_qmi']['published'])}.
+These older methods do not prove that each detail is current. Current workbook notes take priority.
+Direct taxes here include student-loan repayments. Corporation Tax is not assigned to households.
+This is not all UK taxes. Suppressed cells stay suppressed, not zero.</p>
+<p>Do not join these views into a top-group all-tax burden, one average, or a match to receipts.
+Each source link below gives its own version and full official URL.</p>
+<ul class="name">{links}</ul>
+</section>'''
+
+
 def methods():
     src_rows = "".join(
         f'<tr><th scope="row"><a href="{esc(s["url"])}">{esc(Path(s["file"]).name)}</a></th><td>{esc(s["published"])}</td>'
@@ -705,7 +792,7 @@ See <cite>Public finances since 1900, B2 and B139 to B148</cite>.</p>
 <p>The older OBR area series joins sources. Its status is uncertain.
 Its 2022-23 extrapolations are estimates; our decade tables end in 2015-16
 (<cite>Contents, D51 to D56</cite>).</p>
-<div class="tbl"><table><caption>Source files</caption><thead><tr><th scope="col">File</th><th scope="col">Published</th><th scope="col">Downloaded</th><th scope="col">SHA-256 (start)</th></tr></thead>
+<div class="table-scroll" role="region" aria-label="Source files" tabindex="0"><table><caption>Source files</caption><thead><tr><th scope="col">File</th><th scope="col">Published</th><th scope="col">Downloaded</th><th scope="col">SHA-256 (start)</th></tr></thead>
 <tbody>{src_rows}</tbody></table></div>
 <p>Each file has a unique code, called a hash. The full codes are in <a href="data/spending.json">the data file</a>.
 You can download the files and check the codes match.
@@ -782,7 +869,9 @@ No inflation-adjusted tax view has been verified.
 A GDP share is not a real-terms measure, and can rise when GDP falls.</p>
 <p>These tables show receipts by tax type. They do not show how payments are split between people,
 or who ultimately bears the cost.</p>
+<p><a href="who-pays.html">Who pays tax?</a> gives two separate official views.</p>
 </section>
+{section_payer_methods()}
 <h2>Words used on this site</h2>
 <dl>
 <dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.
@@ -801,7 +890,7 @@ We give each one a plain name next to its official name.</dd>
 </dl>
 <h2>What this site does not cover yet</h2>
 <ul>
-<li>Who pays tax and who bears its cost.</li>
+<li>A complete account of who bears all UK tax costs.</li>
 <li>What each party plans to do.</li>
 <li>Spending per person or per home.</li>
 </ul>

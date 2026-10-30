@@ -3,7 +3,7 @@ from build import PUBLIC_FILES, ROOT, payloads, validate_output
 from build_data import build_data
 from build_receipts import build_receipts, encode as encode_receipts
 from check_receipts import validate as validate_receipts
-from check_site import validate
+from check_site import validate, independent_payer_checks
 from check_audit import validate as validate_audit
 from check_receipt_audit import validate as validate_receipt_audit
 from check_payer_sources import validate as validate_payer_sources
@@ -29,6 +29,7 @@ def main():
     observed = snapshot(site)
     if set(observed) != PUBLIC_FILES:
         raise AssertionError("Build missing or public-file manifest changed; run make build")
+    independent_payer_checks(site)
     retained = (ROOT / "data/spending.json").read_bytes()
     if retained != observed["data/spending.json"]:
         raise AssertionError("Published and generated spending data differ")
