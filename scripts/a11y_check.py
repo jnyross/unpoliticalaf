@@ -9,6 +9,7 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from importlib.util import find_spec
 from pathlib import Path
+import json
 import shutil
 import sys
 from threading import Thread
@@ -65,12 +66,51 @@ def serve_site():
             thread.join()
 
 
+def check_payer_browser(page, data):
+    """Bind the browser's core content and links to the checked public projection."""
+    if page.locator("h1").all_text_contents() != ["Who pays tax?"]:
+        raise RuntimeError("Payer browser heading changed")
+    headings = page.locator("main h2")
+    if headings.all_text_contents() != [
+            "Who owed Income Tax in 2023/24?",
+            "How do taxes compare with household income?",
+            "Who sends the tax, and who bears its cost?",
+            "Where can I check the numbers?"]:
+        raise RuntimeError("Payer browser section headings changed")
+    if not all(headings.nth(i).is_visible() for i in range(headings.count())):
+        raise RuntimeError("Payer browser section heading hidden")
+    figures = page.locator("data[data-payer-id]")
+    if figures.count() != len(data["values"]):
+        raise RuntimeError("Payer browser figure set changed")
+    for entry in data["values"]:
+        figure = page.locator(f'data[data-payer-id="{entry["id"]}"]')
+        if (figure.count() != 1 or not figure.is_visible() or
+                figure.inner_text() != f'{entry["value"]:.1f}%'):
+            raise RuntimeError("Payer browser value missing or changed: " + entry["id"])
+        for attribute, field in (("value", "value"), ("data-denominator", "denominator"),
+                                 ("data-status", "status"), ("data-population", "population")):
+            if figure.get_attribute(attribute) != str(entry[field]):
+                raise RuntimeError("Payer browser value metadata changed: " + entry["id"])
+    for sid in ("hmrc", "ons"):
+        for selector in (f'#{sid}-source-note a', f'#{sid}-sources a'):
+            link = page.locator(selector)
+            if link.count() != 1 or link.get_attribute("href") != data["sources"][sid]["url"]:
+                raise RuntimeError("Payer browser workbook route changed: " + selector)
+        if not page.locator(f'#{sid}-source-note a').is_visible():
+            raise RuntimeError("Payer browser adjacent source link hidden")
+    download = page.locator('#payer-sources a[href="data/payers.json"]')
+    if download.count() != 1 or not download.is_visible():
+        raise RuntimeError("Payer browser selected-data download missing")
+
+
 def check():
     pages = sorted(SITE.glob("*.html"))
-    if {path.name for path in pages} != {"index.html", "taxes.html", "methods.html"}:
-        raise RuntimeError("Expected exactly spending, taxes and methods HTML pages; build the site first.")
+    if {path.name for path in pages} != {"index.html", "taxes.html", "who-pays.html", "methods.html"}:
+        raise RuntimeError("Expected exactly spending, taxes, who-pays and methods HTML pages; build the site first.")
     chrome = find_chrome()
     axe_source = bundled_axe()
+    payer_bytes = (SITE / "data/payers.json").read_bytes()
+    payer_data = json.loads(payer_bytes)
     from playwright.sync_api import sync_playwright
 
     violations = 0
@@ -91,6 +131,11 @@ def check():
                     route.abort()
 
             context.route("**/*", local_assets_only)
+            # Follow the actual local download route and compare its bytes.
+            download = context.request.get(origin + "/data/payers.json")
+            if (download.status != 200 or download.body() != payer_bytes or
+                    "application/json" not in download.headers.get("content-type", "")):
+                raise RuntimeError("Payer browser JSON download route failed")
             page = context.new_page()
             page.set_default_timeout(30_000)
             script_errors = []
@@ -104,8 +149,10 @@ def check():
                         raise RuntimeError(f"Could not load {path.name} at {width}px.")
                     if script_errors:
                         raise RuntimeError(f"Page script error: {path.name}: {script_errors}")
-                    nav = page.locator("nav")
-                    for target in ("index.html", "taxes.html", "methods.html"):
+                    nav = page.locator('nav.site-nav[aria-label="Primary"]')
+                    if nav.count() != 1:
+                        raise RuntimeError(f"Expected one shared primary navigation: {path.name}")
+                    for target in ("index.html", "taxes.html", "who-pays.html", "methods.html"):
                         link = nav.locator(f'a[href="{target}"]')
                         if link.count() != 1 or not link.is_visible():
                             raise RuntimeError(f"Missing visible top navigation to {target}: {path.name}")
@@ -146,27 +193,39 @@ def check():
                             )
                         if page.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                             raise RuntimeError(f"Page overflow: {path.name}, {width}px, {state}")
-                        if path.name == "taxes.html":
-                            table_failures = page.locator("table").evaluate_all("""tables =>
-                                tables.flatMap(table => {
-                                    const region = table.closest('[role="region"]');
-                                    return !region || region.tabIndex !== 0 ||
-                                        !(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby')) ||
-                                        getComputedStyle(region).overflowX !== 'auto'
-                                        ? ['Tax table lacks labelled keyboard scroll region'] : [];
-                                })""")
-                            if table_failures:
-                                raise RuntimeError("; ".join(table_failures))
-                            small_targets = page.locator("nav a, summary, button").evaluate_all("""nodes =>
-                                nodes.filter(node => {
-                                    const box = node.getBoundingClientRect();
-                                    return box.width > 0 && box.height > 0 &&
-                                        (box.width < 44 || box.height < 44);
-                                }).map(node => node.textContent.trim())""")
-                            if small_targets:
-                                raise RuntimeError(f"Tax controls below 44px: {small_targets}")
-                            if page.locator("data[tabindex='0']").count():
-                                raise RuntimeError("Tax figures must not each be a keyboard tab stop")
+                        if path.name == "who-pays.html":
+                            check_payer_browser(page, payer_data)
+                        table_failures = page.locator("table").evaluate_all("""tables =>
+                            tables.flatMap(table => {
+                                const region = table.closest('[role="region"]');
+                                return !region || region.tabIndex !== 0 ||
+                                    !(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby')) ||
+                                    getComputedStyle(region).overflowX !== 'auto'
+                                    ? ['Table lacks labelled keyboard scroll region'] : [];
+                            })""")
+                        if table_failures:
+                            raise RuntimeError("; ".join(table_failures))
+                        small_targets = page.locator("nav a, summary, button").evaluate_all("""nodes =>
+                            nodes.filter(node => {
+                                const box = node.getBoundingClientRect();
+                                return box.width > 0 && box.height > 0 &&
+                                    (box.width < 44 || box.height < 44);
+                            }).map(node => node.textContent.trim())""")
+                        if small_targets:
+                            raise RuntimeError(f"Controls below 44px on {path.name}: {small_targets}")
+                        if path.name in ("taxes.html", "who-pays.html") and page.locator("data[tabindex='0']").count():
+                            raise RuntimeError("Tax/payer figures must not each be a keyboard tab stop")
+                        for index in range(page.locator("summary").count()):
+                            summary = page.locator("summary").nth(index)
+                            if not summary.is_visible():
+                                continue
+                            detail = summary.locator("..")
+                            was_open = detail.get_attribute("open") is not None
+                            summary.focus()
+                            page.keyboard.press("Enter")
+                            if (detail.get_attribute("open") is not None) == was_open:
+                                raise RuntimeError(f"Disclosure failed keyboard activation: {path.name}")
+                            page.keyboard.press("Enter")
                         if script_errors:
                             raise RuntimeError(f"Page script error: {path.name}: {script_errors}")
                         result = page.evaluate("""async tags => await axe.run(document, {
@@ -189,26 +248,24 @@ def check():
             plain.route("**/*", local_assets_only)
             reader = plain.new_page()
             for path in pages:
-                response = reader.goto(f"{origin}/{quote(path.name)}", wait_until="load")
-                if response is None or response.status != 200 or not reader.locator("main").is_visible():
-                    raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
-                for index in range(reader.locator("details").count()):
-                    detail = reader.locator("details").nth(index)
-                    if detail.get_attribute("open") is None:
-                        detail.locator(":scope > summary").click()
-                    if detail.get_attribute("open") is None:
-                        raise RuntimeError(f"No-JavaScript disclosure failed: {path.name}")
-                if path.name == "taxes.html":
-                    summary = reader.locator("details summary").first
-                    if not summary.count():
-                        raise RuntimeError("Tax source detail is missing without JavaScript")
-                    # Native disclosure must respond to keyboard, not a click handler.
-                    detail = summary.locator("..")
-                    was_open = detail.get_attribute("open") is not None
-                    summary.focus()
-                    reader.keyboard.press("Enter")
-                    if (detail.get_attribute("open") is not None) == was_open:
-                        raise RuntimeError("Tax source detail failed keyboard activation")
+                for width in WIDTHS:
+                    reader.set_viewport_size({"width": width, "height": 900})
+                    response = reader.goto(f"{origin}/{quote(path.name)}", wait_until="load")
+                    if response is None or response.status != 200 or not reader.locator("main").is_visible():
+                        raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
+                    if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
+                        raise RuntimeError(f"No-JavaScript default overflow: {path.name}, {width}px")
+                    if path.name in ("taxes.html", "who-pays.html") and not reader.locator("details").count():
+                        raise RuntimeError(f"Source detail is missing without JavaScript: {path.name}")
+                    for index in range(reader.locator("details").count()):
+                        detail = reader.locator("details").nth(index)
+                        summary = detail.locator(":scope > summary")
+                        if detail.get_attribute("open") is None:
+                            # Native disclosure must work with the keyboard.
+                            summary.focus()
+                            reader.keyboard.press("Enter")
+                        if detail.get_attribute("open") is None:
+                            raise RuntimeError(f"No-JavaScript keyboard disclosure failed: {path.name}")
                     for region in reader.locator("table").evaluate_all("""tables =>
                         tables.map(table => {
                             const region = table.closest('[role="region"]');
@@ -216,11 +273,13 @@ def check():
                                 !!(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby'));
                         })"""):
                         if not region:
-                            raise RuntimeError("No-JavaScript tax table lacks keyboard scroll access")
-                if not reader.locator("table").count():
-                    raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
-                if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
-                    raise RuntimeError(f"No-JavaScript mobile overflow: {path.name}")
+                            raise RuntimeError(f"No-JavaScript table lacks keyboard scroll access: {path.name}")
+                    if not reader.locator("table").count():
+                        raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
+                    if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
+                        raise RuntimeError(f"No-JavaScript expanded overflow: {path.name}, {width}px")
+                    if path.name == "who-pays.html":
+                        check_payer_browser(reader, payer_data)
             plain.close()
         finally:
             browser.close()

@@ -4,8 +4,9 @@ A plain-English guide to UK public spending, taxes, receipts, borrowing and debt
 Spending has cash, inflation-adjusted and GDP-share views, area histories and
 quick answers. Taxes has current OBR receipt groups, cash and published GDP-share
 history, and separate forecasts. Core text, source details and tables work
-without JavaScript. Party proposals and payer evidence remain separate tickets
-in [the specification](docs/product-spec.md).
+without JavaScript. Who pays keeps HMRC Income Tax liability shares separate from
+ONS household tax estimates, with income and expenditure denominators explained.
+Party proposals remain a separate ticket in [the specification](docs/product-spec.md).
 
 ## Build and check
 
@@ -71,9 +72,11 @@ The only public outputs are:
 site/index.html
 site/methods.html
 site/taxes.html
+site/who-pays.html
 site/icon.svg
 site/data/spending.json
 site/data/taxes.json
+site/data/payers.json
 ```
 
 `data/spending.json` is the generated working dataset; the public JSON must be
@@ -94,6 +97,11 @@ invented as zero; a missing required PESA operand stops the build. Historical
 identities with genuine source gaps are recorded as not testable with named
 missing operands.
 The controller must investigate such a failure against retained source notes.
+The payer build also reads the seven retained official sources listed in
+`data/payers/sources.json`. It publishes only 23 selected percentages and their
+provenance, never the workbooks or full HTML responses. The independent payer
+checker reopens those sources with a separate reader and pins their hashes.
+See [payer methods](docs/payer-methods.md) for populations, scope and limitations.
 `data/corrections.json` is an append-only editorial log, initially empty for
 this site. New entries use date, page, what was wrong and what changed.
 
@@ -137,7 +145,7 @@ regeneration, in addition to both audit scopes. See
 [receipt methods](docs/receipts-methods.md) for the tax/non-tax residual formulas,
 historical licence-fee overlap and debt/GDP limits. Only the selected CURRENT
 tables enter `site/data/taxes.json`; the private receipt dataset is never published.
-The explicit public allowlist has six files. Tax output is checked by
+The explicit public allowlist has eight files. Tax output is checked by
 `scripts/check_taxes.py`, which separately reopens the pinned current workbook
 and binds every public node, signed rendered value and chart encoding to exact
 cells, ordered formulas, units, years and status. This adds no historical receipt

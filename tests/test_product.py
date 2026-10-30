@@ -18,7 +18,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import build as builder
 import build_data
-from check_site import independent_data_checks, cells
+import build_site
+import build_taxes
+import check_taxes
+import check_payers
+import payer_projection
+from check_site import independent_data_checks, independent_payer_checks, cells, check_pesa_dates
+from check_fiscal import RawReader
+
+HTML_PAGES = ("index.html", "taxes.html", "who-pays.html", "methods.html")
 
 class Document(HTMLParser):
     def __init__(self, text):
@@ -87,7 +95,7 @@ class ProductTests(unittest.TestCase):
 
     def test_semantics_links_and_no_javascript_content(self):
         docs = {name: Document(self.files[name].decode("utf-8"))
-                for name in ("index.html", "taxes.html", "methods.html")}
+                for name in HTML_PAGES}
         ids = {name: [attrs["id"] for _, attrs in doc.tags if "id" in attrs]
                for name, doc in docs.items()}
         for name, doc in docs.items():
@@ -102,7 +110,8 @@ class ProductTests(unittest.TestCase):
                                                    if a.get("name") == "viewport"))
             self.assertEqual(len(ids[name]), len(set(ids[name])), "Duplicate IDs")
             self.assertEqual(doc.elements("a")[0]["href"], "#" + doc.elements("main")[0]["id"])
-            self.assertIn("Open Government Licence v3.0", raw)
+            self.assertEqual(raw.count("Open Government Licence v3.0"), 1)
+            self.assertEqual(len(doc.elements("footer")), 1)
             for tag, attrs in doc.tags:
                 # Citations may link out; page resources must remain local.
                 if tag in ("script", "img", "link", "iframe"):
@@ -133,18 +142,23 @@ class ProductTests(unittest.TestCase):
         self.assertNotIn("All the rest is real spending", self.files["index.html"].decode("utf-8"))
 
     def test_tax_navigation_and_public_projection_boundary(self):
-        expected_links = {"index.html", "taxes.html", "methods.html"}
-        for name in ("index.html", "taxes.html", "methods.html"):
+        expected_links = set(HTML_PAGES)
+        for name in HTML_PAGES:
             doc = Document(self.files[name].decode("utf-8"))
             navigation = [node for node in doc.nodes if node["tag"] == "nav"]
-            self.assertTrue(navigation, f"Missing top navigation: {name}")
+            primary = [node for node in navigation if node["attrs"].get("aria-label") == "Primary"]
+            self.assertEqual(len(primary), 1, f"Missing unique top navigation: {name}")
+            navigation = primary
             def descendants(node):
                 for child in node["children"]:
                     yield child
                     yield from descendants(child)
             links = {child["attrs"].get("href") for nav in navigation
                      for child in descendants(nav) if child["tag"] == "a"}
-            self.assertTrue(expected_links <= links, f"Incomplete navigation: {name}")
+            self.assertEqual(expected_links, links, f"Incomplete navigation: {name}")
+            current = [child["attrs"].get("href") for child in descendants(primary[0])
+                       if child["tag"] == "a" and child["attrs"].get("aria-current") == "page"]
+            self.assertEqual(current, [name])
             self.assertIn("UnpoliticalAF", " ".join(doc.text))
         raw = self.files["taxes.html"].decode("utf-8")
         tax = Document(raw)
@@ -174,6 +188,109 @@ class ProductTests(unittest.TestCase):
                 return table in node["children"] or any(contains(child) for child in node["children"])
             self.assertTrue(any(contains(region) for region in regions),
                             "Tax table needs a labelled, keyboard-focusable scroll region")
+
+    def test_current_tax_renderer_preserves_full_payer_limit_and_adds_onward_route(self):
+        taxes = check_taxes.expected_data(ROOT)
+        build_site.configure(self.data, payers=independent_payer_checks(self.site))
+        raw = build_taxes.render(taxes, build_site.page)
+        check_taxes.validate_html(raw, taxes)
+        doc = Document(raw)
+        limits = [node for node in doc.nodes
+                  if node["tag"] == "p" and node["attrs"].get("data-pid") == "who-pays-limit"]
+        self.assertEqual(len(limits), 1)
+        self.assertEqual(" ".join("".join(limits[0]["text"]).split()), check_taxes.PAYER_LIMIT)
+        section = next(node for node in doc.nodes if node["attrs"].get("id") == "who-pays")
+        paragraphs = [node for node in section["children"] if node["tag"] == "p"]
+        self.assertEqual(len(paragraphs), 2)
+        self.assertIs(paragraphs[0], limits[0])
+        onward = [node for node in paragraphs[1]["children"] if node["tag"] == "a"]
+        self.assertEqual(len(onward), 1)
+        self.assertEqual(onward[0]["attrs"].get("href"), "who-pays.html")
+        self.assertEqual("".join(onward[0]["text"]), "Who pays tax?")
+        self.assertEqual(raw, build_taxes.render(taxes, build_site.page))
+
+    def test_spending_only_configure_keeps_validated_payer_methods_and_determinism(self):
+        # Legacy callers do not pass the new optional payer argument.
+        with patch.object(payer_projection, "project", wraps=payer_projection.project) as project, patch.object(
+                check_payers, "validate_data", wraps=check_payers.validate_data) as validate:
+            build_site.configure(self.data)
+            self.assertIsNone(build_site.PAYERS)
+            first = build_site.methods()
+            payers = build_site.PAYERS
+            self.assertIsNotNone(payers)
+            project.assert_called_once_with(build_site.ROOT)
+            validate.assert_called_once_with(build_site.ROOT, payers)
+            self.assertEqual(first, build_site.methods())
+            self.assertEqual(project.call_count, 1, "Repeated rendering must reuse validated data")
+            self.assertEqual(validate.call_count, 1)
+            doc = Document(first)
+            section = next(node for node in doc.nodes if node["attrs"].get("id") == "payer-methods")
+            source_links = {a.get("href") for a in Document(
+                build_site.section_payer_methods()).elements("a")}
+            self.assertTrue({source["url"] for source in payers["sources"].values()} <= source_links)
+            self.assertIn("data/payers.json", source_links)
+            self.assertIn("positive Income Tax bill", " ".join(section["text"]))
+            self.assertIn("not households", " ".join(section["text"]))
+            build_site.configure(self.data)
+            self.assertIsNone(build_site.PAYERS)
+            self.assertEqual(first, build_site.methods())
+            self.assertEqual(project.call_count, 2)
+            self.assertEqual(validate.call_count, 2)
+
+    def test_spending_only_methods_fail_closed_before_caching_invalid_payers(self):
+        build_site.configure(self.data)
+        with patch.object(payer_projection, "project", return_value={}) as project, patch.object(
+                check_payers, "validate_data", side_effect=ValueError("bad payer source")) as validate:
+            with self.assertRaisesRegex(ValueError, "bad payer source"):
+                build_site.methods()
+            project.assert_called_once_with(build_site.ROOT)
+            validate.assert_called_once_with(build_site.ROOT, {})
+            self.assertIsNone(build_site.PAYERS)
+
+    def test_payer_public_projection_and_rendered_page_are_independently_verified(self):
+        public = independent_payer_checks(self.site)
+        self.assertEqual(len(public["values"]), 23)
+        self.assertLess(len(self.files["data/payers.json"]), 500_000)
+        self.assertTrue(self.files["data/payers.json"].endswith(b"\n"))
+        for token in (b"original_response", b"data/payers/raw/", b"/home/", b"<!DOCTYPE"):
+            self.assertNotIn(token, self.files["data/payers.json"])
+        page = Document(self.files["who-pays.html"].decode("utf-8"))
+        self.assertEqual(len(page.elements("table")), 3)
+        self.assertEqual(len(page.elements("data")), 23)
+        self.assertEqual(len(page.elements("nav")), 1, "Payer page must reuse shared primary navigation")
+        self.assertFalse(any("tabindex" in node for node in page.elements("data")))
+        methods = Document(self.files["methods.html"].decode("utf-8"))
+        self.assertTrue(any(a.get("id") == "payer-methods" for a in methods.elements("section")))
+        tax = self.files["taxes.html"].decode("utf-8")
+        self.assertIn("This page does not show who pays.", tax)
+        self.assertIn('<a href="who-pays.html">Who pays tax?</a>', tax)
+
+    def test_payer_independent_gate_rejects_published_json_and_html_corruption(self):
+        for filename in ("data/payers.json", "who-pays.html"):
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory() as directory:
+                site = Path(directory)
+                (site / "data").mkdir()
+                for name in ("data/payers.json", "who-pays.html"):
+                    (site / name).write_bytes(self.files[name])
+                if filename.endswith(".json"):
+                    data = json.loads(self.files[filename])
+                    data["values"][0]["denominator"] = "All UK taxes"
+                    (site / filename).write_text(json.dumps(data))
+                else:
+                    raw = self.files[filename].decode("utf-8")
+                    self.assertIn('data-denominator="Total Income Tax liabilities"', raw)
+                    (site / filename).write_text(raw.replace(
+                        'data-denominator="Total Income Tax liabilities"',
+                        'data-denominator="All UK taxes"', 1))
+                with self.assertRaises(ValueError):
+                    independent_payer_checks(site)
+
+    def test_payer_page_keeps_legacy_unmarked_forecast_date_guard(self):
+        raw = self.files["who-pays.html"].decode("utf-8")
+        for claim in ("Forecast made in March 2026.", "Economic and fiscal outlook dated March 2026."):
+            with self.subTest(claim=claim), self.assertRaisesRegex(ValueError, "unmarked forecast date/vintage"):
+                check_pesa_dates(raw.replace('</main>', '<p>' + claim + '</p></main>', 1),
+                                 self.data, RawReader(), "who-pays.html")
 
     def test_responsive_focus_and_chart_alternatives(self):
         raw = self.files["index.html"].decode("utf-8")
@@ -212,6 +329,13 @@ class ProductTests(unittest.TestCase):
             for name in ("README.md", "AGENTS.md", ".git/config", ".env", "scripts/build.py",
                          "tests/test_product.py", "data/raw/", "data/sources.json", "data/audit/index.json",
                          "data/receipts.json", "data/audit/", "docs/receipts-methods.md",
+                         "data/payers/", "data/payers/sources.json", "data/payers/raw/",
+                         "data/payers/raw/hmrc-table24-july2026.ods",
+                         "data/payers/raw/ons-etb-fye2024.xlsx",
+                         "data/payers/raw/ons-bulletin-2024.html.json",
+                         "data/payers/audit/index.json", "data/payers/audit/ons-cells.csv",
+                         "scripts/payer_projection.py", "scripts/build_payers.py", "scripts/check_payers.py",
+                         "tests/test_payers.py", "docs/payer-methods.md", "docs/payer-source-seed.md",
                          "factory/project.json", "reference/", "missing.html"):
                 with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
                     urlopen(base + "/" + name, timeout=5)
@@ -291,12 +415,14 @@ class PublicationSafetyTests(unittest.TestCase):
         before = snapshot(self.project)
         receipts = {"private_receipt_sentinel": "only in the private build root"}
         self.assertEqual(builder.PUBLIC_FILES, {
-            "index.html", "taxes.html", "methods.html", "icon.svg",
-            "data/spending.json", "data/taxes.json"})
+            "index.html", "taxes.html", "who-pays.html", "methods.html", "icon.svg",
+            "data/spending.json", "data/taxes.json", "data/payers.json"})
         with patch.object(builder, "ROOT", self.project), patch.object(
                 builder, "build_receipts", return_value=receipts) as receipt_read, patch.object(
                 builder, "validate_receipts") as receipt_check, patch.object(
                 builder, "build_data", return_value={}), patch.object(
+                builder, "project_payers", return_value={}) as payer_read, patch.object(
+                builder, "validate_payer_data") as payer_check, patch.object(
                 builder, "payloads", return_value=public):
             builder.build(output)
             self.assertEqual(snapshot(output), public)
@@ -311,6 +437,14 @@ class PublicationSafetyTests(unittest.TestCase):
             self.assertEqual(snapshot(output), public)
             self.assertEqual(receipt_read.call_count, 2)
             self.assertEqual(receipt_check.call_count, 2)
+            self.assertEqual(payer_read.call_count, 2)
+            self.assertEqual(payer_check.call_count, 2)
+            for call in payer_read.call_args_list:
+                self.assertEqual(call.args, (self.project,))
+                self.assertEqual(call.kwargs, {})
+            for call in payer_check.call_args_list:
+                self.assertEqual(call.args, (self.project, {}))
+                self.assertEqual(call.kwargs, {})
             for call in receipt_read.call_args_list:
                 self.assertEqual(call.args, ())
                 self.assertEqual(call.kwargs, {"root": self.project})
@@ -406,7 +540,8 @@ class PublicationSafetyTests(unittest.TestCase):
         with patch.object(builder, "ROOT", self.project), patch.object(
                 builder, "build_receipts", return_value={}), patch.object(
                 builder, "validate_receipts"), patch.object(builder, "build_data", return_value={}), patch.object(
-                builder, "payloads", return_value=public):
+                builder, "project_payers", return_value={}), patch.object(
+                builder, "validate_payer_data"), patch.object(builder, "payloads", return_value=public):
             with self.assertRaisesRegex(ValueError, "unexpected public payload"):
                 builder.build(output)
         self.assertEqual(snapshot(self.project), before)
@@ -419,11 +554,47 @@ class PublicationSafetyTests(unittest.TestCase):
         with patch.object(builder, "ROOT", self.project), patch.object(
                 builder, "build_receipts", return_value={}) as read, patch.object(
                 builder, "validate_receipts") as check, patch.object(
-                builder, "build_data", return_value={}), patch.object(builder, "payloads", return_value=public):
+                builder, "build_data", return_value={}), patch.object(
+                builder, "project_payers", return_value={}) as payer_read, patch.object(
+                builder, "validate_payer_data") as payer_check, patch.object(builder, "payloads", return_value=public):
             builder.build(output, write_data=False)
             read.assert_called_once_with(root=self.project)
             check.assert_called_once_with({}, root=self.project)
+            payer_read.assert_called_once_with(self.project)
+            payer_check.assert_called_once_with(self.project, {})
         self.assertEqual(snapshot(output), public)
+        self.assertEqual(snapshot(self.project), before)
+
+    def test_payer_source_failure_keeps_all_private_and_public_files(self):
+        output = self.work / "public"
+        (output / "data").mkdir(parents=True)
+        for name in builder.PUBLIC_FILES | builder.LEGACY_FILES:
+            (output / name).write_text("last good")
+        before, private = snapshot(output), snapshot(self.project)
+        for stage in ("project_payers", "validate_payer_data"):
+            with self.subTest(stage=stage), patch.object(builder, "ROOT", self.project), patch.object(
+                    builder, "build_receipts", return_value={}), patch.object(
+                    builder, "validate_receipts"), patch.object(builder, "build_data", return_value={}), patch.object(
+                    builder, "project_payers", return_value={}) as project, patch.object(
+                    builder, "validate_payer_data") as validate, patch.object(builder, "payloads") as payload:
+                (project if stage == "project_payers" else validate).side_effect = ValueError("bad payer source")
+                with self.assertRaisesRegex(ValueError, "bad payer source"):
+                    builder.build(output)
+                payload.assert_not_called()
+                self.assertEqual(snapshot(output), before)
+                self.assertEqual(snapshot(self.project), private)
+
+    def test_foreign_payer_sources_cannot_fill_empty_build_root(self):
+        output = self.work / "public"
+        before = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}), patch.object(
+                builder, "validate_receipts"), patch.object(builder, "build_data", return_value={}), patch.object(
+                builder, "payloads") as payload:
+            with self.assertRaises((ValueError, FileNotFoundError)):
+                builder.build(output)
+            payload.assert_not_called()
+        self.assertFalse(output.exists())
         self.assertEqual(snapshot(self.project), before)
 
     def test_missing_is_not_zero(self):

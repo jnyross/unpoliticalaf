@@ -13,9 +13,12 @@ from fiscal_contract import public_fields
 import build_site
 from tax_projection import project as project_taxes, encode as encode_taxes
 import build_taxes
+from payer_projection import project as project_payers
+from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
+import build_payers
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "icon.svg", "data/spending.json", "data/taxes.json"})
+PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "who-pays.html", "icon.svg", "data/spending.json", "data/taxes.json", "data/payers.json"})
 # A previous baseline can be replaced, but no other files may be deleted.
 LEGACY_FILES = frozenset({"styles.css"})
 
@@ -49,20 +52,28 @@ def regular_input(path):
     return path.read_bytes()
 
 
-def payloads(data, receipts=None):
+def payloads(data, receipts=None, payers=None):
     public_fields(data)
     if receipts is None:
         receipts = build_receipts(root=ROOT)
         validate_receipts(receipts, root=ROOT)
     taxes = project_taxes(receipts)
+    if payers is None:
+        payers = project_payers(ROOT)
+    validate_payer_data(ROOT, payers)
     corrections = json.loads(regular_input(ROOT / "data/corrections.json"))
-    build_site.configure(data, corrections)
+    build_site.configure(data, corrections, payers)
+    payer_html = build_payers.render(payers, build_site.page)
+    validate_payer_page(ROOT, payers, payer_html)
     encoded = (json.dumps(data, indent=1, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
     return {
         "index.html": build_site.index().encode("utf-8"),
         "methods.html": build_site.methods().encode("utf-8"),
         "taxes.html": build_taxes.render(taxes, build_site.page).encode("utf-8"),
         "data/taxes.json": encode_taxes(taxes),
+        "who-pays.html": payer_html.encode("utf-8"),
+        "data/payers.json": (json.dumps(payers, indent=1, ensure_ascii=False,
+                                      allow_nan=False) + "\n").encode("utf-8"),
         "icon.svg": regular_input(ROOT / "assets/icon.svg"),
         "data/spending.json": encoded,
     }
@@ -96,15 +107,18 @@ def build(output, *, write_data=True):
     receipts_path = ROOT / "data/receipts.json"
     if write_data and (receipts_path.is_symlink() or (receipts_path.exists() and not receipts_path.is_file())):
         raise ValueError("data/receipts.json must be a regular file")
-    # Validate both fiscal families before changing any generated or public file.
+    # Validate every fiscal family before changing any generated or public file.
     receipts = build_receipts(root=ROOT)
     validate_receipts(receipts, root=ROOT)
     receipt_bytes = encode_receipts(receipts)
     data = build_data()
-    public = payloads(data, receipts)
+    payers = project_payers(ROOT)
+    validate_payer_data(ROOT, payers)
+    public = payloads(data, receipts, payers)
     if set(public) != PUBLIC_FILES:
         raise ValueError("unexpected public payload")
-    for name in ("index.html", "methods.html", "taxes.html", "data/taxes.json"):
+    for name in ("index.html", "methods.html", "taxes.html", "who-pays.html",
+                 "data/taxes.json", "data/payers.json"):
         if len(public[name]) >= 500_000:
             raise ValueError(f"{name}: over the public page/projection size limit")
     validate_output(output)
