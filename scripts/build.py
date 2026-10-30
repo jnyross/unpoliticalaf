@@ -16,6 +16,7 @@ import build_taxes
 from payer_projection import project as project_payers
 from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
 import build_payers
+from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
 PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "who-pays.html", "icon.svg", "data/spending.json", "data/taxes.json", "data/payers.json"})
@@ -54,6 +55,8 @@ def regular_input(path):
 
 def payloads(data, receipts=None, payers=None):
     public_fields(data)
+    # Bind guidance to this build root, never the checker's default checkout.
+    validate_basics_sources(ROOT)
     if receipts is None:
         receipts = build_receipts(root=ROOT)
         validate_receipts(receipts, root=ROOT)
@@ -62,14 +65,18 @@ def payloads(data, receipts=None, payers=None):
         payers = project_payers(ROOT)
     validate_payer_data(ROOT, payers)
     corrections = json.loads(regular_input(ROOT / "data/corrections.json"))
-    build_site.configure(data, corrections, payers)
+    basics_sources = json.loads(regular_input(ROOT / "data/tax-basics/sources.json"))
+    build_site.configure(data, corrections, payers, basics_sources)
     payer_html = build_payers.render(payers, build_site.page)
+    tax_html = build_taxes.render(taxes, build_site.page)
     validate_payer_page(ROOT, payers, payer_html)
+    # Check the actual complete public pages before changing any output file.
+    validate_basics_fragments(tax_html, payer_html, root=ROOT)
     encoded = (json.dumps(data, indent=1, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
     return {
         "index.html": build_site.index().encode("utf-8"),
         "methods.html": build_site.methods().encode("utf-8"),
-        "taxes.html": build_taxes.render(taxes, build_site.page).encode("utf-8"),
+        "taxes.html": tax_html.encode("utf-8"),
         "data/taxes.json": encode_taxes(taxes),
         "who-pays.html": payer_html.encode("utf-8"),
         "data/payers.json": (json.dumps(payers, indent=1, ensure_ascii=False,

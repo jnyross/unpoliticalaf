@@ -95,7 +95,8 @@
     "hmrc:2_4_Taxpayer_share_tax!A1",
     "hmrc:2_4_Taxpayer_share_tax!A27",
     "hmrc:2_4_Taxpayer_share_tax!F2",
-    "hmrc:Contents!A5"
+    "hmrc:Contents!A5",
+    "hmrc:2_4_Taxpayer_share_tax!A2"
    ]
   },
   {
@@ -123,7 +124,8 @@
     "hmrc:2_4_Taxpayer_share_tax!A1",
     "hmrc:2_4_Taxpayer_share_tax!A27",
     "hmrc:2_4_Taxpayer_share_tax!I2",
-    "hmrc:Contents!A5"
+    "hmrc:Contents!A5",
+    "hmrc:2_4_Taxpayer_share_tax!A2"
    ]
   },
   {
@@ -151,7 +153,8 @@
     "hmrc:2_4_Taxpayer_share_tax!A1",
     "hmrc:2_4_Taxpayer_share_tax!A27",
     "hmrc:2_4_Taxpayer_share_tax!K2",
-    "hmrc:Contents!A5"
+    "hmrc:Contents!A5",
+    "hmrc:2_4_Taxpayer_share_tax!A2"
    ]
   },
   {
@@ -179,7 +182,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!D4",
     "ons:Table 8!B5",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -207,7 +211,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!D4",
     "ons:Table 8!B9",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -235,7 +240,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!D4",
     "ons:Table 8!B15",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -263,7 +269,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!D4",
     "ons:Table 8!B22",
-    "ons:Table 8!A22"
+    "ons:Table 8!A22",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -291,7 +298,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!E4",
     "ons:Table 8!B5",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -319,7 +327,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!E4",
     "ons:Table 8!B9",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -347,7 +356,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!E4",
     "ons:Table 8!B15",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -375,7 +385,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!E4",
     "ons:Table 8!B22",
-    "ons:Table 8!A22"
+    "ons:Table 8!A22",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -403,7 +414,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!F4",
     "ons:Table 8!B5",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -431,7 +443,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!F4",
     "ons:Table 8!B9",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -459,7 +472,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!F4",
     "ons:Table 8!B15",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -487,7 +501,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!F4",
     "ons:Table 8!B22",
-    "ons:Table 8!A22"
+    "ons:Table 8!A22",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -515,7 +530,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!G4",
     "ons:Table 8!B5",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -543,7 +559,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!G4",
     "ons:Table 8!B9",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -571,7 +588,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!G4",
     "ons:Table 8!B15",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -599,7 +617,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!G4",
     "ons:Table 8!B22",
-    "ons:Table 8!A22"
+    "ons:Table 8!A22",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -627,7 +646,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!H4",
     "ons:Table 8!B5",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -655,7 +675,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!H4",
     "ons:Table 8!B9",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -683,7 +704,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!H4",
     "ons:Table 8!B15",
-    "ons:Table 8!A5"
+    "ons:Table 8!A5",
+    "ons:Cover sheet!A5"
    ]
   },
   {
@@ -711,7 +733,8 @@
     "ons:Table 8!A1",
     "ons:Table 8!H4",
     "ons:Table 8!B22",
-    "ons:Table 8!A22"
+    "ons:Table 8!A22",
+    "ons:Cover sheet!A5"
    ]
   }
  ],
@@ -724,20 +747,28 @@
    "text": "9.9 ",
    "formula": null
   },
-  "hmrc:2_4_Taxpayer_share_tax!A1": {
-   "source_id": "hmrc",
-   "sheet": "2_4_Taxpayer_share_tax",
-   "cell": "A1",
-   "value": "Table 2.4 Percentage shares of total Income Tax liabilities shown for percentile groups ranged on total income before tax",
-   "text": "Table 2.4 Percentage shares of total Income Tax liabilities shown for percentile groups ranged on total income before tax",
-   "formula": null
-  },
   "hmrc:2_4_Taxpayer_share_tax!A27": {
    "source_id": "hmrc",
    "sheet": "2_4_Taxpayer_share_tax",
    "cell": "A27",
    "value": "2023 to 2024",
    "text": "2023 to 2024",
+   "formula": null
+  },
+  "hmrc:2_4_Taxpayer_share_tax!A2": {
+   "source_id": "hmrc",
+   "sheet": "2_4_Taxpayer_share_tax",
+   "cell": "A2",
+   "value": "Tax year",
+   "text": "Tax year",
+   "formula": null
+  },
+  "hmrc:2_4_Taxpayer_share_tax!A1": {
+   "source_id": "hmrc",
+   "sheet": "2_4_Taxpayer_share_tax",
+   "cell": "A1",
+   "value": "Table 2.4 Percentage shares of total Income Tax liabilities shown for percentile groups ranged on total income before tax",
+   "text": "Table 2.4 Percentage shares of total Income Tax liabilities shown for percentile groups ranged on total income before tax",
    "formula": null
   },
   "hmrc:2_4_Taxpayer_share_tax!F2": {
@@ -801,6 +832,14 @@
    "sheet": "Table 8",
    "cell": "A1",
    "value": "Table 8: Taxes as a percentage of gross income, disposable income and expenditure for all individuals by equivalised household disposable income quintile group, UK, 2023/24",
+   "text": null,
+   "formula": null
+  },
+  "ons:Cover sheet!A5": {
+   "source_id": "ons",
+   "sheet": "Cover sheet",
+   "cell": "A5",
+   "value": "2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years.",
    "text": null,
    "formula": null
   },
@@ -1076,14 +1115,6 @@
    "text": null,
    "formula": null
   },
-  "ons:Cover sheet!A5": {
-   "source_id": "ons",
-   "sheet": "Cover sheet",
-   "cell": "A5",
-   "value": "2023/24 refers to the financial year ending 2024.  Similarly other years in this format refer to financial years.",
-   "text": null,
-   "formula": null
-  },
   "ons:Cover sheet!A6": {
    "source_id": "ons",
    "sheet": "Cover sheet",
@@ -1140,6 +1171,14 @@
    "text": null,
    "formula": null
   },
+  "ons:Notes!A8": {
+   "source_id": "ons",
+   "sheet": "Notes",
+   "cell": "A8",
+   "value": "note 5",
+   "text": null,
+   "formula": null
+  },
   "ons:Notes!B8": {
    "source_id": "ons",
    "sheet": "Notes",
@@ -1148,11 +1187,27 @@
    "text": null,
    "formula": null
   },
+  "ons:Notes!A9": {
+   "source_id": "ons",
+   "sheet": "Notes",
+   "cell": "A9",
+   "value": "note 6",
+   "text": null,
+   "formula": null
+  },
   "ons:Notes!B9": {
    "source_id": "ons",
    "sheet": "Notes",
    "cell": "B9",
    "value": "Note that the inclusion of lump sum tax payments deferred from a previous financial year(s) can lead to high estimates of direct taxes paid for the lowest deciles or quintiles determined by ranking disposable income (gross income minus direct taxes) as people with high gross incomes can end up towards the lower end of the income distribution by virtue of large deferred direct tax payments which are not reflective of their direct tax liabilities for a typical financial year.",
+   "text": null,
+   "formula": null
+  },
+  "ons:Notes!A16": {
+   "source_id": "ons",
+   "sheet": "Notes",
+   "cell": "A16",
+   "value": "note 13",
    "text": null,
    "formula": null
   },

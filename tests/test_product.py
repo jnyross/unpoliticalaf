@@ -5,6 +5,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import json
 import re
+import shutil
 import sys
 import tempfile
 import threading
@@ -18,12 +19,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import build as builder
 import build_data
+from check_site import independent_data_checks, independent_payer_checks, independent_basics_checks, cells, check_pesa_dates
+import check_site
+import verify
 import build_site
 import build_taxes
 import check_taxes
 import check_payers
 import payer_projection
-from check_site import independent_data_checks, independent_payer_checks, cells, check_pesa_dates
 from check_fiscal import RawReader
 
 HTML_PAGES = ("index.html", "taxes.html", "who-pays.html", "methods.html")
@@ -285,6 +288,84 @@ class ProductTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     independent_payer_checks(site)
 
+    def test_basics_fragments_and_newcomer_routes_on_real_public_pages(self):
+        self.assertTrue(independent_basics_checks(self.site, root=ROOT))
+        index = Document(self.files["index.html"].decode("utf-8"))
+        start = next(n for n in index.nodes if n["attrs"].get("id") == "start")
+        questions = next(n for n in start["children"] if n["tag"] == "dl")
+        self.assertEqual(["".join(n["text"]) for n in questions["children"] if n["tag"] == "dt"],
+                         ["Where does the money go?", "How has it changed?",
+                          "How is the money raised?", "Who pays?"])
+        self.assertLess(index.nodes.index(start), next(i for i, n in enumerate(index.nodes)
+                                                     if n["attrs"].get("id") == "answers"))
+        routes = {n["attrs"].get("href") for n in index.nodes if n["tag"] == "a"}
+        self.assertTrue({"#hundred", "#total", "taxes.html", "who-pays.html"} <= routes)
+        tax = self.files["taxes.html"].decode("utf-8")
+        payer = self.files["who-pays.html"].decode("utf-8")
+        self.assertLess(tax.index('data-basics="taxes"'), tax.index('id="receipt-groups"'))
+        self.assertLess(payer.index('id="burden"'), payer.index('data-basics="payers"'))
+        self.assertLess(payer.index('data-basics="payers"'), payer.index(
+            'ONS assigns final and intermediate indirect taxes fully to consumers'))
+        payer_doc = Document(payer)
+        self.assertEqual(len(payer_doc.elements("h2")), 4)
+        self.assertIn('<h3 id="payer-basics-title">How is the tax collected?</h3>', payer)
+        self.assertNotIn("A business that sends money to HMRC is not always the person who bears the cost.", payer)
+        self.assertEqual(len(Document(payer).elements("data")), 23)
+        self.assertEqual(len(json.loads(self.files["data/taxes.json"])["nodes"]), 287)
+        methods = self.files["methods.html"].decode("utf-8")
+        self.assertIn('id="tax-guidance"', methods)
+        self.assertIn("no publication date is established", methods)
+        self.assertIn("Private source registers and raw responses are not public downloads", methods)
+
+    def test_check_site_and_verify_reject_real_basics_meaning_and_href_mutations(self):
+        mutations = (
+            ("taxes.html", "not every tax", "every tax", "changed meaning"),
+            ("who-pays.html", "the difference between VAT charged", "all VAT charged", "changed meaning"),
+            ("taxes.html", 'href="https://www.gov.uk/income-tax"',
+             'href="https://example.org/tax"', "source URL/locator"),
+            ("who-pays.html", 'href="https://www.gov.uk/paye-for-employers#deductions-from-their-pay"',
+             'href="https://example.org/paye"', "source URL/locator"),
+        )
+        for name, before, after, error in mutations:
+            with self.subTest(name=name, mutation=before), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                site = root / "site"
+                (site / "data").mkdir(parents=True)
+                shutil.copytree(ROOT / "data/tax-basics", root / "data/tax-basics")
+                for filename, content in self.files.items():
+                    (site / filename).write_bytes(content)
+                original = (site / name).read_text(encoding="utf-8")
+                self.assertIn(before, original)
+                (site / name).write_text(original.replace(before, after, 1), encoding="utf-8")
+                # Exercise the real public-byte gate through both entry points.
+                # Other fiscal families keep their own unmocked mutation suites.
+                with self.assertRaisesRegex(ValueError, error):
+                    check_site.validate(site)
+                receipts = (ROOT / "data/receipts.json").read_bytes()
+                (root / "data/receipts.json").write_bytes(receipts)
+                with patch.object(verify, "ROOT", root), patch.object(
+                        verify, "validate_output", return_value=site), patch.object(
+                        verify, "validate_audit"), patch.object(verify, "validate_receipt_audit"), patch.object(
+                        verify, "validate_payer_sources"), patch.object(verify, "validate_receipts"), patch.object(
+                        verify, "build_receipts", return_value={}), patch.object(
+                        verify, "encode_receipts", return_value=receipts):
+                    with self.assertRaisesRegex(ValueError, error):
+                        verify.main()
+
+    def test_basics_disclosure_exception_does_not_allow_unmarked_early_depth(self):
+        from check_taxes import validate_html, expected_data
+        from check_payers import validate_page
+        tax = self.files["taxes.html"].decode("utf-8")
+        payer = self.files["who-pays.html"].decode("utf-8")
+        with self.assertRaisesRegex(ValueError, "unmarked source depth"):
+            validate_html(tax.replace(
+                '<section id="receipt-groups"', '<details><summary>Extra depth</summary></details><section id="receipt-groups"', 1),
+                expected_data(ROOT))
+        data = json.loads(self.files["data/payers.json"])
+        with self.assertRaisesRegex(ValueError, "Only the marked basics disclosure"):
+            validate_page(ROOT, data, payer.replace('<section id="burden"',
+                '<details><summary>Extra depth</summary></details><section id="burden"', 1))
+
     def test_payer_page_keeps_legacy_unmarked_forecast_date_guard(self):
         raw = self.files["who-pays.html"].decode("utf-8")
         for claim in ("Forecast made in March 2026.", "Economic and fiscal outlook dated March 2026."):
@@ -336,6 +417,16 @@ class ProductTests(unittest.TestCase):
                          "data/payers/audit/index.json", "data/payers/audit/ons-cells.csv",
                          "scripts/payer_projection.py", "scripts/build_payers.py", "scripts/check_payers.py",
                          "tests/test_payers.py", "docs/payer-methods.md", "docs/payer-source-seed.md",
+                         "data/tax-basics/", "data/tax-basics/sources.json", "data/tax-basics/raw/",
+                         "data/tax-basics/raw/basics-income-tax.html.json",
+                         "data/tax-basics/raw/basics-national-insurance.html.json",
+                         "data/tax-basics/raw/basics-paye-remitter.html.json",
+                         "data/tax-basics/raw/basics-scottish-powers.html.json",
+                         "data/tax-basics/raw/basics-vat.html.json",
+                         "data/tax-basics/raw/basics-welsh-income-tax.html.json",
+                         "data/tax-basics/raw/basics-corporation-tax.html.json",
+                         "scripts/build_basics.py", "scripts/check_basics.py", "tests/test_basics.py",
+                         "docs/tax-basics-evidence.md", "docs/tax-basics-integration.md",
                          "factory/project.json", "reference/", "missing.html"):
                 with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
                     urlopen(base + "/" + name, timeout=5)
@@ -596,6 +687,49 @@ class PublicationSafetyTests(unittest.TestCase):
             payload.assert_not_called()
         self.assertFalse(output.exists())
         self.assertEqual(snapshot(self.project), before)
+
+    def test_basics_source_and_fragment_failures_keep_last_good_files(self):
+        output = self.work / "public"
+        (output / "data").mkdir(parents=True)
+        for name in builder.PUBLIC_FILES | builder.LEGACY_FILES:
+            (output / name).write_text("last good")
+        for name in ("spending", "receipts"):
+            (self.project / f"data/{name}.json").write_text("last good private")
+        before, private = snapshot(output), snapshot(self.project)
+        # payloads() is real: the basics source gate must use builder.ROOT.
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_receipts", return_value={}), patch.object(
+                builder, "validate_receipts"), patch.object(builder, "build_data", return_value={}), patch.object(
+                builder, "project_payers", return_value={}), patch.object(
+                builder, "validate_payer_data"), patch.object(builder, "public_fields"):
+            with self.assertRaises(FileNotFoundError):
+                builder.build(output)
+        self.assertEqual(snapshot(output), before)
+        self.assertEqual(snapshot(self.project), private)
+        # Exercise fragment rejection after a successful source gate and before publication.
+        receipts = json.loads((ROOT / "data/receipts.json").read_text())
+        data = json.loads((ROOT / "data/spending.json").read_text())
+        from payer_projection import project
+        payers = project(ROOT)
+        original = builder.build_taxes.render
+        def corrupt(*args):
+            return original(*args).replace("not every tax", "every tax", 1)
+        with patch.object(builder.build_taxes, "render", side_effect=corrupt), patch.object(
+                builder, "build_data", return_value=data), patch.object(
+                builder, "build_receipts", return_value=receipts), patch.object(
+                builder, "project_payers", return_value=payers):
+            with self.assertRaisesRegex(ValueError, "changed meaning"):
+                builder.build(output, write_data=False)
+        self.assertEqual(snapshot(output), before)
+        self.assertEqual(snapshot(self.project), private)
+
+    def test_basics_source_gate_does_not_fall_back_to_module_root(self):
+        data = json.loads((ROOT / "data/spending.json").read_text())
+        with patch.object(builder, "ROOT", self.project):
+            with self.assertRaises(FileNotFoundError):
+                builder.payloads(data)
+        with self.assertRaises(FileNotFoundError):
+            independent_basics_checks(ROOT / "site", root=self.project)
 
     def test_missing_is_not_zero(self):
         for marker in (None, "", "-", " - "):
