@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "status": "candidate",
+  "as_of": "2026-10-30",
+  "reason": null,
+  "roster_sources": [
+    "commons"
+  ],
+  "parties": [
+    {
+      "id": "1",
+      "name": "Alliance",
+      "official_domain": null,
+      "mp_count": 1,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "4",
+      "name": "Conservative",
+      "official_domain": null,
+      "mp_count": 118,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "7",
+      "name": "Democratic Unionist Party",
+      "official_domain": null,
+      "mp_count": 5,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "44",
+      "name": "Green Party",
+      "official_domain": null,
+      "mp_count": 5,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "15",
+      "name": "Labour",
+      "official_domain": "labour.org.uk",
+      "mp_count": 404,
+      "publication_sources": [
+        "labour-fiscal-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "labour-public-services-2024",
+          "title": "Additional public services spending (2024 manifesto)",
+          "proposal_date": "2024-06-13",
+          "fiscal_year": "2028-29",
+          "fiscal_year_reason": null,
+          "baseline": "Source uses the last year of the most recent OBR forecast (2028-29); additional spending, not total departmental budgets.",
+          "scope": "Public Services table including Barnett consequentials. Excludes Green Prosperity Plan and reallocations. Not all revenue is allocated to spending.",
+          "geography": "Mixed service remits; source footnotes distinguish England and Wales, UK-wide costs and Barnett allocations to Scotland, Wales and Northern Ireland.",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "labour-fiscal-2024",
+            "start": 2929,
+            "end": 4547,
+            "quote": "Public Services\n1\nREVENUE (2028-29)\n£M\nPOLICIES FUNDED (2028-29)\n£M\nRevenue from closing further non-dom tax loopholes and investment in reducing tax avoidance\n2\n5,230\n40,000 more operations, scans and appointments every week\n1,010\nDouble the number of NHS CT and MRI scanners\n250\nDentistry package including 700,000 urgent appointments every year\n125\nFree breakfast clubs in every primary school\n315\nInvestment in HMRC to reduce tax avoidance\n855\nRevenue from applying VAT and business rates to private schools\n1,510\n6,500 new expert teachers\n450\nIncreased teacher and headteacher training\n270\nDelivering work experience and careers advice for all young people\n85\nEarly language development in primary schools\n5\nOfsted reform\n45\nOver 3,000 new nurseries\n35\nMental health support for every school\n175\nYoung Futures Hubs\n95\nRevenue from closing carried interest tax loophole\n565\nRecruit 8,500 new mental health staff\n410\nLegal aid for victims of disasters or state-related deaths\n3\n30\nWaive visa costs for non-UK veterans who have served four years or more in the British forces\n4\n10\nRevenue from increasing stamp duty on purchases of residential property by non-UK residents by 1%\n40\nAppoint 300 new planning officers\n20\nBarnett consequentials\n5\n650\nTotal\n7,350\nTotal including Barnett consequentials\n4,835\n1\nMay not sum due to rounding.\n2\nRevenue from tax avoidance driven by additional £855m per year investment in HMRC. Does not include £600m revenue from removing non-dom discount loophole in 2025-26.\n3\nCosts are England and Wales.\n4\nCosts are UK wide.\n5\nScotland (£320m), Wales (£195m), Northern Ireland (£135m)."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "4835",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "labour-fiscal-2024",
+                  "start": 4191,
+                  "end": 4235,
+                  "quote": "Total including Barnett consequentials\n4,835"
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "7350",
+                "unit": "GBP million",
+                "basis": "annual",
+                "evidence": {
+                  "source_id": "labour-fiscal-2024",
+                  "start": 4179,
+                  "end": 4190,
+                  "quote": "Total\n7,350"
+                }
+              }
+            ]
+          },
+          "assessments": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "publisher": "Resolution Foundation",
+                "assessed_on": "2024-06-14",
+                "scope": "Overall Conservative and Labour spending plans; not verification of this individual table or of a 2026 plan.",
+                "evidence": {
+                  "source_id": "resolution-comparison-2024",
+                  "start": 7353,
+                  "end": 8280,
+                  "quote": "Neither of the manifestos have much to say about how they would deliver the current tax and spending plans, announced in the last parliament, and which both parties are implicitly signed up to. No party has said what these overall spending totals mean for different departments, but under plausible assumptions about the parties’ plans for defence, health and education, then they could mean\nat least £18 billion of cuts to unprotected departments\n(including Justice, the Home Office and local government) – a bigger sum than the changes the two parties focus on in their respective manifestos. The existing fiscal forecast also banks on squeezing working-age benefits, through the continued roll-out of the two-child limit on support and freezes to Local Housing Allowances. These sorts of cuts will also be extremely challenging to deliver given the current state of public services and levels of hardship around the country."
+                }
+              }
+            ]
+          },
+          "overlap_key": "labour-public-services-2024",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "name": "Liberal Democrat",
+      "official_domain": null,
+      "mp_count": 71,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "22",
+      "name": "Plaid Cymru",
+      "official_domain": null,
+      "mp_count": 4,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "1036",
+      "name": "Reform UK",
+      "official_domain": null,
+      "mp_count": 8,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "1117",
+      "name": "Restore Britain",
+      "official_domain": null,
+      "mp_count": 1,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "29",
+      "name": "Scottish National Party",
+      "official_domain": "snp.org",
+      "mp_count": 8,
+      "publication_sources": [
+        "snp-speech-2024"
+      ],
+      "coverage": "recorded",
+      "unavailable_reason": null,
+      "proposals": [
+        {
+          "id": "snp-nhs-scotland-2024",
+          "title": "NHS funding in Scotland (2024 launch speech)",
+          "proposal_date": "2024-06-19",
+          "fiscal_year": null,
+          "fiscal_year_reason": "The retained speech does not state a fiscal year for the extra NHS allocation.",
+          "baseline": "Additional funding in the 2024 launch speech; a quantified comparison baseline is unavailable in this passage.",
+          "scope": "Additional NHS allocation in Scotland described in a Westminster manifesto launch speech; not a full plan costing.",
+          "geography": "Scotland",
+          "status": "proposed",
+          "evidence": {
+            "source_id": "snp-speech-2024",
+            "start": 3092,
+            "end": 4666,
+            "quote": "The SNP manifesto argues for new, sensible fiscal rules – rules that will:\nEnd the cuts, reverse the 1.3 billion pounds cut to Scotland’s capital budget, and invest in public services, starting with the Health Service.\nWe will join with progressive politicians south of the border to press for greater funding for the NHS and for the UK government to match the pay deals we have given our health staff in Scotland.\nThat would see an extra £1.6 billion for the NHS in Scotland.\nAnd we would introduce a “Keep the NHS in Public Hands Bill” at Westminster.\nA legal guarantee for a publicly owned, publicly operated health service.\nThe SNP message on the health services is clear, it is simple and it will never change…\nThe NHS is not for sale.\nVoting SNP is a vote to protect our public services and our precious NHS.\nFriends, I have made clear the focus of my Government will be to eradicate child poverty.\nThe 2-child benefit cap makes things worse.\nIt is the exact opposite of what the UK government should be doing.\nIntroduced by an uncaring Conservative Government, it is frankly beyond me that the prospective Labour Government plan to keep this deeply damaging policy.\nSNP MPs will press for the 2-child benefit cap to be scrapped.\nColleagues, the future of the 2 child cap is a simple test.\nAre you in government to help children out of poverty?\nOr are you so morally lost, that you push more kids into poverty?\nOur choice – to abolish the cap – is obvious and it is driven by our values.\nThe same values that drive the SNP on so many issues, not least nuclear weapons."
+          },
+          "costs_claimed": {
+            "availability": "available",
+            "reason": null,
+            "items": [
+              {
+                "amount": "1.6",
+                "unit": "GBP billion",
+                "basis": "unspecified",
+                "evidence": {
+                  "source_id": "snp-speech-2024",
+                  "start": 3507,
+                  "end": 3568,
+                  "quote": "That would see an extra £1.6 billion for the NHS in Scotland."
+                }
+              }
+            ]
+          },
+          "funding_claimed": {
+            "availability": "unavailable",
+            "reason": "No specific revenue amount tied to this allocation established in the retained speech.",
+            "items": []
+          },
+          "assessments": {
+            "availability": "unavailable",
+            "reason": "No assessment of this allocation from a rubric-named body retained in this seed.",
+            "items": []
+          },
+          "overlap_key": "snp-nhs-scotland-2024",
+          "overlaps_with": []
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "name": "Sinn Féin",
+      "official_domain": null,
+      "mp_count": 7,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "31",
+      "name": "Social Democratic & Labour Party",
+      "official_domain": null,
+      "mp_count": 2,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "158",
+      "name": "Traditional Unionist Voice",
+      "official_domain": null,
+      "mp_count": 1,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "38",
+      "name": "Ulster Unionist Party",
+      "official_domain": null,
+      "mp_count": 1,
+      "publication_sources": [],
+      "coverage": "unavailable",
+      "unavailable_reason": "No proposal dataset acquired for this party in this bounded seed; coverage remains pending.",
+      "proposals": []
+    },
+    {
+      "id": "1115",
+      "name": "Your Party",
+      "official_domain": "yourparty.uk",
+      "mp_count": 2,
+      "publication_sources": [
+        "yourparty-statement"
+      ],
+      "coverage": "unavailable",
+      "unavailable_reason": "Retained Political Statement landing describes principles and links to a printable draft. It supplies no costed fiscal plan here; linked documents and current plan coverage remain unverified.",
+      "proposals": []
+    }
+  ],
+  "non_party_members": [
+    {
+      "parliament_id": "47",
+      "name": "Speaker",
+      "classification": "speaker",
+      "mp_count": 1
+    },
+    {
+      "parliament_id": "8",
+      "name": "Independent",
+      "classification": "independent",
+      "mp_count": 11
+    }
+  ],
+  "reviews": {
+    "fiscal": null,
+    "editorial": null
+  }
+}
