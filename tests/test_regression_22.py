@@ -76,7 +76,7 @@ class Recovery22Tests(unittest.TestCase):
         # agreement must still not validate public/common services as international.
         def equalized(reader):
             def read(ref):
-                return reader("4_2!X7") if ref == "4_2!X8" else reader(ref)
+                return reader(ref.replace("X8", "X7")) if ref in ("4_2!X8", "4_3!X8") else reader(ref)
             return read
         specs = list(fiscal_schema.reconciliation_specs())
         index = next(i for i, s in enumerate(specs) if s[0] == "base-price/public-common")
