@@ -149,10 +149,10 @@ This includes employer National Insurance. Employee and self-employed National I
 <p>Actual costs can fall on producers, workers, buyers and others in varying shares.
 Full consumer allocation is an assumption, not a settled fact. A combined National Insurance receipts total
 must not be mapped wholly to either ONS group.</p>
-<p>The linked technical report covers FYE 2019 and was published on 25 June 2020.
+<p>The linked technical report covers FYE 2019. It was published on 25 June 2020.
 Sections 7 and 10 explain these assumptions and limits. The QMI is dated 15 June 2018.
-These are the latest linked reports observed in this retained source set.
-We do not assume all their older details still apply. Current workbook notes take priority.</p>
+These are the latest linked reports we found in the sources we kept.
+They are older reports. Some details may have changed. Current workbook notes take priority.</p>
 <p>HMRC and ONS use different populations and tax measures. Do not combine them into a top-1% all-tax burden,
 an average across the panels, or a match to tax receipts.</p></section>
 <section id="payer-sources"><h2>Where can I check the numbers?</h2>
