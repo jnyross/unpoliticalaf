@@ -1,0 +1,22 @@
+# Deterministic generated output and Python caches
+/site/
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+# Local runtime, private configuration, credentials and working notes
+.codeaf/
+.senior-dev/
+.factory/
+factory/
+.vercel/
+.cache/
+.env
+.env.*
+*.pem
+*.key
+/config.local.*
+/private/
+/notes/

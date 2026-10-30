@@ -1,81 +1,72 @@
 # Start UnpoliticalAF
 
-## What exists, and what does not
+## Current scope
 
-This workspace contains readiness instructions for a separate project. Read
-`README.md`, `AUTONOMOUS-BRIEF.md` and `AGENTS.md` together. No app stack is approved;
-there is no application run command yet. These documents do **not** create a team,
-manager, scheduled worker or deployed application. No team was started by this
-setup. Current blocker: a person must establish a native manager through `/teams`
-and hand over the brief; this setup conversation has no manager tools.
+Read `README.md`, `AGENTS.md` and `AUTONOMOUS-BRIEF.md` together. The current user
+request authorizes an honest static setup baseline committed and pushed to the
+existing private repository <https://github.com/jnyross/unpoliticalaf> on `main`.
+It supersedes earlier readiness-only prohibitions for this bounded work. The
+fiscal product is still under construction: no invented figures, completed
+spending/tax application, deployed site or active factory may be claimed.
 
-## Minimal native-team activation handover (instructions only)
+Use the assigned task checkout, not the sister repository. Keep
+`/home/john/projects/un-political` strictly read-only. Preserve unexpected work.
+Initialize only if needed, inspect existing remote/history, fetch if remote
+history exists, and do not overwrite history or force-push. Only the coordinator
+performing publication owns init/remote/commit/push, not every worker.
 
-Do this only when ready to start agent work and its usage. Do not install anything,
-edit CodeAF configuration or change approval/billing/wake settings for these steps.
+## Handoff and verification
 
-1. Open/select the CodeAF workspace `/home/john/projects/unpoliticalaf` (not the
-   sister project). Open `/teams` or press `alt+2`.
-2. Choose **+ New AI team** in the Teams sidebar. Enter **UnpoliticalAF**, choose a
-   colour, leave members empty and press **enter** to create. Creating an empty
-   team does not create a manager or start its members.
-3. On that team choose **+ AI manager**, which creates a manager conversation in
-   the team's folder. If that control is not available in the current layout, use
-   **+ Add chat** → **+ New conversation**, give it the assignment below and
-   **enter create**, then return to Teams → **Choose AI manager** and select that
-   conversation. The Add chat route submits its assignment before appointment,
-   so the assignment explicitly prohibits starting work until manager status is
-   confirmed. Do not select **All teams**: this needs a project manager, not a
-   global one. Confirm the chosen conversation shows **◆ Manager**.
-4. Send the following handover (or use it as the new conversation assignment).
-   The first action must verify the working directory; if it is wrong, stop and
-   correct the project selection through the UI before any edits or member starts.
-   Do not assume team creation or a project name proves the folder.
+The baseline must supply real dependency-light setup, build and verification
+commands, deterministic ignored output, and a built-output HTTP smoke check.
+Use Python 3.10+ and GNU Make (no npm/Node or package dependencies):
 
-   > Act as delivery lead for UnpoliticalAF only after your native manager status
-   > is confirmed. First verify your working directory is exactly
-   > /home/john/projects/unpoliticalaf; stop if not. Read README.md,
-   > AUTONOMOUS-BRIEF.md, AGENTS.md and START.md there. Follow their scope,
-   > independent-review gates and approval boundaries. Use your native manager
-   > tools to start three separate members: fiscal-data researcher,
-   > implementation, and independent QA/data reviewer, with precise ownership
-   > and evidence deliverables from AGENTS.md. Keep the reviewer independent.
-   > Record actual member handles and status; do not invent running state.
-   > Research and plan the bounded first usable version covering expenditure
-   > and tax revenue, then request approval for the proposed stack before adopting
-   > it. Routine local reversible choices within the approved brief are delegated.
-   > No commits, remotes, publication/deployment, installations, factory activation,
-   > configuration/settings/subscription changes or schedules are authorized.
-   > Report your real roster, first scoped tickets and any blocking decisions.
+```sh
+make setup
+make build
+make verify
+make smoke
+```
 
-5. Inspect the manager's **Traffic** and actual roster. Member starts use
-   `team_start` under the existing approval posture: approve only permitted starts
-   if asked. New conversations consume usage; the manager cannot grant your
-   permissions. A member being created does not prove it ran: auto-wake may be
-   off, starts may be refused by a cap, or a permission may await you. With wake
-   off, open/resume the member to receive its brief; do not silently change settings.
-   Starting a member requires a window holding the manager. Verify researcher,
-   implementation and reviewer each received their brief in the correct folder.
+`make site` aliases `make build`. Output is ignored `site/`, absolute checkout
+root plus `/site`. For Vercel use repository root, Framework **Other**, Install
+Command `make setup`, Build Command `make build`, Output Directory `site`. See
+README for the task-checkout path and publishing boundaries. These are declared
+commands, not assumed passing results.
+A read-only reviewer separate from the author must inspect the exact candidate,
+run the declared checks and return defects for correction. Baseline review does
+not satisfy the later official-data, reconciliation, browser and accessibility
+gates in `AGENTS.md` and `AUTONOMOUS-BRIEF.md`.
 
-Use `alt+m` to return to the manager. Ask it for meaningful results, evidence and
-blocked decisions, not a promise of unlimited unattended execution. Native wake
-limits and user permissions can require you to resume or answer. Stop at the local
-accepted candidate; release/publication requires separate approval.
+Before committing, inspect the actual diff and tracked paths. Exclude credentials,
+private source snapshots, runtime configuration/caches/notes, `.senior-dev`
+artifacts and generated output from Git; publish only intended static assets.
+Report the full baseline SHA, matching remote `main` SHA, check/review evidence,
+relative and absolute output directory, framework preset and build command.
+A local commit or build alone is not a successful push or deployment.
 
-## Evidence before calling a build complete
+## User-owned next steps
 
-The manager must supply the acceptance mapping and independent signed-off review
-specified in `AGENTS.md`: official source traceability and reconciled figures for
-both spending and tax, real end-to-end checks, mobile/keyboard accessibility,
-exact candidate identity, commands/results, limitations and local reproduction.
-No tests or build success are claimed by this readiness document. Before handover,
-inspect `git status --short` and the four documents; no commit is required.
+John handles Vercel project connection in his existing signed-in Mac browser and
+separately verifies the factory's native Claude route. Do not ask for Vercel
+CLI/login, deploy, install/bootstrap/activate the factory, create automation
+configuration/schedules, change provider/billing defaults, or purchase anything
+in this baseline task. All Claude calls must use CLIProxy, never direct paid
+Anthropic API. Use ordinary configured available proxy workers; do not use
+senior-dev's unconfigured `z-ai/glm-5.1` default.
 
-## Authority checked
+The software-factory skill and installed guide are required reading, not evidence
+that factory configuration, preflight, activation or live qualification ran.
+Later factory configuration must adapt its command arrays and generated-output
+contracts to this project's real checks. Keep private bindings/receipts outside
+Git. No UI instructions here create a manager, team, hook or running worker.
 
-UI labels and lifecycle are from CodeAF's `team-manager` and `teams-page` manual;
-these pages were read, including team creation, manager assignment, membership
-and settings sections. Saved prior manual output paths and the skill/component
-guide paths are listed in `AGENTS.md`. The separate software-factory workflow was
-read only: it is not installed/activated/configured by these instructions, nor
-is its GitHub/T3/Vercel profile selected for this project.
+## Future fiscal product
+
+The preserved brief requires compatible official spending and tax series,
+provenance and source-cell traceability, actual/estimate/forecast distinctions,
+reconciliation with justified tolerances, neutral plain English and mobile and
+keyboard accessibility. Research, implementation and independent review have
+separate ownership. A lead must collect exact candidate identity, rerunnable
+commands/results, independent source checks and outstanding limits before
+accepting that product. Missing material evidence remains blocked, not complete.

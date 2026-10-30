@@ -2,8 +2,9 @@
 
 A new, separate project to make it easy to understand **where UK public money is
 spent and how taxes are raised**. It inherits evidence and principles from
-Un-political, not a mandate to reuse its implementation. This workspace is for
-build readiness; this README does not mean an app or an autonomous team is running.
+Un-political, not a mandate to reuse its implementation. The current delivery is
+an honest static setup baseline, not the fiscal application.
+No autonomous factory, deployed site or completed product is claimed.
 
 ## Verified inheritance
 
@@ -31,13 +32,17 @@ The sister README documents Python (CI uses 3.12), `openpyxl`, Make, spreadsheet
 processing, generated static HTML and a site that opens without a server. Its
 `scripts/build_data.py`, `scripts/build_site.py` and `scripts/check_site.py` implement
 that pipeline. These are historical implementation facts, **not an approved stack
-for UnpoliticalAF**. No framework, hosting, database or paid service is selected here.
-Prefer small, reversible decisions after checking the delivery brief.
+for UnpoliticalAF**. The current user authorizes a dependency-light static
+baseline for import into
+Vercel. This does not select the future fiscal application stack, database or any
+paid service. Prefer small, reversible decisions after checking the delivery brief.
 
 `/home/john/projects/un-political/CLAUDE.md` contains that repository's direct-to-main
-commit/push policy and verification rules. Its commit/push permission does **not**
-transfer here: no commits, remotes, publication or deployment are authorized by this
-setup. Do not modify the sister repository. Inherit its raw-source discipline and
+commit/push policy and verification rules. Its permissions do **not** transfer
+here. The current user independently authorizes
+initializing this project, adding exactly `https://github.com/jnyross/unpoliticalaf`,
+and committing/pushing the reviewed static baseline to `main` without force.
+Do not modify the sister repository. Inherit its raw-source discipline and
 append-only evidence history, not its repository-specific workflow permissions.
 
 ## Bounded first usable version — proposed delivery scope
@@ -90,4 +95,72 @@ of the renderer, including derived values and units. Record browser accessibilit
 manual checks, test commands and results, source release dates and unresolved limits.
 An independent QA/data reviewer must verify fiscal definitions, totals, provenance,
 neutral copy and the end-to-end evidence before the delivery lead accepts completion.
-No app, test pass, independent review, deployment or running AI team is claimed here.
+Static-baseline checks are not evidence that these fiscal-product gates passed.
+No completed fiscal app, deployment or running factory is claimed here.
+
+## Current authorization and delivery boundary
+
+The current user request supersedes earlier readiness-only prohibitions for this
+bounded baseline. Initialize only if needed, inspect existing history/remotes,
+fetch remote history if any, and publish a reviewed baseline without overwriting
+unexpected work. The repository must remain private. Report the actual pushed SHA
+and compare it with remote `main`; documentation is not proof of publication.
+
+John handles the Vercel project connection in his existing signed-in browser and
+separately verifies the native Claude route. Do not request Vercel CLI/login,
+deploy, install/bootstrap/activate the factory, change providers/billing/defaults,
+purchase anything or start direct Anthropic calls in this baseline task. All
+Claude calls must use CLIProxy; ordinary delegates must use configured available
+proxy models, not senior-dev's unconfigured `z-ai/glm-5.1` default.
+
+The product brief and independent fiscal acceptance gates above remain in force.
+`AUTONOMOUS-BRIEF.md` describes the later fiscal product, not a claim that the
+static setup baseline satisfies it; its older readiness-only approval wording is
+superseded only to the extent explicitly authorized here. Keep raw/private source
+snapshots, runtime configuration, credentials and notes out of the published build.
+
+## Static baseline: local commands and Vercel import
+
+Prerequisites: Python 3.10 or later and GNU Make. There is no Node/npm requirement,
+package installation, application framework or database. Standard-library Python
+keeps the baseline small and reproducible; this is not a decision to reuse the
+sister project's spreadsheet pipeline or select the future fiscal app stack.
+
+Run from this checkout's root:
+
+```sh
+make setup
+make build
+make verify
+make smoke
+```
+
+`make setup` checks prerequisites without installing packages. `make build`
+(`make site` is an alias) writes deterministic output to ignored `site/`.
+`make verify` runs the baseline integrity tests; `make smoke` checks the built
+site over local HTTP. These are commands to run, not a claim of passing results
+in this documentation. Review and execution evidence must name the exact candidate.
+Only `static/index.html` and `static/styles.css` belong in the published output;
+root instructions, source snapshots, tests and private/runtime files do not.
+
+For the user's existing Vercel Git import:
+
+| Setting | Value |
+| --- | --- |
+| Repository / branch | `jnyross/unpoliticalaf` (private), `main` |
+| Root directory | Repository root (`.`) |
+| Framework preset | Other |
+| Install command | `make setup` (no packages) |
+| Build command | `make build` |
+| Output directory | `site` |
+
+The relative output is `site/`; its absolute path is the current checkout root
+plus `/site` (run `pwd` at the root). In this assigned worker checkout that is
+`/home/john/.codeaf/v3/projects/-home-john/672c0985f766aca6/trees/7/site`.
+The coordinator must report the actual final checkout's absolute output path,
+not mistake this isolated task path for a deployment path.
+
+The factory guide's `make setup`, generation and verification examples must be
+adapted to these real commands if activation is later authorized and verified.
+No factory configuration is created here. The baseline output does not contain
+financial datasets or prove product, browser-accessibility or live-deployment gates.
