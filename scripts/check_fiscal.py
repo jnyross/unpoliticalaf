@@ -104,7 +104,7 @@ def source_metadata(contract, read):
             raise ValueError("Independent PESA outturn header changed")
         status, refs = "pesa_outturn", [f"5_2!{c}" for c in ("G6", "B137", "B138", "B147")]
     elif sheet.startswith("4_"):
-        if "Outturn" not in str(read(sheet + "!B4")["value"]):
+        if read(sheet + "!B4")["value"] != "outturn":
             raise ValueError("Independent PESA outturn header changed")
         status, refs = "pesa_outturn", [sheet + "!B4", sheet + "!A1"]
         if sheet in ("4_3", "4_4"):
