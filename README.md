@@ -99,3 +99,5 @@ own tickets. Do not invent their results.
 
 The factory controller owns Git, independent review, exact-candidate checks and
 publication to https://unpoliticalaf.vercel.app . Workers return file edits only.
+
+`make setup` creates the local `.venv` and installs dependencies there. Build and check commands use that environment, leaving system Python unchanged.

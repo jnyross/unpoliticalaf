@@ -247,6 +247,9 @@ class PublicationSafetyTests(unittest.TestCase):
                 builder, "payloads", return_value=public):
             builder.build(output)
             self.assertEqual(snapshot(output), public)
+            for path in (output / name for name in builder.PUBLIC_FILES):
+                self.assertEqual(path.stat().st_mode & 0o777, 0o644)
+            self.assertEqual((self.project / "data/spending.json").stat().st_mode & 0o777, 0o644)
             builder.build(output)
             self.assertEqual(snapshot(output), public)
         self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json"})

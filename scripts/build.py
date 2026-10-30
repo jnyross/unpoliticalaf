@@ -62,6 +62,7 @@ def atomic_write(path, content):
         temporary = Path(file.name)
         try:
             file.write(content)
+            os.fchmod(file.fileno(), 0o644)
             file.flush()
             os.fsync(file.fileno())
         except BaseException:
