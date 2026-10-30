@@ -577,7 +577,9 @@ def page(title, body, views=False):
     # Keep the tax renderer/checker contract intact. Add a distinct onward route
     # after its exact scope paragraph, without inventing remitter examples.
     if title == "Taxes, receipts and borrowing | UnpoliticalAF":
-        marker = '<p data-pid="who-pays-limit">This page does not show who pays.</p>'
+        marker = ('<p data-pid="who-pays-limit">This page does not show who pays.\n'
+                  'These tables show receipts by tax type. They do not show how payments are split between people,\n'
+                  'or who ultimately bears the cost. They give no percentages for who bears that cost.</p>')
         if body.count(marker) != 1:
             raise ValueError("Tax who-pays route anchor changed")
         body = body.replace(marker, marker + '<p><a href="who-pays.html">Who pays tax?</a> '

@@ -23,6 +23,8 @@ from check_site import independent_data_checks, independent_payer_checks, indepe
 import check_site
 import verify
 import build_site
+import build_taxes
+import check_taxes
 import check_payers
 import payer_projection
 from check_fiscal import RawReader
@@ -189,6 +191,26 @@ class ProductTests(unittest.TestCase):
                 return table in node["children"] or any(contains(child) for child in node["children"])
             self.assertTrue(any(contains(region) for region in regions),
                             "Tax table needs a labelled, keyboard-focusable scroll region")
+
+    def test_current_tax_renderer_preserves_full_payer_limit_and_adds_onward_route(self):
+        taxes = check_taxes.expected_data(ROOT)
+        build_site.configure(self.data, payers=independent_payer_checks(self.site))
+        raw = build_taxes.render(taxes, build_site.page)
+        check_taxes.validate_html(raw, taxes)
+        doc = Document(raw)
+        limits = [node for node in doc.nodes
+                  if node["tag"] == "p" and node["attrs"].get("data-pid") == "who-pays-limit"]
+        self.assertEqual(len(limits), 1)
+        self.assertEqual(" ".join("".join(limits[0]["text"]).split()), check_taxes.PAYER_LIMIT)
+        section = next(node for node in doc.nodes if node["attrs"].get("id") == "who-pays")
+        paragraphs = [node for node in section["children"] if node["tag"] == "p"]
+        self.assertEqual(len(paragraphs), 2)
+        self.assertIs(paragraphs[0], limits[0])
+        onward = [node for node in paragraphs[1]["children"] if node["tag"] == "a"]
+        self.assertEqual(len(onward), 1)
+        self.assertEqual(onward[0]["attrs"].get("href"), "who-pays.html")
+        self.assertEqual("".join(onward[0]["text"]), "Who pays tax?")
+        self.assertEqual(raw, build_taxes.render(taxes, build_site.page))
 
     def test_spending_only_configure_keeps_validated_payer_methods_and_determinism(self):
         # Legacy callers do not pass the new optional payer argument.
