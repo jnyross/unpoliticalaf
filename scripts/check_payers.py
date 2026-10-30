@@ -380,10 +380,13 @@ def validate_page(root, data, text):
             all(nodes.index(n) < nodes.index(basics) for n in nodes
                 if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
             "Payer collection basics must follow the tables and precede burden methodology")
-    ids = {n["attrs"].get("id") for n in document.nodes}
     for table in tables:
         regions = [p for p in table["parents"] if p["attrs"].get("role") == "region"]
-        require(regions and regions[-1]["attrs"].get("aria-labelledby") in ids, "Table scroll region lacks a label")
+        captions = [n for n in nodes if n["tag"] == "caption" and table in n["parents"]]
+        require(len(captions) == 1 and regions and
+                regions[-1]["attrs"].get("aria-labelledby") == captions[0]["attrs"].get("id") and
+                bool(captions[0]["attrs"].get("id")),
+                "Table scroll region must name its own caption")
     source_sections = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "payer-sources"]
     require(len(source_sections) == 1, "Missing unique payer source section")
     source_section = source_sections[0]

@@ -210,7 +210,19 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_page('high gross income but low disposable income', 'no caveat')
         self.assert_bad_page('href="data/payers.json"', 'href="data/missing.json"')
         self.assert_bad_page('href="' + check_payers.URLS[1] + '"', 'href="#missing"')
-        self.assert_bad_page('aria-labelledby="ons-income-table"', 'aria-labelledby="missing"')
+        region = '<div class="payer-scroll" role="region" aria-labelledby="ons-income-table"'
+        self.assert_bad_page(region, region.replace('"ons-income-table"', '"missing"'))
+        self.assert_bad_page(region, region.replace('"ons-income-table"', '"hmrc-table"'))
+
+    def test_each_scroll_region_names_its_own_caption(self):
+        for caption_id in ("hmrc-table", "ons-income-table", "ons-expenditure-table"):
+            region = f'<div class="payer-scroll" role="region" aria-labelledby="{caption_id}"'
+            for wrong in ("missing", "hmrc-table" if caption_id != "hmrc-table" else "ons-income-table"):
+                with self.subTest(caption=caption_id, wrong=wrong):
+                    mutated = self.page.replace(region, region.replace(f'"{caption_id}"', f'"{wrong}"'), 1)
+                    self.assertNotEqual(mutated, self.page)
+                    with self.assertRaisesRegex(ValueError, "own caption"):
+                        check_payers.validate_page(ROOT, self.data, mutated)
 
     def test_source_links_bind_to_panels_and_details_not_global_href_set(self):
         for sid, index, label in (("hmrc", 1, "HMRC Table 2.4 (ODS)"),
