@@ -18,7 +18,8 @@ from openpyxl import load_workbook
 from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 from check_taxes import validate as validate_taxes, checked_forecast_prose
-from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
+from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page, Page as SemanticPage
+from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -209,6 +210,7 @@ def check_pesa_dates(raw, data, read, name):
 
 
 def validate(site=SITE):
+    independent_basics_checks(site)
     read = cells()
     errors, report = [], []
     if not (site / "index.html").is_file():
@@ -231,7 +233,8 @@ def validate(site=SITE):
         p = Page()
         p.feed(raw)
         if name == "methods.html":
-            for section_id in ("about", "corrections", "payer-methods"):
+            check_guidance_methods(raw)
+            for section_id in ("about", "corrections", "payer-methods", "tax-guidance"):
                 if section_id not in p.section_ids:
                     errors.append(f"{name}: missing section id={section_id!r}")
 
@@ -324,6 +327,103 @@ def validate(site=SITE):
         print("\n".join("FAIL " + e for e in errors))
         sys.exit(1)
     print("all checks passed")
+
+
+def independent_basics_checks(site, root=None):
+    """Check retained guidance and marked fragments in actual published HTML."""
+    root = ROOT if root is None else Path(root)
+    site = Path(site)
+    validate_basics_sources(root)
+    pages = []
+    for name in ("taxes.html", "who-pays.html"):
+        path = site / name
+        if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
+            raise ValueError("Basics publication must contain regular HTML files")
+        if path.stat().st_size >= MAX_BYTES:
+            raise ValueError("Basics publication exceeds page size limit")
+        pages.append(path.read_text(encoding="utf-8"))
+    result = validate_basics_fragments(*pages, root=root)
+    path = site / "methods.html"
+    if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
+        raise ValueError("Guidance methods must be a regular HTML file")
+    check_guidance_methods(path.read_text(encoding="utf-8"), root=root)
+    return result
+
+
+def check_guidance_methods(raw, root=None):
+    """Bind the published guidance record to independently checked source bytes."""
+    root = ROOT if root is None else Path(root)
+    validate_basics_sources(root)
+    register = json.loads((root / "data/tax-basics/sources.json").read_text(encoding="utf-8"))
+    # Independent locator map: do not import the renderer or its source ordering.
+    locators = {
+        "income-tax": "Income Tax: Overview; Income Tax allowances and reliefs",
+        "national-insurance": "National Insurance: Overview; Who pays National Insurance; National Insurance classes",
+        "paye-remitter": "PAYE for employers: Introduction to PAYE; Deductions from their pay; Reporting pay and deductions; Paying HMRC",
+        "scottish-powers": "Scottish Government: Income Tax",
+        "vat": "How VAT works: Overview; Your responsibilities as a VAT-registered business; What VAT is charged on; How much VAT you must charge",
+        "welsh-income-tax": "Welsh Income Tax: Income Tax in Wales; Who pays the Welsh rates; How you pay",
+        "corporation-tax": "Corporation Tax: Overview; Profits you pay Corporation Tax on",
+    }
+    def require(ok, message):
+        if not ok:
+            raise ValueError("Guidance methods: " + message)
+    def text(node):
+        return " ".join("".join(node["text"]).split())
+    def concealed(node):
+        return any("hidden" in p["attrs"] or p["attrs"].get("aria-hidden", "").lower() == "true" or
+                   set(p["attrs"].get("class", "").split()) & {"v", "narrow", "wide"} or
+                   re.search(r"display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse)",
+                             p["attrs"].get("style", ""), re.I)
+                   for p in [node] + node["parents"])
+    document = SemanticPage(raw)
+    sections = [n for n in document.nodes if n["attrs"].get("id") == "tax-guidance"]
+    require(len(sections) == 1, "missing or duplicated section")
+    section = sections[0]
+    require(section["tag"] == "section" and section["attrs"].get("data-pid") == "tax-guidance-methods" and
+            section["parents"] and section["parents"][-1]["tag"] == "main" and
+            not concealed(section) and not any(p["tag"] == "details" for p in section["parents"]),
+            "section hidden or misplaced")
+    nodes = [n for n in document.nodes if section in n["parents"]]
+    headings = [n for n in nodes if n["tag"] in {"h1", "h2", "h3"}]
+    require(len(headings) == 1 and headings[0]["tag"] == "h2" and
+            text(headings[0]) == "Where the tax definitions come from" and not concealed(headings[0]),
+            "heading changed or hidden")
+    intros = [n for n in nodes if n["tag"] == "p" and n["parents"][-1] is section]
+    require([text(n) for n in intros] == [
+        "Official guidance explains the tax rules. It is not the source of the household percentages or receipt totals. "
+        "We checked these guidance pages on 30 October 2026. They are living guidance; no publication date is established. "
+        "The next update is unknown. We use no current rates or personal tax examples.",
+        "The short definitions link to the official page and name the relevant heading. "
+        "The OBR group limits and ONS model limits remain beside their own figures. "
+        "These definitions do not describe who bears every tax cost."] and all(not concealed(n) for n in intros),
+        "retrieval date, status or scope changed")
+    require(register["retrieved_date_utc"] == "2026-10-30", "retrieval register changed")
+    details = [n for n in nodes if n["tag"] == "details"]
+    require(len(details) == 1 and details[0]["parents"][-1] is section and not concealed(details[0]),
+            "missing or hidden source disclosure")
+    summaries = [n for n in nodes if n["tag"] == "summary"]
+    require(len(summaries) == 1 and summaries[0]["parents"][-1] is details[0] and
+            text(summaries[0]) == "Guidance headings and retained file hashes" and not concealed(summaries[0]),
+            "source disclosure label changed")
+    rows = [n for n in nodes if n["tag"] == "li"]
+    require([n["attrs"].get("data-guidance-source") for n in rows] == list(locators), "source IDs/order changed")
+    sources = {Path(s["file"]).name.removeprefix("basics-").removesuffix(".html.json"): s
+               for s in register["sources"]}
+    require(len(register["sources"]) == 7 and set(sources) == set(locators), "source register IDs changed")
+    for row, sid in zip(rows, locators):
+        descendants = [n for n in nodes if row in n["parents"]]
+        links = [n for n in descendants if n["tag"] == "a"]
+        codes = [n for n in descendants if n["tag"] == "code"]
+        source = sources[sid]
+        require(details[0] in row["parents"] and not concealed(row) and len(links) == 1 and
+                links[0]["attrs"] == {"href": source["url"]} and text(links[0]) == locators[sid] and
+                [text(n) for n in codes] == [source["sha256"], source["stored_sha256"]] and
+                text(row) == locators[sid] + "Original response SHA-256: " + source["sha256"] +
+                ". Retained copy SHA-256: " + source["stored_sha256"] + "." and
+                all(not concealed(n) for n in descendants), "source URL, locator or hash changed: " + sid)
+    require(len([n for n in nodes if n["tag"] == "a"]) == 7, "unexpected source links")
+    return True
 
 
 def independent_payer_checks(site):

@@ -204,12 +204,13 @@ def table(caption, head, rows):
 
 # ---------------------------------------------------------------- page sections
 
-def configure(data, corrections=None, payers=None):
+def configure(data, corrections=None, payers=None, basics_sources=None):
     """Bind a validated in-memory dataset; importing this module reads no files."""
-    global D, SRC, LATEST, BASE, SHEET_SOURCE, VIEWS, CORRECTIONS, PAYERS
+    global D, SRC, LATEST, BASE, SHEET_SOURCE, VIEWS, CORRECTIONS, PAYERS, BASICS_SOURCES
     global agg, funcs, total, services, interest, latest, ranked, years, agg_years, TEN, TWENTY, H, first_forecast
     D = data
     PAYERS = payers
+    BASICS_SOURCES = basics_sources
     CORRECTIONS = [] if corrections is None else corrections
     SRC = D["sources"]
     LATEST, BASE = D["latest_year"], D["base_year"]
@@ -625,7 +626,7 @@ def index():
     s = SRC["pesa_ch4"]
     body = f"""<header>
 <h1>Where the UK's public money goes</h1>
-<p data-pid="newcomer-route">Start here for spending. Then see <a href="taxes.html">Taxes: where receipts come from and how borrowing fits</a>.</p>
+<p data-pid="newcomer-route">Start with a question. Follow a link for the figures and their limits.</p>
 <p class="lead">In {LATEST} the UK public sector spent {fig(total["nominal"])}.
 This page shows what it went on, and how that has changed.
 It uses the government's own figures.</p>
@@ -634,6 +635,13 @@ PESA treats {LATEST} as outturn; it can be revised.
 Tap a number, or use Tab then Enter, to see its source. "bn" means billion.</p>
 </header>
 <main id="main">
+<section id="start" data-pid="newcomer-questions"><h2>What would you like to know?</h2>
+<dl>
+<dt>Where does the money go?</dt><dd><a href="#hundred">Spending: see the main areas</a>.</dd>
+<dt>How has it changed?</dt><dd><a href="#total">How spending changed: cash, prices and GDP</a>.</dd>
+<dt>How is the money raised?</dt><dd><a href="taxes.html">Taxes: receipts, borrowing and debt</a>.</dd>
+<dt>Who pays?</dt><dd><a href="who-pays.html">Who pays: people and households</a>, with each view's limits.</dd>
+</dl></section>
 <nav class="page-links" aria-label="On this page">
 <a href="#answers">Quick answers</a><a href="#hundred">Spending by area</a>
 <a href="#total">Total spending</a><a href="#decades">Since 1945</a>
@@ -741,6 +749,49 @@ This is not all UK taxes. Suppressed cells stay suppressed, not zero.</p>
 Each source link below gives its own version and full official URL.</p>
 <ul class="name">{links}</ul>
 </section>'''
+
+
+def section_basics_methods():
+    sources = BASICS_SOURCES
+    if sources is None:
+        # Legacy configure(data)/methods() callers also need real, checked guidance.
+        # The explicit build path supplies its own root-validated register instead.
+        import json
+        from check_basics import validate_sources
+        validate_sources(ROOT)
+        sources = json.loads((ROOT / "data/tax-basics/sources.json").read_text(encoding="utf-8"))
+    # These headings identify the retained text used for the qualitative copy.
+    locators = {
+        "income-tax": "Income Tax: Overview; Income Tax allowances and reliefs",
+        "national-insurance": "National Insurance: Overview; Who pays National Insurance; National Insurance classes",
+        "paye-remitter": "PAYE for employers: Introduction to PAYE; Deductions from their pay; Reporting pay and deductions; Paying HMRC",
+        "scottish-powers": "Scottish Government: Income Tax",
+        "vat": "How VAT works: Overview; Your responsibilities as a VAT-registered business; What VAT is charged on; How much VAT you must charge",
+        "welsh-income-tax": "Welsh Income Tax: Income Tax in Wales; Who pays the Welsh rates; How you pay",
+        "corporation-tax": "Corporation Tax: Overview; Profits you pay Corporation Tax on",
+    }
+    by_id = {Path(s["file"]).name.removeprefix("basics-").removesuffix(".html.json"): s
+             for s in sources["sources"]}
+    if len(sources["sources"]) != 7 or set(by_id) != set(locators):
+        raise ValueError("Guidance methods source IDs changed")
+    rows = "".join(
+        f'<li data-guidance-source="{sid}"><a href="{esc(by_id[sid]["url"])}">{esc(locator)}</a>'
+        f'<p class="small">Original response SHA-256: <code>{esc(by_id[sid]["sha256"])}</code>. '
+        f'Retained copy SHA-256: <code>{esc(by_id[sid]["stored_sha256"])}</code>.</p></li>'
+        for sid, locator in locators.items())
+    return f'''<section id="tax-guidance" data-pid="tax-guidance-methods">
+<h2>Where the tax definitions come from</h2>
+<p>Official guidance explains the tax rules. It is not the source of the household percentages or receipt totals.
+We checked these guidance pages on 30 October 2026. They are living guidance; no publication date is established.
+The next update is unknown. We use no current rates or personal tax examples.</p>
+<p>The short definitions link to the official page and name the relevant heading.
+The OBR group limits and ONS model limits remain beside their own figures.
+These definitions do not describe who bears every tax cost.</p>
+<details><summary>Guidance headings and retained file hashes</summary>
+<p>Each link opens the official guidance. The headings below locate the text we used.
+The hashes identify the original response and its lossless retained copy.
+A later download can change because these are living pages. Private source registers and raw responses are not public downloads.</p>
+<ul class="name">{rows}</ul></details></section>'''
 
 
 def methods():
@@ -872,6 +923,7 @@ or who ultimately bears the cost.</p>
 <p><a href="who-pays.html">Who pays tax?</a> gives two separate official views.</p>
 </section>
 {section_payer_methods()}
+{section_basics_methods()}
 <h2>Words used on this site</h2>
 <dl>
 <dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.
