@@ -1,0 +1,268 @@
+"""Product, publication-boundary and local HTTP checks for the spending port."""
+from functools import partial
+from html.parser import HTMLParser
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+import json
+import re
+import sys
+import tempfile
+import threading
+import unittest
+from unittest.mock import patch
+from urllib.error import HTTPError
+from urllib.parse import urlsplit, unquote
+from urllib.request import urlopen
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+import build as builder
+import build_data
+from check_site import independent_data_checks, cells
+
+class Document(HTMLParser):
+    def __init__(self, text):
+        super().__init__(convert_charrefs=True)
+        self.tags = []
+        self.text = []
+        self.nodes = []
+        self._stack = []
+        self.feed(text)
+
+    def handle_starttag(self, tag, attrs):
+        self.tags.append((tag, dict(attrs)))
+        node = {"tag": tag, "attrs": dict(attrs), "children": [], "text": []}
+        self.nodes.append(node)
+        if self._stack:
+            self._stack[-1]["children"].append(node)
+        if tag not in {"area", "base", "br", "col", "embed", "hr", "img",
+                       "input", "link", "meta", "param", "source", "track", "wbr"}:
+            self._stack.append(node)
+
+    def handle_endtag(self, tag):
+        for index in range(len(self._stack) - 1, -1, -1):
+            if self._stack[index]["tag"] == tag:
+                del self._stack[index:]
+                break
+
+    def handle_data(self, data):
+        self.text.append(data)
+        for node in self._stack:
+            node["text"].append(data)
+
+    def elements(self, tag):
+        return [attrs for name, attrs in self.tags if name == tag]
+
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, *_args):
+        pass
+
+
+
+def snapshot(directory):
+    return {p.relative_to(directory).as_posix(): p.read_bytes()
+            for p in directory.rglob("*") if p.is_file()}
+
+
+class ProductTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.site = ROOT / "site"
+        cls.files = snapshot(cls.site)
+        if set(cls.files) != builder.PUBLIC_FILES:
+            raise AssertionError("Run make build before product verification or smoke")
+        cls.data = json.loads(cls.files["data/spending.json"])
+
+    def test_complete_public_product(self):
+        self.assertEqual(self.files["data/spending.json"], (ROOT / "data/spending.json").read_bytes())
+        self.assertGreaterEqual(len(self.data["years"]), 20)
+        self.assertEqual(len(self.data["functions"]), 11)
+        self.assertEqual(self.data["base_year"], self.data["latest_year"])
+        decades = self.data["history"]["decades"]
+        self.assertEqual(decades[0], "1945-46")
+        self.assertEqual(decades[-1], self.data["latest_year"])
+        self.assertTrue(all(int(b[:4]) - int(a[:4]) == 10 for a, b in zip(decades, decades[1:])))
+        self.assertEqual(self.data["product_source"]["revision"], "8eb81d6c7075e4b4e89e4aa1cc398fbae12eb713")
+
+    def test_semantics_links_and_no_javascript_content(self):
+        docs = {name: Document(self.files[name].decode("utf-8"))
+                for name in ("index.html", "methods.html")}
+        ids = {name: [attrs["id"] for _, attrs in doc.tags if "id" in attrs]
+               for name, doc in docs.items()}
+        for name, doc in docs.items():
+            raw = self.files[name].decode("utf-8")
+            self.assertLess(len(self.files[name]), 500_000)
+            self.assertRegex(raw.lower(), r"<!doctype\s+html\s*>")
+            self.assertEqual(len(doc.elements("main")), 1)
+            self.assertEqual(len(doc.elements("h1")), 1)
+            self.assertEqual(len(doc.elements("title")), 1)
+            self.assertTrue(doc.elements("html")[0]["lang"].startswith("en"))
+            self.assertIn("width=device-width", next(a["content"] for a in doc.elements("meta")
+                                                   if a.get("name") == "viewport"))
+            self.assertEqual(len(ids[name]), len(set(ids[name])), "Duplicate IDs")
+            self.assertEqual(doc.elements("a")[0]["href"], "#" + doc.elements("main")[0]["id"])
+            self.assertIn("Open Government Licence v3.0", raw)
+            for tag, attrs in doc.tags:
+                # Citations may link out; page resources must remain local.
+                if tag in ("script", "img", "link", "iframe"):
+                    target = attrs.get("src", attrs.get("href", ""))
+                    self.assertFalse(target.startswith(("http:", "https:", "//")))
+                if tag == "a":
+                    link = urlsplit(attrs.get("href", ""))
+                    if link.scheme or link.netloc:
+                        continue
+                    target = unquote(link.path) or name
+                    self.assertIn(target, self.files, f"Broken link: {name} -> {target}")
+                    if link.fragment:
+                        self.assertIn(unquote(link.fragment), ids[target])
+            for table in [node for node in doc.nodes if node["tag"] == "table"]:
+                self.assertTrue(any(child["tag"] == "caption" for child in table["children"]))
+            self.assertTrue(all(a.get("scope") in ("row", "col") for a in doc.elements("th")))
+
+        index = docs["index.html"]
+        answers = next(node for node in index.nodes if node["attrs"].get("id") == "answers")
+        self.assertEqual(sum(child["tag"] == "details" for child in answers["children"]), 8)
+        for section_id in ("hundred", "items", "total", "decades", "areas"):
+            section = next(node for node in index.nodes if node["attrs"].get("id") == section_id)
+            self.assertIn("Show the numbers in a table", " ".join(section["text"]))
+        self.assertGreater(len(index.elements("data")), 100)
+        self.assertTrue(all(a.get("data-ref") and a.get("value") for a in index.elements("data")))
+        # Static table text is present before the enhancement script runs.
+        self.assertIn("not given", self.files["index.html"].decode("utf-8"))
+        self.assertNotIn("All the rest is real spending", self.files["index.html"].decode("utf-8"))
+
+    def test_responsive_focus_and_chart_alternatives(self):
+        raw = self.files["index.html"].decode("utf-8")
+        self.assertRegex(raw, r"@media\s*[^{}]*max-width")
+        self.assertRegex(raw, r":focus-visible\{[^}]*outline:")
+        self.assertIn("overflow-x:auto", raw)
+        self.assertNotRegex(raw, r"outline\s*:\s*(?:none|0)\s*[;}]")
+        for attrs in Document(raw).elements("svg"):
+            self.assertEqual(attrs.get("aria-hidden"), "true")
+
+    def test_independent_checker_rejects_corrupt_generated_value(self):
+        with tempfile.TemporaryDirectory() as directory:
+            site = Path(directory)
+            (site / "data").mkdir()
+            data = json.loads(self.files["data/spending.json"])
+            data["services_total"][data["latest_year"]]["v"] += 1
+            (site / "data/spending.json").write_text(json.dumps(data))
+            with self.assertRaisesRegex(ValueError, "Independent reconciliation failed"):
+                independent_data_checks(site, cells())
+
+    def test_built_product_http_bytes_types_and_private_404s(self):
+        server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(self.site)))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            base = f"http://127.0.0.1:{server.server_port}"
+            for name, content in self.files.items():
+                with self.subTest(name=name), urlopen(base + "/" + name, timeout=5) as response:
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(response.read(), content)
+                    expected = ("text/html" if name.endswith(".html") else
+                                "application/json" if name.endswith(".json") else "image/svg+xml")
+                    self.assertEqual(response.headers.get_content_type(), expected)
+            with urlopen(base + "/", timeout=5) as response:
+                self.assertEqual(response.read(), self.files["index.html"])
+            for name in ("README.md", "AGENTS.md", ".git/config", ".env", "scripts/build.py",
+                         "tests/test_product.py", "data/raw/", "data/sources.json",
+                         "factory/project.json", "reference/", "missing.html"):
+                with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
+                    urlopen(base + "/" + name, timeout=5)
+                self.assertEqual(caught.exception.code, 404)
+                caught.exception.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
+            self.assertFalse(thread.is_alive())
+
+
+class PublicationSafetyTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.work = Path(self.temp.name)
+        self.project = self.work / "project"
+        for name in ("static", "scripts", "tests", ".git", "data", "assets"):
+            (self.project / name).mkdir(parents=True)
+            (self.project / name / "keep.txt").write_text("private sentinel")
+        (self.project / "README.md").write_text("private documentation")
+
+    def test_builder_rejects_unsafe_targets_without_reading_sources(self):
+        original = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(builder, "build_data") as read:
+            for target in (self.project, self.project.parent, self.project / "static",
+                           self.project / "scripts", self.project / "tests", self.project / ".git",
+                           self.project / "data", self.project / "README.md",
+                           self.project / "static/generated"):
+                with self.subTest(target=target), self.assertRaises(ValueError):
+                    builder.build(target)
+            read.assert_not_called()
+        self.assertEqual(snapshot(self.project), original)
+
+    def test_contaminated_and_symlinked_output_preserved(self):
+        output = self.work / "public"
+        output.mkdir()
+        (output / "index.html").write_text("last good")
+        (output / "credentials.json").write_text("private")
+        before = snapshot(output)
+        with self.assertRaises(ValueError):
+            builder.build(output)
+        self.assertEqual(snapshot(output), before)
+        (output / "credentials.json").unlink()
+        (output / "data").symlink_to(self.project / "data", target_is_directory=True)
+        with self.assertRaises(ValueError):
+            builder.build(output)
+        self.assertTrue((output / "data").is_symlink())
+        link = self.work / "linked"
+        link.symlink_to(output, target_is_directory=True)
+        for target in (link, link / "child"):
+            with self.assertRaises(ValueError):
+                builder.build(target)
+        self.assertFalse((output / "child").exists())
+
+    def test_failed_source_validation_keeps_last_good_publication(self):
+        output = self.work / "public"
+        (output / "data").mkdir(parents=True)
+        for name in builder.PUBLIC_FILES:
+            (output / name).write_text("last good")
+        before = snapshot(output)
+        with patch.object(builder, "ROOT", self.project), patch.object(
+                builder, "build_data", side_effect=ValueError("source hash mismatch")):
+            with self.assertRaisesRegex(ValueError, "source hash mismatch"):
+                builder.build(output)
+        self.assertEqual(snapshot(output), before)
+        self.assertFalse((self.project / "data/spending.json").exists())
+
+    def test_exact_allowlist_and_legacy_cleanup(self):
+        output = self.work / "public"
+        output.mkdir()
+        (output / "styles.css").write_text("old baseline")
+        public = {name: f"public {name}".encode() for name in builder.PUBLIC_FILES}
+        before = snapshot(self.project)
+        with patch.object(builder, "ROOT", self.project), patch.object(builder, "build_data", return_value={}), patch.object(
+                builder, "payloads", return_value=public):
+            builder.build(output)
+            self.assertEqual(snapshot(output), public)
+            for path in (output / name for name in builder.PUBLIC_FILES):
+                self.assertEqual(path.stat().st_mode & 0o777, 0o644)
+            self.assertEqual((self.project / "data/spending.json").stat().st_mode & 0o777, 0o644)
+            builder.build(output)
+            self.assertEqual(snapshot(output), public)
+        self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json"})
+        for name, content in before.items():
+            self.assertEqual((self.project / name).read_bytes(), content)
+
+    def test_missing_is_not_zero(self):
+        for marker in (None, "", "-", " - "):
+            self.assertIsNone(build_data.number(marker))
+        self.assertEqual(build_data.number(0), 0.0)
+        with self.assertRaises(ValueError):
+            build_data.number(float("nan"))
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

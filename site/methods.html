@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How this site works | UnpoliticalAF</title>
+<link rel="icon" href="icon.svg">
+<style>
+:root{--ink:#1f2937;--soft:#4b5563;--line:#e5e7eb}
+*{box-sizing:border-box}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+[id]{scroll-margin-top:12rem}
+.skip{position:absolute;left:18px;top:8px;z-index:2;background:#fff;padding:8px;transform:translateY(-200%)}
+.skip:focus{transform:none}
+body{margin:0;font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff}
+header,main,footer{max-width:760px;margin:0 auto;padding:0 18px}
+header{padding-top:28px}
+h1{font-size:2rem;line-height:1.2;margin:.2em 0}
+h2{font-size:1.45rem;margin:2.2em 0 .4em;border-top:2px solid var(--ink);padding-top:.6em}
+h3{font-size:1.1rem;margin:1.2em 0 .2em}
+.lead{font-size:1.2rem}
+.small,.note,.official{font-size:.88rem;color:var(--soft)}
+.note{border-left:3px solid var(--line);padding-left:10px}
+data{border-bottom:1px dotted var(--soft);cursor:help;font-weight:600}
+.chart{width:100%;height:auto;display:block;margin:.6em 0}
+.chart text{font-size:13px;fill:var(--ink)}
+.chart .axis{font-size:11px;fill:var(--soft)}
+.bars{margin:.8em 0}
+.bar{display:grid;grid-template-columns:minmax(0,38%) 1fr;gap:10px;align-items:center;margin:5px 0;font-size:.9rem}
+.bl{text-align:right}
+.bt{display:flex;align-items:center;gap:6px}
+.bf{display:block;height:20px;background:var(--ink);min-width:2px}
+.bv{white-space:nowrap;font-weight:600}
+@media (max-width:560px){.bar{grid-template-columns:1fr;gap:2px;margin:9px 0}.bl{text-align:left}}
+.legend{font-size:.9rem}.key{display:inline-block;width:12px;height:12px;margin:0 4px 0 10px;vertical-align:-1px}
+.chart.small .axis{font-size:12px}
+.steps{margin:.2em 0}
+.narrow{display:none}
+@media (max-width:560px){.wide{display:none}.narrow{display:block}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.card{border-top:1px solid var(--line)}
+.card .chart .axis{font-size:12px}
+.v{display:none}
+body.view-real .v-real,body.view-nominal .v-nominal,body.view-gdp .v-gdp{display:inline}
+.views{position:sticky;top:0;background:#fff;padding:8px max(18px,calc((100% - 724px)/2));border-bottom:1px solid var(--line);z-index:1}
+.views button{font:inherit;font-size:.9rem;padding:4px 10px;margin:2px 4px 2px 0;border:1px solid var(--ink);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer}
+.views button[aria-pressed=true]{background:var(--ink);color:#fff}
+.nojs .views button,.nojs .views br{display:none}
+.tip{position:fixed;left:12px;right:12px;bottom:12px;max-width:600px;margin:0 auto;background:var(--ink);color:#fff;padding:10px 14px;border-radius:6px;font-size:.9rem;cursor:pointer}
+.tbl{overflow-x:auto;max-width:100%}
+code{overflow-wrap:anywhere}
+nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.5em 0}
+th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;vertical-align:top}
+th[scope=row],caption{text-align:left}
+caption{font-weight:600;padding:4px 0}
+details{margin:.4em 0}
+summary{cursor:pointer;color:var(--ink);font-weight:600}
+.tbl summary{font-weight:400;font-size:.9rem;color:var(--soft)}
+#answers details{border-bottom:1px solid var(--line);padding:6px 0}
+a{color:var(--ink)}
+footer{margin-top:3em;padding:1.5em 18px 3em;font-size:.85rem;color:var(--soft);border-top:1px solid var(--line)}
+@media (max-width:480px){body{font-size:16px}h1{font-size:1.6rem}}
+</style>
+</head>
+<body class="view-real nojs">
+<a class="skip" href="#main">Skip to content</a>
+
+<header><h1>How this site works</h1></header>
+<main id="main">
+<section id="about">
+<h2>About</h2>
+<p>John Ross runs this site.</p>
+</section>
+<h2>What this site is for</h2>
+<p>This site shows where UK public money goes, in plain words.
+It uses official figures and nothing else.
+It does not say if any spend is right or wrong.
+It does not back any party.</p>
+<section id="check"><h2>How to check a figure</h2>
+<ul>
+<li>Find the official source publication, table and version in the source note.</li>
+<li>Check the fiscal year, unit, scale and definitions for that cell.</li>
+<li>Read the source notes: an actual, estimate and forecast are not the same. A forecast is not observed spending.</li>
+<li>Check reconciliation with the published total. Allow for rounding, exclusions and scope differences. Rounded parts may not add up exactly.</li>
+</ul>
+<p>When figures are published, they can later be revised. The dates below show which files we use.
+No next release date has been recorded in this port.</p>
+</section>
+<h2>Where the numbers come from</h2>
+<p>Most numbers come from one report by the Treasury:
+<a href="https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2026"><cite>Public Expenditure Statistical Analyses 2026</cite></a> (PESA).
+These are <cite>Accredited Official Statistics</cite>.
+They cover all public bodies across the whole UK.
+That means central government, local councils and firms the state owns.</p>
+<p>The figures every ten years since 1945 come from the <cite>Office for Budget Responsibility</cite> (OBR).
+The OBR is the official body that checks the government's figures.
+Its <cite>Public finances databank, October 2026</cite> gives spending, income, borrowing and debt.
+Its <cite>Historical public finances database</cite> gives spending on five areas.
+The OBR says the second one is not National Statistics.
+It joins up old sources, and it made its own choices to do that.</p>
+<div class="tbl"><table><caption>Source files</caption><thead><tr><th scope="col">File</th><th scope="col">Published</th><th scope="col">Downloaded</th><th scope="col">SHA-256 (start)</th></tr></thead>
+<tbody><tr><th scope="row"><a href="https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx">PESA_2026_CP_Chapter_4_tables.xlsx</a></th><td>2026-07-16</td><td>2026-10-29</td><td><code>50ae80d95c4e542c…</code></td></tr><tr><th scope="row"><a href="https://assets.publishing.service.gov.uk/media/6a5772f59e63154454413701/PESA_2026_CP_Chapter_5_tables.xlsx">PESA_2026_CP_Chapter_5_tables.xlsx</a></th><td>2026-07-16</td><td>2026-10-29</td><td><code>ccb4539bb837c2b6…</code></td></tr><tr><th scope="row"><a href="https://obr.uk/download/public-finances-databank-october-2026-efo/">OBR_Public_finances_databank_October_2026.xlsx</a></th><td>2026-10-28</td><td>2026-10-29</td><td><code>16a4bf46d8692e18…</code></td></tr><tr><th scope="row"><a href="https://obr.uk/download/historical-public-finances-database/">OBR_Historical_public_finances_database.xlsx</a></th><td>2023-08-03</td><td>2026-10-29</td><td><code>df154a4774807de3…</code></td></tr></tbody></table></div>
+<p>Each file has a unique code, called a hash. The full codes are in <a href="data/spending.json">the data file</a>.
+You can download the files and check the codes match.
+If they match, the files have not been changed.</p>
+<h2>How the numbers are checked</h2>
+<p>A script reads the Treasury files. No number is typed in by hand.
+The build checks the following sums before it writes the pages:</p>
+<ul class="name"><li>Table 4.2: the 11 areas add up to spending on services in all 23 years</li><li>Table 4.2: spending on services plus accounting adjustments equals TME in every year</li><li>Table 4.2 TME matches Table 4.1 TME in every year</li><li>Table 4.3 (real terms) equals Table 4.2 (cash) in the base year 2025-26</li><li>Table 4.1 real-terms figures equal cash figures in 2025-26</li><li>Table 5.2 area totals match Table 4.2 for 2021-22 to 2025-26</li><li>Table 5.2 debt items add up to the Table 4.2 debt interest line for 2025-26</li><li>OBR databank: borrowing equals spending minus income in every year from 1900-01 to 2031-32</li><li>OBR historical database: the five areas plus &#x27;other&#x27; add up to total spending in every year that has all of them</li><li>OBR total spending as a share of GDP in 2025-26 is within 0.5 points of the Treasury figure (they differ slightly because the OBR file is newer)</li></ul>
+<p>Then a second script reads every number on the page.
+It checks each one against the cell it names in the source file.
+The source files and sums can be checked again with the build commands in the README.</p>
+<h2>Words used on this site</h2>
+<dl>
+<dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.
+It is all the public sector spends, including building work and interest.</dd>
+<dt><strong>Spending on services</strong></dt><dd>Total spending split into areas such as health and defence.
+It leaves out some book-keeping items that do not belong to one area.</dd>
+<dt><strong>Adjusted for inflation</strong></dt><dd>Prices rise over time, so £1 bought more in the past.
+We show older amounts in 2025-26 prices so you can compare years fairly.
+This uses the same price measure as the Treasury tables.</dd>
+<dt><strong>Share of GDP</strong></dt><dd>GDP is the value of all the goods and services made in the UK in a year.
+This shows spending as a part of that.</dd>
+<dt><strong>Comparing years</strong></dt><dd>We compare in steps of ten years, counting back from 2025-26.
+So we use 2015-16, 2005-06 and so on, back to 1945-46. We do not pick years by hand.</dd>
+<dt><strong>Areas</strong></dt><dd>The areas are the ones the United Nations uses, called <cite>COFOG</cite>.
+We give each one a plain name next to its official name.</dd>
+</dl>
+<h2>What this site does not cover yet</h2>
+<ul>
+<li>Which taxes the money comes from.</li>
+<li>What each party plans to do.</li>
+<li>Spending per person or per home.</li>
+</ul>
+<section id="corrections"><h2>Corrections</h2><p>No corrections yet.</p></section>
+<h2>Report an error</h2>
+<p>A way to report errors is coming soon.</p>
+</main>
+<footer>
+<p class="name">Data: HM Treasury, <a href="https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2026">Public Expenditure Statistical Analyses 2026</a> (2026-07-16); Office for Budget Responsibility, <a href="https://obr.uk/data/">Historical public finances database</a> (2023-08-03); Office for Budget Responsibility, <a href="https://obr.uk/data/">Public finances databank, October 2026</a> (2026-10-28).
+Contains public sector information licensed under the
+<a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+<p><a href="index.html">Where the money goes</a> · <a href="methods.html">How this site works</a> ·
+<a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
+<a href="data/spending.json">Download all the data (JSON)</a></p>
+</footer>
+<p id="tip" class="tip" role="status" hidden></p>
+<script>
+document.body.classList.remove('nojs');
+var bs=document.querySelectorAll('.views button');
+bs.forEach(function(b){b.addEventListener('click',function(){
+  document.body.className='view-'+b.dataset.view;
+  bs.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});
+  document.getElementById('view-label').textContent=b.textContent;
+})});
+var tip=document.getElementById('tip');
+document.querySelectorAll('data[title]').forEach(function(d){
+  d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-controls','tip');
+  function showSource(){tip.textContent=d.title;tip.hidden=false;}
+  d.addEventListener('click',showSource);
+  d.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();showSource();}
+  });
+});
+tip.addEventListener('click',function(){tip.hidden=true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){tip.hidden=true;}});
+</script>
+</body>
+</html>

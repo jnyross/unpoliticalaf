@@ -1,12 +1,12 @@
 {
   "name": "unpoliticalaf",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "Static under-construction baseline for UnpoliticalAF; no npm dependencies.",
+  "description": "Static, sourced guide to UK public spending; built from retained official workbooks.",
   "scripts": {
-    "setup": "python3 -c \"import sys; assert sys.version_info >= (3, 10), 'Python 3.10+ required'; print('Setup OK: Python standard library only; no packages to install')\"",
-    "build": "python3 scripts/build.py",
-    "verify": "python3 -m unittest discover -s tests -v",
-    "smoke": "python3 scripts/build.py && python3 -m unittest discover -s tests -k http -v"
+    "setup": "make setup",
+    "build": "make build",
+    "verify": "make verify",
+    "smoke": "make smoke"
   }
 }
