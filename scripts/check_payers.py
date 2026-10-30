@@ -360,10 +360,26 @@ def validate_page(root, data, text):
         actual_ids = [n["attrs"].get("data-payer-id") for n in descendants if n["tag"] == "data"]
         require(captions == [caption] and headers == heads and actual_ids == value_ids,
                 "Table year, status, denominator, group order or measure changed")
+    basics = [n for n in nodes if n["attrs"].get("data-basics") == "payers"]
+    require(len(basics) == 1 and basics[0]["tag"] == "aside" and
+            basics[0]["parents"][-1] is main, "Missing unique payer basics aside")
+    basics = basics[0]
+    basics_headings = [n for n in nodes if n["tag"] == "h2" and basics in n["parents"]]
+    require(len(basics_headings) == 1 and basics_headings[0]["parents"][-1] is basics and
+            basics_headings[0]["attrs"].get("id") == "payer-basics-title" and
+            "".join(basics_headings[0]["text"]) == "Who sends the tax?",
+            "Payer basics heading changed")
+    # Do not ignore arbitrary aside headings: the exact marked heading is the only addition.
     headings = ["".join(n["text"]) for n in nodes if n["tag"] == "h2"]
     require(headings == ["Who owed Income Tax in 2023/24?", "How do taxes compare with household income?",
-                         "Who sends the tax, and who bears its cost?", "Where can I check the numbers?"],
-            "Payer heading scope/year changed")
+                         "Who sends the tax?", "Who sends the tax, and who bears its cost?",
+                         "Where can I check the numbers?"], "Payer heading scope/year changed")
+    burden = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "burden"]
+    require(len(burden) == 1 and nodes.index(basics) < nodes.index(burden[0]) and
+            all(nodes.index(n) < nodes.index(burden[0]) for n in nodes if basics in n["parents"]) and
+            all(nodes.index(n) < nodes.index(basics) for n in nodes
+                if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
+            "Payer collection basics must follow the tables and precede burden methodology")
     ids = {n["attrs"].get("id") for n in document.nodes}
     for table in tables:
         regions = [p for p in table["parents"] if p["attrs"].get("role") == "region"]
@@ -371,6 +387,15 @@ def validate_page(root, data, text):
     source_sections = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "payer-sources"]
     require(len(source_sections) == 1, "Missing unique payer source section")
     source_section = source_sections[0]
+    basics_details = [n for n in nodes if n["tag"] == "details" and basics in n["parents"]]
+    require(len(basics_details) == 1 and basics_details[0]["parents"][-1] is basics,
+            "Payer basics must have one native disclosure")
+    for detail in (n for n in nodes if n["tag"] == "details"):
+        if detail is basics_details[0]:
+            continue
+        require(detail["parents"][-1] is source_section and
+                detail["attrs"].get("id") in {"hmrc-sources", "ons-sources"},
+                "Only the marked basics disclosure can precede final source details")
     require(source_section["parents"][-1] is main and
             all(nodes.index(n) < nodes.index(source_section) for n in nodes
                 if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),

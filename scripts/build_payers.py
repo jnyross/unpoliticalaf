@@ -4,6 +4,7 @@ The callback has the existing build_site.page(title, body) signature. The
 controller owns file publication, shared navigation, CSS and output allowlists.
 """
 from html import escape
+from build_basics import payer_basics
 
 
 def esc(value):
@@ -131,6 +132,7 @@ Compare the spending measure below too.</p></div>
 Current direct taxes include student-loan repayments. Corporation Tax is not allocated to households in this analysis.
 This is not a measure of all UK taxes. Suppressed components stay suppressed; we do not fill them in.</p>
 </section>
+{payer_basics()}
 <section id="burden"><h2>Who sends the tax, and who bears its cost?</h2>
 <p>A business that sends money to HMRC is not always the person who bears the cost.
 ONS assigns final and intermediate indirect taxes fully to consumers in this model.

@@ -19,6 +19,7 @@ from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 from check_taxes import validate as validate_taxes, checked_forecast_prose
 from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
+from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -209,6 +210,7 @@ def check_pesa_dates(raw, data, read, name):
 
 
 def validate(site=SITE):
+    independent_basics_checks(site)
     read = cells()
     errors, report = [], []
     if not (site / "index.html").is_file():
@@ -324,6 +326,22 @@ def validate(site=SITE):
         print("\n".join("FAIL " + e for e in errors))
         sys.exit(1)
     print("all checks passed")
+
+
+def independent_basics_checks(site, root=None):
+    """Check retained guidance and marked fragments in actual published HTML."""
+    root = ROOT if root is None else Path(root)
+    site = Path(site)
+    validate_basics_sources(root)
+    pages = []
+    for name in ("taxes.html", "who-pays.html"):
+        path = site / name
+        if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
+            raise ValueError("Basics publication must contain regular HTML files")
+        if path.stat().st_size >= MAX_BYTES:
+            raise ValueError("Basics publication exceeds page size limit")
+        pages.append(path.read_text(encoding="utf-8"))
+    return validate_basics_fragments(*pages, root=root)
 
 
 def independent_payer_checks(site):

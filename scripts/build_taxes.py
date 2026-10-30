@@ -3,6 +3,7 @@ import html
 import json
 import re
 from decimal import Decimal, ROUND_HALF_UP
+from build_basics import tax_basics
 
 LABELS = {
     "income_tax": "Income tax",
@@ -172,9 +173,10 @@ No next release date is announced in the retained evidence.</p>
 <p class="small" data-pid="tax-outturn-note">Outturn can be revised. The outturn figures are consistent with the public finances bulletin released on 22 September 2026.</p>
 <p class="small">That bulletin date is not the later forecast vintage. Forecast years are shown separately below.</p>
 </header><main id="main">
-<nav class="page-links" aria-label="On this page"><a href="#receipt-groups">Main taxes</a>
+<nav class="page-links" aria-label="On this page"><a href="#tax-basics-title">Main taxes</a>
 <a href="#balance">Borrowing and debt</a><a href="#tax-history">History and forecasts</a>
 <a href="#tax-sources">Check the sources</a></nav>
+{tax_basics()}
 <section id="receipt-groups" data-pid="receipt-groups"><h2>Where each £100 of receipts came from</h2>
 <p data-pid="receipt-denominator">The whole is all current public receipts: taxes plus other receipts.
 The shares mean “of each £100 of all current public receipts”. They are not shares of tax.
