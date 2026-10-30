@@ -251,7 +251,7 @@ class PayerTests(unittest.TestCase):
             check_payers.validate_page(ROOT, self.data, candidate)
         candidate = self.page.replace(sentence, '', 1).replace(
             '</header>', '<p>' + sentence + '</p></header>', 1)
-        with self.assertRaisesRegex(ValueError, "Shown HMRC group relationship changed"):
+        with self.assertRaisesRegex(ValueError, "Missing visible fiscal limit: The top 10% is part of the top 50%"):
             check_payers.validate_page(ROOT, self.data, candidate)
 
     def test_claim_scan_excludes_hidden_and_non_page_text(self):
