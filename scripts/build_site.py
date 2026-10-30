@@ -292,7 +292,7 @@ Ten years earlier, in {TEN}, it was {fig(then["gdp"], kind="gdp")}.
 <a href="#decades">See every ten years back to 1945</a>.</p>
 {view_chart(make)}
 <p class="small">Years after {LATEST} are a forecast. They have a dashed line and a grey background.
-The GDP and price forecasts are from the <cite>Office for Budget Responsibility</cite>, dated {esc(D["pesa_context"]["forecast_date"])}.
+The GDP and price forecasts are from the <cite>Office for Budget Responsibility</cite>, dated <span data-pesa-forecast-date="1">{esc(D["pesa_context"]["forecast_date"])}</span>.
 The dates and price basis are in <cite>PESA {esc(D["pesa_context"]["forecast_ref"])} and {esc(D["pesa_context"]["deflator_ref"])}</cite>.
 From 2020-21, the figures include help given during Covid and when prices rose fast.
 (<cite>PESA Table 4.2, note 2</cite>)</p>
@@ -348,7 +348,7 @@ In {last} it was {pct(t["debt"]["values"][last])}.</p>
 <p class="small">Source: <cite>{esc(SRC["obr_databank"]["publisher"])}, {esc(SRC["obr_databank"]["publication"])}</cite>.
 This file is newer than the Treasury tables used above, so it can differ a little.
 Each value has an uncertain actual/estimate status in the data file. The notes do not give a clear final status.
-The March 2026 forecast note above applies to the Treasury totals, not this OBR file.
+The <span data-pesa-forecast-date="1">{esc(D["pesa_context"]["forecast_date"])}</span> forecast note above applies to the Treasury totals, not this OBR file.
 The OBR sheet's own notes name both March and October forecasts. The registry keeps these conflicts and each series' update notes
 (<cite>Public finances since 1900, B2 and B139 to B148</cite>).
 For {last} it gives spending of {pct(sp[last])} of GDP; the Treasury gives {fig(total["gdp"], kind="gdp")}.

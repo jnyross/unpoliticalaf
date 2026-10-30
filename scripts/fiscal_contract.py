@@ -23,6 +23,21 @@ FUNCTION_ROWS = {
     "social": (23, "10. Social protection"),
     "eu": (24, "EU transactions"),
 }
+# All original Table 4.2 rows, including undisplayed subsets and accounting
+# totals. These are paired price identities, never an additive partition.
+BASE_PRICE_ROWS = dict(sorted({**FUNCTION_ROWS,
+    "public-common": (7, "of which: public and common services"),
+    "international": (8, "of which: international services"),
+    "debt-interest": (9, "of which: public sector debt interest"),
+    "enterprise": (13, "of which: enterprise and economic development"),
+    "science": (14, "of which: science and technology"),
+    "employment": (15, "of which: employment policies"),
+    "agriculture": (16, "of which: agriculture, fisheries and forestry"),
+    "transport": (17, "of which: transport"),
+    "services": (25, "Public sector expenditure on services"),
+    "adjustments": (26, "Accounting adjustments"),
+    "tme": (27, "Total Managed Expenditure"),
+}.items(), key=lambda item: item[1][0]))
 DETAIL_ROWS = {
     "pensions": (107, "of which: pensions", "social"),
     "medical": (76, "Medical services", "health"),

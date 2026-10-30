@@ -15,7 +15,7 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
-from check_fiscal import validate_fiscal
+from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -47,9 +47,13 @@ class Page(HTMLParser):
         self._names = []  # open tags that hold proper names, left out of the reading score
         self._fig = None
         self._para = None
+        self.date_labels = []
+        self._date_label = None
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == "span" and a.get("data-pesa-forecast-date") == "1":
+            self._date_label = []
         if tag == "section" and a.get("id"):
             self.section_ids.add(a["id"])
         if tag in ("script", "style", "svg"):
@@ -60,11 +64,15 @@ class Page(HTMLParser):
         if tag == "data":
             self._fig = {"value": a.get("value"), "ref": a.get("data-ref"), "calc": a.get("data-calc"),
                          "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
-                         "report_id": a.get("data-report-id"), "report_field": a.get("data-report-field"), "text": ""}
+                         "report_id": a.get("data-report-id"), "report_field": a.get("data-report-field"),
+                         "title": a.get("title"), "text": ""}
         if tag in ("p", "dd", "li") and not self._skip:
             self._para = []
 
     def handle_endtag(self, tag):
+        if tag == "span" and self._date_label is not None:
+            self.date_labels.append("".join(self._date_label))
+            self._date_label = None
         if tag not in ("br", "img", "input", "meta", "link") and self._names:
             self._names.pop()
         if tag in ("script", "style", "svg"):
@@ -77,6 +85,8 @@ class Page(HTMLParser):
             self._para = None
 
     def handle_data(self, data):
+        if self._date_label is not None:
+            self._date_label.append(data)
         if self._skip:
             return
         self.text.append(data)
@@ -135,6 +145,20 @@ def grade(paras):
     return 0.39 * words / sents + 11.8 * syl / words - 15.59
 
 
+def check_pesa_dates(raw, data, read, name):
+    """Validate prose and every forecast tooltip against separately read notes."""
+    date = pesa_forecast_date(read)
+    page = Page()
+    page.feed(raw)
+    if page.date_labels != ([date, date] if name == "index.html" else []):
+        raise ValueError(f"Independent PESA rendered date/vintage mismatch: {name}")
+    forecast_ids = {key for key, meta in data["provenance"].items() if meta["status"] == "pesa_forecast"}
+    label = "PESA forecast; OBR " + date + "."
+    for figure in page.figures:
+        if figure["value_id"] in forecast_ids and not (figure["title"] or "").endswith(label):
+            raise ValueError(f"Independent PESA tooltip date/vintage mismatch: {name}")
+
+
 def validate(site=SITE):
     read = cells()
     errors, report = [], []
@@ -142,6 +166,7 @@ def validate(site=SITE):
         raise ValueError("index.html: missing spending page")
     independent_data_checks(site, read)
     data = json.loads((site / "data/spending.json").read_text())
+    raw_fiscal = RawReader()
     nodes = {node["value_id"]: node for node, _ in selections(data)}
     reports = {r["id"]: r for r in data["reconciliations"]}
     if not (site / "methods.html").is_file():
@@ -149,6 +174,7 @@ def validate(site=SITE):
     for path in sorted(site.glob("*.html")):
         raw = path.read_text()
         name = path.name
+        check_pesa_dates(raw, data, raw_fiscal, name)
         p = Page()
         p.feed(raw)
         if name == "methods.html":

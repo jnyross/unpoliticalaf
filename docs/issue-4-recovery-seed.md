@@ -1,4 +1,30 @@
-# Issue #4 evidence recovery seed
+# Historical issue #4 audit-only preparation
+
+This is a historical record of the partial audit seed prepared on 30 October
+2026, **not the current implementation or acceptance status**. The sections
+below describe that seed at `1758636d33e65202bfe215c50216f11229b21451` and its
+then-outstanding work. Preserve its observations and failure evidence.
+
+The later #20 integration seed and deployed #21 candidate
+`8e60e9e03707ec38cb274468306e95085bb0bee3` implemented schema version 2,
+per-value semantics, ordered formula operands, fiscal-boundary corruption tests,
+explicit status uncertainty, and residual/exclusion ledgers. Current arithmetic
+does **not** preserve this historical seed's tolerances: PESA uses operand-grid
+nearest-rounding consistency budgets (not statistical error bounds); ratios use
+a numerical allowance of 1e-9 percentage points; the former 0.5-point OBR/PESA
+vintage proximity pass was removed in favour of a signed, non-comparable
+difference with no budget. See [the fiscal schema](fiscal-schema.md) for the
+current rules and #22's full-row/date repair.
+
+The #21 worker edited source only. The controller generated the artifacts that
+were committed and deployed on 30 October 2026; its generation, exact-candidate
+gate and independent review receipts are retained under
+`receipts/21/1793368898495164182/` in private factory state. Current #4/#20
+completion still requires the combined acceptance evidence and the normal
+controller's reviews, gates and canonical live verification. This document
+neither reopens #21 nor proves that remaining acceptance.
+
+## Original audit-seed record (historical)
 
 This is a bounded seed for a new recovery ticket, not completion or a retry of
 original issue #4. Base: `bbb0d143ad09df9ef684192babe0a14a251eb7ed`.
