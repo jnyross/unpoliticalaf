@@ -32,34 +32,40 @@ def money(v, unit="bn"):
 
 
 def fig(entry, text=None, kind="bn"):
-    """A sourced figure from the data."""
+    """A value whose full fiscal contract is in the downloadable registry."""
     v = entry["v"]
     if v is None:
         return '<span class="small">not given</span>'
+    meta = D["provenance"][entry["value_id"]]
+    status = D["status_definitions"][meta["status"]]["label"]
+    note = f'{where(entry["ref"])}. {meta["period"]}; {meta["unit"]}; {status}.'
     shown = text if text is not None else money(v, kind)
-    return (f'<data value="{v}" data-ref="{entry["ref"]}" title="Source: {esc(where(entry["ref"]))}">'
-            f"{esc(shown)}</data>")
+    return (f'<data value="{v}" data-value-id="{esc(entry["value_id"])}" '
+            f'data-ref="{esc(entry["ref"])}" title="Source: {esc(note)}">{esc(shown)}</data>')
+
+
+def calculation(kind, a, b, text_fn):
+    key = kind + ":" + a["value_id"] + ":" + b["value_id"]
+    node = D["derived"][key]
+    if node["v"] is None:
+        if node.get("comparability") == "definition_break":
+            refs = "; ".join(where(ref) for ref in node["comparison_refs"])
+            return (f'<span class="small" title="{esc(refs)}">'
+                    'not comparable: the definition changed</span>')
+        return '<span class="small">not given: no comparable calculation</span>'
+    refs = f'{a["ref"]} {b["ref"]}'
+    title = (f'{D["formulae"][kind]}. Operands: {where(a["ref"])} and {where(b["ref"])}. '
+             'Units, scope, periods and status are in the data file.')
+    return (f'<data value="{node["v"]:.4f}" data-calc="{kind}" data-derived-id="{esc(key)}" '
+            f'data-ref="{esc(refs)}" title="{esc(title)}">{esc(text_fn(node["v"]))}</data>')
 
 
 def change(old, new):
-    """Percentage change from old to new, with both source cells named."""
-    if old["v"] in (None, 0) or new["v"] is None:
-        return '<span class="small">not given: no comparable change</span>'
-    c = (new["v"] - old["v"]) / old["v"] * 100
-    return (f'<data value="{c:.4f}" data-calc="change" data-ref="{old["ref"]} {new["ref"]}" '
-            f'title="Calculated from {esc(where(old["ref"]))} and {esc(where(new["ref"]))}">'
-            f'{abs(c):.0f}% {"more" if c > 0 else "less"}</data>')
+    return calculation("change", old, new, lambda c: f'{abs(c):.0f}% {"more" if c > 0 else "less"}')
 
 
 def share(part, whole, text_fn=lambda s: f"£{s:.0f}"):
-    """A figure calculated as part / whole x 100, with both source cells named."""
-    if part["v"] is None or whole["v"] in (None, 0):
-        return '<span class="small">not given: no comparable share</span>'
-    s = part["v"] / whole["v"] * 100
-    refs = f'{part["ref"]} {whole["ref"]}'
-    return (f'<data value="{s:.4f}" data-calc="share" data-ref="{refs}" '
-            f'title="Calculated from {esc(where(part["ref"]))} and {esc(where(whole["ref"]))}">'
-            f"{esc(text_fn(s))}</data>")
+    return calculation("share", part, whole, text_fn)
 
 
 # ---------------------------------------------------------------- charts
@@ -230,7 +236,7 @@ def section_hundred():
               share(latest[f["id"]], services, lambda s: f"£{s:.2f}")] for f in ranked]
     eu = latest["eu"]
     trows.append(["Payments to and from the EU<br><small>EU transactions</small>", fig(eu), share(eu, services, lambda s: f"£{s:.2f}")])
-    trows.append(["<strong>Total spending on services</strong>", fig(services), "£100.00"])
+    trows.append(["<strong>Total spending on services</strong>", fig(services), share(services, services, lambda s: f"£{s:.2f}")])
     return f"""
 <section id="hundred">
 <h2>Out of every £100</h2>
@@ -254,8 +260,12 @@ def section_items():
 <section id="items">
 <h2>Ten spending items</h2>
 <p>These are ten selected items within the spending areas in {LATEST}. These items sit inside the area totals, so do not add the two lists.</p>
+<p class="small">The source counts some primary academy spending under secondary schools.
+Health uses a Treasury grouping where the needed detail is not available in England and Wales.
+The defence figure uses the UN definition; it is not a NATO total.
+See <cite>PESA Table 5.2, notes 4, 6 and 7</cite>. Each item's data record keeps the source notes.</p>
 {hbar(rows)}
-{table(f"Largest items, {LATEST}", ["Item", "Spent"], trows)}
+{table(f"Selected items, {LATEST}", ["Item", "Spent"], trows)}
 <h3 id="debt">Interest on government debt</h3>
 <p>The Treasury's line for debt interest in {LATEST} is {fig(interest)}.
 That is {share(interest, services)} of every £100.
@@ -275,17 +285,18 @@ def section_total():
               fig(e["tme"]["gdp"], kind="gdp")] for e in D["aggregates"]]
     return f"""
 <section id="total">
-<h2>Total spending since 1985</h2>
+<h2>Total spending since {agg_years[0][:4]}</h2>
 <p>In {LATEST} the public sector spent {fig(total["nominal"])} in all.
 That was {fig(total["gdp"], kind="gdp")} of the value of all the goods and services made in the UK that year (GDP).
 Ten years earlier, in {TEN}, it was {fig(then["gdp"], kind="gdp")}.
 <a href="#decades">See every ten years back to 1945</a>.</p>
 {view_chart(make)}
 <p class="small">Years after {LATEST} are a forecast. They have a dashed line and a grey background.
-The forecast is from the <cite>Office for Budget Responsibility</cite>, made on 3 March 2026.
+The GDP and price forecasts are from the <cite>Office for Budget Responsibility</cite>, dated {esc(D["pesa_context"]["forecast_date"])}.
+The dates and price basis are in <cite>PESA {esc(D["pesa_context"]["forecast_ref"])} and {esc(D["pesa_context"]["deflator_ref"])}</cite>.
 From 2020-21, the figures include help given during Covid and when prices rose fast.
 (<cite>PESA Table 4.2, note 2</cite>)</p>
-{table("Total Managed Expenditure, 1985-86 to 2028-29", ["Year", "Cash", f"Adjusted for inflation ({BASE} prices)", "Share of GDP"], trows)}
+{table(f"Total Managed Expenditure, {agg_years[0]} to {agg_years[-1]}", ["Year", "Cash", f"Adjusted for inflation ({BASE} prices)", "Share of GDP"], trows)}
 </section>"""
 
 
@@ -336,40 +347,49 @@ In {last} it was {pct(t["debt"]["values"][last])}.</p>
        ["Year", "Spending", "Income", "Borrowing", "Debt"], trows)}
 <p class="small">Source: <cite>{esc(SRC["obr_databank"]["publisher"])}, {esc(SRC["obr_databank"]["publication"])}</cite>.
 This file is newer than the Treasury tables used above, so it can differ a little.
-The latest year may be an estimate; this port has not checked each cell's status. Read the source file notes.
+Each value has an uncertain actual/estimate status in the data file. The notes do not give a clear final status.
 The March 2026 forecast note above applies to the Treasury totals, not this OBR file.
+The OBR sheet's own notes name both March and October forecasts. The registry keeps these conflicts and each series' update notes
+(<cite>Public finances since 1900, B2 and B139 to B148</cite>).
 For {last} it gives spending of {pct(sp[last])} of GDP; the Treasury gives {fig(total["gdp"], kind="gdp")}.
 Missing figures are shown as “not given”, not zero.</p>
 <h3>Spending on five areas</h3>
 <p>Here is the spend on five big areas, every ten years.
-The newest year here is {dec[-2]}, because this data set stops in {H["areas_last_year"]}.
+The newest year here is {max(y for a in H["areas"] for y in a["values"])}, because this data set stops in {H["areas_last_year"]}.
 These areas are counted in a different way from the ones higher up this page, so the numbers do not match them.</p>
 <div class="cards">{"".join(cards)}</div>
 <p class="small">Source: <cite>{esc(hist_src["publisher"])}, {esc(hist_src["publication"])}</cite>.
 The OBR says these are not National Statistics. It made its own choices to join up older and newer sources.
 There are no health or education figures for 1945-46. "Interest on government debt" here is central government
-interest only, after taking off the Bank of England's bond-buying scheme.</p>
+interest only, after taking off the Bank of England's bond-buying scheme.
+The source's 2022-23 values for several areas are grown from past years. These are estimates, not observed data.
+The fixed decade view stops at 2015-16 (<cite>Contents, D51 to D56</cite>).</p>
 </section>"""
 
 
-BREAKS = {"education": ("2011-12", "Student loans removed"), "economic": ("2015-16", "Network Rail added")}
+BREAKS = {
+    "education": [("2011-12", "Student loans removed")],
+    "economic": [("2011-12", "TfL added"), ("2015-16", "Rail added")],
+    "eu": [("2010-11", "VAT basis changed")],
+}
 
 
 def section_areas():
     cards = []
     for f in ranked:
-        brk = BREAKS.get(f["id"])
-        breaks = [(years.index(brk[0]), brk[1])] if brk else []
+        boundaries = BREAKS.get(f["id"], [])
+        breaks = [(years.index(year), note) for year, note in boundaries if year in years]
 
         def make(view, f=f, breaks=breaks):
             return line(years, [f["series"][y][view]["v"] for y in years], breaks=breaks, width=340,
                         height=190, small=True, unit=view)
         steps = []
         for then in (TEN, TWENTY):
-            mark = " *" if brk and then < brk[0] else ""
+            mark = " *" if any(then < year <= LATEST for year, _ in boundaries) else ""
             steps.append(f"<li>{then}: {change(f['series'][then]['real'], f['series'][LATEST]['real'])}{mark}</li>")
-        caveat = (f'<p class="small">* The way this is counted changed in {brk[0]}, so this comparison is not exact.</p>'
-                  if brk and TWENTY < brk[0] else "")
+        crossed = [year for year, _ in boundaries if TWENTY < year <= LATEST]
+        caveat = (f'<p class="small">* The way this is counted changed in {" and ".join(crossed)}. '
+                  'No percentage change is given across those breaks.</p>' if crossed else "")
         note = f'<p class="note">{esc(f["note"])}</p>' if f["note"] else ""
         trows = [[y, fig(f["series"][y]["nominal"]), fig(f["series"][y]["real"]), fig(f["series"][y]["gdp"], kind="gdp")] for y in years]
         cards.append(f"""
@@ -380,12 +400,12 @@ def section_areas():
 <ul class="steps">{"".join(steps)}</ul>{caveat}
 {view_chart(make, 340, 190)}
 {note}
-{table(f'{f["official"]}, 2003-04 to {LATEST}', ["Year", "Cash", "Inflation-adjusted", "Share of GDP"], trows)}
+{table(f'{f["official"]}, {years[0]} to {LATEST}', ["Year", "Cash", "Inflation-adjusted", "Share of GDP"], trows)}
 </article>""")
     return f"""
 <section id="areas">
 <h2>Each area over time</h2>
-<p>Here is the spend on each area from 2003-04 to {LATEST}.
+<p>Here is the spend on each area from {years[0]} to {LATEST}.
 Each chart has its own scale, and each one starts at zero.
 So compare the shapes, not the heights.</p>
 <div class="cards">{"".join(cards)}</div>
@@ -588,11 +608,37 @@ def section_corrections():
     return f'<section id="corrections"><h2>Corrections</h2>{body}</section>'
 
 
+def reconciliation_table():
+    selected = [r for r in D["reconciliations"]
+                if r["period"] == LATEST or r["id"] in
+                ("history-current/2015-16", "history-functions/2015-16", "OBR-borrowing/1975-76")]
+    rows = []
+    def amount(report, field):
+        value = report[field]
+        if value is None:
+            return "No bound set" if field == "quantisation_budget" else "Not testable"
+        refs = " ".join(o["ref"] for o in report["operands"])
+        return (f'<data value="{value}" data-report-id="{esc(report["id"])}" '
+                f'data-report-field="{field}" data-calc="reconciliation" data-ref="{esc(refs)}">'
+                f'{value:.6f}</data>')
+    for report in selected:
+        refs = "; ".join(o["ref"] for o in report["operands"])
+        excluded = "; ".join(report["excluded_refs"]) or "None"
+        missing = "; ".join(report["missing_operands"]) or "None"
+        rows.append([f'{esc(report["id"])}<br><small>{esc(report["basis"])}</small>',
+                     amount(report, "residual"), amount(report, "quantisation_budget"),
+                     f'{esc(report["unit"])}<br>{esc(report["outcome"])}',
+                     f'<small>Operands: {esc(refs)}<br>Excluded subsets: {esc(excluded)}<br>Missing: {esc(missing)}</small>'])
+    return table("Source reconciliation ledger: latest year and selected historical checks",
+                 ["Check and scope", "Signed residual", "Rounding budget", "Unit and result", "Source cells"], rows)
+
+
 def methods():
     src_rows = "".join(
         f'<tr><th scope="row"><a href="{esc(s["url"])}">{esc(Path(s["file"]).name)}</a></th><td>{esc(s["published"])}</td>'
         f'<td>{esc(s["downloaded"])}</td><td><code>{esc(s["sha256"][:16])}…</code></td></tr>' for s in SRC.values())
     checks = "".join(f"<li>{esc(c)}</li>" for c in D["checks"])
+    ledger = reconciliation_table()
     body = f"""<header><h1>How this site works</h1></header>
 <main id="main">
 <section id="about">
@@ -626,11 +672,40 @@ Its <cite>{esc(SRC["obr_databank"]["publication"])}</cite> gives spending, incom
 Its <cite>{esc(SRC["obr_hist"]["publication"])}</cite> gives spending on five areas.
 The OBR says the second one is not National Statistics.
 It joins up old sources, and it made its own choices to do that.</p>
+<p>The Treasury counts years through {LATEST} as outturn. Later total-spending years are forecasts.
+The price base and forecast date come from the notes in <cite>PESA {esc(D["pesa_context"]["status_ref"])},
+{esc(D["pesa_context"]["deflator_ref"])} and {esc(D["pesa_context"]["forecast_ref"])}</cite>.
+The newer OBR sheet has mixed dates in its notes. It names both March and October forecasts.
+We keep the conflict, rather than call all values observed data.
+Each series cites its own numerator and GDP update notes.
+See <cite>Public finances since 1900, B2 and B139 to B148</cite>.</p>
+<p>The older OBR area series joins sources. Its status is uncertain.
+Its 2022-23 extrapolations are estimates; our decade tables end in 2015-16
+(<cite>Contents, D51 to D56</cite>).</p>
 <div class="tbl"><table><caption>Source files</caption><thead><tr><th scope="col">File</th><th scope="col">Published</th><th scope="col">Downloaded</th><th scope="col">SHA-256 (start)</th></tr></thead>
 <tbody>{src_rows}</tbody></table></div>
 <p>Each file has a unique code, called a hash. The full codes are in <a href="data/spending.json">the data file</a>.
 You can download the files and check the codes match.
 If they match, the files have not been changed.</p>
+<section id="provenance">
+<h2>The record behind each value</h2>
+<p>The data file has a <code>provenance</code> record for each value.
+Its <code>source_id</code> links to the source file, full hash, publication and dates in <code>sources</code>.
+The record names the exact cell, year, unit, scale, price basis, UK coverage and accounting scope.
+It also names the label, year and unit cells used to check its meaning.</p>
+<p>The <code>source_cells</code> records keep raw values, formulas and formats.
+A blank, a literal dash and a numeric zero stay distinct.
+The source notes do not define every dash in the PESA tables. We keep those as missing.
+A number format that shows zero as a dash does not turn that zero into a missing value.</p>
+<p>The <code>formulae</code> and <code>derived</code> records give each formula and its ordered operands.
+Money in Table 5.2 is in millions; we divide by a thousand to show billions.
+Changes that cross a known definition break are not given as percentages.
+The data record names the source note for each break.
+Shares use spending on services as the whole. Changes use the same series in two years.
+Neither calculation fills a missing value.</p>
+<p>The OBR publication dates in the catalogue were read from file headers.
+They have not been verified as release dates. Their retrieval dates are recorded too.</p>
+</section>
 <h2>How the numbers are checked</h2>
 <p>A script reads the Treasury files. No number is typed in by hand.
 The build checks the following sums before it writes the pages:</p>
@@ -638,6 +713,21 @@ The build checks the following sums before it writes the pages:</p>
 <p>Then a second script reads every number on the page.
 It checks each one against the cell it names in the source file.
 The source files and sums can be checked again with the build commands in the README.</p>
+<h3>Residuals and limits</h3>
+<p>A residual is the signed sum of the source operands. We do not change a value to make a sum fit.
+For PESA, the budget is half the stored rounding step for each operand, added together.
+The checker first checks that each value lies on that source grid.
+This is a rounding budget, not a bound on how well the source measures spending.</p>
+<p>OBR ratios keep more digits than we show. Their identities use those stored digits and a small allowance for computer arithmetic.
+The one-decimal format is not a source error bound.
+Checks with missing operands stay untested. The source's “other” series is already a residual, so its sum is not an independent measure of accuracy.</p>
+<p>The OBR and PESA comparison has different vintages and GDP bases.
+We show its difference with no pass/fail bound. There is no established half-point error budget.</p>
+{ledger}
+<p>The full <code>reconciliations</code> ledger in <a href="data/spending.json">the data file</a>
+has all years, signed operands, budgets, residuals and exclusions.
+Selected items sit inside function totals. They are never added to those totals.
+The historical pensioner subsets are excluded from the function sum to avoid counting them twice.</p>
 <h2>Words used on this site</h2>
 <dl>
 <dt><strong>Total spending</strong></dt><dd>The Treasury calls this <cite>Total Managed Expenditure</cite>.

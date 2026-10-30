@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "pinned_manifest_sha256": "871a749fa925f4a4135ff09c2667019ae3101fddafc11c23456fb60ade0b0522",
+  "catalogue_sha256": "5e7ebb343bee091960052b1727bf7bff6997216e8a5bf7805d18770aa7d5914a",
+  "sheets": [
+    {
+      "source_id": "pesa_ch4",
+      "source_file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+      "source_sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+      "publication": "Public Expenditure Statistical Analyses 2026",
+      "published": "2026-07-16",
+      "retrieved": "2026-10-29",
+      "sheet": "4_1",
+      "ranges": [
+        "B1:O53"
+      ],
+      "file": "pesa_ch4--4_1.tsv",
+      "cells": 742,
+      "formats": [
+        "dd/mm/yyyy\" \"hh\":\"mm",
+        "#,##0.0",
+        "General",
+        "#,##0.0,,;\"-\"#,##0.0,,;\"-\""
+      ],
+      "sha256": "7a4fe56fffbb837f2f47b369384a4051f2866120059a74e26c227b4b6f6a3e92"
+    },
+    {
+      "source_id": "pesa_ch4",
+      "source_file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+      "source_sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+      "publication": "Public Expenditure Statistical Analyses 2026",
+      "published": "2026-07-16",
+      "retrieved": "2026-10-29",
+      "sheet": "4_2",
+      "ranges": [
+        "A1:X35"
+      ],
+      "file": "pesa_ch4--4_2.tsv",
+      "cells": 840,
+      "formats": [
+        "dd/mm/yyyy\" \"hh\":\"mm",
+        "General",
+        "#,##0.0\" \";\"-\"#,##0.0\" \"",
+        "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+        "#,##0.0"
+      ],
+      "sha256": "583fc7c9bd48c3575efcb4c2107624eba0bc35584e2577276b52d29659e7d786"
+    },
+    {
+      "source_id": "pesa_ch4",
+      "source_file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+      "source_sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+      "publication": "Public Expenditure Statistical Analyses 2026",
+      "published": "2026-07-16",
+      "retrieved": "2026-10-29",
+      "sheet": "4_3",
+      "ranges": [
+        "A1:X36"
+      ],
+      "file": "pesa_ch4--4_3.tsv",
+      "cells": 864,
+      "formats": [
+        "dd/mm/yyyy\" \"hh\":\"mm",
+        "General",
+        "#,##0.0\" \";\"-\"#,##0.0\" \"",
+        "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+        "#,##0.0"
+      ],
+      "sha256": "6cb81d4b2d43a6d48b6f60c8812ae1955253eade326fa85610f52db89d5ec9d1"
+    },
+    {
+      "source_id": "pesa_ch4",
+      "source_file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+      "source_sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+      "publication": "Public Expenditure Statistical Analyses 2026",
+      "published": "2026-07-16",
+      "retrieved": "2026-10-29",
+      "sheet": "4_4",
+      "ranges": [
+        "A1:X36"
+      ],
+      "file": "pesa_ch4--4_4.tsv",
+      "cells": 864,
+      "formats": [
+        "dd/mm/yyyy\" \"hh\":\"mm",
+        "General",
+        "#,##0.0\" \";\"-\"#,##0.0\" \"",
+        "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+        "#,##0.0"
+      ],
+      "sha256": "97197ce1eb8bedc99ebb7e23394b427c0409b86a09b977b60e2cc198dcbc1d40"
+    },
+    {
+      "source_id": "pesa_ch5",
+      "source_file": "data/raw/PESA_2026_CP_Chapter_5_tables.xlsx",
+      "source_sha256": "ccb4539bb837c2b6a7f9509da49bd409eb9e5a910f3332311b494291fbd33107",
+      "publication": "Public Expenditure Statistical Analyses 2026",
+      "published": "2026-07-16",
+      "retrieved": "2026-10-29",
+      "sheet": "5_2",
+      "ranges": [
+        "B1:G147"
+      ],
+      "file": "pesa_ch5--5_2.tsv",
+      "cells": 882,
+      "formats": [
+        "dd/mm/yyyy\" \"hh\":\"mm",
+        "General",
+        "#,##0,;\"-\"#,##0,;\"-\"",
+        "#,##0",
+        "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+        "#,##0,;\"-\"#,##0,"
+      ],
+      "sha256": "68df6ae7bd1d48cb2bd1313045bf67e2cc832dc2d0ef95428d271f25f4aa5a21"
+    },
+    {
+      "source_id": "obr_databank",
+      "source_file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+      "source_sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+      "publication": "Public finances databank, October 2026",
+      "published": "2026-10-28",
+      "retrieved": "2026-10-29",
+      "sheet": "Public finances since 1900",
+      "ranges": [
+        "B1:F148"
+      ],
+      "file": "obr_databank--Public_finances_since_1900.tsv",
+      "cells": 740,
+      "formats": [
+        "General",
+        "0.0"
+      ],
+      "sha256": "1416d028aac1b94f1bb0aa91b7a3a5065f6d7233df10fb7efeeff719b00a9a61"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Contents",
+      "ranges": [
+        "D4:D4",
+        "A30:D74"
+      ],
+      "file": "obr_hist--Contents.tsv",
+      "cells": 181,
+      "formats": [
+        "General"
+      ],
+      "sha256": "95e87f5ff1b2c2b99346c9c81d40863a4bf3b77fc62263d7bbaff6532f43ed36"
+    },
+    {
+      "source_id": "obr_hist",
+      "source_file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+      "source_sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+      "publication": "Historical public finances database",
+      "published": "2023-08-03",
+      "retrieved": "2026-10-29",
+      "sheet": "Spending (per cent of GDP)",
+      "ranges": [
+        "A1:N329"
+      ],
+      "file": "obr_hist--Spending_per_cent_of_GDP.tsv",
+      "cells": 4606,
+      "formats": [
+        "General",
+        "0.0",
+        "0.00"
+      ],
+      "sha256": "a00fc61bd9b5adb49ac6582828aa6d9fcc8e8a7d6496dbdbfae9cedb1ac1a1eb"
+    }
+  ]
+}

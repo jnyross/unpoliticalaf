@@ -7,6 +7,7 @@ from pathlib import Path
 import tempfile
 
 from build_data import build_data
+from fiscal_contract import public_fields
 import build_site
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +46,7 @@ def regular_input(path):
 
 
 def payloads(data):
+    public_fields(data)
     corrections = json.loads(regular_input(ROOT / "data/corrections.json"))
     build_site.configure(data, corrections)
     encoded = (json.dumps(data, indent=1, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
