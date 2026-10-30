@@ -124,3 +124,19 @@ The factory controller owns Git, independent review, exact-candidate checks and
 publication to https://unpoliticalaf.vercel.app . Workers return file edits only.
 
 `make setup` creates the local `.venv` and installs dependencies there. Build and check commands use that environment, leaving system Python unchanged.
+
+## Party evidence candidate
+
+The [party-data contract](docs/party-data.md) documents the dated Parliament
+roster, common proposal schema and hash-bound official evidence in
+`data/party-evidence/`. The seed has all 15 parties and separately classified
+Independent and Speaker groups for the official snapshot, with two historical
+proposal examples. Full proposal coverage and independent factory review remain
+pending; no party data is published by the fiscal public allowlist.
+
+In the credential-free Boat check environment, run
+`python3 scripts/party_data.py` for current structural/freshness status.
+`make verify` includes tests against real retained evidence. Fiscal rendering
+stays independent of party freshness. The separate strict party acceptance
+command, external factory verdict format, acquisition/import commands, field
+order, missingness rules and remaining #8 gates are in the contract above.
