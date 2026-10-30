@@ -440,11 +440,26 @@ def validate_page(root, data, text):
     bars = [n for n in nodes if "data-payer-bar" in n["attrs"]]
     bar_ids = {"hmrc-bottom50", "hmrc-top10", "hmrc-top1"} | {f"ons-{i}-combined" for i in range(1, 6)}
     require(len(bars) == 8 and {b["attrs"]["data-payer-bar"] for b in bars} == bar_ids, "Chart identities changed")
+    bar_labels = [n for n in nodes if "data-payer-bar-label" in n["attrs"]]
+    require(len(bar_labels) == 8 and {n["attrs"]["data-payer-bar-label"] for n in bar_labels} == bar_ids,
+            "Bar value label identities changed")
     for bar in bars:
         entry = by_id[bar["attrs"]["data-payer-bar"]]
         require(bar["attrs"].get("style") == f'width:{entry["value"]}%', "Bar width differs from source")
         chart = next((p for p in reversed(bar["parents"]) if "data-chart-denominator" in p["attrs"]), None)
         require(chart and chart["attrs"]["data-chart-denominator"] == entry["denominator"], "Bar denominator changed")
+        label = next(n for n in bar_labels if n["attrs"]["data-payer-bar-label"] == entry["id"])
+        require(label["tag"] == "span" and label["attrs"].get("class") == "payer-bar-value" and
+                "".join(label["text"]) == f'{entry["value"]:.1f}%', "Bar value label differs from source")
+        require(chart in label["parents"] and len(label["parents"]) >= 2 and
+                label["parents"][-2] is bar["parents"][-2], "Bar value label moved away from its bar")
+        heading = label["parents"][-1]
+        require(heading["attrs"].get("class") == "payer-bar-heading" and
+                entry["group"] in "".join(heading["text"]), "Bar value label lacks its group label")
+        require(not any("hidden" in p["attrs"] or p["tag"] == "details" or
+                        re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", p["attrs"].get("style", "")) or
+                        (p["attrs"].get("aria-hidden") == "true" and p is not chart)
+                        for p in [label] + label["parents"]), "Bar value label hidden")
     # Required limits must remain outside collapsed source details.
     def concealed(node):
         return any(p["tag"] == "details" or "hidden" in p["attrs"] or
