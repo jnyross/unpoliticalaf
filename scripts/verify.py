@@ -6,6 +6,7 @@ from check_receipts import validate as validate_receipts
 from check_site import validate
 from check_audit import validate as validate_audit
 from check_receipt_audit import validate as validate_receipt_audit
+from check_payer_sources import validate as validate_payer_sources
 
 
 def snapshot(directory):
@@ -16,6 +17,7 @@ def snapshot(directory):
 def main():
     validate_audit()
     validate_receipt_audit()
+    validate_payer_sources()
     validate_receipts()
     receipt_bytes = (ROOT / "data/receipts.json").read_bytes()
     first_receipts = encode_receipts(build_receipts())
