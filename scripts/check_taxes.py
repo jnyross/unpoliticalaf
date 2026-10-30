@@ -43,13 +43,20 @@ GROUP_LABELS = {
 }
 CT_EXPLANATION = (
     "Adds the source's onshore and offshore corporation tax rows. "
-    "The onshore label includes Bank Surcharge and EGL. "
+    "The onshore label includes Bank Surcharge and the Electricity Generator Levy (EGL). "
     "OBR note 3 also includes residential property developers tax and Pillar 2 taxes. "
     "Petroleum revenue tax, energy profits levy and bank levy stay in other taxes.")
 NON_TAX_EXPLANATION = (
     "A calculated difference: all receipts minus National Accounts taxes. "
     "It is not the mixed source row relabelled as non-tax. "
     "Do not add the source's interest, dividend or operating surplus rows again.")
+OUTTURN_EXPLANATION = (
+    "Outturn can be revised. The outturn figures are consistent with the public "
+    "finances bulletin released on 22 September 2026.")
+PAYER_LIMIT = (
+    "This page does not show who pays. "
+    "These tables show receipts by tax type. They do not show how payments are split between people, "
+    "or who ultimately bears the cost. They give no percentages for who bears that cost.")
 NOTES = {
     RECEIPTS: ("C1", "C40", "C41", "C42", "C43"),
     CASH: ("C1", "D7", "O7", "C94", "C95"),
@@ -549,6 +556,26 @@ def validate_story(raw, bound, data):
             "all 6 group explanations must remain available")
     sources = re.search(r'<section id="tax-sources"[^>]*>(.*?)</section>', raw, re.S)
     require(sources is not None, "missing source section")
+    headers = re.findall(r'<header data-pid="tax-header">(.*?)</header>', raw, re.S)
+    require(len(headers) == 1, "missing/duplicate tax header")
+    outturn_notes = re.findall(
+        r'<p class="small" data-pid="tax-outturn-note">(.*?)</p>', raw, re.S)
+    require(len(outturn_notes) == 1 and
+            normalize(html.unescape(outturn_notes[0])) == OUTTURN_EXPLANATION and
+            outturn_notes[0] in headers[0],
+            "header outturn bulletin date/explanation changed")
+    file_note = (
+        f'File date: {data["source"]["published"]}; retrieved {data["source"]["downloaded"]}. '
+        "The file date is its HTTP header date, not a verified release date.")
+    file_notes = re.findall(r'<p class="small">(File date:.*?)</p>', raw, re.S)
+    require(len(file_notes) == 1 and
+            normalize(html.unescape(file_notes[0])) == file_note and
+            file_notes[0] in sources[1] and "File date:" not in headers[0],
+            "HTTP file date must remain distinct under Check the sources")
+    payer_notes = re.findall(r'<p data-pid="who-pays-limit">(.*?)</p>', raw, re.S)
+    require(len(payer_notes) == 1 and
+            normalize(html.unescape(payer_notes[0])) == PAYER_LIMIT,
+            "missing/changed payer and incidence limitation")
     positions = []
     for name in GROUPS:
         marker = f'<details data-pid="tax-source-{name}">'

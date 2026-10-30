@@ -21,7 +21,7 @@ CAVEATS = {
     "income_tax": "PAYE, self-assessed and other income tax are added with their source signs. Other income tax can be negative.",
     "nic": "National Insurance is shown as its own source series.",
     "vat": "This gross grouping is a source-based presentation, not household VAT burden. The notes do not explicitly establish how refunds are classified within National Accounts taxes. The net VAT and refund rows are separate below.",
-    "corporation_tax": "Adds the source's onshore and offshore corporation tax rows. The onshore label includes Bank Surcharge and EGL. OBR note 3 also includes residential property developers tax and Pillar 2 taxes. Petroleum revenue tax, energy profits levy and bank levy stay in other taxes.",
+    "corporation_tax": "Adds the source's onshore and offshore corporation tax rows. The onshore label includes Bank Surcharge and the Electricity Generator Levy (EGL). OBR note 3 also includes residential property developers tax and Pillar 2 taxes. Petroleum revenue tax, energy profits levy and bank levy stay in other taxes.",
     "other_taxes": "A calculated remainder after the named groups. It draws partly on a mixed source line that is not itemised. Arithmetic closure does not prove the classification of each tax or refund.",
     "non_tax": "A calculated difference: all receipts minus National Accounts taxes. It is not the mixed source row relabelled as non-tax. Do not add the source's interest, dividend or operating surplus rows again.",
 }
@@ -216,7 +216,9 @@ Outturn and forecasts are separate. Source notes for each table are below.</p>
 {history(data, forecasts, "October 2026 OBR forecasts: cash (£bn) and published GDP shares (%)", forecast=True)}</details>
 </section>
 <section id="who-pays" data-pid="tax-incidence"><h2>Does this show who pays?</h2>
-<p data-pid="who-pays-limit">This page does not show who pays.</p></section>
+<p data-pid="who-pays-limit">This page does not show who pays.
+These tables show receipts by tax type. They do not show how payments are split between people,
+or who ultimately bears the cost. They give no percentages for who bears that cost.</p></section>
 <section id="tax-sources" data-pid="tax-sources"><h2>Check the sources</h2>
 <p>The source rows keep each part's sign. The formula multiplier shows whether to add or subtract it.
 The two remainder groups have signed formula tables, not component bars.</p>

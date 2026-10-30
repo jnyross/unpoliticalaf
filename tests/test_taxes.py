@@ -361,6 +361,59 @@ class TaxSourceTests(unittest.TestCase):
             '<section id="balance"', match[0] + '<section id="balance"', 1)
         self.check_bad_html(moved)
 
+    def test_header_bulletin_date_and_source_file_date_stay_distinct(self):
+        outturn = re.search(
+            r'<p class="small" data-pid="tax-outturn-note">.*?</p>', self.page, re.S)
+        file_note = re.search(r'<p class="small">File date:.*?</p>', self.page, re.S)
+        self.assertIsNotNone(outturn)
+        self.assertIsNotNone(file_note)
+        for old, new in (
+                ("22 September 2026", "22 October 2026"),
+                ("bulletin released on", "forecast released on"),
+                ("not a verified release date", "the verified release date")):
+            with self.subTest(old=old):
+                self.assertIn(old, self.page)
+                self.check_bad_html(self.page.replace(old, new, 1))
+        moved = self.page.replace(file_note[0], "", 1).replace(
+            "</header>", file_note[0] + "</header>", 1)
+        self.check_bad_html(moved)
+        moved = self.page.replace(outturn[0], "", 1).replace(
+            '<section id="tax-sources" data-pid="tax-sources">',
+            '<section id="tax-sources" data-pid="tax-sources">' + outturn[0], 1)
+        self.check_bad_html(moved)
+        changed = file_note[0].replace(self.expected["source"]["downloaded"], "1900-01-01")
+        self.assertNotEqual(changed, file_note[0])
+        self.check_bad_html(self.page.replace(file_note[0], changed, 1))
+
+    def test_full_charge_name_and_payer_limit_do_not_change_exact_source_labels(self):
+        self.assertIn("Electricity Generator Levy (EGL)", self.page)
+        self.check_bad_html(self.page.replace(
+            "Bank Surcharge and the Electricity Generator Levy (EGL)",
+            "Bank Surcharge and EGL", 1))
+        self.assertIn(
+            '<th scope="row">Onshore corporation tax (includes Bank Surcharge and EGL)3</th>',
+            self.page)
+        for sentence in (
+                "These tables show receipts by tax type.",
+                "They do not show how payments are split between people,",
+                "or who ultimately bears the cost.",
+                "They give no percentages for who bears that cost."):
+            with self.subTest(sentence=sentence):
+                self.assertIn(sentence, self.page)
+                self.check_bad_html(self.page.replace(sentence, "", 1))
+
+    def test_negative_share_cannot_be_rendered_as_a_positive_partition_bar(self):
+        data = copy.deepcopy(self.expected)
+        identity = f"share/income_tax/{self.latest}"
+        data["nodes"][identity]["v"] = -1
+        identities = [f"share/{name}/{self.latest}" for name in check_taxes.GROUPS]
+        with self.assertRaisesRegex(ValueError, "nonnegative"):
+            build_taxes.bars(data, identities, list(build_taxes.LABELS.values()), receipts=True)
+        parser = check_taxes.TaxPage()
+        parser.feed(self.page)
+        with self.assertRaisesRegex(ValueError, "nonnegative"):
+            check_taxes.validate_bars(parser.bar_groups, data)
+
     def test_missing_rendered_node_is_rejected_even_when_data_remains(self):
         identity = f"cash/C/1999-00"
         pattern = re.compile(r'<data\b[^>]*data-tax-id="' + re.escape(identity) + r'"[^>]*>.*?</data>', re.S)

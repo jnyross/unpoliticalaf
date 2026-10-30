@@ -498,8 +498,8 @@ code{overflow-wrap:anywhere}
 nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
 .site-nav{max-width:760px;margin:0 auto;padding:8px 18px;display:flex;flex-wrap:wrap;gap:4px 16px;border-bottom:1px solid var(--line)}
 .site-nav .brand{flex-basis:100%;font-weight:700;font-size:1.15rem;text-decoration:none}
-.site-nav a,.page-links a,summary,.views button{min-height:44px}
-.site-nav a,.page-links a{display:inline-flex;align-items:center;min-width:44px;padding:6px 4px}
+.site-nav a,.page-links a,summary,.views button{min-height:44px;min-width:44px}
+.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 4px}
 summary{padding:10px 0}
 .tax-scroll{overflow-x:auto;max-width:100%;margin:.8em 0}
 .tax-scroll table{width:100%}
@@ -912,7 +912,8 @@ It does not splice in the older historical receipt data.
 Outturn can be revised. Later forecasts are shown apart from outturn, with their own source notes.
 No inflation-adjusted tax view has been verified.
 A GDP share is not a real-terms measure, and can rise when GDP falls.</p>
-<p>The Taxes page does not show who pays.</p>
+<p>These tables show receipts by tax type. They do not show how payments are split between people,
+or who ultimately bears the cost.</p>
 <p><a href="who-pays.html">Who pays tax?</a> gives two separate official views.</p>
 </section>
 {section_payer_methods()}
