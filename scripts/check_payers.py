@@ -241,6 +241,39 @@ def validate_data(root, data):
     }.items():
         for address in addresses:
             retain("ons", sheet, address)
+    # Bind the public aliases to the actual source labels, not only to numbers.
+    # Strip edge whitespace here only; source_cells retains the exact source text.
+    label_aliases = (
+        ("hmrc", "2_4_Taxpayer_share_tax", "F2", "Bottom 50% percentile group", "group", "Bottom 50%", ["hmrc-bottom50"]),
+        ("hmrc", "2_4_Taxpayer_share_tax", "I2", "Top 10% percentile group", "group", "Top 10%", ["hmrc-top10"]),
+        ("hmrc", "2_4_Taxpayer_share_tax", "K2", "Top 1% percentile group", "group", "Top 1%", ["hmrc-top1"]),
+    )
+    label_aliases += tuple(("ons", "Table 8", column + "4", raw, "group", alias,
+                           [f"ons-{i}-{measure}" for measure in ("direct", "indirect", "combined", "expenditure")])
+                          for i, column, raw, alias in (
+                              (1, "D", "Bottom", "Bottom fifth"), (2, "E", "2nd", "Second fifth"),
+                              (3, "F", "3rd", "Middle fifth"), (4, "G", "4th", "Fourth fifth"),
+                              (5, "H", "Top", "Top fifth")))
+    label_aliases += tuple(("ons", "Table 8", address, raw, "measure", alias,
+                           [f"ons-{i}-{measure}" for i in range(1, 6)])
+                          for address, raw, measure, alias in (
+                              ("B5", "Direct taxes", "direct", "Direct taxes"),
+                              ("B9", "Indirect taxes", "indirect", "Indirect taxes"),
+                              ("B15", "All taxes", "combined", "Direct and indirect taxes counted in this ONS analysis"),
+                              ("B22", "Indirect taxes", "expenditure", "Indirect taxes")))
+    label_aliases += (
+        ("ons", "Table 8", "A5", "Percentages of gross income", "denominator", "Gross household income",
+         [f"ons-{i}-{m}" for i in range(1, 6) for m in ("direct", "indirect", "combined")]),
+        ("ons", "Table 8", "A22", "Percentages of expenditure", "denominator", "Household expenditure",
+         [f"ons-{i}-expenditure" for i in range(1, 6)]),
+    )
+    public_values = {v["id"]: v for v in data["values"]}
+    for sid, sheet, address, source_label, field, alias, value_ids in label_aliases:
+        actual = read(sid, sheet, address)["value"]
+        require(isinstance(actual, str) and actual.strip() == source_label,
+                "Source label does not support the public alias: " + sheet + "!" + address)
+        require(all(public_values.get(vid, {}).get(field) == alias for vid in value_ids),
+                "Public group/measure/denominator alias differs from its source label")
     require(data["values"] == expected, "Public values or semantic provenance differ from original cells")
     require(data["source_cells"] == expected_cells, "Public source labels, notes, scalars or formulas differ")
     require("2023 to 2024" in expected_cells["hmrc:Contents!A5"]["value"] and
@@ -335,9 +368,60 @@ def validate_page(root, data, text):
     for table in tables:
         regions = [p for p in table["parents"] if p["attrs"].get("role") == "region"]
         require(regions and regions[-1]["attrs"].get("aria-labelledby") in ids, "Table scroll region lacks a label")
-    for sid in ("hmrc", "ons"):
+    source_sections = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == "payer-sources"]
+    require(len(source_sections) == 1, "Missing unique payer source section")
+    source_section = source_sections[0]
+    require(source_section["parents"][-1] is main and
+            all(nodes.index(n) < nodes.index(source_section) for n in nodes
+                if n["tag"] == "table" or any(p["tag"] == "table" for p in n["parents"])),
+            "Source details must follow all three complete tables")
+    require(any(n["tag"] == "section" and n["attrs"].get("id") == "burden" and
+                n["parents"][-1] is main and nodes.index(n) < nodes.index(source_section) for n in nodes) and
+            all(nodes.index(n) < nodes.index(source_section) for n in nodes
+                if any(p["attrs"].get("id") == "burden" for p in n["parents"])),
+            "Source details must follow the explanation of tax burden")
+    for sid, section_id, table_ids, link_text in (
+        ("hmrc", "income-tax", ["hmrc-table"], "HMRC Table 2.4 (ODS)"),
+        ("ons", "household-taxes", ["ons-income-table", "ons-expenditure-table"], "ONS reference tables (XLSX), Table 8"),
+    ):
+        panels = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == section_id]
+        require(len(panels) == 1, "Missing unique source panel")
+        panel = panels[0]
+        notes = [n for n in nodes if n["tag"] == "p" and n["attrs"].get("id") == sid + "-source-note"]
+        require(len(notes) == 1 and notes[0]["parents"][-1] is panel,
+                "Workbook source note moved outside its panel")
+        note = notes[0]
+        anchors = [n for n in nodes if n["tag"] == "a" and note in n["parents"]]
+        require(len(anchors) == 1 and anchors[0]["attrs"] ==
+                {"data-payer-source": sid, "href": URLS[1 if sid == "hmrc" else 4]} and
+                "".join(anchors[0]["text"]) == link_text,
+                "Adjacent workbook link identity changed")
+        require(not any("hidden" in p["attrs"] or p["attrs"].get("aria-hidden") == "true" or
+                        p["tag"] == "details" or
+                        re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", p["attrs"].get("style", ""))
+                        for p in [note, anchors[0]] + note["parents"]), "Adjacent source link hidden")
+        captions = [n for n in nodes if n["tag"] == "caption" and n["attrs"].get("id") in table_ids]
+        require(len(captions) == len(table_ids) and all(panel in n["parents"] and nodes.index(n) < nodes.index(note)
+                                                     for n in captions), "Source note must follow its panel tables")
         details = [n for n in nodes if n["tag"] == "details" and n["attrs"].get("id") == sid + "-sources"]
-        require(len(details) == 1, "Missing source details")
+        require(len(details) == 1 and details[0]["parents"][-1] is source_section, "Source details moved outside final source section")
+        downloads = [n for n in nodes if n["tag"] == "a" and details[0] in n["parents"]]
+        require(len(downloads) == 1 and downloads[0]["attrs"] ==
+                {"data-payer-source": sid, "href": URLS[1 if sid == "hmrc" else 4]} and
+                "".join(downloads[0]["text"]) == "Download the original workbook",
+                "Source-details workbook link changed")
+        detail_intro = [" ".join("".join(n["text"]).split()) for n in nodes
+                        if n["tag"] == "p" and n["parents"][-1] is details[0]]
+        source = data["sources"][sid]
+        require(f'{source["publication"]}; published {source["published"]}. Unit: %. Geography: UK. '
+                'Values use the published cells, not sums of rounded parts.' in detail_intro and
+                'Source SHA-256: ' + source["sha256"] in detail_intro,
+                "Source-details publication, date, unit, geography or hash changed")
+        rendered_cells = [" ".join("".join(n["text"]).split()) for n in nodes
+                          if n["tag"] == "li" and details[0] in n["parents"]]
+        expected_cells = [f'{v["group"]}: {v["measure"]} — {v["sheet"]}!{v["cell"]}. '
+                          f'Denominator: {v["denominator"]}.' for v in data["values"] if v["source_id"] == sid]
+        require(rendered_cells == expected_cells, "Source-details cell list changed")
         rendered_notes = [" ".join("".join(n["text"]).split()) for n in nodes
                           if details[0] in n["parents"] and n["tag"] == "p" and
                           "payer-source-cell" in n["attrs"].get("class", "").split()]
@@ -352,6 +436,7 @@ def validate_page(root, data, text):
     links = {n["attrs"].get("href") for n in document.nodes if n["tag"] == "a"}
     require(set(URLS) <= links and {"data/payers.json", "index.html", "taxes.html", "who-pays.html", "methods.html"} <= links,
             "Source/download/navigation links missing")
+    require(not any(n["tag"] == "nav" for n in nodes), "Page callback owns the main navigation")
     bars = [n for n in nodes if "data-payer-bar" in n["attrs"]]
     bar_ids = {"hmrc-bottom50", "hmrc-top10", "hmrc-top1"} | {f"ons-{i}-combined" for i in range(1, 6)}
     require(len(bars) == 8 and {b["attrs"]["data-payer-bar"] for b in bars} == bar_ids, "Chart identities changed")
@@ -370,7 +455,10 @@ def validate_page(root, data, text):
     visible = " ".join(" ".join(n["text"]) for n in nodes if n["tag"] == "p" and not concealed(n))
     visible = " ".join(visible.split())
     for phrase in (
-        "overlapping groups. Do not add their shares", "Tax due is not cash collected",
+        "The top 1% is part of the top 10%", "The bottom 50% and top 10% do not overlap",
+        "taxpayers with a positive Income Tax bill, not all adults", "Do not add their shares",
+        "Tax due is not cash collected", "tax year 2023 to 2024",
+        "equivalised household disposable income", "household size and needs",
         "People with no Income Tax bill are excluded", "before deductions and allowances",
         "not households", "not the HMRC taxpayer groups", "private households", "not a forecast",
         "Gross income includes cash benefits", "Disposable income is gross income after direct taxes",
@@ -387,11 +475,28 @@ def validate_page(root, data, text):
         require(phrase in visible, "Missing visible fiscal limit: " + phrase)
     bottom = next((n for n in nodes if n["attrs"].get("id") == "bottom-group"), None)
     require(bottom is not None and not concealed(bottom), "Bottom-group warning hidden")
+    ons_scope = next((n for n in nodes if n["tag"] == "h3" and "".join(n["text"]) ==
+                      "Direct and indirect taxes counted in this ONS analysis"), None)
+    require(ons_scope is not None and bottom["parents"][-1] is ons_scope["parents"][-1] and
+            nodes.index(ons_scope) < nodes.index(bottom) < min(nodes.index(b) for b in bars
+                                                            if b["attrs"]["data-payer-bar"].startswith("ons-")),
+            "Bottom-group warning must follow ONS scope and precede the bars")
+    scope_index = nodes.index(ons_scope)
+    scope_siblings = [n for n in nodes[scope_index + 1:] if n["parents"] and
+                      n["parents"][-1] is ons_scope["parents"][-1]]
+    require(scope_siblings and scope_siblings[0] is bottom,
+            "Bottom-group warning must directly follow ONS scope")
+    overlap = next((n for n in nodes if n["attrs"].get("id") == "overlap"), None)
+    require(overlap is not None and not concealed(overlap) and " ".join("".join(overlap["text"]).split()) ==
+            "The top 1% is part of the top 10%. The bottom 50% and top 10% do not overlap. "
+            "These groups refer to taxpayers with a positive Income Tax bill, not all adults. "
+            "Do not add their shares. Tax due is not cash collected. This is Income Tax only, not all UK taxes.",
+            "Shown HMRC group relationship changed")
     require(any(n["tag"] == "h3" and "".join(n["text"]) ==
                 "Direct and indirect taxes counted in this ONS analysis" and not concealed(n) for n in nodes),
             "ONS tax scope heading changed or hidden")
     require(all(not concealed(n) for n in nodes if n["tag"] == "h2"), "Payer heading hidden")
-    require(not re.search(r"(?:groups are disjoint|groups do not overlap|non-overlapping groups|share of all UK taxes|all-tax rate)", visible, re.I),
+    require(not re.search(r"(?:top 50%|groups are disjoint|groups do not overlap|non-overlapping groups|share of all UK taxes|all-tax rate)", visible, re.I),
             "Unsupported overlap or all-tax claim")
     require(not any(token in text for token in ("36.7 million", "36,700,000", "data/payers/raw/", "original_response", "/home/")),
             "Unapproved count or raw/private source leak")
