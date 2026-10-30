@@ -249,6 +249,23 @@ def independent_data_checks(site, read):
     source = data["sources"]["pesa_ch4"]
     workbook = load_workbook(ROOT / source["file"], data_only=True, read_only=True)
     try:
+        # Read pinned note coordinates directly, independently of the builder's
+        # note search. Do not accept the generated date/boundary as evidence.
+        notes = workbook["4_1"]
+        boundary = re.search(r"up to (\d{4}-\d{2})", notes["B3"].value).group(1)
+        price = notes["B51"].value
+        gdp_note = notes["B52"].value
+        base = re.search(r"adjusted to (\d{4}-\d{2}) price levels", price).group(1)
+        date = re.search(r"outlook - ([^)]+)\)", gdp_note).group(1)
+        if f"outlook - {date})" not in price:
+            raise ValueError("PESA forecast notes conflict")
+        expected_context = {"last_outturn": boundary, "status_ref": "4_1!B3",
+                            "forecast_date": date, "forecast_ref": "4_1!B52",
+                            "deflator_ref": "4_1!B51", "base_year": base}
+        if data["pesa_context"] != expected_context or data["latest_year"] != boundary or data["base_year"] != base:
+            raise ValueError("Independent PESA status/vintage check failed")
+        if any(row["forecast"] != (row["year"] > boundary) for row in data["aggregates"]):
+            raise ValueError("Independent PESA forecast boundary check failed")
         sheet = workbook["4_2"]
         # Locate the adjustment row independently, rather than accepting the extractor's total.
         adjustment_row = next(cell.row for row in sheet.iter_rows() for cell in row

@@ -255,7 +255,7 @@ def section_items():
 <h2>Ten spending items</h2>
 <p>These are ten selected items within the spending areas in {LATEST}. These items sit inside the area totals, so do not add the two lists.</p>
 {hbar(rows)}
-{table(f"Largest items, {LATEST}", ["Item", "Spent"], trows)}
+{table(f"Selected items, {LATEST}", ["Item", "Spent"], trows)}
 <h3 id="debt">Interest on government debt</h3>
 <p>The Treasury's line for debt interest in {LATEST} is {fig(interest)}.
 That is {share(interest, services)} of every £100.
@@ -275,17 +275,18 @@ def section_total():
               fig(e["tme"]["gdp"], kind="gdp")] for e in D["aggregates"]]
     return f"""
 <section id="total">
-<h2>Total spending since 1985</h2>
+<h2>Total spending since {agg_years[0][:4]}</h2>
 <p>In {LATEST} the public sector spent {fig(total["nominal"])} in all.
 That was {fig(total["gdp"], kind="gdp")} of the value of all the goods and services made in the UK that year (GDP).
 Ten years earlier, in {TEN}, it was {fig(then["gdp"], kind="gdp")}.
 <a href="#decades">See every ten years back to 1945</a>.</p>
 {view_chart(make)}
 <p class="small">Years after {LATEST} are a forecast. They have a dashed line and a grey background.
-The forecast is from the <cite>Office for Budget Responsibility</cite>, made on 3 March 2026.
+The GDP and price forecasts are from the <cite>Office for Budget Responsibility</cite>, dated {esc(D["pesa_context"]["forecast_date"])}.
+The dates and price basis are in <cite>PESA {esc(D["pesa_context"]["forecast_ref"])} and {esc(D["pesa_context"]["deflator_ref"])}</cite>.
 From 2020-21, the figures include help given during Covid and when prices rose fast.
 (<cite>PESA Table 4.2, note 2</cite>)</p>
-{table("Total Managed Expenditure, 1985-86 to 2028-29", ["Year", "Cash", f"Adjusted for inflation ({BASE} prices)", "Share of GDP"], trows)}
+{table(f"Total Managed Expenditure, {agg_years[0]} to {agg_years[-1]}", ["Year", "Cash", f"Adjusted for inflation ({BASE} prices)", "Share of GDP"], trows)}
 </section>"""
 
 
@@ -338,6 +339,8 @@ In {last} it was {pct(t["debt"]["values"][last])}.</p>
 This file is newer than the Treasury tables used above, so it can differ a little.
 The latest year may be an estimate; this port has not checked each cell's status. Read the source file notes.
 The March 2026 forecast note above applies to the Treasury totals, not this OBR file.
+The OBR sheet's own notes name both March and October forecasts. These dates need further review
+(<cite>Public finances since 1900, B2 and B139 to B148</cite>).
 For {last} it gives spending of {pct(sp[last])} of GDP; the Treasury gives {fig(total["gdp"], kind="gdp")}.
 Missing figures are shown as “not given”, not zero.</p>
 <h3>Spending on five areas</h3>
@@ -626,6 +629,11 @@ Its <cite>{esc(SRC["obr_databank"]["publication"])}</cite> gives spending, incom
 Its <cite>{esc(SRC["obr_hist"]["publication"])}</cite> gives spending on five areas.
 The OBR says the second one is not National Statistics.
 It joins up old sources, and it made its own choices to do that.</p>
+<p>The Treasury counts years through {LATEST} as outturn. Later total-spending years are forecasts.
+The price base and forecast date come from the notes in <cite>PESA {esc(D["pesa_context"]["status_ref"])},
+{esc(D["pesa_context"]["deflator_ref"])} and {esc(D["pesa_context"]["forecast_ref"])}</cite>.
+The newer OBR sheet has mixed dates in its notes. It names both March and October forecasts.
+Those notes still need review. See <cite>Public finances since 1900, B2 and B139 to B148</cite>.</p>
 <div class="tbl"><table><caption>Source files</caption><thead><tr><th scope="col">File</th><th scope="col">Published</th><th scope="col">Downloaded</th><th scope="col">SHA-256 (start)</th></tr></thead>
 <tbody>{src_rows}</tbody></table></div>
 <p>Each file has a unique code, called a hash. The full codes are in <a href="data/spending.json">the data file</a>.

@@ -68,6 +68,14 @@
   }
  },
  "base_year": "2025-26",
+ "pesa_context": {
+  "last_outturn": "2025-26",
+  "status_ref": "4_1!B3",
+  "forecast_date": "3 March 2026",
+  "forecast_ref": "4_1!B52",
+  "deflator_ref": "4_1!B51",
+  "base_year": "2025-26"
+ },
  "latest_year": "2025-26",
  "checks": [
   "Table 4.2: the 11 areas add up to spending on services in all 23 years",

@@ -167,7 +167,7 @@ class ProductTests(unittest.TestCase):
             with urlopen(base + "/", timeout=5) as response:
                 self.assertEqual(response.read(), self.files["index.html"])
             for name in ("README.md", "AGENTS.md", ".git/config", ".env", "scripts/build.py",
-                         "tests/test_product.py", "data/raw/", "data/sources.json",
+                         "tests/test_product.py", "data/raw/", "data/sources.json", "data/audit/index.json",
                          "factory/project.json", "reference/", "missing.html"):
                 with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
                     urlopen(base + "/" + name, timeout=5)

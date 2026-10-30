@@ -33,13 +33,27 @@ pinned Python libraries through the check environment's package mechanism.
   product and publication-boundary tests. Stale output fails.
 - `make smoke` serves only the generated site on loopback, checks bytes, MIME
   types and private-path 404s, then audits every page at 360px and 1100px with
-  bundled axe-core, including expanded tables and contrast. It also exercises the view controls\n  and core content with JavaScript disabled.
+  bundled axe-core, including expanded tables and contrast. It also exercises the view controls
+  and core content with JavaScript disabled.
 - `make a11y` runs the browser accessibility gate separately.
 
 These commands must pass on the exact candidate through the factory controller.
 This port's file edits are not evidence of a passing run, independent review or
 live deployment. Manual keyboard and screen-reader checks and human studies
 remain pending until actually observed.
+
+The recorded Vercel contract is repository root, preset **Other**, install
+`make setup`, build `make build`, output `site`. This is the contract documented
+in this repository's README at `3296b28ba01d89a5f1f9403b71f63e8c44a472e1`;
+this recovery seed does not change bindings or independently recheck Vercel's
+settings/build image. The controller owns that deployment check.
+
+Readable source evidence for the spending recovery is in [data/audit](data/audit/README.md).
+`make verify` reopens all selected raw cells with a reader separate from the
+exporter, including labels, units, blanks, literal dashes and number formats.
+The [recovery scope](docs/issue-4-recovery-seed.md) records unresolved fiscal
+interpretation and remaining issue #4 acceptance; passing software checks does
+not complete that issue.
 
 ## Public and generated files
 

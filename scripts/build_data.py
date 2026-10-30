@@ -35,7 +35,7 @@ FUNCTIONS = [
     ("eu", "EU transactions", "Payments to and from the EU"),
 ]
 
-# Items from table 5.2 (2025-26 detail) shown as "the biggest single items".
+# Selected items from table 5.2 (2025-26 detail), within the function totals.
 DETAIL = [
     ("pensions", "of which: pensions", "Pensions paid in old age"),
     ("medical", "Medical services", "Hospitals, GPs and other medical services"),
@@ -141,8 +141,34 @@ def find(rows, label, after=None):
     raise KeyError(label)
 
 
+def pesa_context(rows):
+    """Read the pinned table's status and price/vintage notes, fail if ambiguous."""
+    notes = {ref("4_1", i, j): c for i, row in enumerate(rows) for j, c in enumerate(row)
+             if isinstance(c, str)}
+    status = [(cell, re.search(r"Outturn data in this table up to (\d{4}-\d{2})", text))
+              for cell, text in notes.items() if "Outturn data in this table up to" in text]
+    if len(status) != 1 or status[0][1] is None:
+        raise ValueError("PESA outturn boundary is missing or ambiguous")
+    boundary = status[0][1].group(1)
+    deflator = [(cell, text) for cell, text in notes.items() if "Real terms figures are" in text]
+    gdp = [(cell, text) for cell, text in notes.items() if "GDP forecasts from" in text]
+    if len(deflator) != 1 or len(gdp) != 1:
+        raise ValueError("PESA forecast/deflator notes missing or ambiguous")
+    date_pattern = r"Economic and fiscal outlook - (\d{1,2} [A-Za-z]+ \d{4})"
+    dates = [re.search(date_pattern, text) for _, text in deflator + gdp]
+    if any(d is None for d in dates) or dates[0].group(1) != dates[1].group(1):
+        raise ValueError("PESA forecast dates missing or conflicting")
+    base = re.search(r"adjusted to (\d{4}-\d{2}) price levels", deflator[0][1])
+    if boundary != LAST_OUTTURN or base is None or base.group(1) != BASE_YEAR:
+        raise ValueError("PESA status/base year differs from supported spending snapshot")
+    return {"last_outturn": boundary, "status_ref": status[0][0],
+            "forecast_date": dates[0].group(1), "forecast_ref": gdp[0][0],
+            "deflator_ref": deflator[0][0], "base_year": base.group(1)}
+
+
 def aggregates(rows):
     """Table 4.1: two header rows (group, then measure) above one row per year."""
+    context = pesa_context(rows)
     group_row = next(i for i, r in enumerate(rows) if "Total Managed Expenditure" in " ".join(map(str, r)))
     groups, current = {}, None
     for j, c in enumerate(rows[group_row]):
@@ -165,7 +191,7 @@ def aggregates(rows):
         year = next((c for c in r if isinstance(c, str) and YEAR.match(c)), None)
         if not year:
             continue
-        entry = {"year": year, "forecast": year > LAST_OUTTURN}
+        entry = {"year": year, "forecast": year > context["last_outturn"]}
         for key, group in wanted.items():
             entry[key] = {
                 kind: {"v": number(r[j]), "ref": ref("4_1", i, j)}
@@ -315,7 +341,9 @@ def build_data():
     ch4 = ROOT / sources["pesa_ch4"]["file"]
     ch5 = ROOT / sources["pesa_ch5"]["file"]
 
-    agg = aggregates(grid(ch4, "4_1"))
+    aggregate_rows = grid(ch4, "4_1")
+    context = pesa_context(aggregate_rows)
+    agg = aggregates(aggregate_rows)
     nominal, years = function_table(grid(ch4, "4_2"), "4_2")
     real, _ = function_table(grid(ch4, "4_3"), "4_3")
     gdp, _ = function_table(grid(ch4, "4_4"), "4_4")
@@ -367,6 +395,7 @@ def build_data():
     out = {
         "sources": sources,
         "base_year": BASE_YEAR,
+        "pesa_context": context,
         "latest_year": LAST_OUTTURN,
         "checks": checks,
         "aggregates": agg,
