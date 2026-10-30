@@ -171,7 +171,7 @@ The issue #21 bounded worker made source edits only. It did not run programs,
 tests or regenerate artifacts. The controller subsequently regenerated the
 dataset and pages committed in deployed candidate
 `8e60e9e03707ec38cb274468306e95085bb0bee3` on 30 October 2026. Its generation,
-both official exact-candidate gate runs and independent review receipts are
+official exact-candidate gate and independent review receipts are
 retained under `receipts/21/1793368898495164182/` in private factory state;
 the review is `review/8e60e9e03707ec38cb274468306e95085bb0bee3/verdict.json`.
 Those historical receipts do not approve #22. Its implementation seed is rebuilt

@@ -29,8 +29,8 @@ class Recovery22Tests(unittest.TestCase):
                          {f"{sheet}!X{row}" for sheet in ("4_2", "4_3") for row in range(6, 28)})
         check_fiscal.check_reports({"reconciliations": fiscal_schema.reconciliations(self.audit)}, self.raw)
 
-    def test_every_omitted_row_missing_cell_or_label_fails_both_readers(self):
-        for row in (7, 8, 9, 13, 14, 15, 16, 17, 25, 26, 27):
+    def test_every_base_price_row_missing_cell_or_label_fails_both_readers(self):
+        for row in range(6, 28):
             for sheet in ("4_2", "4_3"):
                 for col in ("A", "X"):
                     ref = f"{sheet}!{col}{row}"
@@ -70,6 +70,42 @@ class Recovery22Tests(unittest.TestCase):
             reports = fiscal_schema.reconciliations(self.audit)
         with self.assertRaisesRegex(ValueError, "Wrong or overlapping reconciliation source cells"):
             check_fiscal.check_reports({"reconciliations": reports}, self.raw)
+
+    def test_equal_valued_wrong_row_and_duplicate_labels_fail(self):
+        # Deliberately make another numeric row equal in BOTH readers. Numeric
+        # agreement must still not validate public/common services as international.
+        def equalized(reader):
+            def read(ref):
+                return reader("4_2!X7") if ref == "4_2!X8" else reader(ref)
+            return read
+        specs = list(fiscal_schema.reconciliation_specs())
+        index = next(i for i, s in enumerate(specs) if s[0] == "base-price/public-common")
+        name, year, unit, terms, excluded, basis = specs[index]
+        specs[index] = name, year, unit, [("4_2!X8" if ref == "4_2!X7" else ref, c, q)
+                                         for ref, c, q in terms], excluded, basis
+        with patch("fiscal_schema.reconciliation_specs", return_value=iter(specs)):
+            reports = fiscal_schema.reconciliations(equalized(self.audit))
+        with self.assertRaisesRegex(ValueError, "Wrong or overlapping reconciliation source cells"):
+            check_fiscal.check_reports({"reconciliations": reports}, equalized(self.raw))
+        for reader, verify in (
+            (self.audit, lambda read: fiscal_schema.reconciliations(read)),
+            (self.raw, lambda read: check_fiscal.check_reports(self.data, read)),
+        ):
+            def duplicated(ref):
+                return reader("4_2!A7") if ref == "4_2!A8" else reader(ref)
+            with self.assertRaisesRegex(ValueError, "[Ii]dentity"):
+                verify(duplicated)
+
+    def test_undisplayed_base_price_arithmetic_cannot_be_skipped(self):
+        for reader, verify in (
+            (self.audit, lambda read: fiscal_schema.reconciliations(read)),
+            (self.raw, lambda read: check_fiscal.check_reports(self.data, read)),
+        ):
+            def broken(ref):
+                cell = reader(ref)
+                return dict(cell, value=float(cell["value"]) + 1) if ref == "4_3!X7" else cell
+            with self.assertRaisesRegex(ValueError, "reconciliation failed: base-price/public-common"):
+                verify(broken)
 
     def test_raw_source_date_mutation_cannot_be_approved_by_shared_status(self):
         # Both notes change together, so the producer's date-conflict guard alone
