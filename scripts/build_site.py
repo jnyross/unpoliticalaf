@@ -688,8 +688,15 @@ def reconciliation_table():
 
 
 def section_payer_methods():
+    global PAYERS
     if PAYERS is None:
-        raise ValueError("Payer methods require validated payer data")
+        # Compatibility callers bind spending with configure(data). Resolve the
+        # missing family from this root, and cache it only after validation.
+        from payer_projection import project
+        from check_payers import validate_data
+        payers = project(ROOT)
+        validate_data(ROOT, payers)
+        PAYERS = payers
     sources = PAYERS["sources"]
     by_source = {sid: next(v for v in PAYERS["values"] if v["source_id"] == sid)
                  for sid in ("hmrc", "ons")}
