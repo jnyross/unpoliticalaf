@@ -11,9 +11,11 @@ from build_receipts import build_receipts, encode as encode_receipts
 from check_receipts import validate as validate_receipts
 from fiscal_contract import public_fields
 import build_site
+from tax_projection import project as project_taxes, encode as encode_taxes
+import build_taxes
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_FILES = frozenset({"index.html", "methods.html", "icon.svg", "data/spending.json"})
+PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "icon.svg", "data/spending.json", "data/taxes.json"})
 # A previous baseline can be replaced, but no other files may be deleted.
 LEGACY_FILES = frozenset({"styles.css"})
 
@@ -47,14 +49,20 @@ def regular_input(path):
     return path.read_bytes()
 
 
-def payloads(data):
+def payloads(data, receipts=None):
     public_fields(data)
+    if receipts is None:
+        receipts = build_receipts(root=ROOT)
+        validate_receipts(receipts, root=ROOT)
+    taxes = project_taxes(receipts)
     corrections = json.loads(regular_input(ROOT / "data/corrections.json"))
     build_site.configure(data, corrections)
     encoded = (json.dumps(data, indent=1, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
     return {
         "index.html": build_site.index().encode("utf-8"),
         "methods.html": build_site.methods().encode("utf-8"),
+        "taxes.html": build_taxes.render(taxes, build_site.page).encode("utf-8"),
+        "data/taxes.json": encode_taxes(taxes),
         "icon.svg": regular_input(ROOT / "assets/icon.svg"),
         "data/spending.json": encoded,
     }
@@ -93,12 +101,12 @@ def build(output, *, write_data=True):
     validate_receipts(receipts, root=ROOT)
     receipt_bytes = encode_receipts(receipts)
     data = build_data()
-    public = payloads(data)
+    public = payloads(data, receipts)
     if set(public) != PUBLIC_FILES:
         raise ValueError("unexpected public payload")
-    for name in ("index.html", "methods.html"):
+    for name in ("index.html", "methods.html", "taxes.html", "data/taxes.json"):
         if len(public[name]) >= 500_000:
-            raise ValueError(f"{name}: over the HTML size limit")
+            raise ValueError(f"{name}: over the public page/projection size limit")
     validate_output(output)
     if write_data:
         atomic_write(receipts_path, receipt_bytes)

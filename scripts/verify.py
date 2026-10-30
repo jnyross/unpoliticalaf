@@ -32,8 +32,8 @@ def main():
     retained = (ROOT / "data/spending.json").read_bytes()
     if retained != observed["data/spending.json"]:
         raise AssertionError("Published and generated spending data differ")
-    first = payloads(build_data())
-    second = payloads(build_data())
+    first = payloads(build_data(), build_receipts())
+    second = payloads(build_data(), build_receipts())
     if first != second:
         raise AssertionError("Rebuilding twice produced different output")
     if observed != first:

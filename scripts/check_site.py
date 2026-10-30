@@ -17,6 +17,7 @@ from openpyxl import load_workbook
 
 from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
+from check_taxes import validate as validate_taxes, checked_forecast_prose
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -86,7 +87,7 @@ class Page(HTMLParser):
             self._names.append(tag == "cite" or "name" in classes or "official" in classes)
         if tag == "data":
             self._fig = {"value": a.get("value"), "ref": a.get("data-ref"), "calc": a.get("data-calc"),
-                         "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
+                         "tax_id": a.get("data-tax-id"), "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
                          "report_id": a.get("data-report-id"), "report_field": a.get("data-report-field"),
                          "title": a.get("title"), "text": ""}
         if tag in ("p", "dd", "li") and not self._skip:
@@ -212,6 +213,7 @@ def validate(site=SITE):
     if not (site / "index.html").is_file():
         raise ValueError("index.html: missing spending page")
     independent_data_checks(site, read)
+    tax_data = validate_taxes(site)
     data = json.loads((site / "data/spending.json").read_text())
     raw_fiscal = RawReader()
     nodes = {node["value_id"]: node for node, _ in selections(data)}
@@ -221,7 +223,8 @@ def validate(site=SITE):
     for path in sorted(site.glob("*.html")):
         raw = path.read_text()
         name = path.name
-        check_pesa_dates(raw, data, raw_fiscal, name)
+        date_raw = checked_forecast_prose(raw, tax_data) if name == "taxes.html" else raw
+        check_pesa_dates(date_raw, data, raw_fiscal, name)
         p = Page()
         p.feed(raw)
         if name == "methods.html":
@@ -241,6 +244,13 @@ def validate(site=SITE):
                 errors.append(f"{name}: no sourced figures")
 
         for f in p.figures:
+            if f["tax_id"]:
+                # validate_taxes has independently reopened the current workbook
+                # and checked every tax figure's exact attributes AND signed text.
+                # Tax nodes cannot acquire a legacy identity or move to another page.
+                if name != "taxes.html" or f["tax_id"] not in tax_data["nodes"]:
+                    errors.append(f"{name}: tax figure outside its verified page")
+                continue
             if not f["ref"]:
                 errors.append(f"{name}: figure {f['text']!r} has no source reference")
                 continue

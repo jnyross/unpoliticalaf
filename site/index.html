@@ -50,6 +50,24 @@ body.view-real .v-real,body.view-nominal .v-nominal,body.view-gdp .v-gdp{display
 .tbl{overflow-x:auto;max-width:100%}
 code{overflow-wrap:anywhere}
 nav.page-links{display:flex;flex-wrap:wrap;gap:8px 16px}
+.site-nav{max-width:760px;margin:0 auto;padding:8px 18px;display:flex;flex-wrap:wrap;gap:4px 16px;border-bottom:1px solid var(--line)}
+.site-nav .brand{flex-basis:100%;font-weight:700;font-size:1.15rem;text-decoration:none}
+.site-nav a,.page-links a,summary,.views button{min-height:44px;min-width:44px}
+.site-nav a,.page-links a{display:inline-flex;align-items:center;padding:6px 0}
+summary{padding:10px 0}
+.tax-scroll{overflow-x:auto;max-width:100%;margin:.8em 0}
+.tax-scroll table{width:100%}
+.tax-scroll th,.tax-scroll td{min-width:7rem}
+.tax-scroll th:first-child{min-width:12rem}
+.tax-scroll code{white-space:normal}
+.tax-bars{margin:1em 0}
+.tax-bar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.88rem;margin:10px 0}
+.tax-track{position:relative;height:22px;background:#fff;border-left:1px solid #6b7280}
+.tax-bars[data-tax-scale=signed] .tax-track{border-left:0;background:linear-gradient(to right,#fff 49.6%,#6b7280 49.6%,#6b7280 50.4%,#fff 50.4%)}
+.tax-fill{position:absolute;top:2px;height:18px;background:var(--ink)}
+.tax-bar data{font-size:.85rem;white-space:nowrap}
+#tax-sources code{overflow-wrap:anywhere}
+@media(max-width:560px){.tax-bar{grid-template-columns:minmax(0,1fr) auto}.tax-bar>span:first-child{grid-column:1 / -1}}
 table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.5em 0}
 th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;vertical-align:top}
 th[scope=row],caption{text-align:left}
@@ -65,9 +83,14 @@ footer{margin-top:3em;padding:1.5em 18px 3em;font-size:.85rem;color:var(--soft);
 </head>
 <body class="view-real nojs">
 <a class="skip" href="#main">Skip to content</a>
+<nav class="site-nav" aria-label="Primary" data-pid="primary-nav">
+<span class="brand">UnpoliticalAF</span>
+<a href="index.html">Spending</a><a href="taxes.html">Taxes</a><a href="methods.html">Methods</a>
+</nav>
 <nav class="views" aria-label="How to show money over time">Charts show: <span id="view-label" class="small">Adjusted for inflation (2025-26 prices)</span><br><button type="button" data-view="real" aria-pressed="true">Adjusted for inflation (2025-26 prices)</button><button type="button" data-view="nominal" aria-pressed="false">Cash, as spent at the time</button><button type="button" data-view="gdp" aria-pressed="false">Share of the whole economy (GDP)</button></nav>
 <header>
 <h1>Where the UK's public money goes</h1>
+<p data-pid="newcomer-route">Start here for spending. Then see <a href="taxes.html">Taxes: where receipts come from and how borrowing fits</a>.</p>
 <p class="lead">In 2025-26 the UK public sector spent <data value="1360.1" data-value-id="aggregate.tme.nominal/2025-26" data-ref="4_1!M46" title="Source: HM Treasury, Public Expenditure Statistical Analyses 2026, Table 4.1, cell M46. 2025-26; GBP billion; PESA outturn; subject to revision.">£1,360bn</data>.
 This page shows what it went on, and how that has changed.
 It uses the government's own figures.</p>
@@ -296,9 +319,9 @@ So compare the shapes, not the heights.</p>
 <p class="name">Data: HM Treasury, <a href="https://www.gov.uk/government/statistics/public-expenditure-statistical-analyses-2026">Public Expenditure Statistical Analyses 2026</a> (2026-07-16); Office for Budget Responsibility, <a href="https://obr.uk/data/">Historical public finances database</a> (2023-08-03); Office for Budget Responsibility, <a href="https://obr.uk/data/">Public finances databank, October 2026</a> (2026-10-28).
 Contains public sector information licensed under the
 <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
-<p><a href="index.html">Where the money goes</a> · <a href="methods.html">How this site works</a> ·
+<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="methods.html">Methods</a> ·
 <a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
-<a href="data/spending.json">Download all the data (JSON)</a></p>
+<a href="data/spending.json">Download spending data (JSON)</a></p>
 </footer>
 <p id="tip" class="tip" role="status" hidden></p>
 <script>
@@ -310,16 +333,16 @@ bs.forEach(function(b){b.addEventListener('click',function(){
   document.getElementById('view-label').textContent=b.textContent;
 })});
 var tip=document.getElementById('tip');
-document.querySelectorAll('data[title]').forEach(function(d){
+document.querySelectorAll('data[title]:not([data-tax-id])').forEach(function(d){
   d.tabIndex=0;d.setAttribute('role','button');d.setAttribute('aria-controls','tip');
-  function showSource(){tip.textContent=d.title;tip.hidden=false;}
+  function showSource(){if(!tip)return;tip.textContent=d.title;tip.hidden=false;}
   d.addEventListener('click',showSource);
   d.addEventListener('keydown',function(e){
     if(e.key==='Enter'||e.key===' '){e.preventDefault();showSource();}
   });
 });
-tip.addEventListener('click',function(){tip.hidden=true});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){tip.hidden=true;}});
+if(tip)tip.addEventListener('click',function(){tip.hidden=true});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&tip){tip.hidden=true;}});
 </script>
 </body>
 </html>

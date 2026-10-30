@@ -1,4 +1,4 @@
-"""Product, publication-boundary and local HTTP checks for the spending port."""
+"""Product, publication-boundary and local HTTP checks for the public fiscal pages."""
 from functools import partial
 from html.parser import HTMLParser
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -87,7 +87,7 @@ class ProductTests(unittest.TestCase):
 
     def test_semantics_links_and_no_javascript_content(self):
         docs = {name: Document(self.files[name].decode("utf-8"))
-                for name in ("index.html", "methods.html")}
+                for name in ("index.html", "taxes.html", "methods.html")}
         ids = {name: [attrs["id"] for _, attrs in doc.tags if "id" in attrs]
                for name, doc in docs.items()}
         for name, doc in docs.items():
@@ -132,6 +132,49 @@ class ProductTests(unittest.TestCase):
         self.assertIn("not given", self.files["index.html"].decode("utf-8"))
         self.assertNotIn("All the rest is real spending", self.files["index.html"].decode("utf-8"))
 
+    def test_tax_navigation_and_public_projection_boundary(self):
+        expected_links = {"index.html", "taxes.html", "methods.html"}
+        for name in ("index.html", "taxes.html", "methods.html"):
+            doc = Document(self.files[name].decode("utf-8"))
+            navigation = [node for node in doc.nodes if node["tag"] == "nav"]
+            self.assertTrue(navigation, f"Missing top navigation: {name}")
+            def descendants(node):
+                for child in node["children"]:
+                    yield child
+                    yield from descendants(child)
+            links = {child["attrs"].get("href") for nav in navigation
+                     for child in descendants(nav) if child["tag"] == "a"}
+            self.assertTrue(expected_links <= links, f"Incomplete navigation: {name}")
+            self.assertIn("UnpoliticalAF", " ".join(doc.text))
+        raw = self.files["taxes.html"].decode("utf-8")
+        tax = Document(raw)
+        self.assertLess(len(self.files["data/taxes.json"]), 500_000)
+        public = json.loads(self.files["data/taxes.json"])
+        self.assertIsInstance(public, dict)
+        self.assertTrue(public)
+        self.assertNotEqual(public, json.loads((ROOT / "data/receipts.json").read_text()))
+        self.assertTrue(tax.elements("details"), "Source detail must work without JavaScript")
+        self.assertTrue(tax.elements("table"), "Tax figures need semantic table alternatives")
+        self.assertTrue(tax.elements("data"), "Tax figures must carry fiscal metadata")
+        self.assertTrue(all(node.get("data-tax-id") and "value" in node
+                            for node in tax.elements("data")))
+        for node in (n for n in tax.nodes if n["tag"] == "data"):
+            if node["attrs"].get("value") == "":
+                self.assertEqual("".join(node["text"]), "not given")
+        self.assertFalse(any(node.get("tabindex") == "0" for node in tax.elements("data")),
+                         "Visible figures must not each add a tab stop")
+        self.assertIn("data/taxes.json", {node.get("href") for node in tax.elements("a")})
+        self.assertNotIn("data/receipts.json", {node.get("href") for node in tax.elements("a")})
+        for table in [node for node in tax.nodes if node["tag"] == "table"]:
+            regions = [region for region in tax.nodes
+                       if region["attrs"].get("role") == "region"
+                       and region["attrs"].get("tabindex") == "0"
+                       and (region["attrs"].get("aria-label") or region["attrs"].get("aria-labelledby"))]
+            def contains(node):
+                return table in node["children"] or any(contains(child) for child in node["children"])
+            self.assertTrue(any(contains(region) for region in regions),
+                            "Tax table needs a labelled, keyboard-focusable scroll region")
+
     def test_responsive_focus_and_chart_alternatives(self):
         raw = self.files["index.html"].decode("utf-8")
         self.assertRegex(raw, r"@media\s*[^{}]*max-width")
@@ -168,6 +211,7 @@ class ProductTests(unittest.TestCase):
                 self.assertEqual(response.read(), self.files["index.html"])
             for name in ("README.md", "AGENTS.md", ".git/config", ".env", "scripts/build.py",
                          "tests/test_product.py", "data/raw/", "data/sources.json", "data/audit/index.json",
+                         "data/receipts.json", "data/audit/", "docs/receipts-methods.md",
                          "factory/project.json", "reference/", "missing.html"):
                 with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
                     urlopen(base + "/" + name, timeout=5)
@@ -247,7 +291,8 @@ class PublicationSafetyTests(unittest.TestCase):
         before = snapshot(self.project)
         receipts = {"private_receipt_sentinel": "only in the private build root"}
         self.assertEqual(builder.PUBLIC_FILES, {
-            "index.html", "methods.html", "icon.svg", "data/spending.json"})
+            "index.html", "taxes.html", "methods.html", "icon.svg",
+            "data/spending.json", "data/taxes.json"})
         with patch.object(builder, "ROOT", self.project), patch.object(
                 builder, "build_receipts", return_value=receipts) as receipt_read, patch.object(
                 builder, "validate_receipts") as receipt_check, patch.object(
