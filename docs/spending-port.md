@@ -30,7 +30,9 @@ The port rejects non-finite numbers and changed catalogue/source hashes.
 Blank and dash-marked missing cells remain null, and a missing required operand
 stops reconciliation. Missing chart points split the line; definition breaks
 also split it. A second reader checks source cells and JSON, independently sums
-areas and debt components and checks the inflation base year. Browser smoke checks exercise the view controls,\nexpand tables, audit both widths and check core content with JavaScript disabled.\nReproducibility
+areas and debt components and checks the inflation base year. Browser smoke checks exercise the view controls,
+expand tables, audit both widths and check core content with JavaScript disabled.
+Reproducibility
 compares two freshly generated payloads with every existing public file.
 
 The original generic assertion that all non-forecast values were real spending
@@ -52,3 +54,7 @@ The controller must run `make setup`, `make build`, `make verify` and
 review, and verify live bytes at the canonical destination where applicable.
 These steps generate `data/spending.json` and `site/` from retained workbooks;
 the worker has not fabricated generated fiscal output.
+
+The later [issue #4 recovery seed](issue-4-recovery-seed.md) supplies readable
+source evidence and separate source-note checks. Its Boat receipts belong to
+that seed; they do not replace the port's independent reviews or live checks.

@@ -2,6 +2,7 @@
 from build import PUBLIC_FILES, ROOT, payloads, validate_output
 from build_data import build_data
 from check_site import validate
+from check_audit import validate as validate_audit
 
 
 def snapshot(directory):
@@ -10,6 +11,7 @@ def snapshot(directory):
 
 
 def main():
+    validate_audit()
     site = validate_output(ROOT / "site")
     observed = snapshot(site)
     if set(observed) != PUBLIC_FILES:

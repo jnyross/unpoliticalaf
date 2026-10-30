@@ -14,6 +14,8 @@ from pathlib import Path
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
+from fiscal_schema import enrich
+
 ROOT = Path(__file__).resolve().parent.parent
 YEAR = re.compile(r"^\d{4}-\d{2}$")
 BASE_YEAR = "2025-26"
@@ -35,7 +37,7 @@ FUNCTIONS = [
     ("eu", "EU transactions", "Payments to and from the EU"),
 ]
 
-# Items from table 5.2 (2025-26 detail) shown as "the biggest single items".
+# Selected items from table 5.2 (2025-26 detail), within the function totals.
 DETAIL = [
     ("pensions", "of which: pensions", "Pensions paid in old age"),
     ("medical", "Medical services", "Hospitals, GPs and other medical services"),
@@ -135,14 +137,40 @@ def function_table(rows, sheet, scale=1.0):
 
 
 def find(rows, label, after=None):
-    for r in rows:
-        if r["label"] == label and (after is None or r["row"] > after):
-            return r
-    raise KeyError(label)
+    matches = [r for r in rows if r["label"] == label and (after is None or r["row"] > after)]
+    if len(matches) != 1:
+        raise ValueError(f"Missing or duplicate source category: {label}")
+    return matches[0]
+
+
+def pesa_context(rows):
+    """Read the pinned table's status and price/vintage notes, fail if ambiguous."""
+    notes = {ref("4_1", i, j): c for i, row in enumerate(rows) for j, c in enumerate(row)
+             if isinstance(c, str)}
+    status = [(cell, re.search(r"Outturn data in this table up to (\d{4}-\d{2})", text))
+              for cell, text in notes.items() if "Outturn data in this table up to" in text]
+    if len(status) != 1 or status[0][1] is None:
+        raise ValueError("PESA outturn boundary is missing or ambiguous")
+    boundary = status[0][1].group(1)
+    deflator = [(cell, text) for cell, text in notes.items() if "Real terms figures are" in text]
+    gdp = [(cell, text) for cell, text in notes.items() if "GDP forecasts from" in text]
+    if len(deflator) != 1 or len(gdp) != 1:
+        raise ValueError("PESA forecast/deflator notes missing or ambiguous")
+    date_pattern = r"Economic and fiscal outlook - (\d{1,2} [A-Za-z]+ \d{4})"
+    dates = [re.search(date_pattern, text) for _, text in deflator + gdp]
+    if any(d is None for d in dates) or dates[0].group(1) != dates[1].group(1):
+        raise ValueError("PESA forecast dates missing or conflicting")
+    base = re.search(r"adjusted to (\d{4}-\d{2}) price levels", deflator[0][1])
+    if boundary != LAST_OUTTURN or base is None or base.group(1) != BASE_YEAR:
+        raise ValueError("PESA status/base year differs from supported spending snapshot")
+    return {"last_outturn": boundary, "status_ref": status[0][0],
+            "forecast_date": dates[0].group(1), "forecast_ref": gdp[0][0],
+            "deflator_ref": deflator[0][0], "base_year": base.group(1)}
 
 
 def aggregates(rows):
     """Table 4.1: two header rows (group, then measure) above one row per year."""
+    context = pesa_context(rows)
     group_row = next(i for i, r in enumerate(rows) if "Total Managed Expenditure" in " ".join(map(str, r)))
     groups, current = {}, None
     for j, c in enumerate(rows[group_row]):
@@ -165,7 +193,7 @@ def aggregates(rows):
         year = next((c for c in r if isinstance(c, str) and YEAR.match(c)), None)
         if not year:
             continue
-        entry = {"year": year, "forecast": year > LAST_OUTTURN}
+        entry = {"year": year, "forecast": year > context["last_outturn"]}
         for key, group in wanted.items():
             entry[key] = {
                 kind: {"v": number(r[j]), "ref": ref("4_1", i, j)}
@@ -186,44 +214,6 @@ def close(a, b, tol, what):
         raise ValueError(f"{what}: missing source value; reconciliation cannot be established")
     if abs(a - b) > tol + 1e-9:
         raise AssertionError(f"{what}: {a} vs {b} (tolerance {tol})")
-
-
-def reconcile(nominal, real, years, agg, detail_rows):
-    checks = []
-    names = [official for _, official, _ in FUNCTIONS]
-    for y in years:
-        parts = sum(required(find(nominal, n)["values"][y], f"4.2 {n}, {y}") for n in names)
-        total = required(find(nominal, "Public sector expenditure on services")["values"][y], f"4.2 services, {y}")
-        close(parts, total, 0.05 * len(names), f"4.2 functions sum to services total, {y}")
-        adj = required(find(nominal, "Accounting adjustments")["values"][y], f"4.2 adjustments, {y}")
-        tme = find(nominal, "Total Managed Expenditure")["values"][y]
-        close(total + adj, tme, 0.1, f"4.2 services + adjustments = TME, {y}")
-        a = next(e for e in agg if e["year"] == y)
-        close(tme, a["tme"]["nominal"]["v"], 0.1, f"4.2 TME matches 4.1 TME, {y}")
-    checks.append(f"Table 4.2: the 11 areas add up to spending on services in all {len(years)} years")
-    checks.append("Table 4.2: spending on services plus accounting adjustments equals TME in every year")
-    checks.append("Table 4.2 TME matches Table 4.1 TME in every year")
-
-    for r in nominal:
-        close(r["values"][BASE_YEAR], find(real, r["label"])["values"][BASE_YEAR], 0.05,
-              f"4.3 equals 4.2 in base year for {r['label']}")
-    checks.append(f"Table 4.3 (real terms) equals Table 4.2 (cash) in the base year {BASE_YEAR}")
-    base = next(e for e in agg if e["year"] == BASE_YEAR)
-    for key in ("tme", "current", "investment"):
-        close(base[key]["nominal"]["v"], base[key]["real"]["v"], 0.05, f"4.1 {key} base year")
-    checks.append(f"Table 4.1 real-terms figures equal cash figures in {BASE_YEAR}")
-
-    totals = [r for r in detail_rows if r["label"].startswith("Total ")]
-    for t in totals:
-        name = t["label"][len("Total "):].lower()
-        match = next((n for n in names if n.split(". ", 1)[-1].lower() == name), None)
-        if match is None:
-            continue
-        for y, v in t["values"].items():
-            if y in years:
-                close(v, find(nominal, match)["values"][y], 0.06, f"5.2 total {name} matches 4.2, {y}")
-    checks.append("Table 5.2 area totals match Table 4.2 for 2021-22 to 2025-26")
-    return checks
 
 
 # Long-run comparisons go back from the latest year in steps of ten years, to the
@@ -276,23 +266,7 @@ def long_run(sources, agg):
              ("nonpensioners", "o/w non-pensioners"), ("other", "Other Public Sector Spending10 ")]
     areas = year_rows(rows, header, 1, sheet, [(k, label) for k, label, _ in LONG_AREAS] + extra, ("-",))
 
-    checks = []
-    for y, t in totals.items():
-        if all(t[k]["raw"] is not None for k in ("spending", "receipts", "borrowing")):
-            close(t["spending"]["raw"] - t["receipts"]["raw"], t["borrowing"]["raw"], 0.01, f"OBR borrowing, {y}")
-    checks.append(f"OBR databank: borrowing equals spending minus income in every year from {min(totals)} to {max(totals)}")
-    for y, a in areas.items():
-        raw = {k: v["raw"] for k, v in a.items()}
-        if None not in (raw["total"], raw["current"], raw["investment"]):
-            close(raw["current"] + raw["investment"], raw["total"], 0.01, f"OBR history current + investment, {y}")
-        named = [raw[k] for k, _, _ in LONG_AREAS]
-        if None not in named + [raw["total"], raw["other"]]:
-            close(sum(named) + raw["other"], raw["total"], 0.01, f"OBR history areas add up, {y}")
-    checks.append("OBR historical database: the five areas plus 'other' add up to total spending in every year that has all of them")
-    pesa = next(e for e in agg if e["year"] == LAST_OUTTURN)["tme"]["gdp"]["v"]
-    close(totals[LAST_OUTTURN]["spending"]["v"], pesa, 0.5, "OBR and PESA total spending share")
-    checks.append(f"OBR total spending as a share of GDP in {LAST_OUTTURN} is within 0.5 points of the Treasury figure "
-                  "(they differ slightly because the OBR file is newer)")
+    checks = []  # The schema ledger checks raw operands, missingness and residuals.
 
     for d in (totals, areas):
         for y in d:
@@ -315,13 +289,15 @@ def build_data():
     ch4 = ROOT / sources["pesa_ch4"]["file"]
     ch5 = ROOT / sources["pesa_ch5"]["file"]
 
-    agg = aggregates(grid(ch4, "4_1"))
+    aggregate_rows = grid(ch4, "4_1")
+    context = pesa_context(aggregate_rows)
+    agg = aggregates(aggregate_rows)
     nominal, years = function_table(grid(ch4, "4_2"), "4_2")
     real, _ = function_table(grid(ch4, "4_3"), "4_3")
     gdp, _ = function_table(grid(ch4, "4_4"), "4_4")
     detail, _ = function_table(grid(ch5, "5_2"), "5_2", scale=0.001)  # £ million to £ billion
 
-    checks = reconcile(nominal, real, years, agg, detail)
+    checks = []
 
     functions = []
     for key, official, plain in FUNCTIONS:
@@ -357,9 +333,7 @@ def build_data():
         row = find(detail, label, after=debt_total["row"])
         debt_parts.append({"official": label.split(":", 1)[1].strip(),
                            "v": round(row["values"][LAST_OUTTURN], 1), "ref": row["refs"][LAST_OUTTURN]})
-    close(sum(p["v"] for p in debt_parts), debt_total["values"][LAST_OUTTURN], 0.3, "5.2 debt parts")
-    close(debt_total["values"][LAST_OUTTURN], interest["values"][LAST_OUTTURN], 0.06, "5.2 debt = 4.2 interest")
-    checks.append("Table 5.2 debt items add up to the Table 4.2 debt interest line for 2025-26")
+    # Reconcile the unrounded integer-million debt parts in the schema ledger.
 
     history, more = long_run(sources, agg)
     checks += more
@@ -367,6 +341,7 @@ def build_data():
     out = {
         "sources": sources,
         "base_year": BASE_YEAR,
+        "pesa_context": context,
         "latest_year": LAST_OUTTURN,
         "checks": checks,
         "aggregates": agg,
@@ -384,8 +359,15 @@ def build_data():
     }
     out["status_notes"] = {
         "pesa": "PESA outturn through 2025-26; later aggregate years are forecasts. Outturn can be revised.",
-        "obr_databank": "October 2026 vintage. This port does not classify each historical cell as actual or estimate; consult the workbook notes.",
-        "obr_hist": "Older joined historical series; not National Statistics. Missing cells remain null.",
+        "obr_databank": "Historical actual/estimate status is uncertain. Series-specific numerator and denominator update notes are retained, including conflicting March/October forecast notes B2/B139/B144/B148.",
+        "obr_hist": "Joined historical series; actual/estimate status uncertain; not National Statistics. Displayed decades stop at 2015-16. Contents D51:D56 describe extrapolated 2022-23 values.",
         "missing": "Blank cells and dash markers remain missing; required missing operands stop the build.",
     }
-    return out
+    out["checks"] = [
+        "Each value is checked against its source label, year, unit and accounting scope.",
+        "PESA sums use stored source rounding steps. The data file shows each residual and its budget.",
+        "OBR identities use stored ratios, not the one-decimal values shown on the page.",
+        "A sum with missing operands is not tested. The data file names each missing cell.",
+        "OBR and PESA use different vintages. Their difference has no established error bound.",
+    ]
+    return enrich(out)

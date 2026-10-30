@@ -15,6 +15,9 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 
+from check_fiscal import validate_fiscal
+from fiscal_contract import selections
+
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 MAX_BYTES = 500_000
@@ -55,7 +58,9 @@ class Page(HTMLParser):
         if tag not in ("br", "img", "input", "meta", "link"):
             self._names.append(tag == "cite" or "name" in classes or "official" in classes)
         if tag == "data":
-            self._fig = {"value": a.get("value"), "ref": a.get("data-ref"), "calc": a.get("data-calc"), "text": ""}
+            self._fig = {"value": a.get("value"), "ref": a.get("data-ref"), "calc": a.get("data-calc"),
+                         "value_id": a.get("data-value-id"), "derived_id": a.get("data-derived-id"),
+                         "report_id": a.get("data-report-id"), "report_field": a.get("data-report-field"), "text": ""}
         if tag in ("p", "dd", "li") and not self._skip:
             self._para = []
 
@@ -136,6 +141,9 @@ def validate(site=SITE):
     if not (site / "index.html").is_file():
         raise ValueError("index.html: missing spending page")
     independent_data_checks(site, read)
+    data = json.loads((site / "data/spending.json").read_text())
+    nodes = {node["value_id"]: node for node, _ in selections(data)}
+    reports = {r["id"]: r for r in data["reconciliations"]}
     if not (site / "methods.html").is_file():
         errors.append("methods.html: missing methods page")
     for path in sorted(site.glob("*.html")):
@@ -167,22 +175,30 @@ def validate(site=SITE):
             if not math.isfinite(shown):
                 errors.append(f"{name}: non-finite displayed value")
                 continue
-            refs = re.findall(r"(.+?![A-Z]+[0-9]+)(?: |$)", f["ref"])
-            values = [read(ref) for ref in refs]
-            if not values or any(value is None for value in values):
-                errors.append(f"{name}: missing source operand for {f['text']!r}")
-                continue
-            if f["calc"] not in (None, "share", "change"):
-                errors.append(f"{name}: unknown formula {f['calc']!r}")
-                continue
-            if f["calc"] == "share":
-                expect, tol = read(refs[0]) / read(refs[1]) * 100, 1e-3
-            elif f["calc"] == "change":
-                expect, tol = (read(refs[1]) - read(refs[0])) / read(refs[0]) * 100, 1e-3
+            if f["value_id"] in nodes and not f["derived_id"] and not f["report_id"]:
+                node = nodes[f["value_id"]]
+                expect, refs, calc = node["v"], node["ref"], None
+            elif f["derived_id"] in data["derived"] and not f["value_id"] and not f["report_id"]:
+                node = data["derived"][f["derived_id"]]
+                expect = node["v"]
+                refs = " ".join(data["provenance"][key]["ref"] for key in node["operands"])
+                calc = node["formula"]
+            elif f["report_id"] in reports and not f["value_id"] and not f["derived_id"]:
+                node = reports[f["report_id"]]
+                if f["report_field"] not in ("residual", "quantisation_budget"):
+                    errors.append(f"{name}: unknown reconciliation field")
+                    continue
+                expect = node[f["report_field"]]
+                refs = " ".join(o["ref"] for o in node["operands"])
+                calc = "reconciliation"
             else:
-                expect, tol = read(refs[0]), 0.051
-            if abs(shown - expect) > tol:
-                errors.append(f"{name}: {f['text']!r} is {shown} but {f['ref']} gives {expect}")
+                errors.append(f"{name}: figure lacks a valid semantic value/formula identity")
+                continue
+            if f["ref"] != refs or f["calc"] != calc:
+                errors.append(f"{name}: source cells or formula do not match fiscal identity")
+                continue
+            if expect is None or abs(shown - expect) > 0.000051:
+                errors.append(f"{name}: {f['text']!r} does not match verified fiscal value {expect}")
             nums = re.findall(r"-?[\d,]+\.?\d*", f["text"])
             if nums:
                 text_v = float(nums[0].replace(",", ""))
@@ -222,60 +238,30 @@ def independent_data_checks(site, read):
     if data["sources"] != json.loads((ROOT / "data/sources.json").read_text()):
         raise ValueError("Published source catalogue differs from retained catalogue")
 
-    def near(actual, expected, tolerance, label):
-        if actual is None or expected is None or abs(actual - expected) > tolerance + 1e-9:
-            raise ValueError(f"Independent reconciliation failed: {label}: {actual} vs {expected}")
-
-    def walk(value):
-        if isinstance(value, dict):
-            if "v" in value and "ref" in value:
-                raw = read(value["ref"])
-                if value["v"] is None:
-                    if raw is not None:
-                        raise ValueError(f"Lost source value: {value['ref']}")
-                else:
-                    if not math.isfinite(value["v"]):
-                        raise ValueError("Non-finite generated value")
-                    # The most coarsely rounded data entries use one decimal.
-                    near(value["v"], raw, 0.050000001, value["ref"])
-            for child in value.values():
-                walk(child)
-        elif isinstance(value, list):
-            for child in value:
-                walk(child)
-    walk(data)
-
-    aggregates = {row["year"]: row for row in data["aggregates"]}
     source = data["sources"]["pesa_ch4"]
     workbook = load_workbook(ROOT / source["file"], data_only=True, read_only=True)
     try:
-        sheet = workbook["4_2"]
-        # Locate the adjustment row independently, rather than accepting the extractor's total.
-        adjustment_row = next(cell.row for row in sheet.iter_rows() for cell in row
-                              if str(cell.value).strip().startswith("Accounting adjustments"))
-        for year in data["years"]:
-            service_ref = data["services_total"][year]["ref"]
-            service = read(service_ref)
-            functions = [read(area["series"][year]["nominal"]["ref"]) for area in data["functions"]]
-            if any(value is None for value in functions):
-                raise ValueError(f"Cannot reconcile missing functional spending in {year}")
-            near(sum(functions), service, 0.05 * len(functions), f"areas -> services, {year}")
-            column = re.search(r"!([A-Z]+)", service_ref).group(1)
-            adjustment_ref = f"4_2!{column}{adjustment_row}"
-            tme = read(aggregates[year]["tme"]["nominal"]["ref"])
-            near(service + read(adjustment_ref), tme, 0.1, f"services + adjustments -> TME, {year}")
-        latest = data["latest_year"]
-        parts = [read(part["ref"]) for part in data["debt_parts"]]
-        if any(value is None for value in parts):
-            raise ValueError("Cannot reconcile missing debt-interest components")
-        near(sum(parts), read(data["debt_interest"][latest]["ref"]), 0.3, "debt components")
-        base = data["base_year"]
-        for area in data["functions"]:
-            row = area["series"][base]
-            near(read(row["nominal"]["ref"]), read(row["real"]["ref"]), 0.05, f"base year {area['id']}")
+        # Read pinned note coordinates directly, independently of the builder's
+        # note search. Do not accept the generated date/boundary as evidence.
+        notes = workbook["4_1"]
+        boundary = re.search(r"up to (\d{4}-\d{2})", notes["B3"].value).group(1)
+        price = notes["B51"].value
+        gdp_note = notes["B52"].value
+        base = re.search(r"adjusted to (\d{4}-\d{2}) price levels", price).group(1)
+        date = re.search(r"outlook - ([^)]+)\)", gdp_note).group(1)
+        if f"outlook - {date})" not in price:
+            raise ValueError("PESA forecast notes conflict")
+        expected_context = {"last_outturn": boundary, "status_ref": "4_1!B3",
+                            "forecast_date": date, "forecast_ref": "4_1!B52",
+                            "deflator_ref": "4_1!B51", "base_year": base}
+        if data["pesa_context"] != expected_context or data["latest_year"] != boundary or data["base_year"] != base:
+            raise ValueError("Independent PESA status/vintage check failed")
+        if any(row["forecast"] != (row["year"] > boundary) for row in data["aggregates"]):
+            raise ValueError("Independent PESA forecast boundary check failed")
     finally:
         workbook.close()
-    print("Independent JSON source-cell and reconciliation checks passed")
+    validate_fiscal(data)
+    print("Independent JSON semantic source-cell, schema and reconciliation checks passed")
 
 
 def main():
