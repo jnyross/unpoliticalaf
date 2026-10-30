@@ -218,6 +218,55 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_page(region, region.replace('"ons-income-table"', '"missing"'))
         self.assert_bad_page(region, region.replace('"ons-income-table"', '"hmrc-table"'))
 
+    def test_extra_fiscal_claims_are_rejected_across_the_visible_document(self):
+        claims = (
+            "The top 50% pays 90.1%.",
+            "The top 10% is part of the top 50%.",
+            "This is a share of all UK taxes.",
+            "This is an all-tax rate.",
+            "The groups are disjoint.",
+            "The top <em>50%</em> pays 90.1%.",
+        )
+        for claim in claims:
+            for fragment in (f"<p>{claim}</p>", f"<h3>{claim}</h3>", claim):
+                for marker in ("</header>", "</body>"):
+                    with self.subTest(claim=claim, fragment=fragment, marker=marker):
+                        # The shell has no footer. Add one outside main for the
+                        # callback-region case; leave the checked overlap intact.
+                        injected = fragment if marker == "</header>" else f"<footer>{fragment}</footer>"
+                        candidate = self.page.replace(marker, injected + marker, 1)
+                        self.assertNotEqual(candidate, self.page)
+                        with self.assertRaisesRegex(ValueError, "Unsupported overlap or all-tax claim"):
+                            check_payers.validate_page(ROOT, self.data, candidate)
+
+    def test_nesting_exception_cannot_move_or_duplicate_the_checked_overlap(self):
+        sentence = "The top 10% is part of the top 50%."
+        self.assertEqual(self.page.count(sentence), 1)
+        # Copying the whole note must not create a second exemption by ID.
+        start = self.page.index('<p class="payer-note" id="overlap">')
+        end = self.page.index('</p>', start) + len('</p>')
+        note = self.page[start:end]
+        candidate = self.page.replace('</header>', note + '</header>', 1)
+        with self.assertRaisesRegex(ValueError, "duplicated HMRC group relationship"):
+            check_payers.validate_page(ROOT, self.data, candidate)
+        candidate = self.page.replace(sentence, '', 1).replace(
+            '</header>', '<p>' + sentence + '</p></header>', 1)
+        with self.assertRaisesRegex(ValueError, "Shown HMRC group relationship changed"):
+            check_payers.validate_page(ROOT, self.data, candidate)
+
+    def test_claim_scan_excludes_hidden_and_non_page_text(self):
+        claim = "The top 50% pays 90.1%."
+        for fragment in (
+            '<script type="application/json">{"claim":"' + claim + '"}</script>',
+            '<style>/* ' + claim + ' */</style>',
+            '<div hidden><p>' + claim + '</p></div>',
+            '<div aria-hidden="true"><p>' + claim + '</p></div>',
+            '<div style="display:none"><h3>' + claim + '</h3></div>',
+        ):
+            with self.subTest(fragment=fragment):
+                candidate = self.page.replace('</body>', fragment + '</body>', 1)
+                self.assertTrue(check_payers.validate_page(ROOT, self.data, candidate))
+
     def test_each_scroll_region_names_its_own_caption(self):
         for caption_id in ("hmrc-table", "ons-income-table", "ons-expenditure-table"):
             region = f'<div class="payer-scroll" role="region" aria-labelledby="{caption_id}"'

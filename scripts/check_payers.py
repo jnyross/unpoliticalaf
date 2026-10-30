@@ -289,22 +289,30 @@ def validate_data(root, data):
 class Page(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=True)
-        self.nodes, self.stack = [], []
+        self.nodes, self.stack, self.text_runs = [], [], []
         self.feed(text)
 
+    def text_boundary(self, tag):
+        if tag in {"p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "section", "header",
+                   "footer", "main", "nav", "li", "dd", "dt", "td", "th", "br", "summary"}:
+            self.text_runs.append((" ", list(self.stack)))
+
     def handle_starttag(self, tag, attrs):
+        self.text_boundary(tag)
         node = {"tag": tag, "attrs": dict(attrs), "text": [], "parents": list(self.stack)}
         self.nodes.append(node)
         if tag not in {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}:
             self.stack.append(node)
 
     def handle_endtag(self, tag):
+        self.text_boundary(tag)
         for index in range(len(self.stack) - 1, -1, -1):
             if self.stack[index]["tag"] == tag:
                 del self.stack[index:]
                 break
 
     def handle_data(self, value):
+        self.text_runs.append((value, list(self.stack)))
         for node in self.stack:
             node["text"].append(value)
 
@@ -505,8 +513,10 @@ def validate_page(root, data, text):
                       n["parents"][-1] is ons_scope["parents"][-1]]
     require(scope_siblings and scope_siblings[0] is bottom,
             "Bottom-group warning must directly follow ONS scope")
-    overlap = next((n for n in nodes if n["attrs"].get("id") == "overlap"), None)
-    require(overlap is not None and not concealed(overlap) and " ".join("".join(overlap["text"]).split()) ==
+    overlaps = [n for n in document.nodes if n["attrs"].get("id") == "overlap"]
+    require(len(overlaps) == 1, "Missing or duplicated HMRC group relationship")
+    overlap = overlaps[0]
+    require(any(n is overlap for n in nodes) and not concealed(overlap) and " ".join("".join(overlap["text"]).split()) ==
             "The top 1% is part of the top 10%. The top 10% is part of the top 50%. "
             "The bottom 50% and top 10% do not overlap. "
             "These groups refer to taxpayers with a positive Income Tax bill, not all adults. "
@@ -516,8 +526,15 @@ def validate_page(root, data, text):
                 "Direct and indirect taxes counted in this ONS analysis" and not concealed(n) for n in nodes),
             "ONS tax scope heading changed or hidden")
     require(all(not concealed(n) for n in nodes if n["tag"] == "h2"), "Payer heading hidden")
-    # Permit the checked nesting explanation, but no extra top-50 claims or figures.
-    claims = visible.replace("The top 10% is part of the top 50%.", "", 1)
+    # Check visible claims across the whole document, not just main paragraphs.
+    # Keep inline text contiguous, exclude hidden ancestors and non-page content.
+    # Exempt one sentence only within the exact, uniquely checked overlap note.
+    claims = "".join(value for value, parents in document.text_runs
+                     if parents and not concealed(parents[-1]) and
+                     not any(p is overlap or p["tag"] in {"head", "script", "style"} for p in parents))
+    claims += " " + " ".join("".join(overlap["text"]).split()).replace(
+        "The top 10% is part of the top 50%.", "", 1)
+    claims = " ".join(claims.split())
     require(not re.search(r"(?:top 50%|groups are disjoint|groups do not overlap|non-overlapping groups|share of all UK taxes|all-tax rate)", claims, re.I),
             "Unsupported overlap or all-tax claim")
     require(not any(token in text for token in ("36.7 million", "36,700,000", "data/payers/raw/", "original_response", "/home/")),
