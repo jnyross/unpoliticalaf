@@ -214,6 +214,10 @@ mixed other-tax residual, AG−AH difference, AG denominator, stock/flow
 distinction and published March-centred debt share remain visible.
 Collections by tax type do not establish payer distributions or incidence.
 The page removes unsupported employer/PAYE and business/VAT remitter claims.
+Its adjacent caveat explains that tax-type collections do not show how payments
+are split between people or who ultimately bears the cost; no incidence
+percentages are inferred. Our corporation-tax explanation spells out Electricity
+Generator Levy (EGL), while original source labels keep their exact wording.
 The current VAT grouping adds the source's net VAT and VAT refunds rows;
 it does not label those refunds as government refunds or establish who pays.
 All six component disclosures follow the basic story under Check the sources.
@@ -238,6 +242,11 @@ missing nodes/fields, changed identities, year/status/unit swaps, different
 denominators, formula overlap, missing-to-zero substitution, modified source
 notes and hashes. Tax forecast prose is source-bound in exact marked snippets;
 all remaining page prose still goes through the existing PESA date guards.
+The header's outturn sentence is checked against the retained 22 September 2026
+bulletin date. HTTP file/retrieval dates and their caveat must remain under Check
+the sources, separate from the header. Regression cases change the bulletin
+date, relocate both date paragraphs, alter retrieval metadata, remove the payer
+limitation and introduce a negative main-chart share.
 Legacy spending and private-receipt checks remain in place.
 
 The controller must regenerate the six outputs and run setup/build/verify/smoke
