@@ -1,7 +1,8 @@
 # Fiscal schema and recovery implementation
 
 Issue #21 integrates the retained issue #20 implementation and partial issue #4 seed. This document describes source
-changes, not an independent fiscal approval, passing check receipt or deployment.
+changes and their recorded artifact attribution, not independent fiscal approval
+of the issue #22 repair.
 Original issue #4 remains incomplete until the controller's required gates and
 canonical live verification are evidenced.
 
@@ -32,6 +33,9 @@ Every contract also identifies the source's label, period and unit evidence.
 Fixed source coordinates are bound to the product's meaning, rather than accepted
 because their numbers happen to agree. For example, base-year cash and real
 health values are equal, but their cells and price bases are not interchangeable.
+Both metadata readers require each label, period and unit identity to have a
+text kind and a nonempty string value before comparing its normalized wording.
+A matching value with a blank or numeric kind is a semantic error.
 A missing category, duplicate category, wrong year, extra value or overlapping
 parent/subcategory cannot silently alter a product partition.
 
@@ -61,6 +65,17 @@ PESA status is outturn through 2025-26 (4_1 B3), with subsequent aggregate years
 forecast. Tables 4.2–4.4 say outturn at B4; Table 5.2 uses the year/outturn headers.
 Price and forecast notes at 4_1 B51/B52 retain the 2025-26 base, ONS June release
 and 3 March 2026 OBR forecast provenance.
+The forecast status label is constructed from both notes rather than a dated
+STATUS constant. The independent raw reader parses those fixed cells separately
+and checks the JSON context and status label. The HTML checker checks both
+marked date passages and every PESA forecast value tooltip against the raw date.
+Unmarked full-date forecast prose is rejected on every page, including methods.
+The prose check preserves block and line-break boundaries while joining inline
+text; marked dates allow inline descendants but reject nested date markers that
+could discard stale wording. Regressions also simulate both notes moving to a
+consistent future date and require stale rendered dates to fail.
+These are source changes for recovery #23; this bounded worker has not executed
+checks or supplied independent fiscal approval.
 
 OBR historical databank values are **uncertain actual/estimate status**, not a
 uniform observed series. Each value retains B2/B139/B144/B148, and the relevant
@@ -121,6 +136,15 @@ non-pensioner subsets J/K are excluded from the five-area-plus-other sum.
 Missing historical components are named individually. Methods shows a table of
 latest-year and selected historical residuals; the download contains all records.
 
+Issue #22 restores all 22 original Table 4.2-to-4.3 base-year identities (rows
+6–27): 11 functions, eight of-which rows, services total, accounting adjustments
+and TME. Both readers require labels, period, outturn header and billion units;
+the verifier independently locates the complete raw row identities, without the
+producer's expectation constructors. Each pair keeps the existing 0.1-billion
+grid budget (0.05 per signed operand) and numerical allowance. These pairs are
+price identities, not an additive partition of overlapping subsets. Their labels
+and header cells are retained in public provenance alongside their operands.
+
 ## Verification boundary and controller handoff
 
 `fiscal_contract.py` is the declarative semantic schema. `fiscal_schema.py`
@@ -146,7 +170,7 @@ provenance, derived, source-cell, policy and reconciliation records.
 Producer-mutation tests are designed to prove that wrong producer metadata and an
 equal-valued cash/real ledger-cell substitution fail separate checker expectations.
 
-The original worker timed out before executing checks; its partial work and
+The original issue #20 worker timed out before executing checks; its partial work and
 failure evidence are preserved. The bounded integration repair moves enrichment
 from the aggregate-list parser to the completed dataset, separates verifier
 expectations, and regenerates `data/spending.json` and `site/` in credential-free
@@ -154,14 +178,22 @@ Boat. Exact-seed execution receipts belong in the private recovery handoff,
 not in public output. Product programs and tests are never run on the host.
 
 The issue #21 bounded worker made source edits only. It did not run programs,
-tests or regenerate artifacts. The controller must rebuild the dataset and pages
-before exact-candidate verification. The public serializer now rejects undeclared
+tests or regenerate artifacts. The controller subsequently regenerated the
+dataset and pages committed in deployed candidate
+`8e60e9e03707ec38cb274468306e95085bb0bee3` on 30 October 2026. Its generation,
+official exact-candidate gate and independent review receipts are
+retained under `receipts/21/1793368898495164182/` in private factory state;
+the review is `review/8e60e9e03707ec38cb274468306e95085bb0bee3/verdict.json`.
+Those historical receipts do not approve #22. Its implementation seed is rebuilt
+and checked in credential-free Boat; the controller still owns independent
+review, official gate adoption and live verification of the eventual candidate.
+The public serializer rejects undeclared
 dataset and fiscal record fields before rendering, alongside the unchanged
 four-file public allowlist. Audit extracts, workbooks and runtime files are not
 added to that allowlist.
 
-The existing controller must still obtain independent product/fiscal review,
-repeat its exact-candidate gates, and verify the deployed bytes at
+For #22 the existing controller must obtain independent product/fiscal review,
+run its official exact-candidate gates, and verify the deployed bytes at
 https://unpoliticalaf.vercel.app. Passing seed checks cannot close #20 or #4.
 Human reviews, source-publication approval, a year of freshness history and
 rubric scores remain unobserved until their owning gates supply evidence.

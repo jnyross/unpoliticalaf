@@ -75776,6 +75776,126 @@
    "number_format": "0.0",
    "formula": null
   },
+  "4_2!A7": {
+   "kind": "text",
+   "value": "of which: public and common services",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A8": {
+   "kind": "text",
+   "value": "of which: international services",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A13": {
+   "kind": "text",
+   "value": " of which: enterprise and economic development (2)",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A14": {
+   "kind": "text",
+   "value": "of which: science and technology",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A15": {
+   "kind": "text",
+   "value": "of which: employment policies",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A16": {
+   "kind": "text",
+   "value": "of which: agriculture, fisheries and forestry",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A17": {
+   "kind": "text",
+   "value": "of which: transport (3), (4)",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_2!A26": {
+   "kind": "text",
+   "value": "Accounting adjustments",
+   "number_format": "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+   "formula": null
+  },
+  "4_2!A27": {
+   "kind": "text",
+   "value": "Total Managed Expenditure(7)",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A7": {
+   "kind": "text",
+   "value": "of which: public and common services",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A8": {
+   "kind": "text",
+   "value": "of which: international services",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A9": {
+   "kind": "text",
+   "value": "of which: public sector debt interest",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A13": {
+   "kind": "text",
+   "value": " of which: enterprise and economic development (3)",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A14": {
+   "kind": "text",
+   "value": "of which: science and technology",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A15": {
+   "kind": "text",
+   "value": "of which: employment policies",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A16": {
+   "kind": "text",
+   "value": "of which: agriculture, fisheries and forestry",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A17": {
+   "kind": "text",
+   "value": "of which: transport (4), (5)",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A25": {
+   "kind": "text",
+   "value": "Public sector expenditure on services",
+   "number_format": "General",
+   "formula": null
+  },
+  "4_3!A26": {
+   "kind": "text",
+   "value": "Accounting adjustments",
+   "number_format": "#,##0.0,,;\"-\"#,##0.0,,;\"-\"",
+   "formula": null
+  },
+  "4_3!A27": {
+   "kind": "text",
+   "value": "Total Managed Expenditure(8)",
+   "number_format": "General",
+   "formula": null
+  },
   "4_2!B26": {
    "kind": "number",
    "value": "45.4",
@@ -76047,6 +76167,114 @@
    "formula": null
   },
   "4_2!X27": {
+   "kind": "number",
+   "value": "1360.1",
+   "number_format": "#,##0.0",
+   "formula": null
+  },
+  "4_2!X7": {
+   "kind": "number",
+   "value": "24.9",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X7": {
+   "kind": "number",
+   "value": "24.9",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X8": {
+   "kind": "number",
+   "value": "10.3",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X8": {
+   "kind": "number",
+   "value": "10.3",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X9": {
+   "kind": "number",
+   "value": "130.30000000000001",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X13": {
+   "kind": "number",
+   "value": "23.5",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X13": {
+   "kind": "number",
+   "value": "23.5",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X14": {
+   "kind": "number",
+   "value": "11.3",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X14": {
+   "kind": "number",
+   "value": "11.3",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X15": {
+   "kind": "number",
+   "value": "3.7",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X15": {
+   "kind": "number",
+   "value": "3.7",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X16": {
+   "kind": "number",
+   "value": "6.6",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X16": {
+   "kind": "number",
+   "value": "6.6",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_2!X17": {
+   "kind": "number",
+   "value": "48.9",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X17": {
+   "kind": "number",
+   "value": "48.9",
+   "number_format": "#,##0.0\" \";\"-\"#,##0.0\" \"",
+   "formula": null
+  },
+  "4_3!X25": {
+   "kind": "number",
+   "value": "1227.5999999999999",
+   "number_format": "#,##0.0",
+   "formula": null
+  },
+  "4_3!X26": {
+   "kind": "number",
+   "value": "132.5",
+   "number_format": "#,##0.0",
+   "formula": null
+  },
+  "4_3!X27": {
    "kind": "number",
    "value": "1360.1",
    "number_format": "#,##0.0",
@@ -103887,6 +104115,117 @@
    ]
   },
   {
+   "id": "base-price/public-common",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X7",
+     "coefficient": 1,
+     "value": 24.9,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X7",
+     "coefficient": -1,
+     "value": 24.9,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/international",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X8",
+     "coefficient": 1,
+     "value": 10.3,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X8",
+     "coefficient": -1,
+     "value": 10.3,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/debt-interest",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X9",
+     "coefficient": 1,
+     "value": 130.3,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X9",
+     "coefficient": -1,
+     "value": 130.3,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
    "id": "base-price/defence",
    "period": "2025-26",
    "unit": "GBP billion",
@@ -103975,6 +104314,191 @@
      "ref": "4_3!X12",
      "coefficient": -1,
      "value": 94.0,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/enterprise",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X13",
+     "coefficient": 1,
+     "value": 23.5,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X13",
+     "coefficient": -1,
+     "value": 23.5,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/science",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X14",
+     "coefficient": 1,
+     "value": 11.3,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X14",
+     "coefficient": -1,
+     "value": 11.3,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/employment",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X15",
+     "coefficient": 1,
+     "value": 3.7,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X15",
+     "coefficient": -1,
+     "value": 3.7,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/agriculture",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X16",
+     "coefficient": 1,
+     "value": 6.6,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X16",
+     "coefficient": -1,
+     "value": 6.6,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/transport",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X17",
+     "coefficient": 1,
+     "value": 48.9,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X17",
+     "coefficient": -1,
+     "value": 48.9,
      "quantum": 0.1
     }
    ],
@@ -104234,6 +104758,117 @@
      "ref": "4_3!X24",
      "coefficient": -1,
      "value": -0.2,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/services",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X25",
+     "coefficient": 1,
+     "value": 1227.6,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X25",
+     "coefficient": -1,
+     "value": 1227.6,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/adjustments",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X26",
+     "coefficient": 1,
+     "value": 132.5,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X26",
+     "coefficient": -1,
+     "value": 132.5,
+     "quantum": 0.1
+    }
+   ],
+   "residual": 0.0,
+   "quantisation_budget": 0.1,
+   "numeric_epsilon": 1e-09,
+   "outcome": "within_quantisation",
+   "missing_operands": [],
+   "excluded_refs": [],
+   "basis": "Same nominal and real price base; 4_3 A28",
+   "formula": "signed_sum",
+   "geography": "UK",
+   "statuses": [
+    "pesa_outturn"
+   ],
+   "status_refs": [
+    "4_1!B3",
+    "4_1!B51",
+    "4_1!B52",
+    "5_2!G6"
+   ]
+  },
+  {
+   "id": "base-price/tme",
+   "period": "2025-26",
+   "unit": "GBP billion",
+   "operands": [
+    {
+     "ref": "4_2!X27",
+     "coefficient": 1,
+     "value": 1360.1,
+     "quantum": 0.1
+    },
+    {
+     "ref": "4_3!X27",
+     "coefficient": -1,
+     "value": 1360.1,
      "quantum": 0.1
     }
    ],

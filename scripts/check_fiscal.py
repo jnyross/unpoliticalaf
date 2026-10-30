@@ -22,6 +22,64 @@ from fiscal_schema import STATUS, FORMULAE, DASH
 ROOT = Path(__file__).resolve().parent.parent
 
 
+def pesa_forecast_date(read):
+    """Read both fixed raw note cells; never accept the producer's status label."""
+    dates = []
+    for cell in ("B51", "B52"):
+        note = read("4_1!" + cell)["value"]
+        match = re.search(r"outlook - ([0-9]{1,2} [A-Za-z]+ [0-9]{4})\)", str(note))
+        if match is None:
+            raise ValueError("Independent PESA forecast date missing")
+        dates.append(match.group(1))
+    if dates[0] != dates[1]:
+        raise ValueError("Independent PESA forecast dates conflict")
+    return dates[0]
+
+
+def independent_base_rows(read):
+    """Enumerate the full original raw table, independently of producer specs."""
+    identities = (
+        ("general", "1. General public services"),
+        ("public-common", "of which: public and common services"),
+        ("international", "of which: international services"),
+        ("debt-interest", "of which: public sector debt interest"),
+        ("defence", "2. Defence"), ("order", "3. Public order and safety"),
+        ("economic", "4. Economic affairs"),
+        ("enterprise", "of which: enterprise and economic development"),
+        ("science", "of which: science and technology"),
+        ("employment", "of which: employment policies"),
+        ("agriculture", "of which: agriculture, fisheries and forestry"),
+        ("transport", "of which: transport"),
+        ("environment", "5. Environment protection"),
+        ("housing", "6. Housing and community amenities"), ("health", "7. Health"),
+        ("culture", "8. Recreation, culture and religion"), ("education", "9. Education"),
+        ("social", "10. Social protection"), ("eu", "EU transactions"),
+        ("services", "Public sector expenditure on services"),
+        ("adjustments", "Accounting adjustments"), ("tme", "Total Managed Expenditure"),
+    )
+    def clean(value):
+        return " ".join(re.sub(r"\(\d+\)|,\s*(?=\(|$)", "", str(value)).split())
+    def text(ref):
+        cell = read(ref)
+        if cell["kind"] != "text" or not isinstance(cell["value"], str) or not cell["value"].strip():
+            raise ValueError(f"Independent base-price text identity missing: {ref}")
+        return cell["value"]
+    rows, evidence = {}, set()
+    for sheet in ("4_2", "4_3"):
+        labels = {r: clean(text(f"{sheet}!A{r}")) for r in range(6, 28)}
+        if set(labels.values()) != {label for _, label in identities} or len(set(labels.values())) != 22:
+            raise ValueError(f"Independent base-price identity missing/duplicate: {sheet}")
+        for ref, want in (("X3", "£ billion"), ("X5", BASE), ("B4", "outturn")):
+            if text(f"{sheet}!{ref}") != want:
+                raise ValueError(f"Independent base-price unit/period/status identity: {sheet}!{ref}")
+            evidence.add(f"{sheet}!{ref}")
+        for key, label in identities:
+            row = next(r for r, value in labels.items() if value == label)
+            rows[sheet, key] = row
+            evidence.add(f"{sheet}!A{row}")
+    return identities, rows, evidence
+
+
 class RawReader:
     def __init__(self, root=ROOT):
         manifest = root / "data/sources.json"
@@ -91,7 +149,9 @@ def source_metadata(contract, read):
         value = re.sub(r"\s*\(\d+\)(,\s*\(\d+\))*", "", str(value).replace("\u00a0", " "))
         return " ".join(value.split())
     for role, (ref, label) in contract["identity"].items():
-        if text(read(ref)["value"]) != text(label):
+        cell = read(ref)
+        if (cell["kind"] != "text" or not isinstance(cell["value"], str)
+                or not cell["value"].strip() or text(cell["value"]) != text(label)):
             raise ValueError(f"Independent fiscal semantic {role} mismatch: {ref}")
     sheet = contract["ref"].split("!")[0]
     year = contract["period"]
@@ -172,9 +232,11 @@ def independent_specs(read):
         yield (f"TME-tables/{year}", year, "GBP billion",
             [(ch4("Total Managed Expenditure", year), 1, .1), (f"4_1!M{ar}", -1, .1)],
             [], "Same PESA TME basis, Tables 4.1 and 4.2")
-    for key, (_, label) in FUNCTION_ROWS.items():
+    base_identities, base_rows, _ = independent_base_rows(read)
+    for key, _ in base_identities:
         yield (f"base-price/{key}", BASE, "GBP billion",
-            [(ch4(label, BASE), 1, .1), (ch4(label, BASE, "4_3"), -1, .1)], [],
+            [(f"{sheet}!{year_column(sheet, BASE, 'B', 'X')}{base_rows[sheet, key]}", coefficient, .1)
+             for sheet, coefficient in (("4_2", 1), ("4_3", -1))], [],
             "Same nominal and real price base; 4_3 A28")
     ar = locate("4_1", "B", BASE, range(6, 50))
     for key, nominal, real in (("current", "C", "D"), ("investment", "I", "J"), ("tme", "M", "N")):
@@ -344,13 +406,17 @@ def validate_fiscal(data, read=None):
     read = RawReader() if read is None else read
     if data.get("fiscal_schema_version") != 2:
         raise ValueError("Missing fiscal schema version")
-    if (data["status_definitions"] != STATUS or data["formulae"] != FORMULAE or data["dash_semantics"] != DASH):
+    date = pesa_forecast_date(read)
+    expected_status = {**STATUS, "pesa_forecast": {"kind": "forecast", "label": "PESA forecast; OBR " + date}}
+    if data["pesa_context"]["forecast_date"] != date or data["status_definitions"]["pesa_forecast"] != expected_status["pesa_forecast"]:
+        raise ValueError("Independent PESA forecast date/vintage mismatch")
+    if (data["status_definitions"] != expected_status or data["formulae"] != FORMULAE or data["dash_semantics"] != DASH):
         raise ValueError("Changed fiscal status, formula or dash definitions")
     if data["sheet_sources"] != {sheet: sid for sid, sheets in SHEETS.items() for sheet in sheets}:
         raise ValueError("Changed source worksheet ownership")
     if hasattr(read, "sources") and data["sources"] != read.sources:
         raise ValueError("Fiscal source identity/publication/hash mismatch")
-    expected_ids, expected_refs, nodes = set(), set(), {}
+    expected_ids, expected_refs, nodes = set(), independent_base_rows(read)[2], {}
     leaf_objects = set()
     for node, contract in selections(data):
         ref, key = contract["ref"], contract["series"] + "/" + contract["period"]
