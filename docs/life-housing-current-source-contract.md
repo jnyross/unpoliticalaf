@@ -2,7 +2,7 @@
 
 ## Bounded role
 
-WholecurrentODS/qualityPDF/catalogue/technicalHTML foundation, afterglossary. Project all17actualobservations/allhouseholdtenures/3childhouseholdgroups, retain rawtypes/formulas/styles/notes; independentrawreopen. Bind qualityPDFparas11/17–19andprocessitem6return2022-23. Textoperatorparentinspectionlimited; verifyoriginalPDFparagraph beforecandidateclaim. No needtechnicalPDFresearchcrosscheck as hiddeninput. Until pandemicfoundation passes, no new pandemiccomparison/methodclaimUI.
+WholecurrentODS/qualityPDF/catalogue/technicalHTML foundation, afterglossary. Explicitly bind the technical-notes italic row/column-unweighted-total-under-30 rule and its source-specific u wording, separately from FT1241 A220 cell greater than 0 and less than 5 suppression; preserve both original texts without merging their predicates. Bind exact FT1241 group labels A113/A149/A185 from the original ODS, not the glossary. Project all17actualobservations/allhouseholdtenures/3childhouseholdgroups, retain rawtypes/formulas/styles/notes; independentrawreopen. Bind qualityPDFparas11/17–19andprocessitem6return2022-23. Textoperatorparentinspectionlimited; verifyoriginalPDFparagraph beforecandidateclaim. No needtechnicalPDFresearchcrosscheck as hiddeninput. Until pandemicfoundation passes, no new pandemiccomparison/methodclaimUI.
 
 ## Applicability — controlling scope for this seed
 
