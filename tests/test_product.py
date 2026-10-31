@@ -702,6 +702,14 @@ class ProductTests(unittest.TestCase):
                          "data/tax-basics/raw/basics-corporation-tax.html.json",
                          "scripts/build_basics.py", "scripts/check_basics.py", "tests/test_basics.py",
                          "docs/tax-basics-evidence.md", "docs/tax-basics-integration.md",
+                         "life.html", "data/life.json", "data/life/holiday-methods-sources.json",
+                         "data/life/holiday-method-quotes.json", "data/life/sources/holiday-methods/",
+                         "data/life/sources/holiday-methods/travel-methods-crawl-0.html.json",
+                         "data/life/sources/holiday-methods/travel-methods-crawl-1.html.json",
+                         "data/life/sources/holiday-methods/travel-methods-crawl-2.html.json",
+                         "data/life/sources/holiday-methods/travel-qmi-crawl-0.html.json",
+                         "scripts/holiday_methods_projection.py", "scripts/check_holiday_methods.py",
+                         "tests/test_holiday_methods.py", "docs/holiday-methods-checks.md",
                          "factory/project.json", "reference/", "missing.html"):
                 with self.subTest(private=name), self.assertRaises(HTTPError) as caught:
                     urlopen(base + "/" + name, timeout=5)
