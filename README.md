@@ -151,3 +151,14 @@ and binds every public node, signed rendered value and chart encoding to exact
 cells, ordered formulas, units, years and status. This adds no historical receipt
 splice or debt repair. Source edits are not a passing check, fiscal approval,
 live deployment or completed issue #5/#26/#29 acceptance.
+
+The private work-methods foundation reopens the six complete official HTML pages
+registered in `data/life/work-methods-sources.json`. `make verify` checks stored
+and recovered original bytes, then audits an in-memory definitions projection
+with separate HTML locators. No derived file or public work story is produced.
+The QMI, quality update and revision notices retain population, response, weight
+and coding cautions; the LFS coding article is not proof of APS affected periods.
+Confidence `20701` remains uninterpreted. Work counts and their catalogue history
+need their own verified foundation before use. See
+[the work-methods contract](docs/life-work-methods-source-contract.md).
+This source foundation earns no v2 product score or human acceptance evidence.
