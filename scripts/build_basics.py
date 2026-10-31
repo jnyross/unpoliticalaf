@@ -24,7 +24,7 @@ COPY = {
     "allowance": "The Personal Allowance applies to Income Tax, not every tax. You can owe no Income Tax and still pay VAT through purchases.",
     "ni-rules": "National Insurance has its own rules and payment periods. Being below the annual Income Tax allowance does not by itself mean you owe no National Insurance.",
     "scotland": "Scotland sets Income Tax rates and bands on non-savings, non-dividend income of Scottish taxpayers. Those powers exclude the Personal Allowance; HMRC collects the tax.",
-    "wales": "Wales also has devolved Income Tax rates. Where you live matters; HMRC collects the tax. Savings and dividends follow UK rules, outside these devolved rate powers.",
+    "wales": "Wales also has devolved Income Tax rates. Where you live matters. Savings and dividends follow UK rules, outside these devolved rate powers.",
     "paye": "Employers normally deduct Income Tax from employees' pay. They also deduct National Insurance. They send this money to HMRC. They can also owe employer National Insurance.",
     "net-vat": "VAT-registered businesses normally pay HMRC the difference between VAT charged to customers and VAT paid to suppliers. They do not send the whole purchase price as VAT.",
     "burden": "Who sends the tax is not the same question as who bears its cost. These rules explain how tax is sent. They do not tell us who bears the cost.",
@@ -71,8 +71,9 @@ def tax_basics():
     return '\n'.join([
         '<section data-basics="taxes" aria-labelledby="tax-basics-title">',
         '<h2 id="tax-basics-title">What are the main taxes?</h2>',
+        '<p>Our summary of official guidance</p>',
         '<dl>' + '\n'.join(definitions) + '</dl>',
-        '<p data-basics-scope="ct">The OBR group also includes related charges. See the OBR group scope and source note. '
+        '<p data-basics-scope="ct">This site’s Corporation Tax receipts group also includes related charges. See the OBR group scope and source note. '
         '<a href="#tax-sources">OBR Receipts (£bn): U4 and note C42</a></p>',
         _claim("allowance", _link("income", "Personal Allowance: allowances and reliefs", "#income-tax-allowances-and-reliefs")),
         _claim("ni-rules", _link("ni", "National Insurance: Who pays", "#who-pays-national-insurance")),
@@ -91,6 +92,7 @@ def payer_basics():
     return '\n'.join([
         '<aside data-basics="payers" aria-labelledby="payer-basics-title">',
         '<h3 id="payer-basics-title">How is the tax collected?</h3>',
+        '<p>Our summary of official guidance</p>',
         _claim("paye", _link("paye", "PAYE: deductions and paying HMRC", "#deductions-from-their-pay")),
         _claim("net-vat", _link("vat", "VAT: business responsibilities", "#your-responsibilities-as-a-vat-registered-business")),
         _claim("burden"),

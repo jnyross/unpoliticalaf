@@ -125,6 +125,13 @@ These are not the HMRC taxpayer groups.</p>
 <p>Gross income includes cash benefits. Disposable income is gross income after direct taxes.
 Each row shows one group's taxes. The shares use that group's gross household income as the whole.</p>
 <h3>Direct and indirect taxes counted in this ONS analysis</h3>
+<p data-payer-definition="tax-types">ONS takes direct taxes, such as Income Tax and Council Tax after benefits or rebates, from household income.
+Indirect taxes are paid through spending, such as VAT and duty on alcohol or fuel.
+Final taxes are on goods and services bought for household use.
+Intermediate taxes are on goods and services firms use to make other goods and services.
+In this model, ONS assumes firms pass the full cost of intermediate taxes to buyers in prices.
+<span>Sources: <a data-definition-source="ons_bulletin" data-locator="Glossary: Stages in the redistribution of income" href="{esc(data['sources']['ons_bulletin']['url'])}#glossary">ONS FYE 2024 glossary</a>;
+<a data-definition-source="ons_method" data-locator="7. Post-tax income" href="{esc(data['sources']['ons_method']['url'])}#post-tax-income">ONS FYE 2019 technical report, section 7</a></span></p>
 <div class="payer-note" id="bottom-group"><h3>Why the bottom group needs care</h3>
 <p data-payer-limit="deferred">Deferred lump-sum tax payments can distort the groups.
 They can leave people with high gross income but low disposable income. These people can enter the bottom group.

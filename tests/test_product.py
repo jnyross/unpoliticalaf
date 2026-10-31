@@ -144,6 +144,114 @@ class ProductTests(unittest.TestCase):
         self.assertIn("not given", self.files["index.html"].decode("utf-8"))
         self.assertNotIn("All the rest is real spending", self.files["index.html"].decode("utf-8"))
 
+    def test_spending_vintages_are_explained_beside_the_decade_headline(self):
+        raw = self.files["index.html"].decode("utf-8")
+        self.assertTrue(check_site.check_spending_comparison(raw, self.data))
+        document = Document(raw)
+        section = next(n for n in document.nodes if n["attrs"].get("id") == "decades")
+        children = section["children"]
+        headline = next(n for n in children if n["attrs"].get("id") == "decade-spending-headline")
+        note = children[children.index(headline) + 1]
+        self.assertEqual(note["attrs"], {"id": "spending-vintage-note"})
+        figures = [n for n in note["children"] if n["tag"] == "data"]
+        year = self.data["latest_year"]
+        obr = next(row for row in self.data["history"]["totals"] if row["id"] == "spending")["values"][year]
+        pesa = next(row for row in self.data["aggregates"] if row["year"] == year)["tme"]["gdp"]
+        self.assertEqual([n["attrs"]["data-value-id"] for n in figures], [obr["value_id"], pesa["value_id"]])
+        note_html = re.search(r'<p id="spending-vintage-note">.*?</p>', raw, re.S).group(0)
+        headline_html = re.search(r'<p id="decade-spending-headline">.*?</p>', raw, re.S).group(0)
+        first_data = re.search(r'<data\b.*?</data>', note_html, re.S).group(0)
+        mutations = (
+            (note_html, ""),
+            (note_html, note_html + note_html),
+            (headline_html + "\n" + note_html, note_html + "\n" + headline_html),
+            (headline_html + "\n" + note_html, headline_html + "<p>Intervening copy.</p>" + note_html),
+            (note_html, note_html.replace(first_data, "")),
+            (headline_html, headline_html.replace(obr["value_id"], pesa["value_id"])),
+            (headline_html, headline_html.replace("When spending is more than receipts", "When spending is more than income")),
+            (note_html, note_html.replace(obr["value_id"], pesa["value_id"])),
+            (note_html, note_html.replace(obr["ref"], pesa["ref"])),
+            (note_html, note_html.replace("different vintages and GDP bases", "the same GDP basis")),
+            (note_html, note_html.replace("not directly comparable", "directly comparable")),
+            (note_html, note_html.replace("OBR, October 2026", "OBR, March 2026")),
+            (note_html, note_html.replace('id="spending-vintage-note"', 'id="spending-vintage-note" hidden')),
+            ("A GDP share can rise when GDP falls.", "GDP shares always show real changes."),
+            ("a common way to compare years far apart", "the fairest way to compare years far apart"),
+            ("Spending and receipts</h3>", "Spending and income</h3>"),
+            ("> Receipts</p>", "> Income</p>"),
+        )
+        for before, after in mutations:
+            with self.subTest(mutation=before):
+                self.assertIn(before, raw)
+                changed = raw.replace(before, after, 1)
+                self.assertNotEqual(changed, raw)
+                with self.assertRaisesRegex(ValueError, "Spending comparison:"):
+                    check_site.check_spending_comparison(changed, self.data)
+        # Select the actual decade table, not the first matching header in the
+        # document. Prove that the intended header changes and all other bytes stay.
+        decade_sections = list(re.finditer(r'<section id="decades">.*?</section>', raw, re.S))
+        self.assertEqual(len(decade_sections), 1)
+        decade = decade_sections[0]
+        caption = f"Spending, receipts, borrowing and debt, share of GDP, {self.data['history']['decades'][0]} to {year}"
+        tables = [match for match in re.finditer(r'<table>.*?</table>', decade.group(), re.S)
+                  if any(n["tag"] == "caption" and "".join(n["text"]) == caption
+                         for n in Document(match.group()).nodes)]
+        self.assertEqual(len(tables), 1, "mutation needs exactly one decade totals table")
+        table_match = tables[0]
+        before, after = '<th scope="col">Receipts</th>', '<th scope="col">Income</th>'
+        self.assertEqual(table_match.group().count(before), 1)
+        start = decade.start() + table_match.start() + table_match.group().index(before)
+        end = start + len(before)
+        changed = raw[:start] + after + raw[end:]
+        self.assertEqual(changed[:start], raw[:start])
+        self.assertEqual(changed[start + len(after):], raw[end:])
+        self.assertEqual(changed.count(before), raw.count(before) - 1)
+        changed_sections = list(re.finditer(r'<section id="decades">.*?</section>', changed, re.S))
+        self.assertEqual(len(changed_sections), 1)
+        self.assertEqual(changed_sections[0].group(), decade.group().replace(before, after, 1))
+        changed_table = Document(table_match.group().replace(before, after, 1))
+        self.assertEqual(["".join(n["text"]) for n in changed_table.nodes
+                          if n["tag"] == "th" and n["attrs"].get("scope") == "col"],
+                         ["Year", "Spending", "Income", "Borrowing", "Debt"])
+        with self.assertRaisesRegex(ValueError, "Spending comparison: decade receipts table headers changed"):
+            check_site.check_spending_comparison(changed, self.data)
+        # Keeping the exact note elsewhere on the page cannot replace locality.
+        changed = raw.replace(note_html, "", 1).replace("</main>", note_html + "</main>", 1)
+        with self.assertRaisesRegex(ValueError, "Spending comparison:"):
+            check_site.check_spending_comparison(changed, self.data)
+
+    def test_spending_comparison_has_exact_attribute_contracts(self):
+        raw = self.files["index.html"].decode("utf-8")
+        note = re.search(r'<p id="spending-vintage-note">.*?</p>', raw, re.S).group(0)
+        headline = re.search(r'<p id="decade-spending-headline">.*?</p>', raw, re.S).group(0)
+        targets = ('<html lang="en-GB">', '<body class="view-real nojs">',
+                   '<main id="main">', '<section id="decades">',
+                   '<p id="decade-spending-headline">', '<p id="spending-vintage-note">')
+        attributes = ('class="unknown"', 'data-unknown="conceal"', 'unknown="value"',
+                      'popover', 'inert', 'style="opacity:0"', 'style="display:none"',
+                      'hidden', 'aria-hidden="true"', 'role="none"', 'tabindex="-1"')
+        for target in targets:
+            for attribute in attributes:
+                with self.subTest(target=target, attribute=attribute):
+                    self.assertIn(target, raw)
+                    changed = raw.replace(target, target[:-1] + " " + attribute + ">", 1)
+                    with self.assertRaisesRegex(ValueError, "Spending comparison:"):
+                        check_site.check_spending_comparison(changed, self.data)
+        for paragraph in (note, headline):
+            for target in re.findall(r'<(?:cite|data)\b[^>]*>', paragraph):
+                for attribute in attributes:
+                    with self.subTest(target=target, attribute=attribute):
+                        changed_paragraph = paragraph.replace(target, target[:-1] + " " + attribute + ">", 1)
+                        changed = raw.replace(paragraph, changed_paragraph, 1)
+                        with self.assertRaisesRegex(ValueError, "Spending comparison:"):
+                            check_site.check_spending_comparison(changed, self.data)
+        # Unknown wrappers cannot add a stylesheet-based concealment route.
+        changed = raw.replace(note, '<div class="unknown">' + note + '</div>', 1)
+        with self.assertRaisesRegex(ValueError, "Spending comparison:"):
+            check_site.check_spending_comparison(changed, self.data)
+        self.assertTrue(check_site.check_spending_comparison(
+            raw.replace('<body class="view-real nojs">', '<body class="view-real">', 1), self.data))
+
     def test_tax_navigation_and_public_projection_boundary(self):
         expected_links = set(HTML_PAGES)
         for name in HTML_PAGES:
@@ -406,6 +514,7 @@ class ProductTests(unittest.TestCase):
             ('data-guidance-source="income-tax"', 'data-guidance-source="vat"'),
             ("30 October 2026", "31 October 2026"),
             ("no publication date is established", "published today"),
+            ("These are our summaries of official guidance, not quotations.", "These are official quotations."),
             ('id="tax-guidance"', 'id="wrong-guidance"'),
         )
         for before, after in mutations:
@@ -435,6 +544,68 @@ class ProductTests(unittest.TestCase):
             (site / "methods.html").write_text(raw.replace(section, section.replace(source["sha256"], "0" * 64, 1), 1))
             with self.assertRaisesRegex(ValueError, "Guidance methods:"):
                 independent_basics_checks(site, root=ROOT)
+
+    def test_methods_ons_glossary_copy_sources_visibility_and_evidence(self):
+        raw = self.files["methods.html"].decode("utf-8")
+        self.assertTrue(check_site.check_ons_glossary(raw, root=ROOT))
+        definition = re.search(r'<dd id="ons-tax-definitions">.*?</dd>', raw, re.S).group(0)
+        paragraphs = [n for n in Document(definition).nodes if n["tag"] == "p"]
+        copy = " ".join("".join(paragraphs[0]["text"]).split())
+        payer = Document(self.files["who-pays.html"].decode("utf-8"))
+        payer_definition = next(n for n in payer.nodes if n["attrs"].get("data-payer-definition") == "tax-types")
+        self.assertEqual(copy, " ".join("".join(payer_definition["text"]).split()).split(" Sources:", 1)[0])
+        mutations = (
+            ("after benefits or rebates", "before benefits or rebates"),
+            ("paid through spending", "taken from income"),
+            ("bought for household use", "bought by all firms"),
+            ("goods and services firms use", "goods and services households use"),
+            ("In this model, ONS assumes", "It is a settled fact that"),
+            ("https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024",
+             "https://example.org/unverified"),
+            ("#glossary", "#wrong-heading"),
+            ("#post-tax-income", "#wrong-income"),
+            ("Glossary: Stages in the redistribution of income", "Unverified heading"),
+            ("7. Post-tax income", "10. Limitations"),
+            ('data-definition-source="ons_method"', 'data-definition-source="ons_bulletin"'),
+        )
+        for before, after in mutations:
+            with self.subTest(mutation=before):
+                self.assertIn(before, definition)
+                changed = raw.replace(definition, definition.replace(before, after, 1), 1)
+                with self.assertRaisesRegex(ValueError, "ONS glossary:"):
+                    check_site.check_ons_glossary(changed, root=ROOT)
+        for changed in (raw.replace(definition, "", 1), raw.replace(definition, definition + definition, 1)):
+            with self.assertRaisesRegex(ValueError, "ONS glossary:"):
+                check_site.check_ons_glossary(changed, root=ROOT)
+        targets = ['<html lang="en-GB">', '<body class="view-real nojs">', '<main id="main">',
+                   '<dl id="fiscal-glossary">', '<dd id="ons-tax-definitions">']
+        for target in targets:
+            for attribute in ('class="unknown"', 'data-unknown="yes"', 'popover', 'inert', 'hidden',
+                              'style="display:none"', 'aria-hidden="true"'):
+                with self.subTest(target=target, attribute=attribute), self.assertRaisesRegex(ValueError, "ONS glossary:"):
+                    check_site.check_ons_glossary(raw.replace(target, target[:-1] + " " + attribute + ">", 1), root=ROOT)
+        for target in re.findall(r'<(?:p|a)\b[^>]*>', definition):
+            with self.subTest(descendant=target), self.assertRaisesRegex(ValueError, "ONS glossary:"):
+                changed = definition.replace(target, target[:-1] + ' class="unknown">', 1)
+                check_site.check_ons_glossary(raw.replace(definition, changed, 1), root=ROOT)
+        with tempfile.TemporaryDirectory() as directory:
+            site = Path(directory)
+            for name in ("taxes.html", "who-pays.html", "methods.html"):
+                (site / name).write_bytes(self.files[name])
+            (site / "methods.html").write_text(raw.replace("In this model, ONS assumes", "It is a settled fact that", 1), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "ONS glossary:"):
+                independent_basics_checks(site, root=ROOT)
+        for filename in ("ons-bulletin-2024.html.json", "ons-technical-2019.html.json"):
+            with self.subTest(source=filename), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                shutil.copytree(ROOT / "data/payers/raw", root / "data/payers/raw")
+                path = root / "data/payers/raw" / filename
+                path.write_bytes(path.read_bytes() + b" ")
+                with self.assertRaisesRegex(ValueError, "ONS glossary: retained source hash changed"):
+                    check_site.check_ons_glossary(raw, root=root)
+        with patch.object(check_site, "payer_raw_cells", return_value=lambda *_: {"value": "Wrong label"}):
+            with self.assertRaisesRegex(ValueError, "ONS glossary: example source label changed"):
+                check_site.check_ons_glossary(raw, root=ROOT)
 
     def test_guidance_method_locator_mapping_uses_ids_not_register_position(self):
         register = json.loads((ROOT / "data/tax-basics/sources.json").read_text())

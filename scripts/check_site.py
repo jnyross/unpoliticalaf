@@ -18,7 +18,7 @@ from openpyxl import load_workbook
 from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 from check_taxes import validate as validate_taxes, checked_forecast_prose
-from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page, Page as SemanticPage
+from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page, Page as SemanticPage, raw_cells as payer_raw_cells
 from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -243,6 +243,7 @@ def validate(site=SITE):
             errors.append(f"{name}: {size} bytes is over the {MAX_BYTES} limit")
 
         if name == "index.html":
+            check_spending_comparison(raw, data)
             for section_id in ("answers", "hundred", "items", "total", "decades", "areas"):
                 if section_id not in p.section_ids:
                     errors.append(f"{name}: missing product section {section_id}")
@@ -329,6 +330,92 @@ def validate(site=SITE):
     print("all checks passed")
 
 
+def check_spending_comparison(raw, data):
+    """Bind the two source vintages to the headline, before its first chart."""
+    def require(ok, message):
+        if not ok:
+            raise ValueError("Spending comparison: " + message)
+    def text(node):
+        return " ".join("".join(node["text"]).split())
+    document = SemanticPage(raw)
+    def unique(identifier):
+        found = [n for n in document.nodes if n["attrs"].get("id") == identifier]
+        require(len(found) == 1, "missing or duplicate " + identifier)
+        return found[0]
+    section = unique("decades")
+    headline = unique("decade-spending-headline")
+    note = unique("spending-vintage-note")
+    require(section["tag"] == "section" and section["parents"] and section["parents"][-1]["tag"] == "main",
+            "decade section misplaced")
+    children = [n for n in document.nodes if n["parents"] and n["parents"][-1] is section]
+    require(headline["tag"] == note["tag"] == "p" and headline in children and note in children and
+            children.index(note) == children.index(headline) + 1,
+            "vintage note must immediately follow the spending headline")
+    charts = [n for n in document.nodes if section in n["parents"] and n["tag"] == "svg"]
+    require(charts and document.nodes.index(note) < document.nodes.index(charts[0]),
+            "vintage note must precede the decade charts")
+    descendants = [n for n in document.nodes if note in n["parents"]]
+    require(headline["attrs"] == {"id": "decade-spending-headline"} and
+            note["attrs"] == {"id": "spending-vintage-note"}, "comparison paragraph attributes changed")
+    # Exact contracts reject all undeclared attributes, including unknown classes
+    # that a stylesheet could conceal. Browser checks separately inspect paint.
+    shell = {"html": ({"lang": "en-GB"},),
+             "body": ({"class": "view-real nojs"}, {"class": "view-real"}),
+             "main": ({"id": "main"},), "section": ({"id": "decades"},)}
+    require([n["tag"] for n in note["parents"]] == ["html", "body", "main", "section"] and
+            headline["parents"] == note["parents"], "comparison ancestor structure changed")
+    for ancestor in note["parents"]:
+        require(ancestor["attrs"] in shell[ancestor["tag"]], "comparison ancestor attributes changed")
+    for paragraph in (headline, note):
+        for node in (n for n in document.nodes if paragraph in n["parents"]):
+            allowed = (node["tag"] == "cite" and paragraph is note and not node["attrs"]) or (
+                node["tag"] == "data" and set(node["attrs"]) ==
+                {"value", "data-value-id", "data-ref", "title"} and bool(node["attrs"]["title"]))
+            require(allowed and node["parents"][-1] is paragraph,
+                    "comparison descendant attributes or structure changed")
+    year = data["latest_year"]
+    spending = next(row for row in data["history"]["totals"] if row["id"] == "spending")["values"][year]
+    pesa = next(row for row in data["aggregates"] if row["year"] == year)["tme"]["gdp"]
+    first = data["history"]["decades"][0]
+    first_spending = next(row for row in data["history"]["totals"] if row["id"] == "spending")["values"][first]
+    headline_figures = [n for n in document.nodes if headline in n["parents"] and n["tag"] == "data"]
+    require([n["attrs"].get("data-value-id") for n in headline_figures] ==
+            [first_spending["value_id"], spending["value_id"]] and
+            text(headline) == f'In {first}, spending was {first_spending["v"]:.1f}% of GDP. '
+            f'In {year} it was {spending["v"]:.1f}%. '
+            'When spending is more than receipts, the government borrows the gap.',
+            "spending headline or its source identities changed")
+    figures = [n for n in descendants if n["tag"] == "data"]
+    require(len(figures) == 2, "both source-backed GDP shares are required")
+    for node, source in zip(figures, (spending, pesa)):
+        require(node["attrs"].get("data-value-id") == source["value_id"] and
+                node["attrs"].get("data-ref") == source["ref"] and
+                node["attrs"].get("value") == str(source["v"]) and text(node) == f'{source["v"]:.1f}%',
+                "vintage figure source identity changed")
+    expected = (f'For {year}, OBR, October 2026 shows {spending["v"]:.1f}% of GDP. '
+                f'HM Treasury, PESA 2026 shows {pesa["v"]:.1f}%. '
+                'These use different vintages and GDP bases. They are not directly comparable. '
+                'The gap is not a change in spending.')
+    require(text(note) == expected, "vintage explanation changed")
+    prose = text(section)
+    require("fairest" not in prose.lower() and "A GDP share can rise when GDP falls." in prose,
+            "neutral comparison or GDP caveat changed")
+    require(not re.search(r"\bincome\b", prose, re.I), "receipts must not be labelled income")
+    require(any(n["tag"] == "h3" and text(n) == "Spending and receipts" for n in children),
+            "receipts heading changed")
+    # Node text does not insert boundaries between adjacent table cells. Bind
+    # the actual headers, not a whole-section word search such as Income.
+    captions = [n for n in document.nodes if section in n["parents"] and n["tag"] == "caption" and
+                text(n) == f"Spending, receipts, borrowing and debt, share of GDP, {first} to {year}"]
+    require(len(captions) == 1 and captions[0]["parents"][-1]["tag"] == "table",
+            "decade receipts table missing or changed")
+    table = captions[0]["parents"][-1]
+    require([text(n) for n in document.nodes if table in n["parents"] and n["tag"] == "th" and
+             n["attrs"].get("scope") == "col"] == ["Year", "Spending", "Receipts", "Borrowing", "Debt"],
+            "decade receipts table headers changed")
+    return True
+
+
 def independent_basics_checks(site, root=None):
     """Check retained guidance and marked fragments in actual published HTML."""
     root = ROOT if root is None else Path(root)
@@ -346,8 +433,93 @@ def independent_basics_checks(site, root=None):
     path = site / "methods.html"
     if any(p.is_symlink() for p in (path, *path.parents)) or not path.is_file():
         raise ValueError("Guidance methods must be a regular HTML file")
-    check_guidance_methods(path.read_text(encoding="utf-8"), root=root)
+    methods = path.read_text(encoding="utf-8")
+    check_guidance_methods(methods, root=root)
+    check_ons_glossary(methods, root=root)
     return result
+
+
+def check_ons_glossary(raw, root=None):
+    """Bind the Methods definitions to their own retained ONS evidence."""
+    root = ROOT if root is None else Path(root)
+    def require(ok, message):
+        if not ok:
+            raise ValueError("ONS glossary: " + message)
+    def text(node):
+        return " ".join("".join(node["text"]).split())
+    document = SemanticPage(raw)
+    definitions = [n for n in document.nodes if n["attrs"].get("id") == "ons-tax-definitions"]
+    require(len(definitions) == 1, "missing or duplicate definitions")
+    definition = definitions[0]
+    require(definition["tag"] == "dd" and definition["attrs"] == {"id": "ons-tax-definitions"} and
+            [n["tag"] for n in definition["parents"]] == ["html", "body", "main", "dl"],
+            "definition structure changed")
+    shell = {"html": ({"lang": "en-GB"},),
+             "body": ({"class": "view-real nojs"}, {"class": "view-real"}),
+             "main": ({"id": "main"},), "dl": ({"id": "fiscal-glossary"},)}
+    require(all(n["attrs"] in shell[n["tag"]] for n in definition["parents"]),
+            "ancestor attributes changed")
+    nodes = [n for n in document.nodes if definition in n["parents"]]
+    paragraphs = [n for n in nodes if n["tag"] == "p"]
+    require([n["tag"] for n in nodes] == ["p", "p", "a", "a"] and
+            all(n["parents"][-1] is definition and not n["attrs"] for n in paragraphs),
+            "definition markup or attributes changed")
+    copy = ("ONS takes direct taxes, such as Income Tax and Council Tax after benefits or rebates, from household income. "
+            "Indirect taxes are paid through spending, such as VAT and duty on alcohol or fuel. "
+            "Final taxes are on goods and services bought for household use. "
+            "Intermediate taxes are on goods and services firms use to make other goods and services. "
+            "In this model, ONS assumes firms pass the full cost of intermediate taxes to buyers in prices.")
+    require(text(paragraphs[0]) == copy and text(paragraphs[1]) ==
+            "Sources: ONS FYE 2024 glossary; ONS FYE 2019 technical report, section 7", "definition copy changed")
+    siblings = [n for n in document.nodes if n["parents"] and n["parents"][-1] is definition["parents"][-1]]
+    position = siblings.index(definition)
+    require(position > 0 and siblings[position - 1]["tag"] == "dt" and not siblings[position - 1]["attrs"] and
+            text(siblings[position - 1]) == "Direct and indirect taxes in this ONS analysis", "glossary label changed")
+    sources = (
+        ("ons_bulletin", "ons-bulletin-2024.html.json", "438d846bff86d243b4b0d9aca02a60a730e8356eeba2ea99dd92322497c77566",
+         "3ea7d0ca5d0461f9f8f1759ec96b0203358fdebd10a59afc60c3b4eb3582bfcc",
+         "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024",
+         "glossary", "Glossary: Stages in the redistribution of income", "ONS FYE 2024 glossary", "Stages in the redistribution of income", (
+             "direct taxes include deductions such as Income Tax, National Insurance contributions, student loan repayments and Council Tax (less Council Tax benefits or rebates)",
+             "indirect taxes are then paid via expenditure",
+             "indirect taxes refer to those on goods and services such as Value Added Tax (VAT), duty on tobacco, alcohol and fuel, and Stamp Duty")),
+        ("ons_method", "ons-technical-2019.html.json", "333f37418a495e5f46b724f6366001330f1d5b42462e2954bd2749ab1907f8f1",
+         "2822bc0a9f9f1c214f9fdf37d5aa1c2a4c31122fd09919af7324c3c95f1b2f15",
+         "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/articles/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2019",
+         "post-tax-income", "7. Post-tax income", "ONS FYE 2019 technical report, section 7", "7. Post-tax income", (
+             "Final goods and services are those that are sold to final users (in this case household consumers)",
+             "intermediate goods are those that are used in the production of final goods",
+             "In this analysis only taxes on goods and services consumed by households are included",
+             "We assume that companies pass on the full cost of intermediate taxes to the consumer in the price of the final good")),
+    )
+    for anchor, (sid, filename, stored_hash, body_hash, url, fragment, locator, label, heading, quotes) in zip(nodes[2:], sources):
+        require(anchor["parents"][-1] is paragraphs[1] and anchor["attrs"] ==
+                {"data-definition-source": sid, "data-locator": locator, "href": url + "#" + fragment} and
+                text(anchor) == label, "source URL or locator changed")
+        path = root / "data/payers/raw" / filename
+        require(not any(p.is_symlink() for p in (path, *path.parents)), "symlink in retained source")
+        blob = path.read_bytes()
+        require(hashlib.sha256(blob).hexdigest() == stored_hash, "retained source hash changed")
+        original = json.loads(blob)["original_response"]
+        require(hashlib.sha256(original.encode("utf-8")).hexdigest() == body_hash, "original source hash changed")
+        evidence = SemanticPage(original)
+        sections = [n for n in evidence.nodes if n["attrs"].get("id") == fragment]
+        require(len(sections) == 1, "source section changed")
+        section = sections[0]
+        require(any(text(n) == heading for n in evidence.nodes if section in n["parents"] and
+                    n["tag"] in {"h2", "h3", "h4"}) and all(q in text(section) for q in quotes),
+                "source heading or evidence changed")
+    workbook = root / "data/payers/raw/ons-etb-fye2024.xlsx"
+    require(not any(p.is_symlink() for p in (workbook, *workbook.parents)) and
+            hashlib.sha256(workbook.read_bytes()).hexdigest() ==
+            "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73", "example workbook hash changed")
+    read = payer_raw_cells(root)
+    for address, label in (("B5", "Direct taxes"), ("C6", "Income Tax"),
+                           ("C8", "Council Tax and Northern Ireland rates"), ("B9", "Indirect taxes"),
+                           ("C10", "Value Added Tax (VAT)"), ("C11", "Duty on alcohol"),
+                           ("C13", "Duty on hydrocarbon oils and Vehicle Excise Duty")):
+        require(read("ons", "Table 8", address)["value"] == label, "example source label changed: " + address)
+    return True
 
 
 def check_guidance_methods(raw, root=None):
@@ -415,6 +587,7 @@ def check_guidance_methods(raw, root=None):
         "Official guidance explains the tax rules. It is not the source of the household percentages or receipt totals. "
         "We checked these guidance pages on 30 October 2026. They are living guidance; no publication date is established. "
         "The next update is unknown. We use no current rates or personal tax examples.",
+        "These are our summaries of official guidance, not quotations. "
         "The short definitions link to the official page and name the relevant heading. "
         "The OBR group limits and ONS model limits remain beside their own figures. "
         "These definitions do not describe who bears every tax cost."] and all(not concealed(n) for n in intros),

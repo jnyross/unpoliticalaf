@@ -105,12 +105,17 @@ def check_payer_browser(page, data):
 
 def check_basics_browser(page, *, expanded=False):
     """Check required guidance text, including clipping and ancestor concealment."""
-    modules = page.locator('[data-basics], #tax-guidance')
+    modules = page.locator('[data-basics], #tax-guidance, [data-payer-definition], #spending-vintage-note, #fiscal-glossary')
     for index in range(modules.count()):
         module = modules.nth(index)
         if not module.is_visible():
             raise RuntimeError("Basics container is not visible")
-        targets = module.locator('p, dt, h2, h3, summary, a, code, [data-guidance-source]')
+        if module.get_attribute('data-payer-definition') == 'tax-types':
+            targets = page.locator('[data-payer-definition], [data-payer-definition] span, [data-payer-definition] a')
+        elif module.get_attribute('id') == 'spending-vintage-note':
+            targets = page.locator('#spending-vintage-note, #spending-vintage-note cite, #spending-vintage-note data')
+        else:
+            targets = module.locator('p, dt, h2, h3, summary, a, code, [data-guidance-source]')
         for target_index in range(targets.count()):
             target = targets.nth(target_index)
             closed = target.evaluate("""node => {
@@ -172,6 +177,15 @@ def check_basics_browser_guards(browser):
 <p data-basics-scope="ct">The OBR group also includes related charges.</p>
 <details><summary>More rules</summary><p>Required disclosure explanation.</p></details>
 </section>
+<p data-payer-definition="tax-types">Direct taxes come out of income. Indirect taxes are paid through spending.
+<span>Sources: <a data-definition-source="ons_bulletin" href="#glossary">ONS glossary</a>;
+<a data-definition-source="ons_method" href="#post-tax-income">ONS technical report</a></span></p>
+<p id="spending-vintage-note"><cite>OBR vintage</cite> shows <data>one GDP share</data>.
+<cite>PESA vintage</cite> shows <data>another GDP share</data>. The source vintages and GDP bases differ.</p>
+<dl id="fiscal-glossary"><dt>ONS definitions</dt><dd id="ons-tax-definitions">
+<p>The same direct and indirect tax definitions.</p>
+<p>Sources: <a href="#glossary">ONS glossary</a>; <a href="#post-tax-income">ONS technical report</a></p>
+</dd></dl>
 <section id="tax-guidance"><h2>Guidance sources</h2>
 <details><summary>Source records</summary>
 <ul><li data-guidance-source="income-tax"><a href="#source">Retained source locator</a>
@@ -188,10 +202,25 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
         ("main", "node.style.clipPath = 'inset(100%)'"),
         ("main", "node.style.transform = 'translateX(-200vw)'"),
         ("main", "node.style.transform = 'translateX(200vw)'"),
+        ("#fiscal-glossary > dt", "node.style.opacity = '0'"),
+        ("#ons-tax-definitions p:first-child", "node.style.clipPath = 'inset(100%)'"),
+        ("#ons-tax-definitions a:first-child", "node.style.opacity = '0'"),
+        ("#ons-tax-definitions", "node.style.opacity = '0'"),
+        ("#spending-vintage-note", "node.style.opacity = '0'"),
+        ("#spending-vintage-note", "node.style.cssText = 'height:1px;overflow:hidden'"),
+        ("#spending-vintage-note cite:first-of-type", "node.style.opacity = '0'"),
+        ("#spending-vintage-note cite:last-of-type", "node.style.visibility = 'hidden'"),
+        ("#spending-vintage-note data:first-of-type", "node.style.opacity = '0'"),
+        ("#spending-vintage-note data:last-of-type", "node.style.clipPath = 'inset(100%)'"),
+        ("[data-payer-definition] span", "node.style.opacity = '0'"),
+        ('[data-definition-source="ons_bulletin"]', "node.style.opacity = '0'"),
+        ('[data-definition-source="ons_method"]', "node.style.clipPath = 'inset(100%)'"),
+        ("[data-payer-definition]", "node.style.opacity = '0'"),
+        ("[data-payer-definition]", "node.style.cssText = 'height:1px;overflow:hidden'"),
         ("[data-basics-scope]", "node.style.opacity = '0'"),
         ("[data-basics-scope]", "node.style.cssText = 'height:1px;overflow:hidden'"),
-        ("dt", "node.style.cssText = 'max-height:1px;overflow:clip'"),
-        ("dt", "node.style.opacity = '0'"),
+        ("[data-basics] dt", "node.style.cssText = 'max-height:1px;overflow:clip'"),
+        ("[data-basics] dt", "node.style.opacity = '0'"),
         ("[data-basics] details p", "node.style.opacity = '0'"),
         ("#tax-guidance li", "node.style.opacity = '0'"),
         ("[data-basics] a", "node.style.opacity = '0'"),
@@ -217,7 +246,7 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
                     check_basics_browser(page, expanded=expanded)
                     target = page.locator(selector)
                     if target.count() != 1:
-                        raise RuntimeError("Basics browser mutation target is not unique")
+                        raise RuntimeError("Basics browser mutation target is not unique: " + selector)
                     target.evaluate("node => { " + mutation + "; }")
                     closed_content = selector in (
                         "[data-basics] details p", "#tax-guidance li", "#tax-guidance code")
@@ -325,8 +354,7 @@ def check():
                             )
                         if page.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                             raise RuntimeError(f"Page overflow: {path.name}, {width}px, {state}")
-                        if path.name in ("taxes.html", "who-pays.html", "methods.html"):
-                            check_basics_browser(page, expanded=state == "expanded")
+                        check_basics_browser(page, expanded=state == "expanded")
                         if path.name == "who-pays.html":
                             check_payer_browser(page, payer_data)
                         table_failures = page.locator("table").evaluate_all("""tables =>
@@ -389,8 +417,7 @@ def check():
                         raise RuntimeError(f"No-JavaScript content unavailable: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript default overflow: {path.name}, {width}px")
-                    if path.name in ("taxes.html", "who-pays.html", "methods.html"):
-                        check_basics_browser(reader)
+                    check_basics_browser(reader)
                     if path.name in ("taxes.html", "who-pays.html") and not reader.locator("details").count():
                         raise RuntimeError(f"Source detail is missing without JavaScript: {path.name}")
                     for index in range(reader.locator("details").count()):
@@ -414,8 +441,7 @@ def check():
                         raise RuntimeError(f"No-JavaScript table alternative missing: {path.name}")
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript expanded overflow: {path.name}, {width}px")
-                    if path.name in ("taxes.html", "who-pays.html", "methods.html"):
-                        check_basics_browser(reader, expanded=True)
+                    check_basics_browser(reader, expanded=True)
                     if path.name == "who-pays.html":
                         check_payer_browser(reader, payer_data)
             plain.close()
