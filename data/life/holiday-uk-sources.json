@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "domain": "holiday-uk",
+  "status": "Draft source-only seed. No projection, product acceptance or publication implied.",
+  "frozen_inventory_sha256": "398797142c6417223d260e10a4c25ba0b954fb9efa7baf1bb44fbbcf8f83f83d",
+  "field_definitions": {
+    "path": "Stored candidate file; decode envelope before original hash validation",
+    "bytes": "Recovered original byte length",
+    "sha256": "Recovered original SHA256",
+    "stored_bytes": "Stored envelope length, if present",
+    "stored_sha256": "Stored envelope SHA256, if present"
+  },
+  "sources": [
+    {
+      "path": "data/life/sources/holiday-uk/travel-2009-2019.xlsx",
+      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+      "bytes": 451291,
+      "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+      "retrieval": "31 October 2026 acquisition; exact time unavailable unless supported by retained response receipt. Never inferred from file mtime.",
+      "storage": "Unchanged official response bytes; not locally filtered or generated",
+      "response_headers": null
+    },
+    {
+      "path": "data/life/sources/holiday-uk/travel-2019-2023.xlsx",
+      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2019to2023/traveltrendssection3ukresidentsvisitsabroad.xlsx",
+      "bytes": 173360,
+      "sha256": "b0c85be28f8af3b9a3a9eebb49320f4227a2ac8fbaa72c652edc1e85558155d1",
+      "retrieval": "31 October 2026 acquisition; exact time unavailable unless supported by retained response receipt. Never inferred from file mtime.",
+      "storage": "Unchanged official response bytes; not locally filtered or generated",
+      "response_headers": null
+    }
+  ]
+}
