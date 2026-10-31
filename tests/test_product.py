@@ -484,6 +484,8 @@ class ProductTests(unittest.TestCase):
         modules.count.return_value = 1
         modules.nth.return_value = module
         module.is_visible.return_value = True
+        # Actual Playwright returns None for absent DOM attributes.
+        module.get_attribute.return_value = None
         module.locator.return_value = targets
         targets.count.return_value = 1
         targets.nth.return_value = target
@@ -499,6 +501,54 @@ class ProductTests(unittest.TestCase):
             check_basics_browser(page, expanded=True)
         target.evaluate.side_effect = [False, True]
         check_basics_browser(page, expanded=True)
+
+    def test_personal_rate_browser_visibility_uses_both_actual_attribute_branches(self):
+        from unittest.mock import MagicMock
+        from a11y_check import check_basics_browser
+        for sid in ("hmrc", "ons"):
+            page, modules, module = (MagicMock() for _ in range(3))
+            page.locator.return_value = modules
+            modules.count.return_value = 1
+            modules.nth.return_value = module
+            module.count.return_value = 1
+            module.nth.return_value = module
+            module.get_attribute.side_effect = (
+                lambda name, identity=sid: identity if name == "data-payer-interpretation" else None)
+            module.is_visible.return_value = True
+            module.locator.side_effect = AssertionError("Must inspect the interpretation itself")
+            for expanded in (False, True):
+                with self.subTest(sid=sid, expanded=expanded):
+                    module.evaluate.reset_mock()
+                    module.evaluate.side_effect = [False, True]
+                    check_basics_browser(page, expanded=expanded)
+                    self.assertEqual(module.evaluate.call_count, 2)
+                    # is_visible alone misses opacity, clip and inert ancestors.
+                    # Actual CSS behavior is exercised by the real-layout guards.
+                    module.evaluate.side_effect = [False, False]
+                    with self.assertRaisesRegex(RuntimeError, "concealed by an ancestor"):
+                        check_basics_browser(page, expanded=expanded)
+                    module.evaluate.side_effect = [True]
+                    with self.assertRaisesRegex(RuntimeError, "must stay outside disclosures"):
+                        check_basics_browser(page, expanded=expanded)
+                    module.is_visible.return_value = False
+                    with self.assertRaisesRegex(RuntimeError, "container is not visible"):
+                        check_basics_browser(page, expanded=expanded)
+                    module.is_visible.return_value = True
+
+    def test_payer_independent_gate_rejects_a_stale_producer(self):
+        # Use the current producer but strip either required paragraph to model
+        # a stale renderer. The real build must fail its independent page gate.
+        original = builder.build_payers.render
+        for sid in ("hmrc", "ons"):
+            def stale(*args, identity=sid):
+                html = original(*args)
+                opening = f'<p data-payer-interpretation="{identity}">'
+                start = html.index(opening)
+                end = html.index('</p>', start) + len('</p>')
+                return html[:start] + html[end:]
+            with self.subTest(sid=sid), patch.object(builder.build_payers, "render", side_effect=stale):
+                with self.assertRaisesRegex(ValueError, "Missing, duplicate or unknown payer interpretation"):
+                    builder.payloads(self.data)
 
     def test_guidance_methods_are_independently_bound_to_the_retained_sources(self):
         raw = self.files["methods.html"].decode("utf-8")

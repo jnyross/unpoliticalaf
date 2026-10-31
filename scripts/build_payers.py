@@ -111,6 +111,7 @@ It is not a rank of wealth. It does not count all income.</p>
 The bottom 50% and top 10% do not overlap.
 These groups refer to taxpayers with a positive Income Tax bill, not all adults.
 Do not add their shares. Tax due is not cash collected. This is Income Tax only, not all UK taxes.</p>
+<p data-payer-interpretation="hmrc">These are shares of total Income Tax due. They are not the Income Tax rate of any person.</p>
 {bars(hmrc, 'Total Income Tax liabilities')}
 {table('HMRC: shares of total Income Tax liabilities, 2023/24 estimated outturn', ['Income group', 'Share of Income Tax due'], [[v['group'], v] for v in hmrc], 'hmrc-table')}
 <p class="source-links" id="hmrc-source-note">Source: <a data-payer-source="hmrc" href="{esc(hsrc['url'])}">HMRC Table 2.4 (ODS)</a>.
@@ -142,6 +143,7 @@ A high indirect-tax share of income is not a tax rate on purchases or a lifetime
 Compare it with the spending view below.</p></div>
 <p>The bars show direct and indirect taxes together. Each bar uses gross household income as the whole.
 The table shows both parts too.</p>
+<p data-payer-interpretation="ons">This is the group's combined taxes as a share of its gross household income. It is not one person's Income Tax rate.</p>
 {bars([entries[f'ons-{i}-combined'] for i in range(1, 6)], 'Gross household income')}
 {table('ONS: percentages of gross household income, 2023/24 completed-year estimates', ['Income group', 'Direct / gross income', 'Indirect / gross income', 'Combined / gross income'], ons_rows, 'ons-income-table')}
 <p>We use the combined values from published Table 8 row 15. We do not add the rounded parts.

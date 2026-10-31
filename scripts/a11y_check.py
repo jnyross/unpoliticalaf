@@ -98,6 +98,28 @@ def check_payer_browser(page, data):
                 raise RuntimeError("Payer browser workbook route changed: " + selector)
         if not page.locator(f'#{sid}-source-note a').is_visible():
             raise RuntimeError("Payer browser adjacent source link hidden")
+    interpretations = page.locator('[data-payer-interpretation]')
+    if interpretations.count() != 2:
+        raise RuntimeError("Payer browser interpretation set changed")
+    for sid, panel, caption, denominator, copy in (
+        ("hmrc", "income-tax", "hmrc-table", "Total Income Tax liabilities",
+         "These are shares of total Income Tax due. They are not the Income Tax rate of any person."),
+        ("ons", "household-taxes", "ons-income-table", "Gross household income",
+         "This is the group's combined taxes as a share of its gross household income. "
+         "It is not one person's Income Tax rate."),
+    ):
+        paragraph = page.locator(f'[data-payer-interpretation="{sid}"]')
+        if (paragraph.count() != 1 or not paragraph.is_visible() or
+                " ".join(paragraph.inner_text().split()) != copy or
+                not paragraph.evaluate("""(node, expected) => {
+                    const chart = node.nextElementSibling;
+                    const table = chart?.nextElementSibling;
+                    return node.tagName === 'P' && node.parentElement.id === expected.panel &&
+                        chart?.getAttribute('data-chart-denominator') === expected.denominator &&
+                        table?.getAttribute('aria-labelledby') === expected.caption &&
+                        !!table.querySelector('table caption#' + expected.caption);
+                }""", {"panel": panel, "caption": caption, "denominator": denominator})):
+            raise RuntimeError("Payer browser interpretation copy, panel or adjacency changed: " + sid)
     download = page.locator('#payer-sources a[href="data/payers.json"]')
     if download.count() != 1 or not download.is_visible():
         raise RuntimeError("Payer browser selected-data download missing")
@@ -105,12 +127,16 @@ def check_payer_browser(page, data):
 
 def check_basics_browser(page, *, expanded=False):
     """Check required guidance text, including clipping and ancestor concealment."""
-    modules = page.locator('[data-basics], #tax-guidance, [data-payer-definition], #spending-vintage-note, #fiscal-glossary')
+    modules = page.locator('[data-basics], #tax-guidance, [data-payer-definition], [data-payer-interpretation], #spending-vintage-note, #fiscal-glossary')
     for index in range(modules.count()):
         module = modules.nth(index)
         if not module.is_visible():
             raise RuntimeError("Basics container is not visible")
-        if module.get_attribute('data-payer-definition') == 'tax-types':
+        interpretation = module.get_attribute('data-payer-interpretation')
+        if interpretation is not None:
+            # Inspect the paragraph itself, not just any descendant elements.
+            targets = module
+        elif module.get_attribute('data-payer-definition') == 'tax-types':
             targets = page.locator('[data-payer-definition], [data-payer-definition] span, [data-payer-definition] a')
         elif module.get_attribute('id') == 'spending-vintage-note':
             targets = page.locator('#spending-vintage-note, #spending-vintage-note cite, #spending-vintage-note data')
@@ -120,11 +146,15 @@ def check_basics_browser(page, *, expanded=False):
             target = targets.nth(target_index)
             closed = target.evaluate("""node => {
                 for (let p = node.parentElement; p; p = p.parentElement) {
+                    if (p.tagName === 'DETAILS' &&
+                        node.hasAttribute('data-payer-interpretation')) return true;
                     if (p.tagName === 'DETAILS' && !p.open &&
                         !p.querySelector(':scope > summary')?.contains(node)) return true;
                 }
                 return false;
             }""")
+            if closed and interpretation is not None:
+                raise RuntimeError("Payer interpretation must stay outside disclosures")
             if closed and not expanded:
                 continue
             if not target.is_visible():
@@ -177,6 +207,8 @@ def check_basics_browser_guards(browser):
 <p data-basics-scope="ct">The OBR group also includes related charges.</p>
 <details><summary>More rules</summary><p>Required disclosure explanation.</p></details>
 </section>
+<section id="interpretation-hmrc"><p data-payer-interpretation="hmrc">These are shares of total Income Tax due. They are not the Income Tax rate of any person.</p></section>
+<section id="interpretation-ons"><p data-payer-interpretation="ons">This is the group's combined taxes as a share of its gross household income. It is not one person's Income Tax rate.</p></section>
 <p data-payer-definition="tax-types">Direct taxes come out of income. Indirect taxes are paid through spending.
 <span>Sources: <a data-definition-source="ons_bulletin" href="#glossary">ONS glossary</a>;
 <a data-definition-source="ons_method" href="#post-tax-income">ONS technical report</a></span></p>
@@ -226,6 +258,29 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
         ("[data-basics] a", "node.style.opacity = '0'"),
         ("#tax-guidance code", "node.style.visibility = 'hidden'"),
     )
+    # Each required paragraph and its own panel ancestor must survive the same
+    # real layout checks, including both closed and open disclosure concealment.
+    interpretation_mutations = tuple(
+        (selector, mutation)
+        for sid in ("hmrc", "ons")
+        for selector in (f'[data-payer-interpretation="{sid}"]', f'#interpretation-{sid}')
+        for mutation in (
+            "node.style.opacity = '0'",
+            "node.style.clipPath = 'inset(100%)'",
+            "node.style.cssText = 'height:1px;overflow:hidden'",
+            "node.style.cssText = 'max-height:1px;overflow:clip'",
+            "node.inert = true",
+            "node.setAttribute('aria-hidden', 'true')",
+            "node.style.transform = 'translateX(200vw)'",
+            "const detail = document.createElement('details'); "
+            "detail.innerHTML = '<summary>Source</summary>'; "
+            "node.replaceWith(detail); detail.append(node)",
+            "const detail = document.createElement('details'); detail.open = true; "
+            "detail.innerHTML = '<summary>Source</summary>'; "
+            "node.replaceWith(detail); detail.append(node)",
+        )
+    )
+    mutations += interpretation_mutations
     for scripts_enabled in (True, False):
         context = browser.new_context(java_script_enabled=scripts_enabled,
                                       viewport={"width": 360, "height": 900})

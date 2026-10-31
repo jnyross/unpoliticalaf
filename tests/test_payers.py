@@ -431,14 +431,17 @@ class PayerTests(unittest.TestCase):
         self.assert_bad_page('tax year 2023 to 2024, estimated outturn', 'financial year ending 2024, estimated outturn')
         self.assert_bad_page('<main id="main" class="payers">',
                              '<main id="main" class="payers"><nav aria-label="Main pages"></nav>')
-        # Move the complete warning after the ONS bars, with every warning word intact.
+        # Move the complete warning after the actual ONS table, keeping the
+        # interpretation -> chart -> table adjacency intact. The bar-order
+        # rule must fail before the later definition/warning adjacency rule.
         start = self.page.index('<div class="payer-note" id="bottom-group">')
         end = self.page.index('</div>', start) + len('</div>')
         warning = self.page[start:end]
         candidate = self.page[:start] + self.page[end:]
-        target = '<div class="payer-scroll" role="region" aria-labelledby="ons-income-table"'
-        candidate = candidate.replace(target, warning + target, 1)
-        with self.assertRaisesRegex(ValueError, "precede the bars"):
+        table_start = candidate.index('<div class="payer-scroll" role="region" aria-labelledby="ons-income-table"')
+        table_end = candidate.index('</table></div>', table_start) + len('</table></div>')
+        candidate = candidate[:table_end] + warning + candidate[table_end:]
+        with self.assertRaisesRegex(ValueError, "^Bottom-group warning must follow ONS scope and precede the bars$"):
             check_payers.validate_page(ROOT, self.data, candidate)
         # Move both complete source details before the data. Their source links remain intact.
         moved = self.page
@@ -460,6 +463,98 @@ class PayerTests(unittest.TestCase):
             moved = moved.replace('<section id="payer-sources">', '<section id="payer-sources">' + note, 1)
             with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "source note moved"):
                 check_payers.validate_page(ROOT, self.data, moved)
+
+    def test_personal_rate_interpretations_are_exact_and_in_their_own_panels(self):
+        nodes = check_payers.Page(self.page).nodes
+        marked = [n for n in nodes if "data-payer-interpretation" in n["attrs"]]
+        self.assertEqual(len(marked), 2)
+        for sid, panel, copy in (
+            ("hmrc", "income-tax",
+             "These are shares of total Income Tax due. They are not the Income Tax rate of any person."),
+            ("ons", "household-taxes",
+             "This is the group's combined taxes as a share of its gross household income. "
+             "It is not one person's Income Tax rate."),
+        ):
+            with self.subTest(sid=sid):
+                paragraph = next(n for n in marked if n["attrs"]["data-payer-interpretation"] == sid)
+                self.assertEqual(paragraph["tag"], "p")
+                self.assertEqual("".join(paragraph["text"]), copy)
+                self.assertEqual(paragraph["parents"][-1]["attrs"], {"id": panel})
+                siblings = [n for n in nodes if n["parents"] and
+                            n["parents"][-1] is paragraph["parents"][-1]]
+                index = siblings.index(paragraph)
+                self.assertIn("data-chart-denominator", siblings[index + 1]["attrs"])
+                self.assertEqual(siblings[index + 2]["attrs"]["aria-labelledby"],
+                                 "hmrc-table" if sid == "hmrc" else "ons-income-table")
+        self.assertTrue(check_payers.validate_page(ROOT, self.data, self.page))
+
+    def test_personal_rate_negations_and_group_wholes_cannot_change(self):
+        for old, new in (
+            ("They are not the Income Tax rate of any person.", "They are the Income Tax rate of any person."),
+            ("It is not one person's Income Tax rate.", "It is one person's Income Tax rate."),
+            ("shares of total Income Tax due.", "shares of all taxes due."),
+            ("of its gross household income.", "of one person's gross income."),
+            ("the group's combined taxes", "the group's average individual tax rates"),
+        ):
+            with self.subTest(old=old):
+                self.assert_bad_page(old, new)
+
+    def test_personal_rate_interpretations_reject_missing_duplicate_and_wrong_panel(self):
+        for sid, wrong_panel in (("hmrc", "household-taxes"), ("ons", "income-tax")):
+            opening = f'<p data-payer-interpretation="{sid}">'
+            start = self.page.index(opening)
+            end = self.page.index('</p>', start) + len('</p>')
+            paragraph = self.page[start:end]
+            for replacement in ("", paragraph + paragraph,
+                                paragraph.replace(opening, '<p data-payer-interpretation="unknown">')):
+                with self.subTest(sid=sid, replacement=replacement):
+                    self.assert_bad_page(paragraph, replacement)
+            removed = self.page[:start] + self.page[end:]
+            wrong = removed.replace(f'<section id="{wrong_panel}">',
+                                    f'<section id="{wrong_panel}">' + paragraph, 1)
+            with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "own panel"):
+                check_payers.validate_page(ROOT, self.data, wrong)
+            # Even an unmarked second copy in the other panel must fail.
+            duplicate = self.page.replace(f'<section id="{wrong_panel}">',
+                                          f'<section id="{wrong_panel}">' +
+                                          paragraph.replace(opening, '<p>'), 1)
+            with self.subTest(sid=sid), self.assertRaisesRegex(ValueError, "Duplicated payer interpretation copy"):
+                check_payers.validate_page(ROOT, self.data, duplicate)
+        self.assert_bad_page('data-payer-interpretation="hmrc"', 'data-payer-interpretation="ons"')
+
+    def test_personal_rate_interpretations_reject_concealed_copy_and_ancestors(self):
+        for sid, panel in (("hmrc", "income-tax"), ("ons", "household-taxes")):
+            opening = f'<p data-payer-interpretation="{sid}">'
+            start = self.page.index(opening)
+            end = self.page.index('</p>', start) + len('</p>')
+            paragraph = self.page[start:end]
+            for attr in ('hidden', 'aria-hidden="true"', 'style="display:none"',
+                         'style="opacity:0"', 'style="clip-path:inset(100%)"',
+                         'style="height:1px;overflow:hidden"', 'inert', 'popover', 'class="narrow"'):
+                for target in (opening, f'<section id="{panel}">', '<main id="main" class="payers">',
+                               '<html lang="en-GB">', '<body>'):
+                    with self.subTest(sid=sid, attr=attr, target=target):
+                        self.assert_bad_page(target, target[:-1] + ' ' + attr + '>')
+            self.assert_bad_page(paragraph, '<div>' + paragraph + '</div>')
+            self.assert_bad_page(paragraph, '<details><summary>Source</summary>' + paragraph + '</details>')
+            self.assert_bad_page(paragraph, paragraph.replace("Income Tax", '<span hidden>Income Tax</span>', 1))
+
+    def test_personal_rate_interpretation_chart_table_adjacency_is_independent(self):
+        for sid, caption in (("hmrc", "hmrc-table"), ("ons", "ons-income-table")):
+            opening = f'<p data-payer-interpretation="{sid}">'
+            start = self.page.index(opening)
+            end = self.page.index('</p>', start) + len('</p>')
+            paragraph = self.page[start:end]
+            table_start = self.page.index(f'<div class="payer-scroll" role="region" aria-labelledby="{caption}"')
+            candidates = (
+                self.page.replace(paragraph, paragraph + '<p>Unrelated copy.</p>', 1),
+                self.page[:table_start] + '<p>Unrelated copy.</p>' + self.page[table_start:],
+                self.page[:start] + self.page[end:table_start] + paragraph + self.page[table_start:],
+            )
+            for candidate in candidates:
+                with self.subTest(sid=sid), self.assertRaisesRegex(
+                        ValueError, "^Payer interpretation must directly precede its chart and table: " + sid + "$"):
+                    check_payers.validate_page(ROOT, self.data, candidate)
 
     def test_tax_definitions_bind_copy_examples_and_model_assumption(self):
         for old, new in (

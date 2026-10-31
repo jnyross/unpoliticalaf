@@ -554,6 +554,53 @@ def validate_page(root, data, text):
             basics["attrs"]["aria-labelledby"] == "payer-basics-title" and not concealed(basics),
             "Payer basics container hidden or attributes changed")
 
+    # Personal-rate interpretations are full-copy, panel and reading-order
+    # contracts independent of the renderer. A correct copy elsewhere cannot
+    # mask a missing negation or an explanation hidden in another panel.
+    interpretations = [n for n in document.nodes if "data-payer-interpretation" in n["attrs"]]
+    require(len(interpretations) == 2 and
+            {n["attrs"]["data-payer-interpretation"] for n in interpretations} == {"hmrc", "ons"},
+            "Missing, duplicate or unknown payer interpretation")
+    interpretation_copy = (
+        ("hmrc", "income-tax", "hmrc-table", "Total Income Tax liabilities",
+         "These are shares of total Income Tax due. They are not the Income Tax rate of any person."),
+        ("ons", "household-taxes", "ons-income-table", "Gross household income",
+         "This is the group's combined taxes as a share of its gross household income. "
+         "It is not one person's Income Tax rate."),
+    )
+    document_text = " ".join("".join(value for value, _ in document.text_runs).split())
+    for sid, panel_id, caption_id, denominator, copy in interpretation_copy:
+        paragraph = next(n for n in interpretations if n["attrs"]["data-payer-interpretation"] == sid)
+        panels = [n for n in nodes if n["tag"] == "section" and n["attrs"].get("id") == panel_id]
+        require(len(panels) == 1 and paragraph["parents"] and
+                paragraph["parents"][-1] is panels[0] and paragraph["tag"] == "p" and
+                paragraph["attrs"] == {"data-payer-interpretation": sid} and not concealed(paragraph) and
+                not any(paragraph in n["parents"] for n in document.nodes),
+                "Payer interpretation must be visible plain text in its own panel: " + sid)
+        require(" ".join("".join(paragraph["text"]).split()) == copy,
+                "Payer interpretation meaning or negation changed: " + sid)
+        require(document_text.count(copy) == 1,
+                "Duplicated payer interpretation copy: " + sid)
+        for ancestor in paragraph["parents"]:
+            allowed, values = ({"id"}, {"id": {panel_id}}) if ancestor["tag"] == "section" else shell.get(
+                ancestor["tag"], (set(), {}))
+            require(ancestor["tag"] in shell and set(ancestor["attrs"]) <= allowed and all(
+                value in values[key] for key, value in ancestor["attrs"].items()),
+                "Payer interpretation ancestor attributes changed: " + sid)
+        siblings = [n for n in nodes if n["parents"] and n["parents"][-1] is panels[0]]
+        index = siblings.index(paragraph)
+        following = siblings[index + 1:index + 3]
+        require(len(following) == 2 and following[0]["tag"] == "div" and
+                following[0]["attrs"].get("data-chart-denominator") == denominator and
+                all(following[0] in b["parents"] for b in bars
+                    if b["attrs"]["data-payer-bar"].startswith(sid + "-")) and
+                following[1]["tag"] == "div" and
+                following[1]["attrs"].get("aria-labelledby") == caption_id and
+                any(n["tag"] == "table" and following[1] in n["parents"] and
+                    any(c["tag"] == "caption" and c["attrs"].get("id") == caption_id and
+                        n in c["parents"] for c in nodes) for n in tables),
+                "Payer interpretation must directly precede its chart and table: " + sid)
+
     # Independent full-copy contracts preserve each causal warning after its
     # plain-language rewrite. Correct keywords elsewhere cannot mask a reversal.
     limit_copy = {
