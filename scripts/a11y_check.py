@@ -203,8 +203,8 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
         ("[data-payer-definition]", "node.style.cssText = 'height:1px;overflow:hidden'"),
         ("[data-basics-scope]", "node.style.opacity = '0'"),
         ("[data-basics-scope]", "node.style.cssText = 'height:1px;overflow:hidden'"),
-        ("dt", "node.style.cssText = 'max-height:1px;overflow:clip'"),
-        ("dt", "node.style.opacity = '0'"),
+        ("[data-basics] dt", "node.style.cssText = 'max-height:1px;overflow:clip'"),
+        ("[data-basics] dt", "node.style.opacity = '0'"),
         ("[data-basics] details p", "node.style.opacity = '0'"),
         ("#tax-guidance li", "node.style.opacity = '0'"),
         ("[data-basics] a", "node.style.opacity = '0'"),
@@ -230,7 +230,7 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
                     check_basics_browser(page, expanded=expanded)
                     target = page.locator(selector)
                     if target.count() != 1:
-                        raise RuntimeError("Basics browser mutation target is not unique")
+                        raise RuntimeError("Basics browser mutation target is not unique: " + selector)
                     target.evaluate("node => { " + mutation + "; }")
                     closed_content = selector in (
                         "[data-basics] details p", "#tax-guidance li", "#tax-guidance code")
