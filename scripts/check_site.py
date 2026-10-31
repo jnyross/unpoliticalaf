@@ -403,6 +403,16 @@ def check_spending_comparison(raw, data):
     require(not re.search(r"\bincome\b", prose, re.I), "receipts must not be labelled income")
     require(any(n["tag"] == "h3" and text(n) == "Spending and receipts" for n in children),
             "receipts heading changed")
+    # Node text does not insert boundaries between adjacent table cells. Bind
+    # the actual headers, not a whole-section word search such as Income.
+    captions = [n for n in document.nodes if section in n["parents"] and n["tag"] == "caption" and
+                text(n) == f"Spending, receipts, borrowing and debt, share of GDP, {first} to {year}"]
+    require(len(captions) == 1 and captions[0]["parents"][-1]["tag"] == "table",
+            "decade receipts table missing or changed")
+    table = captions[0]["parents"][-1]
+    require([text(n) for n in document.nodes if table in n["parents"] and n["tag"] == "th" and
+             n["attrs"].get("scope") == "col"] == ["Year", "Spending", "Receipts", "Borrowing", "Debt"],
+            "decade receipts table headers changed")
     return True
 
 

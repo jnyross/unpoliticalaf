@@ -179,7 +179,6 @@ class ProductTests(unittest.TestCase):
             ("a common way to compare years far apart", "the fairest way to compare years far apart"),
             ("Spending and receipts</h3>", "Spending and income</h3>"),
             ("> Receipts</p>", "> Income</p>"),
-            ('<th scope="col">Receipts</th>', '<th scope="col">Income</th>'),
         )
         for before, after in mutations:
             with self.subTest(mutation=before):
@@ -188,6 +187,34 @@ class ProductTests(unittest.TestCase):
                 self.assertNotEqual(changed, raw)
                 with self.assertRaisesRegex(ValueError, "Spending comparison:"):
                     check_site.check_spending_comparison(changed, self.data)
+        # Select the actual decade table, not the first matching header in the
+        # document. Prove that the intended header changes and all other bytes stay.
+        decade_sections = list(re.finditer(r'<section id="decades">.*?</section>', raw, re.S))
+        self.assertEqual(len(decade_sections), 1)
+        decade = decade_sections[0]
+        caption = f"Spending, receipts, borrowing and debt, share of GDP, {self.data['history']['decades'][0]} to {year}"
+        tables = [match for match in re.finditer(r'<table>.*?</table>', decade.group(), re.S)
+                  if any(n["tag"] == "caption" and "".join(n["text"]) == caption
+                         for n in Document(match.group()).nodes)]
+        self.assertEqual(len(tables), 1, "mutation needs exactly one decade totals table")
+        table_match = tables[0]
+        before, after = '<th scope="col">Receipts</th>', '<th scope="col">Income</th>'
+        self.assertEqual(table_match.group().count(before), 1)
+        start = decade.start() + table_match.start() + table_match.group().index(before)
+        end = start + len(before)
+        changed = raw[:start] + after + raw[end:]
+        self.assertEqual(changed[:start], raw[:start])
+        self.assertEqual(changed[start + len(after):], raw[end:])
+        self.assertEqual(changed.count(before), raw.count(before) - 1)
+        changed_sections = list(re.finditer(r'<section id="decades">.*?</section>', changed, re.S))
+        self.assertEqual(len(changed_sections), 1)
+        self.assertEqual(changed_sections[0].group(), decade.group().replace(before, after, 1))
+        changed_table = Document(table_match.group().replace(before, after, 1))
+        self.assertEqual(["".join(n["text"]) for n in changed_table.nodes
+                          if n["tag"] == "th" and n["attrs"].get("scope") == "col"],
+                         ["Year", "Spending", "Income", "Borrowing", "Debt"])
+        with self.assertRaisesRegex(ValueError, "Spending comparison: decade receipts table headers changed"):
+            check_site.check_spending_comparison(changed, self.data)
         # Keeping the exact note elsewhere on the page cannot replace locality.
         changed = raw.replace(note_html, "", 1).replace("</main>", note_html + "</main>", 1)
         with self.assertRaisesRegex(ValueError, "Spending comparison:"):
