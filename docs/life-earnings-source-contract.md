@@ -10,7 +10,7 @@ Table 5 B14 full-time, B23 part-time; A16/A25 gross weekly earnings; A19/A28 med
 
 SOC2021 is a break. Original2026bulletin Figure notes also say methodological changes from2023mean not directly comparable with2022and earlier: split SOC2020 into2021–2022 and2023–2026, no2021–2026 growth. April2021 study endpoint itself carries furlough/composition limits. All17basispoints remain accessible, no hidden carry-forward.
 
-CPIH CSV: title CPIH INDEX00ALLITEMS2015=100, CDIDL522, datasetMM23, release21October2026, next18November2026. Bind exact metadata strings and April monthly keys, not annual averages. BaseApril2026=141.8. Formula real_t=nominal_t*CPIH_April2026/CPIH_April_t, label “April2026pounds, derived from published rounded values”. Decimal original numeric strings, unrounded calculation, ROUND_HALF_UP presentation1decimal. A difference is calculated before rounding and later shown directly in paired/no-JStables. Same qualified basis only; no nominalminusinflation shortcut.
+CPIH CSV: title CPIH INDEX00ALLITEMS2015=100, CDIDL522, datasetMM23, literal Release date metadata `21-10-2026` (21October2026), next18November2026. Bind exact metadata strings and April monthly keys, not annual averages. BaseApril2026=141.8. Formula real_t=nominal_t*CPIH_April2026/CPIH_April_t, label “April2026pounds, derived from published rounded values”. Decimal original numeric strings, unrounded calculation, ROUND_HALF_UP presentation1decimal. A difference is calculated before rounding and later shown directly in paired/no-JStables. Same qualified basis only; no nominalminusinflation shortcut.
 
 ## Unreconciled bulletin difference
 
@@ -23,3 +23,5 @@ April2011versusApril2021SOC2010, Table2W10/AG10 andTable5AG19/AG28; matchAprilCP
 ## Source-only acceptance
 
 Producer and independent checker reopen original bytes/hashes/semantic coordinates/headers/notes/styles. Fail hash change, shiftedyear, hourly-for-weekly, duplicateSOCoverlap, missing-to-zero, invalidCPIH/nonfinite/nonpositive, wrongmonth/base/formula/unit, droppedflag, Table2/5disagreement and cross-break change. Every selected node retains sourcehash/locator/period/basis/unit/population/status/formulaoperands. Unknown publication/retrieval precision honestly unknown. Existing grade7,publicallowlist/source/whitespace guards remain unchanged. Tests execute only in credential-freeBoat throughcontroller. No new dependencies, network-at-build, hidden/generatedsourceclassification, sourcebyteexclusion,auth/billing/provider/schedulerchange. Measure full normal reviewpayload below1MB before ticket andexactcandidate. Allinputfoundationscanprecedethe10pathUIcontract; do notactivateit here.
+
+Work counts persons16+, including self-employed people; ASHE covers employee jobs on adult rates. Later UI must state the population difference beside both and never form a combined ratio.

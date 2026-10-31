@@ -9,7 +9,7 @@
       "bytes": 291233,
       "sha256": "fce47d18563166c3313ee443fbfe93ce8adc66ea763fa0d011334d8a4cb85022",
       "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/ashe1997to2015selectedestimates/current/selectedestimates19972026.xlsx",
-      "encoding": "retained official response bytes; workbook ZIP unchanged, CSV decoded transfer body",
+      "encoding": "Unchanged official XLSX ZIP bytes; no decoding or reserialization",
       "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them"
     },
     {
@@ -17,7 +17,7 @@
       "bytes": 11944,
       "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
       "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
-      "encoding": "retained official response bytes; workbook ZIP unchanged, CSV decoded transfer body",
+      "encoding": "Unchanged official CSV response bytes; parse text only after byte hash validation",
       "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them"
     },
     {
@@ -44,5 +44,12 @@
       "stored_sha256": "9911c058ea22171a8778902eb09191b62844d37136a4aa2ce8eca431d63211c2",
       "storage": "Existing lossless UTF-8 JSON-envelope pattern; original_response.encode(utf-8) recovers every original byte. Both stored and recovered hashes/bytes must validate. Full normal review bytes count; not generated."
     }
-  ]
+  ],
+  "field_definitions": {
+    "bytes": "Original recovered response byte length, not envelope byte length",
+    "sha256": "Original recovered response SHA256, not envelope SHA256",
+    "stored_bytes": "Stored envelope byte length, when an envelope is used",
+    "stored_sha256": "Stored envelope SHA256, when an envelope is used",
+    "path": "File retained in candidate; decode envelope before validating original fields"
+  }
 }
