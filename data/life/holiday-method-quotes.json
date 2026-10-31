@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "purpose": "Explicit source-semantic assertions, not a substitute source or hidden/generatedinput. Reopen originalHTML/quotedsourcehash/heading/anchor; no numericprojection.",
+  "quotes": [
+    {
+      "source_file": "travel-methods-crawl-0.html",
+      "original_sha256": "2c00ffb3911412c061692bda2810a98114ef43efd2edff224bb023158179ec09",
+      "anchor": "progress-updates",
+      "heading": "Improving our coverage of travel and tourism statistics",
+      "quote": "The methodological approach to IPS sampling changed notably when the new survey design was introduced in July 2024. Sampling at airports was moved from a terminal-basis to a route-basis, an approach that aligns with producing more precise statistics at individual country level.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    },
+    {
+      "source_file": "travel-methods-crawl-0.html",
+      "original_sha256": "2c00ffb3911412c061692bda2810a98114ef43efd2edff224bb023158179ec09",
+      "anchor": "progress-updates",
+      "heading": "UK-level estimates",
+      "quote": "From 1 April 2024, IPS data collection in Northern Ireland (NI) stopped. Data on international tourism to and from NI are now provided by the Northern Ireland Statistics and Research Agency (NISRA). Our Travel trends: 2024 article and our Travel trends: 2025 article include UK-level world totals in their headline estimates only. The remaining estimates and breakdowns cover Great Britain-level geographies only, and our quarterly tables continue to cover the Great Britain-level only.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    },
+    {
+      "source_file": "travel-methods-crawl-0.html",
+      "original_sha256": "2c00ffb3911412c061692bda2810a98114ef43efd2edff224bb023158179ec09",
+      "anchor": "main-points",
+      "heading": "1. Main points",
+      "quote": "This new consistency in methodology allows users to make comparisons between these six quarters; however, we do not recommend comparing 2024 annual estimates with 2025 annual estimates, as the new IPS design was implemented part-way through 2024.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    },
+    {
+      "source_file": "travel-methods-crawl-0.html",
+      "original_sha256": "2c00ffb3911412c061692bda2810a98114ef43efd2edff224bb023158179ec09",
+      "anchor": "main-points",
+      "heading": "1. Main points",
+      "quote": "These official statistics in development are subject to change while we continue to develop and quality assure them. Users should refer to our advice on usability and comparability, provided in Section 4: How these estimates can be used of our Improving our travel and tourism statistics: September 2026 update article.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    },
+    {
+      "source_file": "travel-methods-crawl-0.html",
+      "original_sha256": "2c00ffb3911412c061692bda2810a98114ef43efd2edff224bb023158179ec09",
+      "anchor": "understanding-the-comparability-of-estimates-over-time",
+      "heading": "How these figures can be used",
+      "quote": "The results remain preliminary and are likely to change as more data are collected under the new design, and as the time series modelling framework develops. They do not represent final discontinuity estimates or an agreed method for adjusting historical series.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged",
+      "locator_note": "Use section5stableanchor then subheading; intermediategenerateddivIDnotstable."
+    },
+    {
+      "source_file": "travel-methods-crawl-1.html",
+      "original_sha256": "6e630eab123052fbc20a68503bc05d38c319c01ba7b51e655e4c11d43d055bc2",
+      "anchor": "main-points",
+      "heading": "1. Main points",
+      "quote": "Quarter 1 (Jan to Mar) and Quarter 2 (Apr to June) 2024 data were collected and produced under our previous International Passenger Survey (IPS) design, while Quarter 3 (July to Sept) and Quarter 4 (Oct to Dec) 2024 data were collected and produced under our new IPS design; this may lead to discontinuities between the two halves of 2024 and affects how the data should be used.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    },
+    {
+      "source_file": "travel-methods-crawl-1.html",
+      "original_sha256": "6e630eab123052fbc20a68503bc05d38c319c01ba7b51e655e4c11d43d055bc2",
+      "anchor": "how-these-estimates-can-be-used",
+      "heading": "4. How these estimates can be used",
+      "quote": "compare single 2024 annual estimates against earlier single year or later single year estimates, noting that there may also be a discontinuity between the two halves, based on different IPS methodologies",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged",
+      "context": "Exact prohibition is under \u201cusers should not\u201d; retain this polarity, not a permission."
+    },
+    {
+      "source_file": "travel-methods-crawl-1.html",
+      "original_sha256": "6e630eab123052fbc20a68503bc05d38c319c01ba7b51e655e4c11d43d055bc2",
+      "anchor": "main-points",
+      "heading": "1. Main points",
+      "quote": "These official statistics in development are subject to change while we continue to develop and quality assure them. Annual 2024 estimates represent a composite year, made up of our old and new methodologies. Users should refer to our advice on usability and comparability, provided in Section 4: How these estimates can be used.",
+      "normalisation": "HTMLentities decoded, whitespace collapsed for semantic comparison only; retained original bytes unchanged"
+    }
+  ],
+  "provisional_scope_note": "Officialstatisticsindevelopment is directly asserted in these methodpages. Additionalprovisionalstatus mustbind exact2025workbook/release source text inGBfoundation; do not labelallestimatesprovisionalfrompreliminarydiscontinuityanalysis."
+}
