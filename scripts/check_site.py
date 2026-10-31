@@ -19,6 +19,7 @@ from check_fiscal import RawReader, pesa_forecast_date, validate_fiscal
 from fiscal_contract import selections
 from check_taxes import validate as validate_taxes, checked_forecast_prose
 from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page, Page as SemanticPage, raw_cells as payer_raw_cells
+from check_life import validate as validate_life
 from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -218,6 +219,7 @@ def validate(site=SITE):
     independent_data_checks(site, read)
     tax_data = validate_taxes(site)
     payer_data = independent_payer_checks(site)
+    validate_life(ROOT, site=site)
     payer_ids = {v["id"] for v in payer_data["values"]}
     data = json.loads((site / "data/spending.json").read_text())
     raw_fiscal = RawReader()
@@ -239,7 +241,7 @@ def validate(site=SITE):
                     errors.append(f"{name}: missing section id={section_id!r}")
 
         size = path.stat().st_size
-        if size > MAX_BYTES:
+        if size >= MAX_BYTES:
             errors.append(f"{name}: {size} bytes is over the {MAX_BYTES} limit")
 
         if name == "index.html":

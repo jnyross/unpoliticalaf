@@ -16,10 +16,13 @@ import build_taxes
 from payer_projection import project as project_payers
 from check_payers import validate_data as validate_payer_data, validate_page as validate_payer_page
 import build_payers
+from life_projection import project as project_life, encode as encode_life
+import build_life
+from check_life import validate_candidate as validate_life_candidate
 from check_basics import validate_sources as validate_basics_sources, validate_fragments as validate_basics_fragments
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "who-pays.html", "icon.svg", "data/spending.json", "data/taxes.json", "data/payers.json"})
+PUBLIC_FILES = frozenset({"index.html", "methods.html", "taxes.html", "who-pays.html", "icon.svg", "data/spending.json", "data/taxes.json", "data/payers.json", "life.html", "data/life.json"})
 # A previous baseline can be replaced, but no other files may be deleted.
 LEGACY_FILES = frozenset({"styles.css"})
 
@@ -53,7 +56,7 @@ def regular_input(path):
     return path.read_bytes()
 
 
-def payloads(data, receipts=None, payers=None):
+def payloads(data, receipts=None, payers=None, life=None):
     public_fields(data)
     # Bind guidance to this build root, never the checker's default checkout.
     validate_basics_sources(ROOT)
@@ -72,8 +75,14 @@ def payloads(data, receipts=None, payers=None):
     validate_payer_page(ROOT, payers, payer_html)
     # Check the actual complete public pages before changing any output file.
     validate_basics_fragments(tax_html, payer_html, root=ROOT)
+    if life is None:
+        life = project_life(ROOT)
+    life_html = build_life.render(life)
+    validate_life_candidate(ROOT, life, life_html)
     encoded = (json.dumps(data, indent=1, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
     return {
+        "life.html": life_html.encode("utf-8"),
+        "data/life.json": encode_life(life),
         "index.html": build_site.index().encode("utf-8"),
         "methods.html": build_site.methods().encode("utf-8"),
         "taxes.html": tax_html.encode("utf-8"),
@@ -114,6 +123,9 @@ def build(output, *, write_data=True):
     receipts_path = ROOT / "data/receipts.json"
     if write_data and (receipts_path.is_symlink() or (receipts_path.exists() and not receipts_path.is_file())):
         raise ValueError("data/receipts.json must be a regular file")
+    life_path = ROOT / "data/life.json"
+    if write_data and (life_path.is_symlink() or (life_path.exists() and not life_path.is_file())):
+        raise ValueError("data/life.json must be a regular file")
     # Validate every fiscal family before changing any generated or public file.
     receipts = build_receipts(root=ROOT)
     validate_receipts(receipts, root=ROOT)
@@ -124,7 +136,7 @@ def build(output, *, write_data=True):
     public = payloads(data, receipts, payers)
     if set(public) != PUBLIC_FILES:
         raise ValueError("unexpected public payload")
-    for name in ("index.html", "methods.html", "taxes.html", "who-pays.html",
+    for name in ("index.html", "methods.html", "taxes.html", "who-pays.html", "life.html",
                  "data/taxes.json", "data/payers.json"):
         if len(public[name]) >= 500_000:
             raise ValueError(f"{name}: over the public page/projection size limit")
@@ -132,6 +144,7 @@ def build(output, *, write_data=True):
     if write_data:
         atomic_write(receipts_path, receipt_bytes)
         atomic_write(data_path, public["data/spending.json"])
+        atomic_write(life_path, public["data/life.json"])
     for name, content in public.items():
         atomic_write(output / name, content)
     for name in LEGACY_FILES:

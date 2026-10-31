@@ -407,13 +407,14 @@ class CustodyTests(unittest.TestCase):
                     verify.main()
                 gate.assert_called_once_with()
 
-    def test_public_paths_stay_exactly_eight_and_reject_private_sources(self):
+    def test_public_paths_stay_exactly_ten_and_reject_private_sources(self):
         self.assertEqual(PUBLIC_FILES, {
             "index.html", "methods.html", "icon.svg", "data/spending.json",
-            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json"})
+            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json",
+            "life.html", "data/life.json"})
         output = self.root / "public"
         for name in ("data/life/school-sources.json", "data/life/schools.json",
-                     "life.html", "data/life.json", checker.DIRECTORY + "/" + checker.INPUTS[0]):
+                     "data/undeclared-life.json", checker.DIRECTORY + "/" + checker.INPUTS[0]):
             with self.subTest(path=name):
                 path = output / name
                 path.parent.mkdir(parents=True, exist_ok=True)

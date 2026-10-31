@@ -518,6 +518,7 @@ summary{padding:10px 0}
 .tax-bar data{font-size:.85rem;white-space:nowrap}
 #tax-sources code{overflow-wrap:anywhere}
 @media(max-width:560px){.tax-bar{grid-template-columns:minmax(0,1fr) auto}.tax-bar>span:first-child{grid-column:1 / -1}}
+.life-controls select{font:inherit;min-height:44px;max-width:100%}.life-controls label{display:block}
 table{border-collapse:collapse;width:100%;font-size:.9rem;margin:.5em 0}
 th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:right;vertical-align:top}
 th[scope=row],caption{text-align:left}
@@ -563,7 +564,7 @@ def footer():
 <p class="name">Data: {data}.
 Contains public sector information licensed under the
 <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
-<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="who-pays.html">Who pays</a> · <a href="methods.html">Methods</a> ·
+<p><a href="index.html">Spending</a> · <a href="taxes.html">Taxes</a> · <a href="who-pays.html">Who pays</a> · <a href="methods.html">Methods</a> · <a href="life.html">Year by year</a> ·
 <a href="methods.html#about">About</a> · <a href="methods.html#corrections">Corrections</a> ·
 <a href="data/spending.json">Download spending data (JSON)</a></p>
 </footer>"""
@@ -594,7 +595,8 @@ def page(title, body, views=False):
     navigation = "".join(
         f'<a href="{target}"' + (' aria-current="page"' if target == current else '') + f'>{label}</a>'
         for target, label in (("index.html", "Spending"), ("taxes.html", "Taxes"),
-                              ("who-pays.html", "Who pays"), ("methods.html", "Methods")))
+                              ("who-pays.html", "Who pays"), ("methods.html", "Methods"),
+                              ("life.html", "Year by year")))
     switch = ""
     if views:
         buttons = "".join(f'<button type="button" data-view="{k}" aria-pressed="{"true" if k == "real" else "false"}">{esc(t)}</button>'

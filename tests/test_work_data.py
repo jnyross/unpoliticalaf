@@ -370,7 +370,7 @@ class CustodyTests(unittest.TestCase):
                 with self.subTest(raw=raw, decoder=decoder.__module__), self.assertRaises(ValueError):
                     decoder(raw)
 
-    def test_no_derived_files_or_public_activation(self):
+    def test_work_projection_writes_no_derived_files_with_exact_ten_public_paths(self):
         def snapshot():
             return {p.relative_to(self.root).as_posix(): p.read_bytes()
                     for p in self.root.rglob("*") if p.is_file()}
@@ -380,9 +380,10 @@ class CustodyTests(unittest.TestCase):
         self.assertEqual(before, snapshot())
         self.assertEqual(PUBLIC_FILES, {
             "index.html", "methods.html", "icon.svg", "data/spending.json",
-            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json"})
+            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json",
+            "life.html", "data/life.json"})
         output = self.root / "public"
-        for name in ("life.html", "data/life.json", checker.REGISTER,
+        for name in ("data/undeclared-life.json", checker.REGISTER,
                      checker.DIRECTORY + "/" + producer.FILES[0]):
             path = output / name
             path.parent.mkdir(parents=True, exist_ok=True)

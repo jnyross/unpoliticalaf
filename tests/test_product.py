@@ -29,7 +29,7 @@ import check_payers
 import payer_projection
 from check_fiscal import RawReader
 
-HTML_PAGES = ("index.html", "taxes.html", "who-pays.html", "methods.html")
+HTML_PAGES = ("index.html", "taxes.html", "who-pays.html", "methods.html", "life.html")
 
 class Document(HTMLParser):
     def __init__(self, text):
@@ -447,6 +447,9 @@ class ProductTests(unittest.TestCase):
                 (site / name).write_text(original.replace(before, after, 1), encoding="utf-8")
                 # Exercise the real public-byte gate through both entry points.
                 # Other fiscal families keep their own unmocked mutation suites.
+                # This temporary root retains guidance only. Isolate the life
+                # regeneration gate to reach the intended guidance-byte error;
+                # real life staleness and gate propagation have dedicated tests.
                 with self.assertRaisesRegex(ValueError, error):
                     check_site.validate(site)
                 receipts = (ROOT / "data/receipts.json").read_bytes()
@@ -456,7 +459,8 @@ class ProductTests(unittest.TestCase):
                         verify, "validate_audit"), patch.object(verify, "validate_receipt_audit"), patch.object(
                         verify, "validate_payer_sources"), patch.object(verify, "validate_receipts"), patch.object(
                         verify, "build_receipts", return_value={}), patch.object(
-                        verify, "encode_receipts", return_value=receipts):
+                        verify, "encode_receipts", return_value=receipts), patch.object(
+                        verify, "verify_life_generated"), patch.object(verify, "validate_life"):
                     with self.assertRaisesRegex(ValueError, error):
                         verify.main()
 
@@ -752,7 +756,21 @@ class ProductTests(unittest.TestCase):
                          "data/tax-basics/raw/basics-corporation-tax.html.json",
                          "scripts/build_basics.py", "scripts/check_basics.py", "tests/test_basics.py",
                          "docs/tax-basics-evidence.md", "docs/tax-basics-integration.md",
-                         "life.html", "data/life.json", "data/life/holiday-methods-sources.json",
+                         "data/undeclared-life.json", "data/life/schools.json",
+                         "data/life/school-sources.json", "data/life/sources/schools/",
+                         "data/life/sources/schools/dfe-national-class-sizes-1.0.json",
+                         "data/life/sources/schools/dfe-class-sizes-meta-1.0.json",
+                         "data/life/sources/schools/catalogs-methods-crawl-2.html.json",
+                         "data/life/sources/schools/catalogs-methods-crawl-3.html.json",
+                         "data/life/sources/schools/official-pages-crawl-3.html.json",
+                         "scripts/school_projection.py", "scripts/check_schools.py",
+                         "scripts/life_projection.py", "scripts/build_life.py", "scripts/check_life.py",
+                         "data/life/work-methods-sources.json", "data/life/work-data-sources.json",
+                         "data/life/sources/work-methods/", "data/life/sources/work-data/",
+                         "data/life/work-methods.json", "data/life/work-data.json",
+                         "docs/school-foundation.md", "docs/work-data-foundation.md",
+                         "tests/test_schools.py", "tests/test_work_methods.py", "tests/test_work_data.py",
+                         "data/life/holiday-methods-sources.json",
                          "data/life/holiday-method-quotes.json", "data/life/sources/holiday-methods/",
                          "data/life/sources/holiday-methods/travel-methods-crawl-0.html.json",
                          "data/life/sources/holiday-methods/travel-methods-crawl-1.html.json",
@@ -765,6 +783,18 @@ class ProductTests(unittest.TestCase):
                     urlopen(base + "/" + name, timeout=5)
                 self.assertEqual(caught.exception.code, 404)
                 caught.exception.close()
+            # Every retained life input stays private, including all four
+            # foundations' whole source files rather than one representative.
+            for register in ("school-sources.json", "holiday-methods-sources.json",
+                             "work-methods-sources.json", "work-data-sources.json"):
+                declaration = json.loads((ROOT / "data/life" / register).read_text())
+                private_paths = ["data/life/" + register]
+                private_paths.extend(entry["path"] for entry in declaration["sources"])
+                for name in private_paths:
+                    with self.subTest(private_source=name), self.assertRaises(HTTPError) as caught:
+                        urlopen(base + "/" + name, timeout=5)
+                    self.assertEqual(caught.exception.code, 404)
+                    caught.exception.close()
         finally:
             server.shutdown()
             server.server_close()
@@ -840,7 +870,7 @@ class PublicationSafetyTests(unittest.TestCase):
         receipts = {"private_receipt_sentinel": "only in the private build root"}
         self.assertEqual(builder.PUBLIC_FILES, {
             "index.html", "taxes.html", "who-pays.html", "methods.html", "icon.svg",
-            "data/spending.json", "data/taxes.json", "data/payers.json"})
+            "data/spending.json", "data/taxes.json", "data/payers.json", "life.html", "data/life.json"})
         with patch.object(builder, "ROOT", self.project), patch.object(
                 builder, "build_receipts", return_value=receipts) as receipt_read, patch.object(
                 builder, "validate_receipts") as receipt_check, patch.object(
@@ -852,10 +882,11 @@ class PublicationSafetyTests(unittest.TestCase):
             self.assertEqual(snapshot(output), public)
             for path in (output / name for name in builder.PUBLIC_FILES):
                 self.assertEqual(path.stat().st_mode & 0o777, 0o644)
-            for name in ("spending", "receipts"):
+            for name in ("spending", "receipts", "life"):
                 self.assertEqual((self.project / f"data/{name}.json").stat().st_mode & 0o777, 0o644)
             self.assertEqual((self.project / "data/spending.json").read_bytes(), public["data/spending.json"])
             self.assertEqual((self.project / "data/receipts.json").read_bytes(), builder.encode_receipts(receipts))
+            self.assertEqual((self.project / "data/life.json").read_bytes(), public["data/life.json"])
             self.assertTrue(all(b"private_receipt_sentinel" not in content for content in snapshot(output).values()))
             builder.build(output)
             self.assertEqual(snapshot(output), public)
@@ -875,7 +906,7 @@ class PublicationSafetyTests(unittest.TestCase):
             for call in receipt_check.call_args_list:
                 self.assertEqual(call.args, (receipts,))
                 self.assertEqual(call.kwargs, {"root": self.project})
-        self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json", "data/receipts.json"})
+        self.assertEqual(set(snapshot(self.project)) - set(before), {"data/spending.json", "data/receipts.json", "data/life.json"})
         for name, content in before.items():
             self.assertEqual((self.project / name).read_bytes(), content)
 

@@ -260,12 +260,13 @@ class CustodyTests(unittest.TestCase):
                     verify.main()
                 gate.assert_called_once_with()
 
-    def test_existing_public_allowlist_rejects_methods_and_life(self):
+    def test_exact_ten_public_allowlist_rejects_private_holiday_methods(self):
         self.assertEqual(PUBLIC_FILES, {
             "index.html", "methods.html", "icon.svg", "data/spending.json",
-            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json"})
+            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json",
+            "life.html", "data/life.json"})
         output = self.root / "public"
-        for name in ("life.html", "data/life.json", checker.REGISTER, checker.QUOTES,
+        for name in ("data/undeclared-life.json", checker.REGISTER, checker.QUOTES,
                      checker.DIRECTORY + "/" + checker.INPUTS[0]):
             with self.subTest(name=name):
                 path = output / name

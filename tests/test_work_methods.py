@@ -339,9 +339,10 @@ class CustodyTests(unittest.TestCase):
     def test_exact_public_allowlist_still_rejects_private_work_inputs(self):
         self.assertEqual(PUBLIC_FILES, {
             "index.html", "methods.html", "icon.svg", "data/spending.json",
-            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json"})
+            "taxes.html", "data/taxes.json", "who-pays.html", "data/payers.json",
+            "life.html", "data/life.json"})
         output = self.root / "public"
-        for name in ("life.html", "data/life.json", "data/life/work-methods.json",
+        for name in ("data/undeclared-life.json", "data/life/work-methods.json",
                      checker.REGISTER, checker.DIRECTORY + "/" + checker.INPUTS[0]):
             with self.subTest(name=name):
                 path = output / name

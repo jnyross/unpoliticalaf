@@ -13,6 +13,7 @@ import json
 import shutil
 import sys
 from threading import Thread
+from time import monotonic, sleep
 from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -318,14 +319,442 @@ Original response SHA-256: <code>0123456789abcdef</code>.</li></ul>
             context.close()
 
 
+
+def settle_life_hash(page, fragment):
+    """Wait for native hash handling and stable scroll, also with JS disabled."""
+    deadline = monotonic() + 5
+    previous, stable = None, 0
+    while monotonic() < deadline:
+        state = page.evaluate("({hash: location.hash, x: scrollX, y: scrollY})")
+        position = (state["x"], state["y"])
+        stable = stable + 1 if position == previous and state["hash"] == fragment else 0
+        if stable >= 4:
+            return
+        previous = position
+        sleep(0.02)
+    raise RuntimeError("Life anchor hash/scroll did not settle: " + fragment)
+
+
+def life_selected_year(page):
+    value = page.locator("#life-year-select").input_value()
+    selected = page.locator('[data-life-year][aria-current="true"]')
+    if selected.count() != 1 or selected.get_attribute("data-life-year") != value:
+        raise RuntimeError("Life selected year and annual section disagree")
+    return value
+
+
+def check_life_target(page, fragment, activator=None):
+    target = page.locator('[id="' + fragment[1:] + '"]')
+    if target.count() != 1 or not target.is_visible():
+        raise RuntimeError("Life fragment target missing or hidden: " + fragment)
+    if not target.evaluate("""node => {
+        const box = node.getBoundingClientRect();
+        return box.width > 0 && box.height > 0 &&
+            box.top >= -2 && box.top < innerHeight && box.left >= -1 &&
+            box.left < document.documentElement.clientWidth;
+    }"""):
+        raise RuntimeError("Life fragment did not scroll to its target: " + fragment)
+    # Native anchors need not focus a nonfocusable heading/section. Chromium may
+    # retain the activating link or use body. A focusable target should receive
+    # native focus; do not let a year listener move focus to unrelated content.
+    if activator is not None:
+        focus_ok = target.evaluate("""(node, source) => {
+            const active = document.activeElement;
+            const focusable = node.matches(
+                '[tabindex], a[href], button, input, select, textarea, [contenteditable="true"]');
+            if (node === source && active === source) return true;
+            if (focusable) return node === active || node.contains(active);
+            return active === document.body || active === source ||
+                active === node || node.contains(active);
+        }""", activator.element_handle())
+        if not focus_ok:
+            raise RuntimeError("Life fragment focus moved to unrelated content: " + fragment)
+
+
+def activate_life_anchor(page, link, fragment, *, keyboard=False, selected=None,
+                         scripts_enabled=True):
+    if link.count() != 1:
+        raise RuntimeError("Life anchor is missing or ambiguous: " + fragment)
+    changed = page.evaluate("location.hash") != fragment
+    # Focus first also exposes the keyboard-only skip link for a normal click.
+    link.focus()
+    if changed and scripts_enabled:
+        page.evaluate("""() => {
+            window.__lifeAnchorHashChanged = false;
+            addEventListener("hashchange", () => { window.__lifeAnchorHashChanged = true; },
+                             {once: true});
+        }""")
+    if keyboard:
+        link.press("Enter")
+    else:
+        link.click()
+    if changed and scripts_enabled:
+        page.wait_for_function("window.__lifeAnchorHashChanged === true")
+    settle_life_hash(page, fragment)
+    check_life_target(page, fragment, link)
+    if selected is not None and life_selected_year(page) != str(selected):
+        raise RuntimeError("Life anchor hijacked the selected year: " + fragment)
+
+
+def check_life_visibility(page, *, expanded=False):
+    """Required text cannot disappear through opacity, clipping or ancestors."""
+    targets = page.locator(
+        'header h1, header p, header strong, header a, main > h2, main > p, '
+        'main > nav a, footer p, footer a, [data-value], '
+        '#life-years a, [data-life-year] h2, [data-life-year] h3, '
+        '[data-life-year] p, #compare > h2, #school-sources > h2, '
+        '#compare h3, #compare summary, [data-life-year] summary, '
+        '#compare table caption, [data-school-row] [data-value], '
+        '[data-school-pair] [data-value], #compare-result, '
+        '[data-pid="school-phase-order"], [data-pid="pair-method"], '
+        '[data-pid="pair-mapping"], #school-sources p, #school-sources li, '
+        '#school-sources blockquote, #school-sources a, #school-sources code')
+    if not targets.count():
+        raise RuntimeError("Life readable content is missing")
+    failures = targets.evaluate_all("""(nodes, expanded) => {
+        const visible = node => {
+            const closed = node.closest("details:not([open])");
+            if (!expanded && closed && !closed.querySelector(":scope > summary")?.contains(node))
+                return true;
+            const box = node.getBoundingClientRect();
+            if (box.width <= 0 || box.height <= 0 ||
+                box.top + scrollY < -1) return false;
+            for (let p = node; p; p = p.parentElement) {
+                const css = getComputedStyle(p);
+                if (p.inert || p.hidden || p.hasAttribute('popover') ||
+                    p.getAttribute('aria-hidden') === 'true' ||
+                    Number(css.opacity) <= 0 || css.display === 'none' ||
+                    css.visibility !== 'visible' || css.clip !== 'auto' ||
+                    css.clipPath !== 'none' || css.contentVisibility === 'hidden')
+                    return false;
+                const clip = value => /^(hidden|clip|auto|scroll)$/.test(value);
+                const bounds = p.getBoundingClientRect();
+                // Horizontal overflow inside the labelled table region is
+                // accessible by native scrolling; vertical clipping is not.
+                const tableScroll = p.matches('[role="region"][tabindex="0"]') &&
+                    !!p.querySelector('table') && css.overflowX === 'auto';
+                if (clip(css.overflowY) &&
+                    (box.top < bounds.top + p.clientTop - 1 ||
+                     box.bottom > bounds.top + p.clientTop + p.clientHeight + 1))
+                    return false;
+                if (!tableScroll && clip(css.overflowX) &&
+                    (box.left < bounds.left + p.clientLeft - 1 ||
+                     box.right > bounds.left + p.clientLeft + p.clientWidth + 1))
+                    return false;
+            }
+            const region = node.closest('[role="region"][tabindex="0"]');
+            return !!region || (box.left >= -1 &&
+                box.right <= document.documentElement.clientWidth + 1);
+        };
+        return nodes.filter(node => !visible(node)).map(node => node.innerText.slice(0, 100));
+    }""", expanded)
+    if failures:
+        raise RuntimeError("Life required text is hidden or clipped: " + "; ".join(failures[:5]))
+
+
+def check_life_number(locator, expected, label):
+    expected = str(expected)
+    if (locator.count() != 1 or not locator.is_visible() or
+            locator.get_attribute("data-value") != expected or
+            locator.inner_text().replace(",", "").strip().removesuffix("%") != expected):
+        raise RuntimeError("Life browser numeric answer changed: " + label)
+
+
+def check_life_browser(page, data, *, expanded=False):
+    """Bind visible annual answers to the independently checked public data."""
+    if page.locator("[data-life-year]").count() != 19:
+        raise RuntimeError("Life browser must retain all 19 annual sections")
+    years = [str(year) for year in range(2008, 2027)]
+    if page.locator("[data-life-year]").evaluate_all(
+            "nodes => nodes.map(node => node.getAttribute('data-life-year'))") != years:
+        raise RuntimeError("Life annual anchor order changed")
+    for year in years:
+        section = page.locator("#year-" + year)
+        link = page.locator('#life-years a[href="#year-' + year + '"]')
+        if not section.is_visible() or link.count() != 1 or not link.is_visible():
+            raise RuntimeError("Life annual section/link hidden: " + year)
+    expected = []
+    for row in data["schools"]["rows"]:
+        phase = row["filters"]["5cGdi"]
+        band = row["filters"]["cAd31"]
+        selector = (f'[data-school-row][data-anchor="{row["anchor"]}"]'
+                    f'[data-phase="{phase}"][data-band="{band}"]')
+        measures = {
+            "classes": row["published"]["EAicq"]["display"],
+            "pupils": row["published"]["QtxWw"]["display"],
+            "mean": row["derived"]["mean"]["display"],
+            "class_share": row["derived"]["class_share"]["display"],
+            "pupil_share": row["derived"]["pupil_share"]["display"],
+        }
+        expected.extend({"selector": selector + f' [data-measure="{measure}"]', "value": value}
+                        for measure, value in measures.items())
+        if phase in ("5kyxd", "tfHTE") and band == "XdTUf":
+            expected.append({
+                "selector": (f'[data-school-summary="{phase}"][data-anchor="{row["anchor"]}"]'
+                             ' [data-measure="mean"]'),
+                "value": row["derived"]["mean"]["display"]})
+    for pair in data["comparisons"]:
+        if not pair["available"] or pair["from"] >= pair["to"]:
+            continue
+        selector = (f'[data-school-pair][data-from="{pair["from"]}"]'
+                    f'[data-to="{pair["to"]}"][data-phase="{pair["phase"]}"]')
+        expected.extend({
+            "selector": selector + f' [data-measure="{measure}"]', "value": pair[field]}
+            for measure, field in (("left", "left"), ("right", "right"), ("change", "display")))
+    for record in data["schools"]["reconciliations"]:
+        if record["residual_total_minus_bands"] == "0":
+            continue
+        expected.append({
+            "selector": (f'[data-school-residual][data-period="{record["timePeriod"]["period"]}"]'
+                         f'[data-phase="{record["phase"]}"][data-indicator="{record["indicator"]}"]'
+                         ' [data-measure="residual"]'),
+            "value": record["residual_total_minus_bands"]})
+    default_pair = next(pair for pair in data["comparisons"]
+                        if pair["id"] == "2016:2026:5kyxd")
+    expected.extend({
+        "selector": '#compare-result ' + f'[data-measure="{measure}"]',
+        "value": default_pair[field]}
+        for measure, field in (("left", "left"), ("right", "right"), ("change", "display")))
+    for phase, measure in (("5kyxd", "primary_mean"), ("tfHTE", "secondary_mean")):
+        row = next(row for row in data["schools"]["rows"]
+                   if row["anchor"] == 2026 and row["filters"]["5cGdi"] == phase and
+                   row["filters"]["cAd31"] == "XdTUf")
+        expected.append({
+            "selector": f'[data-pid="school-phase-order"] [data-measure="{measure}"]',
+            "value": row["derived"]["mean"]["display"]})
+    difference = next(item for item in data["schools"]["comparisons"]
+                      if item["id"] == "primary_minus_secondary_2026")
+    expected.append({
+        "selector": '[data-pid="school-phase-order"] [data-measure="primary_minus_secondary"]',
+        "value": difference["display"]})
+    failures = page.evaluate("""({expected, expanded}) => expected.flatMap(entry => {
+        const nodes = document.querySelectorAll(entry.selector), node = nodes[0];
+        if (nodes.length === 1 && !expanded && node.closest("details:not([open])")) return [];
+        return nodes.length !== 1 || !node.getBoundingClientRect().width ||
+            !node.getBoundingClientRect().height ||
+            node.getAttribute('data-value') !== entry.value ||
+            node.innerText.replaceAll(',', '').trim().replace(/%$/, '') !== entry.value
+            ? [entry.selector] : [];
+    })""", {"expected": expected, "expanded": expanded})
+    if failures:
+        raise RuntimeError("Life browser numeric answer changed: " + "; ".join(failures[:5]))
+    for phase in ("5kyxd", "tfHTE", "TaWMP", "cDwC3"):
+        pair_table = page.locator("#pairs-" + phase)
+        if not pair_table.is_visible() or pair_table.locator("[data-school-pair]").count() != 55:
+            raise RuntimeError("Life no-JavaScript pair table missing: " + phase)
+        table = pair_table.locator("table")
+        if not table.is_visible():
+            summary = pair_table.locator("details > summary")
+            if expanded or summary.count() != 1 or not summary.is_visible():
+                raise RuntimeError("Life pair table is concealed or cannot be expanded: " + phase)
+    check_life_visibility(page, expanded=expanded)
+
+
+def check_life_navigation(page, origin):
+    """Exercise real native click/Enter and progressive year controls."""
+    url = origin + "/life.html"
+    page.goto(url, wait_until="load")
+    page.wait_for_function("!document.querySelector('#life-year-controls').hidden")
+    default = life_selected_year(page)
+    if (default != "2026" or page.evaluate("location.hash") != "" or
+            page.evaluate("scrollY > 1 || document.activeElement !== document.body")):
+        raise RuntimeError("Life initial visit rewrote the URL or selected the wrong year")
+    for keyboard in (False, True):
+        for fragment in ("#main", "#life-years", "#compare", "#school-sources",
+                         "#pairs-5kyxd", "#pairs-tfHTE", "#pairs-TaWMP", "#pairs-cDwC3"):
+            page.goto(url + "#year-2020", wait_until="load")
+            settle_life_hash(page, "#year-2020")
+            check_life_target(page, "#year-2020", page.locator("#year-2020"))
+            if life_selected_year(page) != "2020":
+                raise RuntimeError("Life initial year fragment did not synchronize")
+            link = page.locator('a[href="' + fragment + '"]').first
+            activate_life_anchor(page, link, fragment, keyboard=keyboard, selected=2020)
+        # Exercise actual inline DfE citations as well as the Sources navigation.
+        for selector in (
+                '#year-2008 a[href="#school-sources"]',
+                '#year-2026 a[href="#school-sources"]',
+                '#compare > [data-pid="school-scope"] a[href="#school-sources"]',
+                '[data-pid="pair-method"] a[href="#school-sources"]',
+                '[data-pid="school-phase-order"] a[href="#school-sources"]'):
+            page.goto(url + "#year-2020", wait_until="load")
+            activate_life_anchor(page, page.locator(selector), "#school-sources",
+                                 keyboard=keyboard, selected=2020)
+        # Every supported annual link must change year, fragment and scroll.
+        for year in range(2008, 2027):
+            fragment = "#year-" + str(year)
+            page.goto(url + ("#year-2026" if year != 2026 else "#year-2008"),
+                      wait_until="load")
+            activate_life_anchor(page, page.locator('#life-years a[href="' + fragment + '"]'),
+                                 fragment, keyboard=keyboard, selected=year)
+    page.goto(url + "#year-2008", wait_until="load")
+    for year in range(2008, 2026):
+        activate_life_anchor(
+            page, page.locator(f'#year-{year} a[data-year-step="next"]'),
+            f"#year-{year + 1}", selected=year + 1)
+    for year in range(2026, 2008, -1):
+        activate_life_anchor(
+            page, page.locator(f'#year-{year} a[data-year-step="previous"]'),
+            f"#year-{year - 1}", keyboard=True, selected=year - 1)
+    if (page.locator('#year-2008 a[data-year-step="previous"]').count() or
+            page.locator('#year-2026 a[data-year-step="next"]').count()):
+        raise RuntimeError("Life boundary steps link outside supported annual anchors")
+    year_select = page.locator("#life-year-select")
+    for year in range(2008, 2027):
+        year_select.select_option(str(year))
+        settle_life_hash(page, "#year-" + str(year))
+        check_life_target(page, "#year-" + str(year))
+        if life_selected_year(page) != str(year):
+            raise RuntimeError("Life year select failed: " + str(year))
+    year_select.select_option("2025")
+    settle_life_hash(page, "#year-2025")
+    year_select.focus()
+    page.keyboard.press("ArrowDown")
+    page.keyboard.press("Enter")
+    settle_life_hash(page, "#year-2026")
+    check_life_target(page, "#year-2026", year_select)
+    if life_selected_year(page) != "2026":
+        raise RuntimeError("Life year select failed native keyboard change")
+    for fragment in ("#compare", "#school-sources", "#pairs-5kyxd"):
+        page.goto(url + fragment, wait_until="load")
+        settle_life_hash(page, fragment)
+        check_life_target(page, fragment, page.locator("body"))
+        if life_selected_year(page) != default:
+            raise RuntimeError("Life nonyear reload changed selected year: " + fragment)
+    for fragment in ("#year-2007", "#year-2027", "#year-nope", "#year-2020-extra",
+                     "#year-%E0%A4%A", "#%"):
+        page.goto(url + "#year-2020", wait_until="load")
+        focused = page.evaluate("document.activeElement.id")
+        page.evaluate("(hash) => { location.hash = hash; }", fragment)
+        settle_life_hash(page, fragment)
+        if (life_selected_year(page) != "2020" or
+                page.evaluate("document.activeElement.id") != focused):
+            raise RuntimeError("Life unsupported hash hijacked selected year/focus: " + fragment)
+        page.reload(wait_until="load")
+        settle_life_hash(page, fragment)
+        if (life_selected_year(page) != default or
+                page.evaluate("document.activeElement !== document.body")):
+            raise RuntimeError("Life malformed/unsupported reload changed focus/year: " + fragment)
+    page.goto(url, wait_until="load")
+
+
+
+def check_life_comparison_controls(page, data):
+    """Every ordered choice must render the checked answer through real handlers."""
+    initial_year = life_selected_year(page)
+    initial_hash = page.evaluate("location.hash")
+    failures = page.evaluate("""pairs => {
+        const from = document.querySelector('#compare-from');
+        const to = document.querySelector('#compare-to');
+        const phase = document.querySelector('#compare-phase');
+        const result = document.querySelector('#compare-result');
+        if (![from, to, phase, result].every(Boolean)) return ['Missing comparison controls'];
+        const visible = node => {
+            if (!node || !node.getBoundingClientRect().width ||
+                !node.getBoundingClientRect().height) return false;
+            for (let p = node; p; p = p.parentElement) {
+                const css = getComputedStyle(p);
+                if (p.hidden || p.inert || p.getAttribute('aria-hidden') === 'true' ||
+                    Number(css.opacity) <= 0 || css.display === 'none' ||
+                    css.visibility !== 'visible' || css.clip !== 'auto' ||
+                    css.clipPath !== 'none' || css.contentVisibility === 'hidden') return false;
+            }
+            return true;
+        };
+        const failures = [];
+        for (const pair of pairs) {
+            for (const [control, value] of [[from, pair.from], [to, pair.to], [phase, pair.phase]]) {
+                control.value = String(value);
+                if (control.value !== String(value)) {
+                    failures.push('Option absent: ' + pair.id); break;
+                }
+                control.dispatchEvent(new Event('change', {bubbles: true}));
+            }
+            if (!visible(result) || result.getAttribute('role') !== 'status' ||
+                result.getAttribute('data-available') !== String(pair.available)) {
+                failures.push('Unavailable/hidden result: ' + pair.id); continue;
+            }
+            if (pair.available) {
+                for (const [measure, field] of [['left', 'left'], ['right', 'right'], ['change', 'display']]) {
+                    const spans = result.querySelectorAll('[data-measure="' + measure + '"]');
+                    const span = spans[0];
+                    if (spans.length !== 1 || !visible(span) ||
+                        span.getAttribute('data-value') !== pair[field] ||
+                        span.textContent.replaceAll(',', '').trim() !== pair[field]) {
+                        failures.push('Wrong visible ' + measure + ': ' + pair.id);
+                    }
+                }
+            } else if (!result.innerText.includes(pair.reason) ||
+                       result.querySelector('[data-measure][data-value]') ||
+                       !result.querySelector('a[href="#year-2016"]')) {
+                failures.push('Missing comparison converted to value or lost nearest link: ' + pair.id);
+            }
+        }
+        return failures;
+    }""", data["comparisons"])
+    if failures:
+        raise RuntimeError("Life comparison handlers failed: " + "; ".join(failures[:10]))
+    if life_selected_year(page) != initial_year or page.evaluate("location.hash") != initial_hash:
+        raise RuntimeError("Life comparison controls hijacked annual selection or fragment")
+    # Actual keyboard changes independently exercise native select interaction.
+    pairs = {(str(p["from"]), str(p["to"]), p["phase"]): p for p in data["comparisons"]}
+    for selector, baseline in (("#compare-from", "2016"), ("#compare-to", "2025"),
+                               ("#compare-phase", "5kyxd")):
+        page.locator("#compare-from").select_option("2016")
+        page.locator("#compare-to").select_option("2026")
+        page.locator("#compare-phase").select_option("5kyxd")
+        control = page.locator(selector)
+        control.select_option(baseline)
+        before = control.input_value()
+        control.focus()
+        control.press("ArrowDown")
+        control.press("Enter")
+        if control.input_value() == before:
+            raise RuntimeError("Life comparison select failed keyboard change: " + selector)
+        key = (page.locator("#compare-from").input_value(),
+               page.locator("#compare-to").input_value(),
+               page.locator("#compare-phase").input_value())
+        pair = pairs[key]
+        for measure, field in (("left", "left"), ("right", "right"), ("change", "display")):
+            check_life_number(page.locator(f'#compare-result [data-measure="{measure}"]'),
+                              pair[field], "keyboard comparison/" + measure)
+    for selector, value in (("#compare-from", "2016"), ("#compare-to", "2026"),
+                            ("#compare-phase", "5kyxd")):
+        page.locator(selector).select_option(value)
+    if life_selected_year(page) != initial_year or page.evaluate("location.hash") != initial_hash:
+        raise RuntimeError("Life keyboard comparison controls hijacked annual selection")
+
+
+def check_life_plain(page, data):
+    for selector in ("#life-year-select", "#compare-from", "#compare-to", "#compare-phase"):
+        control = page.locator(selector)
+        if control.count() != 1 or (control.is_visible() and not control.is_disabled()):
+            raise RuntimeError("No-JavaScript life enhancement control is active: " + selector)
+    check_life_browser(page, data)
+    for keyboard in (False, True):
+        for year in range(2008, 2027):
+            fragment = "#year-" + str(year)
+            activate_life_anchor(page, page.locator('#life-years a[href="' + fragment + '"]'),
+                                 fragment, keyboard=keyboard, scripts_enabled=False)
+        for year in range(2008, 2026):
+            activate_life_anchor(
+                page, page.locator(f'#year-{year} a[data-year-step="next"]'),
+                f"#year-{year + 1}", keyboard=keyboard, scripts_enabled=False)
+        for year in range(2026, 2008, -1):
+            activate_life_anchor(
+                page, page.locator(f'#year-{year} a[data-year-step="previous"]'),
+                f"#year-{year - 1}", keyboard=keyboard, scripts_enabled=False)
+
+
 def check():
     pages = sorted(SITE.glob("*.html"))
-    if {path.name for path in pages} != {"index.html", "taxes.html", "who-pays.html", "methods.html"}:
-        raise RuntimeError("Expected exactly spending, taxes, who-pays and methods HTML pages; build the site first.")
+    if {path.name for path in pages} != {"index.html", "taxes.html", "who-pays.html", "life.html", "methods.html"}:
+        raise RuntimeError("Expected exactly spending, taxes, who-pays, life and methods HTML pages; build the site first.")
     chrome = find_chrome()
     axe_source = bundled_axe()
     payer_bytes = (SITE / "data/payers.json").read_bytes()
     payer_data = json.loads(payer_bytes)
+    life_bytes = (SITE / "data/life.json").read_bytes()
+    life_data = json.loads(life_bytes)
     from playwright.sync_api import sync_playwright
 
     violations = 0
@@ -352,6 +781,18 @@ def check():
             if (download.status != 200 or download.body() != payer_bytes or
                     "application/json" not in download.headers.get("content-type", "")):
                 raise RuntimeError("Payer browser JSON download route failed")
+            life_download = context.request.get(origin + "/data/life.json")
+            if (life_download.status != 200 or life_download.body() != life_bytes or
+                    "application/json" not in life_download.headers.get("content-type", "")):
+                raise RuntimeError("Life browser JSON download route failed")
+            for private in (
+                    "data/life/schools.json", "data/schools.json",
+                    "data/life/school-sources.json", "data/life/work-data-sources.json",
+                    "data/life/work-methods-sources.json", "data/life/holiday-methods-sources.json",
+                    "data/life/sources/schools/dfe-national-class-sizes-1.0.json",
+                    "data/life/sources/schools/dfe-class-sizes-meta-1.0.json"):
+                if context.request.get(origin + "/" + private).status != 404:
+                    raise RuntimeError("Private life foundation is publicly served: " + private)
             page = context.new_page()
             page.set_default_timeout(30_000)
             script_errors = []
@@ -368,10 +809,13 @@ def check():
                     nav = page.locator('nav.site-nav[aria-label="Primary"]')
                     if nav.count() != 1:
                         raise RuntimeError(f"Expected one shared primary navigation: {path.name}")
-                    for target in ("index.html", "taxes.html", "who-pays.html", "methods.html"):
+                    for target in ("index.html", "taxes.html", "who-pays.html", "life.html", "methods.html"):
                         link = nav.locator(f'a[href="{target}"]')
                         if link.count() != 1 or not link.is_visible():
                             raise RuntimeError(f"Missing visible top navigation to {target}: {path.name}")
+                    if path.name == "life.html":
+                        check_life_navigation(page, origin)
+                        check_life_comparison_controls(page, life_data)
                     # Exercise the progressive view controls before the audit.
                     buttons = page.locator(".views button")
                     for index in range(buttons.count()):
@@ -412,6 +856,8 @@ def check():
                         check_basics_browser(page, expanded=state == "expanded")
                         if path.name == "who-pays.html":
                             check_payer_browser(page, payer_data)
+                        if path.name == "life.html":
+                            check_life_browser(page, life_data, expanded=state == "expanded")
                         table_failures = page.locator("table").evaluate_all("""tables =>
                             tables.flatMap(table => {
                                 const region = table.closest('[role="region"]');
@@ -422,7 +868,7 @@ def check():
                             })""")
                         if table_failures:
                             raise RuntimeError("; ".join(table_failures))
-                        small_targets = page.locator("nav a, summary, button").evaluate_all("""nodes =>
+                        small_targets = page.locator("nav a, summary, button, select, [data-year-step]").evaluate_all("""nodes =>
                             nodes.filter(node => {
                                 const box = node.getBoundingClientRect();
                                 return box.width > 0 && box.height > 0 &&
@@ -473,6 +919,8 @@ def check():
                     if reader.evaluate("document.documentElement.scrollWidth > window.innerWidth"):
                         raise RuntimeError(f"No-JavaScript default overflow: {path.name}, {width}px")
                     check_basics_browser(reader)
+                    if path.name == "life.html":
+                        check_life_plain(reader, life_data)
                     if path.name in ("taxes.html", "who-pays.html") and not reader.locator("details").count():
                         raise RuntimeError(f"Source detail is missing without JavaScript: {path.name}")
                     for index in range(reader.locator("details").count()):
@@ -488,7 +936,8 @@ def check():
                         tables.map(table => {
                             const region = table.closest('[role="region"]');
                             return !!region && region.tabIndex === 0 &&
-                                !!(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby'));
+                                !!(region.getAttribute('aria-label') || region.getAttribute('aria-labelledby')) &&
+                                getComputedStyle(region).overflowX === 'auto';
                         })"""):
                         if not region:
                             raise RuntimeError(f"No-JavaScript table lacks keyboard scroll access: {path.name}")
@@ -499,6 +948,8 @@ def check():
                     check_basics_browser(reader, expanded=True)
                     if path.name == "who-pays.html":
                         check_payer_browser(reader, payer_data)
+                    if path.name == "life.html":
+                        check_life_browser(reader, life_data, expanded=True)
             plain.close()
         finally:
             browser.close()

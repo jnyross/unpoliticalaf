@@ -73,11 +73,18 @@ site/index.html
 site/methods.html
 site/taxes.html
 site/who-pays.html
+site/life.html
 site/icon.svg
 site/data/spending.json
 site/data/taxes.json
 site/data/payers.json
+site/data/life.json
 ```
+
+`data/life.json` is the private generated school preview projection; its public
+copy `site/data/life.json` is byte-identical. It retains the full school source
+projection and all 1,444 ordered phase/year comparison choices. No JSON size cap
+is added; every HTML page remains strictly below 500000 bytes.
 
 `data/spending.json` is the generated working dataset; the public JSON must be
 byte-identical. Both are rebuilt from the seed. `site/` remains generated under
@@ -145,7 +152,7 @@ regeneration, in addition to both audit scopes. See
 [receipt methods](docs/receipts-methods.md) for the tax/non-tax residual formulas,
 historical licence-fee overlap and debt/GDP limits. Only the selected CURRENT
 tables enter `site/data/taxes.json`; the private receipt dataset is never published.
-The explicit public allowlist has eight files. Tax output is checked by
+The explicit public allowlist has exactly ten files. Tax output is checked by
 `scripts/check_taxes.py`, which separately reopens the pinned current workbook
 and binds every public node, signed rendered value and chart encoding to exact
 cells, ordered formulas, units, years and status. This adds no historical receipt
@@ -168,9 +175,29 @@ The private work-data foundation now retains both complete calendar CSVs and the
 `data/life/work-data-sources.json`. `make verify` independently reopens their
 stored and recovered bytes and checks all 660 SOC2010 and 300 SOC2020 rows
 against dataset-specific codes, labels, calendar periods and statuses. The
-projection stays in memory: no derived file or public life output is added.
+work projection stays in memory: it writes no derived file or public work output.
 Conflicting time annotations remain literal; Confidence `20701` has no inferred
 CI meaning. Methods cautions are cross-references, not additional local inputs.
 See [work-data verification](docs/work-data-foundation.md). Controller candidate
 review, payload measurement, Boat checks and live verification remain required;
 these edits do not establish a passing run or v2 product acceptance.
+
+The **Year by year** school page is a **TECHNICAL PREVIEW — reader acceptance
+pending**. Other topics are not yet built. It uses the five unchanged DfE inputs
+in `data/life/school-sources.json`, with all 176 observations, and distinguishes
+January census anchors from academic years. The 2008–2015 anchors are not in
+this selected dataset; the page links to the nearest actual period without
+filling a gap. JavaScript enhances disabled selects; all 19 native year links,
+one-year steps, source tables and forward comparison tables work without it.
+Reverse, equal and missing pairs have explicit native rules and source-derived
+ordered JSON entries. A year hash alone updates year focus; other anchors keep
+their native destination.
+
+`scripts/check_life.py` independently reopens the retained school originals,
+checks the complete projection and binds visible labels, values, source links
+and navigation to those inputs. Verification regenerates real private/public
+life JSON and all HTML before comparing exact bytes; stale artifacts fail.
+Browser regressions exercise keyboard and normal hash links after hashchange,
+as well as enhancement state and native navigation with scripts disabled before
+loading. The controller must run these checks; file edits alone establish no
+passing result, live deployment, human study or manual assistive-technology pass.
