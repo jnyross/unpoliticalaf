@@ -2,7 +2,7 @@
 
 ## Bounded role
 
-Whole glossary definitions foundation. Independently bind household, tenure, dependentchildren, all3publishedchild-householdgroups and italicindicative row/column<30 rule; preserve distinction from FT1241cell>0<5u. No ODS/PDF or tenureprojection claims yet. Make checker prove definitions from complete originalHTML, not generatedsurrogate. Later current/pandemic tickets depend on this foundation.
+Whole glossary definitions foundation. Independently bind the actual household, tenure, dependent-children and household-type definitions/headings present in this complete original HTML. Do not invent single-versus-previously-married lone-parent subgroup definitions or all three FT1241 group labels when absent: the later current-workbook foundation binds those exact published labels at A113/A149/A185. The italic indicative row/column-under-30 rule is NOT in this glossary; the later current foundation must prove it from its retained technical-notes HTML. FT1241 cell>0<5 u is a separate workbook rule, not a glossary claim. No ODS/PDF, numeric tenure projection, historical definition-continuity or source-absent claim here. Make the checker prove each local definition from complete original HTML, not a generated surrogate. The frozen full-domain excerpt below remains unchanged context.
 
 ## Applicability — controlling scope for this seed
 
@@ -10,8 +10,8 @@ The closed local input set is exactly the manifest sources. The frozen domain ex
 
 | Class | Requirements |
 |---|---|
-| local input | Complete glossaryHTML: definitions/headings/row-column<30indicative rule only; checker normalises nooriginalbytes. |
-| cross-check | LaterFT1241cell>0<5u is a different rule; noODSrequiredhere. |
+| local input | Complete glossary HTML: only actual definitions and headings present there; checker preserves original bytes. |
+| cross-check | Later current foundation owns technical-notes row/column-under-30 italic rule and original FT1241 group labels/cell>0<5 u rule. No ODS or technical-notes input is required here. |
 | not this seed | Any tenuredata projection,ODS/PDFparser/numericclaim,periodcomparison orPDFmethodparagraph assertion. |
 
 ## Exact frozen domain rules (verbatim cross-reference)
