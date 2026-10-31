@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "retained proposed source input, no public output or source-check pass implied",
+  "domain": "earnings",
+  "frozen_inventory_sha256": "398797142c6417223d260e10a4c25ba0b954fb9efa7baf1bb44fbbcf8f83f83d",
+  "sources": [
+    {
+      "path": "data/life/sources/earnings/ashe-selected-2026.xlsx",
+      "bytes": 291233,
+      "sha256": "fce47d18563166c3313ee443fbfe93ce8adc66ea763fa0d011334d8a4cb85022",
+      "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/ashe1997to2015selectedestimates/current/selectedestimates19972026.xlsx",
+      "encoding": "retained official response bytes; workbook ZIP unchanged, CSV decoded transfer body",
+      "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them"
+    },
+    {
+      "path": "data/life/sources/earnings/cpih-l522.csv",
+      "bytes": 11944,
+      "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+      "encoding": "retained official response bytes; workbook ZIP unchanged, CSV decoded transfer body",
+      "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them"
+    },
+    {
+      "path": "data/life/sources/earnings/annual-work-data-api-crawl-1.html.json",
+      "bytes": 41744,
+      "sha256": "0c32766d6d8c6627da7f46ef24d38fe8ef8e6197061ecbec0665fac7435d22c4",
+      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/ashe1997to2015selectedestimates",
+      "encoding": "unchanged UTF-8 returned HTML body, not compressed wire transfer",
+      "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them",
+      "original_path": "data/life/sources/earnings/annual-work-data-api-crawl-1.html",
+      "stored_bytes": 43867,
+      "stored_sha256": "860f7f7be4c26028c7974a2d3706e4c7d63fcf06fe0d6f4fb054d95a60202586",
+      "storage": "Existing lossless UTF-8 JSON-envelope pattern; original_response.encode(utf-8) recovers every original byte. Both stored and recovered hashes/bytes must validate. Full normal review bytes count; not generated."
+    },
+    {
+      "path": "data/life/sources/earnings/official-pages-crawl-1.html.json",
+      "bytes": 143643,
+      "sha256": "7b718f8c657deed91c4d895352f9a0b0ecb65d0fe4274c60d4452ba0be5ff1a7",
+      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026",
+      "encoding": "unchanged UTF-8 returned HTML body, not compressed wire transfer",
+      "retrieval": "2026-10-31 acquisition; precise timestamp/headers unavailable for curl; do not invent them",
+      "original_path": "data/life/sources/earnings/official-pages-crawl-1.html",
+      "stored_bytes": 151448,
+      "stored_sha256": "9911c058ea22171a8778902eb09191b62844d37136a4aa2ce8eca431d63211c2",
+      "storage": "Existing lossless UTF-8 JSON-envelope pattern; original_response.encode(utf-8) recovers every original byte. Both stored and recovered hashes/bytes must validate. Full normal review bytes count; not generated."
+    }
+  ]
+}
