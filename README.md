@@ -162,3 +162,15 @@ Confidence `20701` remains uninterpreted. Work counts and their catalogue histor
 need their own verified foundation before use. See
 [the work-methods contract](docs/life-work-methods-source-contract.md).
 This source foundation earns no v2 product score or human acceptance evidence.
+
+The private work-data foundation now retains both complete calendar CSVs and the
+18 SDMX definition/catalogue originals in the closed 20-file register
+`data/life/work-data-sources.json`. `make verify` independently reopens their
+stored and recovered bytes and checks all 660 SOC2010 and 300 SOC2020 rows
+against dataset-specific codes, labels, calendar periods and statuses. The
+projection stays in memory: no derived file or public life output is added.
+Conflicting time annotations remain literal; Confidence `20701` has no inferred
+CI meaning. Methods cautions are cross-references, not additional local inputs.
+See [work-data verification](docs/work-data-foundation.md). Controller candidate
+review, payload measurement, Boat checks and live verification remain required;
+these edits do not establish a passing run or v2 product acceptance.

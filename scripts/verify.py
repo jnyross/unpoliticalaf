@@ -10,6 +10,7 @@ from check_payer_sources import validate as validate_payer_sources
 from check_schools import validate as validate_schools
 from check_holiday_methods import validate as validate_holiday_methods
 from check_work_methods import validate as validate_work_methods
+from check_work_data import validate as validate_work_data
 
 
 def snapshot(directory):
@@ -24,6 +25,7 @@ def main():
     validate_schools()
     validate_holiday_methods()
     validate_work_methods()
+    validate_work_data()
     validate_receipts()
     receipt_bytes = (ROOT / "data/receipts.json").read_bytes()
     first_receipts = encode_receipts(build_receipts())
