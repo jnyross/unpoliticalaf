@@ -2,7 +2,7 @@
 
 ## Bounded role
 
-WholecurrentODS/qualityPDF/catalogue/technicalHTML foundation, afterglossary. Explicitly bind the technical-notes italic row/column-unweighted-total-under-30 rule and its source-specific u wording, separately from FT1241 A220 cell greater than 0 and less than 5 suppression; preserve both original texts without merging their predicates. Bind exact FT1241 group labels A113/A149/A185 from the original ODS, not the glossary. Project all17actualobservations/allhouseholdtenures/3childhouseholdgroups, retain rawtypes/formulas/styles/notes; independentrawreopen. Bind qualityPDFparas11/17–19andprocessitem6return2022-23. Textoperatorparentinspectionlimited; verifyoriginalPDFparagraph beforecandidateclaim. No needtechnicalPDFresearchcrosscheck as hiddeninput. Until pandemicfoundation passes, no new pandemiccomparison/methodclaimUI.
+WholecurrentODS/qualityPDF/catalogue/technicalHTML foundation, independent of the glossary implementation. Explicitly bind the technical-notes italic row/column-unweighted-total-under-30 rule and its source-specific u wording, separately from FT1241 A220 cell greater than 0 and less than 5 suppression; preserve both original texts without merging their predicates. Bind exact FT1241 group labels A113/A149/A185 from the original ODS, not the glossary. Project all17actualobservations/allhouseholdtenures/3childhouseholdgroups, retain rawtypes/formulas/styles/notes; independentrawreopen. Bind qualityPDFparas11/17–19andprocessitem6return2022-23. Textoperatorparentinspectionlimited; verifyoriginalPDFparagraph beforecandidateclaim. No needtechnicalPDFresearchcrosscheck as hiddeninput. Until pandemicfoundation passes, no new pandemiccomparison/methodclaimUI.
 
 ## Applicability — controlling scope for this seed
 
@@ -11,7 +11,7 @@ The closed local input set is exactly the manifest sources. The frozen domain ex
 | Class | Requirements |
 |---|---|
 | local input | BothODS/currentqualityPDF/currenttechnicalHTML/catalogue:17points/tenures/childgroups/quality2013/2015/2022/2024notes. |
-| cross-check | Glossarydefinitions from earlier genuinefoundation, ordinarytrackedinputs onceadopted. |
+| cross-check | Glossary definitions only if an earlier foundation is actually on main. If absent, do not import missing glossary code/files or claim glossary-checked definitions; bind the original publisher labels A113/A149/A185 and the local original workbook/technical/quality notes only. No historical age-definition continuity claim. This numeric-source foundation is independent of the failed glossary implementation; a public housing story still needs qualified glossary evidence. |
 | not this seed | 2020/21PDFparas1.10/2.21/2.22 checker; pandemic source arrives separately. No demandthatabsentPDFexist. |
 
 ## Exact frozen domain rules (verbatim cross-reference)
