@@ -14,7 +14,7 @@ CPIH CSV: title CPIH INDEX00ALLITEMS2015=100, CDIDL522, datasetMM23, literal Rel
 
 ## Unreconciled bulletin difference
 
-Original bulletin URL recorded in source manifest; “Employee earnings”, Figure2: full-time April2026 nominal5.8%, real2.7% year-on-year. Rounded source operands£766.6/£811.2 and137.7/141.8 derive2.75828%→2.8%. Primary independent realLEVELS do not reproduce the bulletin growth series. Methods must state both2.8and2.7 “not reconciled” wherever that derived percentage is discussed, without a guessed cause. Do not widen tolerance, change cells or claim unrounded data explains the discrepancy. Bulletin footnotes locate2023methodboundary; Table2J27 says published levels1decimal/percentagesunrounded, but this is not proof of a reconciliation.
+Original bulletin URL recorded in source manifest; “Employee earnings”, Figure2: full-time April2026 nominal5.8%, real2.7% year-on-year. Rounded source operands£766.6/£811.2 and137.7/141.8 derive2.75828%→2.8%. Primary independent realLEVELS do not reproduce the bulletin growth series. Methods must state both2.8and2.7 “not reconciled” wherever that derived percentage is discussed, without a guessed cause. Do not widen tolerance, change cells or claim unrounded data explains the discrepancy. Bulletin footnotes locate2023methodboundary; Notes!J27 says published levels1decimal/percentagesunrounded, but this is not proof of a reconciliation.
 
 ## Later study key
 
@@ -25,3 +25,7 @@ April2011versusApril2021SOC2010, Table2W10/AG10 andTable5AG19/AG28; matchAprilCP
 Producer and independent checker reopen original bytes/hashes/semantic coordinates/headers/notes/styles. Fail hash change, shiftedyear, hourly-for-weekly, duplicateSOCoverlap, missing-to-zero, invalidCPIH/nonfinite/nonpositive, wrongmonth/base/formula/unit, droppedflag, Table2/5disagreement and cross-break change. Every selected node retains sourcehash/locator/period/basis/unit/population/status/formulaoperands. Unknown publication/retrieval precision honestly unknown. Existing grade7,publicallowlist/source/whitespace guards remain unchanged. Tests execute only in credential-freeBoat throughcontroller. No new dependencies, network-at-build, hidden/generatedsourceclassification, sourcebyteexclusion,auth/billing/provider/schedulerchange. Measure full normal reviewpayload below1MB before ticket andexactcandidate. Allinputfoundationscanprecedethe10pathUIcontract; do notactivateit here.
 
 Work counts persons16+, including self-employed people; ASHE covers employee jobs on adult rates. Later UI must state the population difference beside both and never form a combined ratio.
+
+## Adopted locator-only erratum
+
+The frozeninventory mistakenlynamesTable2J27. ParentoriginalZIP/XMLreopenprovesTable2!J27=39.5. CorrectroundingheadingNotes!J26; fullroundingnoteNotes!J27; CVlegendNotes!A42. Wholeoriginalworkbookhashunchanged. All3focusedcouncilreviewsgaveADOPTABLElocatorerratum, separatehashaddendumrecorded2026-10-31T14:04:08.564100+00:00. EvidenceSHA256436623b0dd542e7f8647a9b8b977438c1635ffb4b53b85b7e201312ab10deff0. Checkerbindsthefullnoteincludingannualearningsnearestpound/hourlynearestpenny/employeejobsnearestthousandexceptionsandpercentagesfromunroundedvalues. Do not citefalseTable2locator orclaim2.8vs2.7reconciled. Candidateindependentrawreopenstillmandatory.
