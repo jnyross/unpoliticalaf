@@ -1,6 +1,132 @@
 # UnpoliticalAF product specification
 
-## Outcome and authority
+## Controlling v2 outcome and acceptance contract — 31 October 2026
+
+John authorised the annual life scope and reference-design reset on
+31 October 2026. This section and [the frozen v2 contract](v2-contract.md) control
+future implementation and acceptance. The historical v1 specification below is
+retained in full, with its headings nested under the historical label. Its
+requirements remain applicable unless explicitly superseded here or in the v2
+contract; its old target, study protocol and delivery sequence do not override
+v2. This product specification does not change protected factory instructions
+or controller policy.
+
+### Outcome and design
+
+A UK newcomer on a phone must understand where public money goes, which taxes
+raise revenue, which people pay, and taxes as a share of household income.
+Alongside these four fiscal questions, tell an actual year-by-year story of all
+five life topics: work/job types, real earnings, England housing tenure,
+overseas holiday-purpose/destination visits, and England children's class sizes.
+Include meaningful occupation/sex, weekly full-time/part-time, child-household
+tenure, holiday region/country and school phase/band variation.
+
+Default to an aggregate/domain lens. Explicitly distinguish populations,
+geographies and actual periods. Do not present an observed fictional family,
+tracked person, universal family or causal implication. Inherit the plain
+typography, compact navigation, narrow column and white/grey character of
+https://un-political.vercel.app/ while preserving fiscal accuracy and access.
+
+### Frozen evidence and target precedence
+
+The parent records the rubric's adoption after three independent challenges and
+two passed source-inventory/acceptance-procedure rounds, with all three reviewers
+saying **ADOPTABLE FOR HASH FREEZE** and no material blockers. This completes the
+recorded source/fixture challenge and hash-freeze prerequisite, not product
+acceptance. Exact complete originals and the freeze receipt remain with the
+parent privately; this edit records supplied identifiers, not independent
+verification of inaccessible originals.
+
+| Frozen original | SHA256 |
+| --- | --- |
+| Governing rubric | `94b7c2b8c8f7737aa80ede1c89591842ac1ee653bf3ef61ce498a16309d63a02` |
+| Source inventory | `398797142c6417223d260e10a4c25ba0b954fb9efa7baf1bb44fbbcf8f83f83d` |
+| Normative fiscal companion | `9c837137fd813abaf0752fc5371f9d7228c4b1b07d5e43f77f3993450bc7b49f` |
+| Acceptance fixture | `9e61f6229678b48bef53c0aaea03e6421126354503f56906f271ca836b3b1ed6` |
+
+The v2 target is **50 binary checks × 2 points = 100**. **Each of three council
+reviewers independently must score at least 96/100, every dimension at least
+8/10, all G1–G7 satisfied and an explicit SATISFIED verdict on the same live SHA
+and evidence.** No averaging and no old scores reused. This replaces the
+future v1 31/32 end-state target; it does not change historical results.
+
+At this contract change, live remains `a18` and v2 is **unassessed**. The original
+formal **18/32** assessment and narrower fiscal **9.6/9.6/9.7** reviews remain
+historical evidence only. Preserve dated assessments and their scopes. After
+each deployed wave, independently assess the same live candidate, retain scores
+and evidence, and turn verified deficits into follow-up tickets until the v2
+target is achieved. Never award unperformed evidence or close the overall
+product on technical delivery alone.
+
+### Required gates, scope and stages
+
+The [v2 contract](v2-contract.md) specifies G1 official provenance and independently
+reopened originals; G2 numerical integrity and impartiality; G3 all four fiscal
+and five life topics with meaningful splits; G4 annual navigation 2008–2026,
+actual periods/gaps and at least ten consecutive observed annual points;
+G5 no-JavaScript core/year/pair tables, semantic access, 44px targets, no loss at
+360px, each HTML file below 500000 bytes, zero WCAG 2.2 AA axe violations at
+360/1100px in default/expanded states and no unresolved actual manual keyboard
+or screen-reader blocker; G6 existing-controller exact-candidate independent
+reviews, credential-free Boat checks, reproducibility, recovery, live hashes and
+reviewed output allowlist; and G7 a passing real five-person study.
+
+The contract is normative for annual anchors, series/method boundaries, gaps,
+source-specific fiscal history and calculations, meaningful splits, public
+paths, source-byte review limits and the study. Preserve supported fiscal
+histories and cash/real/GDP views; no missing-to-zero, forward filling,
+silent interpolation, invented periods, incompatible changes or forecast-as-observed.
+
+Implementation follows the recorded source/fixture freeze. Build/controller/
+output changes receive exact-candidate review and checks before activation.
+Independently verify exact calculated task outputs against the candidate before
+recruitment. Actual participant dates/contacts are not first-code prerequisites.
+Until G7 passes, call the product **TECHNICAL PREVIEW — reader acceptance
+pending**. Real people and manual evidence cannot be fabricated.
+
+The v2 study supersedes the old five-minute/eight-question protocol: exactly
+five eligible consenting UK adults, first five rather than best five, on actual
+portrait phones; twelve fixed tasks; at least 48/60 total and each at least 9/12;
+each entire session at most 480 seconds and all three critical interpretations
+correct for each participant. Fixture section 8 alone owns wording and marking.
+The contract contains the eligibility, viewport, fresh-cohort, independent-marker,
+privacy and no-help rules. No contact or spending authority is inferred.
+
+Party proposals remain deferred in the original backlog, not completed; their
+inherited requirements remain for that work. A full year of update history is
+monitoring, not a fabricated release prerequisite. No scheduler activation is
+authorised by this change. Other unsuperseded human evidence remains pending
+until actually observed.
+
+### Delivery and documentation boundary
+
+Keep the existing setup/build/verify interfaces, deterministic static output,
+source/negative/reconciliation/access/smoke gates, independent review, private
+repository and last-good recovery. The existing controller alone owns checks,
+publication, recovery and deployment. No billing, authentication, provider,
+dependency or scheduler changes are part of this contract update.
+
+The current public contract contains eight URL-relative paths; a later reviewed
+activation adds only `life.html` and `data/life.json`, for ten. `site/` is the
+build root, not a URL prefix. This docs ticket activates neither path and changes
+no product code, data or HTML. Do not hide life in fiscal JSON or add an
+unreviewed path. Current eight live outputs remain unchanged except any
+already-declared generation determinism approved through normal checks.
+
+Root `AGENTS.md` still states the v1 31/32 target. Alignment of that protected
+instruction file requires the owning operator's normal reviewed policy procedure.
+Do not edit or bypass protected instructions through product docs or ticket text.
+For product acceptance, the v2 target above controls; the v1 text below describes
+the earlier contract and must not be reported as current v2 acceptance.
+
+## Historical v1 specification — retained text, not the v2 acceptance target
+
+The following is the original specification, preserved with heading levels
+nested beneath this historical label. Read its requirements through the explicit
+v2 supersessions above. Its targets, protocols, past assessments and proposed
+delivery sequence are historical; they are not evidence of v2 completion.
+
+### Outcome and authority
 
 Build and deploy a complete, plain-English and impartial account of UK public
 spending, taxation, borrowing, debt and party proposals. John authorised this
@@ -16,7 +142,7 @@ and its README. The archived reference files and their hashes are in
 not another application or factory. The original repository stays read-only.
 Its historical 18/32 assessment is not a score for this new site.
 
-## Target and improvement loop
+### Target and improvement loop
 
 John's acceptance target is **at least 9.5/10**, using the original eight-dimension
 rubric unchanged. Compute the normalized score as `total / 32 * 10`; because the
@@ -37,7 +163,7 @@ needs real people or an owner's decision, surface the exact human-gate issue and
 resume after evidence arrives; do not invent a pass, endlessly repeat the same
 assessment, or mark the overall product complete.
 
-## Product requirements
+### Product requirements
 
 1. **Spending.** Explain the latest compatible fiscal year's public spending by
    area, spending on services, debt interest, pensions and defence. Show meaningful
@@ -108,7 +234,7 @@ assessment, or mark the overall product complete.
     Record revision, source vintages, review findings, checks and deployment receipts.
     Append evidence-backed rubric assessments rather than rewriting history.
 
-## Reuse and source boundaries
+### Reuse and source boundaries
 
 `data/raw/` and `data/sources.json` are a hash-verified seed from the pinned source.
 The reference scripts, asset, requirements and human-check protocols can be adapted
@@ -122,7 +248,7 @@ Those sheets were not used by the old renderer. Their actual/forecast notes must
 be checked per series; the old site's March 2026 forecast note is not a universal
 description of the newer receipt data.
 
-## Evidence the factory cannot fabricate
+### Evidence the factory cannot fabricate
 
 Software delivery and external evidence are tracked separately. Five eligible
 people must actually answer at least seven of the eight questions correctly in
@@ -136,7 +262,7 @@ unperformed work must not be scored as passed.
 The source's 31/32 aspiration needs all applicable lower levels plus the human
 evidence. Freshness level 4 cannot be claimed until the required year exists.
 
-## Delivery order
+### Delivery order
 
 The [GitHub product epic](https://github.com/jnyross/unpoliticalaf/issues/2) links the executable tickets. Start by porting the verified
 spending product, then strengthen provenance, add receipts and history, add parties,
