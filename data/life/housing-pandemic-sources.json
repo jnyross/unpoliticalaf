@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "domain": "housing-pandemic",
+  "status": "Draft source-only seed. No projection, product acceptance or publication implied.",
+  "frozen_inventory_sha256": "398797142c6417223d260e10a4c25ba0b954fb9efa7baf1bb44fbbcf8f83f83d",
+  "field_definitions": {
+    "path": "Stored candidate file; decode envelope before original hash validation",
+    "bytes": "Recovered original byte length",
+    "sha256": "Recovered original SHA256",
+    "stored_bytes": "Stored envelope length, if present",
+    "stored_sha256": "Stored envelope SHA256, if present"
+  },
+  "sources": [
+    {
+      "path": "data/life/sources/housing-pandemic/ehs-quality-2020-21.pdf",
+      "url": "https://assets.publishing.service.gov.uk/media/61b08cb28fa8f5037cc5e16f/2020-21_EHS_Quality_Report.pdf",
+      "bytes": 466837,
+      "sha256": "fbc2df1aedafa329256e9aa411db708d3547f4df397ba560d503c94debca586a",
+      "retrieval": "31 October 2026 acquisition; exact time unavailable unless supported by retained response receipt. Never inferred from file mtime.",
+      "storage": "Unchanged official response bytes; not locally filtered or generated",
+      "response_headers": null
+    }
+  ]
+}
