@@ -9,6 +9,7 @@ Years with no published figure stay empty.
 from .data import YEARS, EARLY_YEARS, AGE_SERIES
 from .html import page, table, details_table, line_chart, source_line, spark, esc, _join
 from . import pages_life as L
+from . import findings as F
 
 LAST = YEARS[-1]
 ALL = EARLY_YEARS + YEARS
@@ -111,13 +112,15 @@ def chart(facts, num, topic):
         items = [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")]
         return _line(facts, num, "Employment rate since 1971, men and women", years, items,
                      "Per cent of people aged 16 to 64 in work, April to June each year, United Kingdom. Before 1992 the survey was not quarterly",
-                     "pct", events=[(years.index(1992), "Quarterly survey from 1992")])
+                     "pct", events=[(years.index(1992), "Quarterly survey from 1992")],
+                     finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.0f} points"))
     if topic == "earnings":
         years = [y for y in ALL if y >= first]
         items = [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")]
         breaks = [(years.index(y), t) for y, t in ((2004, "Method change"), (2006, "Method change"), (2011, "Coding change"), (2021, "Coding change"))]
         return _line(facts, num, "Median full-time weekly pay since 2002, after inflation", years, items,
-                     "£ a week before tax, April each year, in April 2025 prices (CPIH), United Kingdom", "pounds", breaks=breaks)
+                     "£ a week before tax, April each year, in April 2025 prices (CPIH), United Kingdom", "pounds", breaks=breaks,
+                     finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week"))
     if topic == "housing":
         years = list(range(first, 2025))
         def pick(key):
@@ -127,27 +130,27 @@ def chart(facts, num, topic):
         return L.groups_chart(facts, "Owning and renting in England since 1981", items,
                               "Per cent of households in England. Up to 2007 Labour Force Survey, calendar years; from 2008-09 English Housing Survey, survey years, so the lines break there",
                               years=years, breaks=[(years.index(2008), "New survey")], split_breaks=True, ymin=0, kind="pct", num=num,
-                              point_label=lambda y: str(y) if y < 2008 else L.sy(y))
+                              point_label=lambda y: str(y) if y < 2008 else L.sy(y), finding=F.moves(L.TENURE_WORDS, which="first"))
     if topic == "holidays":
         years = list(range(first, 2024))
         items = [("Visits abroad per 100 residents", lambda y: f"hol.ips.per100.{y}", "a")]
         return _line(facts, num, "Visits abroad by UK residents since 1980, per 100 residents", years, items,
                      "Visits abroad for any purpose, per 100 UK residents, January to December, International Passenger Survey", "int", ymin=0,
-                     events=[(years.index(2020), "Covid")])
+                     events=[(years.index(2020), "Covid")], finding=F.trend("Visits abroad per 100 residents", which="all"))
     if topic == "schools":
         years = [y for y in ALL if y >= first]
         items = [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")]
         return _line(facts, num, "Average class size in England since 2006", years, items,
-                     "Pupils per class, January school census, state-funded schools in England", "dp1", ymin=15)
+                     "Pupils per class, January school census, state-funded schools in England", "dp1", ymin=15, finding=L.CLASS_FINDING)
     return ""
 
 
-def _line(facts, num, title, years, items, unit, kind, breaks=(), split=False, ymin=None, events=(), point_label=str):
+def _line(facts, num, title, years, items, unit, kind, breaks=(), split=False, ymin=None, events=(), point_label=str, finding=None):
     series = [(name, [L._val(facts, fid(y)) for y in years], style) for name, fid, style in items]
     ids = [[fid(y) if L._val(facts, fid(y)) is not None else None for y in years] for _, fid, _ in items]
     scale = 1000 if kind == "millions" else 1
     return line_chart(title, [str(y) for y in years], series, unit, breaks=breaks, split_breaks=split, ymin=ymin, scale=scale,
-                      kind=kind, ids=ids, num=num, events=events, point_labels=[point_label(y) for y in years])
+                      kind=kind, ids=ids, num=num, events=events, point_labels=[point_label(y) for y in years], finding=finding)
 
 
 def table_for(facts, num, topic):
@@ -265,7 +268,8 @@ def early_spark(facts, num, topic, y):
     svg = spark(pts, aria, highlight=y, group=group, axis=(first, last), kind=kind)
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
-    cap = (f"<strong>{esc(label)}</strong>, {first} to {last}. The dark dot is {y}: {num(fid(y), kind)}. "
+    split = group if group and len({group(o) for o, _ in pts}) > 1 else None
+    cap = (f"<strong>{esc(label)}</strong>, {first} to {last}. The dark dot is {y}: {num(fid(y), kind)}{F.place(have, y, split)}. "
            f"The scale runs from {num(fid(lo[0]), kind)} ({lo[0]}) to {num(fid(hi[0]), kind)} ({hi[0]}) and does not start at zero.")
     if len(have) < len(pts):
         cap += " Years with no figure have no dot."

@@ -1,6 +1,7 @@
 """Taxes by type since 1948-49, from the OBR's historical public finances database."""
 from .html import FOLD, page, details_table, small_multiples, switch, change_bars, source_line, esc
 from .pages_money import derive
+from . import findings as F
 
 
 # A few words on what a group covers, for the summary.
@@ -43,7 +44,11 @@ def tax_history_page(facts, d, num, sources):
         return small_multiples(f"Public receipts by type, {first} to {last}", [y[:4] for y in years],
                                [(n, [facts[i].value for i in row]) for (k, n), row in zip(groups, ids)],
                                unit + ". Axis years are financial years starting in April of the year shown. Source: OBR historical public finances database.",
-                               "pct", ids=ids, num=num, breaks=breaks, ymin=0, point_labels=years)
+                               "pct", ids=ids, num=num, breaks=breaks, ymin=0, point_labels=years,
+                               # The share view reads every group's trend; the GDP view sums it up, to keep the page within its size limit
+                               summary_note="" if v == "share" else "The second table below gives every group's share of GDP in every year.",
+                               finding=F.within("Income Tax raised between {lo} and {hi} of " + {"share": "all receipts", "gdp": "GDP"}[v] + " in every year from {first} to {last}",
+                                                lambda x: f"{x:.0f}%", si=keys.index("income_tax")))
 
     body.append(switch("Show each group as", [
         ("Share of all receipts", "Each group's share of everything the public sector received that year. A smaller share does not have to mean less money: other receipts may have grown faster.", chart("share")),

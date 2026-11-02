@@ -10,6 +10,7 @@ import math
 import re
 from html import escape
 from . import version, downloads
+from . import findings as F
 
 SITE = "Unpolitical"
 
@@ -102,7 +103,7 @@ figure{margin:16px 0 8px}
 figure.yearspark{margin:4px 0 14px}figure.yearspark figcaption{font-size:.87rem;color:var(--muted);line-height:1.5;margin-top:4px}
 a.card .mini{margin:6px 0 4px}.cards .mini li{border:0;border-radius:0;padding:0}a.card .mini .bars{margin:8px 0 2px}a.card .mini .bars li{margin:0 0 6px}a.card .mini .bars .lab{font-size:.84rem;color:var(--ink2)}a.card .mini .bars .track,a.card .mini .bars .fill{height:8px}
 p.dl{margin:4px 0 12px;font-size:.87rem}p.dl a{display:inline-block;padding:6px 0}
-figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 4px}
+figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 2px}figure .csub{font-size:.86rem;color:var(--muted);margin:0 0 4px}
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
 details.csum{margin:6px 0 0;padding:0 12px;background:var(--soft2);border:0;border-left:3px solid var(--line);border-radius:0;font-size:.92rem}details.csum[open]{padding-bottom:6px}details.csum>summary{min-height:44px;font-size:.9rem;font-weight:500}
 .csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum p{margin:0 0 4px}.csum-note{margin:6px 0 0}
@@ -618,7 +619,7 @@ def details_table(summary, caption, head, rows):
 
 
 def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None, ymin=None, ymax=None, height=240, desc="", scale=1, split_breaks=False,
-               kind=None, ids=None, num=None, events=(), point_labels=None, future="forecast"):
+               kind=None, ids=None, num=None, events=(), point_labels=None, future="forecast", finding=None):
     """Inline SVG line chart.
 
     labels: list of x labels. series: list of (name, values list (None = gap), style 'a'|'b').
@@ -633,8 +634,11 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     ids: one list of fact ids per series, so the summary's numbers are traceable figures
     (needs num). point_labels: longer names for each point used in the summary and readout,
     such as "2008-09" where the axis shows "2008".
+    finding: a rule from builder/findings.py (or a string) that states what the chart
+    shows. It becomes the chart's heading and title moves beneath it as a subtitle.
     """
     raw = series
+    heading = _finding(finding, point_labels or labels, [(nm, vals) for nm, vals, _ in series], breaks, split_breaks, forecast_from)
     W, H = 400, round(height * 400 / 480) + 20
     direct = len(series) <= 3 and all(len(nm) <= 26 for nm, _, _ in series) and len(series) > 1
     L, R, T, B = 44, 8, 14, 30
@@ -746,7 +750,8 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         parts.extend(_end_labels(series, x, y, T, H - B))
     elif len(series) == 1 and kind:
         parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T))
-    label = f"{title}. {desc}" if desc else title
+    label = f"{heading}. {title}." if heading else f"{title}."
+    label += f" {desc}" if desc else ""
     attrs = ""
     summary = ""
     if kind:
@@ -758,7 +763,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         attrs = _chart_attr(read)
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks,
                                 forecast_from=forecast_from, events=events, future=future)
-    svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value."{attrs}>'
+    svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label.replace("..", "."))} The table below gives every value."{attrs}>'
            + "".join(parts) + "</svg>")
     if not kind:  # no readout data, so the figures travel to the CSV download in a comment
         plabels = list(point_labels or labels)
@@ -769,7 +774,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if forecast_from is not None:
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title)}{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
 
 _SW_COUNT = [0]
@@ -854,7 +859,7 @@ def _lower_first(text):
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
-                    ymin=None, scale=1, point_labels=None, desc="", summary_note=""):
+                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None):
     """One small line chart per group, so no group is hidden behind a key.
 
     Used instead of line_chart() when more than three groups matter. Every panel
@@ -869,9 +874,12 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     point_labels work as in line_chart(): one "What the chart shows" summary for
     all groups and one tap/hover/arrow readout that marks the year in every panel.
     summary_note: where a table right beside the chart already gives each group's
-    first and latest figures, say so in this sentence instead of repeating them.
+    first and latest figures, say so in this sentence instead of repeating them; a
+    sentence comparing every group's first and latest figure is added after it.
+    finding: as in line_chart().
     """
     raw = [(nm, vals, "a") for nm, vals in series]
+    heading = _finding(finding, point_labels or labels, series, breaks, split_breaks, None)
     scaled = [[None if v is None else v / scale for v in vals] for _, vals in series]
     W, H = 180, 120
     L, R, T, B = 34, 6, 18, 22
@@ -955,15 +963,17 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     names = [nm for nm, _ in series]
     rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals in series] for i in range(n)]
     read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows, "fc": None}
-    label = f"{title}. {desc} " if desc else f"{title}. "
+    label = (f"{heading}. " if heading else "") + f"{title}. " + (f"{desc} " if desc else "")
     grid = (f'<div class="sm" role="group" aria-label="{esc(label)}One small chart for each of {len(series)} groups, all on the same scale. The summary and table below give every value."'
             f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
     key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
     if summary_note:
-        summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{summary_note}</p></details>'
+        a, b = _stretches(n, breaks if split_breaks else (), None)[-1]
+        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i))
+        summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{over} {summary_note}</p></details>'
     else:
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
-    return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title)}{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
 
 def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
@@ -985,47 +995,56 @@ def _stretches(n, breaks, forecast_from):
     return [(edges[k], edges[k + 1]) for k in range(len(edges) - 1) if edges[k + 1] > edges[k]]
 
 
+def _finding(rule, labels, series, breaks, split_breaks, forecast_from):
+    """The chart's finding as a sentence, from a rule in builder/findings.py."""
+    if not rule:
+        return ""
+    if isinstance(rule, str):
+        return rule
+    stretches = _stretches(len(labels), breaks if split_breaks else (), forecast_from)
+    return rule([str(v) for v in labels], series, stretches) if stretches else ""
+
+
+def _titles(heading, title):
+    """The finding as the chart's heading, with what the chart measures beneath it."""
+    if not heading:
+        return f'<p class="ctitle" aria-hidden="true">{esc(title)}</p>'
+    return f'<p class="ctitle" aria-hidden="true">{esc(heading)}</p><p class="csub" aria-hidden="true">{esc(title)}</p>'
+
+
+def _show(series, ids, num, kind, si, i):
+    vals = series[si][1]
+    if ids and num and ids[si][i]:
+        return num(ids[si][i], kind)
+    return esc(fmt(vals[i], kind))
+
+
 CSUM_LABEL = "What the chart shows, in words"
 
 
 def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast",
                   extremes=True):
-    """A plain-English reading of a line chart: for each line, the first and latest
-    values, the highest and lowest, and any missing years. Built from the same values
+    """A plain-English reading of a line chart: for each line, whether it rose, fell,
+    peaked or changed little, with the first, latest and any turning-point values,
+    the highest and lowest, and any missing years. Built from the same values
     as the chart. Nothing is compared across a definition break the chart splits at,
     and forecasts are kept apart from measured years. extremes=False leaves out the
     highest and lowest, for small multiples with many groups, where each panel shows them.
     """
     def show(si, i):
-        vals = series[si][1]
-        if ids and num and ids[si][i]:
-            return num(ids[si][i], kind)
-        return esc(fmt(vals[i], kind))
+        return _show(series, ids, num, kind, si, i)
 
     items = []
     spans = _stretches(len(labels), breaks, forecast_from)
     for si, (name, vals, _) in enumerate(series):
         parts = []
         for a, b in spans:
-            pts = [i for i in range(a, b) if vals[i] is not None]
-            if not pts:
+            text = F.sentence([esc(str(v)) for v in labels], vals, lambda i: show(si, i), a, b, extremes=extremes)
+            if not text:
                 continue
-            first, last = pts[0], pts[-1]
-            lead = f"{esc(labels[first])} to {esc(labels[last])}: " if len(spans) > 1 else ""
-            if first == last:
-                parts.append(f"{lead}{show(si, first)} in {esc(labels[first])}.")
-                continue
-            text = f"{lead}{show(si, first)} in {esc(labels[first])} and {show(si, last)} in {esc(labels[last])}."
-            if extremes and len(pts) >= 3:
-                hi = max(pts, key=lambda i: (vals[i], i))
-                lo = min(pts, key=lambda i: (vals[i], -i))
-                extra = []
-                if hi not in (first, last):
-                    extra.append(f"highest {show(si, hi)} ({esc(labels[hi])})")
-                if lo not in (first, last):
-                    extra.append(f"lowest {show(si, lo)} ({esc(labels[lo])})")
-                if extra:
-                    text += " In between: " + " and ".join(extra) + "."
+            first, last = F.measured(vals, a, b)[0], F.measured(vals, a, b)[-1]
+            if len(spans) > 1:
+                text = f"{esc(labels[first])} to {esc(labels[last])}: {F.lower_first(text)}"
             gaps = [labels[i] for i in range(first, last + 1) if vals[i] is None]
             if gaps:
                 text += f" No figure for {esc(_join(gaps))}."
@@ -1035,8 +1054,10 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
             if fpts:
                 parts.append(f"{future.capitalize()} for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}.")
         if parts:
-            who = f"<strong>{esc(name)}</strong>: " if len(series) > 1 else ""
-            items.append(f"<li>{who}{' '.join(parts)}</li>")
+            text = " ".join(parts)
+            if len(series) > 1:
+                text = f"<strong>{esc(name)}</strong>: {F.lower_first(text)}"
+            items.append(f"<li>{text}</li>")
     notes = []
     for i, text in breaks:
         if split_breaks:

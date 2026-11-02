@@ -49,8 +49,7 @@ class Charts(unittest.TestCase):
     def test_summary_reads_first_latest_high_low_and_gaps(self):
         svg = line_chart("t", ["2018", "2019", "2020", "2021", "2022"], [("a", [5.0, 9.0, None, 2.0, 4.0], "a")], "u", kind="pct")
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("5.0% in 2018 and 4.0% in 2022", text)
-        self.assertIn("highest 9.0% (2019)", text)
+        self.assertIn("Rose from 5.0% in 2018 to a high of 9.0% in 2019, then fell to 4.0% in 2022", text)
         self.assertIn("lowest 2.0% (2021)", text)
         self.assertIn("No figure for 2020", text)
 
@@ -58,14 +57,14 @@ class Charts(unittest.TestCase):
         svg = line_chart("t", ["1", "2", "3", "4", "5", "6"], [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")], "u",
                          breaks=[(3, "New method")], kind="dp1")
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("1 to 3: 1.0 in 1 and 2.0 in 3", text)
-        self.assertIn("4 to 6: 3.0 in 4 and 4.0 in 6", text)
+        self.assertIn("1 to 3: rose from 1.0 in 1 to a high of 9.0 in 2, then fell to 2.0 in 3", text)
+        self.assertIn("4 to 6: fell from 3.0 in 4 to a low of 0.5 in 5, then rose to 4.0 in 6", text)
         self.assertNotIn("9.0 in 1", text)
 
     def test_summary_keeps_forecasts_apart(self):
         svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 99.0], "a")], "u", forecast_from=3, kind="dp1")
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("1.0 in 1 and 3.0 in 3", text)
+        self.assertIn("Rose from 1.0 in 1 to 3.0 in 3", text)
         self.assertIn("Forecast for 4: 99.0", text)
         self.assertIn("forecasts, not measurements", text)
 
@@ -81,7 +80,7 @@ class Charts(unittest.TestCase):
     def test_events_do_not_split_the_summary(self):
         svg = line_chart("t", ["1", "2", "3"], [("a", [1.0, 5.0, 2.0], "a")], "u", events=[(1, "Covid")], kind="dp1")
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("1.0 in 1 and 2.0 in 3", text)
+        self.assertIn("Rose from 1.0 in 1 to a high of 5.0 in 2, then fell to 2.0 in 3", text)
         self.assertIn("not what it caused", text)
 
     def test_chart_has_text_alternative(self):
@@ -96,6 +95,51 @@ class ChartMarks(unittest.TestCase):
         out = hide_chart_marks('<svg role="img" aria-label="x"><text>0</text></svg><svg><text>a</text></svg>')
         self.assertEqual(out, '<svg role="img" aria-label="x"><g aria-hidden="true"><text>0</text></g></svg><svg><text>a</text></svg>')
         self.assertEqual(hide_chart_marks(out), out)  # running twice changes nothing
+
+
+class Findings(unittest.TestCase):
+    """Chart titles state the finding, worked out from the chart's own values."""
+    L = ["2008", "2009", "2010", "2011", "2012", "2013"]
+
+    def test_shapes(self):
+        from builder.findings import phrase
+        self.assertEqual(phrase(self.L, [1, 2, 3, 4, 5, 6]), "rose between 2008 and 2013")
+        self.assertEqual(phrase(self.L, [6, 5, 4, 3, 2, 1]), "fell between 2008 and 2013")
+        self.assertEqual(phrase(self.L, [5, 5.05, 4.97, 5, 5.04, 5.01]), "changed little between 2008 and 2013")
+        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.1]), "rose until 2010, then fell back to about the 2008 level")
+        self.assertEqual(phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way")
+        self.assertEqual(phrase(self.L, [4, 4, 4, 4, 4, 4]), "stayed the same from 2008 to 2013")
+
+    def test_missing_years_are_skipped_not_zero(self):
+        from builder.findings import phrase
+        self.assertEqual(phrase(self.L, [None, 2, None, 4, 5, None]), "rose between 2009 and 2012")
+
+    def test_title_and_subtitle(self):
+        from builder import findings as F
+        svg = line_chart("Things, 2008 to 2013", self.L, [("a", [1, 2, 3, 4, 5, 6], "a")], "u", kind="dp1", finding=F.trend("Things"))
+        self.assertIn('<p class="ctitle" aria-hidden="true">Things rose between 2008 and 2013</p>', svg)
+        self.assertIn('<p class="csub" aria-hidden="true">Things, 2008 to 2013</p>', svg)
+        self.assertIn('aria-label="Things rose between 2008 and 2013. Things, 2008 to 2013.', svg)
+
+    def test_title_does_not_reach_across_a_split_break_or_into_forecasts(self):
+        from builder import findings as F
+        svg = line_chart("t", self.L, [("a", [9, 8, 1, 2, 3, 99], "a")], "u", kind="dp1", breaks=[(2, "New method")], split_breaks=True,
+                         forecast_from=5, finding=F.trend("A"))
+        self.assertIn(">A rose between 2010 and 2012<", svg)
+
+    def test_gap_and_leader(self):
+        from builder import findings as F
+        series = [("Men", [5, 6, 7]), ("Women", [3, 4, 6])]
+        st = [(0, 3)]
+        self.assertEqual(F.gap("Men's rate", "women's")(self.L, series, st), "Men's rate was higher than women's in every year from 2008 to 2010")
+        self.assertEqual(F.leader("{name} was highest {span}")(self.L, series, st), "Men was highest in every year from 2008 to 2010")
+
+    def test_overview_counts_groups(self):
+        fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0]), ("East", [7.0, 8.0, 9.0])], "u", "dp1",
+                              summary_note="The table gives every figure.")
+        text = re.sub(r"<[^>]+>", "", fig)
+        self.assertIn("Comparing 1 with 3, 2 of the 3 shown were higher and 1 of the 3 shown was lower.", text)
+        self.assertIn("The largest rise was North (1.0 to 4.0); the largest fall was South (4.0 to 3.0).", text)
 
 
 class SmallMultiples(unittest.TestCase):

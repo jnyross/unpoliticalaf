@@ -1,0 +1,2528 @@
+{
+ "meta": {
+  "seed": 20261102,
+  "population": 9723,
+  "headline_population": 2599,
+  "commit": "497795e35fa9761ce9245cf0a1bbc98354d2e1c7"
+ },
+ "items": [
+  {
+   "n": 1,
+   "group": "random",
+   "id": "work.occshare.SOC2010.9000000.2021",
+   "page": "life/2021.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "9.5%",
+   "value": 9.486995141657562,
+   "unit": "% of people in work",
+   "period": "January to December 2021",
+   "status": "calculated",
+   "formula": "100 × work.occ.SOC2010.9000000.2021 ÷ work.occ.SOC2010.0.2021",
+   "calc": {
+    "work.occshare.SOC2010.9000000.2021": {
+     "formula": "100 × work.occ.SOC2010.9000000.2021 ÷ work.occ.SOC2010.0.2021",
+     "inputs": [
+      "work.occ.SOC2010.9000000.2021",
+      "work.occ.SOC2010.0.2021"
+     ],
+     "value": 9.486995141657562
+    }
+   },
+   "cells": [
+    {
+     "id": "work.occ.SOC2010.9000000.2021",
+     "value": 3048200.0,
+     "unit": "people",
+     "period": "January to December 2021",
+     "source": "aps2010",
+     "locator": "aps210-uk-calendar-annual.csv line 620",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps210-uk-calendar-annual.csv",
+     "sha256": "9bd1e5427dab27003f08b2fde0c7b8df85717e0acaf221093ccc941ccacce285",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2010), January to December"
+    },
+    {
+     "id": "work.occ.SOC2010.0.2021",
+     "value": 32130300.0,
+     "unit": "people",
+     "period": "January to December 2021",
+     "source": "aps2010",
+     "locator": "aps210-uk-calendar-annual.csv line 602",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps210-uk-calendar-annual.csv",
+     "sha256": "9bd1e5427dab27003f08b2fde0c7b8df85717e0acaf221093ccc941ccacce285",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2010), January to December"
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "group": "random",
+   "id": "avg.work.women.2009-2011",
+   "page": "life/compare/spans/2009-2011-and-2012-2014.html",
+   "pages": 30,
+   "kind": "pct",
+   "text": "65.5%",
+   "value": 65.53333333333335,
+   "unit": "%",
+   "period": "average of Apr–Jun 2009 to Apr–Jun 2011",
+   "status": "calculated",
+   "formula": "(work.women.2009 + work.women.2010 + work.women.2011) ÷ 3",
+   "calc": {
+    "avg.work.women.2009-2011": {
+     "formula": "(work.women.2009 + work.women.2010 + work.women.2011) ÷ 3",
+     "inputs": [
+      "work.women.2009",
+      "work.women.2010",
+      "work.women.2011"
+     ],
+     "value": 65.53333333333335
+    }
+   },
+   "cells": [
+    {
+     "id": "work.women.2009",
+     "value": 65.7,
+     "unit": "%",
+     "period": "April to June 2009",
+     "source": "ons-lf25",
+     "locator": "LF25 row '2009 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "file": "data/fetched/ons/lf25.csv",
+     "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: female employment rate, aged 16 to 64 (LF25)"
+    },
+    {
+     "id": "work.women.2010",
+     "value": 65.5,
+     "unit": "%",
+     "period": "April to June 2010",
+     "source": "ons-lf25",
+     "locator": "LF25 row '2010 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "file": "data/fetched/ons/lf25.csv",
+     "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: female employment rate, aged 16 to 64 (LF25)"
+    },
+    {
+     "id": "work.women.2011",
+     "value": 65.4,
+     "unit": "%",
+     "period": "April to June 2011",
+     "source": "ons-lf25",
+     "locator": "LF25 row '2011 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "file": "data/fetched/ons/lf25.csv",
+     "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: female employment rate, aged 16 to 64 (LF25)"
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "group": "random",
+   "id": "rec.gdp.vat.2014-15",
+   "page": "taxes.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "5.9%",
+   "value": 5.8882037843053965,
+   "unit": "% of GDP",
+   "period": "2014-15",
+   "status": "calculated",
+   "formula": "100 × rec.vat.2014-15 ÷ agg.gdpcash.2014-15",
+   "calc": {
+    "rec.gdp.vat.2014-15": {
+     "formula": "100 × rec.vat.2014-15 ÷ agg.gdpcash.2014-15",
+     "inputs": [
+      "rec.vat.2014-15",
+      "agg.gdpcash.2014-15"
+     ],
+     "value": 5.8882037843053965
+    }
+   },
+   "cells": [
+    {
+     "id": "rec.vat.2014-15",
+     "value": 111.176,
+     "unit": "£bn",
+     "period": "2014-15",
+     "source": "obr",
+     "locator": "Receipts (£bn)!C22",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "agg.gdpcash.2014-15",
+     "value": 1888.114,
+     "unit": "£bn",
+     "period": "2014-15",
+     "source": "obr-prices",
+     "locator": "Aggregates (£bn)!AE76",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "group": "random",
+   "id": "gdp.tme.1957-58",
+   "page": "taxes.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "35.2%",
+   "value": 35.19012082444918,
+   "unit": "% of GDP",
+   "period": "1957-58",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "gdp.tme.1957-58",
+     "value": 35.19012082444918,
+     "unit": "% of GDP",
+     "period": "1957-58",
+     "source": "obr",
+     "locator": "Aggregates (per cent of GDP)!D14",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "group": "random",
+   "id": "etbh.pall.1977.all",
+   "page": "household-tax.html",
+   "pages": 4,
+   "kind": "pct",
+   "text": "38.1%",
+   "value": 38.072601555747625,
+   "unit": "% of gross household income",
+   "period": "1977",
+   "status": "calculated",
+   "formula": "100 × (etbh.direct.1977.all + etbh.indirect.1977.all) ÷ etbh.gross.1977.all",
+   "calc": {
+    "etbh.pall.1977.all": {
+     "formula": "100 × (etbh.direct.1977.all + etbh.indirect.1977.all) ÷ etbh.gross.1977.all",
+     "inputs": [
+      "etbh.direct.1977.all",
+      "etbh.indirect.1977.all",
+      "etbh.gross.1977.all"
+     ],
+     "value": 38.072601555747625
+    }
+   },
+   "cells": [
+    {
+     "id": "etbh.direct.1977.all",
+     "value": 1060.0,
+     "unit": "£ a year per household",
+     "period": "1977",
+     "source": "etb-hist-quintile-all",
+     "locator": "1977!G51",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    },
+    {
+     "id": "etbh.indirect.1977.all",
+     "value": 702.0,
+     "unit": "£ a year per household",
+     "period": "1977",
+     "source": "etb-hist-quintile-all",
+     "locator": "1977!G78",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    },
+    {
+     "id": "etbh.gross.1977.all",
+     "value": 4628.0,
+     "unit": "£ a year per household",
+     "period": "1977",
+     "source": "etb-hist-quintile-all",
+     "locator": "1977!G44",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "group": "random",
+   "id": "spend.cash.order.2022-23",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£44.2bn",
+   "value": 44.2,
+   "unit": "£bn",
+   "period": "2022-23",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.cash.order.2022-23",
+     "value": 44.2,
+     "unit": "£bn",
+     "period": "2022-23",
+     "source": "pesa4",
+     "locator": "4_2!U11",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "group": "random",
+   "id": "avg.school.primary.2011-2013",
+   "page": "life/compare/spans/2008-2010-and-2011-2013.html",
+   "pages": 44,
+   "kind": "dp1",
+   "text": "26.7",
+   "value": 26.733333333333334,
+   "unit": "pupils per class",
+   "period": "average of January 2011 to January 2013",
+   "status": "calculated",
+   "formula": "(school.primary.2011 + school.primary.2012 + school.primary.2013) ÷ 3",
+   "calc": {
+    "avg.school.primary.2011-2013": {
+     "formula": "(school.primary.2011 + school.primary.2012 + school.primary.2013) ÷ 3",
+     "inputs": [
+      "school.primary.2011",
+      "school.primary.2012",
+      "school.primary.2013"
+     ],
+     "value": 26.733333333333334
+    }
+   },
+   "cells": [
+    {
+     "id": "school.primary.2011",
+     "value": 26.6,
+     "unit": "pupils per class",
+     "period": "January 2011 census (2010/11 school year)",
+     "source": "dfe-spc-2015-tables",
+     "locator": "Table 6b!O11",
+     "scale": 1,
+     "status": "published",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "file": "data/fetched/dfe/spc-2015-national-tables.xlsx",
+     "sha256": "334839c1205fb5dee49eb6e76bceaa52a875a6789b3703ed017c9cb7d429b07f",
+     "publisher": "Department for Education",
+     "title": "Schools, pupils and their characteristics: January 2015, national tables (SFR16/2015)"
+    },
+    {
+     "id": "school.primary.2012",
+     "value": 26.8,
+     "unit": "pupils per class",
+     "period": "January 2012 census (2011/12 school year)",
+     "source": "dfe-spc-2015-tables",
+     "locator": "Table 6b!Q11",
+     "scale": 1,
+     "status": "published",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "file": "data/fetched/dfe/spc-2015-national-tables.xlsx",
+     "sha256": "334839c1205fb5dee49eb6e76bceaa52a875a6789b3703ed017c9cb7d429b07f",
+     "publisher": "Department for Education",
+     "title": "Schools, pupils and their characteristics: January 2015, national tables (SFR16/2015)"
+    },
+    {
+     "id": "school.primary.2013",
+     "value": 26.8,
+     "unit": "pupils per class",
+     "period": "January 2013 census (2012/13 school year)",
+     "source": "dfe-spc-2015-tables",
+     "locator": "Table 6b!S11",
+     "scale": 1,
+     "status": "published",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "file": "data/fetched/dfe/spc-2015-national-tables.xlsx",
+     "sha256": "334839c1205fb5dee49eb6e76bceaa52a875a6789b3703ed017c9cb7d429b07f",
+     "publisher": "Department for Education",
+     "title": "Schools, pupils and their characteristics: January 2015, national tables (SFR16/2015)"
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "group": "random",
+   "id": "hist.real.debt.1974-75",
+   "page": "spending-history.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£25.9bn",
+   "value": 25.863195250659636,
+   "unit": "£bn (2025-26 prices)",
+   "period": "1974-75",
+   "status": "calculated",
+   "formula": "hist.cash.debt.1974-75 × 100 ÷ agg.deflator.1974-75",
+   "calc": {
+    "hist.real.debt.1974-75": {
+     "formula": "hist.cash.debt.1974-75 × 100 ÷ agg.deflator.1974-75",
+     "inputs": [
+      "hist.cash.debt.1974-75",
+      "agg.deflator.1974-75"
+     ],
+     "value": 25.863195250659636
+    }
+   },
+   "cells": [
+    {
+     "id": "hist.cash.debt.1974-75",
+     "value": 2.257,
+     "unit": "£bn",
+     "period": "1974-75",
+     "source": "obrhist-amounts",
+     "locator": "Spending (£m)!M281",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: spending by purpose in £ and after inflation"
+    },
+    {
+     "id": "agg.deflator.1974-75",
+     "value": 8.726686622150586,
+     "unit": "index, 2025-26 = 100",
+     "period": "1974-75",
+     "source": "obr-prices",
+     "locator": "Aggregates (£bn)!AH36",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "group": "random",
+   "id": "spend.cash.economic.2006-07",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£37.4bn",
+   "value": 37.4,
+   "unit": "£bn",
+   "period": "2006-07",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.cash.economic.2006-07",
+     "value": 37.4,
+     "unit": "£bn",
+     "period": "2006-07",
+     "source": "pesa4",
+     "locator": "4_2!E12",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "group": "random",
+   "id": "thist.share.council.1953-54",
+   "page": "tax-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "2.8%",
+   "value": 2.8391167192429023,
+   "unit": "% of all public sector receipts",
+   "period": "1953-54",
+   "status": "calculated",
+   "formula": "100 × thist.cash.council.1953-54 ÷ thist.cash.total.1953-54",
+   "calc": {
+    "thist.share.council.1953-54": {
+     "formula": "100 × thist.cash.council.1953-54 ÷ thist.cash.total.1953-54",
+     "inputs": [
+      "thist.cash.council.1953-54",
+      "thist.cash.total.1953-54"
+     ],
+     "value": 2.8391167192429023
+    }
+   },
+   "cells": [
+    {
+     "id": "thist.cash.council.1953-54",
+     "value": 0.18,
+     "unit": "£bn",
+     "period": "1953-54",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!W260",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    },
+    {
+     "id": "thist.cash.total.1953-54",
+     "value": 6.34,
+     "unit": "£bn",
+     "period": "1953-54",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!Y260",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "group": "random",
+   "id": "spread.p50.2009",
+   "page": "life/earnings.html",
+   "pages": 1,
+   "kind": "pounds",
+   "text": "£488",
+   "value": 488.5,
+   "unit": "£ a week",
+   "period": "April 2009",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spread.p50.2009",
+     "value": 488.5,
+     "unit": "£ a week",
+     "period": "April 2009",
+     "source": "nomis-ashe-percentiles",
+     "locator": "ashe-resident-uk-weekly-percentiles.csv line 454",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-weekly-percentiles.csv",
+     "sha256": "fe8cac45c2c7ae15552192928dd242e0ce770ed5197568b41e3e968772a657cf",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: gross weekly pay of full-time employees at the 10th, 50th (median) and 90th percentiles"
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "group": "random",
+   "id": "hist.gdp.social.1996-97",
+   "page": "spending-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "10.3%",
+   "value": 10.290635289568522,
+   "unit": "% of GDP",
+   "period": "1996-97",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hist.gdp.social.1996-97",
+     "value": 10.290635289568522,
+     "unit": "% of GDP",
+     "period": "1996-97",
+     "source": "obrhist",
+     "locator": "Spending (per cent of GDP)!I303",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database (300 years of tax, spending, borrowing and debt)"
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "group": "random",
+   "id": "hist.gdp.health.1955-56",
+   "page": "spending-history.html",
+   "pages": 4,
+   "kind": "pct",
+   "text": "2.8%",
+   "value": 2.8045017375432972,
+   "unit": "% of GDP",
+   "period": "1955-56",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hist.gdp.health.1955-56",
+     "value": 2.8045017375432972,
+     "unit": "% of GDP",
+     "period": "1955-56",
+     "source": "obrhist",
+     "locator": "Spending (per cent of GDP)!H262",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database (300 years of tax, spending, borrowing and debt)"
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "group": "random",
+   "id": "work.men.2005",
+   "page": "life/2005.html",
+   "pages": 56,
+   "kind": "pct",
+   "text": "79.1%",
+   "value": 79.1,
+   "unit": "%",
+   "period": "April to June 2005",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "work.men.2005",
+     "value": 79.1,
+     "unit": "%",
+     "period": "April to June 2005",
+     "source": "ons-mgsv",
+     "locator": "MGSV row '2005 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms",
+     "file": "data/fetched/ons/mgsv.csv",
+     "sha256": "9d2008ed9769b8f4d80cc26d81dce4861b39d32a327319cccc4428503ffcb6fe",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: male employment rate, aged 16 to 64 (MGSV)"
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "group": "random",
+   "id": "spend.cash.education.2019-20",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£90.6bn",
+   "value": 90.6,
+   "unit": "£bn",
+   "period": "2019-20",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.cash.education.2019-20",
+     "value": 90.6,
+     "unit": "£bn",
+     "period": "2019-20",
+     "source": "pesa4",
+     "locator": "4_2!R22",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 16,
+   "group": "random",
+   "id": "work.occshare.SOC2010.7000000.2019",
+   "page": "life/2019.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "7.3%",
+   "value": 7.277833660941975,
+   "unit": "% of people in work",
+   "period": "January to December 2019",
+   "status": "calculated",
+   "formula": "100 × work.occ.SOC2010.7000000.2019 ÷ work.occ.SOC2010.0.2019",
+   "calc": {
+    "work.occshare.SOC2010.7000000.2019": {
+     "formula": "100 × work.occ.SOC2010.7000000.2019 ÷ work.occ.SOC2010.0.2019",
+     "inputs": [
+      "work.occ.SOC2010.7000000.2019",
+      "work.occ.SOC2010.0.2019"
+     ],
+     "value": 7.277833660941975
+    }
+   },
+   "cells": [
+    {
+     "id": "work.occ.SOC2010.7000000.2019",
+     "value": 2365900.0,
+     "unit": "people",
+     "period": "January to December 2019",
+     "source": "aps2010",
+     "locator": "aps210-uk-calendar-annual.csv line 496",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps210-uk-calendar-annual.csv",
+     "sha256": "9bd1e5427dab27003f08b2fde0c7b8df85717e0acaf221093ccc941ccacce285",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2010), January to December"
+    },
+    {
+     "id": "work.occ.SOC2010.0.2019",
+     "value": 32508300.0,
+     "unit": "people",
+     "period": "January to December 2019",
+     "source": "aps2010",
+     "locator": "aps210-uk-calendar-annual.csv line 482",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps210-uk-calendar-annual.csv",
+     "sha256": "9bd1e5427dab27003f08b2fde0c7b8df85717e0acaf221093ccc941ccacce285",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2010), January to December"
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "group": "random",
+   "id": "spend.real.environment.2024-25",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£17.8bn",
+   "value": 17.8,
+   "unit": "£bn (2025-26 prices)",
+   "period": "2024-25",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.real.environment.2024-25",
+     "value": 17.8,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2024-25",
+     "source": "pesa4",
+     "locator": "4_3!W18",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 18,
+   "group": "random",
+   "id": "work.women.2009",
+   "page": "life/2009.html",
+   "pages": 76,
+   "kind": "pct",
+   "text": "65.7%",
+   "value": 65.7,
+   "unit": "%",
+   "period": "April to June 2009",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "work.women.2009",
+     "value": 65.7,
+     "unit": "%",
+     "period": "April to June 2009",
+     "source": "ons-lf25",
+     "locator": "LF25 row '2009 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "file": "data/fetched/ons/lf25.csv",
+     "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: female employment rate, aged 16 to 64 (LF25)"
+    }
+   ]
+  },
+  {
+   "n": 19,
+   "group": "random",
+   "id": "jobs.share.C.1989",
+   "page": "life/1989.html",
+   "pages": 56,
+   "kind": "pct",
+   "text": "17.3%",
+   "value": 17.32245516196771,
+   "unit": "% of all workforce jobs",
+   "period": "June 1989",
+   "status": "calculated",
+   "formula": "100 × jobs.ind.C.1989 ÷ jobs.total.1989",
+   "calc": {
+    "jobs.share.C.1989": {
+     "formula": "100 × jobs.ind.C.1989 ÷ jobs.total.1989",
+     "inputs": [
+      "jobs.ind.C.1989",
+      "jobs.total.1989"
+     ],
+     "value": 17.32245516196771
+    }
+   },
+   "cells": [
+    {
+     "id": "jobs.ind.C.1989",
+     "value": 5032.0,
+     "unit": "thousand jobs",
+     "period": "June 1989",
+     "source": "ons-jobs02",
+     "locator": "WFJ SA!E50",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "file": "data/fetched/ons/jobs02.xls",
+     "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+     "publisher": "Office for National Statistics",
+     "title": "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted"
+    },
+    {
+     "id": "jobs.total.1989",
+     "value": 29049.0,
+     "unit": "thousand jobs",
+     "period": "June 1989",
+     "source": "ons-jobs02",
+     "locator": "WFJ SA!X50",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "file": "data/fetched/ons/jobs02.xls",
+     "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+     "publisher": "Office for National Statistics",
+     "title": "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted"
+    }
+   ]
+  },
+  {
+   "n": 20,
+   "group": "random",
+   "id": "hist.gdp.total.1980-81",
+   "page": "spending-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "42.9%",
+   "value": 42.87582822911256,
+   "unit": "% of GDP",
+   "period": "1980-81",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hist.gdp.total.1980-81",
+     "value": 42.87582822911256,
+     "unit": "% of GDP",
+     "period": "1980-81",
+     "source": "obrhist",
+     "locator": "Spending (per cent of GDP)!D287",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database (300 years of tax, spending, borrowing and debt)"
+    }
+   ]
+  },
+  {
+   "n": 21,
+   "group": "random",
+   "id": "work.age.25_34.2005",
+   "page": "life/2005.html",
+   "pages": 55,
+   "kind": "pct",
+   "text": "80.0%",
+   "value": 80.0,
+   "unit": "%",
+   "period": "April to June 2005",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "work.age.25_34.2005",
+     "value": 80.0,
+     "unit": "%",
+     "period": "April to June 2005",
+     "source": "ons-ybug",
+     "locator": "YBUG row '2005 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+     "file": "data/fetched/ons/ybug.csv",
+     "sha256": "fb818e40eb9e4c8448835294a71627a6d3da99e90aaf4a9d6302004ecbd0cc82",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: employment rate, aged 25 to 34 (YBUG)"
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "group": "random",
+   "id": "thist.gdp.other.2010-11",
+   "page": "tax-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "7.8%",
+   "value": 7.831158301205658,
+   "unit": "% of GDP",
+   "period": "2010-11",
+   "status": "calculated",
+   "formula": "thist.gdp.total.2010-11 − sum of the six named groups",
+   "calc": {
+    "thist.gdp.other.2010-11": {
+     "formula": "thist.gdp.total.2010-11 − sum of the six named groups",
+     "inputs": [
+      "thist.gdp.total.2010-11",
+      "thist.gdp.income_tax.2010-11",
+      "thist.gdp.nics.2010-11",
+      "thist.gdp.vat.2010-11",
+      "thist.gdp.duties.2010-11",
+      "thist.gdp.corp.2010-11",
+      "thist.gdp.council.2010-11"
+     ],
+     "value": 7.831158301205658
+    }
+   },
+   "cells": [
+    {
+     "id": "thist.gdp.total.2010-11",
+     "value": 37.00819516287901,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!Y317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.income_tax.2010-11",
+     "value": 9.398861926041139,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!C317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.nics.2010-11",
+     "value": 5.995005133476523,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!D317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.vat.2010-11",
+     "value": 6.212058579284307,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!Q317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.duties.2010-11",
+     "value": 3.3089150762293666,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!R317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.corp.2010-11",
+     "value": 2.694369858090347,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!I317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    },
+    {
+     "id": "thist.gdp.council.2010-11",
+     "value": 1.5678262885516727,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!W317",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    }
+   ]
+  },
+  {
+   "n": 23,
+   "group": "random",
+   "id": "avg.work.level.2021-2023",
+   "page": "life/compare/spans/2008-2010-and-2021-2023.html",
+   "pages": 23,
+   "kind": "millions_people",
+   "text": "32.9 million",
+   "value": 32923.333333333336,
+   "unit": "thousands",
+   "period": "average of Apr–Jun 2021 to Apr–Jun 2023",
+   "status": "calculated",
+   "formula": "(work.level.2021 + work.level.2022 + work.level.2023) ÷ 3",
+   "calc": {
+    "avg.work.level.2021-2023": {
+     "formula": "(work.level.2021 + work.level.2022 + work.level.2023) ÷ 3",
+     "inputs": [
+      "work.level.2021",
+      "work.level.2022",
+      "work.level.2023"
+     ],
+     "value": 32923.333333333336
+    }
+   },
+   "cells": [
+    {
+     "id": "work.level.2021",
+     "value": 32443.0,
+     "unit": "thousands",
+     "period": "April to June 2021",
+     "source": "ons-mgrz",
+     "locator": "MGRZ row '2021 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "file": "data/fetched/ons/mgrz.csv",
+     "sha256": "55402f458931c41b131e1a66ba282c8725007214a25a140eaabe108a439e2598",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: people in employment aged 16 and over (MGRZ)"
+    },
+    {
+     "id": "work.level.2022",
+     "value": 32992.0,
+     "unit": "thousands",
+     "period": "April to June 2022",
+     "source": "ons-mgrz",
+     "locator": "MGRZ row '2022 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "file": "data/fetched/ons/mgrz.csv",
+     "sha256": "55402f458931c41b131e1a66ba282c8725007214a25a140eaabe108a439e2598",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: people in employment aged 16 and over (MGRZ)"
+    },
+    {
+     "id": "work.level.2023",
+     "value": 33335.0,
+     "unit": "thousands",
+     "period": "April to June 2023",
+     "source": "ons-mgrz",
+     "locator": "MGRZ row '2023 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "file": "data/fetched/ons/mgrz.csv",
+     "sha256": "55402f458931c41b131e1a66ba282c8725007214a25a140eaabe108a439e2598",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: people in employment aged 16 and over (MGRZ)"
+    }
+   ]
+  },
+  {
+   "n": 24,
+   "group": "random",
+   "id": "earn.place.real.ne.2016",
+   "page": "life/earnings.html",
+   "pages": 1,
+   "kind": "pounds",
+   "text": "£674",
+   "value": 673.9908548707754,
+   "unit": "£ a week, April 2025 prices",
+   "period": "April 2016",
+   "status": "calculated",
+   "formula": "earn.place.ne.2016 × cpih.apr.2025 ÷ cpih.apr.2016",
+   "calc": {
+    "earn.place.real.ne.2016": {
+     "formula": "earn.place.ne.2016 × cpih.apr.2025 ÷ cpih.apr.2016",
+     "inputs": [
+      "earn.place.ne.2016",
+      "cpih.apr.2025",
+      "cpih.apr.2016"
+     ],
+     "value": 673.9908548707754
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.place.ne.2016",
+     "value": 492.4,
+     "unit": "£ a week",
+     "period": "April 2016",
+     "source": "nomis-ashe-places",
+     "locator": "ashe-resident-nations-regions-ft-median-weekly.csv line 578",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
+     "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay of full-time employees, by nation and English region"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2016",
+     "value": 100.6,
+     "unit": "index (2015=100)",
+     "period": "April 2016",
+     "source": "ons-l522",
+     "locator": "L522 row '2016 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 25,
+   "group": "random",
+   "id": "earn.real.pt.2010",
+   "page": "life/2010.html",
+   "pages": 47,
+   "kind": "pounds",
+   "text": "£235",
+   "value": 235.42258064516125,
+   "unit": "£ a week, April 2025 prices",
+   "period": "April 2010",
+   "status": "calculated",
+   "formula": "earn.pt.2010 × cpih.apr.2025 ÷ cpih.apr.2010",
+   "calc": {
+    "earn.real.pt.2010": {
+     "formula": "earn.pt.2010 × cpih.apr.2025 ÷ cpih.apr.2010",
+     "inputs": [
+      "earn.pt.2010",
+      "cpih.apr.2025",
+      "cpih.apr.2010"
+     ],
+     "value": 235.42258064516125
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.pt.2010",
+     "value": 153.7,
+     "unit": "£ a week",
+     "period": "April 2010",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 82",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2010",
+     "value": 89.9,
+     "unit": "index (2015=100)",
+     "period": "April 2010",
+     "source": "ons-l522",
+     "locator": "L522 row '2010 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 26,
+   "group": "random",
+   "id": "ci.hol.cty.spain.2010.rel",
+   "page": "life/2010.html",
+   "pages": 1,
+   "kind": "pm_pct",
+   "text": "±3.8%",
+   "value": 3.8232237545745917,
+   "unit": "± % of the estimate",
+   "period": "2010",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "ci.hol.cty.spain.2010.rel",
+     "value": 3.8232237545745917,
+     "unit": "± % of the estimate",
+     "period": "2010",
+     "source": "ott-2009to2019",
+     "locator": "3.17!F33",
+     "scale": 100,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+     "file": "data/fetched/ott/section3-2009to2019.xlsx",
+     "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+     "publisher": "Office for National Statistics",
+     "title": "Travel trends, Section 3: UK residents' visits abroad, 2009 to 2019"
+    }
+   ]
+  },
+  {
+   "n": 27,
+   "group": "random",
+   "id": "thist.share.income_tax.1974-75",
+   "page": "tax-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "28.8%",
+   "value": 28.8332506592173,
+   "unit": "% of all public sector receipts",
+   "period": "1974-75",
+   "status": "calculated",
+   "formula": "100 × thist.cash.income_tax.1974-75 ÷ thist.cash.total.1974-75",
+   "calc": {
+    "thist.share.income_tax.1974-75": {
+     "formula": "100 × thist.cash.income_tax.1974-75 ÷ thist.cash.total.1974-75",
+     "inputs": [
+      "thist.cash.income_tax.1974-75",
+      "thist.cash.total.1974-75"
+     ],
+     "value": 28.8332506592173
+    }
+   },
+   "cells": [
+    {
+     "id": "thist.cash.income_tax.1974-75",
+     "value": 11.044,
+     "unit": "£bn",
+     "period": "1974-75",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!C281",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    },
+    {
+     "id": "thist.cash.total.1974-75",
+     "value": 38.303,
+     "unit": "£bn",
+     "period": "1974-75",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!Y281",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    }
+   ]
+  },
+  {
+   "n": 28,
+   "group": "random",
+   "id": "thist.share.vat.2014-15",
+   "page": "tax-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "18.6%",
+   "value": 18.57961159987721,
+   "unit": "% of all public sector receipts",
+   "period": "2014-15",
+   "status": "calculated",
+   "formula": "100 × thist.cash.vat.2014-15 ÷ thist.cash.total.2014-15",
+   "calc": {
+    "thist.share.vat.2014-15": {
+     "formula": "100 × thist.cash.vat.2014-15 ÷ thist.cash.total.2014-15",
+     "inputs": [
+      "thist.cash.vat.2014-15",
+      "thist.cash.total.2014-15"
+     ],
+     "value": 18.57961159987721
+    }
+   },
+   "cells": [
+    {
+     "id": "thist.cash.vat.2014-15",
+     "value": 128.316,
+     "unit": "£bn",
+     "period": "2014-15",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!Q321",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    },
+    {
+     "id": "thist.cash.total.2014-15",
+     "value": 690.628,
+     "unit": "£bn",
+     "period": "2014-15",
+     "source": "obrhist-receipts-amounts",
+     "locator": "Receipts (£m)!Y321",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax in £"
+    }
+   ]
+  },
+  {
+   "n": 29,
+   "group": "random",
+   "id": "afford.ratio.em.2008",
+   "page": "life/house-prices.html",
+   "pages": 1,
+   "kind": "dp2",
+   "text": "6.10",
+   "value": 6.1,
+   "unit": "times",
+   "period": "2008 (prices for the year ending September; earnings in April)",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "afford.ratio.em.2008",
+     "value": 6.1,
+     "unit": "times",
+     "period": "2008 (prices for the year ending September; earnings in April)",
+     "source": "ons-affordability",
+     "locator": "1c!N9",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian/current/aff1ratioofhousepricetoworkplacebasedearnings.xlsx",
+     "file": "data/fetched/ons/affordability-workplace.xlsx",
+     "sha256": "585bc98112e801fc3dd45dbc5238d05c6507d4e48dc3ec3afab4867eded1c2f4",
+     "publisher": "Office for National Statistics",
+     "title": "House price to workplace-based earnings ratio (median), by country and region, 1997 to 2025"
+    }
+   ]
+  },
+  {
+   "n": 30,
+   "group": "random",
+   "id": "avg.earn.men.2020-2022",
+   "page": "life/compare/spans/2008-2010-and-2020-2022.html",
+   "pages": 22,
+   "kind": "pounds",
+   "text": "£795",
+   "value": 795.0431668868605,
+   "unit": "£ a week, April 2025 prices",
+   "period": "average of April 2020 to April 2022",
+   "status": "calculated",
+   "formula": "(earn.real.ft_men.2020 + earn.real.ft_men.2021 + earn.real.ft_men.2022) ÷ 3",
+   "calc": {
+    "avg.earn.men.2020-2022": {
+     "formula": "(earn.real.ft_men.2020 + earn.real.ft_men.2021 + earn.real.ft_men.2022) ÷ 3",
+     "inputs": [
+      "earn.real.ft_men.2020",
+      "earn.real.ft_men.2021",
+      "earn.real.ft_men.2022"
+     ],
+     "value": 795.0431668868605
+    },
+    "earn.real.ft_men.2022": {
+     "formula": "earn.ft_men.2022 × cpih.apr.2025 ÷ cpih.apr.2022",
+     "inputs": [
+      "earn.ft_men.2022",
+      "cpih.apr.2025",
+      "cpih.apr.2022"
+     ],
+     "value": 790.56
+    },
+    "earn.real.ft_men.2021": {
+     "formula": "earn.ft_men.2021 × cpih.apr.2025 ÷ cpih.apr.2021",
+     "inputs": [
+      "earn.ft_men.2021",
+      "cpih.apr.2025",
+      "cpih.apr.2021"
+     ],
+     "value": 811.6067934782608
+    },
+    "earn.real.ft_men.2020": {
+     "formula": "earn.ft_men.2020 × cpih.apr.2025 ÷ cpih.apr.2020",
+     "inputs": [
+      "earn.ft_men.2020",
+      "cpih.apr.2025",
+      "cpih.apr.2020"
+     ],
+     "value": 782.9627071823205
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.ft_men.2020",
+     "value": 617.5,
+     "unit": "£ a week",
+     "period": "April 2020",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 164",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2020",
+     "value": 108.6,
+     "unit": "index (2015=100)",
+     "period": "April 2020",
+     "source": "ons-l522",
+     "locator": "L522 row '2020 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "earn.ft_men.2021",
+     "value": 650.7,
+     "unit": "£ a week",
+     "period": "April 2021",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 173",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2021",
+     "value": 110.4,
+     "unit": "index (2015=100)",
+     "period": "April 2021",
+     "source": "ons-l522",
+     "locator": "L522 row '2021 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "earn.ft_men.2022",
+     "value": 683.2,
+     "unit": "£ a week",
+     "period": "April 2022",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 182",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2022",
+     "value": 119.0,
+     "unit": "index (2015=100)",
+     "period": "April 2022",
+     "source": "ons-l522",
+     "locator": "L522 row '2022 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 31,
+   "group": "random",
+   "id": "spi.age.meantax.75plus.women",
+   "page": "who-pays-age.html",
+   "pages": 1,
+   "kind": "pounds",
+   "text": "£2,760",
+   "value": 2760.0,
+   "unit": "£ a year",
+   "period": "2023 to 2024",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spi.age.meantax.75plus.women",
+     "value": 2760.0,
+     "unit": "£ a year",
+     "period": "2023 to 2024",
+     "source": "hmrc-spi-2324-tables",
+     "locator": "Table_3_2!G46",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+     "file": "data/fetched/hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
+     "sha256": "ad063b06b2bdeef8600dbbb09d48153337a4966f8c7eea50df7a2e0304ebd73e",
+     "publisher": "HM Revenue and Customs",
+     "title": "Personal Incomes Statistics, tax year 2023 to 2024: collated tables 3.1 to 3.11 (Survey of Personal Incomes)"
+    }
+   ]
+  },
+  {
+   "n": 32,
+   "group": "random",
+   "id": "moe.earn.real.ft_women.2016",
+   "page": "life/2016.html",
+   "pages": 18,
+   "kind": "pm_pounds",
+   "text": "±£4",
+   "value": 3.86728944333996,
+   "unit": "± £ a week, April 2025 prices",
+   "period": "April 2016",
+   "status": "calculated",
+   "formula": "earn.real.ft_women.2016 × 1.96 × cv.earn.ft_women.2016 ÷ 100",
+   "calc": {
+    "moe.earn.real.ft_women.2016": {
+     "formula": "earn.real.ft_women.2016 × 1.96 × cv.earn.ft_women.2016 ÷ 100",
+     "inputs": [
+      "earn.real.ft_women.2016",
+      "cv.earn.ft_women.2016"
+     ],
+     "value": 3.86728944333996
+    },
+    "earn.real.ft_women.2016": {
+     "formula": "earn.ft_women.2016 × cpih.apr.2025 ÷ cpih.apr.2016",
+     "inputs": [
+      "earn.ft_women.2016",
+      "cpih.apr.2025",
+      "cpih.apr.2016"
+     ],
+     "value": 657.7022862823061
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.ft_women.2016",
+     "value": 480.5,
+     "unit": "£ a week",
+     "period": "April 2016",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 130",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2016",
+     "value": 100.6,
+     "unit": "index (2015=100)",
+     "period": "April 2016",
+     "source": "ons-l522",
+     "locator": "L522 row '2016 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cv.earn.ft_women.2016",
+     "value": 0.3,
+     "unit": "% (coefficient of variation)",
+     "period": "April 2016",
+     "source": "nomis-ashe-resident-cv",
+     "locator": "ashe-resident-uk-median-weekly-cv.csv line 259",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly-cv.csv",
+     "sha256": "28b4f42a60110953a6b4feed3198bbaf03e41a299498f91d8d9ca6742daf45a1",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay with its coefficient of variation"
+    }
+   ]
+  },
+  {
+   "n": 33,
+   "group": "random",
+   "id": "work.occshare.SOC2020.3000000.2023",
+   "page": "life/2023.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "15.1%",
+   "value": 15.061909911661422,
+   "unit": "% of people in work",
+   "period": "January to December 2023",
+   "status": "calculated",
+   "formula": "100 × work.occ.SOC2020.3000000.2023 ÷ work.occ.SOC2020.0.2023",
+   "calc": {
+    "work.occshare.SOC2020.3000000.2023": {
+     "formula": "100 × work.occ.SOC2020.3000000.2023 ÷ work.occ.SOC2020.0.2023",
+     "inputs": [
+      "work.occ.SOC2020.3000000.2023",
+      "work.occ.SOC2020.0.2023"
+     ],
+     "value": 15.061909911661422
+    }
+   },
+   "cells": [
+    {
+     "id": "work.occ.SOC2020.3000000.2023",
+     "value": 4958200.0,
+     "unit": "people",
+     "period": "January to December 2023",
+     "source": "aps2020",
+     "locator": "aps218-uk-calendar-annual.csv line 128",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps218-uk-calendar-annual.csv",
+     "sha256": "e4388e5746ea8e5db6da36c12066abab615036196bb395f37ead005d26161b25",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2020), January to December"
+    },
+    {
+     "id": "work.occ.SOC2020.0.2023",
+     "value": 32918800.0,
+     "unit": "people",
+     "period": "January to December 2023",
+     "source": "aps2020",
+     "locator": "aps218-uk-calendar-annual.csv line 122",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "file": "data/life/sources/work-data/aps218-uk-calendar-annual.csv",
+     "sha256": "e4388e5746ea8e5db6da36c12066abab615036196bb395f37ead005d26161b25",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Population Survey: employment by occupation (SOC2020), January to December"
+    }
+   ]
+  },
+  {
+   "n": 34,
+   "group": "random",
+   "id": "work.age.18_24.2017",
+   "page": "life/2017.html",
+   "pages": 75,
+   "kind": "pct",
+   "text": "62.2%",
+   "value": 62.2,
+   "unit": "%",
+   "period": "April to June 2017",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "work.age.18_24.2017",
+     "value": 62.2,
+     "unit": "%",
+     "period": "April to June 2017",
+     "source": "ons-ybud",
+     "locator": "YBUD row '2017 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+     "file": "data/fetched/ons/ybud.csv",
+     "sha256": "c920ed5c1a7efc29901c4c8eea0420650cb847a383e14eb114843bb19876fb3e",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: employment rate, aged 18 to 24 (YBUD)"
+    }
+   ]
+  },
+  {
+   "n": 35,
+   "group": "random",
+   "id": "ci.hol.cty.greece.2018.rel",
+   "page": "life/2018.html",
+   "pages": 1,
+   "kind": "pm_pct",
+   "text": "±12%",
+   "value": 12.042269362397288,
+   "unit": "± % of the estimate",
+   "period": "2018",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "ci.hol.cty.greece.2018.rel",
+     "value": 12.042269362397288,
+     "unit": "± % of the estimate",
+     "period": "2018",
+     "source": "ott-2009to2019",
+     "locator": "3.17!AD19",
+     "scale": 100,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+     "file": "data/fetched/ott/section3-2009to2019.xlsx",
+     "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+     "publisher": "Office for National Statistics",
+     "title": "Travel trends, Section 3: UK residents' visits abroad, 2009 to 2019"
+    }
+   ]
+  },
+  {
+   "n": 36,
+   "group": "random",
+   "id": "spend.gdp.order.2015-16",
+   "page": "spending.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "1.6%",
+   "value": 1.6,
+   "unit": "% of GDP",
+   "period": "2015-16",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.gdp.order.2015-16",
+     "value": 1.6,
+     "unit": "% of GDP",
+     "period": "2015-16",
+     "source": "pesa4",
+     "locator": "4_4!N11",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 37,
+   "group": "random",
+   "id": "etb.t16.ret.2019/20",
+   "page": "who-pays.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "87.7%",
+   "value": 87.7,
+   "unit": "% of people",
+   "period": "2019/20",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "etb.t16.ret.2019/20",
+     "value": 87.7,
+     "unit": "% of people",
+     "period": "2019/20",
+     "source": "etb",
+     "locator": "Table 16!F47",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 38,
+   "group": "random",
+   "id": "hist.real.total.1974-75",
+   "page": "spending-history.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£502.7bn",
+   "value": 502.68792612137213,
+   "unit": "£bn (2025-26 prices)",
+   "period": "1974-75",
+   "status": "calculated",
+   "formula": "hist.cash.total.1974-75 × 100 ÷ agg.deflator.1974-75",
+   "calc": {
+    "hist.real.total.1974-75": {
+     "formula": "hist.cash.total.1974-75 × 100 ÷ agg.deflator.1974-75",
+     "inputs": [
+      "hist.cash.total.1974-75",
+      "agg.deflator.1974-75"
+     ],
+     "value": 502.68792612137213
+    }
+   },
+   "cells": [
+    {
+     "id": "hist.cash.total.1974-75",
+     "value": 43.868,
+     "unit": "£bn",
+     "period": "1974-75",
+     "source": "obrhist-amounts",
+     "locator": "Spending (£m)!D281",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: spending by purpose in £ and after inflation"
+    },
+    {
+     "id": "agg.deflator.1974-75",
+     "value": 8.726686622150586,
+     "unit": "index, 2025-26 = 100",
+     "period": "1974-75",
+     "source": "obr-prices",
+     "locator": "Aggregates (£bn)!AH36",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP"
+    }
+   ]
+  },
+  {
+   "n": 39,
+   "group": "random",
+   "id": "thist.gdp.total.1956-57",
+   "page": "tax-history.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "35.6%",
+   "value": 35.573197240336455,
+   "unit": "% of GDP",
+   "period": "1956-57",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "thist.gdp.total.1956-57",
+     "value": 35.573197240336455,
+     "unit": "% of GDP",
+     "period": "1956-57",
+     "source": "obrhist-receipts",
+     "locator": "Receipts (per cent of GDP)!Y263",
+     "scale": 1,
+     "status": "published",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "file": "data/raw/OBR_Historical_public_finances_database.xlsx",
+     "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Historical public finances database: receipts by type of tax as a share of GDP"
+    }
+   ]
+  },
+  {
+   "n": 40,
+   "group": "random",
+   "id": "earn.real.ft.2013",
+   "page": "life/2013.html",
+   "pages": 83,
+   "kind": "pounds",
+   "text": "£727",
+   "value": 726.9997959183673,
+   "unit": "£ a week, April 2025 prices",
+   "period": "April 2013",
+   "status": "calculated",
+   "formula": "earn.ft.2013 × cpih.apr.2025 ÷ cpih.apr.2013",
+   "calc": {
+    "earn.real.ft.2013": {
+     "formula": "earn.ft.2013 × cpih.apr.2025 ÷ cpih.apr.2013",
+     "inputs": [
+      "earn.ft.2013",
+      "cpih.apr.2025",
+      "cpih.apr.2013"
+     ],
+     "value": 726.9997959183673
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.ft.2013",
+     "value": 517.4,
+     "unit": "£ a week",
+     "period": "April 2013",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 108",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2013",
+     "value": 98.0,
+     "unit": "index (2015=100)",
+     "period": "April 2013",
+     "source": "ons-l522",
+     "locator": "L522 row '2013 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 41,
+   "group": "headline",
+   "id": "hmrc.share.top1.2025 to 2026",
+   "page": "who-pays.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "26.8%",
+   "value": 26.8,
+   "unit": "% of all Income Tax",
+   "period": "2025 to 2026",
+   "status": "projection",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hmrc.share.top1.2025 to 2026",
+     "value": 26.8,
+     "unit": "% of all Income Tax",
+     "period": "2025 to 2026",
+     "source": "hmrc24",
+     "locator": "2_4_Taxpayer_share_tax!K29",
+     "scale": 1,
+     "status": "projection",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "file": "data/payers/raw/hmrc-table24-july2026.ods",
+     "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+     "publisher": "HM Revenue and Customs",
+     "title": "Income Tax statistics, Table 2.4: shares of total income and Income Tax for percentile groups"
+    }
+   ]
+  },
+  {
+   "n": 42,
+   "group": "headline",
+   "id": "spend.perhousehold.health.2025-26",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "pounds",
+   "text": "£8,878",
+   "value": 8878.391890494087,
+   "unit": "£ per household",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "spend.cash.health.2025-26 × 1000000000 ÷ hh.uk.2025",
+   "calc": {
+    "spend.perhousehold.health.2025-26": {
+     "formula": "spend.cash.health.2025-26 × 1000000000 ÷ hh.uk.2025",
+     "inputs": [
+      "spend.cash.health.2025-26",
+      "hh.uk.2025"
+     ],
+     "value": 8878.391890494087
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.cash.health.2025-26",
+     "value": 257.5,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X20",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "hh.uk.2025",
+     "value": 29003000.0,
+     "unit": "households",
+     "period": "April to June 2025",
+     "source": "ons-families-households",
+     "locator": "5!B21",
+     "scale": 1000,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
+     "file": "data/fetched/ons/families-households.xlsx",
+     "sha256": "a89eaa3d7f519bfa949c7cfa12f531b8c7a86c704adcb70e81f49567ae724a91",
+     "publisher": "Office for National Statistics",
+     "title": "Families and households in the UK, 1996 to 2025 (published 17 April 2026): Table 5, households by size"
+    }
+   ]
+  },
+  {
+   "n": 43,
+   "group": "headline",
+   "id": "spend.gdp.general.2010-11",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "4.8%",
+   "value": 4.8,
+   "unit": "% of GDP",
+   "period": "2010-11",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.gdp.general.2010-11",
+     "value": 4.8,
+     "unit": "% of GDP",
+     "period": "2010-11",
+     "source": "pesa4",
+     "locator": "4_4!I6",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 44,
+   "group": "headline",
+   "id": "spend.gdp.housing.2009-10",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "1.0%",
+   "value": 1.0,
+   "unit": "% of GDP",
+   "period": "2009-10",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.gdp.housing.2009-10",
+     "value": 1.0,
+     "unit": "% of GDP",
+     "period": "2009-10",
+     "source": "pesa4",
+     "locator": "4_4!H19",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 45,
+   "group": "headline",
+   "id": "spend.cash.defence.2004-05",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£29.8bn",
+   "value": 29.8,
+   "unit": "£bn",
+   "period": "2004-05",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.cash.defence.2004-05",
+     "value": 29.8,
+     "unit": "£bn",
+     "period": "2004-05",
+     "source": "pesa4",
+     "locator": "4_2!C10",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 46,
+   "group": "headline",
+   "id": "etbh.pall.1987.q4",
+   "page": "household-tax.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "38.7%",
+   "value": 38.68645973909132,
+   "unit": "% of gross household income",
+   "period": "1987",
+   "status": "calculated",
+   "formula": "100 × (etbh.direct.1987.q4 + etbh.indirect.1987.q4) ÷ etbh.gross.1987.q4",
+   "calc": {
+    "etbh.pall.1987.q4": {
+     "formula": "100 × (etbh.direct.1987.q4 + etbh.indirect.1987.q4) ÷ etbh.gross.1987.q4",
+     "inputs": [
+      "etbh.direct.1987.q4",
+      "etbh.indirect.1987.q4",
+      "etbh.gross.1987.q4"
+     ],
+     "value": 38.68645973909132
+    }
+   },
+   "cells": [
+    {
+     "id": "etbh.direct.1987.q4",
+     "value": 3430.0,
+     "unit": "£ a year per household",
+     "period": "1987",
+     "source": "etb-hist-quintile-all",
+     "locator": "1987!E55",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    },
+    {
+     "id": "etbh.indirect.1987.q4",
+     "value": 2590.0,
+     "unit": "£ a year per household",
+     "period": "1987",
+     "source": "etb-hist-quintile-all",
+     "locator": "1987!E83",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    },
+    {
+     "id": "etbh.gross.1987.q4",
+     "value": 15561.0,
+     "unit": "£ a year per household",
+     "period": "1987",
+     "source": "etb-hist-quintile-all",
+     "locator": "1987!E48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)"
+    }
+   ]
+  },
+  {
+   "n": 47,
+   "group": "headline",
+   "id": "hmrc.share.bottom50.2022 to 2023",
+   "page": "who-pays.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "9.6%",
+   "value": 9.6,
+   "unit": "% of all Income Tax",
+   "period": "2022 to 2023",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hmrc.share.bottom50.2022 to 2023",
+     "value": 9.6,
+     "unit": "% of all Income Tax",
+     "period": "2022 to 2023",
+     "source": "hmrc24",
+     "locator": "2_4_Taxpayer_share_tax!F26",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "file": "data/payers/raw/hmrc-table24-july2026.ods",
+     "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+     "publisher": "HM Revenue and Customs",
+     "title": "Income Tax statistics, Table 2.4: shares of total income and Income Tax for percentile groups"
+    }
+   ]
+  },
+  {
+   "n": 48,
+   "group": "headline",
+   "id": "spend.real.defence.2005-06",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "bn1",
+   "text": "£52.3bn",
+   "value": 52.3,
+   "unit": "£bn (2025-26 prices)",
+   "period": "2005-06",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.real.defence.2005-06",
+     "value": 52.3,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2005-06",
+     "source": "pesa4",
+     "locator": "4_3!D10",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 49,
+   "group": "headline",
+   "id": "etbh.pall.2010-11.q5",
+   "page": "household-tax.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "33.6%",
+   "value": 33.601874208123164,
+   "unit": "% of gross household income",
+   "period": "2010/11",
+   "status": "calculated",
+   "formula": "100 × (etbh.direct.2010-11.q5 + etbh.indirect.2010-11.q5) ÷ etbh.gross.2010-11.q5",
+   "calc": {
+    "etbh.pall.2010-11.q5": {
+     "formula": "100 × (etbh.direct.2010-11.q5 + etbh.indirect.2010-11.q5) ÷ etbh.gross.2010-11.q5",
+     "inputs": [
+      "etbh.direct.2010-11.q5",
+      "etbh.indirect.2010-11.q5",
+      "etbh.gross.2010-11.q5"
+     ],
+     "value": 33.601874208123164
+    }
+   },
+   "cells": [
+    {
+     "id": "etbh.direct.2010-11.q5",
+     "value": 19773.0,
+     "unit": "£ a year per household",
+     "period": "2010/11",
+     "source": "etb-hist-quintile-all-2",
+     "locator": "2010-11!F56",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1997/98 to 2017/18)"
+    },
+    {
+     "id": "etbh.indirect.2010-11.q5",
+     "value": 8339.0,
+     "unit": "£ a year per household",
+     "period": "2010/11",
+     "source": "etb-hist-quintile-all-2",
+     "locator": "2010-11!F86",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1997/98 to 2017/18)"
+    },
+    {
+     "id": "etbh.gross.2010-11.q5",
+     "value": 83662.0,
+     "unit": "£ a year per household",
+     "period": "2010/11",
+     "source": "etb-hist-quintile-all-2",
+     "locator": "2010-11!F48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "file": "data/fetched/etb/hist-quintile-all.xlsx",
+     "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+     "publisher": "Office for National Statistics",
+     "title": "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1997/98 to 2017/18)"
+    }
+   ]
+  },
+  {
+   "n": 50,
+   "group": "headline",
+   "id": "gdp.tme.2005-06",
+   "page": "taxes.html",
+   "pages": 1,
+   "kind": "pct",
+   "text": "39.7%",
+   "value": 39.69928847246721,
+   "unit": "% of GDP",
+   "period": "2005-06",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "gdp.tme.2005-06",
+     "value": 39.69928847246721,
+     "unit": "% of GDP",
+     "period": "2005-06",
+     "source": "obr",
+     "locator": "Aggregates (per cent of GDP)!D62",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  }
+ ]
+}
