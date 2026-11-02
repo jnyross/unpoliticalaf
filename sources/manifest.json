@@ -357,6 +357,66 @@
    "id": "explain-ehs-2024-25-ch2",
    "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
    "file": "explain/ehs-2024-25-chapter-2.html"
+  },
+  {
+   "id": "dluhc-lt101-uk",
+   "url": "https://assets.publishing.service.gov.uk/media/5b055108ed915d13371dc836/Discontinued_LT_101.xls",
+   "file": "nations/dluhc-LT_101-uk-tenure.xls"
+  },
+  {
+   "id": "dluhc-lt106-wales",
+   "url": "https://assets.publishing.service.gov.uk/media/5ce6a1deed915d247979f95b/LT_106.xls",
+   "file": "nations/dluhc-LT_106-wales-tenure.xls"
+  },
+  {
+   "id": "dluhc-lt107-scotland",
+   "url": "https://assets.publishing.service.gov.uk/media/5ce6a1e9e5274a4873de09ba/LT_107.xls",
+   "file": "nations/dluhc-LT_107-scotland-tenure.xls"
+  },
+  {
+   "id": "dluhc-lt104-england",
+   "url": "https://assets.publishing.service.gov.uk/media/6a0dcbcc40a9c699fd826eec/LiveTable104.ods",
+   "file": "nations/dluhc-LiveTable104-england-tenure.ods"
+  },
+  {
+   "id": "probe-scot-stock-tenure",
+   "url": "https://www.gov.scot/publications/housing-statistics-stock-by-tenure/",
+   "file": "probe/scot-stock-tenure.html"
+  },
+  {
+   "id": "probe-scot-school-stats",
+   "url": "https://www.gov.scot/collections/school-education-statistics/",
+   "file": "probe/scot-school-collection.html"
+  },
+  {
+   "id": "probe-scot-ssfs-2024",
+   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/pages/classes-and-pupils/",
+   "file": "probe/scot-ssfs-2024-classes.html"
+  },
+  {
+   "id": "probe-wales-dwelling",
+   "url": "https://www.gov.wales/dwelling-stock-estimates",
+   "file": "probe/wales-dwelling-stock.html"
+  },
+  {
+   "id": "probe-ni-housing-stats",
+   "url": "https://www.communities-ni.gov.uk/topics/housing-statistics",
+   "file": "probe/ni-housing-stats.html"
+  },
+  {
+   "id": "probe-ni-pupils-classes",
+   "url": "https://www.education-ni.gov.uk/articles/pupils-and-classes",
+   "file": "probe/ni-pupils-classes.html"
+  },
+  {
+   "id": "probe-ni-school-enrolments",
+   "url": "https://www.education-ni.gov.uk/articles/school-enrolments-overview",
+   "file": "probe/ni-school-enrolments.html"
+  },
+  {
+   "id": "probe-hbai-tables",
+   "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
+   "file": "probe/hbai-2025.html"
   }
  ]
 }
