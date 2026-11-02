@@ -191,6 +191,14 @@
   "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
   "retrieved": "2026-11-02T16:10:26Z"
  },
+ "eurostat-ilc-mdes02-uk": {
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_mdes02?geo=UK&unit=PC&format=JSON&lang=en",
+  "file": "eurostat/ilc-mdes02-uk.json",
+  "bytes": 13677,
+  "content_type": "application/json",
+  "sha256": "46a9f034404234ee8295850e045edf74270f9ee61b1791b56505e329a05b3078",
+  "retrieved": "2026-11-02T18:09:44Z"
+ },
  "explain-ehs-2023-24-rented-report": {
   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
   "file": "explain/ehs-2023-24-rented-sectors.html",
