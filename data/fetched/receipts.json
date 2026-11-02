@@ -575,6 +575,22 @@
   "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
   "retrieved": "2026-11-02T16:30:02Z"
  },
+ "oecd-gov-cofog": {
+  "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels",
+  "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
+  "bytes": 1431297,
+  "content_type": "application/vnd.sdmx.data+csv; labels=name; version=2; charset=utf-8",
+  "sha256": "2f1e3548526041d10fdc9012e8a56fbda6f1086effce5c5db88076e97095cb35",
+  "retrieved": "2026-11-02T20:18:52Z"
+ },
+ "oecd-gov-pf": {
+  "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A..GE+GR.PT_B1GQ.S13..?startPeriod=1995&format=csvfilewithlabels",
+  "file": "oecd/gov-at-a-glance-expenditure-revenue-gdp.csv",
+  "bytes": 531769,
+  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
+  "sha256": "4bfd9cf579afe53ef77f7102a943686a2ebd563857fb7b6213d810a8c9596ecb",
+  "retrieved": "2026-11-02T20:18:48Z"
+ },
  "oecd-rs-tax": {
   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels",
   "file": "oecd/revenue-statistics-tax-gdp.csv",
