@@ -12,7 +12,13 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
 3. **Answer box** (`.answer`): the same answer in full sentences, with the
    period and population.
 4. **On this page** (added by `page()` when a page has three or more `h2`
-   headings with ids). Give every `h2` an id.
+   headings with ids). Give every `h2` an id. A chart must start within the
+   first two phone screens (360 x 640) of the money pages, the everyday life
+   hub, topic pages and year pages; `make a11y` checks this (`CHART_EARLY` in
+   `builder/check.py`). To get there, `page(..., toc_after_first=True)` puts
+   the contents list after the first section, and `before_toc(html)` moves
+   notes such as the per-person scale or "Change is not cause" to sit between
+   that first section and the contents, outside any fold.
 5. **Sections**, each in this order: question or finding as the `h2`, chart,
    "Show … as a table" (`details_table()`), limits (`.limit`), source line.
 6. **Folding** (`fold()`, run by `page()`): on a phone each section shows its
