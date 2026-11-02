@@ -3,7 +3,7 @@ import re
 import unittest
 
 from builder.data import Fact, Facts
-from builder.html import fmt, line_chart, Num
+from builder.html import fmt, line_chart, small_multiples, Num
 from builder import pages_life
 
 
@@ -88,6 +88,35 @@ class Charts(unittest.TestCase):
         svg = line_chart("Title", ["1", "2"], [("a", [1, 2], "a")], "u")
         self.assertIn('role="img"', svg)
         self.assertIn("aria-label", svg)
+
+
+class SmallMultiples(unittest.TestCase):
+    SERIES = [("North", [1.0, 2.0, 3.0]), ("South", [4.0, None, 6.0]), ("East", [7.0, 8.0, 9.0]), ("West", [None, None, None])]
+
+    def test_one_labelled_panel_per_group(self):
+        fig = small_multiples("t", ["1", "2", "3"], self.SERIES, "u", "dp1")
+        self.assertEqual(fig.count('role="img"'), 4)
+        for name, _ in self.SERIES:
+            self.assertIn(f'aria-label="{name}"', fig)
+        self.assertIn("No figures", fig)  # a group with no data says so, it is not drawn as zero
+
+    def test_gaps_are_not_joined(self):
+        fig = small_multiples("t", ["1", "2", "3"], self.SERIES, "u", "dp1")
+        south = re.search(r'<path id="sm\d+s1" d="([^"]+)"', fig).group(1)
+        self.assertEqual(south.count("M"), 2)
+
+    def test_one_readout_and_summary_for_all_panels(self):
+        fig = small_multiples("t", ["1", "2", "3"], self.SERIES, "u", "dp1")
+        self.assertEqual(fig.count("data-chart="), 1)
+        self.assertIn("<strong>South</strong>", fig)
+        self.assertIn("No figure for 2", fig)
+
+    def test_definition_break_splits_lines_and_summary(self):
+        fig = small_multiples("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 4.0]), ("b", [1.0, 1.0, 1.0, 1.0])], "u", "dp1",
+                              breaks=[(2, "New method")], split_breaks=True)
+        a = re.search(r'<path id="sm\d+s0" d="([^"]+)"', fig).group(1)
+        self.assertEqual(a.count("M"), 2)
+        self.assertIn("values either side are not compared", fig)
 
 
 class Comparisons(unittest.TestCase):

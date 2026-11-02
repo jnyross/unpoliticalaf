@@ -37,6 +37,15 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   lines are named at their ends instead of in a key. Gaps and definition
   breaks are drawn as gaps and dashed lines, never joined. The visible title
   sits above the chart; the SVG's `aria-label` repeats it for screen readers.
+- **Small multiples** (`small_multiples()`, or `groups_chart()` in
+  `pages_life.py`): when more than three groups matter (age groups, job types,
+  tenures, nations, regions), draw one small panel per group instead of a
+  crowded line chart. Every panel uses the same scale, names its group above
+  it, writes its latest value at the line's end and shows the other groups as
+  faint grey lines for context. One summary covers every group (first and
+  latest values, missing years, each side of a break read separately) and one
+  readout marks the chosen year in every panel. Two columns on phones, three
+  on wider screens. Keep groups in their official order, not ranked.
 - **Chart summaries** (`chart_summary()`): pass `kind` (and `ids` with `num`, so
   the numbers are traceable figures) to `line_chart()` and it writes "What the
   chart shows" under the chart: each line's first and latest values, the highest

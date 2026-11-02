@@ -16,7 +16,8 @@ from .rates import read_rates
 from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
-MAX_PAGE_BYTES = 400_000
+# The product spec requires every page to be under 500,000 bytes; this keeps a margin.
+MAX_PAGE_BYTES = 450_000
 
 
 def render():

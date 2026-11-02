@@ -9,7 +9,7 @@ definition are not calculated.
 """
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import FOLD, page, table, details_table, line_chart, source_line, fmt, esc
+from .html import FOLD, page, table, details_table, line_chart, small_multiples, source_line, fmt, esc
 from . import uncertainty as U
 
 FIRST, LAST = YEARS[0], YEARS[-1]
@@ -575,6 +575,15 @@ def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split
                       kind=kind, ids=ids, num=num, point_labels=[point_label(y) for y in YEARS])
 
 
+def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=False, ymin=None, kind=None, num=None, point_label=str):
+    """Small multiples: one panel per group, all on one scale. items: (name, fid(year))."""
+    years = list(years or YEARS)
+    series = [(name, [_val(facts, fid(y)) for y in years]) for name, fid in items]
+    ids = [[fid(y) if _val(facts, fid(y)) is not None else None for y in years] for _, fid in items]
+    return small_multiples(title, [str(y) for y in years], series, unit, kind, ids=ids, num=num, breaks=breaks,
+                           split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years])
+
+
 def life_index(facts, d, num, sources):
     body = ["<h1>Everyday life, year by year</h1>"]
     body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed since {FIRST}?</p>
@@ -600,6 +609,11 @@ def life_index(facts, d, num, sources):
                 break
             rows.append([f"{yy} ({s})"] + [num(f"work.occshare.{s}.{c}.{yy}", "pct") for c in groups["SOC2020"] if c != "0"])
     head = ["Year"] + [esc(n.split(" occupations")[0].split(",")[0]) for c, n in groups["SOC2020"].items() if c != "0"]
+    oyears = [yy for yy in YEARS if f"work.occshare.{occ_scheme(yy)}.2000000.{yy}" in facts]
+    body.append(groups_chart(facts, "Share of people in work by job type",
+                             [(n.split(" occupations")[0], (lambda c: lambda yy: f"work.occshare.{occ_scheme(yy)}.{c}.{yy}")(c)) for c, n in groups["SOC2020"].items() if c != "0"],
+                             "Per cent of people in work, January to December, United Kingdom. Up to 2020 SOC2010 job types; from 2021 SOC2020, so the lines break there",
+                             years=oyears, breaks=[(oyears.index(2021), "New job classification")] if 2021 in oyears else (), split_breaks=True, ymin=0, kind="pct", num=num))
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
     body.extend(work_ages_block(facts, num))
     body.extend(places_block(facts, num, "work"))
@@ -627,8 +641,10 @@ def life_index(facts, d, num, sources):
     hy = max(yy for yy in YEARS if _val(facts, f"house.private.{yy}") is not None)
     body.append(f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
     body.append(U.topic_line(num, "housing", LAST))
-    body.append(series_chart(facts, "How households in England live", [("Rent privately", lambda y: f"house.private.{y}", "a"), ("Rent from council or housing association", lambda y: f"house.social.{y}", "b")],
-                             "Per cent of households in England, survey year starting in the year shown", ymin=0, kind="pct", num=num, point_label=sy))
+    hyears = [y for y in YEARS if y <= hy]
+    body.append(groups_chart(facts, "How households in England live", [("Own outright", lambda y: f"house.outright.{y}"), ("Own with a mortgage", lambda y: f"house.mortgage.{y}"),
+                                                                       ("Rent from council or housing association", lambda y: f"house.social.{y}"), ("Rent privately", lambda y: f"house.private.{y}")],
+                             "Per cent of households in England, survey year starting in the year shown", years=hyears, ymin=0, kind="pct", num=num, point_label=sy))
     body.append(details_table("Show housing for every year", "Housing tenure, England, % of households",
                               ["Survey year", "Own outright", "Mortgage", "Social rent", "Private rent", "Families with children renting privately"],
                               [[f"{y}-{str(y + 1)[2:]}", num(f"house.outright.{y}", "pct"), num(f"house.mortgage.{y}", "pct"), num(f"house.social.{y}", "pct"), num(f"house.private.{y}", "pct"),
@@ -698,9 +714,8 @@ def work_ages_block(facts, num):
     out.append(f'<div class="answer"><p>In April to June {LAST}, {num(f"work.age.25_34.{LAST}", "pct")} of people aged 25 to 34 and {num(f"work.age.35_49.{LAST}", "pct")} of those aged 35 to 49 were in work. '
                f'The rate was lower for 18 to 24 year olds ({num(young, "pct")}), many of whom are studying, and for 50 to 64 year olds ({num(old, "pct")}). '
                f'{num(f"work.age.65.{LAST}", "pct")} of people aged 65 and over were in work, compared with {num(f"work.age.65.{FIRST}", "pct")} in {FIRST}.</p></div>')
-    out.append(series_chart(facts, "Employment rate, ages 18 to 24, 50 to 64 and 65 and over", [("50 to 64", lambda y: f"work.age.50_64.{y}", "a"), ("18 to 24", lambda y: f"work.age.18_24.{y}", "b"),
-                                                            ("65 and over", lambda y: f"work.age.65.{y}", "c")],
-                            "Per cent of each age group in work, April to June each year, United Kingdom. Ages 25 to 34 and 35 to 49 are in the table below", ymin=0, kind="pct", num=num))
+    out.append(groups_chart(facts, "Employment rate by age group", [(lab, (lambda k: lambda y: f"work.age.{k}.{y}")(k)) for k, lab, _ in AGE_SERIES],
+                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0, kind="pct", num=num))
     out.append(details_table("Show employment by age for every year", "Employment rate by age group, United Kingdom, April to June, %",
                              ["Year"] + [lab for _, lab, _ in AGE_SERIES],
                              [[str(y)] + [num(f"work.age.{k}.{y}", "pct") for k, _, _ in AGE_SERIES] for y in YEARS]))
@@ -739,6 +754,10 @@ def places_block(facts, num, topic):
         mk = "pm_pp" if kind == "pct" else "pm_pounds"
         moe = num(U.MARGINS[fid(k, b)][0], mk) if U.has(fid(k, b)) else '<span class="missing">not published</span>'
         rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
+    out.append(groups_chart(facts, f"{what.split(',')[0]}: the four nations", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n in NATIONS[1:]],
+                            what, years=ys, kind=kind, num=num))
+    out.append(groups_chart(facts, f"{what.split(',')[0]}: regions of England", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n, _ in REGIONS],
+                            what, years=ys, kind=kind, num=num))
     out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), f"Margin of error, {b}", "Change"], rows))
     out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
@@ -763,6 +782,8 @@ def housing_regions_block(facts, num):
         rows.append([esc(n)] + [num(f"house.reg.{t}.{k}.{y}", "pct") for t in ("owner", "private", "social") for y in (a, b)])
     out.append(table(f"Homes by tenure, England and its regions, 31 March {a} and {b}, % of homes",
                      ["Place", f"Owner occupied {a}", f"Owner occupied {b}", f"Private rent {a}", f"Private rent {b}", f"Social rent {a}", f"Social rent {b}"], rows))
+    out.append(groups_chart(facts, "Homes rented privately in each region of England", [("All of England" if k == "england" else n, (lambda k: lambda y: f"house.reg.private.{k}.{y}")(k)) for k, n in places],
+                            "Per cent of homes rented privately, 31 March each year", years=ys, ymin=0, kind="pct", num=num))
     out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
                              ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
     out.append(f'<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
