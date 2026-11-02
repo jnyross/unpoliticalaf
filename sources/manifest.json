@@ -193,6 +193,51 @@
    "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
   },
   {
+   "id": "nomis-aps-emp-places",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+   "file": "nomis/aps-employment-rate-nations-regions.csv"
+  },
+  {
+   "id": "nomis-ashe-places",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
+  },
+  {
+   "id": "ons-ybud",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+   "file": "ons/ybud.csv"
+  },
+  {
+   "id": "ons-ybug",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+   "file": "ons/ybug.csv"
+  },
+  {
+   "id": "ons-ybuj",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybuj/lms",
+   "file": "ons/ybuj.csv"
+  },
+  {
+   "id": "ons-lf2u",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf2u/lms",
+   "file": "ons/lf2u.csv"
+  },
+  {
+   "id": "ons-lfk6",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lfk6/lms",
+   "file": "ons/lfk6.csv"
+  },
+  {
+   "id": "dluhc-lt109",
+   "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
+   "file": "dluhc/LiveTable109.ods"
+  },
+  {
+   "id": "wg-schools-census-2025",
+   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
+   "file": "wg/schools-census-results-january-2025.ods"
+  },
+  {
    "id": "explain-ons-psf-2021-03",
    "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
    "file": "explain/ons-psf-march2021.html"

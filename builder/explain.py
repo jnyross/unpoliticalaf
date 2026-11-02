@@ -174,7 +174,7 @@ EXPLANATIONS = {
         source="dfe-spc-page", publisher="Department for Education",
         title="Schools, pupils and their characteristics: academic year 2025/26", date="4 June 2026",
         quote=["Large Classes - An infant class is described as ‘large’ when it exceeds the statutory limit of 30 pupils. There are no formal policy restrictions on any other class sizes."],
-        gloss="Infant classes are reception, year 1 and year 2. The averages on this site cover all primary or all secondary classes, so they say nothing about the limit on their own."),
+        gloss="This is the rule in England. Infant classes are reception, year 1 and year 2. The English averages on this site cover all primary or all secondary classes, so they say nothing about the limit on their own."),
 }
 
 _text_cache = {}

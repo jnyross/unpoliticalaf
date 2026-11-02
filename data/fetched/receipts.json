@@ -39,6 +39,14 @@
   "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
   "retrieved": "2026-11-02T08:58:39Z"
  },
+ "dluhc-lt109": {
+  "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
+  "file": "dluhc/LiveTable109.ods",
+  "bytes": 81649,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "2fb92e0ad64000e96279cd7afbae29bdc686b0779ae3aaa834789deb1b25f8a9",
+  "retrieved": "2026-11-02T10:28:45Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
@@ -271,6 +279,22 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "nomis-aps-emp-places": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+  "file": "nomis/aps-employment-rate-nations-regions.csv",
+  "bytes": 382725,
+  "content_type": "text/csv",
+  "sha256": "39efbc62386147ae214072d5496344b8cb8003ee1208aa96b46928cbca2e3998",
+  "retrieved": "2026-11-02T10:26:23Z"
+ },
+ "nomis-ashe-places": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
+  "bytes": 123468,
+  "content_type": "text/csv",
+  "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+  "retrieved": "2026-11-02T10:26:31Z"
+ },
  "nomis-ashe-resident": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
   "file": "nomis/ashe-resident-uk-median-weekly.csv",
@@ -327,6 +351,22 @@
   "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
   "retrieved": "2026-11-02T08:58:24Z"
  },
+ "ons-lf2u": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf2u/lms",
+  "file": "ons/lf2u.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "3454d3aa08564fc402a35d2bba8d1103ef4ef205665979c1da85948ef27d268b",
+  "retrieved": "2026-11-02T10:28:39Z"
+ },
+ "ons-lfk6": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lfk6/lms",
+  "file": "ons/lfk6.csv",
+  "bytes": 10035,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "6a4c1fe23a5f81d5a746120aabf6cbba95777a467812b1c31f1ba5947b6ab781",
+  "retrieved": "2026-11-02T10:28:42Z"
+ },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
   "file": "ons/mgrz.csv",
@@ -350,6 +390,30 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "88f8285509f69313fb14f9f3e77d0e04b272dcbfe5a9c109bedf392da5abd90f",
   "retrieved": "2026-11-02T09:55:36Z"
+ },
+ "ons-ybud": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+  "file": "ons/ybud.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "c920ed5c1a7efc29901c4c8eea0420650cb847a383e14eb114843bb19876fb3e",
+  "retrieved": "2026-11-02T10:28:29Z"
+ },
+ "ons-ybug": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+  "file": "ons/ybug.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "fb818e40eb9e4c8448835294a71627a6d3da99e90aaf4a9d6302004ecbd0cc82",
+  "retrieved": "2026-11-02T10:28:32Z"
+ },
+ "ons-ybuj": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybuj/lms",
+  "file": "ons/ybuj.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "221cf5804d9236babfc4399b72ab9337ea0e6fd68633d046c96e43c1ae4c4b2f",
+  "retrieved": "2026-11-02T10:28:35Z"
  },
  "ons-ycbe": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",
@@ -406,5 +470,13 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "wg-schools-census-2025": {
+  "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
+  "file": "wg/schools-census-results-january-2025.ods",
+  "bytes": 75586,
+  "content_type": "application/octet-stream",
+  "sha256": "c323b03444f3cb9ce9df7de61f8bb9c65d1417a51f2cea59e360ac5bc1bc2d45",
+  "retrieved": "2026-11-02T10:28:49Z"
  }
 }
