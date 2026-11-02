@@ -151,6 +151,22 @@
   "sha256": "a014a38563622e3361db3fb4b3d70689dd74f23f1aebe625c1393f2c0e9fa15d",
   "retrieved": "2026-11-02T10:24:32Z"
  },
+ "explain-hmrc-spi-2324-commentary": {
+  "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
+  "file": "explain/hmrc-spi-2023-24-commentary.html",
+  "bytes": 213855,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "87160b66c7b163366f8f3187e79c0f2fac4de7f1882f36f980cb96cfa37c9c6c",
+  "retrieved": "2026-11-02T15:15:33Z"
+ },
+ "explain-hmrc-spi-quality": {
+  "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
+  "file": "explain/hmrc-spi-quality-report.html",
+  "bytes": 240912,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
+  "retrieved": "2026-11-02T15:15:37Z"
+ },
  "explain-ons-2008-recession": {
   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
   "file": "explain/ons-2008-recession.html",
@@ -278,6 +294,30 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "hmrc-spi-2324-tables": {
+  "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+  "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
+  "bytes": 166693,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "ad063b06b2bdeef8600dbbb09d48153337a4966f8c7eea50df7a2e0304ebd73e",
+  "retrieved": "2026-11-02T15:15:29Z"
+ },
+ "ni-de-enrolments-2025-26": {
+  "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
+  "file": "nations/ni-school-enrolments-2025-26-page.html",
+  "bytes": 33612,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "037a1726d90f86fc36cc06c64732eb963c6709da46326fff1de5a6a506bdfd82",
+  "retrieved": "2026-11-02T15:17:56Z"
+ },
+ "ni-housing-2025-26": {
+  "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
+  "file": "nations/ni-housing-stats-25-26-tables1.ods",
+  "bytes": 371994,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "8709fa04decf7b82feebfec3806dfb1989418e8d813d91f829ee1e938bda3eae",
+  "retrieved": "2026-11-02T15:19:11Z"
  },
  "nomis-aps-def": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.def.sdmx.json",
@@ -558,6 +598,46 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "scot-primary-class-2025": {
+  "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
+  "file": "nations/scot-primary-class-size-dataset-2025.xlsx",
+  "bytes": 600760,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  "sha256": "9abf2c165e276af2be8ac75c4ccb054dda1cc77180ebcc8fcd5f2e6d8066fb91",
+  "retrieved": "2026-11-02T15:19:04Z"
+ },
+ "scot-pupil-census-2025": {
+  "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
+  "file": "nations/scot-pupil-census-supplementary-2025.xlsx",
+  "bytes": 987934,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  "sha256": "cf3b126da6b4e36655c96ff779d8deaa4408c863cbe9a1ad5fd652b9c2dc303d",
+  "retrieved": "2026-11-02T15:19:08Z"
+ },
+ "scot-stock-by-tenure": {
+  "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2018/09/housing-statistics-stock-by-tenure/documents/stock-by-tenure-2017/stock-by-tenure-2017/govscot%3Adocument/2025%2B-%2BStock%2Bby%2Btenure.xlsx",
+  "file": "nations/scot-stock-by-tenure-2025.xlsx",
+  "bytes": 172861,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  "sha256": "b69149bdf5a5496cc9a79b109d2011ca7f8813c10f47eddd896fc5564002548b",
+  "retrieved": "2026-11-02T15:17:34Z"
+ },
+ "wales-dwelling-stock": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+  "file": "nations/wales-dwelling-stock-by-tenure.csv",
+  "bytes": 444935,
+  "content_type": "text/csv",
+  "sha256": "e510c9a85c407c5d575510a9dc050821236d1664214bc58a0ce4574cc6f91e72",
+  "retrieved": "2026-11-02T15:21:03Z"
+ },
+ "wales-dwelling-stock-meta": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+  "file": "nations/wales-dwelling-stock-metadata.json",
+  "bytes": 16672,
+  "content_type": "application/json; charset=utf-8",
+  "sha256": "7931404545e7769761ba9fbc3aa9ddc84fafc89179acb813238844bb4206caab",
+  "retrieved": "2026-11-02T15:20:59Z"
  },
  "wg-schools-census-2025": {
   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",

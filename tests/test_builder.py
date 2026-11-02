@@ -279,6 +279,42 @@ class WhoPaysAndTaxMix(unittest.TestCase):
         self.assertTrue(all(0 < self.facts[f"etb.t16.ret.{y}"].value <= 100 for y in ys))
 
 
+class IncomeTaxByAge(unittest.TestCase):
+    """Review gap 4: HMRC Income Tax by age (Survey of Personal Incomes Table 3.2)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+
+    def test_age_ranges_add_up_to_hmrc_totals(self):
+        f = self.facts
+        ages = [k for k, _ in self.d["who_age"]["ages"]]
+        n = sum(f[f"spi.age.n.{a}.all"].value for a in ages)
+        self.assertLess(abs(n - f["spi.age.n.all.all"].value) / f["spi.age.n.all.all"].value, 0.005)
+        published = f["spi.age.n.all.all"].value * f["spi.age.meantax.all.all"].value / 1e6
+        self.assertLess(abs(f["spi.age.tottax.sum.all"].value - published) / published, 0.005)
+        for m in ("n", "tax", "inc"):
+            self.assertAlmostEqual(sum(f[f"spi.age.share{m}.{a}"].value for a in ages), 100, places=6)
+
+    def test_men_and_women_add_up(self):
+        f = self.facts
+        for a, _ in self.d["who_age"]["ages"]:
+            both = f[f"spi.age.n.{a}.men"].value + f[f"spi.age.n.{a}.women"].value
+            self.assertLess(abs(both - f[f"spi.age.n.{a}.all"].value), 15, a)  # thousands, rounded
+
+    def test_page_wording_matches_the_data(self):
+        f = self.facts
+        ages = [k for k, _ in self.d["who_age"]["ages"]]
+        top_tax = max(ages, key=lambda a: f[f"spi.age.meantax.{a}.all"].value)
+        top_inc = sorted(ages, key=lambda a: f[f"spi.age.meaninc.{a}.all"].value)[-2:]
+        self.assertIn(top_tax, top_inc)  # "groups that owed the most tax per taxpayer also had the highest incomes"
+        self.assertLess(f[f"spi.age.medtax.{top_tax}.all"].value, f[f"spi.age.meantax.{top_tax}.all"].value)
+
+
 class Glossary(unittest.TestCase):
     def wrap(self, main):
         return f'<html><body><nav>VAT</nav><main id="main" class="wrap">{main}</main><footer><p>VAT</p></footer></body></html>'

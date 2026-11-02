@@ -74,7 +74,7 @@ def cell_value(src_file, locator):
         if m:
             lines = list(csv.reader(io.StringIO(text)))
             head = lines[0]
-            return lines[int(m.group(1)) - 1][head.index("OBS_VALUE")]
+            return lines[int(m.group(1)) - 1][head.index("OBS_VALUE" if "OBS_VALUE" in head else "Data values")]
         m = re.fullmatch(r"\w+ row '(.+)'", locator)
         if m:
             for row in csv.reader(io.StringIO(text)):

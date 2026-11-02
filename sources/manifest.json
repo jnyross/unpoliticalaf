@@ -357,6 +357,56 @@
    "id": "explain-ehs-2024-25-ch2",
    "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
    "file": "explain/ehs-2024-25-chapter-2.html"
+  },
+  {
+   "id": "hmrc-spi-2324-tables",
+   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods"
+  },
+  {
+   "id": "explain-hmrc-spi-2324-commentary",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
+   "file": "explain/hmrc-spi-2023-24-commentary.html"
+  },
+  {
+   "id": "explain-hmrc-spi-quality",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
+   "file": "explain/hmrc-spi-quality-report.html"
+  },
+  {
+   "id": "scot-stock-by-tenure",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2018/09/housing-statistics-stock-by-tenure/documents/stock-by-tenure-2017/stock-by-tenure-2017/govscot%3Adocument/2025%2B-%2BStock%2Bby%2Btenure.xlsx",
+   "file": "nations/scot-stock-by-tenure-2025.xlsx"
+  },
+  {
+   "id": "ni-de-enrolments-2025-26",
+   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
+   "file": "nations/ni-school-enrolments-2025-26-page.html"
+  },
+  {
+   "id": "scot-primary-class-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
+   "file": "nations/scot-primary-class-size-dataset-2025.xlsx"
+  },
+  {
+   "id": "scot-pupil-census-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
+   "file": "nations/scot-pupil-census-supplementary-2025.xlsx"
+  },
+  {
+   "id": "ni-housing-2025-26",
+   "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
+   "file": "nations/ni-housing-stats-25-26-tables1.ods"
+  },
+  {
+   "id": "wales-dwelling-stock-meta",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+   "file": "nations/wales-dwelling-stock-metadata.json"
+  },
+  {
+   "id": "wales-dwelling-stock",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+   "file": "nations/wales-dwelling-stock-by-tenure.csv"
   }
  ]
 }

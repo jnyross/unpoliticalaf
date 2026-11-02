@@ -1078,6 +1078,75 @@ def schools_wales(facts):
     return out
 
 
+# ---------------------------------------------------------------- who pays: Income Tax by age
+
+SPI_AGES = (("u20", "Under 20"), ("20_24", "20-24"), ("25_29", "25-29"), ("30_34", "30-34"), ("35_39", "35-39"), ("40_44", "40-44"),
+            ("45_49", "45-49"), ("50_54", "50-54"), ("55_59", "55-59"), ("60_64", "60-64"), ("65_69", "65-69"), ("70_74", "70-74"),
+            ("75plus", "75 and over"), ("all", "Totals"))
+
+
+def income_tax_by_age(facts):
+    """HMRC Survey of Personal Incomes 2023-24, Table 3.2: taxpayers, income and Income Tax by age range and sex."""
+    path = "data/fetched/hmrc/spi-2023-24-tables-3-1-to-3-11.ods"
+    rows = ods(path)["Table_3_2"]
+    hdr_i = next(i for i, r in enumerate(rows) if r and str(r[0]).strip() == "Age range")
+    hdr = [str(v).strip() for v in rows[hdr_i]]
+    cols = {"n": "Number of taxpayers", "medinc": "Median income before tax", "medtax": "Median tax",
+            "meaninc": "Mean income before tax", "meantax": "Mean tax"}
+    units = {"n": "thousand taxpayers", "medinc": "£ a year", "medtax": "£ a year", "meaninc": "£ a year", "meantax": "£ a year"}
+    sexes = {"All": "all", "Male": "men", "Female": "women"}
+    y = "2023 to 2024"
+    labels = dict((lab, key) for key, lab in SPI_AGES)
+    for i in range(hdr_i + 1, len(rows)):
+        r = rows[i]
+        if not r or len(r) < len(hdr):
+            continue
+        age, pop = str(r[0]).strip(), str(r[1]).strip()
+        sex = sexes.get(pop) or ("all" if pop == "All age ranges" else "men" if pop == "All male age ranges" else "women" if pop == "All female age ranges" else None)
+        if age not in labels or sex is None:
+            continue
+        for m, col in cols.items():
+            j = hdr.index(col)
+            facts.add(Fact(f"spi.age.{m}.{labels[age]}.{sex}", num(r[j]), units[m], y, "hmrc-spi-2324-tables", f"Table_3_2!{ref(i, j)}", "outturn"))
+    # Totals of income and tax for each age range: number of taxpayers × mean. HMRC rounds both to
+    # three significant figures, so these totals (and shares built from them) are approximate.
+    ages = [k for k, _ in SPI_AGES if k != "all"]
+    for sex in ("all", "men", "women"):
+        for m, unit in (("inc", "£bn a year"), ("tax", "£bn a year")):
+            for a in ages:
+                n, mean = f"spi.age.n.{a}.{sex}", f"spi.age.mean{m}.{a}.{sex}"
+                facts.add(Fact(f"spi.age.tot{m}.{a}.{sex}", facts[n].value * facts[mean].value / 1e6, unit, y, "hmrc-spi-2324-tables",
+                               f"{facts[n].locator} × {facts[mean].locator}", "calculated",
+                               formula=f"{n} × {mean} ÷ 1000000", inputs=[n, mean],
+                               note="Number of taxpayers × mean, both rounded by HMRC to three significant figures, so approximate."))
+            ids = [f"spi.age.tot{m}.{a}.{sex}" for a in ages]
+            facts.add(Fact(f"spi.age.tot{m}.sum.{sex}", sum(facts[i].value for i in ids), unit, y, "hmrc-spi-2324-tables",
+                           facts[ids[0]].locator, "calculated", formula=" + ".join(ids), inputs=ids,
+                           note="Sum of the age ranges, each calculated from rounded figures."))
+    ids = [f"spi.age.n.{a}.all" for a in ages]
+    facts.add(Fact("spi.age.n.sum.all", sum(facts[i].value for i in ids), "thousand taxpayers", y, "hmrc-spi-2324-tables",
+                   facts[ids[0]].locator, "calculated", formula=" + ".join(ids), inputs=ids,
+                   note="Sum of the age ranges, so shares add up to 100%; HMRC's own rounded total may differ slightly."))
+    for a in ages:
+        for m, base in (("n", "spi.age.n.sum.all"), ("tax", "spi.age.tottax.sum.all"), ("inc", "spi.age.totinc.sum.all")):
+            part = f"spi.age.n.{a}.all" if m == "n" else f"spi.age.tot{m}.{a}.all"
+            facts.add(Fact(f"spi.age.share{m}.{a}", 100 * facts[part].value / facts[base].value, "% of all taxpayers" if m == "n" else f"% of all taxpayers' {'Income Tax' if m == 'tax' else 'income'}",
+                           y, "hmrc-spi-2324-tables", facts[part].locator, "calculated", formula=f"100 × {part} ÷ {base}", inputs=[part, base]))
+        facts.add(Fact(f"spi.age.rate.{a}", 100 * facts[f"spi.age.meantax.{a}.all"].value / facts[f"spi.age.meaninc.{a}.all"].value,
+                       "% of the age range's total income", y, "hmrc-spi-2324-tables", facts[f"spi.age.meantax.{a}.all"].locator, "calculated",
+                       formula=f"100 × spi.age.meantax.{a}.all ÷ spi.age.meaninc.{a}.all", inputs=[f"spi.age.meantax.{a}.all", f"spi.age.meaninc.{a}.all"],
+                       note="Mean tax ÷ mean income: all Income Tax owed by the age range as a share of all its income."))
+    # Broader groups for the headline: sums of the published age ranges.
+    groups = {"u30": ("u20", "20_24", "25_29"), "30_64": ("30_34", "35_39", "40_44", "45_49", "50_54", "55_59", "60_64"),
+              "65plus": ("65_69", "70_74", "75plus")}
+    for g, members in groups.items():
+        for m in ("n", "tax", "inc"):
+            ids = [f"spi.age.share{m}.{a}" for a in members]
+            facts.add(Fact(f"spi.age.share{m}.{g}", sum(facts[i].value for i in ids), facts[ids[0]].unit, y, "hmrc-spi-2324-tables",
+                           facts[ids[0]].locator, "calculated", formula=" + ".join(ids), inputs=ids))
+    return {"ages": [(k, lab) for k, lab in SPI_AGES if k != "all"], "year": y}
+
+
 def build_all():
     facts = Facts()
     d = {
@@ -1085,6 +1154,7 @@ def build_all():
         "receipts": receipts(facts),
         "who": who_pays(facts),
         "who_types": household_types(facts),
+        "who_age": income_tax_by_age(facts),
         "work": work(facts),
         "earnings": earnings(facts),
         "work_places": work_places(facts),
@@ -1100,6 +1170,8 @@ def build_all():
         "housing_regions": housing_regions(facts),
         "schools_wales": schools_wales(facts),
     }
+    from . import data_nations
+    d["nations"] = data_nations.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     return facts, d
