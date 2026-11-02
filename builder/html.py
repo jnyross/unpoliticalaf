@@ -640,6 +640,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     """
     raw = series
     heading = _finding(finding, point_labels or labels, [(nm, vals) for nm, vals, _ in series], breaks, split_breaks, forecast_from)
+    described = _described(finding, len(labels), breaks, split_breaks, forecast_from) if heading else []
     W, H = 400, round(height * 400 / 480) + 20
     direct = len(series) <= 3 and all(len(nm) <= 26 for nm, _, _ in series) and len(series) > 1
     L, R, T, B = 44, 8, 14, 30
@@ -775,7 +776,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if forecast_from is not None:
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure>{_titles(heading, title)}{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title, described)}{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
 
 _SW_COUNT = [0]
@@ -1006,11 +1007,23 @@ def _finding(rule, labels, series, breaks, split_breaks, forecast_from):
     return rule([str(v) for v in labels], series, stretches) if stretches else ""
 
 
-def _titles(heading, title):
-    """The finding as the chart's heading, with what the chart measures beneath it."""
+def _described(rule, n, breaks, split_breaks, forecast_from):
+    """The lines and years a trend heading describes, for builder/check.py."""
+    if not rule or isinstance(rule, str):
+        return []
+    stretches = _stretches(n, breaks if split_breaks else (), forecast_from)
+    return F.lines_of(rule, stretches) if stretches else []
+
+
+def _titles(heading, title, described=()):
+    """The finding as the chart's heading, with what the chart measures beneath it.
+    described: (series, a, b) runs the heading describes, written as data-lines so the
+    build check can confirm the heading names every big rise and fall in them."""
     if not heading:
         return f'<p class="ctitle" aria-hidden="true">{esc(title)}</p>'
-    return f'<p class="ctitle" aria-hidden="true">{esc(heading)}</p><p class="csub" aria-hidden="true">{esc(title)}</p>'
+    lines = " ".join(f"{si}:{a}:{b}" for si, a, b in described)
+    attr = f' data-lines="{lines}"' if lines else ""
+    return f'<p class="ctitle" aria-hidden="true"{attr}>{esc(heading)}</p><p class="csub" aria-hidden="true">{esc(title)}</p>'
 
 
 def _show(series, ids, num, kind, si, i):

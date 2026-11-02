@@ -110,6 +110,27 @@ class Findings(unittest.TestCase):
         self.assertEqual(phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way")
         self.assertEqual(phrase(self.L, [4, 4, 4, 4, 4, 4]), "stayed the same from 2008 to 2013")
 
+    def test_every_big_rise_and_fall_is_named(self):
+        from builder.findings import phrase, sentence
+        years = [str(y) for y in range(2009, 2024)]
+        # Holiday visits abroad, millions: up to 2019, down in 2020, back up by 2023
+        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, 4.4, 8.9, 45.6, 55.5]
+        self.assertEqual(phrase(years, hol), "rose until 2019, fell in 2020, then rose back to about the 2019 level")
+        self.assertEqual(sentence(years, hol, lambda i: str(hol[i])),
+                         "From 41.2 in 2009, rose to a high of 58.7 in 2019, fell to a low of 4.4 in 2020, then rose to 55.5 in 2023.")
+        # Spending as a share of GDP: a ten-year fall before the 2020-21 rise. The small
+        # rise from 43.0 to 46.0 comes before the fall, so the fall is measured from 46.0.
+        gdp = [43.0, 46.0, 45.5, 44.4, 43.8, 42.2, 41.6, 40.8, 40.0, 39.7, 39.1, 39.1, 52.3, 43.4, 44.1]
+        self.assertEqual(phrase(years, gdp), "fell until 2019, rose until 2021, then fell back part of the way")
+
+    def test_check_finds_a_title_that_leaves_out_a_turn(self):
+        from builder.check import big_turns
+        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, 4.4, 8.9, 45.6, 55.5]
+        self.assertEqual(big_turns(hol), [([10], "peak"), ([11], "low")])
+        self.assertEqual(big_turns([39.1, 39.1, 38.9, 39.0]), [])  # within 2%: changed little
+        self.assertEqual(big_turns([5, 1, 1, 5]), [([1, 2], "low")])  # a low held two years is one turn
+        self.assertEqual(big_turns([1, 2, 3, None, 5]), [])
+
     def test_missing_years_are_skipped_not_zero(self):
         from builder.findings import phrase
         self.assertEqual(phrase(self.L, [None, 2, None, 4, 5, None]), "rose between 2009 and 2012")
@@ -117,7 +138,7 @@ class Findings(unittest.TestCase):
     def test_title_and_subtitle(self):
         from builder import findings as F
         svg = line_chart("Things, 2008 to 2013", self.L, [("a", [1, 2, 3, 4, 5, 6], "a")], "u", kind="dp1", finding=F.trend("Things"))
-        self.assertIn('<p class="ctitle" aria-hidden="true">Things rose between 2008 and 2013</p>', svg)
+        self.assertIn('<p class="ctitle" aria-hidden="true" data-lines="0:0:6">Things rose between 2008 and 2013</p>', svg)
         self.assertIn('<p class="csub" aria-hidden="true">Things, 2008 to 2013</p>', svg)
         self.assertIn('aria-label="Things rose between 2008 and 2013. Things, 2008 to 2013.', svg)
 
