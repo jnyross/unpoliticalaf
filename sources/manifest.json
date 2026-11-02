@@ -193,36 +193,6 @@
    "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
   },
   {
-   "id": "explain-obr-energy",
-   "url": "https://obr.uk/box/the-cost-of-the-governments-energy-support-policies/",
-   "file": "explain/obr-energy-support.html"
-  },
-  {
-   "id": "explain-obr-debt-interest",
-   "url": "https://obr.uk/box/the-sensitivity-and-volatility-of-debt-interest-spending/",
-   "file": "explain/obr-debt-interest.html"
-  },
-  {
-   "id": "explain-obr-thresholds",
-   "url": "https://obr.uk/box/fiscal-implications-of-personal-tax-threshold-freezes-and-reductions/",
-   "file": "explain/obr-threshold-freezes.html"
-  },
-  {
-   "id": "explain-obr-receipts-recovered",
-   "url": "https://obr.uk/box/why-have-receipts-recovered-so-strongly-in-the-wake-of-the-pandemic/",
-   "file": "explain/obr-receipts-recovered.html"
-  },
-  {
-   "id": "explain-obr-income-tax-strong",
-   "url": "https://obr.uk/box/why-is-the-economy-generating-such-strong-income-tax-revenues/",
-   "file": "explain/obr-income-tax-strong.html"
-  },
-  {
-   "id": "explain-obr-spa",
-   "url": "https://obr.uk/box/reviews-of-the-state-pension-age/",
-   "file": "explain/obr-state-pension-age.html"
-  },
-  {
    "id": "explain-ons-psf-2021-03",
    "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
    "file": "explain/ons-psf-march2021.html"
@@ -231,11 +201,6 @@
    "id": "explain-ons-2008-recession",
    "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
    "file": "explain/ons-2008-recession.html"
-  },
-  {
-   "id": "explain-ons-etb-fye2024",
-   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2024",
-   "file": "explain/ons-etb-fye2024.html"
   },
   {
    "id": "explain-ons-ashe-2025",
@@ -253,11 +218,6 @@
    "file": "explain/ons-labour-market-latest.html"
   },
   {
-   "id": "explain-ons-travel-2020",
-   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2020",
-   "file": "explain/ons-travel-trends-2020.html"
-  },
-  {
    "id": "explain-ons-travel-2024",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
    "file": "explain/ons-travel-trends-2024.html"
@@ -271,6 +231,46 @@
    "id": "explain-ehs-collection",
    "url": "https://www.gov.uk/government/collections/english-housing-survey",
    "file": "explain/ehs-collection.html"
+  },
+  {
+   "id": "explain-hmrc-itl-commentary",
+   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
+   "file": "explain/hmrc-itl-commentary.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-demographics",
+   "url": "https://www.gov.uk/government/collections/english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
+   "file": "explain/ehs-2024-25-demographics-collection.html"
+  },
+  {
+   "id": "explain-ehs-2023-24-rented",
+   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors",
+   "file": "explain/ehs-2023-24-rented-sectors-page.html"
+  },
+  {
+   "id": "explain-ons-etb-latest",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
+   "file": "explain/ons-etb-latest.html"
+  },
+  {
+   "id": "explain-ons-etb-previous",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/previousReleases",
+   "file": "explain/ons-etb-previous.html"
+  },
+  {
+   "id": "explain-ons-psf-2023-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
+   "file": "explain/ons-psf-march2023.html"
+  },
+  {
+   "id": "explain-ons-travel-2021",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
+   "file": "explain/ons-travel-trends-2021.html"
+  },
+  {
+   "id": "explain-ons-travel-2022",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
+   "file": "explain/ons-travel-trends-2022.html"
   }
  ]
 }
