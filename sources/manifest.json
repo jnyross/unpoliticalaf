@@ -452,6 +452,16 @@
    "id": "etb-hist-page",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets",
    "file": "etb/hist-dataset-page.html"
+  },
+  {
+   "id": "ons-ott-timeseries",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
+   "file": "ott/ott-timeseries.csv"
+  },
+  {
+   "id": "explain-ons-lfs-qmi",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
+   "file": "explain/ons-lfs-qmi.html"
   }
  ]
 }

@@ -75,6 +75,11 @@ def cell_value(src_file, locator):
             lines = list(csv.reader(io.StringIO(text)))
             head = lines[0]
             return lines[int(m.group(1)) - 1][head.index("OBS_VALUE" if "OBS_VALUE" in head else "Data values")]
+        m = re.fullmatch(r"CDID (\w+) row '(.+)'", locator)
+        if m:  # a time-series file with one column per series, found by its CDID row
+            rows = list(csv.reader(io.StringIO(text)))
+            col = next(r for r in rows if r and r[0] == "CDID").index(m.group(1))
+            return next((r[col] for r in rows if r and r[0] == m.group(2)), None)
         m = re.fullmatch(r"\w+ row '(.+)'", locator)
         if m:
             for row in csv.reader(io.StringIO(text)):
@@ -297,11 +302,19 @@ def check_structure():
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
-    years = sorted(int(p.stem) for p in (SITE / "life").glob("[0-9]*.html"))
-    pairs = len(list((SITE / "life/compare").glob("*-*.html")))
+    pages = sorted(int(p.stem) for p in (SITE / "life").glob("[0-9]*.html"))
+    # Every pair of explorer years (2008 on) has a comparison page; earlier years have a year page only.
+    compare = list((SITE / "life/compare").glob("*-*.html"))
+    years = sorted({int(x) for p in compare for x in p.stem.split("-")})
+    pairs = len(compare)
     if pairs != len(years) * (len(years) - 1) // 2:
         fail(f"{pairs} comparison pages for {len(years)} years")
-    return len(years), pairs
+    for y in years:
+        if y not in pages:
+            fail(f"missing year page life/{y}.html")
+    if pages != list(range(pages[0], pages[-1] + 1)):
+        fail("year pages are not one per year")
+    return len(pages), pairs
 
 
 def run_axe(paths):
@@ -353,7 +366,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
+                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/index.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
