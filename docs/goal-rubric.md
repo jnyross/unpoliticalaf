@@ -29,6 +29,8 @@ Caps that apply whatever the page looks like:
 - No dimension scores above 3 on the auditor's own judgement alone. Level 4 needs
   a recorded independent review of that dimension or a recorded side-by-side
   comparison with a named benchmark page.
+  Side-by-side benchmark comparisons are recorded in
+  [benchmark-comparison.md](benchmark-comparison.md).
 - Level 5 needs evidence from real readers (the five-person phone test, or a
   recorded smaller test with real people).
 - Any material factual error, misleading chart or partisan framing found
