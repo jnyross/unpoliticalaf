@@ -11,7 +11,7 @@ import re
 
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, fmt, esc
+from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
 from .pages_nations import housing_nations_block, schools_nations_block
 
@@ -276,6 +276,39 @@ def headline(facts, num, topic, y, gb=True):
     return ""
 
 
+def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
+    """Where year y sits in the topic's key measure, as a small dot chart for every year.
+
+    mkey picks another measure from MEAS; measure gives (label, fact-id function,
+    kind, group function) for one that is not in MEAS.
+    """
+    if measure:
+        label, fid, kind, group = measure
+    else:
+        mkey = mkey or KEY_MEASURES[topic][0]
+        _, _, label, fid, kind, _, _, group = next(m for m in MEAS if m[0] == mkey)
+    pts = [(yr, facts[fid(yr)].value if fid(yr) in facts else None) for yr in YEARS]
+    have = [(yr, v) for yr, v in pts if v is not None]
+    if len(have) < 2:
+        return ""
+    breaks = bool(group) and len({group(yr) for yr in YEARS}) > 1
+    aria = f"Dot chart of {label.lower()} for each year from {FIRST} to {LAST}, with {y} shown as a larger dark dot. The caption gives the values."
+    svg = spark(pts, aria, highlight=y, group=group)
+    if not caption:
+        return svg
+    lo = min(have, key=lambda t: t[1])
+    hi = max(have, key=lambda t: t[1])
+    this = (f"The dark dot is {y}: {num(fid(y), kind)}." if fid(y) in facts and facts[fid(y)].value is not None
+            else f"There is no figure for {y}.")
+    cap = (f"<strong>{esc(label)}</strong>, {FIRST} to {LAST}. {this} "
+           f"The scale runs from {num(fid(lo[0]), kind)} ({lo[0]}) to {num(fid(hi[0]), kind)} ({hi[0]}) and does not start at zero.")
+    if len(have) < len(pts):
+        cap += " Years with no figure have no dot."
+    if breaks:
+        cap += " The dashed line marks a change of definition, so dots either side are not joined."
+    return f'<figure class="yearspark">{svg}<figcaption>{cap}</figcaption></figure>'
+
+
 def year_page(facts, d, num, sources, y):
     up = "../"
     body = [f"<h1>Everyday life in {y}</h1>"]
@@ -287,6 +320,7 @@ def year_page(facts, d, num, sources, y):
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
+        body.append(year_spark(facts, num, key, y))
         body.append(topic_block_for_year(facts, num, sources, key, y, up))
         if any(U.has(m[3](y)) for m in MEAS if m[1] == key):
             body.append(f'<p class="small">± is the 95% margin of error, shown where the publisher gives one. {U.how_sure_link("../")}</p>')

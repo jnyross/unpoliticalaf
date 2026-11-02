@@ -367,8 +367,38 @@ class Folding(unittest.TestCase):
         self.assertIn('<div class="answer"><p>75%</p><div>x</div></div>', lead)
         self.assertIn("<p>Intro</p>", lead)
         self.assertIn("More on Work", rest)
-        self.assertIn("chart and table", rest)
-        self.assertIn("<figure>chart</figure>", rest.split("</summary>", 1)[1])
+        # The section's main chart stays in view under the answer; only the table folds.
+        self.assertIn("<figure>chart</figure>", lead)
+        self.assertIn('class="hint">table<', rest)
+        self.assertNotIn("<figure>", rest)
+
+    def test_chart_inside_a_disclosure_stays_folded(self):
+        from builder.html import fold
+        body = ('<h2 id="a">Work</h2><div class="answer"><p>x</p></div>'
+                '<details><summary>s</summary><figure>inner</figure></details><p class="small">Cap</p><ul class="bars"><li>b</li></ul><table></table>')
+        lead, rest = fold(body).split('<details class="more">')
+        self.assertIn('<p class="small">Cap</p>', lead)
+        self.assertIn('<ul class="bars"><li>b</li></ul>', lead)
+        self.assertIn("<figure>inner</figure>", rest)
+
+    def test_long_comparison_list_keeps_first_rows(self):
+        from builder.html import fold, KEEP_ROWS
+        rows = "".join(f"<li>r{i}</li>" for i in range(KEEP_ROWS + 3))
+        body = f'<h2 id="a">Work</h2><div class="answer"><p>x</p></div><ul class="cmp-list">{rows}</ul><table></table>'
+        lead, rest = fold(body).split('<details class="more">')
+        self.assertIn(f"<li>r{KEEP_ROWS - 1}</li>", lead)
+        self.assertNotIn(f"<li>r{KEEP_ROWS}</li>", lead)
+        self.assertIn(f'<ul class="cmp-list"><li>r{KEEP_ROWS}</li>', rest)
+
+    def test_spark_leaves_gaps_and_breaks(self):
+        from builder.html import spark
+        pts = [(2008, None), (2009, 1.0), (2010, 2.0), (2011, 3.0), (2012, 4.0)]
+        svg = spark(pts, "label", highlight=2010, group=lambda y: y >= 2011)
+        self.assertIn('role="img"', svg)
+        self.assertEqual(svg.count('class="gap"'), 1)   # 2008 has no figure
+        self.assertEqual(svg.count('class="brk"'), 1)   # definition change between 2010 and 2011
+        self.assertEqual(svg.count("<polyline"), 2)     # never joined across the break
+        self.assertEqual(svg.count('class="hi"'), 1)
 
     def test_marker_and_unmarked_sections(self):
         from builder.html import fold, FOLD, NOFOLD

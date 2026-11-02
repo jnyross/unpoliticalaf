@@ -1,11 +1,35 @@
 """Home page and the sources and methods page."""
-from .html import page, esc, table
+from .html import page, esc, table, bars
 
 
 def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
+    from .pages_life import year_spark, FIRST
+    per = d["spending"]["per100"]
+    names = {k: v["name"] for k, v in d["spending"]["views"]["cash"]["series"].items()}
+    top3 = sorted((k for k in names if k in per and k not in ("services", "adjustments", "tme", "debt_interest", "transport", "eu")),
+                  key=lambda k: -facts[per[k]].value)[:3]
+
+    def mini(html):
+        # A small picture of the card's figures. The card text says the same in words,
+        # so it is hidden from screen readers to keep the link name short.
+        return f'<div class="mini" aria-hidden="true">{html}</div>'
+
+    v_spend = mini(bars([(esc(names[k]), per[k], "") for k in top3], "per100", num, maxval=100))
+    v_tax = mini(bars([("Income Tax", f"rec.share.income_tax.{y}", ""), ("National Insurance", f"rec.share.nics.{y}", ""),
+                       ("VAT", f"rec.share.vat.{y}", "")], "pct0", num, maxval=100))
+    v_who = mini(bars([("Their share of taxpayers' income", "hmrc.income.top1.2023 to 2024", "alt"),
+                       ("Their share of Income Tax", "hmrc.share.top1.2023 to 2024", "")], "pct", num, maxval=100))
+    fifths = ["Lowest-income fifth", "Second fifth", "Middle fifth", "Fourth fifth", "Highest-income fifth"]
+    v_hh = mini(bars([(f, f"etb.t8.gross.all.q{i + 1}", "") for i, f in enumerate(fifths)], "pct", num, maxval=100))
+    owners = ("Households in England that own their home", lambda yr: f"house.owners.{yr}", "pct0", None)
+    sparks = {"work": mini(year_spark(facts, num, "work", L, caption=False)),
+              "earnings": mini(year_spark(facts, num, "earnings", L, caption=False)),
+              "housing": mini(year_spark(facts, num, "housing", 2024, caption=False, measure=owners)),
+              "holidays": mini(year_spark(facts, num, "holidays", L, caption=False, mkey="hol.visits")),
+              "schools": mini(year_spark(facts, num, "schools", L, caption=False))}
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 <h2 id="money">Public money: four questions</h2>
@@ -13,28 +37,32 @@ def home_page(facts, d, num, sources):
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>
 <span class="big">{num(f"spend.cash.tme.{sp}", "bn")}</span>
 <p>spent by the public sector in {esc(sp)}. The largest area was social protection, including pensions: {num(d["spending"]["per100"]["social"], "per100")} of every £100 spent on services.</p>
+{v_spend}
 <span class="more">Spending by area and over time</span></a>
 <a class="card" href="taxes.html"><h3>Which taxes raise the money?</h3>
 <span class="big">{num(f"rec.taxes.{y}", "bn")}</span>
 <p>raised in taxes in {y}. Income Tax, National Insurance and VAT raised {num(f"rec.big3share.{y}", "pct0")} of it. Borrowing covered another {num(f"agg.psnb.{y}", "bn")}.</p>
+{v_tax}
 <span class="more">Taxes, other receipts and borrowing</span></a>
 <a class="card" href="who-pays.html"><h3>Who pays?</h3>
 <span class="big">{num("hmrc.share.top1.2023 to 2024", "pct")}</span>
 <p>of all Income Tax was paid by the top 1% of Income Tax payers in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
+{v_who}
 <span class="more">Income Tax and all taxes, by group</span></a>
 <a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
-<p>of gross household income, on average across everyone, in 2023/24. That is an average across households, not anyone's tax rate.</p>
+<p>of gross household income, on average across everyone, in 2023/24. That is an average across households, not anyone's tax rate. By income fifth:</p>
+{v_hh}
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from 2008 to {L}, or compare two. Each topic shows the latest figure and what it covers.</p>
+<p>Pick any year from 2008 to {L}, or compare two. Each topic shows the latest figure and what it covers, with a small chart of every year: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
-<a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p></a>
-<a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK.</p></a>
-<a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p></a>
-<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p></a>
-<a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p></a>
+<a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p>{sparks["work"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
+<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p>{sparks["holidays"]}</a>
+<a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p>{sparks["schools"]}</a>
 <a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from 2008 to {L} side by side, with what changed and where definitions changed.</p><span class="more">Choose two years</span></a>
 </div>
 <h2 id="how">How to read this site</h2>
