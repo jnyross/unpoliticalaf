@@ -640,11 +640,18 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         fx = x(forecast_from) - (x(1) - x(0)) / 2
         parts.append(f'<rect x="{fx:.1f}" y="{T}" width="{W - R - fx:.1f}" height="{H - T - B}" fill="#f1f2f3"/>')
         parts.append(f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">{future.capitalize()}</text>')
+    taken = []  # x ranges of break labels already drawn
     for i, text in breaks:
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
         parts.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
         # Right-align the label when it would run past the chart's right edge
-        if bx > W * 0.65 or bx + 3 + len(text) * 6.6 > W:
+        w = len(text) * 6.6
+        right = bx > W * 0.65 or bx + 3 + w > W
+        lo_, hi_ = (bx - 3 - w, bx - 3) if right else (bx + 3, bx + 3 + w)
+        if any(lo_ < b + 4 and hi_ > a - 4 for a, b in taken):
+            continue  # breaks close together share one label; the summary names each
+        taken.append((lo_, hi_))
+        if right:
             parts.append(f'<text x="{bx - 3:.1f}" y="{T + 12}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
         else:
             parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')

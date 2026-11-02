@@ -414,19 +414,9 @@
    "file": "ott/ott-timeseries.csv"
   },
   {
-   "id": "ons-ott-timeseries-page",
-   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet",
-   "file": "ott/ott-timeseries-page.html"
-  },
-  {
    "id": "explain-ons-lfs-qmi",
    "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
    "file": "explain/ons-lfs-qmi.html"
-  },
-  {
-   "id": "explain-ons-employment-1861-2018",
-   "url": "https://www.ons.gov.uk/economy/nationalaccounts/uksectoraccounts/compendium/economicreview/april2019/longtermtrendsinukemployment1861to2018",
-   "file": "explain/ons-long-term-employment-1861-2018.html"
   }
  ]
 }

@@ -5,6 +5,8 @@ and cell or row locator), its period, unit and status. Derived figures (shares,
 real-terms values, changes) record their formula and the facts they use.
 Nothing is filled in: a missing source value stays missing (None).
 """
+import csv
+import io
 import json
 import re
 from dataclasses import dataclass, field, asdict
@@ -13,6 +15,10 @@ from typing import Optional
 from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows, pdf_number
 
 YEARS = list(range(2008, 2026))  # year explorer range (calendar years)
+# Years before the explorer's full range. Only some series reach back this far;
+# their figures are read by history() and shown on the topic pages and the
+# earlier-year pages, each with its own survey and break.
+EARLY_YEARS = list(range(1971, 2008))
 
 
 @dataclass
@@ -466,7 +472,7 @@ def earnings(facts):
         if not g:
             continue
         y = int(r["DATE_NAME"])
-        if y not in YEARS:
+        if y not in YEARS and y not in EARLY_YEARS:
             continue
         fid = f"earn.{g}.{y}"
         st = "provisional" if y == base_year else "published"
@@ -963,7 +969,7 @@ def population(facts):
     """Mid-year population estimates, used to express trips per 100 residents."""
     for key, sid, path in (("uk", "ons-ukpop", "data/fetched/ons/ukpop.csv"), ("gb", "ons-gbpop", "data/fetched/ons/gbpop.csv")):
         meta, data = ons_series(path)
-        for y in YEARS:
+        for y in EARLY_YEARS + YEARS:
             v = data.get(str(y))
             if v is not None:
                 facts.add(Fact(f"pop.{key}.{y}", v, "people", f"mid-{y}", sid, f"{meta.get('CDID')} row '{y}'", "published", note=meta.get("Title", "")))
@@ -997,7 +1003,7 @@ def schools(facts):
     avg_p = find_row(rows, "Average class size", start=prim)
     avg_s = find_row(rows, "Average class size", start=sec)
     for y, j in ycols.items():
-        if y not in YEARS:
+        if y not in YEARS and y not in EARLY_YEARS:
             continue
         for phase, i in (("primary", avg_p), ("secondary", avg_s)):
             facts.add(Fact(f"school.{phase}.{y}", num(rows[i][j]), "pupils per class", f"January {y} census ({y - 1}/{str(y)[2:]} school year)",
@@ -1174,4 +1180,76 @@ def build_all():
     d["nations"] = data_nations.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
+    d["history"] = history(facts)
     return facts, d
+
+
+# ---------------------------------------------------------------- life: before 2008
+
+def history(facts):
+    """Figures from before 2008, where an official series reaches back that far.
+
+    Work: Labour Force Survey, April to June, from 1971 (part-time and age groups from 1992).
+    Housing: tenure in England from the Labour Force Survey, calendar years 1981 to 2008
+    (FT1101 rows above the English Housing Survey's survey years).
+    Travel: all visits abroad by UK residents, International Passenger Survey, 1980 to 2023.
+    Earnings (from 2002) and class sizes (from 2006) are read by earnings() and schools().
+    Only years with a published figure get a fact: nothing is filled in.
+    """
+    out = {"work": {}, "ages": {}, "tenure": {}, "travel": {}}
+    for key, sid, path, unit in (("rate", "ons-lf24", "data/fetched/ons/lf24.csv", "%"), ("men", "ons-mgsv", "data/fetched/ons/mgsv.csv", "%"),
+                                 ("women", "ons-lf25", "data/fetched/ons/lf25.csv", "%"), ("level", "ons-mgrz", "data/fetched/ons/mgrz.csv", "thousands"),
+                                 ("ft", "ons-ycbe", "data/fetched/ons/ycbe.csv", "thousands"), ("pt", "ons-ycbh", "data/fetched/ons/ycbh.csv", "thousands")):
+        meta, data = ons_series(path)
+        for y in EARLY_YEARS:
+            v = _q2(data, y)
+            if v is None:
+                continue
+            fid = f"work.{key}.{y}"
+            facts.add(Fact(fid, v, unit, f"April to June {y}", sid, f"{meta.get('CDID')} row '{y} Q2'", "published", note=meta.get("Title", "")))
+            out["work"].setdefault(key, []).append(y)
+    for y in out["work"].get("pt", []):
+        ft, pt = facts.get(f"work.ft.{y}"), facts[f"work.pt.{y}"]
+        if ft is not None:
+            facts.add(Fact(f"work.ptshare.{y}", 100 * pt.value / (ft.value + pt.value), "%", f"April to June {y}", "ons-ycbh", pt.locator,
+                           "calculated", formula=f"100 × {pt.id} ÷ ({ft.id} + {pt.id})", inputs=[pt.id, ft.id]))
+            out["work"].setdefault("ptshare", []).append(y)
+    for key, label, cdid in AGE_SERIES:
+        meta, data = ons_series(f"data/fetched/ons/{cdid}.csv")
+        for y in EARLY_YEARS:
+            v = _q2(data, y)
+            if v is not None:
+                facts.add(Fact(f"work.age.{key}.{y}", v, "%", f"April to June {y}", f"ons-{cdid}", f"{meta.get('CDID')} row '{y} Q2'", "published",
+                               note=meta.get("Title", "")))
+                out["ages"].setdefault(key, []).append(y)
+    # Tenure, England, Labour Force Survey calendar years. Row labels carry footnote
+    # numbers ("19973" is 1997, note 3), so only the first four digits are the year.
+    rows = ods("data/fetched/ehs/FT1101_Trends_in_tenure.ods")["FT1101"]
+    pct_start = next(i for i, r in enumerate(rows) if len(r) > 8 and r[8] == "percentages")
+    cols = {"outright": 1, "mortgage": 2, "owners": 3, "social": 6, "private": 7}
+    for i in range(pct_start, len(rows)):
+        r = rows[i]
+        m = re.fullmatch(r"(\d{4})\d?", str(r[0]).strip()) if r and r[0] is not None else None
+        if not m or not 1981 <= int(m.group(1)) <= 2008:
+            continue
+        y = int(m.group(1))
+        survey = "DOE Labour Force Survey housing trailer" if y <= 1991 else "ONS Labour Force Survey"
+        for key, j in cols.items():
+            facts.add(Fact(f"house.lfs.{key}.{y}", num(r[j]), "% of households", f"{y} (calendar year)", "ehs-ft1101", f"FT1101!{ref(i, j)}", "published",
+                           note=f"{survey}, England"))
+        out["tenure"][y] = survey
+    # Visits abroad by UK residents, all purposes (holidays, visiting family and friends, business and other).
+    lines = list(csv.reader(io.StringIO((ROOT / "data/fetched/ott/ott-timeseries.csv").read_text(encoding="utf-8-sig"))))
+    col = lines[1].index("GMAF")
+    for r in lines:
+        if r and re.fullmatch(r"\d{4}", r[0]) and r[col].strip():
+            y = int(r[0])
+            fid = f"hol.ips.all.{y}"
+            facts.add(Fact(fid, num(r[col]), "thousand visits", str(y), "ons-ott-timeseries", f"CDID GMAF row '{y}'", "published",
+                           note="UK residents' visits abroad, all purposes, not seasonally adjusted (International Passenger Survey)"))
+            pop = facts.get(f"pop.uk.{y}")
+            if pop is not None:
+                facts.add(Fact(f"hol.ips.per100.{y}", 100 * 1000 * facts[fid].value / pop.value, "visits abroad per 100 residents", str(y), "ons-ott-timeseries",
+                               facts[fid].locator, "calculated", formula=f"100 × 1000 × {fid} ÷ {pop.id}", inputs=[fid, pop.id]))
+            out["travel"][y] = fid
+    return out

@@ -489,3 +489,52 @@ class Explanations(unittest.TestCase):
             if "topic" in e:
                 self.assertIn(e["topic"], {t[0] for t in pages_life.TOPICS}, key)
                 self.assertTrue(set(e["years"]) <= set(pages_life.YEARS), key)
+
+
+class BeforeTwoThousandEight(unittest.TestCase):
+    """Gap 5: series that reach back before 2008, with their breaks."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+        pages_life.init(cls.d)
+
+    def test_series_start_where_the_sources_do(self):
+        from builder import pages_history as H
+        f = self.facts
+        self.assertEqual(f["work.rate.1971"].value, 72.0)  # LF24 row '1971 Q2'
+        self.assertNotIn("work.ptshare.1991", f)  # part-time figures start in 1992
+        self.assertIn("work.ptshare.1992", f)
+        self.assertNotIn("house.lfs.private.1982", f)  # no tenure figure between 1981 and 1984: nothing filled in
+        self.assertIn("house.lfs.private.1984", f)
+        self.assertNotIn("hol.ips.all.2024", f)  # the long travel series stops before the 2024 method change
+        self.assertIn("earn.real.ft.2002", f)
+        self.assertNotIn("earn.real.ft.2001", f)
+        self.assertIn("school.primary.2006", f)
+        for topic, first in H.FIRST_YEAR.items():
+            self.assertTrue(any(H._has(f, m[3](first)) for m in H.LONG if m[1] == topic), topic)
+
+    def test_tenure_surveys_are_not_compared(self):
+        from builder import pages_history as H
+        m = next(m for m in H.LONG if m[0] == "house.lfs.private")
+        self.assertEqual(H.latest_comparable(self.facts, m, 1995), 2008)  # the last Labour Force Survey year, not the English Housing Survey
+
+    def test_pay_is_compared_only_within_one_survey_method(self):
+        from builder import pages_history as H
+        m = next(m for m in H.LONG if m[0] == "earn.ft")
+        self.assertEqual(H.latest_comparable(self.facts, m, 2002), 2003)
+        self.assertEqual(H.latest_comparable(self.facts, m, 2004), 2005)
+        self.assertEqual(H.latest_comparable(self.facts, m, 2007), pages_life.LAST)
+
+    def test_early_year_page_shows_gaps_and_no_comparison_pages(self):
+        from builder import pages_history as H
+        from builder.html import Num
+        num = Num(self.facts)
+        html = H.early_year_page(self.facts, self.d, num, {}, 1975)
+        self.assertIn("Not available: the earnings figures used here start in 2002", html)
+        self.assertIn('data-fact="work.rate.1975"', html)
+        self.assertNotIn("compare/1975-", html)
