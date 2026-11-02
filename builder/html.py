@@ -61,7 +61,7 @@ figcaption{font-size:.9rem;color:var(--muted)}
 svg text{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#333}
 .key{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.88rem;color:var(--muted);margin:4px 0}
 .key i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px;background:var(--bar)}
-.key i.b{background:var(--bar2)}.key i.d{background:repeating-linear-gradient(90deg,var(--bar) 0 4px,transparent 4px 7px)}
+.key i.b{background:var(--bar2)}.key i.c{width:18px;height:8px;background:linear-gradient(var(--bar),var(--bar)) center/18px 1.5px no-repeat,linear-gradient(var(--bar),var(--bar)) center/8px 8px no-repeat}.key i.d{background:repeating-linear-gradient(90deg,var(--bar) 0 4px,transparent 4px 7px)}
 .cards{list-style:none;padding:0;margin:16px 0;display:grid;gap:12px}
 .cards li{border:1px solid var(--line);padding:14px}
 .cards h2,.cards h3{margin:0 0 6px;border:0;padding:0;font-size:1.1rem}
@@ -294,8 +294,9 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         else:
             parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')
     for name, vals, style in series:
-        colour = "#3d4852" if style == "a" else "#8d969e"
-        width = 2.5 if style == "a" else 2
+        # a: dark thick line; b: grey line; c: dark thin line with a square at every point
+        colour = "#8d969e" if style == "b" else "#3d4852"
+        width = {"a": 2.5, "b": 2, "c": 1.5}.get(style, 2)
         segs, cur = [], []
         split_at = {i for i, _ in breaks} if split_breaks else set()
         for i, v in enumerate(vals):
@@ -318,14 +319,16 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
                     d = " ".join(f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}" for k, (i, v) in enumerate(pts))
                     parts.append(f'<path d="{d}" fill="none" stroke="{colour}" stroke-width="{width}"{dash}/>')
             for i, v in seg:
-                if len(seg) == 1:
+                if style == "c":
+                    parts.append(f'<rect x="{x(i) - 3.5:.1f}" y="{y(v) - 3.5:.1f}" width="7" height="7" fill="{colour}"/>')
+                elif len(seg) == 1:
                     parts.append(f'<circle cx="{x(i):.1f}" cy="{y(v):.1f}" r="3" fill="{colour}"/>')
     label = f"{title}. {desc}" if desc else title
     svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value.">'
            + "".join(parts) + "</svg>")
     key = ""
     if len(series) > 1 or forecast_from is not None:
-        items = [f'<span><i class="{"" if s == "a" else "b"}"></i>{esc(nm)}</span>' for nm, _, s in series]
+        items = [f'<span><i class="{"" if s == "a" else s}"></i>{esc(nm)}</span>' for nm, _, s in series]
         if forecast_from is not None:
             items.append('<span><i class="d"></i>Forecast (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
@@ -343,8 +346,10 @@ def _nice_step(raw):
 
 
 def _tick(v, step=1):
-    if step >= 1:
+    if step >= 1 and float(step).is_integer():
         return f"{v:,.0f}"
+    if step >= 1:
+        return f"{v:,.0f}" if float(v).is_integer() else f"{v:,.1f}"
     return f"{v:.1f}"
 
 

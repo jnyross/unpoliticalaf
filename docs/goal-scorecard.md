@@ -1,11 +1,78 @@
 # Goal scorecard
 
-This file scores the live site against every item in the project goal. Each
-goal audit adds a new dated section at the top, so later audits can see what
-changed. Older sections stay as they were.
+This file scores the live site against the project goal. Each goal audit adds a
+new dated section at the top, so later audits can see what changed. Older
+sections stay as they were.
 
-Statuses: **Met**, **Partly met**, **Not met**, **Human step** (needs real
-people and cannot be done by a code change).
+From Audit 2 onwards, audits use [goal-rubric.md](goal-rubric.md): eleven
+dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
+used a checklist that only asked whether each feature existed, and it was too
+generous.
+
+## Audit 2: 2 November 2026 (stricter rubric)
+
+- Commit audited: `3831fc0` on `main` (after PR #71).
+- Rubric: [goal-rubric.md](goal-rubric.md), first use.
+- How it was checked: the evidence from Audit 1, plus phone screenshots at
+  390px of the home, spending, life and comparison pages, and a comparison of
+  what the site offers with the benchmarks named in the rubric.
+
+**Total: 29 out of 55.** Target: at least 49, every dimension at least 4, and
+the phone test passed. No dimension can score above 3 yet, because no
+independent review or reader test exists.
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 3 | Correct, clear answers with history and limits. Missing: per-person and per-household scale, how the tax mix changed over time, attributed explanations of big moves (2008-09, 2020-21), and any "who pays" split other than income. |
+| D2 Life: breadth and depth | 2 | Five topics, but about five measures each. Housing is tenure only (no costs or space), holidays are abroad only with three regions and no frequency, housing and schools are England only, and there are no age, region or income splits. |
+| D3 Life: choosing and comparing | 2 | Every year and pair works without JavaScript and breaks are respected, but comparisons are long tables of numbers on a phone, with no "what changed most" summary, no visual comparison and no ranges. Comparing 2010 with 2025 shows nine rows of "not available" for job types. |
+| D4 Explanation and understanding | 2 | Good warnings about the three easy mistakes, but little teaching: no glossary, few explanations of terms, little context for big numbers, and pages start with figures rather than a question a newcomer would ask. |
+| D5 Visual design and charts | 2 | Clean and neutral, but basic: simple bars and small line charts, few annotations, and tables dominate. Far behind the benchmarks for showing the answer at a glance. |
+| D6 Phone experience | 3 | No sideways scrolling and readable text, but pages are very long, the navigation takes two rows, there is no in-page navigation, and comparison tables are tall and cramped at 390px. |
+| D7 Accuracy and traceability | 3 | Every figure is re-read from its source cell on every build. Capped at 3: no independent check against the original publications, and a figure is traced through the section's source line rather than from the figure itself. |
+| D8 Impartiality | 3 | Neutral wording and fixed comparison years. Capped at 3: no independent review of framing, headline choices or chart scales. |
+| D9 Accessibility and no JavaScript | 3 | Zero axe WCAG 2.2 AA violations at 360px with sections expanded, and no-JavaScript fallbacks. Capped at 3: no manual screen-reader or keyboard test. |
+| D10 Honesty about limits | 3 | Gaps, breaks and the illustration label are handled well. Capped at 3: no survey uncertainty shown, and no independent check. |
+| D11 Reader evidence | 0 | No testing with real people of any kind. |
+| **Total** | **29 / 55** | |
+
+### What is stopping a far better product
+
+1. **We were measuring the wrong thing.** The old checklist rewarded features
+   existing, so every audit would have said "nearly done". The new rubric scores
+   quality against benchmarks and needs outside evidence for high scores.
+2. **Nobody has designed the experience.** The site was built data first: a
+   checked number pipeline, then pages to show the numbers. No one has designed
+   the reading journey, the charts or the phone layout as a product, or studied
+   how the best explainers do it.
+3. **The rules have been read as "show less".** Principles like no persuasion,
+   no causation and no invented households are being met by saying very little.
+   Official bodies (OBR, ONS, HM Treasury) publish their own explanations of big
+   changes, and quoting them, clearly attributed, would add context without
+   breaking any rule. "Works without JavaScript" has also been read as "no
+   interactivity", when interactive charts can be added on top of the no-JS
+   tables.
+4. **Thin data.** Each life topic has a handful of measures, mostly for one
+   nation and with few group splits. Adding data is slow because this
+   environment cannot download from ONS or GOV.UK directly; every new source
+   has to go through the GitHub fetch workflow.
+5. **No outside eyes.** The same kind of agent built, checked and scored the
+   site. There has been no independent review and no reader of any kind.
+6. **The phone test needs real people.** Only John can arrange it, and there is
+   no test pack yet to make it easy.
+
+### Gaps (most valuable first)
+
+1. Commission a design pass that studies the benchmarks and produces a new phone-first layout, chart style and page structure for the money pages and the life explorer, then apply it page by page.
+2. Rebuild the two-year comparison so it leads with the biggest changes in plain words and charts, shortens the table, hides rows with no data for either year, and explains each "not comparable" in place.
+3. Add teaching to every page: start from the newcomer's question, explain terms where they appear, add a glossary, and give relatable scale such as per person and per household.
+4. Add attributed official explanations for the big moves (for example 2008-09, 2020-21, the 2022 energy support) next to the charts, quoted from OBR, ONS or HM Treasury.
+5. Widen the life evidence: housing costs and space, holidays at home and abroad with frequency, age and region splits, and other UK nations or a clear "England only" reason.
+6. Widen "who pays" with official splits by age, retired or working, and household type, and show how the tax mix has changed over time.
+7. Upgrade the charts: direct labels, annotations for events and breaks, interactive versions on top of the no-JS tables, and a short text summary for each chart.
+8. Shorten pages for phones: in-page navigation, a one-row menu, and collapsing secondary detail.
+9. Write the phone test pack (12 questions with the three critical ones, answer key, marking sheet, consent note) and run a small informal test to find problems early.
+10. Run independent accuracy, impartiality and accessibility reviews (including a manual screen-reader test) and log the findings, so dimensions can score above 3.
 
 ---
 
