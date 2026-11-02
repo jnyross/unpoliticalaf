@@ -284,6 +284,8 @@ def fmt(value, kind):
         return f"£{value:,.2f}"
     if kind == "per100":
         return f"£{value:.0f}"
+    if kind == "pts":
+        return f"{value:+.1f} points"
     if kind == "dp1":
         return f"{value:.1f}"
     if kind == "millions":
