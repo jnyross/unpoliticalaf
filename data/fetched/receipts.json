@@ -1,0 +1,218 @@
+{
+ "ashe-2025-fig1": {
+  "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/cfe85f05&format=csv",
+  "file": "ons/ashe-2025-fig1.csv",
+  "bytes": 1554,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "27e841cf714283cb12fcbaba34df66d5f6823359613dfefc9371fa76bea1e832",
+  "retrieved": "2026-11-02T08:58:34Z"
+ },
+ "ashe-2025-fig2": {
+  "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/247173f1&format=csv",
+  "file": "ons/ashe-2025-fig2.csv",
+  "bytes": 1063,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "b5848e0ecfeecc88237730a42242781e04a4e19d834526e5bd3f2849cd3465d9",
+  "retrieved": "2026-11-02T08:58:35Z"
+ },
+ "dfe-spc-2015-page": {
+  "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
+  "file": "dfe/spc-2015-page.html",
+  "bytes": 85204,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "2fb4417ca62c173ef9b3d2f96789381ef23be141a1f5c8f897af28386ef154fa",
+  "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "dfe-spc-2015-tables": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+  "file": "dfe/spc-2015-national-tables.xlsx",
+  "bytes": 151786,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "334839c1205fb5dee49eb6e76bceaa52a875a6789b3703ed017c9cb7d429b07f",
+  "retrieved": "2026-11-02T08:59:07Z"
+ },
+ "dfe-spc-page": {
+  "url": "https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics",
+  "file": "dfe/spc-page.html",
+  "bytes": 168704,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
+  "retrieved": "2026-11-02T08:58:39Z"
+ },
+ "ehs-ft1101": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
+  "file": "ehs/FT1101_Trends_in_tenure.ods",
+  "bytes": 20010,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "acc7b55efb97606d882323f717f12ac8258123b5287fee5fc451e54806730103",
+  "retrieved": "2026-11-02T08:58:47Z"
+ },
+ "ehs-ft1241": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4d9aa9ed5ddb5c8626f49b/FT1241_Trends_in_tenure_households_with_dependent_children.ods",
+  "file": "ehs/FT1241_Trends_in_tenure_households_with_dependent_children.ods",
+  "bytes": 28724,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "35ab454f545f4596c5ab46265b7697ce64c823b9ac0b4f53a881138c73385a49",
+  "retrieved": "2026-11-02T08:58:48Z"
+ },
+ "ehs-ft1421": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af30aec033c100108061f1/FT1421_Trends_in_overcrowding_by_tenure.ods",
+  "file": "ehs/FT1421_Trends_in_overcrowding_by_tenure.ods",
+  "bytes": 6705,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "2aa18c5cce29b1f362cd1b7ec8cb623b945114e311e13a37ec78502cbacd0a2c",
+  "retrieved": "2026-11-02T08:58:48Z"
+ },
+ "ehs-tenure-page": {
+  "url": "https://www.gov.uk/government/statistical-data-sets/tenure-trends-and-cross-tenure-analysis",
+  "file": "ehs/tenure-page.html",
+  "bytes": 110460,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "d9c57564b9755a347f7840cb18cf4e0d62f3174bc91bd62707ce9c3e4ea630f2",
+  "retrieved": "2026-11-02T08:58:37Z"
+ },
+ "gov-income-tax-rates": {
+  "url": "https://www.gov.uk/income-tax-rates",
+  "file": "gov/income-tax-rates.html",
+  "bytes": 87997,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "da3bc798c5911fe966d5a95b8714dce89bfdb7cb65ad53eec7aa62e6c94b5a57",
+  "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "gov-income-tax-rates-previous": {
+  "url": "https://www.gov.uk/income-tax-rates/previous-tax-years",
+  "file": "gov/income-tax-rates-previous.html",
+  "bytes": 72165,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "5af8292623f13d80928974164f6379df1c98d43dabe7718e123229c90c1ebf30",
+  "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "gov-ni-rates": {
+  "url": "https://www.gov.uk/national-insurance-rates-letters",
+  "file": "gov/national-insurance-rates.html",
+  "bytes": 111965,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
+  "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "nomis-ashe-resident": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-uk-median-weekly.csv",
+  "bytes": 23816,
+  "content_type": "text/csv",
+  "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+  "retrieved": "2026-11-02T08:58:36Z"
+ },
+ "nomis-ashe-sex-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/sex.def.sdmx.json",
+  "file": "nomis/ashe-sex-codes.json",
+  "bytes": 2861,
+  "content_type": "application/json",
+  "sha256": "46aa0cc10d64a8adf3613af58c59e312a1425398b353bca6c524008cee02e693",
+  "retrieved": "2026-11-02T08:58:36Z"
+ },
+ "ons-a3wx": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
+  "file": "ons/a3wx.csv",
+  "bytes": 7702,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "de61ee291cca0c336ba3ae5b3dcee36da8c38ed165d2d9d8672809f84a34aeb7",
+  "retrieved": "2026-11-02T08:58:34Z"
+ },
+ "ons-l522": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+  "file": "ons/l522.csv",
+  "bytes": 11944,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+  "retrieved": "2026-11-02T08:56:49Z"
+ },
+ "ons-lf24": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf24/lms",
+  "file": "ons/lf24.csv",
+  "bytes": 16745,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "77a8b0e67df50f5ebf8bc9a978fea688c7dba11f0e464803577e4387809de956",
+  "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-lf25": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+  "file": "ons/lf25.csv",
+  "bytes": 16751,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+  "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-mgrz": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+  "file": "ons/mgrz.csv",
+  "bytes": 17710,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "55402f458931c41b131e1a66ba282c8725007214a25a140eaabe108a439e2598",
+  "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-mgsv": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms",
+  "file": "ons/mgsv.csv",
+  "bytes": 16748,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "9d2008ed9769b8f4d80cc26d81dce4861b39d32a327319cccc4428503ffcb6fe",
+  "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-ycbe": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",
+  "file": "ons/ycbe.csv",
+  "bytes": 11132,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "264b809fcadc83240175146d978f6dad609c044afa1139be0b6b99f7e8e1e5f5",
+  "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-ycbh": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbh/lms",
+  "file": "ons/ycbh.csv",
+  "bytes": 10541,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "e766c0ad54e247fd8f8f3c5bca875f701fc85072e847fbe81e2a74fe380ce803",
+  "retrieved": "2026-11-02T08:58:39Z"
+ },
+ "ott-2009to2019": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+  "file": "ott/section3-2009to2019.xlsx",
+  "bytes": 451291,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+  "retrieved": "2026-11-02T09:00:30Z"
+ },
+ "ott-2019to2023": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2019to2023/traveltrendssection3ukresidentsvisitsabroad.xlsx",
+  "file": "ott/section3-2019to2023.xlsx",
+  "bytes": 173360,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "b0c85be28f8af3b9a3a9eebb49320f4227a2ac8fbaa72c652edc1e85558155d1",
+  "retrieved": "2026-11-02T08:58:58Z"
+ },
+ "ott-2024": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
+  "file": "ott/ukresidents2024annual.xlsx",
+  "bytes": 172474,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "479fd06c58a7adda2a282d1d6b50f8504a2aad41682ae7c63d006eca7a15b999",
+  "retrieved": "2026-11-02T09:00:33Z"
+ },
+ "ott-2025": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
+  "file": "ott/ukresidents2025annual.xlsx",
+  "bytes": 172447,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "978dabb5e0abe36274f8f3d19af3fe3004b3049a158515a83c9dc158180f5d4d",
+  "retrieved": "2026-11-02T09:00:26Z"
+ },
+ "ott-uk-residents-page": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad",
+  "file": "ott/uk-residents-page.html",
+  "bytes": 76811,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
+  "retrieved": "2026-11-02T08:58:38Z"
+ }
+}

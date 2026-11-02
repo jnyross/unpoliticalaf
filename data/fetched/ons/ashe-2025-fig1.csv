@@ -1,0 +1,31 @@
+"Figure 1: Median weekly earnings for full-time employee jobs was £766.60 in April 2025   ",""
+"Gross median weekly earnings by employment type, UK, April 2012 to April 2025 ",""
+"",""
+"Notes","1. Estimates for 2025 are provisional.   
+
+2. Employee jobs include those on adult rates with pay unaffected by absence.  
+
+3. Full-time is defined as employees working more than 30 paid hours per week (or 25 or more for the teaching professions).   
+
+4. Line at 2021 represents discontinuities because of a change in occupational coding.   
+
+5. Because of methodological changes, data from 2023 onwards might not be directly comparable with data for 2022 (see [Section 9: Data sources and quality](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025#data-sources-and-quality)).  
+
+6. Data for 2020 and 2021 are subject to more uncertainty and should be treated with caution because of the impact of the coronavirus (COVID-19) pandemic on the data and collection. "
+"Unit","£"
+"",""
+"","All","FT","PT"
+"2012","405.80","506.10","155.20"
+"2013","415.30","517.40","159.80"
+"2014","417.90","518.30","161.00"
+"2015","425.10","527.10","166.50"
+"2016","438.40","538.60","177.10"
+"2017","448.50","550.00","182.00"
+"2018","460.00","568.30","187.30"
+"2019","479.10","585.20","196.90"
+"2020","479.10","585.70","202.00"
+"2021","505.10","609.80","214.90"
+"2022","533.70","641.80","228.30"
+"2023","574.95","687.00","241.48"
+"2024","613.46","728.27","263.25"
+"2025","642.46","766.60","280.00"

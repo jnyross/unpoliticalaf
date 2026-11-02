@@ -1,24 +1,36 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup build site verify smoke a11y
+.PHONY: setup setup-dev build site check test verify a11y fetch
+
+# Production install: only what the build needs (used by Vercel).
 setup:
 	$(PYTHON) -c 'import sys; assert sys.version_info >= (3, 10), "Python 3.10+ required"'
 	$(PYTHON) -m venv .venv
-	$(RUN_PYTHON) -m pip install -r requirements.txt
+	$(RUN_PYTHON) -m pip install -q -r requirements.txt
+
+# Adds the browser accessibility tools used by `make a11y`.
+setup-dev: setup
+	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
 
 build: site
 
 site:
-	$(RUN_PYTHON) scripts/build.py
+	$(RUN_PYTHON) -m builder.build
 
-verify:
-	$(RUN_PYTHON) scripts/verify.py
+# Re-reads every figure from its source file and checks every page.
+check:
+	$(RUN_PYTHON) -m builder.check
+
+test:
 	$(RUN_PYTHON) -m unittest discover -s tests -v
 
-smoke: site
-	$(RUN_PYTHON) -m unittest discover -s tests -k http -v
-	$(RUN_PYTHON) scripts/a11y_check.py
+verify: build check test
 
+# axe-core accessibility checks at phone and desktop width.
 a11y:
-	$(RUN_PYTHON) scripts/a11y_check.py
+	$(RUN_PYTHON) -m builder.check --axe
+
+# Download the sources listed in sources/manifest.json (needs open network access).
+fetch:
+	$(RUN_PYTHON) scripts/fetch_sources.py

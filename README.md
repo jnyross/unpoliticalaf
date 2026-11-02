@@ -1,203 +1,68 @@
-# UnpoliticalAF
+# Unpolitical
 
-A plain-English guide to UK public spending, taxes, receipts, borrowing and debt.
-Spending has cash, inflation-adjusted and GDP-share views, area histories and
-quick answers. Taxes has current OBR receipt groups, cash and published GDP-share
-history, and separate forecasts. Core text, source details and tables work
-without JavaScript. Who pays keeps HMRC Income Tax liability shares separate from
-ONS household tax estimates, with income and expenditure denominators explained.
-Party proposals remain a separate ticket in [the specification](docs/product-spec.md).
+An independent, phone-first website that explains UK public money and everyday
+life using only official statistics. It answers four questions, with the answer
+first and the method close by:
 
-## Build and check
+- **Where does public money go?** (`spending.html`)
+- **Which taxes raise the money?** Taxes, other receipts and borrowing, kept apart (`taxes.html`)
+- **Who pays?** Income Tax by taxpayer group, and all taxes by household income (`who-pays.html`)
+- **How much household income goes on tax?** Without mixing up household
+  averages, personal tax rates and shares of total revenue (`household-tax.html`)
 
-Use Python 3.10+ in the controller's credential-free Linux check environment.
-The three required libraries are version-pinned in requirements.txt. The smoke
-gate also needs an installed Chrome or Chromium executable; it fails if the
-browser or bundled axe-core is unavailable. No browser is downloaded by a check.
+It also has **Everyday life, year by year** (`life/`): work and job types, pay
+after inflation, housing, holidays abroad and school class sizes from 2008 to
+2025. Every year has its own page, and every pair of years has a comparison page,
+so the core answers and comparisons work without JavaScript.
 
-```sh
-make setup
-make build
-make verify
-make smoke
+## Rules the site follows
+
+- Every number comes from an official file kept in this repository, and is shown
+  with its period, place, population and units. `site/data/facts.json` lists every
+  figure with its exact sheet and cell, or the calculation and its inputs.
+- Missing years stay missing. Where a definition changes (job classification in
+  2021, the holiday survey method in 2024, and others listed on the pages), the
+  series is broken and no change is calculated across the break.
+- No invented household is presented as fact. The single worked example is
+  labelled “Illustration, not a statistic” and kept apart from the statistics.
+- Figures show what changed, not why.
+- Plain English, white and grey styling, and a full table next to every chart.
+
+## Commands
+
+Python 3.10 or later.
+
+```
+make setup     # create .venv and install openpyxl
+make build     # write the site to site/
+make check     # re-read every figure from its source file and check every page
+make test      # fast unit tests
+make verify    # build + check + test
+make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
-The npm scripts delegate to the same Make targets. There are no npm packages.
-Builds and checks use retained files, without fetching data. Setup installs the
-pinned Python libraries through the check environment's package mechanism.
+Vercel: install `make setup`, build `make build`, output directory `site`.
 
-- `make build` validates seed hashes, reads workbooks, reconciles totals and
-  renders every output. It finishes source validation and rendering before
-  changing public files.
-- `make verify` independently reopens source cells, checks displayed figures,
-  JSON values, sums, neutral wording, palette and reading grade. It compares
-  two complete regenerated payloads with the existing output, then runs
-  product and publication-boundary tests. Stale output fails.
-- `make smoke` serves only the generated site on loopback, checks bytes, MIME
-  types and private-path 404s, then audits every page at 360px and 1100px with
-  bundled axe-core, including expanded tables and contrast. It also exercises the view controls
-  and core content with JavaScript disabled.
-- `make a11y` runs the browser accessibility gate separately.
+## How it is built
 
-These commands must pass on the exact candidate through the factory controller.
-This port's file edits are not evidence of a passing run, independent review or
-live deployment. Manual keyboard and screen-reader checks and human studies
-remain pending until actually observed.
+| Path | What it does |
+| --- | --- |
+| `builder/sources.py` | Registry of every source: publisher, title, link, file, SHA-256, dates, coverage |
+| `builder/data.py` | Reads each figure from its file and cell into a `Fact` |
+| `builder/pages_*.py` | Writes the pages; every displayed figure is a `<data data-fact="…">` element |
+| `builder/check.py` | Independent checks: hashes, source cells, recalculations, page numbers, links, wording, accessibility |
+| `sources/manifest.json`, `scripts/fetch_sources.py` | List and download newer sources into `data/fetched/` |
+| `.github/workflows/fetch-sources.yml` | Runs the downloader on GitHub and commits the files with a receipt (`data/fetched/receipts.json`) |
 
-The recorded Vercel contract is repository root, preset **Other**, install
-`make setup`, build `make build`, output `site`. This is the contract documented
-in this repository's README at `3296b28ba01d89a5f1f9403b71f63e8c44a472e1`;
-this recovery seed does not change bindings or independently recheck Vercel's
-settings/build image. The controller owns that deployment check.
+Official data files live in `data/raw/`, `data/payers/raw/`, `data/life/sources/`
+and `data/fetched/`. If any file changes without its recorded hash being updated,
+the build stops.
 
-Readable source evidence for the spending recovery is in [data/audit](data/audit/README.md).
-`make verify` reopens all selected raw cells with a reader separate from the
-exporter, including labels, units, blanks, literal dashes and number formats.
-The [original audit seed](docs/issue-4-recovery-seed.md) is historical preparation,
-with its then-outstanding work preserved. The [fiscal schema](docs/fiscal-schema.md) describes the
-recovery implementation, per-value records, source-specific rounding models,
-explicit OBR status uncertainty, residuals, and #22's full-row/date repair.
-The #21 worker edited source only; the controller generated the committed
-artifacts in deployed `8e60e9e03707ec38cb274468306e95085bb0bee3` on
-30 October 2026 (private receipts: `receipts/21/1793368898495164182/`).
-Passing seed software checks does not complete #4/#20/#22: independent fiscal
-and product review, official candidate gates and canonical live verification
-remain the existing controller's responsibility.
+## Updating the data
 
-## Public and generated files
+1. Add or change the download in `sources/manifest.json` and push. The fetch
+   workflow downloads it and commits it with its hash and retrieval time.
+2. Update the reader in `builder/data.py` if the layout changed.
+3. Run `make verify` and review the changed pages.
 
-The only public outputs are:
-
-```text
-site/index.html
-site/methods.html
-site/taxes.html
-site/who-pays.html
-site/life.html
-site/icon.svg
-site/data/spending.json
-site/data/taxes.json
-site/data/payers.json
-site/data/life.json
-```
-
-`data/life.json` is the private generated school preview projection; its public
-copy `site/data/life.json` is byte-identical. It retains the full school source
-projection and all 1,444 ordered phase/year comparison choices. No JSON size cap
-is added; every HTML page remains strictly below 500000 bytes.
-
-`data/spending.json` is the generated working dataset; the public JSON must be
-byte-identical. Both are rebuilt from the seed. `site/` remains generated under
-the existing repository contract. The controller generates these artifacts;
-do not type in fiscal values or copy a historical site's output. The old
-baseline's `styles.css` is removed on a successful rebuild. Unknown files or
-symlinks in an output directory stop the build without deleting them.
-
-The builder supports `python3 scripts/build.py --output /tmp/public-preview`.
-Inside this repository only `site/` is a valid output directory. It does not
-publish the checkout, source workbooks, operational files or private state.
-The old `static/` placeholder is not a build input.
-
-`data/raw/` and `data/sources.json` are immutable seeded inputs. A missing or
-changed source hash fails closed. Null and dash-marked missing values are not
-invented as zero; a missing required PESA operand stops the build. Historical
-identities with genuine source gaps are recorded as not testable with named
-missing operands.
-The controller must investigate such a failure against retained source notes.
-The payer build also reads the seven retained official sources listed in
-`data/payers/sources.json`. It publishes only 23 selected percentages and their
-provenance, never the workbooks or full HTML responses. The independent payer
-checker reopens those sources with a separate reader and pins their hashes.
-See [payer methods](docs/payer-methods.md) for populations, scope and limitations.
-`data/corrections.json` is an append-only editorial log, initially empty for
-this site. New entries use date, page, what was wrong and what changed.
-
-## Sources, reuse and limitations
-
-Product code and the icon derive from
-[jnyross/un-political at 8eb81d6c7075e4b4e89e4aa1cc398fbae12eb713](https://github.com/jnyross/un-political/tree/8eb81d6c7075e4b4e89e4aa1cc398fbae12eb713).
-[Port notes](docs/spending-port.md) record file hashes, adaptations and remaining
-verification. The selected source snapshot and its manifest are read-only.
-No old factory, CI, agent policies, credentials or deployment bindings are ported.
-
-Fiscal data comes from HM Treasury PESA and OBR publications named in the
-retained source catalogue and on the methods page. Contains public sector
-information licensed under the
-[Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
-Each sourced figure carries the sheet and cell reference; calculated shares and
-changes retain both operands. The download retains publication dates and hashes.
-
-PESA outturns, forecasts and OBR historical vintages must be read separately.
-The forecast date in PESA Table 4.1 notes B51/B52 applies to the PESA aggregate
-forecast, not the separately vintaged OBR databank. The port does not assert a
-checked actual/estimate classification for every OBR historical cell. Definition breaks and missing
-values stay visible. No next release date is recorded by this port.
-
-The repository remains private. Historical scores from the original product
-are not scores or new verification results for this site. Public reporting,
-funding evidence, human acceptance and later product requirements have their
-own tickets. Do not invent their results.
-
-The factory controller owns Git, independent review, exact-candidate checks and
-publication to https://unpoliticalaf.vercel.app . Workers return file edits only.
-
-`make setup` creates the local `.venv` and installs dependencies there. Build and check commands use that environment, leaving system Python unchanged.
-
-Receipt evidence is separately scoped in
-[data/audit/receipts](data/audit/receipts/README.md). The controller build now
-creates the private `data/receipts.json` working dataset, with seven source
-receipt/debt tables, original missingness and explicit reconciliation limits.
-`make verify` independently reopens its raw workbooks and checks deterministic
-regeneration, in addition to both audit scopes. See
-[receipt methods](docs/receipts-methods.md) for the tax/non-tax residual formulas,
-historical licence-fee overlap and debt/GDP limits. Only the selected CURRENT
-tables enter `site/data/taxes.json`; the private receipt dataset is never published.
-The explicit public allowlist has exactly ten files. Tax output is checked by
-`scripts/check_taxes.py`, which separately reopens the pinned current workbook
-and binds every public node, signed rendered value and chart encoding to exact
-cells, ordered formulas, units, years and status. This adds no historical receipt
-splice or debt repair. Source edits are not a passing check, fiscal approval,
-live deployment or completed issue #5/#26/#29 acceptance.
-
-The private work-methods foundation reopens the six complete official HTML pages
-registered in `data/life/work-methods-sources.json`. `make verify` checks stored
-and recovered original bytes, then audits an in-memory definitions projection
-with separate HTML locators. No derived file or public work story is produced.
-The QMI, quality update and revision notices retain population, response, weight
-and coding cautions; the LFS coding article is not proof of APS affected periods.
-Confidence `20701` remains uninterpreted. Work counts and their catalogue history
-need their own verified foundation before use. See
-[the work-methods contract](docs/life-work-methods-source-contract.md).
-This source foundation earns no v2 product score or human acceptance evidence.
-
-The private work-data foundation now retains both complete calendar CSVs and the
-18 SDMX definition/catalogue originals in the closed 20-file register
-`data/life/work-data-sources.json`. `make verify` independently reopens their
-stored and recovered bytes and checks all 660 SOC2010 and 300 SOC2020 rows
-against dataset-specific codes, labels, calendar periods and statuses. The
-work projection stays in memory: it writes no derived file or public work output.
-Conflicting time annotations remain literal; Confidence `20701` has no inferred
-CI meaning. Methods cautions are cross-references, not additional local inputs.
-See [work-data verification](docs/work-data-foundation.md). Controller candidate
-review, payload measurement, Boat checks and live verification remain required;
-these edits do not establish a passing run or v2 product acceptance.
-
-The **Year by year** school page is a **TECHNICAL PREVIEW — reader acceptance
-pending**. Other topics are not yet built. It uses the five unchanged DfE inputs
-in `data/life/school-sources.json`, with all 176 observations, and distinguishes
-January census anchors from academic years. The 2008–2015 anchors are not in
-this selected dataset; the page links to the nearest actual period without
-filling a gap. JavaScript enhances disabled selects; all 19 native year links,
-one-year steps, source tables and forward comparison tables work without it.
-Reverse, equal and missing pairs have explicit native rules and source-derived
-ordered JSON entries. A year hash alone updates year focus; other anchors keep
-their native destination.
-
-`scripts/check_life.py` independently reopens the retained school originals,
-checks the complete projection and binds visible labels, values, source links
-and navigation to those inputs. Verification regenerates real private/public
-life JSON and all HTML before comparing exact bytes; stale artifacts fail.
-Browser regressions exercise keyboard and normal hash links after hashchange,
-as well as enhancement state and native navigation with scripts disabled before
-loading. The controller must run these checks; file edits alone establish no
-passing result, live deployment, human study or manual assistive-technology pass.
+Contains public sector information licensed under the Open Government Licence v3.0.

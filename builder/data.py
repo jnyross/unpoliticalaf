@@ -1,0 +1,604 @@
+"""Extract every figure the site shows from the retained official files.
+
+Each figure becomes a Fact: a value plus where exactly it came from (source id
+and cell or row locator), its period, unit and status. Derived figures (shares,
+real-terms values, changes) record their formula and the facts they use.
+Nothing is filled in: a missing source value stays missing (None).
+"""
+import json
+import re
+from dataclasses import dataclass, field, asdict
+from typing import Optional
+
+from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows
+
+YEARS = list(range(2008, 2026))  # year explorer range (calendar years)
+
+
+@dataclass
+class Fact:
+    id: str
+    value: Optional[float]
+    unit: str
+    period: str
+    source: str
+    locator: str
+    status: str = "published"
+    note: str = ""
+    formula: str = ""
+    inputs: list = field(default_factory=list)
+    scale: float = 1  # value = source cell × scale (e.g. 0.001 when a source in units is shown in thousands)
+
+
+class Facts(dict):
+    def add(self, fact):
+        if fact.id in self:
+            raise ValueError(f"duplicate fact id {fact.id}")
+        self[fact.id] = fact
+        return fact
+
+    def get_value(self, fid):
+        return self[fid].value
+
+    def to_json(self):
+        return [asdict(f) for f in self.values()]
+
+
+def num(v):
+    """Turn a source cell into a number, or None for blanks and markers."""
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    s = str(v).strip().replace(",", "")
+    if s in ("", "-", "..", "x", "u", "n/a", "*", "Not available", "[x]", "[c]", "[not available]"):
+        return None
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+
+def find_row(rows, label, col=0, start=0, exact=False):
+    for i in range(start, len(rows)):
+        cell = rows[i][col] if col < len(rows[i]) else None
+        if cell is None:
+            continue
+        text = str(cell).strip()
+        if (text == label) if exact else text.startswith(label):
+            return i
+    raise KeyError(label)
+
+
+# ---------------------------------------------------------------- spending
+
+FUNCTIONS = [
+    # (key, plain name, PESA row label prefix)
+    ("social", "Social protection (pensions, benefits, social care)", "10. Social protection"),
+    ("health", "Health", "7. Health"),
+    ("general", "General public services (incl. debt interest)", "1. General public services"),
+    ("education", "Education", "9. Education"),
+    ("economic", "Economic affairs (incl. transport)", "4. Economic affairs"),
+    ("defence", "Defence", "2. Defence"),
+    ("order", "Public order and safety (police, courts, prisons, fire)", "3. Public order and safety"),
+    ("housing", "Housing and community amenities", "6. Housing and community amenities"),
+    ("environment", "Environment protection", "5. Environment protection"),
+    ("recreation", "Recreation, culture and religion", "8. Recreation, culture and religion"),
+    ("eu", "EU transactions", "EU transactions"),
+]
+SUBITEMS = [
+    ("debt_interest", "Interest on government debt (inside general public services)", "of which: public sector debt interest"),
+    ("transport", "Transport (inside economic affairs)", "of which: transport"),
+]
+
+
+def spending(facts):
+    path = "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx"
+    wb = xlsx(path)
+    out = {"years": [], "views": {}}
+    for view, sheet, unit in (("cash", "4_2", "£bn"), ("real", "4_3", "£bn (2025-26 prices)"), ("gdp", "4_4", "% of GDP")):
+        ws = wb[sheet]
+        rows = [[c.value for c in r] for r in ws.iter_rows()]
+        header = rows[4]
+        years = [(j, str(v)) for j, v in enumerate(header) if v and re.fullmatch(r"\d{4}-\d{2}", str(v))]
+        out["years"] = [y for _, y in years]
+        series = {}
+        for key, name, label in FUNCTIONS + SUBITEMS + [("services", "Spending on services", "Public sector expenditure on services"),
+                                                       ("adjustments", "Accounting adjustments", "Accounting adjustments"),
+                                                       ("tme", "Total managed expenditure", "Total Managed Expenditure")]:
+            i = find_row(rows, label)
+            vals = {}
+            for j, y in years:
+                fid = f"spend.{view}.{key}.{y}"
+                facts.add(Fact(fid, num(rows[i][j]), unit, y, "pesa4", f"{sheet}!{ref(i, j)}", "outturn"))
+                vals[y] = fid
+            series[key] = {"name": name, "values": vals}
+        out["views"][view] = {"unit": unit, "series": series, "sheet": sheet}
+    latest = out["years"][-1]
+    out["latest"] = latest
+    # Shares of spending on services, per £100 (calculated)
+    total = facts[f"spend.cash.services.{latest}"]
+    shares = {}
+    for key, name, _ in FUNCTIONS:
+        part = facts[f"spend.cash.{key}.{latest}"]
+        fid = f"spend.per100.{key}.{latest}"
+        facts.add(Fact(fid, 100 * part.value / total.value, "£ per £100", latest, "pesa4", part.locator,
+                       "calculated", formula=f"100 × {part.id} ÷ {total.id}", inputs=[part.id, total.id]))
+        shares[key] = fid
+    for key, name, _ in SUBITEMS:
+        part = facts[f"spend.cash.{key}.{latest}"]
+        fid = f"spend.per100.{key}.{latest}"
+        facts.add(Fact(fid, 100 * part.value / total.value, "£ per £100", latest, "pesa4", part.locator,
+                       "calculated", formula=f"100 × {part.id} ÷ {total.id}", inputs=[part.id, total.id]))
+        shares[key] = fid
+    out["per100"] = shares
+    # State pension detail from Table 5.2 (social protection: old age)
+    path5 = "data/raw/PESA_2026_CP_Chapter_5_tables.xlsx"
+    rows5 = [[c.value for c in r] for r in xlsx(path5)["5_2"].iter_rows()]
+    hdr = rows5[4]
+    col = max(j for j, v in enumerate(hdr) if v == latest)
+    i = find_row(rows5, "of which: pensions", col=1, start=find_row(rows5, "10.2 Old age", col=1))
+    facts.add(Fact(f"spend.oldage.{latest}", num(rows5[i][col]) / 1000, "£bn", latest, "pesa5", f"5_2!{ref(i, col)}", "outturn", scale=0.001,
+                   note="Old age: of which pensions. Table 5.2 is in £ million; shown here in £ billion."))
+    out["oldage"] = f"spend.oldage.{latest}"
+    return out
+
+
+# ---------------------------------------------------------------- receipts
+
+TAX_GROUPS = [
+    # key, plain name, OBR column headers (summed), notes
+    ("income_tax", "Income Tax", ["Pay as your earn (PAYE) income tax", "Self assessed (SA) income tax", "Other income tax"]),
+    ("nics", "National Insurance contributions", ["National insurance contributions (NICs)"]),
+    ("vat", "VAT", ["VAT (net of VAT refunds)"]),
+    ("corp", "Corporation Tax", ["Onshore corporation tax (includes Bank Surcharge and EGL)3", "Offshore corporation tax"]),
+    ("council", "Council Tax", ["Council tax"]),
+    ("fuel", "Fuel duties", ["Fuel duties"]),
+    ("cgt", "Capital Gains Tax", ["Capital gains tax"]),
+    ("stamp", "Stamp duties on property and shares", ["Stamp duty land tax (includes Scottish LBTT and ATED)", "Stamp taxes on shares"]),
+    ("alcohol_tobacco", "Alcohol and tobacco duties", ["Alcohol duties", "Tobacco duties"]),
+    ("iht", "Inheritance Tax", ["Inheritance tax"]),
+]
+
+
+def receipts(facts):
+    path = "data/raw/OBR_Public_finances_databank_October_2026.xlsx"
+    wb = xlsx(path)
+    rows = [[c.value for c in r] for r in wb["Receipts (£bn)"].iter_rows()]
+    head = rows[3]
+    cols = {str(v).strip(): j for j, v in enumerate(head) if v}
+    year_rows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
+    note = " ".join(str(r[1] or r[0] or "") for r in rows[39:43])
+    # Forecast years start from 2026-27 in this vintage (sheet note row 41).
+    forecast_from = "2026-27"
+    out = {"years": list(year_rows), "groups": [], "forecast_from": forecast_from}
+
+    def status(y):
+        return "forecast" if y >= forecast_from else "outturn"
+
+    def cellfact(fid, colname, y, label=None):
+        i, j = year_rows[y], cols[colname]
+        return facts.add(Fact(fid, num(rows[i][j]), "£bn", y, "obr", f"Receipts (£bn)!{ref(i, j)}", status(y), note=label or colname))
+
+    for y in year_rows:
+        cellfact(f"rec.total.{y}", "Public sector current receipts", y)
+        cellfact(f"rec.taxes.{y}", "National accounts taxes", y)
+        t, tx = facts[f"rec.total.{y}"], facts[f"rec.taxes.{y}"]
+        facts.add(Fact(f"rec.nontax.{y}", t.value - tx.value, "£bn", y, "obr", t.locator, "calculated",
+                       formula=f"{t.id} − {tx.id}", inputs=[t.id, tx.id]))
+        listed = 0
+        for key, name, colnames in TAX_GROUPS:
+            ids = []
+            for k, c in enumerate(colnames):
+                ids.append(cellfact(f"rec.part.{key}.{k}.{y}", c, y).id)
+            v = sum(facts[i].value for i in ids)
+            facts.add(Fact(f"rec.{key}.{y}", v, "£bn", y, "obr", ", ".join(facts[i].locator for i in ids),
+                           "calculated" if len(ids) > 1 else status(y), formula=" + ".join(ids) if len(ids) > 1 else "", inputs=ids if len(ids) > 1 else []))
+            listed += v
+        facts.add(Fact(f"rec.othertax.{y}", tx.value - listed, "£bn", y, "obr", tx.locator, "calculated",
+                       formula=f"{tx.id} − sum of the named taxes", inputs=[tx.id] + [f"rec.{k}.{y}" for k, _, _ in TAX_GROUPS]))
+    out["groups"] = [(k, n) for k, n, _ in TAX_GROUPS]
+    # Aggregates: borrowing, spending, debt (OBR basis)
+    rows = [[c.value for c in r] for r in wb["Aggregates (£bn)"].iter_rows()]
+    head = [str(v).strip() if v else "" for v in rows[3]]
+    yrows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
+    want = {"tme": "Total managed expenditure", "psnb": "Public sector net borrowing", "psnd": "Public sector net debt"}
+    found = {}
+    for key, label in want.items():
+        js = [j for j, h in enumerate(head) if h.startswith(label)]
+        if js:
+            found[key] = js[0]
+    for y, i in yrows.items():
+        for key, j in found.items():
+            facts.add(Fact(f"agg.{key}.{y}", num(rows[i][j]), "£bn", y, "obr", f"Aggregates (£bn)!{ref(i, j)}", status(y), note=head[j]))
+    out["agg_years"] = list(yrows)
+    out["agg_keys"] = list(found)
+    # Receipts as % of GDP, long history (outturn and forecast marked)
+    rows = [[c.value for c in r] for r in wb["Aggregates (per cent of GDP)"].iter_rows()]
+    head = [str(v).strip() if v else "" for v in rows[3]]
+    yrows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
+    for key, label in (("receipts", "Public sector current receipts"), ("tme", "Total managed expenditure"), ("psnb", "Public sector net borrowing"), ("psnd", "Public sector net debt")):
+        js = [j for j, h in enumerate(head) if h.startswith(label)]
+        if not js:
+            continue
+        for y, i in yrows.items():
+            facts.add(Fact(f"gdp.{key}.{y}", num(rows[i][js[0]]), "% of GDP", y, "obr", f"Aggregates (per cent of GDP)!{ref(i, js[0])}", status(y), note=head[js[0]]))
+    out["gdp_years"] = list(yrows)
+    return out
+
+
+# ---------------------------------------------------------------- who pays
+
+def who_pays(facts):
+    sheets = ods("data/payers/raw/hmrc-table24-july2026.ods")
+    rows = sheets["2_4_Taxpayer_share_tax"]
+    head = rows[1]
+    groups = {"top1": "Top 1% percentile group", "top10": "Top 10% percentile group", "top50": "Top 50% percentile group", "bottom50": "Bottom 50% percentile group"}
+    out = {"hmrc_years": [], "hmrc": {}}
+    for i, r in enumerate(rows[2:], start=2):
+        if not r or not re.fullmatch(r"\d{4} to \d{4}", str(r[0])):
+            continue
+        y = str(r[0])
+        start = int(y[:4])
+        st = "projection" if start >= 2024 else "outturn"
+        out["hmrc_years"].append(y)
+        for key, label in groups.items():
+            j = head.index(label)
+            facts.add(Fact(f"hmrc.share.{key}.{y}", num(r[j]), "% of all Income Tax", y, "hmrc24", f"2_4_Taxpayer_share_tax!{ref(i, j)}", st))
+        j = len(head) - 1
+        facts.add(Fact(f"hmrc.total.{y}", num(r[j]), "£bn", y, "hmrc24", f"2_4_Taxpayer_share_tax!{ref(i, j)}", st))
+    # income shares of the same groups, before tax
+    rows = sheets["2_4_Taxpayer_share_inc_pretax"]
+    for i, r in enumerate(rows[2:], start=2):
+        if not r or not re.fullmatch(r"\d{4} to \d{4}", str(r[0])):
+            continue
+        y = str(r[0])
+        st = "projection" if int(y[:4]) >= 2024 else "outturn"
+        for key, label in groups.items():
+            j = rows[1].index(label)
+            facts.add(Fact(f"hmrc.income.{key}.{y}", num(r[j]), "% of all taxpayers' income", y, "hmrc24", f"2_4_Taxpayer_share_inc_pretax!{ref(i, j)}", st))
+    rows = sheets["2_4_Taxpayer_inc_quantiles"]
+    for i, r in enumerate(rows[2:], start=2):
+        if r and str(r[0]) == "2023 to 2024":
+            for key, label in (("top1", "Top 1% percentile group"), ("top10", "Top 10% percentile group"), ("top50", "Top 50% percentile group")):
+                j = rows[1].index(label)
+                facts.add(Fact(f"hmrc.threshold.{key}", num(r[j]), "£ a year", "2023 to 2024", "hmrc24", f"2_4_Taxpayer_inc_quantiles!{ref(i, j)}", "outturn"))
+    out["hmrc_latest_outturn"] = "2023 to 2024"
+    # ETB: average taxes paid per household, by income fifth (Table 2a)
+    wb = xlsx("data/payers/raw/ons-etb-fye2024.xlsx")
+    rows = [[c.value for c in r] for r in wb["Table 2a"].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r and any(str(v).strip() == "Bottom" for v in r if v))
+    hdr = rows[hdr_i]
+    qcols = {q: next(j for j, v in enumerate(hdr) if v and str(v).strip() == lab) for q, lab in
+             (("q1", "Bottom"), ("q2", "2nd"), ("q3", "3rd"), ("q4", "4th"), ("q5", "Top"), ("all", "All individuals"))}
+
+    def etb_row(label):
+        for i, r in enumerate(rows):
+            if len(r) > 1 and r[1] and str(r[1]).strip() == label:
+                return i
+        raise KeyError(label)
+    out["etb"] = {}
+    for key, label in (("gross", "Gross income"), ("direct", "Total direct taxes"), ("indirect", "Total indirect taxes"), ("disposable", "Disposable income"),
+                       ("original", "Total original income"), ("benefits_cash", "Total cash benefits"), ("households", "Number of households in the population (thousands)")):
+        i = etb_row(label)
+        for q, j in qcols.items():
+            facts.add(Fact(f"etb.2a.{key}.{q}", num(rows[i][j]), "£ a year per household", "2023/24", "etb", f"Table 2a!{ref(i, j)}", "outturn"))
+    for q in qcols:
+        d, ind = facts[f"etb.2a.direct.{q}"], facts[f"etb.2a.indirect.{q}"]
+        facts.add(Fact(f"etb.2a.alltax.{q}", d.value + ind.value, "£ a year per household", "2023/24", "etb", f"{d.locator} + {ind.locator}",
+                       "calculated", formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
+    # ETB Table 8: taxes as a % of gross income / disposable income / expenditure
+    rows = [[c.value for c in r] for r in wb["Table 8"].iter_rows()]
+    hdr = rows[3]
+    qcols = {q: next(j for j, v in enumerate(hdr) if v and str(v).strip() == lab) for q, lab in
+             (("q1", "Bottom"), ("q2", "2nd"), ("q3", "3rd"), ("q4", "4th"), ("q5", "Top"), ("all", "All individuals"))}
+    section = None
+    for i, r in enumerate(rows):
+        if r[0] and str(r[0]).startswith("Percentages of"):
+            section = {"Percentages of gross income": "gross", "Percentages of disposable income": "disposable", "Percentages of expenditure": "spend"}[str(r[0]).strip()]
+        if section is None:
+            continue
+        label = (r[2] or r[1])
+        if not label:
+            continue
+        key = {"Direct taxes": "direct", "Income Tax": "income_tax", "National Insurance contributions": "nics",
+               "Council Tax and Northern Ireland rates": "council", "Indirect taxes": "indirect", "Value Added Tax (VAT)": "vat",
+               "All taxes": "all"}.get(str(label).strip())
+        if not key:
+            continue
+        for q, j in qcols.items():
+            facts.add(Fact(f"etb.t8.{section}.{key}.{q}", num(r[j]), "%", "2023/24", "etb", f"Table 8!{ref(i, j)}", "outturn"))
+    return out
+
+
+# ---------------------------------------------------------------- life: work
+
+def _q2(data, year):
+    return data.get(f"{year} Q2")
+
+
+def work(facts):
+    out = {"rate": {}, "men": {}, "women": {}, "level": {}, "ft": {}, "pt": {}, "occ": {}}
+    for key, sid, path, unit in (("rate", "ons-lf24", "data/fetched/ons/lf24.csv", "%"), ("men", "ons-mgsv", "data/fetched/ons/mgsv.csv", "%"),
+                                 ("women", "ons-lf25", "data/fetched/ons/lf25.csv", "%"), ("level", "ons-mgrz", "data/fetched/ons/mgrz.csv", "thousands"),
+                                 ("ft", "ons-ycbe", "data/fetched/ons/ycbe.csv", "thousands"), ("pt", "ons-ycbh", "data/fetched/ons/ycbh.csv", "thousands")):
+        meta, data = ons_series(path)
+        for y in YEARS:
+            v = _q2(data, y)
+            fid = f"work.{key}.{y}"
+            facts.add(Fact(fid, v, unit, f"April to June {y}", sid, f"{meta.get('CDID')} row '{y} Q2'", "published",
+                           note=meta.get("Title", "")))
+            out[key][y] = fid
+    for y in YEARS:
+        ft, pt = facts[f"work.ft.{y}"], facts[f"work.pt.{y}"]
+        if ft.value is not None and pt.value is not None:
+            facts.add(Fact(f"work.ptshare.{y}", 100 * pt.value / (ft.value + pt.value), "%", f"April to June {y}", "ons-ycbh", pt.locator,
+                           "calculated", formula=f"100 × {pt.id} ÷ ({ft.id} + {pt.id})", inputs=[pt.id, ft.id]))
+    out["ptshare"] = {y: f"work.ptshare.{y}" for y in YEARS if f"work.ptshare.{y}" in facts}
+    # Occupation shares from the Annual Population Survey (two classifications)
+    out["occ_groups"] = {}
+    for sid, path, codecol, namecol, scheme in (("aps2010", "data/life/sources/work-data/aps210-uk-calendar-annual.csv", "C_OCCPUK11H_0", "C_OCCPUK11H_0_NAME", "SOC2010"),
+                                                ("aps2020", "data/life/sources/work-data/aps218-uk-calendar-annual.csv", "SOC2020_FULL", "SOC2020_FULL_NAME", "SOC2020")):
+        rows = csv_rows(path)
+        for line, r in enumerate(rows, start=2):
+            if r["C_SEX_NAME"] != "All persons" or r["MEASURES_NAME"] != "Value":
+                continue
+            y = int(r["DATE_NAME"][-4:])
+            code = r[codecol]
+            name = re.sub(r"^\d\s*:?\s*", "", r[namecol]).strip()
+            name = name[0].upper() + name[1:].lower()
+            fid = f"work.occ.{scheme}.{code}.{y}"
+            facts.add(Fact(fid, num(r["OBS_VALUE"]), "people", f"January to December {y}", sid, f"{path.split('/')[-1]} line {line}", "published"))
+            out["occ_groups"].setdefault(scheme, {})[code] = name
+        for y in sorted({int(r["DATE_NAME"][-4:]) for r in rows}):
+            total = facts.get(f"work.occ.{scheme}.0.{y}")
+            if not total:
+                continue
+            for code in out["occ_groups"][scheme]:
+                if code == "0":
+                    continue
+                part = facts[f"work.occ.{scheme}.{code}.{y}"]
+                facts.add(Fact(f"work.occshare.{scheme}.{code}.{y}", 100 * part.value / total.value, "% of people in work", f"January to December {y}", sid,
+                               part.locator, "calculated", formula=f"100 × {part.id} ÷ {total.id}", inputs=[part.id, total.id]))
+            out["occ"].setdefault(scheme, []).append(y)
+    return out
+
+
+# ---------------------------------------------------------------- life: earnings
+
+def earnings(facts):
+    rows = csv_rows("data/fetched/nomis/ashe-resident-uk-median-weekly.csv")
+    meta, cpih = ons_series("data/fetched/ons/l522.csv")
+    base_year = max(int(r["DATE_NAME"]) for r in rows)
+    base = cpih[f"{base_year} APR"]
+    facts.add(Fact(f"cpih.apr.{base_year}", base, "index (2015=100)", f"April {base_year}", "ons-l522", f"L522 row '{base_year} APR'"))
+    groups = {"8": "ft", "9": "pt", "1": "ft_men", "3": "ft_women"}
+    out = {"base_year": base_year, "series": {g: {} for g in groups.values()}, "real": {g: {} for g in groups.values()}}
+    for line, r in enumerate(rows, start=2):
+        g = groups.get(r["SEX"])
+        if not g:
+            continue
+        y = int(r["DATE_NAME"])
+        if y not in YEARS:
+            continue
+        fid = f"earn.{g}.{y}"
+        st = "provisional" if y == base_year else "published"
+        facts.add(Fact(fid, num(r["OBS_VALUE"]), "£ a week", f"April {y}", "nomis-ashe-resident", f"ashe-resident-uk-median-weekly.csv line {line}", st,
+                       note=r["SEX_NAME"] + ", median gross weekly pay"))
+        out["series"][g][y] = fid
+        idx = cpih.get(f"{y} APR")
+        facts.add(Fact(f"cpih.apr.{y}", idx, "index (2015=100)", f"April {y}", "ons-l522", f"L522 row '{y} APR'")) if f"cpih.apr.{y}" not in facts else None
+        v = facts[fid].value
+        rid = f"earn.real.{g}.{y}"
+        facts.add(Fact(rid, None if v is None or idx is None else v * base / idx, f"£ a week, April {base_year} prices", f"April {y}", "nomis-ashe-resident",
+                       facts[fid].locator, "calculated", formula=f"{fid} × cpih.apr.{base_year} ÷ cpih.apr.{y}", inputs=[fid, f"cpih.apr.{base_year}", f"cpih.apr.{y}"]))
+        out["real"][g][y] = rid
+    return out
+
+
+# ---------------------------------------------------------------- life: housing
+
+def housing(facts):
+    rows = ods("data/fetched/ehs/FT1101_Trends_in_tenure.ods")["FT1101"]
+    pct_start = next(i for i, r in enumerate(rows) if len(r) > 8 and r[8] == "percentages")
+    out = {"tenure": {}, "children": {}}
+    cols = {"outright": 1, "mortgage": 2, "owners": 3, "social": 6, "private": 7}
+    for i in range(pct_start, len(rows)):
+        r = rows[i]
+        if not r or not re.fullmatch(r"\d{4}-\d{2}", str(r[0])):
+            continue
+        survey = str(r[0])
+        y = int(survey[:4])
+        if y not in YEARS:
+            continue
+        for key, j in cols.items():
+            facts.add(Fact(f"house.{key}.{y}", num(r[j]) if j < len(r) else None, "% of households", f"{survey} survey year", "ehs-ft1101",
+                           f"FT1101!{ref(i, j)}", "published"))
+        out["tenure"][y] = survey
+    # Households with dependent children (FT1241). The table has separate blocks for
+    # single lone parents, previously married lone parents and couples, in thousands.
+    # We add the blocks together and calculate shares; the formula is recorded.
+    sheets = ods("data/fetched/ehs/FT1241_Trends_in_tenure_households_with_dependent_children.ods")
+    sname = next(iter(sheets))
+    sheet = sheets[sname]
+    pct_i = next(i for i, r in enumerate(sheet) if len(r) > 6 and r[6] == "percentages")
+    blocks = {"single lone parent": "lone", "previously married lone parent": "lone", "couple with dependent child(ren)": "couple"}
+    counts = {}
+    current = None
+    for i in range(pct_i):
+        r = sheet[i]
+        if r and isinstance(r[0], str) and r[0].strip() in blocks:
+            current = r[0].strip()
+            continue
+        if current and r and re.fullmatch(r"\d{4}-\d{2}", str(r[0])):
+            y = int(str(r[0])[:4])
+            if y in YEARS:
+                for key, j in (("owners", 3), ("social", 4), ("private", 5), ("all", 6)):
+                    fid = f"house.kidsk.{blocks[current]}.{current[:6]}.{key}.{y}"
+                    facts.add(Fact(fid, num(r[j]), "thousand households", f"{r[0]} survey year", "ehs-ft1241", f"{sname}!{ref(i, j)}", "published",
+                                   note=current))
+                    counts.setdefault((y, key), []).append(fid)
+                out["children"][y] = str(r[0])
+    for y in out["children"]:
+        total_ids = counts[(y, "all")]
+        total = sum(facts[i].value for i in total_ids)
+        for key in ("owners", "social", "private"):
+            ids = counts[(y, key)]
+            if any(facts[i].value is None for i in ids):
+                continue
+            facts.add(Fact(f"house.kids.{key}.{y}", 100 * sum(facts[i].value for i in ids) / total, "% of households with dependent children",
+                           f"{out['children'][y]} survey year", "ehs-ft1241", ", ".join(facts[i].locator for i in ids), "calculated",
+                           formula=f"100 × ({' + '.join(ids)}) ÷ ({' + '.join(total_ids)})", inputs=ids + total_ids))
+    return out
+
+
+# ---------------------------------------------------------------- life: holidays
+
+def _ott_block_table(path, sheet, source):
+    """Parse the 2009-2019 layout: region heading rows, then purpose rows with year columns."""
+    ws = xlsx(path)[sheet]
+    rows = [[c.value for c in r] for r in ws.iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r[2] is not None and str(r[2]).strip() == "2009")
+    years = {j: int(str(v)) for j, v in enumerate(rows[hdr_i]) if v and re.fullmatch(r"\d{4}", str(v).strip())}
+    region, out = None, {}
+    for i in range(hdr_i + 1, len(rows)):
+        r = rows[i]
+        a = (str(r[0]).strip() if r[0] else "")
+        if a and all(v is None for v in r[2:13]):
+            region = a
+            continue
+        if not a or region is None:
+            continue
+        for j, y in years.items():
+            out[(region, a, y)] = (num(r[j]), f"{sheet}!{ref(i, j)}", source, 1)
+    return out
+
+
+def _ott_wide_table(path, sheet, source):
+    """Parse the 2019-2023 layout: region, purpose, then one column per year."""
+    rows = [[c.value for c in r] for r in xlsx(path)[sheet].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r[0] and str(r[0]).strip() == "Region of Visit")
+    years = {j: int(str(v)) for j, v in enumerate(rows[hdr_i]) if v and re.fullmatch(r"\d{4}", str(v).strip())}
+    out = {}
+    for i in range(hdr_i + 1, len(rows)):
+        r = rows[i]
+        if not r[0] or not r[1]:
+            continue
+        for j, y in years.items():
+            out[(str(r[0]).strip(), str(r[1]).strip(), y)] = (num(r[j]) / 1000 if num(r[j]) is not None else None, f"{sheet}!{ref(i, j)}", source, 0.001)
+    return out
+
+
+def _ott_annual(path, source, year):
+    rows = [[c.value for c in r] for r in xlsx(path)["2"].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r[0] and str(r[0]).strip() == "Region of Visit")
+    out = {}
+    for i in range(hdr_i + 1, len(rows)):
+        r = rows[i]
+        if r[0] and r[1]:
+            v = num(r[2])
+            out[(str(r[0]).strip(), str(r[1]).strip(), year)] = (v / 1000 if v is not None else None, f"2!{ref(i, 2)}", source, 0.001)
+    rows1 = [[c.value for c in r] for r in xlsx(path)["1"].iter_rows()]
+    for i, r in enumerate(rows1):
+        if r[0] and str(r[0]).strip() in ("United Kingdom", "Great Britain"):
+            out[("Residents total", str(r[0]).strip(), year)] = (num(r[1]) / 1000, f"1!{ref(i, 1)}", source, 0.001)
+    return out
+
+
+def holidays(facts):
+    cells = {}
+    cells.update(_ott_block_table("data/fetched/ott/section3-2009to2019.xlsx", "3.03", "ott-2009to2019"))
+    newer = _ott_wide_table("data/fetched/ott/section3-2019to2023.xlsx", "2", "ott-2019to2023")
+    # 2019 appears in both files: keep the later publication (2019-2023) for 2019
+    cells.update(newer)
+    for y, path, sid in ((2024, "data/fetched/ott/ukresidents2024annual.xlsx", "ott-2024"), (2025, "data/fetched/ott/ukresidents2025annual.xlsx", "ott-2025")):
+        if (ROOT / path).exists():
+            cells.update(_ott_annual(path, sid, y))
+    regions = {"europe": ("Europe", "Europe"), "namerica": ("North America", "North America"), "other": ("Other Countries", "Other Countries"), "world": ("Total World", "Total World")}
+    purposes = {"holiday": ("Holiday", "Holiday - All"), "vfr": ("Visiting friends or relatives", "Visit friends or relatives"),
+                "business": ("Business", "Business"), "all": ("All visits", "All visits")}
+    out = {"series": {}, "basis": {}}
+    for y in YEARS:
+        basis = "UK residents" if y <= 2023 else "Great Britain residents"
+        out["basis"][y] = basis
+        for rk, (old_r, new_r) in regions.items():
+            for pk, (old_p, new_p) in purposes.items():
+                key = None
+                for cand in ((old_r, old_p, y), (new_r, new_p, y), ("Total World" if rk == "world" else new_r, new_p, y)):
+                    if cand in cells:
+                        key = cand
+                        break
+                fid = f"hol.{rk}.{pk}.{y}"
+                if key is None:
+                    facts.add(Fact(fid, None, "thousand visits", str(y), "ott-2019to2023" if y <= 2023 else "ott-2024", "not published", "missing",
+                                   note="No estimate in the retained source for this year."))
+                else:
+                    v, loc, sid, scale = cells[key]
+                    facts.add(Fact(fid, v, "thousand visits", str(y), sid, loc, "published",
+                                   note=f"{basis}; {key[0]}, {key[1]}" + ("; source counts visits, shown here in thousands" if scale != 1 else ""), scale=scale))
+                out["series"].setdefault(rk, {}).setdefault(pk, {})[y] = fid
+    for y in YEARS:
+        h, a = facts[f"hol.world.holiday.{y}"], facts[f"hol.world.all.{y}"]
+        if h.value is not None and a.value:
+            facts.add(Fact(f"hol.holshare.{y}", 100 * h.value / a.value, "% of visits abroad", str(y), h.source, h.locator, "calculated",
+                           formula=f"100 × {h.id} ÷ {a.id}", inputs=[h.id, a.id]))
+            e = facts[f"hol.europe.holiday.{y}"]
+            if e.value is not None:
+                facts.add(Fact(f"hol.europeshare.{y}", 100 * e.value / h.value, "% of holiday visits", str(y), e.source, e.locator, "calculated",
+                               formula=f"100 × {e.id} ÷ {h.id}", inputs=[e.id, h.id]))
+    return out
+
+
+# ---------------------------------------------------------------- life: schools
+
+def schools(facts):
+    out = {"primary": {}, "secondary": {}, "over30_primary": {}}
+    # January 2006 to January 2015: SFR16/2015 national tables, Table 6b
+    path = "data/fetched/dfe/spc-2015-national-tables.xlsx"
+    rows = [[c.value for c in r] for r in xlsx(path)["Table 6b"].iter_rows()]
+    yr_i = next(i for i, r in enumerate(rows) if any(str(v).strip() == "2006" for v in r if v))
+    ycols = {int(str(v).strip()): j for j, v in enumerate(rows[yr_i]) if v and re.fullmatch(r"\d{4}", str(v).strip())}
+    prim = find_row(rows, "STATE-FUNDED PRIMARY")
+    sec = find_row(rows, "STATE-FUNDED SECONDARY")
+    avg_p = find_row(rows, "Average class size", start=prim)
+    avg_s = find_row(rows, "Average class size", start=sec)
+    for y, j in ycols.items():
+        if y not in YEARS:
+            continue
+        for phase, i in (("primary", avg_p), ("secondary", avg_s)):
+            facts.add(Fact(f"school.{phase}.{y}", num(rows[i][j]), "pupils per class", f"January {y} census ({y - 1}/{str(y)[2:]} school year)",
+                           "dfe-spc-2015-tables", f"Table 6b!{ref(i, j)}", "published"))
+            out[phase][y] = f"school.{phase}.{y}"
+    # January 2016 onwards: DfE statistics API, national level
+    data = json.loads((ROOT / "data/life/sources/schools/dfe-national-class-sizes-1.0.json").read_text())
+    phase_ids = {"5kyxd": "primary", "tfHTE": "secondary"}
+    for k, r in enumerate(data["results"]):
+        if r["filters"].get("cAd31") != "XdTUf":
+            continue
+        phase = phase_ids.get(r["filters"].get("5cGdi"))
+        if not phase:
+            continue
+        period = r["timePeriod"]["period"]
+        y = int(period[-4:])
+        if y not in YEARS:
+            continue
+        v = round(float(r["values"]["Wc9V2"]), 1)
+        facts.add(Fact(f"school.{phase}.{y}", v, "pupils per class", f"January {y} census ({period[:4]}/{period[-2:]} school year)", "dfe_api",
+                       f"results[{k}] values.Wc9V2", "published", note="API gives unrounded value; rounded to 1 decimal place as in DfE publications."))
+        out[phase][y] = f"school.{phase}.{y}"
+    return out
+
+
+def build_all():
+    facts = Facts()
+    d = {
+        "spending": spending(facts),
+        "receipts": receipts(facts),
+        "who": who_pays(facts),
+        "work": work(facts),
+        "earnings": earnings(facts),
+        "housing": housing(facts),
+        "holidays": holidays(facts),
+        "schools": schools(facts),
+    }
+    return facts, d

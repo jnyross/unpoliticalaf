@@ -1,12 +1,12 @@
 {
   "name": "unpoliticalaf",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Static, sourced guide to UK public spending; built from retained official workbooks.",
+  "description": "Independent, sourced guide to UK public money and everyday life, built from official statistics.",
   "scripts": {
     "setup": "make setup",
     "build": "make build",
-    "verify": "make verify",
-    "smoke": "make smoke"
+    "check": "make check",
+    "verify": "make verify"
   }
 }
