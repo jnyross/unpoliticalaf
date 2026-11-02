@@ -9,6 +9,83 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 8: 2 November 2026 (confirming re-score after PRs #118 and #119)
+
+- Commit audited: `fded452` on `main` (after #118 chart titles that name
+  every big rise and fall, with a check, and #119 topic pages, taxes and the
+  default comparison shortened to about 8 phone screens).
+- Rubric: [goal-rubric.md](goal-rubric.md), strict reading as in Audits 4 to
+  7. Level 5 needs real readers, so 4 is the highest any dimension can reach
+  until people test the site.
+- How it was checked: a fresh build (1,762 pages, 5,851 CSV downloads, every
+  chart and table still has one); `make check` (174,539 numbers re-read, 50
+  finding-led headings, 12 trend headings checked against every big rise and
+  fall of their line) and the 124 unit tests pass; 18 pages measured at
+  360 × 640 with and without JavaScript; every chart title on the money
+  pages, the life hub and each topic page read against the chart's own CSV,
+  including the two titles Audit 7 found misleading. CI (build and checks,
+  including `make a11y` with the new screen limits) and the "Live site
+  matches main" check are both green for `fded452`.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 40 out of 55** on both the strict and lenient readings. Audit 7: 37
+strict, 40 lenient. Target: at least 49, every dimension at least 4, and the
+phone test passed. Not met, and no longer reachable by building alone.
+
+Both gaps from Audit 7 are closed:
+
+- Chart titles (#118). The holiday visits title now reads "rose until 2019,
+  fell in 2020, then rose back to about the 2019 level" (41.2 million in 2009,
+  58.7 million in 2019, 4.4 million in 2020, 58.4 million in 2025), and the
+  spending share of GDP title reads "rose until 2009-10, fell until 2018-19,
+  rose until 2020-21, then fell back part of the way" (46.0%, 39.1%, 52.3%,
+  44.3%). Both match their CSVs. Visits per 100 residents now names the
+  2020-21 fall. A check fails the build if a trend title leaves out a big
+  move, and the fix is logged on the corrections page.
+- Page length (#119). Measured with JavaScript off: work 7.7, earnings 7.7,
+  housing 8.4, holidays 8.4, class sizes 8.0, taxes 8.2, the default 2009 vs
+  2023 comparison 8.3 screens (were 10.0 to 11.3). Spending 7.8, who pays
+  7.9, household tax 7.7, life hub 8.2, home 8.1, OECD 8.7. CI holds them
+  under 8.5 or 8.8. No page scrolls sideways. The comparison page still
+  carries the "not comparable: definition changed" wording that user-test
+  question 10 relies on.
+
+| Dimension | Strict | Lenient | Why |
+|---|---|---|---|
+| D1 Public money answers | 4 | 4 | Unchanged from Audit 7. Not 5: no reader evidence. |
+| D2 Life: breadth and depth | 4 | 4 | Unchanged. The charts #119 moved into folds are still on the page and in the CSVs. Not 5: no reader evidence; housing costs and space are England only. |
+| D3 Life: choosing and comparing | 4 | 4 | The default comparison is now 8.3 screens instead of 10.5, with the lead figures and the longer run in view and the rest in folds. Not 5: no reader evidence. |
+| D4 Explanation and understanding | 4 | 4 | The two titles that taught the wrong trend are fixed. Not 5: no evidence that a newcomer can explain a point back. |
+| D5 Visual design and charts | 4 | 4 | Up from 1 strict. No chart title misstates its line: every trend title on the key pages was read against its CSV, and CI now checks it. Some multi-turn titles are long (the housing rent and mortgage title is 31 words), which is a readability point, not a misleading one. Not 5: no reader evidence. |
+| D6 Phone experience | 4 | 4 | Every page Audit 7 named is now 7.7 to 8.4 screens and held there by CI. Not 5: nothing measures "answer in under a minute" with real people. |
+| D7 Accuracy and traceability | 4 | 4 | Unchanged (50 of 50 random figures match the publishers' files, #110). Not 5: no review by a person outside the project. |
+| D8 Impartiality | 4 | 4 | The spending share title no longer hides the 2010s fall, which was Audit 7's one impartiality risk. Not 5: no outside review. |
+| D9 Accessibility and no JavaScript | 4 | 4 | Unchanged. Known and recorded trade-off: one figure's source panel opens by tap or click only; keyboard users reach the same record through each section's Sources line (benchmark-comparison.md, item 4; neither benchmark has the feature). Not 5: no VoiceOver or TalkBack test by a person. |
+| D10 Honesty about limits | 4 | 4 | Unchanged. Not 5: no outside review. |
+| D11 Reader evidence | 0 | 0 | Nobody has used the site in a test. |
+| **Total** | **40 / 55** | **40 / 55** | |
+
+### Gaps that a worker can do
+
+None that move the score. Every dimension except D11 is at 4, the most the
+rubric allows without real readers. Optional polish that would not change a
+score: shorter wording for the longest multi-turn chart titles (housing costs,
+classes over 30), and a keyboard way to open one figure's source panel.
+
+### Human-only steps (all that remain)
+
+1. A quick informal test with two or three people on phones (D11 to 2).
+2. The five-person phone test with the pack in `docs/user-test/` (D11 to 5;
+   required for the goal).
+3. A VoiceOver (iPhone) and TalkBack (Android) test (D9 to 5).
+4. A review of accuracy and impartiality by a person outside the project (D7,
+   D8, D10 to 5).
+
+Reaching 49 needs D11 at 5 (45) and at least four other dimensions at 5,
+which these steps make possible: for example D7, D8, D9 and D10.
+
+---
+
 ## Audit 7: 2 November 2026 (strict re-score after PRs #110 to #116)
 
 - Commit audited: `871f814` on `main` (after #110 a 50-figure random accuracy
