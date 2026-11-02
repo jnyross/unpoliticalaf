@@ -77,11 +77,6 @@
    "file": "ons/ycbh.csv"
   },
   {
-   "id": "ons-mgsx",
-   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinunemployment/timeseries/mgsx/lms",
-   "file": "ons/mgsx.csv"
-  },
-  {
    "id": "ehs-ft1101",
    "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
    "file": "ehs/FT1101_Trends_in_tenure.ods"
@@ -136,6 +131,11 @@
    "page": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
    "find": "https://assets\\.publishing\\.service\\.gov\\.uk/[^\"']*[Nn]ational[^\"']*\\.xlsx",
    "file": "dfe/spc-2015-national-tables"
+  },
+  {
+   "id": "ott-2024",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
+   "file": "ott/ukresidents2024annual.xlsx"
   }
  ]
 }

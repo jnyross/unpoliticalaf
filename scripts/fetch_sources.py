@@ -19,13 +19,13 @@ def get(url):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=90) as r:
                 return r.read(), r.headers.get("Content-Type", "")
-        except Exception as e:  # retry transient failures
+        except Exception as e:  # retry transient failures and rate limits
             if attempt == 3:
                 raise
-            time.sleep(2 ** attempt)
+            time.sleep(30 * (attempt + 1) if "429" in str(e) else 2 ** attempt)
 
 
-def main(only=None):
+def main(only=None, refresh=False):
     manifest = json.loads((ROOT / "sources/manifest.json").read_text())
     receipts_path = OUT / "receipts.json"
     receipts = json.loads(receipts_path.read_text()) if receipts_path.exists() else {}
@@ -33,6 +33,9 @@ def main(only=None):
     for s in manifest["sources"]:
         if only and s["id"] not in only:
             continue
+        if not refresh and not only and s["id"] in receipts and (OUT / receipts[s["id"]]["file"]).exists():
+            continue  # keep the retained copy; pass --refresh to download again
+        time.sleep(3)  # be polite to the publishers' servers
         try:
             url = s.get("url")
             if "find" in s:
@@ -61,4 +64,5 @@ def main(only=None):
 
 
 if __name__ == "__main__":
-    main(set(sys.argv[1:]) or None)
+    args = [a for a in sys.argv[1:] if a != "--refresh"]
+    main(set(args) or None, refresh="--refresh" in sys.argv)
