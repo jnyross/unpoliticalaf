@@ -138,6 +138,36 @@
    "file": "ott/ukresidents2024annual.xlsx"
   },
   {
+   "id": "gbts-2025-toplines",
+   "url": "https://www.visitbritain.org/media/5894/download?attachment",
+   "file": "gbts/gbts-2025-toplines.pdf"
+  },
+  {
+   "id": "gbts-2024-q4-annual-tables",
+   "url": "https://www.visitbritain.org/media/4472/download?attachment",
+   "file": "gbts/gbts-2024-q4-annual-tables.xlsx"
+  },
+  {
+   "id": "gbts-2022to2023-tables",
+   "url": "https://www.visitbritain.org/media/3719/download?attachment",
+   "file": "gbts/gbts-2022to2023-tables.xlsx"
+  },
+  {
+   "id": "gbts-2019-gb-summary",
+   "url": "https://www.visitbritain.org/media/3009/download?attachment",
+   "file": "gbts/gbts-2019-gb-summary.xlsx"
+  },
+  {
+   "id": "ons-ukpop",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
+   "file": "ons/ukpop.csv"
+  },
+  {
+   "id": "ons-gbpop",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
+   "file": "ons/gbpop.csv"
+  },
+  {
    "id": "ehs-fa3201",
    "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
    "file": "ehs/FA3201_rent_before_housing_support.ods"

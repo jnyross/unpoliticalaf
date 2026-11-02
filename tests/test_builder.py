@@ -89,3 +89,14 @@ class Sources(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Holidays(unittest.TestCase):
+    def test_only_single_countries_are_ranked(self):
+        from builder.data import _country_rows
+        rows = [["Spain", 5], ["Rest of Europe", 9], ["Total World", 99], ["- of which EU", 50], ["Other Asia", 3], ["USA", 4], ["Fly/cruise (stay onboard)", 1]]
+        self.assertEqual([n for n, _ in _country_rows(rows, 0, 0, [1])], ["Spain", "United States"])
+
+    def test_survey_change_blocks_comparison(self):
+        self.assertNotEqual(pages_life.gb_survey(2019), pages_life.gb_survey(2022))
+        self.assertEqual(pages_life.gb_survey(2022), pages_life.gb_survey(2025))

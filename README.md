@@ -11,7 +11,7 @@ first and the method close by:
   averages, personal tax rates and shares of total revenue (`household-tax.html`)
 
 It also has **Everyday life, year by year** (`life/`): work and job types, pay
-after inflation, housing, holidays abroad and school class sizes from 2008 to
+after inflation, housing, holidays (abroad and within Great Britain, with the most visited countries) and school class sizes from 2008 to
 2025. Every year has its own page, and every pair of years has a comparison page,
 so the core answers and comparisons work without JavaScript.
 

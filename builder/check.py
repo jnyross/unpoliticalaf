@@ -80,6 +80,14 @@ def cell_value(src_file, locator):
         m = re.fullmatch(r"results\[(\d+)\] values\.(\w+)", locator)
         data = json.loads((ROOT / src_file).read_text())
         return data["results"][int(m.group(1))]["values"][m.group(2)]
+    if src_file.endswith(".pdf"):
+        # Read the page text afresh and find the anchor, the line and the nth number on it
+        from pypdf import PdfReader
+        m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)
+        text = PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text()
+        after = text[text.index(m.group(2)) + len(m.group(2)):]
+        line = after[after.index(m.group(3)) + len(m.group(3)):].split("\n", 1)[0]
+        return re.findall(r"-?[\d,]+(?:\.\d+)?", line)[int(m.group(4)) - 1].replace(",", "")
     raise ValueError(f"cannot read {src_file} at {locator}")
 
 

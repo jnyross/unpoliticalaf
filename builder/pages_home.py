@@ -18,7 +18,7 @@ def home_page(facts, d, num, sources):
 <p>On average, {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24. That is an average across households, not anyone's tax rate.</p></a>
 </div>
 <h2>Everyday life, year by year</h2>
-<p>See how work, pay after inflation, housing, holidays abroad and school class sizes have changed since 2008. Pick a year or compare two.</p>
+<p>See how work, pay after inflation, housing, holidays at home and abroad, and school class sizes have changed since 2008. Pick a year or compare two.</p>
 <p><a class="button" href="life/index.html">Explore everyday life</a></p>
 <h2>How to read this site</h2>
 <ul>
@@ -48,7 +48,9 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Families with children renting privately</strong>: private-renting families ÷ all families, adding couples, single lone parents and previously married lone parents (EHS FT1241).</li>'
             '<li><strong>Housing costs after inflation</strong>: cash rent or mortgage payment × (average CPIH over the latest survey year ÷ average CPIH over that survey year). A survey year runs from April to the following March, so each average uses the twelve monthly CPIH values (ONS series L522) for those months.</li>'
             '<li><strong>Households with five or more rooms</strong>: the published percentages with five, six, seven, and eight or more rooms, added together (EHS FA1401).</li>'
-            '<li><strong>Holiday share of visits</strong> and <strong>Europe share</strong>: holiday visits ÷ all visits, and holiday visits to Europe ÷ all holiday visits.</li></ul>',
+            '<li><strong>Holiday share of visits</strong> and <strong>Europe share</strong>: holiday visits ÷ all visits, and holiday visits to Europe ÷ all holiday visits.</li>'
+            '<li><strong>Holidays per 100 residents</strong>: holiday trips × 100 ÷ mid-year population (ONS UKPOP up to 2023 for trips abroad, GBPOP from 2024 and for trips within Great Britain). This is an average over everyone, including children and people who took no holiday.</li>'
+            '<li><strong>Most visited countries</strong>: single countries ranked by visits in that year; groups such as “Rest of Europe” are left out.</li></ul>',
             '<h2 id="data">Every figure, machine-readable</h2>',
             f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Figures on each page are tagged with the same id.</p>',
             '<h2 id="reproduce">How to reproduce the site</h2><p>With Python 3.10 or later: <code>make setup</code>, then <code>make build</code> and <code>make check</code>. The check re-opens every source file, re-reads each figure, and confirms that every number on every page matches its record.</p>',

@@ -111,6 +111,38 @@
   "sha256": "d9c57564b9755a347f7840cb18cf4e0d62f3174bc91bd62707ce9c3e4ea630f2",
   "retrieved": "2026-11-02T08:58:37Z"
  },
+ "gbts-2019-gb-summary": {
+  "url": "https://www.visitbritain.org/media/3009/download?attachment",
+  "file": "gbts/gbts-2019-gb-summary.xlsx",
+  "bytes": 58560,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "a4890aae6f6b96a8894a63c7a8906cda999a5901f97f50071fb99cbf9556d9b3",
+  "retrieved": "2026-11-02T09:55:17Z"
+ },
+ "gbts-2022to2023-tables": {
+  "url": "https://www.visitbritain.org/media/3719/download?attachment",
+  "file": "gbts/gbts-2022to2023-tables.xlsx",
+  "bytes": 29721,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "af3a5881df94550a8e989d3e3fa3034f416be5e2084980c9f83709884656b970",
+  "retrieved": "2026-11-02T09:55:09Z"
+ },
+ "gbts-2024-q4-annual-tables": {
+  "url": "https://www.visitbritain.org/media/4472/download?attachment",
+  "file": "gbts/gbts-2024-q4-annual-tables.xlsx",
+  "bytes": 50951,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "7985b5cbd2d69f12c95dba469c8eca572dde7a04fda2f6205304e09cab63ab8c",
+  "retrieved": "2026-11-02T09:54:53Z"
+ },
+ "gbts-2025-toplines": {
+  "url": "https://www.visitbritain.org/media/5894/download?attachment",
+  "file": "gbts/gbts-2025-toplines.pdf",
+  "bytes": 2399429,
+  "content_type": "application/pdf",
+  "sha256": "88ea35ba9131883ffd74af9fd067cd1e6c950afd33aa3605c71f7f1ecbf325da",
+  "retrieved": "2026-11-02T09:54:49Z"
+ },
  "gov-income-tax-rates": {
   "url": "https://www.gov.uk/income-tax-rates",
   "file": "gov/income-tax-rates.html",
@@ -159,6 +191,14 @@
   "sha256": "de61ee291cca0c336ba3ae5b3dcee36da8c38ed165d2d9d8672809f84a34aeb7",
   "retrieved": "2026-11-02T08:58:34Z"
  },
+ "ons-gbpop": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
+  "file": "ons/gbpop.csv",
+  "bytes": 1780,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "a912da34f98c17bcc2ca6ffe125b79c05c4491923f9cc9678b866c83e8062a6f",
+  "retrieved": "2026-11-02T09:55:39Z"
+ },
  "ons-l522": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
   "file": "ons/l522.csv",
@@ -198,6 +238,14 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "9d2008ed9769b8f4d80cc26d81dce4861b39d32a327319cccc4428503ffcb6fe",
   "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-ukpop": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
+  "file": "ons/ukpop.csv",
+  "bytes": 1781,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "88f8285509f69313fb14f9f3e77d0e04b272dcbfe5a9c109bedf392da5abd90f",
+  "retrieved": "2026-11-02T09:55:36Z"
  },
  "ons-ycbe": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",

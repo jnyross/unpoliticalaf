@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
-from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows
+from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows, pdf_number
 
 YEARS = list(range(2008, 2026))  # year explorer range (calendar years)
 
@@ -717,6 +717,133 @@ def holidays(facts):
     return out
 
 
+# Countries: only single countries are ranked, never regions, groups or "other" rows
+COUNTRY_RENAME = {"USA": "United States", "Czech Republic": "Czechia"}
+NOT_A_COUNTRY = re.compile(r"^(Total|Other|Rest of|- of which|EU|Europe$|North America$|Fly|South and Central America)", re.I)
+
+
+def _country_rows(rows, name_col, start, cols):
+    """Yield (country name, row index) for single-country rows of a country table."""
+    for i in range(start, len(rows)):
+        r = rows[i]
+        name = r[name_col]
+        if not name or not isinstance(name, str):
+            continue
+        name = re.sub(r"\s*\[Note \d+\]", "", name).strip()
+        if name in ("Total World",) or NOT_A_COUNTRY.match(name):
+            continue
+        if all(num(r[j]) is None and str(r[j]).strip() != "Not available" for j in cols):
+            continue
+        yield COUNTRY_RENAME.get(name, name), i
+
+
+def _slug(name):
+    return re.sub(r"[^a-z]+", "-", name.lower()).strip("-")
+
+
+def holiday_countries(facts):
+    """Visits abroad by main country visited. All purposes for every year; holidays only from 2024."""
+    out = {"names": {}, "all": {}, "holiday": {}}
+
+    def add(name, kind, y, v, sid, loc, scale, basis):
+        s = _slug(name)
+        out["names"][s] = name
+        fid = f"hol.cty.{s}.{kind}.{y}"
+        if v is None:
+            return
+        facts.add(Fact(fid, v, "thousand visits", str(y), sid, loc, "published",
+                       note=f"{basis}; main country visited: {name}; {'all purposes' if kind == 'all' else 'holiday visits'}", scale=scale))
+        out[kind].setdefault(y, []).append(s)
+
+    # 2009 to 2018: Travel trends 2009-2019, table 3.10, thousands of visits
+    rows = [[c.value for c in r] for r in xlsx("data/fetched/ott/section3-2009to2019.xlsx")["3.10"].iter_rows()]
+    hdr = next(i for i, r in enumerate(rows) if r[2] == 2009)
+    years = {j: int(v) for j, v in enumerate(rows[hdr]) if isinstance(v, int)}
+    for name, i in _country_rows(rows, 0, hdr + 1, list(years)):
+        for j, y in years.items():
+            if y <= 2018:
+                add(name, "all", y, num(rows[i][j]), "ott-2009to2019", f"3.10!{ref(i, j)}", 1, "UK residents")
+    # 2019 to 2023: Travel trends 2019-2023, table 3.09, visits (shown in thousands)
+    rows = [[c.value for c in r] for r in xlsx("data/fetched/ott/section3-2019to2023.xlsx")["9"].iter_rows()]
+    hdr = next(i for i, r in enumerate(rows) if r[0] == "Region of Visit")
+    years = {j: int(str(v)) for j, v in enumerate(rows[hdr]) if v and re.fullmatch(r"\d{4}", str(v).strip())}
+    for name, i in _country_rows(rows, 1, hdr + 1, list(years)):
+        for j, y in years.items():
+            v = num(rows[i][j])
+            add(name, "all", y, None if v is None else v / 1000, "ott-2019to2023", f"9!{ref(i, j)}", 0.001, "UK residents")
+    # 2024 onwards: annual tables, table 7 (holiday visits and all purposes)
+    for y, path, sid in ((2024, "data/fetched/ott/ukresidents2024annual.xlsx", "ott-2024"), (2025, "data/fetched/ott/ukresidents2025annual.xlsx", "ott-2025")):
+        rows = [[c.value for c in r] for r in xlsx(path)["7"].iter_rows()]
+        hdr = next(i for i, r in enumerate(rows) if r[0] == "Region of Visit")
+        col = {}
+        for j, v in enumerate(rows[hdr]):  # first column of each purpose is its visits column
+            if v and str(v).split("\n")[-1].strip() == "Visits":
+                col[str(v).split("\n")[0].strip()] = j
+        hol_j, all_j = col["Holiday - all"], col["All Purposes"]
+        for name, i in _country_rows(rows, 1, hdr + 1, [hol_j, all_j]):
+            for kind, j in (("holiday", hol_j), ("all", all_j)):
+                v = num(rows[i][j])
+                add(name, kind, y, None if v is None else v / 1000, sid, f"7!{ref(i, j)}", 0.001, "Great Britain residents")
+    return out
+
+
+def holidays_gb(facts):
+    """Holiday trips taken within Great Britain by GB residents (Great Britain Tourism Survey)."""
+    out = {}
+    entries = [
+        # (year, source, locator, survey)
+        (2019, "gbts-2019-gb-summary", "GB All Tourism!B5", "earlier"),
+        (2022, "gbts-2022to2023-tables", "Britain trips!F9", "current"),
+        (2023, "gbts-2024-q4-annual-tables", "2024_Britain trips!F9", "current"),
+        (2024, "gbts-2024-q4-annual-tables", "2024_Britain trips!G9", "current"),
+    ]
+    files = {"gbts-2019-gb-summary": "data/fetched/gbts/gbts-2019-gb-summary.xlsx", "gbts-2022to2023-tables": "data/fetched/gbts/gbts-2022to2023-tables.xlsx",
+             "gbts-2024-q4-annual-tables": "data/fetched/gbts/gbts-2024-q4-annual-tables.xlsx"}
+    labels = {"GB All Tourism!B5": ("Holidays", "A5"), "Britain trips!F9": ("Total GB trips (million)", "A9"), "2024_Britain trips!F9": ("Total GB trips (million)", "A9"),
+              "2024_Britain trips!G9": ("Total GB trips (million)", "A9")}
+    for y, sid, loc, survey in entries:
+        sheet, cellref = loc.rsplit("!", 1)
+        ws = xlsx(files[sid])[sheet]
+        want_label, label_ref = labels[loc]
+        if str(ws[label_ref].value).strip() != want_label:
+            raise ValueError(f"{sid} {sheet}!{label_ref}: expected '{want_label}', found '{ws[label_ref].value}'")
+        v = num(ws[cellref].value)
+        facts.add(Fact(f"hol.gb.holiday.{y}", v * 1000, "thousand trips", f"January to December {y}", sid, loc, "published",
+                       note=f"GB residents' overnight trips in Great Britain whose main purpose was a holiday; adults and accompanying children each count as a trip; {survey} survey method; source in millions",
+                       scale=1000))
+        out[y] = survey
+    loc = "p10 after 'Holidays Q4 2024' line 'Visits (million))' number 5"
+    v = pdf_number("data/fetched/gbts/gbts-2025-toplines.pdf", loc)
+    facts.add(Fact("hol.gb.holiday.2025", v * 1000, "thousand trips", "January to December 2025", "gbts-2025-toplines", loc, "published",
+                   note="GB residents' overnight trips in Great Britain whose main purpose was a holiday; current survey method; published rounded to 0.1 million", scale=1000))
+    out[2025] = "current"
+    return out
+
+
+def population(facts):
+    """Mid-year population estimates, used to express trips per 100 residents."""
+    for key, sid, path in (("uk", "ons-ukpop", "data/fetched/ons/ukpop.csv"), ("gb", "ons-gbpop", "data/fetched/ons/gbpop.csv")):
+        meta, data = ons_series(path)
+        for y in YEARS:
+            v = data.get(str(y))
+            if v is not None:
+                facts.add(Fact(f"pop.{key}.{y}", v, "people", f"mid-{y}", sid, f"{meta.get('CDID')} row '{y}'", "published", note=meta.get("Title", "")))
+
+
+def holiday_rates(facts, gb_survey):
+    """Holiday trips per 100 residents: an average across everyone, including people who took none."""
+    for y in YEARS:
+        h = facts.get(f"hol.world.holiday.{y}")
+        pop = facts.get(f"pop.{'uk' if y <= 2023 else 'gb'}.{y}")
+        if h is not None and h.value is not None and pop is not None:
+            facts.add(Fact(f"hol.abroad.per100.{y}", 100 * 1000 * h.value / pop.value, "holiday visits abroad per 100 residents", str(y), h.source, h.locator, "calculated",
+                           formula=f"100 × 1000 × {h.id} ÷ {pop.id}", inputs=[h.id, pop.id]))
+        g, gp = facts.get(f"hol.gb.holiday.{y}"), facts.get(f"pop.gb.{y}")
+        if g is not None and gp is not None:
+            facts.add(Fact(f"hol.gb.per100.{y}", 100 * 1000 * g.value / gp.value, "holiday trips in Great Britain per 100 GB residents", str(y), g.source, g.locator, "calculated",
+                           formula=f"100 × 1000 × {g.id} ÷ {gp.id}", inputs=[g.id, gp.id]))
+
+
 # ---------------------------------------------------------------- life: schools
 
 def schools(facts):
@@ -769,6 +896,10 @@ def build_all():
         "housing_costs": housing_costs(facts),
         "housing_space": housing_space(facts),
         "holidays": holidays(facts),
+        "countries": holiday_countries(facts),
+        "gb_holidays": holidays_gb(facts),
         "schools": schools(facts),
     }
+    population(facts)
+    holiday_rates(facts, d["gb_holidays"])
     return facts, d
