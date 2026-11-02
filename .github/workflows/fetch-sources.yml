@@ -1,0 +1,20 @@
+name: Fetch official sources
+on:
+  push:
+    paths: ["sources/manifest.json", "scripts/fetch_sources.py", ".github/workflows/fetch-sources.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/fetch_sources.py
+      - name: Commit fetched files
+        run: |
+          git config user.name "unpolitical-fetch"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/fetched
+          git diff --cached --quiet || git commit -m "Fetch official sources ($(date -u +%F))"
+          git push
