@@ -119,6 +119,78 @@
   "sha256": "d9c57564b9755a347f7840cb18cf4e0d62f3174bc91bd62707ce9c3e4ea630f2",
   "retrieved": "2026-11-02T08:58:37Z"
  },
+ "etb-fye2018": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2018/etb2018referencetablesv3final.xlsx",
+  "file": "etb/fye2018.xlsx",
+  "bytes": 761511,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "793b84c9517e02e6670e6c16e04c072c33a9f9311ed46f991923f0aa4db3eb01",
+  "retrieved": "2026-11-02T16:10:33Z"
+ },
+ "etb-fye2019": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending/etb2019referencetablesfinal1.xlsx",
+  "file": "etb/fye2019.xlsx",
+  "bytes": 803276,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "833d77798a10184743608d355b7a566ba3fbc0766f01e287130a9eb652a1379c",
+  "retrieved": "2026-11-02T16:10:37Z"
+ },
+ "etb-fye2020": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2020/201920etbtablesrevised.xlsx",
+  "file": "etb/fye2020.xlsx",
+  "bytes": 209896,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "a0677319f53f11b03074ea106721c85faf18a98d09c2cf5c0b9dea8fd9050383",
+  "retrieved": "2026-11-02T16:10:40Z"
+ },
+ "etb-fye2021": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2021/etb2021correctionuploadv3.xlsx",
+  "file": "etb/fye2021.xlsx",
+  "bytes": 219249,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "ad5e22552c8dc13ffaf192e855fd1f9fe58e41e71af84c8cff0246d906eb2ded",
+  "retrieved": "2026-11-02T16:10:43Z"
+ },
+ "etb-fye2022": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2022/etbreferencetablesfye2022correction2.xlsx",
+  "file": "etb/fye2022.xlsx",
+  "bytes": 234928,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "dda990927952e968522af25bf71769c48ddeac824d0cc7304611ddf60fa1b74c",
+  "retrieved": "2026-11-02T16:10:46Z"
+ },
+ "etb-fye2023": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2023/etbreferencetablesfye202223.xlsx",
+  "file": "etb/fye2023.xlsx",
+  "bytes": 227331,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "5fd1f1c3c04456cf3acfe7ebe9a82031c2d51eb84dcf22c7db8fa01f0c73bfc8",
+  "retrieved": "2026-11-02T16:10:50Z"
+ },
+ "etb-hist-deflator": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/deflator/deflator.xlsx",
+  "file": "etb/hist-deflator.xlsx",
+  "bytes": 13568,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "f81cd59b7b590e549759cd821d0db678dc9a2dd38fefe7d88fb99c024cb828e9",
+  "retrieved": "2026-11-02T16:10:29Z"
+ },
+ "etb-hist-page": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets",
+  "file": "etb/hist-dataset-page.html",
+  "bytes": 66208,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "bc7c3f6d17fdc16c192fd026f434385830df7acbfccf62cec9f459926eef1080",
+  "retrieved": "2026-11-02T16:10:53Z"
+ },
+ "etb-hist-quintile-all": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+  "file": "etb/hist-quintile-all.xlsx",
+  "bytes": 416385,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+  "retrieved": "2026-11-02T16:10:26Z"
+ },
  "explain-ehs-2023-24-rented-report": {
   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
   "file": "explain/ehs-2023-24-rented-sectors.html",

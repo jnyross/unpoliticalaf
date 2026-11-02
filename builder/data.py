@@ -1178,6 +1178,8 @@ def build_all():
     }
     from . import data_nations
     d["nations"] = data_nations.build(facts)
+    from . import data_taxhist
+    d["tax_history"] = data_taxhist.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)

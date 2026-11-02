@@ -293,6 +293,8 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(explain("fiscal-drag", sources))
     body.append(explain("redistribution", sources))
     body.append(source_line(sources, ["etb"], "Table 8, all individuals, grouped by equivalised household disposable income."))
+    from .pages_money_extra import tax_history_section
+    body.append(tax_history_section(facts, d, num, sources))
     # three numbers
     body.append(f'''<h2 id="three-numbers">Three numbers that are easy to mix up</h2>
 <ol>
