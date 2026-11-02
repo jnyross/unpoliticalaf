@@ -9,7 +9,7 @@ import json
 import math
 import re
 from html import escape
-from . import version
+from . import version, downloads
 
 SITE = "Unpolitical"
 
@@ -101,6 +101,7 @@ figure{margin:16px 0 8px}
 .spark-ax{display:flex;justify-content:space-between;max-width:30rem;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:2px}
 figure.yearspark{margin:4px 0 14px}figure.yearspark figcaption{font-size:.87rem;color:var(--muted);line-height:1.5;margin-top:4px}
 a.card .mini{margin:6px 0 4px}.cards .mini li{border:0;border-radius:0;padding:0}a.card .mini .bars{margin:8px 0 2px}a.card .mini .bars li{margin:0 0 6px}a.card .mini .bars .lab{font-size:.84rem;color:var(--ink2)}a.card .mini .bars .track,a.card .mini .bars .fill{height:8px}
+p.dl{margin:4px 0 12px;font-size:.87rem}p.dl a{display:inline-block;padding:6px 0}
 figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 4px}
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
 .csum{margin:8px 0 0;padding:8px 12px;background:var(--soft2);border-left:3px solid var(--line);font-size:.92rem}
@@ -292,6 +293,7 @@ def _contents_hint(html):
 _CHART_OPEN = re.compile(r'<(figure)\b[^>]*>|<(ul) class="(?:bars|cmp-list)[^"]*">')
 _CAPTION = re.compile(r'<p class="small">(?:(?!</p>).)*</p>\s*$', re.S)
 _NEST = re.compile(r'<(/?)(details|aside|div|figure|ul|blockquote|table)\b[^>]*>')
+_DL = re.compile(r'\s*<p class="dl">.*?</p>', re.S)
 KEEP_ROWS = 4  # rows of a long comparison list kept in view; the rest fold away
 
 
@@ -313,6 +315,9 @@ def _first_chart(rest):
             level += -1 if t.group(1) else 1
             if level == 0:
                 start, end = m.start(), m.start() + t.end()
+                dl = _DL.match(rest, end)
+                if dl:  # the chart's CSV download travels with it
+                    end = dl.end()
                 cap = _CAPTION.search(rest[:start])
                 if cap and not re.search(r"<(?:div|ul|details|table|figure|aside)\b", rest[cap.start():start]):
                     start = cap.start()
@@ -323,14 +328,14 @@ def _first_chart(rest):
 
 def _split_long_list(chart):
     """Keep the first few rows of a long comparison list in view; return (shown, folded)."""
-    m = re.match(r'(.*?<ul class="cmp-list">)(.*)(</ul>)$', chart, re.S)
+    m = re.match(r'(.*?<ul class="cmp-list">)(.*)(</ul>)(\s*<p class="dl">.*?</p>)?$', chart, re.S)
     if not m:
         return chart, ""
     rows = re.findall(r'<li>.*?</li>(?=<li>|$)', m.group(2), re.S)
     if len(rows) <= KEEP_ROWS + 1:
         return chart, ""
-    return (m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3),
-            '<ul class="cmp-list">' + "".join(rows[KEEP_ROWS:]) + "</ul>")
+    return (m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3) + (m.group(4) or ""),
+            '<ul class="cmp-list cont">' + "".join(rows[KEEP_ROWS:]) + "</ul>")
 
 
 def keep_chart(lead, rest):
@@ -408,6 +413,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
         for href, label in NAV)
     foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
+    body = downloads.add_links(body, path) if not path.startswith("figures/") else downloads.strip(body)
     if folded:
         body = fold(body)
     if contents:
@@ -742,6 +748,9 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
                                 forecast_from=forecast_from, events=events, future=future)
     svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value."{attrs}>'
            + "".join(parts) + "</svg>")
+    if not kind:  # no readout data, so the figures travel to the CSV download in a comment
+        plabels = list(point_labels or labels)
+        svg += downloads.chart_data([nm for nm, _, _ in series], [[plabels[i]] + [downloads.raw(vals[i]) for _, vals, _ in series] for i in range(n)])
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
         items = [] if direct else [f'<span><i class="{"" if s == "a" else s}"></i>{esc(nm)}</span>' for nm, _, s in series]
@@ -779,13 +788,14 @@ def _chart_attr(read):
 _SM_COUNT = [0]
 
 
-def spark(points, label, highlight=None, group=None, axis=None):
+def spark(points, label, highlight=None, group=None, axis=None, kind=None, point_label=str):
     """A small dot chart of one measure, year by year, for a quick sense of where a year sits.
 
     points: (year, value or None). Missing years get no dot and a short grey mark
     on the baseline. Dots are joined only between neighbouring years in the same
     comparability group (group(year)); a dashed line marks each change of definition.
     The scale fits the values and is stated in the caption by whoever uses it.
+    kind and point_label format the values and years in the chart's CSV download.
     """
     W, H, P = 320, 56, 6
     vals = [v for _, v in points if v is not None]
@@ -822,7 +832,8 @@ def spark(points, label, highlight=None, group=None, axis=None):
     svg = (f'<svg class="spark" viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label)}" focusable="false">'
            f'{"".join(parts)}</svg>')
     a, b = axis or (points[0][0], points[-1][0])
-    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>'
+    csv_rows = [[point_label(yr), (fmt(v, kind) if kind else downloads.raw(v)) if v is not None else ""] for yr, v in points]
+    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>' + downloads.chart_data(["Value"], csv_rows)
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,

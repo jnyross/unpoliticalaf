@@ -15,7 +15,7 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import version
-from . import pages_money, pages_spendhist, pages_life, pages_history, pages_home, pages_ranges, glossary, trace, uncertainty
+from . import downloads, pages_money, pages_spendhist, pages_life, pages_history, pages_home, pages_ranges, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -110,11 +110,15 @@ def main():
         p = OUT / path
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(html, encoding="utf-8")
+    for path, text in downloads.FILES.items():
+        p = OUT / path
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(text, encoding="utf-8", newline="")
     (OUT / "data").mkdir(exist_ok=True)
     (OUT / "data/facts.json").write_text(json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1), encoding="utf-8")
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
     write_build_record()
-    print(f"Built {len(pages)} pages, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
+    print(f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
     if num.absent:
         print(f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}")
     return 0
