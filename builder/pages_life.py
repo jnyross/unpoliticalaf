@@ -133,10 +133,10 @@ def change_cell(facts, num, a_id, b_id, style, kind):
         text = f"{v:+.1f} pupils"
     else:
         v = 100 * (b / a - 1)
-        text = f"{v:+.0f}%"
+        text = f"{v:+.1f}%" if abs(v) < 10 else f"{v:+.0f}%"
     cls = "change-up" if v > 0.049 else ("change-down" if v < -0.049 else "")
     if abs(v) < 0.05:
-        text = "no change" if style != "pct" else "+0%"
+        text = "no change"
     return f'<data class="{cls}" value="{v!r}" data-change="{style}" data-from="{esc(a_id)}" data-to="{esc(b_id)}">{esc(text)}</data>'
 
 
@@ -318,27 +318,204 @@ def country_table(facts, num, d, y, n):
     return table(cap, head, rows) + ('<p class="small">All visits include holidays, visiting friends or family and business.</p>' if not hol else "")
 
 
+# One fixed measure per topic leads each comparison page. They are the same for
+# every pair of years, so the summary never depends on which way the numbers moved.
+KEY_MEASURES = {
+    "work": ("work.rate", "The share of people aged 16 to 64 in work"),
+    "earnings": ("earn.ft", "Median full-time weekly pay, after inflation,"),
+    "housing": ("house.private", "The share of households in England renting privately"),
+    "holidays": ("hol.per100", "Holiday visits abroad for every 100 residents"),
+    "schools": ("school.primary", "The average class in English state primary schools"),
+}
+
+# Plain-English reasons for each definition change that stops a comparison.
+BREAK_REASONS = {
+    occ_scheme: "Job types were regrouped in 2021, when the classification changed from SOC2010 to SOC2020, so the groups before and after are not the same.",
+    rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
+    hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method.",
+    gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
+}
+
+
+def missing_reason(mkey, y):
+    """Why a measure has no figure for year y, in plain words."""
+    if mkey.startswith("work.occ.") and y < 2011:
+        return "job-type figures in these tables start in 2011"
+    if mkey.startswith("house.crowd.") and y > 2022:
+        return "the latest published overcrowding average ends in 2022-23"
+    if mkey.startswith("house.") and y > 2024:
+        return f"the English Housing Survey for {sy(y)} is not yet published"
+    if mkey.startswith("hol.gb"):
+        if y in (2020, 2021):
+            return "the Great Britain Tourism Survey has no full-year figures for 2020 and 2021"
+        if y < 2019:
+            return "earlier Great Britain Tourism Survey years used other methods and are not shown"
+    if mkey.startswith("hol.") and y == 2008:
+        return "2008 is not in the tables used here"
+    if mkey == "hol.europe" and y == 2020:
+        return "the survey was paused for most of 2020, so there is no breakdown by destination"
+    return "there is no figure in the tables used here"
+
+
+def _status(facts, m, a, b):
+    """'ok', 'missing' or 'break' for one measure and a pair of years."""
+    mkey, topic, label, fid, kind, style, period, group = m
+    if _val(facts, fid(a)) is None or _val(facts, fid(b)) is None:
+        return "missing"
+    if group and group(a) != group(b):
+        return "break"
+    return "ok"
+
+
+def _change(facts, num, m, a, b):
+    """Signed change between the two years, plus its checked <data> element."""
+    fa, fb = m[3](a), m[3](b)
+    va, vb = _val(facts, fa), _val(facts, fb)
+    v = (vb - va) if m[5] in ("pp", "abs") else 100 * (vb / va - 1)
+    return v, change_cell(facts, num, fa, fb, m[5], m[4])
+
+
+def _pair_bars(facts, num, m, a, b):
+    """Two bars from zero, one per year, scaled to the larger of the two values."""
+    fa, fb = m[3](a), m[3](b)
+    top = max(_val(facts, fa), _val(facts, fb)) or 1
+    out = []
+    for y, f, cls in ((a, fa, "cmp-a"), (b, fb, "cmp-b")):
+        w = max(0.0, 100 * _val(facts, f) / top)
+        out.append(f'<div class="cmp-bar"><span class="cmp-y">{y}</span><span class="cmp-track" aria-hidden="true"><span class="cmp-fill {cls}" style="width:{w:.1f}%"></span></span>'
+                   f'<span class="cmp-v">{num(f, m[4])}</span></div>')
+    return "".join(out)
+
+
+def _row_card(facts, num, m, a, b):
+    mkey, topic, label, fid, kind, style, period, group = m
+    v, ch = _change(facts, num, m, a, b)
+    return (f'<li><p class="cmp-label">{esc(label)}</p>{_pair_bars(facts, num, m, a, b)}'
+            f'<p class="cmp-change">Change: {ch} <span class="small">({esc(period(a))} to {esc(period(b))})</span></p></li>')
+
+
+def _nearest_pair(facts, m, a, b):
+    """The closest other pair of years that has a comparable figure, if any."""
+    best = None
+    for y in YEARS:
+        for (x, z) in ((a, y), (y, b)):
+            if x >= z or (x, z) == (a, b):
+                continue
+            if _status(facts, m, x, z) == "ok":
+                dist = abs(x - a) + abs(z - b)
+                if best is None or dist < best[0]:
+                    best = (dist, x, z)
+    return None if best is None else best[1:]
+
+
+def _join_labels(labels):
+    """'Share of workers in: A', 'Share of workers in: B' -> 'Share of workers in: A; B'."""
+    heads = {l.split(": ", 1)[0] for l in labels if ": " in l}
+    if len(labels) > 1 and len(heads) == 1 and all(": " in l for l in labels):
+        head = heads.pop()
+        return esc(head) + ": " + "; ".join(esc(l.split(": ", 1)[1]) for l in labels)
+    return "; ".join(esc(l) for l in labels)
+
+
+def key_sentence(facts, num, topic, a, b):
+    """One plain sentence for the topic's fixed lead measure, or why it is not compared."""
+    mkey, subject = KEY_MEASURES[topic]
+    m = next(x for x in MEAS if x[0] == mkey)
+    st = _status(facts, m, a, b)
+    fa, fb = m[3](a), m[3](b)
+    if st == "ok":
+        v, ch = _change(facts, num, m, a, b)
+        verb = "went up from" if v > 0.049 else ("went down from" if v < -0.049 else "was about the same:")
+        return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if abs(v) < 0.05 else 'to'} {num(fb, m[4])} ({esc(m[6](b))}).{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>"
+                + _pair_bars(facts, num, m, a, b))
+    near = _nearest_pair(facts, m, a, b)
+    link = f' The nearest pair of years with comparable figures is <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
+    if st == "break":
+        return (f"<p>{esc(subject)}: {num(fa, m[4])} in {esc(m[6](a))} and {num(fb, m[4])} in {esc(m[6](b))}, "
+                f"but these are <strong>not compared</strong>. {esc(BREAK_REASONS[m[7]])}{link}</p>")
+    missing = [y for y in (a, b) if _val(facts, m[3](y)) is None]
+    y = missing[0]
+    return f"<p>{esc(subject)}: <strong>not compared</strong>, because {esc(missing_reason(mkey, y))}.{link}</p>"
+
+
+def largest_changes(facts, num, a, b, n=3):
+    """The biggest comparable changes, ranked by size by a fixed rule (cash figures left out)."""
+    ok = [m for m in MEAS if not m[0].endswith("cash") and _status(facts, m, a, b) == "ok"]
+    out = []
+    for style, title in (("pp", "Shares, in percentage points"), ("pct", "Money and numbers, in per cent")):
+        ranked = sorted((m for m in ok if m[5] == style), key=lambda m: -abs(_change(facts, num, m, a, b)[0]))[:n]
+        if not ranked:
+            continue
+        items = []
+        for m in ranked:
+            topic_title = dict((t[0], t[1]) for t in TOPICS)[m[1]]
+            _, ch = _change(facts, num, m, a, b)
+            items.append(f'<li><a href="#{m[1]}">{esc(topic_title)}</a>: {esc(m[2])}, {num(m[3](a), m[4])} → {num(m[3](b), m[4])} ({ch})</li>')
+        out.append(f'<h3>{title}</h3><ol class="cmp-top">{"".join(items)}</ol>')
+    return "".join(out)
+
+
 def compare_page(facts, d, num, sources, a, b):
+    titles = dict((t[0], t[1]) for t in TOPICS)
     body = [f"<h1>{a} compared with {b}</h1>"]
     body.append(f'<p><a href="../{a}.html">Everyday life in {a}</a> · <a href="../{b}.html">Everyday life in {b}</a> · <a href="index.html">Choose two other years</a></p>')
     body.append(compare_form("../", a, b))
+    # Summary: the same lead measure for every topic, then the biggest changes by a fixed rule.
+    body.append('<h2 id="summary">In brief</h2>')
+    body.append('<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved. Each figure covers its own period, shown in brackets.</p>')
+    for key, title, _ in TOPICS:
+        body.append(f'<div class="cmp-key"><h3>{esc(title)}</h3>{key_sentence(facts, num, key, a, b)}</div>')
+    top = largest_changes(facts, num, a, b)
+    if top:
+        body.append(f'<h2 id="largest">Largest changes between {a} and {b}</h2>')
+        body.append('<p class="small">Every figure on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>')
+        body.append(top)
     body.append(CAUSE)
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
-        rows = []
-        for mkey, topic, label, fid, kind, style, period, group in MEAS:
-            if topic != key:
-                continue
-            fa, fb = fid(a), fid(b)
-            va = num(fa, kind) if fa in facts else '<span class="missing">not available</span>'
-            vb = num(fb, kind) if fb in facts else '<span class="missing">not available</span>'
-            if group and group(a) != group(b) and _val(facts, fa) is not None and _val(facts, fb) is not None:
-                ch = f'<span class="missing">not comparable: definition changed ({esc(group(a))} → {esc(group(b))})</span>'
-            else:
-                ch = change_cell(facts, num, fa, fb, style, kind)
-            rows.append([esc(label), va, vb, ch])
         body.append(f'<p class="small">{esc(scope)}</p>')
-        body.append(table(f"{title}: {a} and {b}", ["Measure", str(a), str(b), "Change"], rows))
+        ms = [m for m in MEAS if m[1] == key]
+        ok = [m for m in ms if _status(facts, m, a, b) == "ok" and not m[0].endswith("cash")]
+        breaks = [m for m in ms if _status(facts, m, a, b) == "break"]
+        missing = [m for m in ms if _status(facts, m, a, b) == "missing"]
+        if ok:
+            body.append(f'<ul class="cmp-list">{"".join(_row_card(facts, num, m, a, b) for m in ok)}</ul>')
+        if any(m[0].endswith("cash") and _status(facts, m, a, b) == "ok" for m in ms):
+            body.append('<p class="small">Amounts above are after inflation. Cash amounts, as paid at the time, are in the full table below.</p>')
+        if breaks:
+            reasons = {}
+            for m in breaks:
+                reasons.setdefault(BREAK_REASONS[m[7]], []).append(m)
+            items = []
+            for reason, group in reasons.items():
+                vals = "".join(f"<li>{esc(m[2])}: {num(m[3](a), m[4])} in {a}, {num(m[3](b), m[4])} in {b}</li>" for m in group)
+                items.append(f"<li><p>{esc(reason)}</p><p class=\"small\">Shown side by side, not compared:</p><ul class=\"small cmp-vals\">{vals}</ul></li>")
+            body.append(f'<h3>Not compared: the definition changed</h3><ul class="cmp-notes">{"".join(items)}</ul>')
+        if missing:
+            reasons = {}
+            for m in missing:
+                for y in (a, b):
+                    if _val(facts, m[3](y)) is None:
+                        reasons.setdefault((y, missing_reason(m[0], y)), []).append(m)
+                        break
+            items = []
+            for (y, reason), group in reasons.items():
+                near = _nearest_pair(facts, group[0], a, b)
+                link = f' Nearest comparable pair: <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
+                names = _join_labels([m[2] for m in group])
+                items.append(f"<li><p>No figure for {y}: {esc(reason)}.{link}</p><p class=\"small\">Not shown: {names}.</p></li>")
+            body.append(f'<h3>Not compared: no figure for one of the years</h3><ul class="cmp-notes">{"".join(items)}</ul>')
+        rows = []
+        for m in ms:
+            fa, fb = m[3](a), m[3](b)
+            st = _status(facts, m, a, b)
+            if st == "break":
+                ch = f'<span class="missing">not comparable: definition changed ({esc(m[7](a))} → {esc(m[7](b))})</span>'
+            else:
+                ch = change_cell(facts, num, fa, fb, m[5], m[4])
+            na = '<span class="missing">not available</span>'
+            rows.append([esc(m[2]), num(fa, m[4]) if fa in facts else na, num(fb, m[4]) if fb in facts else na, ch])
+        body.append(details_table(f"Show the full {esc(title.lower())} table", f"{title}: {a} and {b}", ["Measure", str(a), str(b), "Change"], rows))
         if key == "holidays":
             names = d["countries"]["names"]
             ta, tb = top_countries(facts, d, a, 5), top_countries(facts, d, b, 5)
@@ -350,9 +527,9 @@ def compare_page(facts, d, num, sources, a, b):
                 body.append(table(f"Five most visited countries, {a} and {b}: all visits abroad, millions", ["Rank", str(a), str(b)], crow))
                 if hol_basis(a) != hol_basis(b):
                     body.append(f'<p class="small">{a} counts UK residents and {b} Great Britain residents measured with a new method, so the numbers are listed side by side but not compared.</p>')
-        body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS[key])}</p></div>')
+        body.append(f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(TOPIC_LIMITS[key])}</p></details>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
-    body.append('<p class="small">Changes in percentages are shown in percentage points: a rise from 20% to 25% is +5 percentage points. Changes in money and counts are shown as a percentage of the earlier year.</p>')
+    body.append('<p class="small">Changes in percentages are shown in percentage points: a rise from 20% to 25% is +5 percentage points. Changes in money and counts are shown as a percentage of the earlier year. Class sizes change in pupils.</p>')
     return page(f"life/compare/{a}-{b}.html", f"{a} compared with {b}", "\n".join(body), f"How work, pay, housing, holidays and class sizes differed between {a} and {b}.", scripts=COMPARE_JS)
 
 
