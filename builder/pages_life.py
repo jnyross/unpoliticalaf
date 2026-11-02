@@ -165,7 +165,7 @@ def year_links(current, up, href=lambda y: f"{y}.html", strip=False):
 def compare_form(up, a=None, b=None):
     def opts(sel):
         return "".join(f'<option value="{y}"{" selected" if y == sel else ""}>{y}</option>' for y in YEARS)
-    return f'''<form class="pick" action="{up}compare/index.html" method="get" data-compare>
+    return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare>
 <label>First year <select name="from">{opts(a or 2010)}</select></label>
 <label>Second year <select name="to">{opts(b or LAST)}</select></label>
 <button type="submit">Compare</button></form>'''
@@ -173,7 +173,7 @@ def compare_form(up, a=None, b=None):
 
 COMPARE_JS = """<script>
 document.querySelectorAll('form[data-compare]').forEach(function(f){f.addEventListener('submit',function(e){
-var a=+f.elements.from.value,b=+f.elements.to.value;e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html$/,'');
+var a=+f.elements.from.value,b=+f.elements.to.value;e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'');
 if(a===b){location.href=base+'../'+a+'.html';return;}
 var lo=Math.min(a,b),hi=Math.max(a,b);location.href=base+lo+'-'+hi+'.html';});});
 (function(){var p=new URLSearchParams(location.search),a=+p.get('from'),b=+p.get('to');
@@ -556,7 +556,7 @@ def compare_page(facts, d, num, sources, a, b):
 
 def compare_index(sources):
     body = ["<h1>Compare two years</h1>", "<p>Pick two years to see work, pay, housing, holidays and class sizes side by side.</p>", compare_form("../")]
-    body.append("<h2>All comparisons</h2><p>Every pair of years has its own page.</p>")
+    body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
     for a in YEARS[:-1]:
         links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in YEARS if b > a)
         body.append(f'<h3>{a} with…</h3><ul class="yearnav">{links}</ul>')
@@ -642,7 +642,7 @@ def life_index(facts, d, num, sources):
     names = d["countries"]["names"]
     tl = top_countries(facts, d, LAST, 3)
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
-    body.append(f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} The pandemic cut holidays abroad to {num("hol.world.holiday.2020", "millions")} in 2020. {headline(facts, num, "holidays", LAST)}</p>
+    body.append(f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to {num("hol.world.holiday.2020", "millions")}. {headline(facts, num, "holidays", LAST)}</p>
 <p>{"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, followed by {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
 <p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019; see the table below.</p>
 <p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience.</p></div>''')
@@ -695,9 +695,9 @@ def work_ages_block(facts, num):
     out.append(f'<div class="answer"><p>In April to June {LAST}, {num(f"work.age.25_34.{LAST}", "pct")} of people aged 25 to 34 and {num(f"work.age.35_49.{LAST}", "pct")} of those aged 35 to 49 were in work. '
                f'The rate was lower for 18 to 24 year olds ({num(young, "pct")}), many of whom are studying, and for 50 to 64 year olds ({num(old, "pct")}). '
                f'{num(f"work.age.65.{LAST}", "pct")} of people aged 65 and over were in work, compared with {num(f"work.age.65.{FIRST}", "pct")} in {FIRST}.</p></div>')
-    out.append(series_chart(facts, "Employment rate by age", [("50 to 64", lambda y: f"work.age.50_64.{y}", "a"), ("18 to 24", lambda y: f"work.age.18_24.{y}", "b"),
+    out.append(series_chart(facts, "Employment rate, ages 18 to 24, 50 to 64 and 65 and over", [("50 to 64", lambda y: f"work.age.50_64.{y}", "a"), ("18 to 24", lambda y: f"work.age.18_24.{y}", "b"),
                                                             ("65 and over", lambda y: f"work.age.65.{y}", "c")],
-                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0, kind="pct", num=num))
+                            "Per cent of each age group in work, April to June each year, United Kingdom. Ages 25 to 34 and 35 to 49 are in the table below", ymin=0, kind="pct", num=num))
     out.append(details_table("Show employment by age for every year", "Employment rate by age group, United Kingdom, April to June, %",
                              ["Year"] + [lab for _, lab, _ in AGE_SERIES],
                              [[str(y)] + [num(f"work.age.{k}.{y}", "pct") for k, _, _ in AGE_SERIES] for y in YEARS]))

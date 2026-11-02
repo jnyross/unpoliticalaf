@@ -9,6 +9,51 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 3: 2 November 2026 (after the independent review)
+
+- Commit audited: `b3dd569` on `main` (after PRs #74 to #85), plus the small
+  fixes made by the review in the same PR as this section.
+- Rubric: [goal-rubric.md](goal-rubric.md).
+- How it was checked: the [independent review](independent-review.md) of
+  accuracy, impartiality, accessibility and reproducibility, phone screenshots at
+  360px, and a reading of every main page against the benchmarks.
+- Who scored it: the same reviewer, a Claude session that did not build the site.
+  Level 4 is given only where that review checked the dimension and found no open
+  material problem. Because the reviewer is the same kind of agent as the
+  builders, a stricter reader can treat those 4s as 3s; the total would then be
+  30, not 34.
+
+**Total: 34 out of 55** (Audit 2: 29). Target: at least 49, every dimension at
+least 4, and the phone test passed. Not met. Nothing can score 5 until real
+readers have tested the site.
+
+| Dimension | Score | Change | Why |
+|---|---|---|---|
+| D1 Public money answers | 4 | +1 | All four answers now give per-person scale, the tax mix since 1999-00, quoted official explanations of the big moves, cash, real-terms and share-of-GDP tables, and who pays by income, retired or not, and household type. Headline figures were checked against the source tables. Missing for 5: Income Tax by age, a single switch between cash, real terms and % of GDP, and reader evidence. |
+| D2 Life: breadth and depth | 3 | +1 | Housing now has costs, rooms and overcrowding; holidays have frequency, destinations and trips in Great Britain; work and pay have nations, regions, ages and sex. Still behind: housing and most school figures are England only, there are few income or age splits outside work, and holiday frequency is an average per resident, not the share of people who went away. |
+| D3 Life: choosing and comparing | 3 | +1 | Comparisons lead with fixed key measures, rank the largest changes, show bars, explain each "not comparable" in place, and say when a change is within the margin of error. Held at 3: the first phone screen of a comparison is the chooser and contents list, not the answer; pages run to about 18 screens; and ranges (several years together) cannot be compared. |
+| D4 Explanation and understanding | 3 | +1 | Glossary links on first use, question headings, per-person scale, and quoted explanations. Held at 3: pages are long and dense for a newcomer (who pays is about 19 screens), and there is no evidence yet that a newcomer can explain the main point back. |
+| D5 Visual design and charts | 3 | +1 | Charts are labelled at the line ends, annotated with breaks and events, summarised in words and readable by tap. The review found a chart that hid the two largest age groups under a general title and a label cut off on phones (both fixed). Held at 3: nearly every chart is a line chart with up to three series, and labels can sit on top of lines. |
+| D6 Phone experience | 3 | 0 | No sideways scrolling, a one-row menu, in-page contents, 44px menu targets. Held at 3: pages are 10 to 29 screens long at 360px, and the menu scrolls sideways, so some sections are hidden off the right edge. |
+| D7 Accuracy and traceability | 4 | +1 | Independent review: all source hashes match, 40 random cells were the right row and column, all 2,009 derived figures recomputed with no mismatch, and headline claims match the source tables. Any figure traces in one tap, and corrections are logged. Not 5: no reader evidence, and the originals were not re-downloaded. |
+| D8 Impartiality | 4 | +1 | Independent review of headlines, windows, quotes, chart scales and wording. It found three small framing problems (fixed) and none open. The sources page now explains how years, headline measures and scales are chosen. Not 5: no reader evidence or review by a person outside the project. |
+| D9 Accessibility and no JavaScript | 3 | 0 | Zero WCAG 2.2 AA failures on 18 pages at 360px and 1100px with every section open (after fixing one), keyboard path and no-JavaScript answers work, and the check now runs in CI. Held at 3: no manual VoiceOver or TalkBack test. |
+| D10 Honesty about limits | 4 | +1 | Margins of error on survey figures, breaks shown on charts and in comparisons, limits in plain sentences next to each section, projections labelled as projections. The review found one causal sentence in the site's own words (fixed). Not 5: no reader evidence. |
+| D11 Reader evidence | 0 | 0 | The test pack is ready, but nobody has used the site in a test. |
+| **Total** | **34 / 55** | **+5** | |
+
+### Gaps (most valuable first)
+
+1. Run the five-person phone test with the pack in `docs/user-test/` (a human step: John).
+2. Before that, record a quick informal test with two or three people on phones, to find problems while they are cheap to fix (a human step).
+3. Make every long page answer first on a phone: put the comparison summary above the year chooser, and fold secondary sections on who pays, the life index and comparison pages so each page is a few screens before the details.
+4. Widen life evidence beyond England where publishers allow (tenure and class sizes for Scotland, Wales and Northern Ireland, or a clear note where they do not), and add the share of people who took a holiday.
+5. Add Income Tax by age and sex from HMRC to "who pays".
+6. Replace crowded multi-line charts with small multiples where more than three groups matter (age groups, nations, regions), so no chart hides groups.
+7. Get a manual screen-reader test (VoiceOver and TalkBack) and a review of accuracy and impartiality by a person outside the project (human steps).
+
+---
+
 ## Audit 2: 2 November 2026 (stricter rubric)
 
 - Commit audited: `3831fc0` on `main` (after PR #71).

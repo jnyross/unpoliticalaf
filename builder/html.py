@@ -49,7 +49,7 @@ li{margin-bottom:4px}
 .answer p{margin-bottom:12px}
 .small,.src{font-size:.87rem;color:var(--muted);line-height:1.5}
 .src{margin:8px 0 0}
-details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}
+details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}details.src li a{display:inline-block;padding:4px 0}
 .note{border-left:3px solid var(--bar2);padding:2px 0 2px 12px;margin:16px 0;color:var(--ink2);font-size:.95rem}
 .moe,.moe-in{color:var(--muted);font-size:.88em;white-space:nowrap;font-variant-numeric:tabular-nums}.sure{font-size:.93rem;color:var(--ink2);margin:-6px 0 16px}.sure-check{margin:4px 0 0}
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
@@ -412,13 +412,14 @@ def details_table(summary, caption, head, rows):
 
 
 def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None, ymin=None, ymax=None, height=240, desc="", scale=1, split_breaks=False,
-               kind=None, ids=None, num=None, events=(), point_labels=None):
+               kind=None, ids=None, num=None, events=(), point_labels=None, future="forecast"):
     """Inline SVG line chart.
 
     labels: list of x labels. series: list of (name, values list (None = gap), style 'a'|'b').
     Missing values break the line; nothing is interpolated.
     breaks: list of (index, text) drawn as dashed vertical lines between index-1 and index.
     forecast_from: index from which values are forecasts (dashed line, shaded area).
+    future: the publisher's word for those values, "forecast" (OBR) or "projection" (HMRC).
     events: list of (index, text) for things that happened, such as Covid. Drawn as a grey
     dotted line; unlike breaks they say nothing about definitions.
     kind: number format (see fmt). With kind, the chart gets a written summary under it
@@ -481,11 +482,12 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     if forecast_from is not None and forecast_from < n:
         fx = x(forecast_from) - (x(1) - x(0)) / 2
         parts.append(f'<rect x="{fx:.1f}" y="{T}" width="{W - R - fx:.1f}" height="{H - T - B}" fill="#f1f2f3"/>')
-        parts.append(f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">Forecast</text>')
+        parts.append(f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">{future.capitalize()}</text>')
     for i, text in breaks:
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
         parts.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
-        if bx > W * 0.65:
+        # Right-align the label when it would run past the chart's right edge
+        if bx > W * 0.65 or bx + 3 + len(text) * 6.6 > W:
             parts.append(f'<text x="{bx - 3:.1f}" y="{T + 12}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
         else:
             parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')
@@ -542,14 +544,14 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
                 "fc": forecast_from}
         attrs = f' data-chart="{esc(json.dumps(read, ensure_ascii=False, separators=(",", ":")))}"'
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks,
-                                forecast_from=forecast_from, events=events)
+                                forecast_from=forecast_from, events=events, future=future)
     svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value."{attrs}>'
            + "".join(parts) + "</svg>")
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
         items = [] if direct else [f'<span><i class="{"" if s == "a" else s}"></i>{esc(nm)}</span>' for nm, _, s in series]
         if forecast_from is not None:
-            items.append('<span><i class="d"></i>Forecast (dashed)</span>')
+            items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
     return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
@@ -573,7 +575,7 @@ def _stretches(n, breaks, forecast_from):
     return [(edges[k], edges[k + 1]) for k in range(len(edges) - 1) if edges[k + 1] > edges[k]]
 
 
-def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=()):
+def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast"):
     """A plain-English reading of a line chart: for each line, the first and latest
     values, the highest and lowest, and any missing years. Built from the same values
     as the chart. Nothing is compared across a definition break the chart splits at,
@@ -616,7 +618,7 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
         if forecast_from is not None and forecast_from < len(labels):
             fpts = [i for i in range(forecast_from, len(labels)) if vals[i] is not None]
             if fpts:
-                parts.append(f"Forecast for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}.")
+                parts.append(f"{future.capitalize()} for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}.")
         if parts:
             who = f"<strong>{esc(name)}</strong>: " if len(series) > 1 else ""
             items.append(f"<li>{who}{' '.join(parts)}</li>")
@@ -629,7 +631,7 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
     for i, text in events:
         notes.append(f"The grey dotted line marks {esc(labels[i])} ({esc(text)}). It shows when it happened, not what it caused.")
     if forecast_from is not None and forecast_from < len(labels):
-        notes.append(f"Years from {esc(labels[forecast_from])} are forecasts, not measurements.")
+        notes.append(f"Years from {esc(labels[forecast_from])} are {future}s, not measurements.")
     if not items:
         return ""
     note = f'<p class="small">{" ".join(notes)}</p>' if notes else ""

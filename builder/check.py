@@ -319,11 +319,14 @@ def run_axe(paths):
             page = browser.new_page(viewport={"width": width, "height": 800})
             for path in paths:
                 page.goto((SITE / path).as_uri())
+                # Open every folded section, so tables and source lists are checked too
+                page.evaluate("document.querySelectorAll('details').forEach(d => d.open = true)")
                 if page.evaluate("document.documentElement.scrollWidth") > width + 1:
                     fail(f"{path}: scrolls sideways at {width}px")
                 res = Axe().run(page)
                 for v in res.response["violations"]:
-                    if v["impact"] in ("serious", "critical"):
+                    wcag = any(tag.startswith("wcag") for tag in v.get("tags", []))
+                    if wcag or v["impact"] in ("serious", "critical"):
                         fail(f"{path} at {width}px: axe {v['id']} ({v['impact']}): {v['help']}")
             page.close()
         browser.close()
@@ -350,7 +353,8 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
+                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
+                 "life/compare/2019-2024.html", "life/compare/index.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")

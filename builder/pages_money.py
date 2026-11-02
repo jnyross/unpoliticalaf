@@ -196,7 +196,7 @@ def who_pays_page(facts, d, num, sources):
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax was paid by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
                          (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
                          (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
-    body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax.</p>
+    body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 <p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p>
 <p>Households of retired people paid less tax on average than households of non-retired people. They also had lower average incomes and fewer people in them (<a href="#retired">see section 3</a>).</p></div>''')
     body.append("<p>Two official sources answer this in different ways. Keep them separate: they count different people and different taxes.</p>")
@@ -216,7 +216,7 @@ def who_pays_page(facts, d, num, sources):
     body.append(line_chart("Share of Income Tax paid by the top 1% of taxpayers", [h[:4] + "-" + h[-2:] for h in hy],
                            [("Top 1% share of Income Tax", vals, "a"), ("Top 1% share of income", [facts[f"hmrc.income.top1.{h}"].value for h in hy], "b")],
                            "Per cent. Gap at 2008-09: HMRC has no figures for that year. Years from 2024-25 are HMRC projections.",
-                           breaks=[(hy.index("2016 to 2017"), "Dividend rules changed")], forecast_from=fc, ymin=0,
+                           breaks=[(hy.index("2016 to 2017"), "Dividend rules changed")], forecast_from=fc, future="projection", ymin=0,
                            kind="pct", num=num, ids=[[f"hmrc.share.top1.{h}" for h in hy], [f"hmrc.income.top1.{h}" for h in hy]]))
     body.append(explain("top1-share", sources))
     rows = [[h + (" (projection)" if int(h[:4]) >= 2024 else ""), num(f"hmrc.share.top1.{h}", "pct"), num(f"hmrc.share.top10.{h}", "pct"), num(f"hmrc.share.bottom50.{h}", "pct")] for h in hy]
