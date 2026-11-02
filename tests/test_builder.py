@@ -292,6 +292,30 @@ class Glossary(unittest.TestCase):
                 self.assertTrue(words and text.strip(), a)
 
 
+class Folding(unittest.TestCase):
+    def test_answer_stays_in_view_and_detail_folds(self):
+        from builder.html import fold
+        body = ('<h1>Q</h1><h2 id="a">Work</h2><p>Intro</p><div class="answer"><p>75%</p><div>x</div></div>'
+                '<figure>chart</figure><table></table>')
+        out = fold(body)
+        lead, rest = out.split('<details class="more">')
+        self.assertIn('<div class="answer"><p>75%</p><div>x</div></div>', lead)
+        self.assertIn("<p>Intro</p>", lead)
+        self.assertIn("More on Work", rest)
+        self.assertIn("chart and table", rest)
+        self.assertIn("<figure>chart</figure>", rest.split("</summary>", 1)[1])
+
+    def test_marker_and_unmarked_sections(self):
+        from builder.html import fold, FOLD, NOFOLD
+        body = (f'<h2 id="a">1. Bars</h2><ul class="bars"></ul>{FOLD}<table></table>'
+                '<h2 id="b">Open</h2><p>All of it</p>'
+                f'<h2 id="c">Kept</h2><div class="answer"><p>x</p></div>{NOFOLD}<table></table>')
+        out = fold(body)
+        self.assertEqual(out.count('<details class="more">'), 1)
+        self.assertIn("More on Bars", out)
+        self.assertNotIn("<!--", out)
+
+
 if __name__ == "__main__":
     unittest.main()
 
