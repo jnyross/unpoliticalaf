@@ -59,6 +59,15 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   a record of every figure used from that source. Nothing to do per page: wrap
   numbers with `num()` as usual. When a published mistake is fixed, add it to
   `CORRECTIONS` so it appears on `corrections.html`.
+- **Margins of error** (`builder/uncertainty.py`): survey figures carry their
+  95% margin of error after the number (`pm()`, grey `±`), but only where the
+  publisher gives one: ONS A11 for the latest LFS employment rate, Nomis APS
+  for nations and regions, Nomis ASHE coefficients of variation (margin =
+  1.96 × CV × figure) and ONS travel intervals. Never invent one; where a
+  source gives none, say so (see `uncertainty.html`). Each life topic gets a
+  "How sure?" line (`topic_line()`), and comparisons say whether a change is
+  bigger than the two margins combined, √(a² + b²) (`check_sentence()`), which
+  `make check` recalculates.
 - **Illustrations** keep the dashed border and the "Illustration, not a
   statistic" tag. Don't restyle them to look like measured figures.
 

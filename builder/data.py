@@ -50,7 +50,7 @@ def num(v):
         return None
     if isinstance(v, (int, float)):
         return float(v)
-    s = str(v).strip().replace(",", "")
+    s = str(v).strip().replace(",", "").lstrip("±").strip()  # "± 0.4": a published margin of error
     if s in ("", "-", "..", "x", "u", "n/a", "*", "Not available", "[x]", "[c]", "[not available]"):
         return None
     try:

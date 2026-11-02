@@ -51,6 +51,7 @@ li{margin-bottom:4px}
 .src{margin:8px 0 0}
 details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}
 .note{border-left:3px solid var(--bar2);padding:2px 0 2px 12px;margin:16px 0;color:var(--ink2);font-size:.95rem}
+.moe,.moe-in{color:var(--muted);font-size:.88em;white-space:nowrap;font-variant-numeric:tabular-nums}.sure{font-size:.93rem;color:var(--ink2);margin:-6px 0 16px}.sure-check{margin:4px 0 0}
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
 .scale{border-left:4px solid var(--line);padding:2px 0 2px 12px;margin:0 0 18px;font-size:.96rem}
 .illustration{border:2px dashed var(--bar2);border-radius:var(--r);padding:14px 16px;margin:24px 0;background:#fff}
@@ -248,7 +249,7 @@ def page(path, title, body, description="", scripts="", contents=True):
 </main>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
-<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from, or see every source on the <a href="{up}methods.html">sources and methods</a> page. Mistakes we fix are listed under <a href="{up}corrections.html">corrections</a>.</p>
+<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from, or see every source on the <a href="{up}methods.html">sources and methods</a> page. Mistakes we fix are listed under <a href="{up}corrections.html">corrections</a>. Survey figures are estimates: see <a href="{up}uncertainty.html">how sure they are</a>.</p>
 <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
 </div></footer>
 {scripts}
@@ -293,6 +294,13 @@ def fmt(value, kind):
         return f"{value / 1_000_000:.1f} million"
     if kind == "int":
         return f"{value:,.0f}"
+    # Margins of error (95%), shown after the figure they belong to
+    if kind == "pm_pp":
+        return f"±{value:.1f} points"
+    if kind == "pm_pounds":
+        return f"±£{value:,.0f}"
+    if kind == "pm_pct":
+        return f"±{value:.0f}%" if value >= 9.5 else f"±{value:.1f}%"
     raise ValueError(kind)
 
 
