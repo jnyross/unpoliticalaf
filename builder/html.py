@@ -722,7 +722,7 @@ def _chart_attr(read):
 _SM_COUNT = [0]
 
 
-def spark(points, label, highlight=None, group=None):
+def spark(points, label, highlight=None, group=None, axis=None):
     """A small dot chart of one measure, year by year, for a quick sense of where a year sits.
 
     points: (year, value or None). Missing years get no dot and a short grey mark
@@ -764,7 +764,8 @@ def spark(points, label, highlight=None, group=None):
     parts += [d for on, d in dots if not on] + [d for on, d in dots if on]
     svg = (f'<svg class="spark" viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label)}" focusable="false">'
            f'{"".join(parts)}</svg>')
-    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{points[0][0]}</span><span>{points[-1][0]}</span></div>'
+    a, b = axis or (points[0][0], points[-1][0])
+    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>'
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,

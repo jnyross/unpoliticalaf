@@ -291,17 +291,20 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
     have = [(yr, v) for yr, v in pts if v is not None]
     if len(have) < 2:
         return ""
+    if y is None:
+        y = have[-1][0]  # the latest year with a figure
     breaks = bool(group) and len({group(yr) for yr in YEARS}) > 1
-    aria = f"Dot chart of {label.lower()} for each year from {FIRST} to {LAST}, with {y} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group)
+    yl = sy if topic == "housing" else str  # housing figures are for survey years, April to March
+    aria = f"Dot chart of {label.lower()} for each year from {yl(FIRST)} to {yl(LAST)}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
+    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(FIRST), yl(LAST)))
     if not caption:
         return svg
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
-    this = (f"The dark dot is {y}: {num(fid(y), kind)}." if fid(y) in facts and facts[fid(y)].value is not None
-            else f"There is no figure for {y}.")
-    cap = (f"<strong>{esc(label)}</strong>, {FIRST} to {LAST}. {this} "
-           f"The scale runs from {num(fid(lo[0]), kind)} ({lo[0]}) to {num(fid(hi[0]), kind)} ({hi[0]}) and does not start at zero.")
+    this = (f"The dark dot is {yl(y)}: {num(fid(y), kind)}." if fid(y) in facts and facts[fid(y)].value is not None
+            else f"There is no figure for {yl(y)}.")
+    cap = (f"<strong>{esc(label)}</strong>, {yl(FIRST)} to {yl(LAST)}. {this} "
+           f"The scale runs from {num(fid(lo[0]), kind)} ({yl(lo[0])}) to {num(fid(hi[0]), kind)} ({yl(hi[0])}) and does not start at zero.")
     if len(have) < len(pts):
         cap += " Years with no figure have no dot."
     if breaks:
@@ -814,6 +817,7 @@ def life_index(facts, d, num, sources):
         answer, _detail = TOPIC_BUILDERS[key](facts, d, num, sources)
         body.append(f"<h2 id='{key}'>{esc(title)}</h2>{NOFOLD}")
         body.append(answer)
+        body.append(year_spark(facts, num, key, None))
         body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST}</a>: {esc(TOPIC_PAGES[key][1])}.</p>')
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), "How work, earnings, housing, holidays and class sizes have changed in the UK since 2008.", scripts=COMPARE_JS)
 
