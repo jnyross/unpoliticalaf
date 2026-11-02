@@ -3,7 +3,7 @@ by type of household (scorecard gap 6).
 
 Kept in their own module so the main page functions only gain one call each.
 """
-from .html import FOLD, bars, change_bars, details_table, line_chart, small_multiples, source_line, table, esc
+from .html import FOLD, NOFOLD, bars, change_bars, details_table, line_chart, small_multiples, source_line, table, esc
 from .pages_money import derive
 from .explain import box as explain
 
@@ -79,18 +79,21 @@ def household_types_section(facts, d, num, sources):
     w = d["who_types"]
     types = [t for t in w["types"] if t[0] != "all"]
     out = [f'''<h2 id="household-type">4. All taxes, by type of household</h2>
-<p>The same Office for National Statistics survey also groups people by the kind of household they live in. Here every figure is <strong>adjusted for household size</strong>
-(the ONS calls this “equivalised”), so a large household and a single person can be compared fairly. The adjustment counts the first adult as 1, each other person aged 14 or over as 0.5 and each younger child as 0.3,
-then rescales to a household of two adults. The amounts are therefore not the bill any household receives.</p>''']
+<p>The same survey also groups people by the kind of household they live in. Every figure here is <strong>adjusted for household size</strong>, so the amounts are not the bill any household receives.</p>''']
     lone, couple2, ret1 = "nc1", "nc22", "r1"
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
     out.append(f'''<div class="answer"><p class="lede">After adjusting for household size, taxes took between {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) and {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income, depending on the kind of household.</p>
-<p>The amounts differ more, because incomes differ. Adjusted for size, people in households of two working-age adults with two children paid about {num(f"etb.t12.{couple2}.alltax", "pounds")} a year in all taxes, people in one-adult households with children about {num(f"etb.t12.{lone}.alltax", "pounds")},
-and single retired people about {num(f"etb.t12.{ret1}.alltax", "pounds")}.</p></div>''')
+<p>The amounts differ more, because incomes differ (see the bars below).</p></div>''')
+    amounts = (f'<p>Adjusted for size, people in households of two working-age adults with two children paid about {num(f"etb.t12.{couple2}.alltax", "pounds")} a year in all taxes, people in one-adult households with children about {num(f"etb.t12.{lone}.alltax", "pounds")}, '
+               f'and single retired people about {num(f"etb.t12.{ret1}.alltax", "pounds")}.</p>')
     items = [(esc(label), f"etb.t12.{k}.alltax", "alt" if g == "Retired" else "") for k, label, g in types]
     items.append(("Everyone", "etb.t12.all.alltax", "alt"))
     out.append(bars(items, "pounds", num, caption="All taxes (direct and indirect), £ a year, adjusted for household size, 2023/24. Grey bars: retired households and everyone."))
+    out.append(FOLD)
+    out.append(amounts)
+    out.append('<p>How the size adjustment works: the ONS calls it “equivalised”, so that a large household and a single person can be compared fairly. '
+               'It counts the first adult as 1, each other person aged 14 or over as 0.5 and each younger child as 0.3, then rescales to a household of two adults.</p>')
     rows = []
     for k, label, g in types + [("all", "Everyone", "Everyone")]:
         rows.append([esc(label), esc(g), num(f"etb.t12.{k}.gross", "pounds"), num(f"etb.t12.{k}.direct", "pounds"), num(f"etb.t12.{k}.indirect", "pounds"),
@@ -105,11 +108,9 @@ and single retired people about {num(f"etb.t12.{ret1}.alltax", "pounds")}.</p></
     ys = w["t16_years"]
     first, last = ys[0], ys[-1]
     out.append(f'''<h2 id="net">5. Who receives more in benefits than they pay in taxes?</h2>
-<p>The ONS also estimates how many people live in households that receive more in benefits than they pay in taxes in a year. Here “benefits” include
-cash benefits such as the State Pension and Universal Credit, <strong>and</strong> the estimated value of public services used, such as state schooling and the NHS. “Taxes” are the direct and indirect taxes in sections 2 to 4.</p>
+<p>Here “benefits” include cash benefits such as the State Pension, <strong>and</strong> the estimated value of public services used, such as state schools and the NHS.</p>
 <div class="answer"><p class="lede">In {last}, {num(f"etb.t16.all.{last}", "pct")} of people lived in households that received more in benefits and services than they paid in taxes.</p>
-<p>That was {num(f"etb.t16.ret.{last}", "pct")} of people in retired households and {num(f"etb.t16.nonret.{last}", "pct")} in non-retired households.
-The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series.</p></div>''')
+<p>That was {num(f"etb.t16.ret.{last}", "pct")} of people in retired households and {num(f"etb.t16.nonret.{last}", "pct")} in non-retired households.</p></div>''')
     fy = next(i for i, y in enumerate(ys) if "/" in y)
     out.append(line_chart(f"People in households receiving more in benefits than they pay in taxes, {first} to {last}", ys,
                           [("Retired", [facts[f"etb.t16.ret.{y}"].value for y in ys], "b"),
@@ -118,6 +119,11 @@ The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the 
                           breaks=[(fy, "Financial years")], ymin=0, ymax=100,
                           desc=f"Retired: {facts[f'etb.t16.ret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.ret.{last}'].value:.1f}% in {last}. "
                                f"Non-retired: {facts[f'etb.t16.nonret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.nonret.{last}'].value:.1f}% in {last}. The figures for everyone are in the table."))
+    out.append(FOLD)
+    out.append(f'<p>The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series.</p>')
+    out.append('<p>What is counted: the ONS estimates, one year at a time, how many people live in households that receive more in benefits than they pay in taxes. '
+               'Benefits are cash benefits such as the State Pension and Universal Credit plus the estimated value of public services used. '
+               '“Taxes” are the direct and indirect taxes in sections 2 to 4.</p>')
     rows = [[y, num(f"etb.t16.all.{y}", "pct"), num(f"etb.t16.nonret.{y}", "pct"), num(f"etb.t16.ret.{y}", "pct")] for y in ys]
     out.append(details_table("Show every year", f"Share of people in households receiving more in benefits than they pay in taxes, {first} to {last}",
                              ["Year", "Everyone", "Non-retired", "Retired"], rows))
@@ -128,23 +134,38 @@ From 2001/02 the ONS adjusts for top earners being under-recorded in the survey,
     return "\n".join(out)
 
 
-def income_tax_age_section(facts, d, num, sources):
-    """HMRC Survey of Personal Incomes Table 3.2: Income Tax payers, income and tax by age (review gap 4)."""
+AGE_PAGE = "who-pays-age.html"
+
+
+def income_tax_age_section(facts, d, num, sources, full=False):
+    """HMRC Survey of Personal Incomes Table 3.2: Income Tax payers, income and tax by age (review gap 4).
+
+    The who pays page shows the short version (heading, answer and a link); the
+    full version, with the bars and tables, is a page of its own so that who
+    pays stays short on a phone.
+    """
     w = d["who_age"]
     ages = w["ages"]
     yr = w["year"].replace(" to ", "-")[:5] + w["year"][-2:]
     lab = {k: (v if k in ("u20", "75plus") else v.replace("-", " to ")) for k, v in ages}
     q = sources["explain-hmrc-spi-quality"]["page"]
     top = max((k for k, _ in ages), key=lambda k: facts[f"spi.age.meantax.{k}.all"].value)
-    out = [f'''<h2 id="age">6. Income Tax, by age</h2>
-<p>HM Revenue and Customs also publishes Income Tax by age, from the same survey of tax records as section 1. It covers only people who owe some Income Tax, about {num("spi.age.n.all.all", "millions_people")} people in tax year {yr}.
-It says nothing about people who owe none, so it cannot show what share of each age group pays Income Tax.</p>
+    head = '<h2 id="age">6. Income Tax, by age</h2>' if not full else '<h2 id="by-age">Income Tax at each age</h2>'
+    where = 'section 1 of <a href="who-pays.html">who pays</a>' if full else "section 1"
+    out = [head + f'''
+<p>From the same HMRC records as {where}: only the {num("spi.age.n.all.all", "millions_people")} people who owed some Income Tax in tax year {yr}.</p>
 <div class="answer"><p class="lede">In tax year {yr}, taxpayers aged 30 to 64 were {num("spi.age.sharen.30_64", "pct0")} of all Income Tax payers and owed about {num("spi.age.sharetax.30_64", "pct0")} of all Income Tax.
 Taxpayers aged 65 and over were {num("spi.age.sharen.65plus", "pct0")} of taxpayers and owed about {num("spi.age.sharetax.65plus", "pct0")}; those under 30 were {num("spi.age.sharen.u30", "pct0")} and owed about {num("spi.age.sharetax.u30", "pct0")}.</p>
 <p>The age groups that owed the most tax per taxpayer also had the highest incomes. The highest average (mean) Income Tax was {num(f"spi.age.meantax.{top}.all", "pounds")} a year for taxpayers aged {lab[top]}, on an average income of {num(f"spi.age.meaninc.{top}.all", "pounds")}.
 The middle (median) taxpayer in that group owed much less, {num(f"spi.age.medtax.{top}.all", "pounds")}: a small number of taxpayers with very high incomes and tax bills raise the mean.</p></div>''']
+    if not full:
+        short = out[0].split("<p>The age groups that owed the most")[0].rstrip() + "</div>"
+        return short + (f'\n{NOFOLD}<p class="more-link"><a href="{AGE_PAGE}">Income Tax by age</a>: the average tax per taxpayer at each age, '
+                        'the median beside the mean, men and women separately, and the full table.</p>')
     items = [(esc(lab[k]), f"spi.age.meantax.{k}.all", "alt" if k in ("65_69", "70_74", "75plus") else "") for k, _ in ages]
     out.append(bars(items, "pounds", num, caption=f"Average (mean) Income Tax owed per taxpayer, by age, £ a year, tax year {yr}. Grey bars: ages 65 and over. Taxpayers only."))
+    out.append(FOLD)
+    out.append('<p>Because people who owe no Income Tax are not in these records, they cannot show what share of each age group pays Income Tax.</p>')
     items = [(esc(lab[k]), f"spi.age.sharetax.{k}", "alt" if k in ("65_69", "70_74", "75plus") else "") for k, _ in ages]
     out.append(bars(items, "pct", num, caption=f"Share of all Income Tax owed by each age range, per cent, tax year {yr}. Calculated here from HMRC's rounded figures, so approximate."))
     rows = [[esc(lab[k]), num(f"spi.age.n.{k}.all", "millions_people"), num(f"spi.age.sharen.{k}", "pct"), num(f"spi.age.sharetax.{k}", "pct"),
@@ -247,3 +268,12 @@ For {ov}, the one year published both ways, the share for everyone was {num(oall
     out.append(source_line(sources, ["etb-hist-quintile-all", "etb-hist-quintile-all-2", "etb-fye2018", "etb-fye2019", "etb-fye2020", "etb-fye2021", "etb-fye2022", "etb-fye2023", "etb"],
                            f"Older method: historical tables, one sheet per year; shares calculated here as (total direct taxes + total indirect taxes) ÷ gross income. Current method: Table 8 of each year’s reference tables, all individuals."))
     return "\n".join(out)
+
+
+def income_tax_age_page(facts, d, num, sources):
+    """Income Tax by age on a page of its own, linked from section 6 of who pays."""
+    from .html import page
+    body = ['<p class="small"><a href="who-pays.html">Who pays?</a></p>', "<h1>How much Income Tax do people of different ages pay?</h1>",
+            income_tax_age_section(facts, d, num, sources, full=True)]
+    return page(AGE_PAGE, "Income Tax by age", "\n".join(body),
+                "Income Tax payers, income and Income Tax by age group in the UK, from HMRC's Survey of Personal Incomes.")

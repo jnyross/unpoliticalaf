@@ -200,6 +200,9 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     gy = [g for g in rc["gdp_years"] if facts.get(f"gdp.receipts.{g}") and facts[f"gdp.receipts.{g}"].value is not None]
     fc = next((i for i, g in enumerate(gy) if g >= rc["forecast_from"]), None)
     body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>Shown as a share of GDP to start with, so that years with very different prices and economies can be compared. You can switch to amounts after inflation. Forecast years are shaded and dashed.</p>")
+    body.append(f"<p>Taxes alone, without other receipts, were {num(f'rec.gdp.taxes.{y}', 'pct')} of GDP in {y}. News reports often call this share the <a href='glossary.html#tax-burden'>“tax burden”</a>. "
+                "It compares all tax, paid by people and businesses, with the size of the economy. It is not anyone's tax bill: "
+                "<a href='household-tax.html'>tax and income</a> shows what households pay.</p>")
     rec_title = {"cash": "Receipts and spending in cash", "real": "Receipts and spending after inflation", "gdp": "Receipts and spending as a share of GDP"}
     rec_unit = {"cash": "£ billion, cash. Source: OBR public finances databank.", "real": "£ billion, 2025-26 prices (OBR GDP deflator). Source: OBR public finances databank.",
                 "gdp": "Per cent of GDP. Source: OBR public finances databank."}
@@ -275,9 +278,8 @@ def who_pays_page(facts, d, num, sources):
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
     items = [("Top 1% of taxpayers", f"hmrc.share.top1.{y}", ""), ("Top 10% of taxpayers", f"hmrc.share.top10.{y}", ""), ("Top 50% of taxpayers", f"hmrc.share.top50.{y}", ""), ("Bottom 50% of taxpayers", f"hmrc.share.bottom50.{y}", "alt")]
     body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
-    body.append('''<p>HM Revenue and Customs ranks everyone who owes Income Tax by their income, then adds up how much tax each group owes. People who owe no Income Tax are not included. For Income Tax by age, see <a href="#age">section 6</a>.</p>''')
-    body.append(before_toc('<p>Households of retired people paid less tax on average than households of non-retired people. They also had lower average incomes and fewer people in them (<a href="#retired">see section 3</a>).</p>'
-                           "<p>Two official sources answer who pays in different ways: HM Revenue and Customs (section 1) and the Office for National Statistics (section 2). Keep them separate: they count different people and different taxes.</p>"))
+    body.append('''<p>HM Revenue and Customs ranks everyone who owes Income Tax by income and adds up the tax each group owes. People who owe no Income Tax are not included.</p>''')
+    body.append(before_toc("<p>Two official sources answer who pays in different ways: HM Revenue and Customs (section 1) and the Office for National Statistics (section 2). Keep them separate: they count different people and different taxes.</p>"))
     body.append(FOLD)
     rows = []
     for key, label, thr in (("top1", "Top 1%", "hmrc.threshold.top1"), ("top10", "Top 10%", "hmrc.threshold.top10"), ("top50", "Top 50%", "hmrc.threshold.top50"), ("bottom50", "Bottom 50%", None)):
@@ -299,26 +301,32 @@ def who_pays_page(facts, d, num, sources):
     body.append(source_line(sources, ["hmrc24"], "Survey of Personal Incomes. 2023-24 is outturn; later years are projections."))
     # ETB
     body.append(f'''<h2 id="households">2. All taxes, by household income</h2>
-<p>The Office for National Statistics ranks everyone in UK private households by their household's income, adjusted for household size, and splits them into five groups with the same number of people in each (“fifths”). For each fifth, it then estimates the average income and taxes of the households those people live in. Each fifth has the same number of people, but not the same number of households. This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>''')
+<p>The Office for National Statistics splits everyone in UK private households into five groups of equal size (“fifths”) by household income, and estimates the taxes, including VAT, paid by the households they live in.</p>''')
     rows = []
     for q, label in QUINTS:
         rows.append([label, num(f"etb.2a.gross.{q}", "pounds"), num(f"etb.2a.direct.{q}", "pounds"), num(f"etb.2a.indirect.{q}", "pounds"), num(f"etb.2a.alltax.{q}", "pounds")])
     body.append(bars([(lab, f"etb.2a.alltax.{q}", "alt" if q == "all" else "") for q, lab in QUINTS], "pounds", num,
                      caption="Average taxes paid by the households that people in each fifth live in, £ a year, financial year ending 2024 (April 2023 to March 2024)."))
     body.append(FOLD)
+    body.append("<p>How the fifths are made: everyone is ranked by their household's income, adjusted for household size, and split into five groups with the same number of people in each. "
+                "For each fifth, the ONS then estimates the average income and taxes of the households those people live in. Each fifth has the same number of people, but not the same number of households. "
+                "This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>")
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
     body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
     body.append('<p>For how big these taxes are compared with each group\'s income, see <a href="household-tax.html">how much of household income goes on tax</a>.</p>')
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are modelled from what households report spending.</p></div>')
     body.append(source_line(sources, ["etb"], "Table 2a. Survey-based estimates for April 2023 to March 2024."))
     # ETB retired / non-retired
+    retired_def = f'''<p>Who counts as retired: people who live in a household where more than half of the income comes from people who say they are retired and are over 50, or who are not working because of sickness or injury and are over State Pension age. Everyone else counts as “non-retired”. In 2023/24, {num("etb.ret.people.all", "millions_people")} people lived in retired households and {num("etb.nonret.people.all", "millions_people")} in non-retired households.</p>'''
     body.append(f'''<h2 id="retired">3. All taxes, retired and non-retired people</h2>
-<p>The same Office for National Statistics survey also splits people into two groups. People count as “retired” if they live in a household where more than half of the income comes from people who say they are retired and are over 50, or who are not working because of sickness or injury and are over State Pension age. Everyone else counts as “non-retired”. In 2023/24, {num("etb.ret.people.all", "millions_people")} people lived in retired households and {num("etb.nonret.people.all", "millions_people")} in non-retired households.</p>
-<p>Non-retired households paid about {num("etb.nonret.alltax.all", "pounds")} a year in all taxes on average, and retired households about {num("etb.ret.alltax.all", "pounds")}. Retired households are smaller ({num("etb.ret.hhsize.all", "dp1")} people on average, against {num("etb.nonret.hhsize.all", "dp1")}) and have lower incomes. Compared with each group's income, the difference is much smaller: taxes took {num("etb.nonret.taxshare.all", "pct")} of gross household income for non-retired people and {num("etb.ret.taxshare.all", "pct")} for retired people.</p>''')
+<p>From the same survey: retired households paid less tax on average, but they are smaller and have lower incomes. Compared with each group's income, the difference is much smaller: taxes took {num("etb.nonret.taxshare.all", "pct")} of gross household income for non-retired people and {num("etb.ret.taxshare.all", "pct")} for retired people.</p>''')
     groups = [("nonret", "Non-retired people"), ("ret", "Retired people")]
     body.append(bars([(lab, f"etb.{g}.alltax.all", "") for g, lab in groups], "pounds", num,
                      caption="Average taxes paid by the households that retired and non-retired people live in, £ a year, 2023/24."))
     body.append(FOLD)
+    body.append(retired_def)
+    body.append(f'<p>Non-retired households paid about {num("etb.nonret.alltax.all", "pounds")} a year in all taxes on average, and retired households about {num("etb.ret.alltax.all", "pounds")}. '
+                f'Retired households had {num("etb.ret.hhsize.all", "dp1")} people on average, against {num("etb.nonret.hhsize.all", "dp1")}.</p>')
     rows = [[lab, num(f"etb.{g}.people.all", "millions_people"), num(f"etb.{g}.hhsize.all", "dp1"), num(f"etb.{g}.gross.all", "pounds"),
              num(f"etb.{g}.direct.all", "pounds"), num(f"etb.{g}.indirect.all", "pounds"), num(f"etb.{g}.alltax.all", "pounds"), num(f"etb.{g}.taxshare.all", "pct")]
             for g, lab in groups]
