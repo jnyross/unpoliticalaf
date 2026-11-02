@@ -5,7 +5,13 @@ Kept in their own module so the main page functions only gain one call each.
 """
 from .html import FOLD, NOFOLD, bars, change_bars, details_table, line_chart, small_multiples, source_line, table, esc
 from .pages_money import derive
+from . import findings as F
 from .explain import box as explain
+
+def _plain_years(rule):
+    """A title rule that names years without the "(calendar year)" note the readout uses."""
+    return lambda labels, series, stretches: rule([lab.replace(" (calendar year)", "") for lab in labels], series, stretches)
+
 
 # Taxes shown one by one in the tax-mix section, in the order of the main taxes page.
 MIX_LINES = (("income_tax", "Income Tax", "a"), ("nics", "National Insurance", "b"), ("vat", "VAT", "c"))
@@ -52,6 +58,8 @@ A smaller share does not have to mean less money: it can also mean other taxes g
     out.append(line_chart(f"Share of all taxes, {first} to {last}", years,
                           [(n, [facts[f"rec.share.{k}.{y}"].value for y in years], st) for k, n, st in MIX_LINES],
                           "Per cent of all taxes raised in each year. Source: OBR public finances databank.", ymin=0,
+                          kind="pct", num=num, ids=[[f"rec.share.{k}.{y}" for y in years] for k, _, _ in MIX_LINES],
+                          finding=F.leader("{name} raised a larger share of all tax than the other two {span}"),
                           desc=f"Income Tax {facts[f'rec.share.income_tax.{first}'].value:.1f}% in {first} and {facts[f'rec.share.income_tax.{last}'].value:.1f}% in {last}; "
                                f"National Insurance {facts[f'rec.share.nics.{first}'].value:.1f}% and {facts[f'rec.share.nics.{last}'].value:.1f}%; "
                                f"VAT {facts[f'rec.share.vat.{first}'].value:.1f}% and {facts[f'rec.share.vat.{last}'].value:.1f}%."))
@@ -156,6 +164,7 @@ def net_section(facts, d, num, sources):
                            ("Non-retired", [facts[f"etb.t16.nonret.{y}"].value for y in ys], "a")],
                           "Per cent of people. Calendar years to 1993, then financial years (April to March) from 1994/95.",
                           breaks=[(fy, "Financial years")], ymin=0, ymax=100,
+                          finding=F.gap("The share for people in retired households", "for people in non-retired households"),
                           desc=f"Retired: {facts[f'etb.t16.ret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.ret.{last}'].value:.1f}% in {last}. "
                                f"Non-retired: {facts[f'etb.t16.nonret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.nonret.{last}'].value:.1f}% in {last}. The figures for everyone are in the table."))
     out.append(FOLD)
@@ -269,6 +278,7 @@ def tax_history_section(facts, d, num, sources):
                           [("Everyone", vals(series_ids("all")), "a")],
                           f"Per cent of gross household income, average across all households to {ov} and across all people from {adj}. Calendar years to 1993, then financial years (April to March).",
                           breaks=[(cut, "Method changed")], split_breaks=True, ymin=0, ymax=50,
+                          finding=_plain_years(F.both(F.trend("On the older method, the share", which="first"), F.trend("on the current method it", which="last"))),
                           events=[(labels.index("2020/21"), "Covid")] if "2020/21" in labels else (),
                           kind="pct", ids=[series_ids("all")], num=num, point_labels=pl))
     out.append(FOLD)  # keep the main chart in view on phones
@@ -279,6 +289,7 @@ For {ov}, the one year published both ways, the share for everyone was {num(oall
                                [(lab, vals(series_ids(q))) for q, lab in FIFTHS],
                                "Per cent of gross household income. Fifths of households to 2017/18; fifths of people from 2018/19.", "pct",
                                ids=[series_ids(q) for q, _ in FIFTHS], num=num, breaks=[(cut, "Method changed")], split_breaks=True,
+                               finding=F.leader("Taxes took the largest share of income for the {lname} {span}", which="last"),
                                ymin=0, point_labels=pl))
     # every year, both methods, including the overlap year on the people method
     rows = []

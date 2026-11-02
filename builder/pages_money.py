@@ -2,6 +2,7 @@
 from .data import Fact
 from .explain import box as explain
 from .html import FOLD, before_toc, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, source_line, fmt, esc
+from . import findings as F
 
 # What each way of showing money means, in one sentence, shown with every cash / real / GDP switch.
 VIEW_NOTES = {
@@ -126,6 +127,8 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     def tme_chart(v):
         vals = [facts[f"spend.{v}.tme.{yy}"].value for yy in years]
         return line_chart(tme_title[v], years, [("Total managed expenditure", vals, "a")], tme_unit[v], events=covid,
+                          finding=F.trend({"cash": "Total public spending in cash", "real": "After inflation, total public spending",
+                                           "gdp": "As a share of GDP, total public spending"}[v]),
                           desc=f"From {fmt(vals[0], tme_kind[v])} in {first} to {fmt(vals[-1], tme_kind[v])} in {y}.",
                           kind=tme_kind[v], num=num, ids=[[f"spend.{v}.tme.{yy}" for yy in years]], ymin=0 if v != "gdp" else None)
     body.append(views(tme_chart))
@@ -181,6 +184,7 @@ def spending_areas_page(facts, d, num, sources):
         return small_multiples(f"Spending by area, {first} to {y}", [yy[:4] for yy in years], [(n.split(" (")[0], [facts[f"spend.{v}.{k}.{yy}"].value for yy in years]) for k, n in order],
                                area_unit[v] + ". Axis years are financial years starting in April of the year shown.", area_kind[v], point_labels=years, ids=[[f"spend.{v}.{k}.{yy}" for yy in years] for k, _ in order], num=num,
                                summary_note="The tables below give every area's figure for every year.", ymin=0 if v != "gdp" else None,
+                               finding=F.leader("{name} was the largest area of spending {span}"),
                                breaks=[(years.index("2011-12"), "Education: student loans removed")] if "2011-12" in years else ())
     body.append(views(area_chart))
     # full history tables per view
@@ -260,6 +264,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
         ids = [[f"{a}.{g}" if f"{a}.{g}" in facts else None for g in gy], [f"{b}.{g}" if f"{b}.{g}" in facts else None for g in gy]]
         vals = [[facts[i].value if i else None for i in row] for row in ids]
         return line_chart(rec_title[v], gy, [("Receipts", vals[0], "a"), ("Spending", vals[1], "b")], rec_unit[v], forecast_from=fc, ymin=0,
+                          finding=F.gap("Spending", "receipts", si=1, sj=0),
                           kind="pct" if v == "gdp" else "bn", num=num, ids=ids)
     first_real = rc["real_years"][0]
     body.append(views(rec_chart, order=("gdp", "real"), default="gdp",
@@ -286,6 +291,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
         ids = [[f"{tax_pre[v]}.{k}.{t}" for t in ty] for k, _, _ in big]
         return line_chart(f"Income Tax, National Insurance and VAT, {VIEW_LABELS[v].lower()}", ty,
                           [(n, [facts[i].value for i in row], st) for (k, n, st), row in zip(big, ids)], tax_unit[v], forecast_from=tfc, ymin=0,
+                          finding=F.leader("{name} raised the most of the three {span}"),
                           kind="pct" if v == "gdp" else "bn", num=num, ids=ids)
     body.append(views(tax_chart))
     rows = [[t + (" (forecast)" if t >= rc["forecast_from"] else "")] + [num(f"rec.real.{k}.{t}", "bn1") for k, _, _ in big] + [num(f"rec.gdp.{k}.{t}", "pct") for k, _, _ in big] for t in ty]
@@ -340,6 +346,7 @@ def who_pays_page(facts, d, num, sources):
                            [("Top 1% share of Income Tax", vals, "a"), ("Top 1% share of income", [facts[f"hmrc.income.top1.{h}"].value for h in hy], "b")],
                            "Per cent. Gap at 2008-09: HMRC has no figures for that year. Years from 2024-25 are HMRC projections.",
                            breaks=[(hy.index("2016 to 2017"), "Dividend rules changed")], forecast_from=fc, future="projection", ymin=0,
+                           finding=F.gap("The top 1%'s share of Income Tax", "their share of income"),
                            kind="pct", num=num, ids=[[f"hmrc.share.top1.{h}" for h in hy], [f"hmrc.income.top1.{h}" for h in hy]]))
     body.append(explain("top1-share", sources))
     rows = [[h + (" (projection)" if int(h[:4]) >= 2024 else ""), num(f"hmrc.share.top1.{h}", "pct"), num(f"hmrc.share.top10.{h}", "pct"), num(f"hmrc.share.bottom50.{h}", "pct")] for h in hy]

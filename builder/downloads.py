@@ -132,7 +132,9 @@ def add_links(body, path):
         rows = figure_rows(m.group(1))
         if not rows:
             continue
-        t = re.search(r'<p class="ctitle"[^>]*>(.*?)</p>', m.group(1), re.S) or re.search(r"<strong>(.*?)</strong>", m.group(1), re.S)
+        # Named after what the chart measures (the subtitle under a finding), which stays the same when figures are refreshed
+        t = (re.search(r'<p class="csub"[^>]*>(.*?)</p>', m.group(1), re.S) or re.search(r'<p class="ctitle"[^>]*>(.*?)</p>', m.group(1), re.S)
+             or re.search(r"<strong>(.*?)</strong>", m.group(1), re.S))
         title = text(t.group(1)) if t else heading_before(m.start())
         if rows[0][1:] == ["Value"]:
             rows[0][1] = title

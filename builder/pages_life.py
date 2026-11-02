@@ -13,6 +13,7 @@ from .data import YEARS, EARLY_YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
 from .html import FOLD, NOFOLD, before_toc, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
+from . import findings as F
 from .pages_nations import housing_nations_block, schools_nations_block
 from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page
 
@@ -141,7 +142,7 @@ TOPIC_SOURCES = {
     "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020", "ons-jobs02"],
     "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "nomis-ashe-percentiles", "ons-l522"],
     "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ons-affordability", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26"],
-    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop", "eurostat-ilc-mdes02-uk"],
+    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop", "eurostat-ilc-mdes02-uk", "ons-l522"],
     "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025", "scot-pupil-census-2025", "ni-de-enrolments-2025-26"],
 }
 
@@ -150,7 +151,7 @@ TOPIC_LIMITS = {
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
     "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure in each region and nation, with what each one counts, are on their own page. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years; ONS says annual 2024 mixes the old method (January to June) and the new one (July to December), so 2024 is not compared with 2025 either. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. No official statistic, published each year, gives the share of people who took a holiday. The nearest, the share of people whose household could not afford a week’s holiday away, is shown for the 2005 to 2018 surveys, the only years with UK figures. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
-    "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
+    "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. Averages for infant and key stage 2 classes, and counts of pupils in classes of more than 30 for each, start in January 2016 in the DfE data used here; shares of pupils in classes of more than 30 for primary and secondary schools start in January 2006. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
 
 
@@ -367,7 +368,7 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
         return svg
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
-    this = (f"The dark dot is {yl(y)}: {num(fid(y), kind)}." if fid(y) in facts and facts[fid(y)].value is not None
+    this = (f"The dark dot is {yl(y)}: {num(fid(y), kind)}{F.place(have, y, group if breaks else None)}." if fid(y) in facts and facts[fid(y)].value is not None
             else f"There is no figure for {yl(y)}.")
     cap = (f"<strong>{esc(label)}</strong>, {yl(FIRST)} to {yl(LAST)}. {this} "
            f"The scale runs from {num(fid(lo[0]), kind)} ({yl(lo[0])}) to {num(fid(hi[0]), kind)} ({yl(hi[0])}) and does not start at zero.")
@@ -716,21 +717,29 @@ def compare_index(sources):
     return html.replace("<body>", "<body data-compare-index>", 1)
 
 
-def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split_breaks=False, kind=None, num=None, point_label=str):
+# Words for the housing tenure groups in chart titles.
+TENURE_WORDS = {"Own outright": "the share owning outright", "Own with a mortgage": "the share buying with a mortgage",
+                "Rent from council or housing association": "the share renting from a council or housing association",
+                "Rent privately": "the share renting privately"}
+CLASS_FINDING = F.pair("Primary class sizes", "secondary class sizes")
+
+
+def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split_breaks=False, kind=None, num=None, point_label=str, finding=None):
     labels = [str(y) for y in YEARS]
     series = [(name, [_val(facts, fid(y)) for y in YEARS], style) for name, fid, style in items]
     ids = [[fid(y) if _val(facts, fid(y)) is not None else None for y in YEARS] for _, fid, _ in items]
     return line_chart(title, labels, series, unit, breaks=breaks, ymin=ymin, scale=scale, split_breaks=split_breaks,
-                      kind=kind, ids=ids, num=num, point_labels=[point_label(y) for y in YEARS])
+                      kind=kind, ids=ids, num=num, point_labels=[point_label(y) for y in YEARS], finding=finding)
 
 
-def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=False, ymin=None, kind=None, num=None, point_label=str, summary_note=""):
+def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=False, ymin=None, kind=None, num=None, point_label=str, summary_note="", finding=None):
     """Small multiples: one panel per group, all on one scale. items: (name, fid(year))."""
     years = list(years or YEARS)
     series = [(name, [_val(facts, fid(y)) for y in years]) for name, fid in items]
     ids = [[fid(y) if _val(facts, fid(y)) is not None else None for y in years] for _, fid in items]
     return small_multiples(title, [str(y) for y in years], series, unit, kind, ids=ids, num=num, breaks=breaks,
-                           split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years], summary_note=summary_note)
+                           split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years], summary_note=summary_note,
+                           finding=finding)
 
 
 def _work(facts, d, num, sources):
@@ -739,7 +748,8 @@ def _work(facts, d, num, sources):
     y = LAST
     answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
     body.append(U.topic_line(num, "work", LAST))
-    body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num))
+    body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
+                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")))
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
     groups = d["work"]["occ_groups"]
@@ -755,7 +765,8 @@ def _work(facts, d, num, sources):
     body.append(groups_chart(facts, "Share of people in work by job type",
                              [(n.split(" occupations")[0], (lambda c: lambda yy: f"work.occshare.{occ_scheme(yy)}.{c}.{yy}")(c)) for c, n in groups["SOC2020"].items() if c != "0"],
                              "Per cent of people in work, January to December, United Kingdom. Up to 2020 SOC2010 job types; from 2021 SOC2020, so the lines break there",
-                             years=oyears, breaks=[(oyears.index(2021), "New job classification")] if 2021 in oyears else (), split_breaks=True, ymin=0, kind="pct", num=num))
+                             years=oyears, breaks=[(oyears.index(2021), "New job classification")] if 2021 in oyears else (), split_breaks=True, ymin=0, kind="pct", num=num,
+                             finding=F.leader("{name} jobs were the largest group {span}", which="last")))
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
     body.extend(work_ages_block(facts, num))
     body.extend(industry_block(facts, num, d))
@@ -771,7 +782,8 @@ def _earnings(facts, d, num, sources):
     answer = (f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
-                             "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num))
+                             "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num,
+                             finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week")))
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
@@ -790,7 +802,8 @@ def _housing(facts, d, num, sources):
     hyears = [y for y in YEARS if y <= hy]
     body.append(groups_chart(facts, "How households in England live", [("Own outright", lambda y: f"house.outright.{y}"), ("Own with a mortgage", lambda y: f"house.mortgage.{y}"),
                                                                        ("Rent from council or housing association", lambda y: f"house.social.{y}"), ("Rent privately", lambda y: f"house.private.{y}")],
-                             "Per cent of households in England, survey year starting in the year shown", years=hyears, ymin=0, kind="pct", num=num, point_label=sy))
+                             "Per cent of households in England, survey year starting in the year shown", years=hyears, ymin=0, kind="pct", num=num, point_label=sy,
+                             finding=F.moves(TENURE_WORDS)))
     body.append(details_table("Show housing for every year", "Housing tenure, England, % of households",
                               ["Survey year", "Own outright", "Mortgage", "Social rent", "Private rent", "Families with children renting privately"],
                               [[f"{y}-{str(y + 1)[2:]}", num(f"house.outright.{y}", "pct"), num(f"house.mortgage.{y}", "pct"), num(f"house.social.{y}", "pct"), num(f"house.private.{y}", "pct"),
@@ -816,7 +829,8 @@ def _holidays(facts, d, num, sources):
     body.append('<p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
                 'Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019.</p>')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
-                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num))
+                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
+                             finding=F.trend("Holiday visits abroad by UK residents", which="first")))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), num(f"hol.world.holiday.{y}", "millions"), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
@@ -827,7 +841,8 @@ def _holidays(facts, d, num, sources):
                               [[str(y), gb_survey(y), num(f"hol.gb.holiday.{y}", "millions"), num(f"hol.gb.per100.{y}", "int")] if y in gb_years
                                else [str(y), "", '<span class="missing">not available</span>', ""] for y in YEARS if y >= 2019]))
     body.append('<p class="small">2020 and 2021 have no full-year figures because of the pandemic. The survey changed method after 2019, so 2019 is not compared with later years. Earlier years used yet other methods and are not shown.</p>')
-    from .pages_life_extra import holiday_afford_block
+    from .pages_life_extra import holiday_afford_block, holiday_spend_block
+    body.extend(holiday_spend_block(facts, num, d))
     body.extend(holiday_afford_block(facts, num, d))
     body.append(country_table(facts, num, d, LAST, 10))
     cyears = [2009, 2019, LAST]
@@ -852,12 +867,14 @@ def _schools(facts, d, num, sources):
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
                              [(n, [_val(facts, f(y)) for y in sy], st) for n, f, st in (("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b"))],
                              "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num,
-                             ids=[[f(y) for y in sy] for f in (lambda y: f"school.primary.{y}", lambda y: f"school.secondary.{y}")])
+                             ids=[[f(y) for y in sy] for f in (lambda y: f"school.primary.{y}", lambda y: f"school.secondary.{y}")], finding=CLASS_FINDING)
                   if newer else series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
-                             "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num))
+                             "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num, finding=CLASS_FINDING))
     body.append(details_table("Show class sizes for every year", "Average class size, England, January census",
                               ["January census", "School year", "Primary", "Secondary"],
                               [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.primary.{y}", "dp1"), num(f"school.secondary.{y}", "dp1")] for y in sy]))
+    from .pages_life_extra import class_detail_blocks
+    body.extend(class_detail_blocks(facts, num, d))
     wy = [y for y in YEARS if _val(facts, f"school.wales.infant.{y}") is not None]
     body.append("<h3 id='schools-wales'>Wales</h3>")
     body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
@@ -872,8 +889,8 @@ TOPIC_PAGES = {
     "work": ("How has work changed?", "employment by sex and age, the kinds of jobs people do, and each nation and region"),
     "earnings": ("How has pay changed after inflation?", "pay for men, women and part-time employees, and each nation and region"),
     "housing": ("How has housing changed?", "who owns and rents, what housing costs, space and overcrowding, regions and nations"),
-    "holidays": ("How have holidays changed?", "holidays abroad and at home, the countries people visit, and who could afford a week away"),
-    "schools": ("How have class sizes changed?", "primary and secondary classes in England, and figures for Wales and Scotland"),
+    "holidays": ("How have holidays changed?", "holidays abroad and at home, what is spent and for how many nights, the countries people visit, and who could afford a week away"),
+    "schools": ("How have class sizes changed?", "primary, secondary, infant and key stage 2 classes in England, how many pupils are in classes of more than 30, and figures for Wales and Scotland"),
 }
 TOPIC_BUILDERS = {"work": _work, "earnings": _earnings, "housing": _housing, "holidays": _holidays, "schools": _schools}
 TREND_HEADINGS = {"work": "Employment over time", "earnings": "Pay over time", "housing": "Who owns and who rents",
@@ -978,7 +995,8 @@ def work_ages_block(facts, num):
                f'The rate was lower for 18 to 24 year olds ({num(young, "pct")}), many of whom are studying, and for 50 to 64 year olds ({num(old, "pct")}). '
                f'{num(f"work.age.65.{LAST}", "pct")} of people aged 65 and over were in work, compared with {num(f"work.age.65.{FIRST}", "pct")} in {FIRST}.</p></div>')
     out.append(groups_chart(facts, "Employment rate by age group", [(lab, (lambda k: lambda y: f"work.age.{k}.{y}")(k)) for k, lab, _ in AGE_SERIES],
-                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0, kind="pct", num=num))
+                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0, kind="pct", num=num,
+                            finding=F.count("The employment rate", "age groups")))
     out.append(details_table("Show employment by age for every year", "Employment rate by age group, United Kingdom, April to June, %",
                              ["Year"] + [lab for _, lab, _ in AGE_SERIES],
                              [[str(y)] + [num(f"work.age.{k}.{y}", "pct") for k, _, _ in AGE_SERIES] for y in YEARS]))
@@ -995,6 +1013,7 @@ def places_block(facts, num, topic):
         fid, kind, style = (lambda k, y: f"earn.place.real.{k}.{y}"), "pounds", "pct"
         title, what = "By nation and region", "Median weekly pay of full-time employees, by where they live, April each year, in April 2025 prices"
     places = [(k, n) for k, n in NATIONS] + [(k, n) for k, n, _ in REGIONS]
+    subject = "The employment rate" if topic == "work" else "After inflation, median full-time pay"
     ys = [y for y in YEARS if _val(facts, fid("uk", y)) is not None]
     a, b = ys[0], ys[-1]
     out = [f"<h3 id='{topic}-places'>{title}</h3>"]
@@ -1018,9 +1037,11 @@ def places_block(facts, num, topic):
         moe = num(U.MARGINS[fid(k, b)][0], mk) if U.has(fid(k, b)) else '<span class="missing">not published</span>'
         rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
     out.append(groups_chart(facts, f"{what.split(',')[0]}: the four nations", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n in NATIONS[1:]],
-                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year."))
+                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year.",
+                            finding=F.count(subject, "nations")))
     out.append(groups_chart(facts, f"{what.split(',')[0]}: regions of England", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n, _ in REGIONS],
-                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year."))
+                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year.",
+                            finding=F.count(subject, "regions")))
     out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), f"Margin of error, {b}", "Change"], rows))
     out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
@@ -1086,6 +1107,7 @@ def housing_regions_block(facts, num):
                      ["Place", f"Owner occupied {a}", f"Owner occupied {b}", f"Private rent {a}", f"Private rent {b}", f"Social rent {a}", f"Social rent {b}"], rows))
     out.append(groups_chart(facts, "Homes rented privately in each region of England", [("All of England" if k == "england" else n, (lambda k: lambda y: f"house.reg.private.{k}.{y}")(k)) for k, n in places],
                             "Per cent of homes rented privately, 31 March each year", years=ys, ymin=0, kind="pct", num=num,
+                            finding=F.count("The share of homes rented privately", "areas shown"),
                             summary_note=f"One panel for each place, on the same scale. The table above gives every region's figures for {a} and {b}, and the table below gives every year."))
     out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
                              ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
@@ -1106,7 +1128,8 @@ def housing_costs_block(facts, num, d):
     out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
                             [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
-                            f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0, kind="pounds", num=num, point_label=sy))
+                            f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0, kind="pounds", num=num, point_label=sy,
+                            finding=F.pair("After inflation, average private rent", "the average mortgage payment")))
     out.append(details_table("Show housing costs for every year", f"Average (mean) weekly rent before housing support and mortgage payment, England",
                              ["Survey year", "Private rent (cash)", f"Private rent ({b} prices)", "Social rent (cash)", f"Social rent ({b} prices)",
                               "Mortgage (cash)", f"Mortgage ({b} prices)"],
@@ -1127,7 +1150,8 @@ def housing_space_block(facts, num):
     out.append(series_chart(facts, "Overcrowded households in England, by tenure",
                             [("Social renters", lambda y: f"house.crowd.social.{y}", "a"), ("Private renters", lambda y: f"house.crowd.private.{y}", "b"),
                              ("Owner occupiers", lambda y: f"house.crowd.owners.{y}", "c")],
-                            "Per cent of households below the bedroom standard, three-year average ending in the survey year shown", ymin=0, kind="pct", num=num, point_label=sy))
+                            "Per cent of households below the bedroom standard, three-year average ending in the survey year shown", ymin=0, kind="pct", num=num, point_label=sy,
+                            finding=F.leader("{name} were the most likely to be overcrowded {span}")))
     out.append(details_table("Show overcrowding for every year", "Overcrowded households, England, % (three-year averages, bedroom standard)",
                              ["Three survey years", "All households", "Owner occupiers", "Social renters", "Private renters"],
                              [[f"{sy(y - 2)} to {sy(y)}", num(f"house.crowd.all.{y}", "pct"), num(f"house.crowd.owners.{y}", "pct"), num(f"house.crowd.social.{y}", "pct"),

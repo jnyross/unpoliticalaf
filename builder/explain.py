@@ -180,8 +180,9 @@ EXPLANATIONS = {
         question="Is there a legal limit on class sizes?",
         source="dfe-spc-page", publisher="Department for Education",
         title="Schools, pupils and their characteristics: academic year 2025/26", date="4 June 2026",
-        quote=["Large Classes - An infant class is described as ‘large’ when it exceeds the statutory limit of 30 pupils. There are no formal policy restrictions on any other class sizes."],
-        gloss="This is the rule in England. Infant classes are reception, year 1 and year 2. The English averages on this site cover all primary or all secondary classes, so they say nothing about the limit on their own."),
+        quote=["Large Classes - An infant class is described as ‘large’ when it exceeds the statutory limit of 30 pupils. There are no formal policy restrictions on any other class sizes.",
+               "This means that a class of, for example, 32 pupils is lawful if two or more of those pupils have been admitted under lawful exceptions."],
+        gloss="This is the rule in England. Infant classes are reception, year 1 and year 2. The primary and secondary averages say nothing about the limit on their own; the infant figures on the class sizes page show how many pupils are in classes of more than 30, some of which are lawful exceptions."),
 }
 
 _text_cache = {}

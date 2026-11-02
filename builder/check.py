@@ -422,6 +422,28 @@ def run_axe(paths):
         browser.close()
 
 
+# Words a chart heading may not use: they judge or suggest a cause rather than state what changed.
+LOADED_TITLE = re.compile(r"\b(soar|surge|plunge|plummet|slump|skyrocket|crisis|boom|collapse|thanks to|because|due to|caused|record)\w*", re.I)
+
+
+def check_findings():
+    """Every chart heading states its finding: a heading, then what the chart measures
+    beneath it, in neutral words."""
+    n = 0
+    for path in SITE.rglob("*.html"):
+        if path.parts[len(SITE.parts)] == "figures":
+            continue
+        html = path.read_text(encoding="utf-8")
+        for m in re.finditer(r'<p class="ctitle"[^>]*>(.*?)</p>(<p class="csub")?', html):
+            n += 1
+            rel = path.relative_to(SITE)
+            if not m.group(2):
+                fail(f"{rel}: chart “{m.group(1)}” has no finding as its heading")
+            elif LOADED_TITLE.search(m.group(1)):
+                fail(f"{rel}: chart heading “{m.group(1)}” uses loaded or causal wording")
+    return n
+
+
 def check_explanations():
     sys.path.insert(0, str(ROOT))
     from builder.explain import EXPLANATIONS, missing_quotes, norm
@@ -442,6 +464,7 @@ def main():
     n_pages, shown = check_pages(facts)
     n_quotes = check_explanations()
     n_csv = check_downloads()
+    n_findings = check_findings()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
@@ -450,6 +473,7 @@ def main():
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
+    print(f"Checked that {n_findings} chart headings state their finding in neutral words.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
     if problems:
         print(f"\n{len(problems)} problems:")

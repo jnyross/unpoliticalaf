@@ -4,6 +4,7 @@ industry (work). Each returns a list of parts starting with an <h3>, which
 topic_page() turns into its own section.
 """
 from .html import NOFOLD, details_table, esc, line_chart, table
+from . import findings as F
 
 
 def _v(facts, fid):
@@ -11,13 +12,13 @@ def _v(facts, fid):
     return None if f is None else f.value
 
 
-def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str):
+def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str, finding=None):
     """A line chart over a measure's own years. items: (name, fid(year), style)."""
     series = [(name, [_v(facts, fid(y)) for y in years], style) for name, fid, style in items]
     ids = [[fid(y) if _v(facts, fid(y)) is not None else None for y in years] for _, fid, _ in items]
     br = [(years.index(y), text) for y, text in breaks if y in years and y != years[0]]
     return line_chart(title, [str(y) for y in years], series, unit, breaks=br, ymin=ymin, kind=kind, ids=ids, num=num,
-                      point_labels=[point_label(y) for y in years])
+                      point_labels=[point_label(y) for y in years], finding=finding)
 
 
 # ---------------------------------------------------------------- earnings: how far apart is pay?
@@ -49,7 +50,8 @@ def spread_block(facts, num, d, first):
                       [("Top-tenth line", lambda y: f"spread.real.p90.{y}", "a"), ("Median", lambda y: f"spread.real.p50.{y}", "b"),
                        ("Bottom-tenth line", lambda y: f"spread.real.p10.{y}", "c")],
                       f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005", "pounds",
-                      breaks=sorted(sp["breaks"].items()), ymin=0))
+                      breaks=sorted(sp["breaks"].items()), ymin=0,
+                      finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2)))
     out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
                              ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line (times)",
                               f"Bottom line ({base} prices)", f"Top line ({base} prices)"],
@@ -106,7 +108,9 @@ def afford_page(facts, d, num, sources):
     body.append("<h2 id='trend'>The ratio over time</h2>")
     body.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
                        [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
-                       "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0))
+                       "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0,
+                       finding=F.pair("In England, house prices as a multiple of earnings", "in Wales they",
+                                      together="House prices as a multiple of earnings {phrase} in both England and Wales")))
     body.append(FOLD)
     body.append(details_table("Show house prices and earnings for every year", "England and Wales: median house price, median full-time annual earnings and the ratio",
                               ["Year", "Median house price", "Median full-time earnings (a year)", "Ratio (times a year’s earnings)"],
@@ -169,6 +173,7 @@ def industry_page(facts, d, num, sources):
     body.append(groups_chart(facts, "Share of all jobs in six large industries",
                              [(names[s], (lambda s: lambda y: f"jobs.share.{s}.{y}")(s)) for s in SHOWN_INDUSTRIES],
                              "Per cent of all workforce jobs, United Kingdom, June each year, seasonally adjusted", years=years, ymin=0, kind="pct", num=num,
+                             finding=F.moves({n: f"the share of jobs in {n[:1].lower() + n[1:]}" for n in names.values()}, which="all"),
                              point_label=lab))
     body.append(FOLD)
     body.append(details_table("Show jobs in the six large industries for every year", "Share of all workforce jobs, United Kingdom, June each year, %",
@@ -227,7 +232,8 @@ def holiday_afford_block(facts, num, d):
     out.append(_chart(facts, num, "People whose household could not afford a week’s holiday away from home", years,
                       [("Low-income households", lambda y: f"holafford.low.{y}", "b"), ("Everyone", lambda y: f"holafford.all.{y}", "a"),
                        ("Other households", lambda y: f"holafford.notlow.{y}", "c")],
-                      "% of people, United Kingdom, EU-SILC survey year", "pct", breaks=[(y, "Series break") for y in ha["breaks"]], ymin=0))
+                      "% of people, United Kingdom, EU-SILC survey year", "pct", breaks=[(y, "Series break") for y in ha["breaks"]], ymin=0,
+                      finding=F.gap("The share for people in low-income households", "for people in other households", si=0, sj=2)))
     out.append(details_table("Show who could not afford a week’s holiday, every year",
                              "People whose household could not afford a week’s holiday away from home, % of people, United Kingdom",
                              ["Survey year"] + [esc(label) for _, _, _, label in ha["groups"]],
@@ -238,4 +244,116 @@ def holiday_afford_block(facts, num, d):
                f'Eurostat marks breaks in the series in {" and ".join(str(y) for y in ha["breaks"])}, so changes across those years are not like-for-like. '
                f'The figures come from the EU statistics on income and living conditions survey, which the Office for National Statistics ran in the UK; Eurostat’s table has UK figures for the {first} to {last} surveys only, because the UK stopped supplying them after leaving the EU. '
                f'The Department for Work and Pensions’ Family Resources Survey asks a similar question every year, but publishes it only as one item inside combined measures of deprivation for children and pensioners, whose questions have changed several times, so it is not shown here.</p></div>')
+    return out
+
+
+# ---------------------------------------------------------------- schools: large classes, infant and key stage 2
+
+def _school_year(y):
+    return f"{y - 1}/{str(y)[2:]}"
+
+
+def _word(a, b, up="rose", down="fell", same="was unchanged"):
+    return up if b > a else (down if b < a else same)
+
+
+def class_detail_blocks(facts, num, d):
+    """Two sections for the class sizes page: how many pupils are in classes of more than
+    30, and the averages for infant and key stage 2 classes (England, January census)."""
+    cd = d["life_extra"]["classes"]
+    large = cd["large"]
+    py = sorted(large["primary"])
+    iy = sorted(cd["infant"])
+    a, b = py[0], py[-1]
+    out = ["<h3 id='schools-large'>How many pupils are in classes of more than 30?</h3>"]
+    p_word = _word(_v(facts, f"school.large.primary.{a}"), _v(facts, f"school.large.primary.{b}"))
+    s_word = _word(_v(facts, f"school.large.secondary.{a}"), _v(facts, f"school.large.secondary.{b}"))
+    lo = min(py, key=lambda y: (_v(facts, f"school.large.secondary.{y}"), y))
+    out.append(f'<div class="answer"><p>In January {b}, {num(f"school.large.primary.{b}", "pct")} of pupils in English state primary schools and '
+               f'{num(f"school.large.secondary.{b}", "pct")} of pupils in secondary schools were in classes of more than 30. '
+               f'In January {a} the figures were {num(f"school.large.primary.{a}", "pct")} and {num(f"school.large.secondary.{a}", "pct")}, so the primary share {p_word} '
+               f'and the secondary share {s_word}; the secondary share was lowest in January {lo}, at {num(f"school.large.secondary.{lo}", "pct")}.</p>'
+               f'<p>In infant classes (reception to year 2), where the law sets a limit of 30 with some exceptions, {num(f"school.large.infant.{iy[-1]}", "pct")} of pupils '
+               f'({num(f"school.pupils.infant.over30.{iy[-1]}", "int")} children) were in classes of more than 30 in January {iy[-1]}. '
+               f'In key stage 2 classes (years 3 to 6), which have no limit, it was {num(f"school.large.ks2.{iy[-1]}", "pct")}.</p></div>')
+    out.append(_chart(facts, num, "Pupils in classes of more than 30, England", py,
+                      [("Primary", lambda y: f"school.large.primary.{y}", "a"), ("Secondary", lambda y: f"school.large.secondary.{y}", "b")],
+                      "% of pupils in classes of more than 30, January school census, state-funded schools", "pct", ymin=0, point_label=lambda y: f"January {y}",
+                      finding=F.pair("The share of primary pupils in classes of more than 30", "the share of secondary pupils")))
+    rows = [[str(y), _school_year(y), num(f"school.large.primary.{y}", "pct"), num(f"school.large.secondary.{y}", "pct"),
+             num(f"school.large.infant.{y}", "pct") if y in large["infant"] else '<span class="missing">not in these tables</span>',
+             num(f"school.large.ks2.{y}", "pct") if y in large["ks2"] else '<span class="missing">not in these tables</span>'] for y in py]
+    out.append(details_table("Show classes of more than 30 for every year", "Pupils in classes of more than 30, % of pupils, England, January census",
+                             ["January census", "School year", "Primary", "Secondary", "Infant classes", "Key stage 2 classes"], rows))
+    out.append(f'<p class="small">Up to January 2015 the DfE published these shares for primary and secondary schools only, as percentages rounded to 1 decimal place; '
+               f'the figures here add its “31 to 35 pupils” and “36 or more pupils” groups. From January 2016 they are worked out from the DfE’s pupil counts. '
+               f'Both count classes taught by one teacher.</p>')
+    a2, b2 = iy[0], iy[-1]
+    out.append("<h3 id='schools-phases'>Infant and key stage 2 classes</h3>")
+    i_word = _word(_v(facts, f"school.infant.{a2}"), _v(facts, f"school.infant.{b2}"), up="got bigger", down="got smaller", same="were the same size")
+    k_word = _word(_v(facts, f"school.ks2.{a2}"), _v(facts, f"school.ks2.{b2}"), up="got bigger", down="got smaller", same="were the same size")
+    out.append(f'<div class="answer"><p>In January {b2}, the average infant class (reception to year 2) in English state schools had {num(f"school.infant.{b2}", "dp1")} pupils '
+               f'and the average key stage 2 class (years 3 to 6) had {num(f"school.ks2.{b2}", "dp1")}. '
+               f'In January {a2}, the first year with these figures in the DfE’s current data, they were {num(f"school.infant.{a2}", "dp1")} and {num(f"school.ks2.{a2}", "dp1")}: '
+               f'infant classes {i_word} and key stage 2 classes {k_word}.</p></div>')
+    out.append(_chart(facts, num, "Average infant and key stage 2 class size, England", iy,
+                      [("Infant (reception to year 2)", lambda y: f"school.infant.{y}", "a"), ("Key stage 2 (years 3 to 6)", lambda y: f"school.ks2.{y}", "b")],
+                      "Pupils per class, January school census, state-funded schools", "dp1", ymin=20, point_label=lambda y: f"January {y}",
+                      finding=F.pair("Average infant class sizes", "key stage 2 class sizes")))
+    out.append(details_table("Show infant and key stage 2 classes for every year", "Infant and key stage 2 classes, England, January census",
+                             ["January census", "School year", "Infant: average class", "Infant: pupils in classes of more than 30", "Key stage 2: average class",
+                              "Key stage 2: pupils in classes of more than 30"],
+                             [[str(y), _school_year(y), num(f"school.infant.{y}", "dp1"), num(f"school.pupils.infant.over30.{y}", "int"),
+                               num(f"school.ks2.{y}", "dp1"), num(f"school.pupils.ks2.over30.{y}", "int")] for y in iy]))
+    out.append('<p class="small">Infant and key stage 2 figures start in January 2016 in the DfE data used here. A class over 30 in reception to year 2 can be lawful, '
+               'for example when some pupils were admitted under the exceptions the rules allow, so these counts are not counts of unlawful classes.</p>')
+    return out
+
+
+# ---------------------------------------------------------------- holidays: spending and nights abroad
+
+def holiday_spend_block(facts, num, d):
+    """Spending on and length of holiday visits abroad (ONS Travel trends)."""
+    hs = d["life_extra"]["holspend"]
+    have = hs["years"]
+    if not have:
+        return []
+    base = hs["base"]
+    years = list(range(have[0], have[-1] + 1))
+    last = have[-1]
+    old = [y for y in have if y <= 2019]
+    a, b = old[0], old[-1]
+    out = ["<h3 id='holidays-spend'>How much is spent on holidays abroad, and for how long?</h3>"]
+    stay_word = _word(_v(facts, f"hol.stay.{a}"), _v(facts, f"hol.stay.{b}"), up="got longer", down="got shorter", same="stayed the same length")
+    spend_word = _word(_v(facts, f"hol.spendper.real.{a}"), _v(facts, f"hol.spendper.real.{b}"))
+    out.append(f'<div class="answer"><p>In {last}, Great Britain residents spent {num(f"hol.spendbn.holiday.{last}", "bn1")} on holiday visits abroad, '
+               f'which is {num(f"hol.spendper.{last}", "pounds")} per visit, and stayed an average of {num(f"hol.stay.{last}", "dp1")} nights per visit.</p>'
+               f'<p>Among UK residents from {a} to {b}, before the pandemic and the survey’s change of method, the average holiday abroad {stay_word}, '
+               f'from {num(f"hol.stay.{a}", "dp1")} to {num(f"hol.stay.{b}", "dp1")} nights, and spending per visit after allowing for rising prices {spend_word}, '
+               f'from {num(f"hol.spendper.real.{a}", "pounds")} to {num(f"hol.spendper.real.{b}", "pounds")} in {base} prices.</p></div>')
+    br = [(years.index(y), t) for y, t in ((2024, "New method"), (2025, "Fully new method")) if y in years]
+    ev = [(years.index(2020), "Covid-19")] if 2020 in years else []
+    for title, fid, kind, unit, ymin, finding in (
+            ("Spending per holiday visit abroad, after inflation", lambda y: f"hol.spendper.real.{y}", "pounds",
+             f"£ per visit in {base} prices (CPIH). Up to 2023 UK residents; from 2024 Great Britain residents (new method)", 0,
+             f"Before the pandemic, spending per holiday visit abroad after inflation {spend_word} between {a} and {b}"),
+            ("Nights per holiday visit abroad", lambda y: f"hol.stay.{y}", "dp1",
+             "Average nights per visit. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", 0,
+             f"Before the pandemic, the average holiday abroad {stay_word} between {a} and {b}")):
+        vals = [_v(facts, fid(y)) if y in have else None for y in years]
+        out.append(line_chart(title, [str(y) for y in years], [(title, vals, "a")], unit, breaks=br, split_breaks=True, ymin=ymin, kind=kind, num=num, events=ev,
+                              ids=[[fid(y) if v is not None else None for y, v in zip(years, vals)]], point_labels=[str(y) for y in years], finding=finding))
+    rows = []
+    for y in years:
+        if y not in have:
+            rows.append([str(y), '<span class="missing">not available</span>', "", "", "", "", ""])
+            continue
+        rows.append([str(y), "UK" if y <= 2023 else ("GB, mixed methods" if y == 2024 else "GB"), num(f"hol.spendbn.holiday.{y}", "bn1"),
+                     num(f"hol.spendper.{y}", "pounds"), num(f"hol.spendper.real.{y}", "pounds"), num(f"hol.nights.holiday.{y}", "millions"), num(f"hol.stay.{y}", "dp1")])
+    out.append(details_table("Show holiday spending and nights for every year", "Holiday visits abroad: spending and nights",
+                             ["Year", "Residents of", "Spending (cash)", "Per visit (cash)", f"Per visit ({base} prices)", "Nights", "Nights per visit"], rows))
+    out.append(f'<div class="limit"><p>Spending per visit and nights per visit are averages over every holiday visit, short city breaks and long trips alike, so they do not describe a typical holiday. '
+               f'Spending is adjusted for inflation with UK consumer prices (CPIH); this does not allow for exchange rates or for prices in the countries visited. '
+               f'2020 has no full-year figures because the survey was suspended, and 2021 holidays were few and unusual because of travel restrictions. '
+               f'From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years, and 2024 mixes the old and new methods.</p></div>')
     return out
