@@ -11,6 +11,7 @@ import json
 from .readers import ROOT
 
 OGL = "Open Government Licence v3.0"
+GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
 
 
 def _fetched(source_id):
@@ -119,6 +120,12 @@ FETCHED = {
     "ott-2009to2019": ("Office for National Statistics", "Travel trends, Section 3: UK residents' visits abroad, 2009 to 2019", "United Kingdom residents", "Visits abroad by UK residents"),
     "ott-2024": ("Office for National Statistics", "Travel trends: UK residents' visits abroad, 2024 annual tables", "United Kingdom residents", "Visits abroad by UK residents"),
     "ott-2025": ("Office for National Statistics", "Travel trends: UK residents' visits abroad, 2025 annual tables", "United Kingdom residents", "Visits abroad by UK residents"),
+    "gbts-2019-gb-summary": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: GB all trips by purpose, summary tables 2019 (earlier survey method)", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
+    "gbts-2022to2023-tables": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: domestic overnight trips, 2022 to 2023, tables", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
+    "gbts-2024-q4-annual-tables": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: domestic overnight trips, Q4 and annual 2024, tables", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
+    "gbts-2025-toplines": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: domestic overnight and day trips in Q4 2025 and in 2025, toplines", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
+    "ons-ukpop": ("Office for National Statistics", "Population estimates: United Kingdom mid-year population (UKPOP)", "United Kingdom", "Usually resident population, all ages"),
+    "ons-gbpop": ("Office for National Statistics", "Population estimates: Great Britain mid-year population (GBPOP)", "Great Britain", "Usually resident population, all ages"),
     "dfe-spc-2015-tables": ("Department for Education", "Schools, pupils and their characteristics: January 2015, national tables (SFR16/2015)", "England", "State-funded schools; classes taught by one teacher"),
     "gov-income-tax-rates": ("HM Revenue and Customs (GOV.UK)", "Income Tax rates and Personal Allowances", "England, Wales and Northern Ireland", "Individuals"),
     "gov-ni-rates": ("HM Revenue and Customs (GOV.UK)", "National Insurance rates and categories", "United Kingdom", "Employees"),
@@ -137,7 +144,8 @@ def all_sources():
         out[key] = dict(id=key, publisher=publisher, title=title, url=r["url"], page=r["url"],
                         file="data/fetched/" + r["file"], sha256=r["sha256"],
                         published="see publisher page", retrieved=r["retrieved"][:10],
-                        geography=geography, population=population, licence=OGL)
+                        geography=geography, population=population,
+                        licence=GBTS_TERMS if key.startswith("gbts-") else OGL)
     return out
 
 

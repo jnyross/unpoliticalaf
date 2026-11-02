@@ -21,6 +21,10 @@ def hol_basis(y):
     return "UK" if y <= 2023 else "GB"
 
 
+def gb_survey(y):
+    return "earlier survey" if y <= 2019 else "current survey"
+
+
 # Each measure: key, topic, label, fact-id function, display kind, change style ('pp', 'pct' or None),
 # period function, comparability-group function (None = one consistent series)
 def measures(d):
@@ -50,6 +54,9 @@ def measures(d):
         ("house.private", "housing", "Households renting privately", lambda y: f"house.private.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.kids", "housing", "Families with dependent children renting privately", lambda y: f"house.kids.private.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("hol.visits", "holidays", "Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "millions", "pct", lambda y: f"Jan–Dec {y}", hol_basis),
+        ("hol.per100", "holidays", "Holiday visits abroad per 100 residents", lambda y: f"hol.abroad.per100.{y}", "int", "pct", lambda y: f"Jan–Dec {y}", hol_basis),
+        ("hol.gb", "holidays", "Holiday trips within Great Britain (overnight)", lambda y: f"hol.gb.holiday.{y}", "millions", "pct", lambda y: f"Jan–Dec {y}", gb_survey),
+        ("hol.gbper100", "holidays", "Holiday trips within Great Britain per 100 residents", lambda y: f"hol.gb.per100.{y}", "int", "pct", lambda y: f"Jan–Dec {y}", gb_survey),
         ("hol.share", "holidays", "Visits abroad that were holidays", lambda y: f"hol.holshare.{y}", "pct", "pp", lambda y: f"Jan–Dec {y}", hol_basis),
         ("hol.europe", "holidays", "Holiday visits that were to Europe", lambda y: f"hol.europeshare.{y}", "pct", "pp", lambda y: f"Jan–Dec {y}", hol_basis),
         ("school.primary", "schools", "Average class size, primary schools", lambda y: f"school.primary.{y}", "dp1", "abs", lambda y: f"January {y}", None),
@@ -62,7 +69,7 @@ TOPICS = [
     ("work", "Work", "United Kingdom. Employment rates and part-time share: Labour Force Survey, April to June. Job types: Annual Population Survey, January to December, people aged 16 and over in work."),
     ("earnings", "Earnings", "United Kingdom. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the CPIH inflation index."),
     ("housing", "Housing", "England only. English Housing Survey, all households. A survey year runs from April to March, so “2015” means the 2015-16 survey."),
-    ("holidays", "Holidays abroad", "Trips abroad, by year of travel. Up to 2023: UK residents (International Passenger Survey). From 2024: Great Britain residents, measured with a new method. Trips within the UK are not included."),
+    ("holidays", "Holidays", "Trips abroad, by year of travel: up to 2023 UK residents (International Passenger Survey); from 2024 Great Britain residents, measured with a new method. Holidays at home: overnight trips within Great Britain by Great Britain residents whose main purpose was a holiday (Great Britain Tourism Survey); Northern Ireland is not covered. Every traveller, adult or child, counts as one trip. “Per 100 residents” divides trips by the mid-year population."),
     ("schools", "Class sizes", "England only. State-funded schools, classes taught by one teacher, at the January school census. “2015” means January 2015, in the 2014/15 school year."),
 ]
 
@@ -70,7 +77,7 @@ TOPIC_SOURCES = {
     "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "aps2010", "aps2020"],
     "earnings": ["nomis-ashe-resident", "ons-l522"],
     "housing": ["ehs-ft1101", "ehs-ft1241"],
-    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025"],
+    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop"],
     "schools": ["dfe-spc-2015-tables", "dfe_api"],
 }
 
@@ -78,7 +85,7 @@ TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain.",
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional.",
     "housing": "The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents).",
-    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years.",
+    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
 
@@ -151,7 +158,7 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
     return table(f"{dict((t[0], t[1]) for t in TOPICS)[topic]}: {y}", ["Measure", "Value", "Period"], rows)
 
 
-def headline(facts, num, topic, y):
+def headline(facts, num, topic, y, gb=True):
     """One or two plain sentences answering 'what was it like in year y?'."""
     def has(fid):
         return fid in facts and facts[fid].value is not None
@@ -184,7 +191,13 @@ def headline(facts, num, topic, y):
         extra = ""
         if has(f"hol.europeshare.{y}"):
             extra = f" {num(f'hol.europeshare.{y}', 'pct0')} of these holidays were in Europe."
-        return f"In {y}, {who} made {num(f'hol.world.holiday.{y}', 'millions')} holiday visits abroad.{extra}"
+        s = f"In {y}, {who} made {num(f'hol.world.holiday.{y}', 'millions')} holiday visits abroad"
+        if has(f"hol.abroad.per100.{y}"):
+            s += f", about {num(f'hol.abroad.per100.{y}', 'int')} for every 100 residents"
+        s += f".{extra}"
+        if gb and has(f"hol.gb.holiday.{y}"):
+            s += f" Great Britain residents also took {num(f'hol.gb.holiday.{y}', 'millions')} overnight holiday trips within Great Britain."
+        return s
     if topic == "schools":
         if not has(f"school.primary.{y}"):
             return f"No class-size figure for January {y}."
@@ -209,6 +222,7 @@ def year_page(facts, d, num, sources, y):
             body.append(occupation_table(facts, num, d, y))
         if key == "holidays":
             body.append(holiday_regions(facts, num, y))
+            body.append(country_table(facts, num, d, y, 10))
         body.append(f'<p class="small">{esc(scope)}</p>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up=up))
     body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
@@ -244,6 +258,24 @@ def holiday_regions(facts, num, y):
                          ["Destination", "Holiday", "Visiting friends or family", "Business", "All visits"], rows)
 
 
+def top_countries(facts, d, y, n, kind="all"):
+    ids = d["countries"][kind].get(y, [])
+    return sorted(ids, key=lambda s: -facts[f"hol.cty.{s}.{kind}.{y}"].value)[:n]
+
+
+def country_table(facts, num, d, y, n):
+    names = d["countries"]["names"]
+    top = top_countries(facts, d, y, n)
+    if not top:
+        return f'<p class="small">No figures by country for {y}: the survey was paused for most of the year.</p>'
+    hol = y >= 2024
+    head = ["Country, most visited first", "All visits"] + (["Of which holidays"] if hol else [])
+    rows = [[esc(names[s]), num(f"hol.cty.{s}.all.{y}", "millions")] + ([num(f"hol.cty.{s}.holiday.{y}", "millions")] if hol else [])
+            for i, s in enumerate(top)]
+    cap = f"Most visited countries, {y}: visits abroad by main country visited (all purposes), millions"
+    return table(cap, head, rows) + ('<p class="small">All visits include holidays, visiting friends or family and business.</p>' if not hol else "")
+
+
 def compare_page(facts, d, num, sources, a, b):
     body = [f"<h1>{a} compared with {b}</h1>"]
     body.append(f'<p><a href="../{a}.html">Everyday life in {a}</a> · <a href="../{b}.html">Everyday life in {b}</a> · <a href="index.html">Choose two other years</a></p>')
@@ -265,6 +297,17 @@ def compare_page(facts, d, num, sources, a, b):
             rows.append([esc(label), va, vb, ch])
         body.append(f'<p class="small">{esc(scope)}</p>')
         body.append(table(f"{title}: {a} and {b}", ["Measure", str(a), str(b), "Change"], rows))
+        if key == "holidays":
+            names = d["countries"]["names"]
+            ta, tb = top_countries(facts, d, a, 5), top_countries(facts, d, b, 5)
+            if ta or tb:
+                crow = []
+                for i in range(5):
+                    cell = lambda t, y: (f"{esc(names[t[i]])} ({num(f'hol.cty.{t[i]}.all.{y}', 'millions')})" if i < len(t) else '<span class="missing">not available</span>')
+                    crow.append([str(i + 1), cell(ta, a), cell(tb, b)])
+                body.append(table(f"Five most visited countries, {a} and {b}: all visits abroad, millions", ["Rank", str(a), str(b)], crow))
+                if hol_basis(a) != hol_basis(b):
+                    body.append(f'<p class="small">{a} counts UK residents and {b} Great Britain residents measured with a new method, so the numbers are listed side by side but not compared.</p>')
         body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS[key])}</p></div>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
     body.append('<p class="small">Changes in percentages are shown in percentage points: a rise from 20% to 25% is +5 percentage points. Changes in money and counts are shown as a percentage of the earlier year.</p>')
@@ -341,14 +384,33 @@ def life_index(facts, d, num, sources):
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
     # Holidays
-    body.append("<h2 id='holidays'>Holidays abroad</h2>")
-    body.append(f'<div class="answer"><p>{headline(facts, num, "holidays", 2019)} The pandemic cut this to {num("hol.world.holiday.2020", "millions")} in 2020. {headline(facts, num, "holidays", LAST)}</p></div>')
+    body.append("<h2 id='holidays'>Holidays</h2>")
+    names = d["countries"]["names"]
+    tl = top_countries(facts, d, LAST, 3)
+    spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
+    body.append(f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} The pandemic cut holidays abroad to {num("hol.world.holiday.2020", "millions")} in 2020. {headline(facts, num, "holidays", LAST)}</p>
+<p>{"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, followed by {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
+<p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019; see the table below.</p>
+<p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience.</p></div>''')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method")], ymin=0, scale=1000, split_breaks=True))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
-                              ["Year", "Residents of", "Holiday visits", "Of which to Europe", "To North America", "Share of visits that were holidays"],
-                              [[str(y), hol_basis(y), num(f"hol.world.holiday.{y}", "millions"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
+                              ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
+                              [[str(y), hol_basis(y), num(f"hol.world.holiday.{y}", "millions"), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
                                 num(f"hol.holshare.{y}", "pct") if f"hol.holshare.{y}" in facts else "<span class='missing'>not available</span>"] for y in YEARS]))
+    gb_years = [y for y in YEARS if f"hol.gb.holiday.{y}" in facts]
+    body.append(details_table("Show holidays within Great Britain for every year", "Overnight holiday trips within Great Britain by Great Britain residents",
+                              ["Year", "Survey", "Holiday trips", "Per 100 residents"],
+                              [[str(y), gb_survey(y), num(f"hol.gb.holiday.{y}", "millions"), num(f"hol.gb.per100.{y}", "int")] if y in gb_years
+                               else [str(y), "", '<span class="missing">not available</span>', ""] for y in YEARS if y >= 2019]))
+    body.append('<p class="small">2020 and 2021 have no full-year figures because of the pandemic. The survey changed method after 2019, so 2019 is not compared with later years. Earlier years used yet other methods and are not shown.</p>')
+    body.append(country_table(facts, num, d, LAST, 10))
+    cyears = [2009, 2019, LAST]
+    top = top_countries(facts, d, LAST, 10)
+    body.append(details_table("Show the same countries in 2009 and 2019", "Visits abroad by main country visited (all purposes), millions",
+                              ["Country"] + [str(y) for y in cyears],
+                              [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
+    body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["holidays"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["holidays"] if s in sources], up="../"))
     # Schools
