@@ -70,6 +70,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Most visited countries</strong>: single countries ranked by visits in that year; groups such as “Rest of Europe” are left out.</li></ul>',
             '<h2 id="data">Every figure, machine-readable</h2>',
             f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Figures on each page are tagged with the same id.</p>',
+            '<h2 id="trace">Tracing a figure</h2><p>Tap or click any number on the site to see its source, period and the exact cell it was read from, or the calculation that produced it. The source line under each section leads to a record of every figure taken from that source. Without JavaScript, the source line still works. Mistakes we have fixed are listed on the <a href="corrections.html">corrections</a> page.</p>',
             '<h2 id="reproduce">How to reproduce the site</h2><p>With Python 3.10 or later: <code>make setup</code>, then <code>make build</code> and <code>make check</code>. The check re-opens every source file, re-reads each figure, and confirms that every number on every page matches its record.</p>',
             '<h2 id="sources">Sources</h2>']
     for sid, s in sorted(sources.items(), key=lambda kv: (kv[1]["publisher"], kv[1]["title"])):
@@ -84,7 +85,7 @@ def methods_page(facts, sources, used_counts):
 <dt>Link</dt><dd><a href="{esc(s["page"])}">{esc(s["page"])}</a></dd>
 <dt>File kept</dt><dd><code>{esc(s["file"])}</code></dd>
 <dt>SHA-256</dt><dd><code class="hash">{esc(s["sha256"])}</code></dd>
-<dt>Figures used</dt><dd>{n:,}</dd>
+<dt>Figures used</dt><dd>{n:,} (<a href="figures/{esc(sid)}.html">see each one</a>)</dd>
 <dt>Licence</dt><dd>{esc(s["licence"])}</dd>
 </dl></section>''')
     return page("methods.html", "Sources and methods", "\n".join(body), "Where every figure on Unpolitical comes from and how it is calculated.")

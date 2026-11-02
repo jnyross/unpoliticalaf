@@ -558,10 +558,12 @@ def compare_index(sources):
     return html.replace("<body>", "<body data-compare-index>", 1)
 
 
-def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split_breaks=False):
+def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split_breaks=False, kind=None, num=None, point_label=str):
     labels = [str(y) for y in YEARS]
     series = [(name, [_val(facts, fid(y)) for y in YEARS], style) for name, fid, style in items]
-    return line_chart(title, labels, series, unit, breaks=breaks, ymin=ymin, scale=scale, split_breaks=split_breaks)
+    ids = [[fid(y) if _val(facts, fid(y)) is not None else None for y in YEARS] for _, fid, _ in items]
+    return line_chart(title, labels, series, unit, breaks=breaks, ymin=ymin, scale=scale, split_breaks=split_breaks,
+                      kind=kind, ids=ids, num=num, point_labels=[point_label(y) for y in YEARS])
 
 
 def life_index(facts, d, num, sources):
@@ -576,7 +578,7 @@ def life_index(facts, d, num, sources):
     # Work
     body.append("<h2 id='work'>Work</h2>")
     body.append(f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
-    body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year"))
+    body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num))
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
     groups = d["work"]["occ_groups"]
@@ -600,7 +602,7 @@ def life_index(facts, d, num, sources):
     how = "about the same as" if abs(ch) < 2 else (f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than")
     body.append(f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
-                             "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")]))
+                             "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num))
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
@@ -614,7 +616,7 @@ def life_index(facts, d, num, sources):
     hy = max(yy for yy in YEARS if _val(facts, f"house.private.{yy}") is not None)
     body.append(f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
     body.append(series_chart(facts, "How households in England live", [("Rent privately", lambda y: f"house.private.{y}", "a"), ("Rent from council or housing association", lambda y: f"house.social.{y}", "b")],
-                             "Per cent of households in England, survey year starting in the year shown", ymin=0))
+                             "Per cent of households in England, survey year starting in the year shown", ymin=0, kind="pct", num=num, point_label=sy))
     body.append(details_table("Show housing for every year", "Housing tenure, England, % of households",
                               ["Survey year", "Own outright", "Mortgage", "Social rent", "Private rent", "Families with children renting privately"],
                               [[f"{y}-{str(y + 1)[2:]}", num(f"house.outright.{y}", "pct"), num(f"house.mortgage.{y}", "pct"), num(f"house.social.{y}", "pct"), num(f"house.private.{y}", "pct"),
@@ -636,7 +638,7 @@ def life_index(facts, d, num, sources):
 <p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019; see the table below.</p>
 <p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience.</p></div>''')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
-                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method")], ymin=0, scale=1000, split_breaks=True))
+                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), num(f"hol.world.holiday.{y}", "millions"), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
@@ -661,7 +663,7 @@ def life_index(facts, d, num, sources):
     body.append("<h2 id='schools'>Class sizes</h2>")
     body.append(f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
     body.append(series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
-                             "Pupils per class, January school census, state-funded schools in England", ymin=15))
+                             "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num))
     body.append(details_table("Show class sizes for every year", "Average class size, England, January census",
                               ["January census", "School year", "Primary", "Secondary"],
                               [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.primary.{y}", "dp1"), num(f"school.secondary.{y}", "dp1")] for y in YEARS]))
@@ -684,7 +686,7 @@ def work_ages_block(facts, num):
                f'{num(f"work.age.65.{LAST}", "pct")} of people aged 65 and over were in work, compared with {num(f"work.age.65.{FIRST}", "pct")} in {FIRST}.</p></div>')
     out.append(series_chart(facts, "Employment rate by age", [("50 to 64", lambda y: f"work.age.50_64.{y}", "a"), ("18 to 24", lambda y: f"work.age.18_24.{y}", "b"),
                                                             ("65 and over", lambda y: f"work.age.65.{y}", "c")],
-                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0))
+                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0, kind="pct", num=num))
     out.append(details_table("Show employment by age for every year", "Employment rate by age group, United Kingdom, April to June, %",
                              ["Year"] + [lab for _, lab, _ in AGE_SERIES],
                              [[str(y)] + [num(f"work.age.{k}.{y}", "pct") for k, _, _ in AGE_SERIES] for y in YEARS]))
@@ -763,7 +765,7 @@ def housing_costs_block(facts, num, d):
     out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
                             [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
-                            f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0))
+                            f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0, kind="pounds", num=num, point_label=sy))
     out.append(details_table("Show housing costs for every year", f"Average (mean) weekly rent before housing support and mortgage payment, England",
                              ["Survey year", "Private rent (cash)", f"Private rent ({b} prices)", "Social rent (cash)", f"Social rent ({b} prices)",
                               "Mortgage (cash)", f"Mortgage ({b} prices)"],
@@ -784,7 +786,7 @@ def housing_space_block(facts, num):
     out.append(series_chart(facts, "Overcrowded households in England, by tenure",
                             [("Social renters", lambda y: f"house.crowd.social.{y}", "a"), ("Private renters", lambda y: f"house.crowd.private.{y}", "b"),
                              ("Owner occupiers", lambda y: f"house.crowd.owners.{y}", "c")],
-                            "Per cent of households below the bedroom standard, three-year average ending in the survey year shown", ymin=0))
+                            "Per cent of households below the bedroom standard, three-year average ending in the survey year shown", ymin=0, kind="pct", num=num, point_label=sy))
     out.append(details_table("Show overcrowding for every year", "Overcrowded households, England, % (three-year averages, bedroom standard)",
                              ["Three survey years", "All households", "Owner occupiers", "Social renters", "Private renters"],
                              [[f"{sy(y - 2)} to {sy(y)}", num(f"house.crowd.all.{y}", "pct"), num(f"house.crowd.owners.{y}", "pct"), num(f"house.crowd.social.{y}", "pct"),

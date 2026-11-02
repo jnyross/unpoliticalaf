@@ -220,6 +220,7 @@ def check_pages(facts):
     from builder.html import fmt
     pages = sorted(SITE.rglob("*.html"))
     shown = 0
+    ids_cache = {}
     for p in pages:
         rel = p.relative_to(SITE).as_posix()
         pp = PageParser()
@@ -262,9 +263,11 @@ def check_pages(facts):
                 fail(f"{rel}: broken link {href}")
                 continue
             if frag and target.suffix == ".html":
-                tp = PageParser()
-                tp.feed(target.read_text(encoding="utf-8"))
-                if frag not in tp.ids:
+                if target not in ids_cache:
+                    tp = PageParser()
+                    tp.feed(target.read_text(encoding="utf-8"))
+                    ids_cache[target] = tp.ids
+                if frag not in ids_cache[target]:
                     fail(f"{rel}: missing anchor {href}")
         QUOTED_PAGES.append((rel, "".join(pp.quoted)))
         text = " ".join(pp.text).lower()
@@ -336,7 +339,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
+                 "glossary.html", "corrections.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
