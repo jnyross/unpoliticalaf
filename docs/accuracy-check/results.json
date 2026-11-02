@@ -1,10 +1,10 @@
 {
  "meta": {
-  "checked": "2026-11-02T19:44:23Z",
+  "checked": "2026-11-02T19:48:38Z",
   "seed": 20261102,
   "downloads": {
-   "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv": {
-    "sha256": "d0defe34f4abd90b6d162ed02b6f3a2cdef4d2126fe6c4d3bdd2731cc3b17575",
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count": {
+    "sha256": "a065b1a4657d35ee9ebfe28e066af52534142c6ff21ada9423cf1ee755e37970",
     "error": null
    },
    "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms": {
@@ -79,8 +79,8 @@
     "sha256": "28b4f42a60110953a6b4feed3198bbaf03e41a299498f91d8d9ca6742daf45a1",
     "error": null
    },
-   "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv": {
-    "sha256": "9832e63c55af7c0d8954946f02e00dfb684445f5bc0d6588cc1ccc095cc9c00e",
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count": {
+    "sha256": "aa027c9d02dceeebaa5132829d5d39dd75e2c43e414b12fd3faf649200819a9f",
     "error": null
    },
    "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms": {
@@ -108,30 +108,30 @@
    "page": "life/2021.html",
    "text": "9.5%",
    "value": 9.486995141657562,
-   "fresh_value": null,
+   "fresh_value": 9.486995141657562,
    "page_rounds_from_value": true,
-   "page_matches_fresh_source": null,
+   "page_matches_fresh_source": true,
    "note": "9.487 shown as '9.5%'",
    "cells": [
     {
      "id": "work.occ.SOC2010.9000000.2021",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps210-uk-calendar-annual.csv line 620",
      "recorded": 3048200.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2021-12', 'DATE_NAME': 'Jan 2021-Dec 2021', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 3048200.0,
+     "error": null,
+     "match": true
     },
     {
      "id": "work.occ.SOC2010.0.2021",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps210-uk-calendar-annual.csv line 602",
      "recorded": 32130300.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2021-12', 'DATE_NAME': 'Jan 2021-Dec 2021', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 32130300.0,
+     "error": null,
+     "match": true
     }
    ]
   },
@@ -553,30 +553,30 @@
    "page": "life/2019.html",
    "text": "7.3%",
    "value": 7.277833660941975,
-   "fresh_value": null,
+   "fresh_value": 7.277833660941975,
    "page_rounds_from_value": true,
-   "page_matches_fresh_source": null,
+   "page_matches_fresh_source": true,
    "note": "7.27783 shown as '7.3%'",
    "cells": [
     {
      "id": "work.occ.SOC2010.7000000.2019",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps210-uk-calendar-annual.csv line 496",
      "recorded": 2365900.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2019-12', 'DATE_NAME': 'Jan 2019-Dec 2019', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 2365900.0,
+     "error": null,
+     "match": true
     },
     {
      "id": "work.occ.SOC2010.0.2019",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps210-uk-calendar-annual.csv line 482",
      "recorded": 32508300.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2019-12', 'DATE_NAME': 'Jan 2019-Dec 2019', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 32508300.0,
+     "error": null,
+     "match": true
     }
    ]
   },
@@ -1194,30 +1194,30 @@
    "page": "life/2023.html",
    "text": "15.1%",
    "value": 15.061909911661422,
-   "fresh_value": null,
+   "fresh_value": 15.061909911661422,
    "page_rounds_from_value": true,
-   "page_matches_fresh_source": null,
+   "page_matches_fresh_source": true,
    "note": "15.0619 shown as '15.1%'",
    "cells": [
     {
      "id": "work.occ.SOC2020.3000000.2023",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps218-uk-calendar-annual.csv line 128",
      "recorded": 4958200.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2023-12', 'DATE_NAME': 'Jan 2023-Dec 2023', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 4958200.0,
+     "error": null,
+     "match": true
     },
     {
      "id": "work.occ.SOC2020.0.2023",
-     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
      "locator": "aps218-uk-calendar-annual.csv line 122",
      "recorded": 32918800.0,
      "same_file": false,
-     "fresh": null,
-     "error": "ValueError: 0 rows match {'DATE': '2023-12', 'DATE_NAME': 'Jan 2023-Dec 2023', 'GEOGRAPHY_CODE': 'K02000001', 'GEOGRAPHY_NAME': 'United Kingdom', 'JTYPE_NAME': 'Total', 'FTPT_NAME': 'Total', 'ETYPE_NA",
-     "match": null
+     "fresh": 32918800.0,
+     "error": null,
+     "match": true
     }
    ]
   },
