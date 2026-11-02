@@ -79,6 +79,22 @@
   "sha256": "9bbc9eb9b491e84a7dcaa6132ac271802298f6568f99882f83e63ee14c695b96",
   "retrieved": "2026-11-02T10:28:56Z"
  },
+ "discovery-scot-schools-2024-classes": {
+  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/pages/classes-and-pupils/",
+  "file": "discovery/scot-schools-2024-classes.html",
+  "bytes": 0,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "retrieved": "2026-11-02T10:31:23Z"
+ },
+ "discovery-scot-schools-2024-docs": {
+  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/documents/",
+  "file": "discovery/scot-schools-2024-docs.html",
+  "bytes": 0,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "retrieved": "2026-11-02T10:31:20Z"
+ },
  "discovery-wales-census-2025": {
   "url": "https://www.gov.wales/schools-census-results-january-2025",
   "file": "discovery/wales-census-2025.html",
@@ -414,6 +430,14 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "scot-pupil-census-2025": {
+  "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
+  "file": "scot/pupil-census-supplementary-2025.xlsx",
+  "bytes": 0,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "retrieved": "2026-11-02T10:31:16Z"
  },
  "wg-schools-census-2025": {
   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
