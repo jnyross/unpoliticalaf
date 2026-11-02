@@ -198,6 +198,9 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     gy = [g for g in rc["gdp_years"] if facts.get(f"gdp.receipts.{g}") and facts[f"gdp.receipts.{g}"].value is not None]
     fc = next((i for i, g in enumerate(gy) if g >= rc["forecast_from"]), None)
     body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>Shown as a share of GDP to start with, so that years with very different prices and economies can be compared. You can switch to amounts after inflation. Forecast years are shaded and dashed.</p>")
+    body.append(f"<p>Taxes alone, without other receipts, were {num(f'rec.gdp.taxes.{y}', 'pct')} of GDP in {y}. News reports often call this share the <a href='glossary.html#tax-burden'>“tax burden”</a>. "
+                "It compares all tax, paid by people and businesses, with the size of the economy. It is not anyone's tax bill: "
+                "<a href='household-tax.html'>tax and income</a> shows what households pay.</p>")
     rec_title = {"cash": "Receipts and spending in cash", "real": "Receipts and spending after inflation", "gdp": "Receipts and spending as a share of GDP"}
     rec_unit = {"cash": "£ billion, cash. Source: OBR public finances databank.", "real": "£ billion, 2025-26 prices (OBR GDP deflator). Source: OBR public finances databank.",
                 "gdp": "Per cent of GDP. Source: OBR public finances databank."}

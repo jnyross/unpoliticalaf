@@ -140,6 +140,13 @@ GROUPS = [
         ("gdp", "GDP",
          "Gross domestic product: the total value of everything produced in the UK economy in a year. Showing spending or tax as a share of GDP compares them with the size of the economy.",
          ["GDP"]),
+        ("tax-burden", "“Tax burden”",
+         "A name often used in news and politics for tax revenue as a share of GDP. It compares all taxes, paid by people and businesses, with the size of the whole economy. "
+         "This site does not use the name itself, but shows the same kind of figure on the <a href=\"taxes.html#history\">taxes page</a>. "
+         "It is not what any one person or household pays: when this share goes up, it does not mean everyone pays more, and when it goes down, it does not mean everyone pays less. "
+         "The Office for Budget Responsibility publishes its own version, which counts slightly different items from the tax totals on this site, so the two can differ by about one percentage point. "
+         "For what households pay, see <a href=\"household-tax.html\">tax and income</a>.",
+         ["tax burden"]),
         ("gdp-deflator", "GDP deflator",
          "A measure of price changes across the whole economy, used by HM Treasury to put public spending into today's prices.",
          ["GDP deflator"]),

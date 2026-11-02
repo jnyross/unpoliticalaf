@@ -238,6 +238,7 @@ def span_page(facts, d, num, sources, a, b):
         body.append(f'<h2 id="largest">Largest changes between {long(a)} and {long(b)}</h2>')
         body.append('<p class="small">Every average on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>')
         body.append(top)
+    body.append(L.timing_note(sources, up, (long(a), range(int(a[0]), int(a[1]) + 1)), (long(b), range(int(b[0]), int(b[1]) + 1))))
     body.append(L.CAUSE)
     for key, title, scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
