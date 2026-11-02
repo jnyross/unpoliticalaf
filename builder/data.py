@@ -1170,6 +1170,8 @@ def build_all():
         "housing_regions": housing_regions(facts),
         "schools_wales": schools_wales(facts),
     }
+    from . import data_nations
+    d["nations"] = data_nations.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     return facts, d
