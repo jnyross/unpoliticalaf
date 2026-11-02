@@ -507,6 +507,21 @@ class Folding(unittest.TestCase):
         self.assertIn("More on Bars", out)
         self.assertNotIn("<!--", out)
 
+    def test_contents_can_follow_the_first_chart(self):
+        from builder.html import fold, toc, before_toc, FOLD
+        body = (f'<h1>Q</h1><div class="answer"><p>a</p></div><h2 id="a">One</h2><ul class="bars"></ul>{before_toc("<p>Scale</p>")}{FOLD}<table></table>'
+                '<h2 id="b">Two</h2><p>x</p><h2 id="c">Three</h2><p>y</p>')
+        out = toc(fold(body), after_first=True)
+        # The chart comes before the contents list, and the note sits between them, outside the fold.
+        self.assertLess(out.index('class="bars"'), out.index('class="toc"'))
+        self.assertLess(out.index("</details>"), out.index("<p>Scale</p>"))
+        self.assertLess(out.index("<p>Scale</p>"), out.index('class="toc"'))
+        self.assertLess(out.index('class="toc"'), out.index('<h2 id="b">'))
+        self.assertIn('href="#a"', out)
+        # Without the option the contents list stays above the first section.
+        plain = toc(fold(body))
+        self.assertLess(plain.index('class="toc"'), plain.index('<h2 id="a">'))
+
 
 if __name__ == "__main__":
     unittest.main()

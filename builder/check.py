@@ -330,6 +330,18 @@ def check_structure():
     return len(pages), pairs
 
 
+# Pages whose first chart must start high enough on a 360 x 640 phone that at
+# least CHART_SHOWN pixels of it are visible within the first two screens.
+CHART_EARLY = ["spending.html", "taxes.html", "who-pays.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html",
+               "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html"]
+PHONE_SCREEN, CHART_SHOWN = 640, 200
+FIRST_CHART_JS = """() => {
+  const els = [...document.querySelectorAll('main figure, main ul.bars, main ul.cmp-list, main svg[role=img]')]
+    .filter(e => e.offsetParent !== null && e.getBoundingClientRect().height > 30);
+  return els.length ? Math.min(...els.map(e => e.getBoundingClientRect().top + window.scrollY)) : null;
+}"""
+
+
 def run_axe(paths):
     try:
         from playwright.sync_api import sync_playwright
@@ -345,6 +357,10 @@ def run_axe(paths):
             page = browser.new_page(viewport={"width": width, "height": 800})
             for path in paths:
                 page.goto((SITE / path).as_uri())
+                if width == 360 and path in CHART_EARLY:
+                    top = page.evaluate(FIRST_CHART_JS)
+                    if top is None or top > 2 * PHONE_SCREEN - CHART_SHOWN:
+                        fail(f"{path}: first chart starts at {top}px, not within the first two phone screens")
                 # Open every folded section, so tables and source lists are checked too
                 page.evaluate("document.querySelectorAll('details').forEach(d => d.open = true)")
                 if page.evaluate("document.documentElement.scrollWidth") > width + 1:
