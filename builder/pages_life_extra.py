@@ -4,6 +4,7 @@ industry (work). Each returns a list of parts starting with an <h3>, which
 topic_page() turns into its own section.
 """
 from .html import NOFOLD, details_table, esc, line_chart, table
+from . import findings as F
 
 
 def _v(facts, fid):
@@ -11,13 +12,13 @@ def _v(facts, fid):
     return None if f is None else f.value
 
 
-def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str):
+def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str, finding=None):
     """A line chart over a measure's own years. items: (name, fid(year), style)."""
     series = [(name, [_v(facts, fid(y)) for y in years], style) for name, fid, style in items]
     ids = [[fid(y) if _v(facts, fid(y)) is not None else None for y in years] for _, fid, _ in items]
     br = [(years.index(y), text) for y, text in breaks if y in years and y != years[0]]
     return line_chart(title, [str(y) for y in years], series, unit, breaks=br, ymin=ymin, kind=kind, ids=ids, num=num,
-                      point_labels=[point_label(y) for y in years])
+                      point_labels=[point_label(y) for y in years], finding=finding)
 
 
 # ---------------------------------------------------------------- earnings: how far apart is pay?
@@ -49,7 +50,8 @@ def spread_block(facts, num, d, first):
                       [("Top-tenth line", lambda y: f"spread.real.p90.{y}", "a"), ("Median", lambda y: f"spread.real.p50.{y}", "b"),
                        ("Bottom-tenth line", lambda y: f"spread.real.p10.{y}", "c")],
                       f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005", "pounds",
-                      breaks=sorted(sp["breaks"].items()), ymin=0))
+                      breaks=sorted(sp["breaks"].items()), ymin=0,
+                      finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2)))
     out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
                              ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line (times)",
                               f"Bottom line ({base} prices)", f"Top line ({base} prices)"],
@@ -106,7 +108,9 @@ def afford_page(facts, d, num, sources):
     body.append("<h2 id='trend'>The ratio over time</h2>")
     body.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
                        [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
-                       "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0))
+                       "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0,
+                       finding=F.pair("In England, house prices as a multiple of earnings", "in Wales they",
+                                      together="House prices as a multiple of earnings {phrase} in both England and Wales")))
     body.append(FOLD)
     body.append(details_table("Show house prices and earnings for every year", "England and Wales: median house price, median full-time annual earnings and the ratio",
                               ["Year", "Median house price", "Median full-time earnings (a year)", "Ratio (times a year’s earnings)"],
@@ -169,6 +173,7 @@ def industry_page(facts, d, num, sources):
     body.append(groups_chart(facts, "Share of all jobs in six large industries",
                              [(names[s], (lambda s: lambda y: f"jobs.share.{s}.{y}")(s)) for s in SHOWN_INDUSTRIES],
                              "Per cent of all workforce jobs, United Kingdom, June each year, seasonally adjusted", years=years, ymin=0, kind="pct", num=num,
+                             finding=F.moves({n: f"the share of jobs in {n[:1].lower() + n[1:]}" for n in names.values()}, which="all"),
                              point_label=lab))
     body.append(FOLD)
     body.append(details_table("Show jobs in the six large industries for every year", "Share of all workforce jobs, United Kingdom, June each year, %",
@@ -227,7 +232,8 @@ def holiday_afford_block(facts, num, d):
     out.append(_chart(facts, num, "People whose household could not afford a week’s holiday away from home", years,
                       [("Low-income households", lambda y: f"holafford.low.{y}", "b"), ("Everyone", lambda y: f"holafford.all.{y}", "a"),
                        ("Other households", lambda y: f"holafford.notlow.{y}", "c")],
-                      "% of people, United Kingdom, EU-SILC survey year", "pct", breaks=[(y, "Series break") for y in ha["breaks"]], ymin=0))
+                      "% of people, United Kingdom, EU-SILC survey year", "pct", breaks=[(y, "Series break") for y in ha["breaks"]], ymin=0,
+                      finding=F.gap("The share for people in low-income households", "for people in other households", si=0, sj=2)))
     out.append(details_table("Show who could not afford a week’s holiday, every year",
                              "People whose household could not afford a week’s holiday away from home, % of people, United Kingdom",
                              ["Survey year"] + [esc(label) for _, _, _, label in ha["groups"]],

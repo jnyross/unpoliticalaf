@@ -1,6 +1,7 @@
 """Spending by purpose over 100 years, from the OBR's historical public finances database."""
 from .html import FOLD, page, details_table, small_multiples, source_line, esc
 from .pages_money import views, VIEW_NOTES
+from . import findings as F
 from . import data_spendhist as H
 
 
@@ -33,7 +34,8 @@ By {last}, social security was {g("social", last)} of GDP, health {g("health", l
         return small_multiples(f"Public spending on five purposes, {ys[0]} to {last}", [y[:4] for y in ys],
                                [(n, [facts[i].value if i else None for i in row]) for (k, n), row in zip(purposes, ids)],
                                unit[v] + ". Axis years are financial years starting in April of the year shown.", kind[v],
-                               ids=ids, num=num, breaks=breaks, ymin=0, point_labels=ys)
+                               ids=ids, num=num, breaks=breaks, ymin=0, point_labels=ys,
+                               finding=F.leader("{name} was the largest of the five {span}", which="last"))
 
     body.append(f"<h2 id='purposes'>Five purposes since the Second World War</h2>")
     body.append(f"<p>Health, education, defence, social security and interest on government debt, from {full_from}, the OBR's first year with figures for every purpose except social security, which starts in {h['first']['social']}. "

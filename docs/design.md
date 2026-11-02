@@ -55,6 +55,15 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   lines are named at their ends instead of in a key. Gaps and definition
   breaks are drawn as gaps and dashed lines, never joined. The visible title
   sits above the chart; the SVG's `aria-label` repeats it for screen readers.
+- **Finding titles** (`finding=`, rules in `builder/findings.py`): every chart's
+  heading states what it shows ("Spending was higher than receipts in 68 of
+  the 78 years from 1948-49 to 2025-26"), with what it measures as a grey
+  subtitle beneath. Titles are worked out from the chart's own values, so they
+  stay true when figures are refreshed; they never reach across a break the
+  chart splits at or into forecasts. Use only neutral verbs (rose, fell,
+  higher, lower, changed little); `make check` fails on a chart without a
+  finding or with loaded or causal words. CSV downloads are named after the
+  subtitle, so their names do not change with the figures.
 - **Small multiples** (`small_multiples()`, or `groups_chart()` in
   `pages_life.py`): when more than three groups matter (age groups, job types,
   tenures, nations, regions), draw one small panel per group instead of a
@@ -66,8 +75,12 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   on wider screens. Keep groups in their official order, not ranked.
 - **Chart summaries** (`chart_summary()`): pass `kind` (and `ids` with `num`, so
   the numbers are traceable figures) to `line_chart()` and it writes "What the
-  chart shows" under the chart: each line's first and latest values, the highest
-  and lowest in between, and missing years. Each side of a definition break is
+  chart shows" under the chart: for each line, its trend (rose, fell, rose to a
+  high then fell, or changed little, with "in most years" when the moves were
+  steady), its first, latest and turning-point values, the highest and lowest
+  in between, and missing years. Small multiples with a `summary_note` add one
+  sentence counting how many groups were higher or lower and which moved most.
+  Each side of a definition break is
   read separately, even where the line is joined, and forecasts are given on
   their own. Write the facts only; never add a reason for a change.
 - **Events vs breaks**: `breaks` are definition changes (amber dashed line).
