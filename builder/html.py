@@ -36,6 +36,7 @@ nav.main a{display:flex;align-items:center;min-height:44px;padding:0 10px;color:
 nav.main a:hover{color:var(--ink);border-bottom-color:var(--line)}
 nav.main a[aria-current=page]{color:var(--ink);font-weight:650;border-bottom-color:var(--ink)}
 nav.main li:first-child a{padding-left:0}
+@media (max-width:47.99rem){nav.main{margin:0}nav.main::after{display:none}nav.main ul{display:grid;grid-template-columns:repeat(4,1fr);gap:0 4px;padding:0 0 4px;overflow:visible}nav.main li{margin:0;min-width:0}nav.main a,nav.main li:first-child a{justify-content:center;text-align:center;white-space:normal;line-height:1.15;font-size:.86rem;padding:4px 2px;min-height:44px}}
 .wrap{max-width:44rem;margin:0 auto;padding-left:16px;padding-right:16px}
 main{padding-bottom:56px}
 h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px}
@@ -94,6 +95,10 @@ summary::-webkit-details-marker{display:none}
 summary::before{content:"";flex:none;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin:0 2px;transition:transform .15s}
 details[open]>summary::before{transform:rotate(45deg)}
 figure{margin:16px 0 8px}
+.spark{display:block;width:100%;height:auto;max-width:30rem}.spark .ln{fill:none;stroke:var(--bar2);stroke-width:1.5}.spark .pt{fill:var(--bar2)}.spark .hi{fill:var(--ink);stroke:#fff;stroke-width:1.5}.spark .brk{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3}.spark .gap{stroke:var(--line);stroke-width:2}
+.spark-ax{display:flex;justify-content:space-between;max-width:30rem;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:2px}
+figure.yearspark{margin:4px 0 14px}figure.yearspark figcaption{font-size:.87rem;color:var(--muted);line-height:1.5;margin-top:4px}
+a.card .mini{margin:6px 0 4px}.cards .mini li{border:0;border-radius:0;padding:0}a.card .mini .bars{margin:8px 0 2px}a.card .mini .bars li{margin:0 0 6px}a.card .mini .bars .lab{font-size:.84rem;color:var(--ink2)}a.card .mini .bars .track,a.card .mini .bars .fill{height:8px}
 figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 4px}
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
 .csum{margin:8px 0 0;padding:8px 12px;background:var(--soft2);border-left:3px solid var(--line);font-size:.92rem}
@@ -268,6 +273,68 @@ def _contents_hint(html):
     return ", ".join(kinds[:-1]) + " and " + kinds[-1]
 
 
+_CHART_OPEN = re.compile(r'<(figure)\b[^>]*>|<(ul) class="(?:bars|cmp-list)[^"]*">')
+_CAPTION = re.compile(r'<p class="small">(?:(?!</p>).)*</p>\s*$', re.S)
+_NEST = re.compile(r'<(/?)(details|aside|div|figure|ul|blockquote|table)\b[^>]*>')
+KEEP_ROWS = 4  # rows of a long comparison list kept in view; the rest fold away
+
+
+def _first_chart(rest):
+    """(start, end) of the first chart that sits at the top level of a folded part, or None.
+
+    Charts inside a disclosure, aside or table are left alone. A short caption
+    paragraph straight before the chart travels with it.
+    """
+    for m in _CHART_OPEN.finditer(rest):
+        depth = 0
+        for t in _NEST.finditer(rest, 0, m.start()):
+            depth += -1 if t.group(1) else 1
+        if depth:
+            continue
+        tag = m.group(1) or m.group(2)
+        level = 0
+        for t in re.finditer(rf'<(/?){tag}\b[^>]*>', rest[m.start():]):
+            level += -1 if t.group(1) else 1
+            if level == 0:
+                start, end = m.start(), m.start() + t.end()
+                cap = _CAPTION.search(rest[:start])
+                if cap and not re.search(r"<(?:div|ul|details|table|figure|aside)\b", rest[cap.start():start]):
+                    start = cap.start()
+                return start, end
+        return None
+    return None
+
+
+def _split_long_list(chart):
+    """Keep the first few rows of a long comparison list in view; return (shown, folded)."""
+    m = re.match(r'(.*?<ul class="cmp-list">)(.*)(</ul>)$', chart, re.S)
+    if not m:
+        return chart, ""
+    rows = re.findall(r'<li>.*?</li>(?=<li>|$)', m.group(2), re.S)
+    if len(rows) <= KEEP_ROWS + 1:
+        return chart, ""
+    return (m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3),
+            '<ul class="cmp-list">' + "".join(rows[KEEP_ROWS:]) + "</ul>")
+
+
+def keep_chart(lead, rest):
+    """Move a section's main chart out of its fold so it shows under the answer.
+
+    On a phone a folded section otherwise shows only words. The chart keeps its
+    caption, summary and labels; tables, limits and sources stay folded.
+    """
+    if "<!--keepfold-->" in rest:
+        return lead, rest.replace("<!--keepfold-->", "")
+    if re.search(r'<figure\b|<ul class="(?:bars|cmp-list)', lead):
+        return lead, rest
+    c = _first_chart(rest)
+    if not c:
+        return lead, rest
+    chart = rest[c[0]:c[1]]
+    shown, more = _split_long_list(chart)
+    return lead + "\n" + shown, rest[:c[0]] + more + rest[c[1]:]
+
+
 def fold(body):
     """Fold the detail of each section so a phone reader sees the answers first.
 
@@ -275,8 +342,9 @@ def fold(body):
     section's answer stay in view; the rest (charts, tables, limits, sources)
     goes into one "More on ..." disclosure, which works without JavaScript.
     What stays in view is everything up to the end of the section's first
-    top-level .answer box, or everything before a FOLD marker. Sections with
-    neither, or with NOFOLD, are left as they are. Nothing is reordered.
+    top-level .answer box, or everything before a FOLD marker, followed by the
+    section's main chart (see keep_chart). Sections with neither, or with
+    NOFOLD, are left as they are.
     """
     heads = list(_H2.finditer(body))
     if not heads:
@@ -296,6 +364,7 @@ def fold(body):
                 out.append(head + sec)
                 continue
             lead, rest = sec[:a[1]], sec[a[1]:]
+        lead, rest = keep_chart(lead, rest)
         if not rest.strip():
             out.append(head + lead)
             continue
@@ -651,6 +720,52 @@ def _chart_attr(read):
 
 
 _SM_COUNT = [0]
+
+
+def spark(points, label, highlight=None, group=None, axis=None):
+    """A small dot chart of one measure, year by year, for a quick sense of where a year sits.
+
+    points: (year, value or None). Missing years get no dot and a short grey mark
+    on the baseline. Dots are joined only between neighbouring years in the same
+    comparability group (group(year)); a dashed line marks each change of definition.
+    The scale fits the values and is stated in the caption by whoever uses it.
+    """
+    W, H, P = 320, 56, 6
+    vals = [v for _, v in points if v is not None]
+    lo, hi = min(vals), max(vals)
+    pad = (hi - lo) * 0.12 or abs(hi) * 0.05 or 1
+    lo, hi = lo - pad, hi + pad
+    n = len(points)
+    x = lambda i: P + (W - 2 * P) * (i / (n - 1) if n > 1 else 0.5)
+    y = lambda v: H - P - (H - 2 * P) * (v - lo) / (hi - lo)
+    g = group or (lambda _y: None)
+    parts, seg = [], []
+    for i, (yr, v) in enumerate(points):
+        if i and g(points[i - 1][0]) != g(yr):
+            if len(seg) > 1:
+                parts.append(f'<polyline class="ln" points="{" ".join(seg)}"/>')
+            seg = []
+            bx = (x(i - 1) + x(i)) / 2
+            parts.append(f'<line class="brk" x1="{bx:.1f}" y1="2" x2="{bx:.1f}" y2="{H - 2}"/>')
+        if v is None:
+            if len(seg) > 1:
+                parts.append(f'<polyline class="ln" points="{" ".join(seg)}"/>')
+            seg = []
+            parts.append(f'<line class="gap" x1="{x(i) - 3:.1f}" y1="{H - 2}" x2="{x(i) + 3:.1f}" y2="{H - 2}"/>')
+            continue
+        seg.append(f"{x(i):.1f},{y(v):.1f}")
+    if len(seg) > 1:
+        parts.append(f'<polyline class="ln" points="{" ".join(seg)}"/>')
+    dots = []
+    for i, (yr, v) in enumerate(points):
+        if v is not None:
+            on = yr == highlight
+            dots.append((on, f'<circle class="{"hi" if on else "pt"}" cx="{x(i):.1f}" cy="{y(v):.1f}" r="{5 if on else 2.5}"/>'))
+    parts += [d for on, d in dots if not on] + [d for on, d in dots if on]
+    svg = (f'<svg class="spark" viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label)}" focusable="false">'
+           f'{"".join(parts)}</svg>')
+    a, b = axis or (points[0][0], points[-1][0])
+    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>'
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
