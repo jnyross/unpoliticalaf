@@ -149,6 +149,17 @@ GROUPS = [
         ("survey-estimate", "Survey estimate",
          "A figure worked out from a sample of people rather than everyone. It has a margin of error, so small differences between years or groups may not be real.",
          ["survey estimates", "survey estimate", "estimated from a survey"]),
+        ("margin-of-error", "Margin of error",
+         "How far a survey estimate could be from the true figure just because of who happened to be in the sample. This site shows 95% margins, written as ±: "
+         "about 19 times in 20, the range from the estimate minus the margin to the estimate plus the margin contains the true value. "
+         "It does not cover other problems, such as people declining to take part. See <a href=\"uncertainty.html\">how sure the figures are</a>.",
+         ["margin of error", "margins of error", "confidence interval", "confidence intervals"]),
+        ("coefficient-of-variation", "Coefficient of variation",
+         "A survey estimate's standard error as a percentage of the estimate. The smaller it is, the more precise the estimate. The margin of error is about 1.96 times the standard error.",
+         ["coefficient of variation", "coefficients of variation"]),
+        ("sampling-noise", "Sampling noise",
+         "Differences between survey figures that come only from asking different samples of people, not from a real change.",
+         ["sampling noise", "sampling error"]),
         ("definition-break", "Definition change (break in the series)",
          "When a source changes how it measures or groups something, figures before and after the change are not directly comparable. "
          "This site shows these breaks and does not calculate changes across them.",

@@ -9,6 +9,7 @@ definition are not calculated.
 """
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from .html import page, table, details_table, line_chart, source_line, fmt, esc
+from . import uncertainty as U
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 
@@ -195,7 +196,7 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
             value = '<span class="missing">not available</span>'
             per = esc(period(y))
         else:
-            value = num(fact_id, kind)
+            value = num(fact_id, kind) + U.pm(num, fact_id)
             per = esc(period(y)) + (f" ({group(y)})" if group else "")
         rows.append(f'<div><dt>{esc(label)}</dt><dd>{value}</dd><dd class="per">{per}</dd></div>')
     if all(fid(y) not in facts or facts[fid(y)].value is None for _, _, _, fid, *_ in ms):
@@ -273,6 +274,8 @@ def year_page(facts, d, num, sources, y):
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
         body.append(topic_block_for_year(facts, num, sources, key, y, up))
+        if any(U.has(m[3](y)) for m in MEAS if m[1] == key):
+            body.append(f'<p class="small">± is the 95% margin of error, shown where the publisher gives one. {U.how_sure_link("../")}</p>')
         if key == "work" and 2011 <= y:
             body.append(occupation_table(facts, num, d, y))
         if key == "holidays":
@@ -325,10 +328,12 @@ def country_table(facts, num, d, y, n):
         return f'<p class="small">No figures by country for {y}: the survey was paused for most of the year.</p>'
     hol = y >= 2024
     head = ["Country, most visited first", "All visits"] + (["Of which holidays"] if hol else [])
-    rows = [[esc(names[s]), num(f"hol.cty.{s}.all.{y}", "millions")] + ([num(f"hol.cty.{s}.holiday.{y}", "millions")] if hol else [])
+    rows = [[esc(names[s]), num(f"hol.cty.{s}.all.{y}", "millions") + U.pm(num, f"hol.cty.{s}.all.{y}")] + ([num(f"hol.cty.{s}.holiday.{y}", "millions")] if hol else [])
             for i, s in enumerate(top)]
     cap = f"Most visited countries, {y}: visits abroad by main country visited (all purposes), millions"
-    return table(cap, head, rows) + ('<p class="small">All visits include holidays, visiting friends or family and business.</p>' if not hol else "")
+    note = "All visits include holidays, visiting friends or family and business. " if not hol else ""
+    note += "± is the 95% margin of error published by ONS; where two countries’ ranges overlap, their order could be sampling noise."
+    return table(cap, head, rows) + f'<p class="small">{note}</p>'
 
 
 # One fixed measure per topic leads each comparison page. They are the same for
@@ -404,7 +409,8 @@ def _row_card(facts, num, m, a, b):
     mkey, topic, label, fid, kind, style, period, group = m
     v, ch = _change(facts, num, m, a, b)
     return (f'<li><p class="cmp-label">{esc(label)}</p>{_pair_bars(facts, num, m, a, b)}'
-            f'<p class="cmp-change">Change: {ch} <span class="small">({esc(period(a))} to {esc(period(b))})</span></p></li>')
+            f'<p class="cmp-change">Change: {ch} <span class="small">({esc(period(a))} to {esc(period(b))})</span></p>'
+            f'{U.check_sentence(facts, num, fid(a), fid(b), style, (str(a), str(b)))}</li>')
 
 
 def _nearest_pair(facts, m, a, b):
@@ -440,7 +446,7 @@ def key_sentence(facts, num, topic, a, b):
         v, ch = _change(facts, num, m, a, b)
         verb = "went up from" if v > 0.049 else ("went down from" if v < -0.049 else "was about the same:")
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if abs(v) < 0.05 else 'to'} {num(fb, m[4])} ({esc(m[6](b))}).{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>"
-                + _pair_bars(facts, num, m, a, b))
+                + _pair_bars(facts, num, m, a, b) + U.check_sentence(facts, num, fa, fb, m[5], (str(a), str(b))))
     near = _nearest_pair(facts, m, a, b)
     link = f' The nearest pair of years with comparable figures is <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
     if st == "break":
@@ -576,6 +582,7 @@ def life_index(facts, d, num, sources):
     # Work
     body.append("<h2 id='work'>Work</h2>")
     body.append(f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
+    body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num))
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
@@ -598,6 +605,7 @@ def life_index(facts, d, num, sources):
     ch = 100 * (_val(facts, f"earn.real.ft.{LAST}") / _val(facts, f"earn.real.ft.{FIRST}") - 1)
     how = "about the same as" if abs(ch) < 2 else (f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than")
     body.append(f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
+    body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
                              "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num))
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
@@ -611,6 +619,7 @@ def life_index(facts, d, num, sources):
     body.append("<h2 id='housing'>Housing</h2>")
     hy = max(yy for yy in YEARS if _val(facts, f"house.private.{yy}") is not None)
     body.append(f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
+    body.append(U.topic_line(num, "housing", LAST))
     body.append(series_chart(facts, "How households in England live", [("Rent privately", lambda y: f"house.private.{y}", "a"), ("Rent from council or housing association", lambda y: f"house.social.{y}", "b")],
                              "Per cent of households in England, survey year starting in the year shown", ymin=0, kind="pct", num=num, point_label=sy))
     body.append(details_table("Show housing for every year", "Housing tenure, England, % of households",
@@ -632,6 +641,7 @@ def life_index(facts, d, num, sources):
 <p>{"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, followed by {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
 <p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019; see the table below.</p>
 <p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience.</p></div>''')
+    body.append(U.topic_line(num, "holidays", LAST))
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
@@ -656,6 +666,7 @@ def life_index(facts, d, num, sources):
     # Schools
     body.append("<h2 id='schools'>Class sizes</h2>")
     body.append(f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
+    body.append(U.topic_line(num, "schools", LAST))
     body.append(series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
                              "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num))
     body.append(details_table("Show class sizes for every year", "Average class size, England, January census",
@@ -715,8 +726,11 @@ def places_block(facts, num, topic):
                    f'Pay does not show what money buys: prices, especially housing costs, differ between places.</p></div>')
     rows = []
     for k, n in places:
-        rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
-    out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), "Change"], rows))
+        mk = "pm_pp" if kind == "pct" else "pm_pounds"
+        moe = num(U.MARGINS[fid(k, b)][0], mk) if U.has(fid(k, b)) else '<span class="missing">not published</span>'
+        rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
+    out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), f"Margin of error, {b}", "Change"], rows))
+    out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
                              [[str(y)] + [num(fid(k, y), kind) for k, _ in places] for y in ys]))
     out.append('<p class="small">The nine English regions together make up England.</p>')

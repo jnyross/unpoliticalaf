@@ -175,6 +175,14 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "nomis-aps-def": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.def.sdmx.json",
+  "file": "nomis/aps-dataset-def.json",
+  "bytes": 3112,
+  "content_type": "application/json",
+  "sha256": "8ca41a0329c3fbd9449a649147b7682e2c8b623d07ed164e0474a4d50bce228b",
+  "retrieved": "2026-11-02T11:14:09Z"
+ },
  "nomis-aps-emp-places": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
   "file": "nomis/aps-employment-rate-nations-regions.csv",
@@ -182,6 +190,46 @@
   "content_type": "text/csv",
   "sha256": "39efbc62386147ae214072d5496344b8cb8003ee1208aa96b46928cbca2e3998",
   "retrieved": "2026-11-02T10:26:23Z"
+ },
+ "nomis-aps-emp-places-ci": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21003&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+  "file": "nomis/aps-employment-rate-nations-regions-ci.csv",
+  "bytes": 378126,
+  "content_type": "text/csv",
+  "sha256": "404c14134add25fbee3ee4804034f7351b7dfcc36cff21066d39b0e964225093",
+  "retrieved": "2026-11-02T11:12:14Z"
+ },
+ "nomis-aps-measure-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/measures.def.sdmx.json",
+  "file": "nomis/aps-measure-codes.json",
+  "bytes": 2051,
+  "content_type": "application/json",
+  "sha256": "a7bae03d8e5ffb708ae7b2c5bc9d15da0f3d66b41849313403e349373407fac9",
+  "retrieved": "2026-11-02T11:12:18Z"
+ },
+ "nomis-ashe-article": {
+  "url": "https://www.nomisweb.co.uk/articles/1320.aspx",
+  "file": "nomis/ashe-article-1320.html",
+  "bytes": 32704,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "7f4915963921fc97cc81857ccd3b27e539ab8fe3190ed2483c3e58d60a8d1ef9",
+  "retrieved": "2026-11-02T11:14:02Z"
+ },
+ "nomis-ashe-def": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.def.sdmx.json",
+  "file": "nomis/ashe-dataset-def.json",
+  "bytes": 2798,
+  "content_type": "application/json",
+  "sha256": "d306477a7ccbef51316cff40a1d94cfa12732b6619c065584afd00784919f8f9",
+  "retrieved": "2026-11-02T11:14:06Z"
+ },
+ "nomis-ashe-measure-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/measures.def.sdmx.json",
+  "file": "nomis/ashe-measure-codes.json",
+  "bytes": 1653,
+  "content_type": "application/json",
+  "sha256": "2bc9bf9167737673c410ee4438b15ac9dda9594ffa8616408e537bf1ad0f978d",
+  "retrieved": "2026-11-02T11:12:25Z"
  },
  "nomis-ashe-places": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
@@ -199,6 +247,14 @@
   "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
   "retrieved": "2026-11-02T08:58:36Z"
  },
+ "nomis-ashe-resident-cv": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-uk-median-weekly-cv.csv",
+  "bytes": 48152,
+  "content_type": "text/csv",
+  "sha256": "28b4f42a60110953a6b4feed3198bbaf03e41a299498f91d8d9ca6742daf45a1",
+  "retrieved": "2026-11-02T11:12:21Z"
+ },
  "nomis-ashe-sex-codes": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/sex.def.sdmx.json",
   "file": "nomis/ashe-sex-codes.json",
@@ -214,6 +270,14 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "de61ee291cca0c336ba3ae5b3dcee36da8c38ed165d2d9d8672809f84a34aeb7",
   "retrieved": "2026-11-02T08:58:34Z"
+ },
+ "ons-ashe-qmi": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
+  "file": "ons/ashe-qmi.pdf",
+  "bytes": 48315,
+  "content_type": "application/pdf;charset=utf-8",
+  "sha256": "9fe44451456cfcd6d6a2af06cb09a3400c6f34cf92eaef6a13ece9d84f264bff",
+  "retrieved": "2026-11-02T11:14:12Z"
  },
  "ons-gbpop": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
@@ -263,6 +327,22 @@
   "sha256": "6a4c1fe23a5f81d5a746120aabf6cbba95777a467812b1c31f1ba5947b6ab781",
   "retrieved": "2026-11-02T10:28:42Z"
  },
+ "ons-lfs-a11": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11/current/a11oct2026.xlsx",
+  "file": "ons/lfs-sampling-variability-a11.xlsx",
+  "bytes": 32573,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "64eba09d43c2f55fcee4efc2c8e27ce442f4f45af46b26e9012b875aa3641443",
+  "retrieved": "2026-11-02T11:12:29Z"
+ },
+ "ons-lfs-a11-page": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
+  "file": "ons/lfs-sampling-variability-a11-page.html",
+  "bytes": 42479,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "498868a2a2209acbc64c4f8cf59f72af6364f65f69f724be01a5e969978bb2fb",
+  "retrieved": "2026-11-02T11:12:32Z"
+ },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
   "file": "ons/mgrz.csv",
@@ -286,6 +366,14 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "88f8285509f69313fb14f9f3e77d0e04b272dcbfe5a9c109bedf392da5abd90f",
   "retrieved": "2026-11-02T09:55:36Z"
+ },
+ "ons-uncertainty-guide": {
+  "url": "https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit",
+  "file": "ons/uncertainty-guide.html",
+  "bytes": 54776,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "44cd9af9f1ed7e4a11d43fedd0b3e51d20fb5332ef30d26dba81f1365dbc1e85",
+  "retrieved": "2026-11-02T11:14:16Z"
  },
  "ons-ybud": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",

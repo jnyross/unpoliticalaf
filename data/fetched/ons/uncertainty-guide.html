@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Uncertainty and how we measure it for our surveys - Office for National Statistics</title>
+        <meta charset="utf-8" />
+        <meta content="width=device-width,initial-scale=1.0,user-scalable=1" name="viewport">
+        <meta name="theme-color" content="#58595B">
+        <meta name="apple-mobile-web-app-status-bar-style" content="#58595B">
+
+        <meta name="description" content="Explaining measures of uncertainty such as standard error, confidence interval, coefficient of variation and statistical significance and how they affect estimates from our surveys.">
+
+        
+        <link rel="stylesheet" type="text/css" href="//cdn.ons.gov.uk/sixteens/ef5a1ca/css/main.css">
+		
+
+        <script>
+    // extractValue extracts the value from an undecodeable json cookie string
+    function extractValue(key, extractionString) {
+        const extractionRegex = new RegExp(`'${key}':(.*?)[,}]`)
+        const match = extractionString.match(extractionRegex)
+        if (match) {
+            return match[1]
+        }
+        
+        return null
+    }
+
+    // isUsageCookieAllowed reads the ons_cookie_policy to determine the user's usage preference. 
+    function isUsageCookieAllowed() {
+        // ons_cookie_policy handler
+        var policyCookie = document.cookie.match('(?:^|; )ons_cookie_policy=({.*?})');
+        if (policyCookie) {
+            console.debug('ons_cookie_policy found');
+
+            var usageValue = extractValue("usage", policyCookie[1]);
+            console.debug('usage is', usageValue);
+
+            return (usageValue == "true") ? true : false
+        }
+        console.debug('no cookie found - opting out');
+        return false
+    }
+
+    // unescape html entities
+    function htmlUnescape(str){
+        return str
+                .replace(/&#x3D;/g, "=");
+    }
+
+    
+    var dataLayer = [{
+        contentTitle: htmlUnescape("Uncertainty and how we measure it for our surveys"),
+        "gtm.whitelist": ["google","hjtc","lcl"],
+        "gtm.blacklist": ["customScripts","sp","adm","awct","k","d","j"]
+    }];
+
+    
+    dataLayer[0]["releaseDate"] = "2019/12/03";
+    
+
+    
+
+    
+    
+
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+
+</script>
+
+
+        <!-- Google Tag Manager -->
+        <script>
+			// The naming of this function is important as it is called from sixteens as well as from other DOM code
+			function loadGTM(){
+				(function (w, d, s, l, i) {
+				w[l] = w[l] || [];
+				w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+				var f = d.getElementsByTagName(s)[0],
+					j = d.createElement(s),
+					dl = l != 'dataLayer'
+					? '&l=' + l
+					: '';
+				j.async = true;
+				j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+				f.parentNode.insertBefore(j, f);
+				})(window, document, 'script', 'dataLayer', 'GTM-MBCBVQS');
+      		}
+
+			if (isUsageCookieAllowed()) {
+				loadGTM();
+			}
+	  	</script>
+        <!-- End Google Tag Manager -->
+
+        
+
+		
+		
+
+	</head>
+	<body class="static_article">
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js' : 'js');</script>
+    <form action="/cookies/accept-all" method="GET" id="global-cookie-message"
+      class="cookies-banner cookies-banner--hidden js-cookies-banner-form clearfix"
+      aria-label="cookie banner">
+    <div class="cookies-banner__wrapper wrapper js-cookies-banner-inform">
+        <div>
+            <div class="cookies-banner__message adjust-font-size--18">
+                <h3 class="cookies-banner__heading">Cookies on ons.gov.uk</h3>
+                <p class="cookies-banner__body">Cookies are small files stored on your device when you visit a website. We use some essential cookies to make this website work.</p>
+                <p class="cookies-banner__body">We would like to set <a href="/cookies">additional cookies</a> to remember your settings and understand how you use the site. This helps us to improve our services.</p>
+            </div>
+            <div class="cookies-banner__buttons">
+                <div class="nojs--hide cookies-banner__button cookies-banner__button--accept">
+                    <button class="btn btn--full-width btn--primary btn--focus margin-right--2 font-weight-700 font-size--17 text-wrap js-accept-cookies" data-gtm-accept-cookies="true" type="submit" data-action="accept" tabindex="0">
+                        Accept additional cookies
+                    </button>
+                </div>
+                <div class="nojs--hide cookies-banner__button cookies-banner__button--reject">
+                    <button class="btn btn--full-width btn--primary btn--focus margin-right--2 font-weight-700 font-size--17 text-wrap js-reject-cookies" data-gtm-accept-cookies="false" type="submit" data-action="reject" tabindex="0">
+                        Reject additional cookies
+                    </button>
+                </div>
+                <div class="cookies-banner__button">
+                    <a href="/cookies">Manage settings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hidden js-cookies-banner-confirmation" tabindex="-1">
+        <div class="cookies-banner__wrapper wrapper">
+            <div class="col">
+                <div class="cookies-banner__message adjust-font-size--18">
+                    <p class="cookies-banner__confirmation-message">
+                        <span class="hidden ons-js-accepted-text">You have accepted all additional cookies.</span>
+                        <span class="hidden ons-js-rejected-text">You have rejected all additional cookies.</span>
+                        <span>You can <a href="/cookies">change your cookie preferences</a> at any time.</span>
+                        <button type="button" class="cookies-banner__button--hide js-hide-cookies-banner">Hide</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MBCBVQS"
+                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+        
+        
+		
+
+		
+
+		
+		 				
+
+
+
+
+
+
+
+
+
+
+     
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<header >
+	
+    <a class="skiplink" href="#main" tabindex="0">
+        Skip to main content
+    </a>
+	
+  
+  
+
+	
+	
+	<div id="pagePath" class="hide">/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit</div>
+	
+		<div class="wrapper">
+			<div class="header col-wrap">
+				<div class="col col--lg-one-third col--md-one-third">
+					<a href="/">
+						<!--[if lte IE 8]>
+							<img class="logo" src="https://cdn.ons.gov.uk/assets/images/ons-logo/v2/ons-logo.png" alt="Office for National Statistics logo - Homepage">
+						<![endif]-->
+						<img class="logo" src="https://cdn.ons.gov.uk/assets/images/ons-logo/v2/ons-logo.svg" alt="Office for National Statistics logo - Homepage">
+					</a>
+				</div>
+				
+                <div class="col col--lg-two-thirds col--md-two-thirds hide--sm print--hide language--js__container">
+                    
+                    <div class="language">
+                        
+                            <span>English (EN) | </span>
+                            <a href="
+
+
+
+    //cy.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit
+" class="language__link" lang="cy">Cymraeg (CY)</a>
+                        
+                    </div>
+                </div>
+				<div class="secondary-nav col col--lg-two-thirds col--md-two-thirds print--hide">
+					<ul class="secondary-nav__list js-nav-clone__list">
+                        <li class="secondary-nav__item">
+                            <a class="secondary-nav__link  js-nav-clone__link" href="/releasecalendar">Release calendar</a>
+                        </li>
+                        <li class="secondary-nav__item">
+                            <a class="secondary-nav__link  js-nav-clone__link" href="/methodology">Methodology</a>
+                        </li>
+                        <li class="secondary-nav__item">
+                            <a class="secondary-nav__link  js-nav-clone__link" href="/news">Media</a>
+                        </li>
+						<li class="secondary-nav__item">
+							<a class="secondary-nav__link  js-nav-clone__link" href="/aboutus">About</a>
+						</li>
+						<li class="secondary-nav__item">
+							<a class="secondary-nav__link js-nav-clone__link" rel="noopener noreferrer" href="https://blog.ons.gov.uk/">Blog</a>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+		</div>
+	
+
+	
+	
+	<div class="primary-nav print--hide">
+		<nav aria-label="Header links">
+			
+			<ul class="nav--controls">
+				<li class="nav--controls__item">
+					<a href="#nav-primary" id="menu-toggle" aria-controls="nav-primary" aria-expanded="false" class="nav--controls__menu">
+						<span class="nav--controls__text">Menu</span>
+					</a>
+				</li>
+				<li class="nav--controls__item ">
+					<a href="#nav-search" id="search-toggle" aria-controls="nav-search" aria-expanded="false" class="nav--controls__search" aria-label="Search">
+						<span class="nav--controls__text">Search</span>
+					</a>
+				</li>
+			</ul>
+			
+			<ul class="wrapper nav-main--hidden primary-nav__list" id="nav-primary" aria-expanded="false">
+				<li class="primary-nav__item  js-nav hide--sm old-ie--display-block"><a class="primary-nav__link col col--md-7 col--lg-9" href="/">Home</a></li>
+				
+				
+				
+				
+				
+				<li class="primary-nav__item js-nav js-expandable ">
+					<a class="primary-nav__link col col--md-8 col--lg-10" href="/businessindustryandtrade" aria-expanded="false" aria-label="Business, industry and trade sub menu">
+						<span aria-hidden="true" class="expansion-indicator"></span>
+						<span class="submenu-title">
+							Business, industry and trade
+						</span>
+					</a>
+					<ul class="primary-nav__child-list col col--md-16 col--lg-20 js-expandable__content js-nav-hidden jsEnhance" aria-expanded="false" aria-label="submenu">
+						
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/business" >Business</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/changestobusiness" >Changes to business</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/constructionindustry" >Construction industry</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/itandinternetindustry" >Digital economy</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/internationaltrade" >International trade</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/manufacturingandproductionindustry" >Manufacturing and production industry</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/retailindustry" >Retail industry</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/businessindustryandtrade/tourismindustry" >Tourism industry</a>
+						</li>
+						
+					</ul>
+				</li>
+				
+				
+				
+				
+				
+				<li class="primary-nav__item js-nav js-expandable ">
+					<a class="primary-nav__link col col--md-8 col--lg-10" href="/economy" aria-expanded="false" aria-label="Economy sub menu">
+						<span aria-hidden="true" class="expansion-indicator"></span>
+						<span class="submenu-title">
+							Economy
+						</span>
+					</a>
+					<ul class="primary-nav__child-list col col--md-16 col--lg-20 js-expandable__content js-nav-hidden jsEnhance" aria-expanded="false" aria-label="submenu">
+						
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/economicoutputandproductivity" >Economic output and productivity</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/environmentalaccounts" >Environmental accounts</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/governmentpublicsectorandtaxes" >Government, public sector and taxes</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/grossdomesticproductgdp" >Gross Domestic Product (GDP)</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/grossvalueaddedgva" >Gross Value Added (GVA)</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/inflationandpriceindices" >Inflation and price indices</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/investmentspensionsandtrusts" >Investments, pensions and trusts</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/nationalaccounts" >National accounts</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/economy/regionalaccounts" >Regional accounts</a>
+						</li>
+						
+					</ul>
+				</li>
+				
+				
+				
+				
+				
+				<li class="primary-nav__item js-nav js-expandable ">
+					<a class="primary-nav__link col col--md-8 col--lg-10" href="/employmentandlabourmarket" aria-expanded="false" aria-label="Employment and labour market sub menu">
+						<span aria-hidden="true" class="expansion-indicator"></span>
+						<span class="submenu-title">
+							Employment and labour market
+						</span>
+					</a>
+					<ul class="primary-nav__child-list col col--md-16 col--lg-20 js-expandable__content js-nav-hidden jsEnhance" aria-expanded="false" aria-label="submenu">
+						
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/employmentandlabourmarket/peopleinwork" >People in work</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/employmentandlabourmarket/peoplenotinwork" >People not in work</a>
+						</li>
+						
+					</ul>
+				</li>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<li class="primary-nav__item js-nav js-expandable ">
+					<a class="primary-nav__link col col--md-8 col--lg-10" href="/peoplepopulationandcommunity" aria-expanded="false" aria-label="People, population and community sub menu">
+						<span aria-hidden="true" class="expansion-indicator"></span>
+						<span class="submenu-title">
+							People, population and community
+						</span>
+					</a>
+					<ul class="primary-nav__child-list col col--md-16 col--lg-20 js-expandable__content js-nav-hidden jsEnhance" aria-expanded="false" aria-label="submenu">
+						
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/armedforcescommunity" >Armed forces community</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/birthsdeathsandmarriages" >Births, deaths and marriages</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/crimeandjustice" >Crime and justice</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/culturalidentity" >Cultural identity</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/educationandchildcare" >Education and childcare</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/elections" >Elections</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/healthandsocialcare" >Health and social care</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/householdcharacteristics" >Household characteristics</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/housing" >Housing</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/leisureandtourism" >Leisure and tourism</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/wellbeing" >Measuring progress, well-being and beyond GDP</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/personalandhouseholdfinances" >Personal and household finances</a>
+						</li>
+						
+						<li class="primary-nav__child-item  js-expandable__child">
+							<a class="primary-nav__child-link" tabindex="-1" href="/peoplepopulationandcommunity/populationandmigration" >Population and migration</a>
+						</li>
+						
+					</ul>
+				</li>
+				
+				
+				
+				
+				
+				
+				
+				<li class="primary-nav__item  js-nav">
+					<a class="primary-nav__link  col col--md-8 col--lg-10" href="/surveys">
+						Taking part in a survey?
+					</a>
+				</li>
+				<li class="hide--md primary-nav__language">
+					
+						<span>English (EN) | </span>
+						<a href="
+
+
+
+    //cy.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit
+" class="language__link">Cymraeg (CY)</a>
+					
+				</li>
+			</ul>
+		</nav>
+	</div>
+	
+	
+		<div class="search nav-search--hidden print--hide" id="searchBar" role="search">
+			<div class="wrapper">
+				<form class="col-wrap search__form" action="/search">
+					<label class="search__label col col--md-23 col--lg-24" for="nav-search">Search for a keyword(s) or time series ID</label>
+					<input type="search" autocomplete="off" class="search__input col col--md-21 col--lg-32" id="nav-search" name="q" value="">
+					<button type="submit" class="search__button col--md-3 col--lg-3" id="nav-search-submit" aria-label="Search">
+						<span class="visuallyhidden">Search</span>
+						<span class="icon icon-search--light"></span>
+					</button>
+				</form>
+			</div>
+		</div>
+	
+	<div class="promo__background--plum-gradient">
+    <div class="wrapper">
+        <div class="banner--half-padding">
+            <p class="margin-top--0 margin-bottom--0 padding-bottom--0 padding-top--0 flex flex-wrap-wrap banner--vertical-center">
+                <a class="flex" href="/census"><img src="https://cdn.ons.gov.uk/assets/images/census-logo/logo-census-2021-white-landscape.svg" title="Census 2021" alt="" class="header__svg-logo margin-right--1" xmlns="http://www.w3.org/2000/svg" focusable="false" width="167" height="32" viewBox="0 0 242 44" aria-labelledby="census-logo-banner" />
+                <a class="margin-top--0 text--white font-size--18 underline-link" href="/census">Data and analysis from Census 2021</a>
+            </p>
+        </div>
+    </div>
+</div>
+	
+</header>
+
+
+
+
+	
+    
+        <div class="page-neutral-intro background--gallery">
+  <div class="wrapper">
+    <div class="col-wrap">
+      <div class="col">
+        <nav aria-label="Breadcrumbs">
+          <div class="breadcrumb print--hide">
+            <ol class="breadcrumb__list">
+              
+                <li class="breadcrumb__item">
+                  <a
+                    class="breadcrumb__link"
+                    href="/"
+                  >Home</a>
+                </li>
+              
+                <li class="breadcrumb__item">
+                  <a
+                    class="breadcrumb__link"
+                    href="/methodology"
+                  >Methodology</a>
+                </li>
+              
+                <li class="breadcrumb__item">
+                  <a
+                    class="breadcrumb__link"
+                    href="/methodology/methodologytopicsandstatisticalconcepts"
+                  >Methodology topics and statistical concepts</a>
+                </li>
+              
+
+              <li class="breadcrumb__item">
+                
+                  Uncertainty and how we measure it for our surveys
+                
+              </li>
+            </ol>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+		
+<main id="main" role="main" tabindex="-1">
+
+
+    <div class="page-neutral-intro background--gallery">
+	<div class="wrapper">
+		<div class="col-wrap">
+			<div class="col">
+				
+				<div class="col col--md-47 col--lg-48">
+                    
+                        <h1 class="page-intro__title ">
+    Uncertainty and how we measure it for our surveys
+</h1>
+
+
+    
+        <p class="page-intro__content">Explaining measures of uncertainty such as standard error, confidence interval, coefficient of variation and statistical significance and how they affect estimates from our surveys.</p>
+    
+
+                    
+				</div>
+				
+			</div> 
+		</div> 
+	</div> 
+    
+
+
+
+    
+	
+	
+		
+			
+
+
+
+	
+
+
+		
+	
+
+     
+
+</div> 
+
+
+<div class="page-content">
+	
+    <div class="wrapper">
+        
+        <div class="col-wrap border-bottom--iron-md">
+            
+            <div class="col col--md-31 col--lg-41 margin-left-md--1">
+	<div class="table-of-contents print--avoid-break">
+		<h2 class="table-of-contents__title">In this section</h2>
+		<ol id="toc" class="table-of-contents__list">
+			
+			<li class="table-of-contents__item">
+				<a href="#what-is-uncertainty-" class="js-scroll">What is uncertainty?</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#sampling-the-population" class="js-scroll">Sampling the population</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#standard-error" class="js-scroll">Standard error</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#coefficient-of-variation" class="js-scroll">Coefficient of variation</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#confidence-interval" class="js-scroll">Confidence interval</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#statistical-significance" class="js-scroll">Statistical significance</a>
+			</li>
+			
+			<li class="table-of-contents__item">
+				<a href="#related-links" class="js-scroll">Related links</a>
+			</li>
+			
+			
+			
+		</ol>
+	</div>
+</div>
+            
+            
+        </div>
+
+		
+		<div class="hide--md margin-top-sm--1">
+
+
+</div>
+
+        
+        <article class="col col--md-36 col--lg-39 page-content__main-content padding-bottom">
+            
+                <div id="what-is-uncertainty-" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">1.</span> What is uncertainty?</h2>
+                        </header>
+                        <p>Many of our statistics rely on data collected from surveys. We are often interested in the characteristics of the population of people or businesses as a whole, but usually survey a sample of the population rather than everyone. This is timelier and more cost-effective and, if the sample is large enough and well designed, can lead to accurate statistics.</p><p>Using a sample means that our statistics are usually accompanied by measures of uncertainty. Uncertainty relates to how the estimate might differ from the “true value” and these measures help users of ONS statistics to understand the degree of confidence in the outputs. These measures of uncertainty include:</p>
+<ul>
+  <li><p>standard error</p></li>
+  <li><p>confidence interval </p></li>
+  <li><p>coefficient of variation</p></li>
+  <li><p>statistical significance </p></li>
+</ul><p>Understanding sampling and the effect it has on statistics is also important for interpreting these measures of uncertainty. </p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="sampling-the-population" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">2.</span> Sampling the population</h2>
+                        </header>
+                        <p>Sampling involves selecting a subset of a population from which characteristics of the entire population can be estimated. Surveying a sample rather than an entire population is more-cost effective and allows data and findings to be published sooner.</p><p>Information is not gathered from the whole population, so results from sample surveys are estimates of the unknown population values. One sample is selected at random but other potential samples could have been selected, which may have produced different results.</p><p>The difference between a statistic derived from a sample and the population value is caused by what are known as sampling error and non-sampling errors.</p><h3>Sampling error</h3><p>Sampling error is caused by the use of a sample of the population, rather than the entire population. Estimates derived from a sample are likely to differ from the unknown population value because only a subset of the population have provided information. Designing a sample using a scientific approach can help to minimise sampling error and create estimates that are precise and unbiased.</p><p>The <a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#standard-error">standard error</a>, <a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#coefficient-of-variation">coefficient of variation</a> and <a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#confidence-interval">confidence interval</a> can be used to help interpret the possible sampling error, which of course, is unknown. Standard errors are important for interpreting changes in the population estimates over time. A test of <a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#statistical-significance">statistical significance</a> could be used to decide whether the difference between estimates from different samples is caused by a real change in the population, or whether it is because of the effects of random sampling alone.</p><h3>Non-sampling errors</h3><p>Other sources of error are called non-sampling errors. These include:</p>
+<ul>
+  <li><p>businesses or individuals being unreachable</p></li>
+  <li><p>businesses or individuals refusing to respond</p></li>
+  <li><p>respondents giving inaccurate answers </p></li>
+  <li><p>processing or analysis errors</p></li>
+</ul><p>These errors would be present in the statistics even if the entire population had been surveyed. For example, inaccurate answers to a question about money spent on fuel would lead to a difference between the estimate and the population value even if the entire population were surveyed. These errors are usually very difficult to quantify and to do so would require additional and specific research.</p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="standard-error" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">3.</span> Standard error</h2>
+                        </header>
+                        <p>The standard error is the simplest measure of how precise a survey-based estimate is. </p><p>The standard error can be used as a guide to help interpret the possible sampling error. It shows how close the estimate based on sample data might be to the value that would have been taken from the whole population. It is measured using the same units as the estimate itself and, in general, the closer the standard error is to zero, the more precise the estimate. Smaller values show a greater level of precision.</p><p>Standard errors are also based on sample data so are an unknown statistic, and are usually estimated themselves.</p><h4>Example:</h4><p>The non-financial business economy estimates are taken from the Annual Business Survey. The standard error for estimates of various industry sectors is used to assess how precise total turnover estimates are. The estimates for education, and water and waste management differ in size, as do their standard errors. However, the <a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit#coefficient-of-variation">relative standard errors</a> show they have similar levels of relative precision (Table 1).</p><p>
+<div class="markdown-table-container print--avoid-break">
+    <div class="scrollable-container" tabindex="0">
+        <div class="markdown-table-wrap">
+            <figure class="figure" id="table-7ea80ff0">
+<table class="table">
+<caption class="table__caption">Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016</caption>
+<colgroup><col style="width: 48.7%"/><col style="width: 15.4%"/><col style="width: 15.9%"/><col style="width: 19.7%"/></colgroup>
+<tr class="table__header-row"><td></td><th scope="col" class="align-right">Total turnover in</th><th scope="col" class="align-right">Standard error in</th><th scope="col" class="align-right">Relative standard error (or coefficient of variation)²</th></tr>
+<tr class="table__header-row"><td></td><th scope="col" class="align-right">£ millions¹</th><th scope="col" class="align-right">£ millions²</th><td class="align-right"></td></tr>
+<tr><td>Industry 1: Education (private provision only)</td><td class="align-right">42,649</td><td class="align-right">526.8</td><td class="align-right">0.01 (or 1%)</td></tr>
+<tr><td>Industry 2: Water supply; sewerage, waste management and remediation activities</td><td class="align-right">34,677</td><td class="align-right">222.7</td><td class="align-right">0.01 (or 1%)</td></tr>
+</table><footer class="figure__footer">
+<p class="figure__source">Source: Office for National Statistics – Annual Business Survey</p>
+</footer>
+</figure>
+
+        </div>
+    </div>
+
+    <h4 class="print--hide font-size--h6 padding-top--0"><span role="text">Download this table <span class="visuallyhidden">Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016</span></span></h4>
+    <a href="/download/table?format=xlsx&uri=/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit/7ea80ff0.json" title="Download as xls" download="Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016.xls" class="btn btn--primary print--hide" data-gtm-title="Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016" data-gtm-type="download-table-xlsx" aria-label="Download Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016 as xls">.xls</a>
+    <a href="/download/table?format=csv&uri=/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit/7ea80ff0.json" title="Download as csv" download="Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016.csv" class="btn btn--primary print--hide" data-gtm-title="Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016" data-gtm-type="download-table-csv" aria-label="Download Table 1: Total turnover estimates, standard error and relative standard error for education and water and waste management, UK, 2016 as csv">.csv</a>
+</div>
+</p><h4>Notes:</h4>
+<ol>
+  <li>Data are from <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveysectionsas">Non-financial business economy, UK: Sections A to A 2017 revised results</a>.</li>
+  <li>Data are from <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveyqualitymeasures">Non-financial business economy, UK: quality measures 2017 revised results</a>.</li>
+</ol>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="coefficient-of-variation" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">4.</span> Coefficient of variation</h2>
+                        </header>
+                        <p>The coefficient of variation makes it easier to understand whether a standard error is large compared with the estimate itself.</p><p>The coefficient of variation (CV) is used to compare the relative precision across surveys (or variables) and is usually shown as a percentage. It is a unitless quantity, and so allows us to compare estimates with different scales of measurement. It is also known as the relative standard error and is calculated by dividing the standard error of an estimate by the estimate itself.</p><p>Similar to the standard error, the closer the coefficient of variation is to zero, the more precise the estimate is. Where it is above 50%, the estimate is very unprecise and the confidence intervals around the estimate will effectively contain zero. </p><p>The coefficient of variation should not be used for estimates of values that are close to zero or for percentages.</p><h4>Example:</h4><p>The total turnover of plastering businesses in the UK was estimated at £2,322 million in 2016, with a standard error of £201 million. A different survey estimated that the total number of people employed full-time in agriculture, forestry and fishing in the UK was 155,000 in 2016, with a standard error of 12,400 employees</p><p>It is difficult to compare these two standard errors. By calculating the coefficient of variation for each, the results show that both estimates have a similar level of precision:</p>
+<ul>
+  <li><p>£201 million divided by £2,322 million equals 0.087 – a coefficient of variation of 8.7%</p></li>
+  <li><p>12,400 divided by 155,000 equals 0.08 – a coefficient of variation of 8%</p></li>
+</ul><p>The data for this example are from <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveysectionsas">Non-financial business economy, UK: Sections A to S</a>, <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveyqualitymeasures">Non-financial business economy, UK: quality measures</a>, and <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/broadindustrygroupsicbusinessregisterandemploymentsurveybrestable1">Broad Industry Group (SIC) – Business Register and Employment Survey (BRED): Table 1</a>. </p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="confidence-interval" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">5.</span> Confidence interval</h2>
+                        </header>
+                        <p>Confidence intervals use the standard error to derive a range in which we think the true value is likely to lie.</p><p>A confidence interval gives an indication of the degree of uncertainty of an estimate and helps to decide how precise a sample estimate is. It specifies a range of values likely to contain the unknown population value. These values are defined by lower and upper limits.</p><p>The width of the interval depends on the precision of the estimate and the confidence level used. A greater standard error will result in a wider interval; the wider the interval, the less precise the estimate is. </p><h3>Using a 95% confidence interval</h3><p>A 95% confidence level is frequently used. This means that if we drew 20 random samples and calculated a 95% confidence interval for each sample using the data in that sample, we would expect that, on average, 19 out of the 20 (95%) resulting confidence intervals would contain the true population value and 1 in 20 (5%) would not. If we increased the confidence level to 99%, wider intervals would be obtained.</p><h4>Example:</h4><p>Estimates for July to September 2019 show 32.75 million people aged 16 years and over in employment in the UK, with a confidence interval of plus or minus 177,000 people based on the results from a sample. If we took a large number of samples repeatedly, 95% of the confidence intervals would contain the unknown population estimate. </p><p>The data for this example are from <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/november2019">Labour market overview, UK: November 2019</a> and <a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11">A11: Labour Force Survey sampling variability</a>.</p><h3>Calculating confidence intervals</h3><p>To calculate confidence intervals around an estimate we use the standard error for that estimate. The estimate and its 95% confidence interval are presented as: the estimate plus or minus the margin of error.</p><p>The lower and upper 95% confidence limits are given by the sample estimate plus or minus 1.96 standard errors. </p><p>The margin of error is calculated as: </p><p>Margin of error = 1.96 × standard error</p><h4>Example:</h4><p>In 2016, the UK private education industry was estimated to have generated a total turnover of £42,649 million. The standard error for this estimate is £526.8 million. </p><p>The 95% confidence interval around this estimate is calculated as:</p><p>Margin of error = 1.96 × £526.8 million = £1,032.5 million</p><p>The 95% confidence interval is therefore £42,649 million plus or minus £1,032.5 million, which equals £41,616 million and £43,682 million respectively. </p><p>This means that if we drew 20 random samples and calculated an analogous confidence interval for each, on average, 19 out of 20 (95%) would contain the true population value and 1 in 20 (5%) would not. Therefore, there is a 95% chance that the true population value lies between £41,616 million and £43,682 million.</p><p>Data for this example come from <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveysectionsas">Non-financial business economy, UK: Sections A to S 2017 revised results</a> and <a href="https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/datasets/uknonfinancialbusinesseconomyannualbusinesssurveyqualitymeasures">Non-financial business economy, UK: quality measures 2017 revised results</a>.</p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="statistical-significance" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">6.</span> Statistical significance</h2>
+                        </header>
+                        <p>We can use statistical significance to decide whether we think a difference between two survey-based estimates reflects a true change in the population rather than being attributable to random variation in our sample selection.</p><p>Statistical significance helps us to establish what observed changes or relationships we should pay attention to, and which apparent changes may have occurred only as a result of randomness in the sampling.</p><p>A result is said to be statistically significant if it is likely not caused by chance or the variable nature of the samples. A defined threshold can help us test for change. If the test of statistical significance calculated from the estimates at different points in time is larger than the threshold, the change is said to be “statistically significant”.</p><p>A 5% standard is often used when testing for statistical significance. The observed change is statistically significant at the 5% level if there is less than a 1 in 20 chance of the observed change being calculated by chance if there is actually no underlying change.</p><p>Within the commentary of our statistical bulletins we will avoid using the term “significant” to describe trends in our statistics and will always use “statistically significant” to avoid any confusion for our users.</p><h4>Example:</h4><p>Estimates from the Annual Population Survey are based upon one of several samples that could have been drawn at that point in time. This means there is a degree of variability around the estimates. This can sometimes present misleading changes in figures because the people included in the sample are selected at random. </p><p>
+    <div class="markdown-chart-container panel--bottom-mar print--avoid-break">
+        <h4 class="flush--third--vertical">Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011</h4>
+
+        
+            <h5 class="flush--third--bottom">Proportion who were current smokers, all persons aged 18 years and over, UK, 2011 to 2018</h5>
+        
+
+        
+            
+                <img src="/resource?uri=/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit/682670ad.png" alt="There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011.">
+            
+        
+            
+        
+
+        <h6 class="flush--third--bottom">Source: Office for National Statistics – Annual Population Survey </h6>
+        
+
+        <h6 class="print--hide"><span role="text">Download this image <span class="visuallyhidden">Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011</span></span></h6>
+        
+            
+                <a class="btn btn--primary print--hide" title="Download as png"
+                   data-gtm-title="Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011" data-gtm-type="download-png"
+                   href="/file?uri=/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit/682670ad.png" aria-label="Download Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011 as png (15.8 kB)">.png (15.8 kB)</a>
+            
+        
+            
+        
+
+        
+            
+        
+            
+                <a class="btn btn--primary print--hide" title="Download as xlsx"
+                   data-gtm-title="Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011" data-gtm-type="download-xlsx"
+                   href="/file?uri=/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit/682670ad.xlsx" aria-label="Download Figure 1: There has been a statistically significant decrease in the prevalence of smoking in the UK in 2018 compared with 2011 as (160.9 kB)">.xlsx (160.9 kB)
+                </a>
+            
+        
+    </div>
+
+
+</p><p>The proportion of people aged 18 years and over smoking cigarettes in the UK is estimated to have changed from 20.2% in 2011 to 14.7% in 2018. But we cannot assume that this change represents a real decrease in the prevalence of smoking. It could be the result of variations in the sample estimates, which make the differences between the estimates larger than the real change in smoking prevalence.</p><p>The test of statistical significance found that the difference between the estimates was larger than expected if it had only been caused by random sampling. This means that the difference is likely to reflect a true decrease in the prevalence of smoking in the UK between 2011 and 2018 rather than being attributable to random variation in our sample selection between these two years.</p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+                <div id="related-links" class="section__content--markdown">
+                    <section>
+                        <header>
+                            <h2><span class="section__content-number">7.</span> Related links</h2>
+                        </header>
+                        <p><a href="https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/qualityinofficialstatistics/qualitydefined">Quality defined</a><BR> Article<BR> A summary of the work ONS is doing to monitor and improve the quality of our outputs and statistics. </p><p><a href="https://www.statisticsauthority.gov.uk/about-the-authority/uk-statistical-system/types-of-official-statistics/">Types of official statistics</a><BR> Article<BR> Summarises the main types of official statistics produced by public bodies, including National Statistics and Experimental Statistics.</p><p><a href="https://www.statisticsauthority.gov.uk/code-of-practice/">Code of Practice for Statistics</a><BR> Report | February 2018<BR> Provides producers of official statistics with the detailed practices they must commit to.</p>
+                        <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                    </section>
+                </div>
+            
+            <!-- Accordion -->
+            
+             <!-- Margin at bottom of article if no Accordion present -->
+                <div class="margin-bottom--4">
+                </div>
+            
+        </article>
+        
+        <div class="col col--md-11 col--lg-20 margin-top-md--3">
+            
+    
+    
+        
+    
+    
+    
+	
+	
+
+	
+	
+	
+	
+    
+    
+
+        </div>
+    </div> 
+
+</div>
+
+</main>
+
+
+	<footer class="print--hide">
+	<h2 class="visuallyhidden">Footer links</h2>
+	<div class="footer">
+		<div class="wrapper">
+			<nav aria-label="Footer links">
+                <div class="footer-nav col-wrap">
+                    
+                    <div class="col col--lg-one-third col--md-one-third">
+                        <h3 class="footer-nav__heading">Help</h3>
+                        <ul class="footer-nav__list">
+                            <li class="footer-nav__item">
+                                <a href="/help/accessibility">Accessibility</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/cookies">Cookies</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/help/privacynotice">Privacy</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/help/termsandconditions">Terms and conditions</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col col--lg-one-third col--md-one-third">
+                        <h3 class="footer-nav__heading">About ONS</h3>
+                        <ul class="footer-nav__list">
+                            <li class="footer-nav__item">
+                                <a href="/aboutus/whatwedo">What we do</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://careers.ons.gov.uk">Careers</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/aboutus/contactus">Contact us</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/news">News</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="/aboutus/transparencyandgovernance/freedomofinformationfoi">Freedom of Information</a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col col--lg-one-third col--md-one-third">
+                        <h3 class="footer-nav__heading">Connect with us</h3>
+                        <ul class="footer-nav__list">
+                            <li class="footer-nav__item">
+                                <a href="https://twitter.com/ONS" target="_blank">X</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://www.instagram.com/officefornationalstatistics" target="_blank">Instagram</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://www.facebook.com/ONS" target="_blank">Facebook</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://www.linkedin.com/company/office-for-national-statistics" target="_blank">LinkedIn</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://consultations.ons.gov.uk/" target="_blank">Consultations</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://www.statsusernetwork.ons.gov.uk/" target="_blank">Discussion forums</a>
+                            </li>
+                            <li class="footer-nav__item">
+                                <a href="https://public.govdelivery.com/accounts/UKONS/subscribers/new" target="_blank">Email alerts</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+			</nav>
+		</div>
+		<div class="wrapper">
+			<div class="footer-license">
+				<img class="footer-license__img" alt="OGL" width="60" src="https://cdn.ons.gov.uk/assets/images/logo-ogl-footer.svg">
+				<p class="footer-license__text margin-left-sm--0">
+					All content is available under the <a href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>, except where otherwise stated
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+
+
+
+
+
+
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="//cdn.ons.gov.uk/sixteens/ef5a1ca/js/main.js"></script>
+        <script src="/js/app.js"></script>
+
+        
+        
+
+	<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a542b6f1c82adb71',t:'MTc5MzYxODA1NQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a542b6f1c82adb71',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
