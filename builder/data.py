@@ -343,6 +343,61 @@ def who_pays(facts):
     return out
 
 
+# ETB Tables 12a-12c: household types, figures adjusted for household size
+# ("equivalised", ONS note 1). Table 16: people in households receiving more in
+# benefits (cash and in kind) than they pay in taxes, 1977 to 2023/24.
+HOUSEHOLD_TYPES = [
+    # (key, sheet, column header, plain label, group)
+    ("na1", "Table 12a", "1 adult (All)", "One adult, no children", "Working-age, no children"),
+    ("na2", "Table 12a", "2 adults", "Two adults, no children", "Working-age, no children"),
+    ("na3", "Table 12a", "More adults", "Three or more adults, no children", "Working-age, no children"),
+    ("nc1", "Table 12b", "1 adult (with children)", "One adult with children", "Working-age, with children"),
+    ("nc21", "Table 12b", "2 adults (1 child)", "Two adults, one child", "Working-age, with children"),
+    ("nc22", "Table 12b", "2 adults (2 children)", "Two adults, two children", "Working-age, with children"),
+    ("nc23", "Table 12b", "2 adults (3 children)", "Two adults, three children", "Working-age, with children"),
+    ("nc3", "Table 12b", "3 adults (with children)", "Three adults with children", "Working-age, with children"),
+    ("r1", "Table 12c", "1 adult (All)", "One retired adult", "Retired"),
+    ("r2", "Table 12c", "More adults", "Two or more retired adults", "Retired"),
+    ("all", "Table 12a", "All individuals", "Everyone", "Everyone"),
+]
+
+
+def household_types(facts):
+    wb = xlsx("data/payers/raw/ons-etb-fye2024.xlsx")
+    unit = "£ a year, adjusted for household size"
+    sheets = {}
+    for key, sheet, col, label, group in HOUSEHOLD_TYPES:
+        if sheet not in sheets:
+            sheets[sheet] = [[c.value for c in r] for r in wb[sheet].iter_rows()]
+        rows = sheets[sheet]
+        hdr_i = next(i for i, r in enumerate(rows) if r and any(v and str(v).strip() == "All individuals" for v in r))
+        j = next(j for j, v in enumerate(rows[hdr_i]) if v and str(v).strip() == col)
+        for m, label_text in (("gross", "Gross income"), ("direct", "less direct taxes"), ("indirect", "less indirect taxes"),
+                              ("cash", "plus cash benefits"), ("inkind", "plus benefits in kind")):
+            i = next(i for i, r in enumerate(rows) if any(v and str(v).strip() == label_text for v in r[:2]))
+            facts.add(Fact(f"etb.t12.{key}.{m}", num(rows[i][j]), unit, "2023/24", "etb", f"{sheet}!{ref(i, j)}", "outturn"))
+        d, ind, g = (facts[f"etb.t12.{key}.{m}"] for m in ("direct", "indirect", "gross"))
+        facts.add(Fact(f"etb.t12.{key}.alltax", d.value + ind.value, unit, "2023/24", "etb", f"{d.locator} + {ind.locator}",
+                       "calculated", formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
+        facts.add(Fact(f"etb.t12.{key}.taxshare", 100 * (d.value + ind.value) / g.value, "% of gross income", "2023/24", "etb",
+                       f"{d.locator} + {ind.locator}, ÷ {g.locator}", "calculated",
+                       formula=f"100 × ({d.id} + {ind.id}) ÷ {g.id}", inputs=[d.id, ind.id, g.id]))
+    # Table 16
+    rows = [[c.value for c in r] for r in wb["Table 16"].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r and str(r[0]).strip() == "Year")
+    hdr = [str(v).strip() if v else "" for v in rows[hdr_i]]
+    cols = {"all": hdr.index("All individuals (%)"), "nonret": hdr.index("Non-retired individuals (%)"), "ret": hdr.index("Retired individuals (%)")}
+    years = []
+    for i in range(hdr_i + 1, len(rows)):
+        y = str(rows[i][0]).strip() if rows[i][0] is not None else ""
+        if not re.fullmatch(r"\d{4}(/\d{2})?", y):
+            continue
+        years.append(y)
+        for k, j in cols.items():
+            facts.add(Fact(f"etb.t16.{k}.{y}", num(rows[i][j]), "% of people", y, "etb", f"Table 16!{ref(i, j)}", "outturn"))
+    return {"types": [(k, label, group) for k, _, _, label, group in HOUSEHOLD_TYPES], "t16_years": years}
+
+
 # ---------------------------------------------------------------- life: work
 
 def _q2(data, year):
@@ -1029,6 +1084,7 @@ def build_all():
         "spending": spending(facts),
         "receipts": receipts(facts),
         "who": who_pays(facts),
+        "who_types": household_types(facts),
         "work": work(facts),
         "earnings": earnings(facts),
         "work_places": work_places(facts),
