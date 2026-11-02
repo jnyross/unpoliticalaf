@@ -140,14 +140,14 @@ def change_cell(facts, num, a_id, b_id, style, kind):
     return f'<data class="{cls}" value="{v!r}" data-change="{style}" data-from="{esc(a_id)}" data-to="{esc(b_id)}">{esc(text)}</data>'
 
 
-def year_links(current, up, href=lambda y: f"{y}.html"):
+def year_links(current, up, href=lambda y: f"{y}.html", strip=False):
     out = []
     for y in YEARS:
         if y == current:
             out.append(f'<li><span aria-current="page">{y}</span></li>')
         else:
             out.append(f'<li><a href="{up}{href(y)}">{y}</a></li>')
-    return f'<ul class="yearnav">{"".join(out)}</ul>'
+    return f'<ul class="yearnav{" yearstrip" if strip else ""}">{"".join(out)}</ul>'
 
 
 def compare_form(up, a=None, b=None):
@@ -172,15 +172,26 @@ CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures sho
 
 
 def topic_block_for_year(facts, num, sources, topic, y, up):
+    """Every measure for one topic in one year, as a label, value and period list.
+
+    A list reads better than a three-column table on a phone, and each value
+    keeps its own period beside it.
+    """
     ms = [m for m in MEAS if m[1] == topic]
     rows = []
     for key, _, label, fid, kind, _, period, group in ms:
         fact_id = fid(y)
         if fact_id not in facts or facts[fact_id].value is None:
-            rows.append([esc(label), '<span class="missing">not available</span>', esc(period(y))])
+            value = '<span class="missing">not available</span>'
+            per = esc(period(y))
         else:
-            rows.append([esc(label), num(fact_id, kind), esc(period(y)) + (f" ({group(y)})" if group else "")])
-    return table(f"{dict((t[0], t[1]) for t in TOPICS)[topic]}: {y}", ["Measure", "Value", "Period"], rows)
+            value = num(fact_id, kind)
+            per = esc(period(y)) + (f" ({group(y)})" if group else "")
+        rows.append(f'<div><dt>{esc(label)}</dt><dd>{value}</dd><dd class="per">{per}</dd></div>')
+    if all(fid(y) not in facts or facts[fid(y)].value is None for _, _, _, fid, *_ in ms):
+        # One clear line instead of a long list of identical gaps.
+        return f'<p class="missing">Not available: none of the {len(ms)} measures in this section has a figure for this year.</p>'
+    return f'<dl class="stats">{"".join(rows)}</dl>'
 
 
 def headline(facts, num, topic, y, gb=True):
@@ -240,10 +251,10 @@ def headline(facts, num, topic, y, gb=True):
 def year_page(facts, d, num, sources, y):
     up = "../"
     body = [f"<h1>Everyday life in {y}</h1>"]
-    body.append(f'<p>Choose another year:</p>{year_links(y, "")}')
     prev_l = f'<a href="{y - 1}.html">← {y - 1}</a>' if y > FIRST else "<span></span>"
     next_l = f'<a href="{y + 1}.html">{y + 1} →</a>' if y < LAST else "<span></span>"
     body.append(f'<nav class="pager" aria-label="Previous and next year">{prev_l}{next_l}</nav>')
+    body.append(f'<nav aria-label="Choose a year">{year_links(y, "", strip=True)}</nav>')
     body.append(f'<p>Each topic is measured over its own period, shown beside every figure. To see how {y} differs from another year, <a href="#compare">compare two years</a>.</p>')
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')

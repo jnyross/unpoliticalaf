@@ -1,6 +1,6 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
-from .html import page, bars, table, details_table, line_chart, source_line, fmt, esc
+from .html import page, bars, change_bars, keyfigs, table, details_table, line_chart, source_line, fmt, esc
 
 
 def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
@@ -24,6 +24,9 @@ def spending_page(facts, d, num, sources):
     top, second = order[0], order[1]
     adj = f"spend.cash.adjustments.{y}"
     body = [f"<h1>Where does public money go?</h1>"]
+    body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
+                         (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
+                         (num(per["debt_interest"], "per100"), "of every £100 went on interest on government debt", False)]))
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
 <p>Of every £100 spent on public services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}.</p></div>''')
@@ -60,15 +63,17 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     body.append(details_table("Show total spending for every year", "Total managed expenditure, every year",
                               ["Year", "Cash £bn", "£bn, 2025-26 prices", "% of GDP"], rows))
     # ten-year change by area
-    body.append(f"<h3>Change by area over ten years: {ten} to {y}</h3><p>After adjusting for inflation. The two years are a fixed ten years apart, not chosen for the result.</p>")
-    rows = []
+    body.append(f"<h2 id='by-area'>Change by area over ten years: {ten} to {y}</h2><p>After adjusting for inflation. The two years are a fixed ten years apart, not chosen for the result.</p>")
+    rows, citems = [], []
     for k, name in order:
         a, b = facts[f"spend.real.{k}.{ten}"].value, facts[f"spend.real.{k}.{y}"].value
         cid = derive(facts, f"spend.realchange.{k}.{ten}.{y}", 100 * (b / a - 1), "%", f"{ten} to {y}", "pesa4",
                      [f"spend.real.{k}.{y}", f"spend.real.{k}.{ten}"], f"100 × (spend.real.{k}.{y} ÷ spend.real.{k}.{ten} − 1)")
+        citems.append((esc(name), cid, f'{num(f"spend.real.{k}.{ten}", "bn1")} to {num(f"spend.real.{k}.{y}", "bn1")}'))
         rows.append([esc(name), num(f"spend.real.{k}.{ten}", "bn1"), num(f"spend.real.{k}.{y}", "bn1"), num(cid, "pct0"),
                      num(f"spend.gdp.{k}.{ten}", "pct"), num(f"spend.gdp.{k}.{y}", "pct")])
-    body.append(table(f"Spending by area, {ten} and {y}", ["Area", f"{ten} £bn*", f"{y} £bn*", "Change", f"{ten} % GDP", f"{y} % GDP"], rows))
+    body.append(change_bars(citems, "pct0", num, caption=f"Change in spending after inflation, {ten} to {y}. Bars to the right are rises, to the left falls. Under each area: £ billion in 2025-26 prices, then and now."))
+    body.append(details_table("Show the amounts and shares of GDP", f"Spending by area, {ten} and {y}", ["Area", f"{ten} £bn*", f"{y} £bn*", "Change", f"{ten} % GDP", f"{y} % GDP"], rows))
     body.append('<p class="small">* £ billion in 2025-26 prices.</p>')
     # full history tables per view
     for view, label, kind in (("real", "£ billion, 2025-26 prices", "bn1"), ("gdp", "% of GDP", "pct"), ("cash", "£ billion, cash (not adjusted for inflation)", "bn1")):
@@ -92,6 +97,9 @@ def taxes_page(facts, d, num, sources):
     derive(facts, f"rec.big3share.{y}", 100 * big3 / facts[f"rec.taxes.{y}"].value, "% of all taxes", y, "obr",
            [f"rec.income_tax.{y}", f"rec.nics.{y}", f"rec.vat.{y}", f"rec.taxes.{y}"], f"100 × (rec.income_tax + rec.nics + rec.vat) ÷ rec.taxes, {y}")
     body = ["<h1>Which taxes raise the money?</h1>"]
+    body.append(keyfigs([(num(f"rec.taxes.{y}", "bn"), f"raised in taxes in {y}", True),
+                         (num(f"rec.big3share.{y}", "pct0"), "of all tax came from Income Tax, National Insurance and VAT", False),
+                         (num(f"agg.psnb.{y}", "bn"), "borrowed to cover spending above receipts (not tax)", False)]))
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector received {num(f"rec.total.{y}", "bn")}. Most of it, {num(f"rec.taxes.{y}", "bn")}, was tax.</p>
 <p>Three taxes raised {num(f"rec.big3share.{y}", "pct0")} of all tax: Income Tax ({num(f"rec.income_tax.{y}", "bn")}), National Insurance ({num(f"rec.nics.{y}", "bn")}) and VAT ({num(f"rec.vat.{y}", "bn")}).
 Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y}", "bn")} to cover the gap.</p></div>''')
@@ -146,6 +154,9 @@ def who_pays_page(facts, d, num, sources):
     w = d["who"]
     y = w["hmrc_latest_outturn"]
     body = ["<h1>Who pays?</h1>"]
+    body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax was paid by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
+                         (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
+                         (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax.</p>
 <p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p>
 <p>Households of retired people paid less tax on average than households of non-retired people. They also had lower average incomes and fewer people in them (<a href="#retired">see section 3</a>).</p></div>''')
@@ -213,6 +224,9 @@ def household_tax_page(facts, d, num, sources, rates):
     derive(facts, f"rec.incomesharetaxes.{y}", 100 * facts[f"rec.income_tax.{y}"].value / facts[f"rec.taxes.{y}"].value, "%", y, "obr",
            [f"rec.income_tax.{y}", f"rec.taxes.{y}"], "100 × Income Tax ÷ all taxes")
     body = ["<h1>How much of household income goes on tax?</h1>"]
+    body.append(keyfigs([(num("etb.t8.gross.all.all", "pct"), "of gross household income went on tax, on average across everyone, 2023/24. An average, not anyone's tax rate", True),
+                         (num("etb.t8.gross.direct.all", "pct"), "in direct taxes, such as Income Tax", False),
+                         (num("etb.t8.gross.indirect.all", "pct"), "in indirect taxes, such as VAT", False)]))
     body.append(f'''<div class="answer"><p class="lede">Across everyone in UK private households, taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24.</p>
 <p>That was {num("etb.t8.gross.direct.all", "pct")} in direct taxes, such as Income Tax, and {num("etb.t8.gross.indirect.all", "pct")} in indirect taxes, such as VAT. The share was similar for the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")}) and the highest-income fifth ({num("etb.t8.gross.all.q5", "pct")}), but for different reasons. The fifths each hold the same number of people, ranked by their household's income.</p></div>''')
     items = []
