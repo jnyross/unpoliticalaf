@@ -27,11 +27,38 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   lines are named at their ends instead of in a key. Gaps and definition
   breaks are drawn as gaps and dashed lines, never joined. The visible title
   sits above the chart; the SVG's `aria-label` repeats it for screen readers.
+- **Chart summaries** (`chart_summary()`): pass `kind` (and `ids` with `num`, so
+  the numbers are traceable figures) to `line_chart()` and it writes "What the
+  chart shows" under the chart: each line's first and latest values, the highest
+  and lowest in between, and missing years. Each side of a definition break is
+  read separately, even where the line is joined, and forecasts are given on
+  their own. Write the facts only; never add a reason for a change.
+- **Events vs breaks**: `breaks` are definition changes (amber dashed line).
+  `events` are things that happened, such as Covid (grey dotted line, labelled
+  at the foot of the chart); the summary says they show timing, not cause.
+- **Readout**: charts with `kind` also get a small script (`CHART_JS`) that
+  shows one year's values on tap, hover or arrow keys. It only adds to the
+  chart; the summary and table work without it.
 - **Year lists** (`.stats`): label, value and the value's own period, used on
   the year pages instead of three-column tables.
 - **Source line** (`source_line()`): one or two sources are shown in full;
   more are folded into "Sources: publishers (N tables)" so they don't bury the
   page on a phone, but stay one tap away.
+- **Scale line** (`scale_box()` in `pages_money.py`): a national total divided
+  by the UK population, per year and per week. Always say it is an average
+  across everyone, including children, and never call it a bill.
+- **Glossary links** (`builder/glossary.py`): every word explained on
+  `glossary.html` is linked, with a dotted underline, the first time it appears
+  in ordinary text on each page (at most 12 per page). Headings, figures,
+  tables, charts, existing links and text hidden from screen readers are left
+  alone. To explain a new word, add it to `GROUPS` with the words that should
+  link to it; don't write separate definitions on each page.
+- **Tracing figures** (`builder/trace.py`): every page gets the records of the
+  figures it shows, and tapping a number opens a panel with its source, period
+  and cell or calculation. Each source line links to `figures/<source>.html`,
+  a record of every figure used from that source. Nothing to do per page: wrap
+  numbers with `num()` as usual. When a published mistake is fixed, add it to
+  `CORRECTIONS` so it appears on `corrections.html`.
 - **Illustrations** keep the dashed border and the "Illustration, not a
   statistic" tag. Don't restyle them to look like measured figures.
 

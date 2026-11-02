@@ -20,8 +20,13 @@ def tax_mix_section(facts, d, num, sources):
     years = _outturn_years(rc)
     first, last = years[0], years[-1]
     keys = [(k, n) for k, n in rc["groups"]] + [("othertax", "All other taxes")]
+    # Every year for the three charted taxes; first and last year for the rest
+    # (the per-source figure record page has a size limit).
+    lines = {k for k, _, _ in MIX_LINES}
     for y in years:
         for k, _ in keys:
+            if k not in lines and y not in (first, last):
+                continue
             derive(facts, f"rec.share.{k}.{y}", 100 * facts[f"rec.{k}.{y}"].value / facts[f"rec.taxes.{y}"].value, "% of all taxes", y, "obr",
                    [f"rec.{k}.{y}", f"rec.taxes.{y}"], f"100 × rec.{k}.{y} ÷ rec.taxes.{y}")
     for k, _ in keys:
@@ -52,9 +57,15 @@ A smaller share does not have to mean less money: it can also mean other taxes g
               f'{num(f"rec.share.{k}.{first}", "pct")} of all tax in {first}, {num(f"rec.share.{k}.{last}", "pct")} in {last}') for k, n in moves[::-1]]
     out.append(change_bars(items, "pts", num, caption=f"Change in each tax's share of all taxes, {first} to {last}, in percentage points. "
                            "A percentage point is the simple difference between two percentages: from 6% to 2% is a fall of 4 points."))
-    head = ["Year"] + [esc(n) for _, n in keys]
-    rows = [[y] + [num(f"rec.share.{k}.{y}", "pct") for k, _ in keys] for y in years]
-    out.append(details_table("Show each tax's share for every year", f"Share of all taxes by tax, {first} to {last}, per cent", head, rows))
+    head = ["Year"] + [esc(n) for _, n, _ in MIX_LINES] + ["Three together"]
+    for y in years:
+        if y not in (first, last):
+            derive(facts, f"rec.big3sharemix.{y}", big3(y), "% of all taxes", y, "obr",
+                   [f"rec.share.income_tax.{y}", f"rec.share.nics.{y}", f"rec.share.vat.{y}"],
+                   f"rec.share.income_tax.{y} + rec.share.nics.{y} + rec.share.vat.{y}")
+    rows = [[y] + [num(f"rec.share.{k}.{y}", "pct") for k, _, _ in MIX_LINES] + [num(f"rec.big3sharemix.{y}", "pct")] for y in years]
+    out.append(details_table("Show the chart's figures for every year", f"Share of all taxes, Income Tax, National Insurance and VAT, {first} to {last}, per cent", head, rows))
+    out.append(f'<p class="small">Cash amounts for the main taxes in every year are in the “main taxes” table above. Each tax\'s share in {first} and {last} is shown under its bar.</p>')
     out.append(f'''<div class="limit"><p><strong>Limits.</strong> Shares are calculated here from the OBR's cash figures (each tax ÷ all taxes in the same year), so they are not affected by inflation.
 They show what the tax system raised, not why it changed: tax rates, prices, wages, house prices and spending patterns all move the shares. The OBR groups some taxes differently from HMRC; “all other taxes” is what is left after the named taxes.
 {last} figures can still be revised.</p></div>''')

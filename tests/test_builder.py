@@ -46,6 +46,44 @@ class Charts(unittest.TestCase):
         self.assertNotEqual(pages_life.rooms_basis(2010), pages_life.rooms_basis(2011))
         self.assertEqual(pages_life.rooms_basis(2011), pages_life.rooms_basis(2024))
 
+    def test_summary_reads_first_latest_high_low_and_gaps(self):
+        svg = line_chart("t", ["2018", "2019", "2020", "2021", "2022"], [("a", [5.0, 9.0, None, 2.0, 4.0], "a")], "u", kind="pct")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("5.0% in 2018 and 4.0% in 2022", text)
+        self.assertIn("highest 9.0% (2019)", text)
+        self.assertIn("lowest 2.0% (2021)", text)
+        self.assertIn("No figure for 2020", text)
+
+    def test_summary_does_not_compare_across_a_definition_break(self):
+        svg = line_chart("t", ["1", "2", "3", "4", "5", "6"], [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")], "u",
+                         breaks=[(3, "New method")], kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1 to 3: 1.0 in 1 and 2.0 in 3", text)
+        self.assertIn("4 to 6: 3.0 in 4 and 4.0 in 6", text)
+        self.assertNotIn("9.0 in 1", text)
+
+    def test_summary_keeps_forecasts_apart(self):
+        svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 99.0], "a")], "u", forecast_from=3, kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1.0 in 1 and 3.0 in 3", text)
+        self.assertIn("Forecast for 4: 99.0", text)
+        self.assertIn("forecasts, not measurements", text)
+
+    def test_summary_numbers_are_traceable_figures(self):
+        facts = Facts()
+        for i, v in enumerate([1.0, 2.0, 3.0]):
+            facts.add(Fact(f"x.{i}", v, "%", str(i), "s", f"A{i + 1}"))
+        svg = line_chart("t", ["0", "1", "2"], [("a", [1.0, 2.0, 3.0], "a")], "u", kind="pct", num=Num(facts), ids=[["x.0", "x.1", "x.2"]])
+        summary = svg.split('class="csum"')[1]
+        self.assertIn('data-fact="x.0"', summary)
+        self.assertIn('data-fact="x.2"', summary)
+
+    def test_events_do_not_split_the_summary(self):
+        svg = line_chart("t", ["1", "2", "3"], [("a", [1.0, 5.0, 2.0], "a")], "u", events=[(1, "Covid")], kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1.0 in 1 and 2.0 in 3", text)
+        self.assertIn("not what it caused", text)
+
     def test_chart_has_text_alternative(self):
         svg = line_chart("Title", ["1", "2"], [("a", [1, 2], "a")], "u")
         self.assertIn('role="img"', svg)
@@ -161,9 +199,6 @@ class Sources(unittest.TestCase):
         self.assertEqual(verify_hashes(all_sources()), [])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class Holidays(unittest.TestCase):
     def test_only_single_countries_are_ranked(self):
@@ -197,7 +232,8 @@ class WhoPaysAndTaxMix(unittest.TestCase):
         tax_mix_section(self.facts, self.d, num, {"obr": {"publisher": "OBR", "title": "t", "page": "", "id": "obr"}})
         rc = self.d["receipts"]
         keys = [k for k, _ in rc["groups"]] + ["othertax"]
-        for y in [y for y in rc["years"] if y < rc["forecast_from"]]:
+        outturn = [y for y in rc["years"] if y < rc["forecast_from"]]
+        for y in (outturn[0], outturn[-1]):
             total = sum(self.facts[f"rec.share.{k}.{y}"].value for k in keys)
             self.assertAlmostEqual(total, 100, places=6, msg=y)
         self.assertFalse(any(f.startswith("rec.share.") and f.endswith(rc["forecast_from"]) for f in self.facts))
@@ -212,3 +248,91 @@ class WhoPaysAndTaxMix(unittest.TestCase):
         self.assertIn("1994/95", ys)
         self.assertEqual(len(ys), len(set(ys)))
         self.assertTrue(all(0 < self.facts[f"etb.t16.ret.{y}"].value <= 100 for y in ys))
+
+
+class Glossary(unittest.TestCase):
+    def wrap(self, main):
+        return f'<html><body><nav>VAT</nav><main id="main" class="wrap">{main}</main><footer><p>VAT</p></footer></body></html>'
+
+    def test_first_use_in_text_is_linked_once(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap("<p>VAT is a tax. VAT again.</p>"), "taxes.html")
+        self.assertEqual(out.count('href="glossary.html#vat"'), 1)
+        self.assertIn('<a class="term" href="glossary.html#vat">VAT</a> is a tax. VAT again.', out)
+
+    def test_headings_links_figures_and_tables_are_left_alone(self):
+        from builder.glossary import link_terms
+        main = ('<h2 id="x">VAT</h2><p><a href="a.html">VAT</a> <data value="1" data-fact="f" data-kind="int">GDP</data></p>'
+                "<table><caption>VAT</caption><tr><td>VAT</td></tr></table><p><strong>VAT</strong></p>")
+        out = link_terms(self.wrap(main), "taxes.html")
+        self.assertNotIn('class="term"', out)
+
+    def test_links_work_from_subfolders_and_skip_the_glossary(self):
+        from builder.glossary import link_terms
+        self.assertIn('href="../../glossary.html#median"', link_terms(self.wrap("<p>The median rose.</p>"), "life/compare/2010-2025.html"))
+        self.assertNotIn('class="term"', link_terms(self.wrap("<p>The median rose.</p>"), "glossary.html"))
+
+    def test_longer_phrase_wins_and_case_matters_for_names(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap("<p>Taxes took 30% of gross household income. The vat was full.</p>"), "x.html")
+        self.assertIn('glossary.html#gross-income">gross household income</a>', out)
+        self.assertNotIn("#vat", out)
+
+    def test_text_hidden_from_screen_readers_is_left_alone(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap('<div aria-hidden="true"><p>VAT</p></div><p>VAT</p>'), "x.html")
+        self.assertIn('<div aria-hidden="true"><p>VAT</p></div><p><a class="term"', out)
+
+    def test_every_term_has_an_anchor_and_words(self):
+        from builder.glossary import GROUPS
+        anchors = [a for _, _, terms in GROUPS for a, _, _, _ in terms]
+        self.assertEqual(len(anchors), len(set(anchors)))
+        for _, _, terms in GROUPS:
+            for a, name, text, words in terms:
+                self.assertTrue(words and text.strip(), a)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+class Trace(unittest.TestCase):
+    def setUp(self):
+        from builder import trace
+        self.trace = trace
+        self.facts = Facts()
+        self.facts.add(Fact("a.2020", 10.0, "£bn", "2020-21", "s1", "4_2!B23"))
+        self.facts.add(Fact("b.1999 to 2000", 5.0, "%", "1999-00", "s2", "T1!C4"))
+        self.facts.add(Fact("c.2020", 2.0, "ratio", "2020-21", "s1", "", status="calculated",
+                            formula="a.2020 ÷ b.1999 to 2000", inputs=["a.2020", "b.1999 to 2000"]))
+        src = dict(publisher="P", title="T", geography="UK", population="All", published="2025", page="https://example.org", file="data/x.xlsx", licence="OGL")
+        self.sources = {"s1": src, "s2": dict(src, title="T2"), "s3": dict(src, title="Unused")}
+
+    def test_anchor_is_safe(self):
+        self.assertEqual(self.trace.anchor("b.1999 to 2000"), "f-b.1999_to_2000")
+
+    def test_where_reads_sheet_and_cell(self):
+        self.assertEqual(self.trace.where(self.facts["a.2020"]), "Sheet “4_2”, cell B23")
+
+    def test_record_pages_cover_inputs_and_every_source(self):
+        pages = self.trace.figure_pages(self.facts, self.sources, {"c.2020"})
+        self.assertEqual(set(pages), {"figures/s1.html", "figures/s2.html", "figures/s3.html"})
+        s1 = pages["figures/s1.html"]
+        # The calculation links to its inputs, including one on another source's page.
+        self.assertIn('id="f-c.2020"', s1)
+        self.assertIn('id="f-a.2020"', s1)
+        self.assertIn('href="s2.html#f-b.1999_to_2000"', s1)
+        self.assertIn('id="f-b.1999_to_2000"', pages["figures/s2.html"])
+        self.assertIn("No figure from this source is shown directly", pages["figures/s3.html"])
+
+    def test_page_gets_records_for_its_figures_only(self):
+        html = '<body><data value="10.0" data-fact="a.2020" data-kind="bn">£10bn</data></body>'
+        out = self.trace.add_trace(html, "life/2020.html", self.facts, self.sources)
+        self.assertIn('data-up="../"', out)
+        self.assertIn('"a.2020"', out)
+        self.assertNotIn('"c.2020"', out)
+        self.assertEqual(self.trace.add_trace("<body></body>", "x.html", self.facts, self.sources), "<body></body>")
+
+    def test_corrections_link_to_their_change(self):
+        out = self.trace.corrections_page()
+        self.assertIn("/pull/71", out)
