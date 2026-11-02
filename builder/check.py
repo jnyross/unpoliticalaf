@@ -386,6 +386,39 @@ FIRST_CHART_JS = """() => {
 }"""
 
 
+# Every tappable thing on the page, with its size (shared with scripts/a11y_benchmark.py).
+TARGETS_JS = """() => {
+  // Content of a closed <details> still has a size in Chromium, but cannot be seen or tapped.
+  const hiddenIn = e => { const d = e.closest('details:not([open])'); return !!d && !(e.closest('summary') && e.closest('summary').parentElement === d); };
+  const sel = 'a[href], button, summary, input:not([type=hidden]), select, textarea, [tabindex]:not([tabindex="-1"])';
+  const out = [];
+  for (const e of document.querySelectorAll(sel)) {
+    let t = e;
+    // Hidden radio and checkbox inputs are tapped through their label.
+    if (e.matches('input[type=radio], input[type=checkbox]') && e.labels && e.labels.length) t = e.labels[0];
+    const r = t.getBoundingClientRect(), s = getComputedStyle(t);
+    if (r.width === 0 || r.height === 0 || s.visibility === 'hidden' || r.right < 0 || hiddenIn(t)) continue;
+    if (e.classList.contains('skip') || e.closest('.govuk-skip-link, .skiplink, [class*=skip]')) continue;
+    // A link inside running text is exempt from 2.5.8.
+    const p = e.closest('p, li, dd, td, th, figcaption, blockquote');
+    let inline = false;
+    if (e.tagName === 'A' && p && s.display === 'inline') {
+      const txt = (p.innerText || '').trim(), own = (e.innerText || '').trim();
+      inline = txt.length > own.length + 10;
+    }
+    // Or has a 24px circle of space around its centre that no other target overlaps.
+    out.push({tag: e.tagName.toLowerCase(), text: (e.getAttribute('aria-label') || e.innerText || '').trim().replace(/\\s+/g, ' ').slice(0, 50),
+              w: Math.round(r.width * 10) / 10, h: Math.round(r.height * 10) / 10, inline,
+              cx: r.left + r.width / 2, cy: r.top + scrollY + r.height / 2});
+  }
+  // Spacing exception: a small target passes if a 24px circle on its centre touches no other target's circle.
+  for (const t of out) {
+    t.spaced = !out.some(o => o !== t && Math.hypot(o.cx - t.cx, o.cy - t.cy) < 24);
+  }
+  return out;
+}"""
+
+
 def run_axe(paths):
     try:
         from playwright.sync_api import sync_playwright
@@ -409,6 +442,11 @@ def run_axe(paths):
                     screens = page.evaluate("document.documentElement.scrollHeight") / PHONE_SCREEN
                     if screens > MAX_SCREENS[path]:
                         fail(f"{path}: {screens:.1f} phone screens long, over the {MAX_SCREENS[path]} limit")
+                if width == 360:
+                    # WCAG 2.2 2.5.8: targets at least 24 x 24 px, unless inside a sentence or well spaced
+                    for t in page.evaluate(TARGETS_JS):
+                        if (t["w"] < 24 or t["h"] < 24) and not t["inline"] and not t["spaced"]:
+                            fail(f"{path}: tap target '{t['text'][:40]}' is {t['w']}x{t['h']}px, under 24x24 (WCAG 2.5.8)")
                 # Open every folded section, so tables and source lists are checked too
                 page.evaluate("document.querySelectorAll('details').forEach(d => d.open = true)")
                 if page.evaluate("document.documentElement.scrollWidth") > width + 1:
