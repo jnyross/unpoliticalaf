@@ -56,16 +56,18 @@ site does not yet show them (see "Live site" below).
 
 ### Live site
 
-The live site is behind `main`. On 2 November 2026 the live `who-pays.html` had
-five sections; `main` has six (Income Tax by age, #88, is missing). The repository
-has no `vercel.json`, so every pushed branch makes a Vercel preview deployment,
-and the account's 100-deployments-a-day limit was hit today. The goal is judged
-on the live site, and the phone test must use the same live commit as the
-reviews, so this has to be fixed before any test.
+The live site is behind `main`. On 2 November 2026 (checked at 15:47 and again
+at 15:53 UTC) the live `who-pays.html` had five sections; `main` has six (Income
+Tax by age, #88, is missing), although a preview deployment of this audit's own
+branch built successfully at 15:52. The repository has no `vercel.json`, so every
+pushed branch makes a Vercel preview deployment, and the account's
+100-deployments-a-day limit was hit today. The goal is judged on the live site,
+and the phone test must use the same live commit as the reviews, so this has to
+be fixed before any test.
 
 ### Gaps that a worker can do (largest score effect first)
 
-1. Make the live site match `main`: add a `vercel.json` that deploys only `main` (no preview deployments for other branches), then confirm the live pages match the latest build. Needed before any reader test or review.
+1. Make the live site match `main`: find out why production is not updating while previews deploy (production branch setting, failed production builds or the daily cap), add a `vercel.json` that stops preview deployments for other branches so they cannot use up the cap, and add a check that the live pages match the latest build. Needed before any reader test or review.
 2. Split the life explorer (`life/index.html`, 443KB) into one page per topic (work, earnings, housing, holidays, class sizes) under a short hub, each well under 150KB, with links, contents and comparisons updated (D6, D5).
 3. Show the key chart in view, not folded: on every money page, topic page and year page keep each section's main chart under its answer and fold only tables, limits and sources; give each home-page card a small visual (D5, D1, D4).
 4. Show how much household income goes on tax over time: direct, indirect and all taxes as a share of gross income by income fifth from ONS's historical tables since 1977, with breaks marked (D1).
