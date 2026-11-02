@@ -601,7 +601,7 @@
  },
  "ons-jobs02": {
   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
-  "file": "ons/jobs02.bin",
+  "file": "ons/jobs02.xls",
   "bytes": 375296,
   "content_type": "application/vnd.ms-excel;charset=utf-8",
   "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
