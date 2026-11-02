@@ -10,7 +10,11 @@ Usage: python -m builder.check [--axe]
 5. Every change shown on a comparison page is recalculated.
 6. Every internal link and #anchor resolves.
 7. Basic accessibility, wording and labelling rules hold on every page.
+   Quoted text inside <blockquote> is the publisher's own wording, so it is
+   checked word for word against the source (step 9) instead of for loaded words.
 8. With --axe, axe-core accessibility checks run on key pages at phone width.
+9. Every quoted explanation appears word for word in its source file and is
+   shown on at least one page.
 """
 import csv
 import hashlib
@@ -30,6 +34,7 @@ LOADED = ["shocking", "staggering", "soared", "soaring", "plummeted", "plunged",
           "slashed", "splurge", "handout", "handouts", "scrounger", "typical family", "average family"]
 
 problems = []
+QUOTED_PAGES = []
 
 
 def fail(msg):
@@ -164,6 +169,8 @@ class PageParser(HTMLParser):
         self.lang = None
         self._data = None
         self._script = False
+        self._quote = 0
+        self.quoted = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -177,6 +184,8 @@ class PageParser(HTMLParser):
             self._data = [a, ""]
         if tag == "script":
             self._script = True
+        if tag == "blockquote":
+            self._quote += 1
         if tag == "h1":
             self.h1 += 1
         if re.fullmatch(r"h[1-6]", tag):
@@ -194,11 +203,15 @@ class PageParser(HTMLParser):
             self._data = None
         if tag == "script":
             self._script = False
+        if tag == "blockquote":
+            self._quote -= 1
 
     def handle_data(self, d):
         if self._data is not None:
             self._data[1] += d
-        if not self._script:
+        if self._quote:
+            self.quoted.append(d)
+        elif not self._script:
             self.text.append(d)
 
 
@@ -253,6 +266,7 @@ def check_pages(facts):
                 tp.feed(target.read_text(encoding="utf-8"))
                 if frag not in tp.ids:
                     fail(f"{rel}: missing anchor {href}")
+        QUOTED_PAGES.append((rel, " ".join(pp.quoted)))
         text = " ".join(pp.text).lower()
         for w in LOADED:
             if re.search(r"\b" + re.escape(w) + r"\b", text):
@@ -301,16 +315,31 @@ def run_axe(paths):
         browser.close()
 
 
+def check_explanations():
+    sys.path.insert(0, str(ROOT))
+    from builder.explain import EXPLANATIONS, missing_quotes, norm
+    from builder.sources import all_sources
+    for p in missing_quotes(all_sources()):
+        fail(p)
+    shown = " ".join(norm(t) for _, t in QUOTED_PAGES)
+    for key, e in EXPLANATIONS.items():
+        if not all(norm(q) in shown for q in e["quote"]):
+            fail(f"explanation {key} is not shown on any page")
+    return len(EXPLANATIONS)
+
+
 def main():
     data = json.loads((SITE / "data/facts.json").read_text(encoding="utf-8"))
     facts, checked, recalculated = check_facts(data)
     years, pairs = check_structure()
     n_pages, shown = check_pages(facts)
+    n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
                  "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
+    print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
     if problems:
         print(f"\n{len(problems)} problems:")
         for p in problems[:200]:

@@ -135,6 +135,21 @@ FETCHED = {
     "dfe-spc-2015-tables": ("Department for Education", "Schools, pupils and their characteristics: January 2015, national tables (SFR16/2015)", "England", "State-funded schools; classes taught by one teacher"),
     "gov-income-tax-rates": ("HM Revenue and Customs (GOV.UK)", "Income Tax rates and Personal Allowances", "England, Wales and Northern Ireland", "Individuals"),
     "gov-ni-rates": ("HM Revenue and Customs (GOV.UK)", "National Insurance rates and categories", "United Kingdom", "Employees"),
+    # Explanatory publications quoted word for word on the pages (see builder/explain.py).
+    "explain-ons-psf-2021-03": ("Office for National Statistics", "Public sector finances, UK: March 2021 (statistical bulletin)", "United Kingdom", "Whole public sector"),
+    "explain-ons-psf-2023-03": ("Office for National Statistics", "Public sector finances, UK: March 2023 (statistical bulletin)", "United Kingdom", "Whole public sector"),
+    "explain-hmrc-itl-commentary": ("HM Revenue and Customs", "Income Tax liabilities statistics: tax year 2023 to 2024 to tax year 2026 to 2027, bulletin commentary", "United Kingdom", "Individuals with an Income Tax liability"),
+    "explain-ons-etb-latest": ("Office for National Statistics", "Effects of taxes and benefits on UK household income: financial year ending 2024 (statistical bulletin)", "United Kingdom", "People in private households"),
+    "explain-ons-2008-recession": ("Office for National Statistics", "The 2008 recession 10 years on (article)", "United Kingdom", "Whole economy"),
+    "explain-ons-lmo-latest": ("Office for National Statistics", "Labour market overview, UK: October 2026 (statistical bulletin)", "United Kingdom", "People aged 16 and over"),
+    "explain-ons-ashe-2022": ("Office for National Statistics", "Employee earnings in the UK: 2022 (statistical bulletin)", "United Kingdom", "Employee jobs"),
+    "explain-ehs-2023-24-rented-report": ("Ministry of Housing, Communities and Local Government", "English Housing Survey 2023 to 2024: rented sectors (report)", "England", "Households renting privately or socially"),
+    "explain-ehs-2024-25-ch1": ("Ministry of Housing, Communities and Local Government", "English Housing Survey 2024 to 2025 headline findings on demographics and household resilience, chapter 1", "England", "All households"),
+    "explain-ehs-2024-25-ch2": ("Ministry of Housing, Communities and Local Government", "English Housing Survey 2024 to 2025 headline findings on demographics and household resilience, chapter 2", "England", "All households"),
+    "explain-ons-travel-2021": ("Office for National Statistics", "Travel trends: 2021 (article)", "United Kingdom residents and overseas visitors", "Visits abroad and visits to the UK"),
+    "explain-ons-travel-2022": ("Office for National Statistics", "Travel trends: 2022 (article)", "United Kingdom residents and overseas visitors", "Visits abroad and visits to the UK"),
+    "explain-ons-travel-2024": ("Office for National Statistics", "Travel trends: 2024 (article)", "United Kingdom and Great Britain residents and overseas visitors", "Visits abroad and visits to the UK"),
+    "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 
 

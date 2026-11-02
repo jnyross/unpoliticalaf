@@ -162,6 +162,11 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .cmp-notes .cmp-vals{list-style:disc;padding-left:1.2em;margin:0}.cmp-notes .cmp-vals li{border:0;background:none;padding:0;margin:0 0 2px}
 .cmp-top{padding-left:1.4em;margin:6px 0 12px}
 .cmp-top li{margin:0 0 6px}
+.explain{border:1px solid var(--line);border-left:4px solid var(--bar2);padding:10px 14px;margin:16px 0;background:#fff}
+.explain .q{margin:0 0 4px;font-size:1rem;border:0;padding:0}
+.explain .who{font-size:.9rem;color:var(--muted);margin:0 0 4px}
+.explain blockquote{margin:0 0 8px;padding:0}
+.explain blockquote p{margin:0}
 details.limit summary{color:var(--ink)}
 footer{border-top:1px solid var(--line);background:var(--soft2);padding:20px 0 36px;font-size:.88rem;color:var(--muted)}
 footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:0 18px}

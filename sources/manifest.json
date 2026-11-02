@@ -203,11 +203,6 @@
    "file": "explain/ons-2008-recession.html"
   },
   {
-   "id": "explain-ons-ashe-2025",
-   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025",
-   "file": "explain/ons-ashe-2025.html"
-  },
-  {
    "id": "explain-ons-ashe-2022",
    "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
    "file": "explain/ons-ashe-2022.html"
@@ -223,29 +218,9 @@
    "file": "explain/ons-travel-trends-2024.html"
   },
   {
-   "id": "explain-hmrc-itl-page",
-   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
-   "file": "explain/hmrc-itl-page.html"
-  },
-  {
-   "id": "explain-ehs-collection",
-   "url": "https://www.gov.uk/government/collections/english-housing-survey",
-   "file": "explain/ehs-collection.html"
-  },
-  {
    "id": "explain-hmrc-itl-commentary",
    "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
    "file": "explain/hmrc-itl-commentary.html"
-  },
-  {
-   "id": "explain-ehs-2024-25-demographics",
-   "url": "https://www.gov.uk/government/collections/english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
-   "file": "explain/ehs-2024-25-demographics-collection.html"
-  },
-  {
-   "id": "explain-ehs-2023-24-rented",
-   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors",
-   "file": "explain/ehs-2023-24-rented-sectors-page.html"
   },
   {
    "id": "explain-ons-etb-latest",
@@ -266,11 +241,6 @@
    "id": "explain-ons-travel-2022",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
    "file": "explain/ons-travel-trends-2022.html"
-  },
-  {
-   "id": "explain-ehs-2024-25-chapters",
-   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
-   "file": "explain/ehs-2024-25-chapters-page.html"
   },
   {
    "id": "explain-ehs-2023-24-rented-report",
