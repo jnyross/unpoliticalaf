@@ -467,6 +467,41 @@
    "id": "probe-hbai-report",
    "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025/households-below-average-income-an-analysis-of-the-uk-income-distribution-fye-1995-to-fye-2025",
    "file": "probe/hbai-report.html"
+  },
+  {
+   "id": "scot-primary-class-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
+   "file": "nations/scot-primary-class-size-dataset-2025.xlsx"
+  },
+  {
+   "id": "scot-pupil-census-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
+   "file": "nations/scot-pupil-census-supplementary-2025.xlsx"
+  },
+  {
+   "id": "ni-housing-2025-26-t1",
+   "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
+   "file": "nations/ni-housing-stats-25-26-tables1.ods"
+  },
+  {
+   "id": "probe-wales-dwelling-2025-html",
+   "url": "https://www.gov.wales/dwelling-stock-estimates-31-march-2025-html",
+   "file": "probe/wales-dwelling-2025-html.html"
+  },
+  {
+   "id": "probe-wales-stats-topic",
+   "url": "https://stats.gov.wales/en-GB/topic/65/housing-stock-and-need",
+   "file": "probe/wales-stats-topic65.html"
+  },
+  {
+   "id": "probe-ni-summary-ods",
+   "url": "https://www.education-ni.gov.uk/publications/northern-ireland-summary-data-ods-versions",
+   "file": "probe/ni-summary-ods.html"
+  },
+  {
+   "id": "probe-ni-enrol-final",
+   "url": "https://datavis.nisra.gov.uk/DEstatistics/annual-enrolments-at-grant-aided-schools-in-northern-ireland-202526.html",
+   "file": "probe/ni-enrol-final-2025-26.html"
   }
  ]
 }
