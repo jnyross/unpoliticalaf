@@ -119,6 +119,22 @@
   "sha256": "8d80f1da73d223cbaf0b8a912b77f843c80ed4b426868cbceaabd59f1dfbd23a",
   "retrieved": "2026-11-02T10:24:39Z"
  },
+ "explain-ehs-2023-24-rented-report": {
+  "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
+  "file": "explain/ehs-2023-24-rented-sectors.html",
+  "bytes": 293768,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "90044967d57932ef93266b52ef6fd6f594df3cbb608e5a76e1f9eacc6f494df4",
+  "retrieved": "2026-11-02T10:27:31Z"
+ },
+ "explain-ehs-2024-25-chapters": {
+  "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
+  "file": "explain/ehs-2024-25-chapters-page.html",
+  "bytes": 87694,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "1c229c1ce08f303ee6d9f4c8d1e624694cb65692db2a24c0eefb9bd4406ea3aa",
+  "retrieved": "2026-11-02T10:27:27Z"
+ },
  "explain-ehs-2024-25-demographics": {
   "url": "https://www.gov.uk/government/collections/english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
   "file": "explain/ehs-2024-25-demographics-collection.html",
