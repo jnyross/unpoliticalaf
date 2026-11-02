@@ -5,29 +5,46 @@ from .html import page, esc, table
 def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
-    body = [f'''<h1>Public money and everyday life in the UK, in plain numbers</h1>
-<p class="lede">Clear answers from official statistics. Every figure shows where it comes from, what period it covers and what it can't tell you.</p>
+    L = 2025
+    body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
+<p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
+<h2 id="money">Public money: four questions</h2>
 <div class="cards">
-<a class="card" href="spending.html"><h2>Where does public money go?</h2>
-<p>{num(f"spend.cash.tme.{sp}", "bn")} was spent in {esc(sp)}. Social protection, including pensions, was the largest share: {num(d["spending"]["per100"]["social"], "per100")} of every £100 spent on services.</p></a>
-<a class="card" href="taxes.html"><h2>Which taxes raise the money?</h2>
-<p>Taxes raised {num(f"rec.taxes.{y}", "bn")} in {y}. Income Tax, National Insurance and VAT raised {num(f"rec.big3share.{y}", "pct0")} of it. Borrowing covered another {num(f"agg.psnb.{y}", "bn")}.</p></a>
-<a class="card" href="who-pays.html"><h2>Who pays?</h2>
-<p>The top 1% of Income Tax payers paid {num("hmrc.share.top1.2023 to 2024", "pct")} of all Income Tax in 2023 to 2024. Every household pays taxes on spending, such as VAT.</p></a>
-<a class="card" href="household-tax.html"><h2>How much household income goes on tax?</h2>
-<p>On average, {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24. That is an average across households, not anyone's tax rate.</p></a>
+<a class="card" href="spending.html"><h3>Where does public money go?</h3>
+<span class="big">{num(f"spend.cash.tme.{sp}", "bn")}</span>
+<p>spent by the public sector in {esc(sp)}. The largest area was social protection, including pensions: {num(d["spending"]["per100"]["social"], "per100")} of every £100 spent on services.</p>
+<span class="more">Spending by area and over time</span></a>
+<a class="card" href="taxes.html"><h3>Which taxes raise the money?</h3>
+<span class="big">{num(f"rec.taxes.{y}", "bn")}</span>
+<p>raised in taxes in {y}. Income Tax, National Insurance and VAT raised {num(f"rec.big3share.{y}", "pct0")} of it. Borrowing covered another {num(f"agg.psnb.{y}", "bn")}.</p>
+<span class="more">Taxes, other receipts and borrowing</span></a>
+<a class="card" href="who-pays.html"><h3>Who pays?</h3>
+<span class="big">{num("hmrc.share.top1.2023 to 2024", "pct")}</span>
+<p>of all Income Tax was paid by the top 1% of Income Tax payers in 2023 to 2024. Every household also pays taxes on spending, such as VAT.</p>
+<span class="more">Income Tax and all taxes, by group</span></a>
+<a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
+<span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
+<p>of gross household income, on average across everyone, in 2023/24. That is an average across households, not anyone's tax rate.</p>
+<span class="more">Direct, indirect and combined taxes</span></a>
 </div>
-<h2>Everyday life, year by year</h2>
-<p>See how work, pay after inflation, housing, holidays at home and abroad, and school class sizes have changed since 2008. Pick a year or compare two.</p>
-<p><a class="button" href="life/index.html">Explore everyday life</a></p>
-<h2>How to read this site</h2>
-<ul>
-<li>Every number comes from an official UK source. Select “Source” under a figure to see exactly where.</li>
-<li>Gaps stay gaps. When a year is missing or a definition changed, we say so and don't fill it in.</li>
-<li>Anything invented to explain a rule, such as a worked example, is marked “Illustration, not a statistic”.</li>
-<li>Figures show what changed, not why it changed.</li>
+<h2 id="life">Everyday life, year by year</h2>
+<p>Pick any year from 2008 to {L}, or compare two. Each topic shows the latest figure and what it covers.</p>
+<div class="cards">
+<a class="card" href="life/index.html#work"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p></a>
+<a class="card" href="life/index.html#earnings"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK.</p></a>
+<a class="card" href="life/index.html#housing"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p></a>
+<a class="card" href="life/index.html#holidays"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p></a>
+<a class="card" href="life/index.html#schools"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p></a>
+<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from 2008 to {L} side by side, with what changed and where definitions changed.</p><span class="more">Choose two years</span></a>
+</div>
+<h2 id="how">How to read this site</h2>
+<ul class="principles">
+<li><strong>Every number has a source.</strong> Each section names the official source, and the sources page gives the exact file, table and cell.</li>
+<li><strong>Gaps stay gaps.</strong> When a year is missing or a definition changed, we say so and don't fill it in.</li>
+<li><strong>Illustrations are labelled.</strong> Anything invented to explain a rule, such as a worked example, is marked “Illustration, not a statistic”.</li>
+<li><strong>Change is not cause.</strong> Figures show what changed, not why it changed.</li>
 </ul>''']
-    return page("index.html", "Unpolitical", "\n".join(body), "Independent, plain-English answers about UK public spending, taxes and everyday life, from official statistics.")
+    return page("index.html", "Unpolitical", "\n".join(body), contents=False, description="Independent, plain-English answers about UK public spending, taxes and everyday life, from official statistics.")
 
 
 def methods_page(facts, sources, used_counts):
