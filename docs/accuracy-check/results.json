@@ -1,0 +1,1696 @@
+{
+ "meta": {
+  "checked": "2026-11-02T19:48:38Z",
+  "seed": 20261102,
+  "downloads": {
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count": {
+    "sha256": "a065b1a4657d35ee9ebfe28e066af52534142c6ff21ada9423cf1ee755e37970",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms": {
+    "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
+    "error": null
+   },
+   "https://obr.uk/download/public-finances-databank-october-2026-efo/": {
+    "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx": {
+    "sha256": "e8c63353670e3f7fba468c9ff82b2c8cf30f1016af7e6129dbb9299523e6ebc2",
+    "error": null
+   },
+   "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx": {
+    "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+    "error": null
+   },
+   "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx": {
+    "sha256": "334839c1205fb5dee49eb6e76bceaa52a875a6789b3703ed017c9cb7d429b07f",
+    "error": null
+   },
+   "https://obr.uk/download/historical-public-finances-database/": {
+    "sha256": "df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+    "error": null
+   },
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name": {
+    "sha256": "fe8cac45c2c7ae15552192928dd242e0ce770ed5197568b41e3e968772a657cf",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms": {
+    "sha256": "9d2008ed9769b8f4d80cc26d81dce4861b39d32a327319cccc4428503ffcb6fe",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls": {
+    "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms": {
+    "sha256": "fb818e40eb9e4c8448835294a71627a6d3da99e90aaf4a9d6302004ecbd0cc82",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms": {
+    "sha256": "55402f458931c41b131e1a66ba282c8725007214a25a140eaabe108a439e2598",
+    "error": null
+   },
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name": {
+    "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23": {
+    "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+    "error": null
+   },
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name": {
+    "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx": {
+    "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian/current/aff1ratioofhousepricetoworkplacebasedearnings.xlsx": {
+    "sha256": "585bc98112e801fc3dd45dbc5238d05c6507d4e48dc3ec3afab4867eded1c2f4",
+    "error": null
+   },
+   "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods": {
+    "sha256": "ad063b06b2bdeef8600dbbb09d48153337a4966f8c7eea50df7a2e0304ebd73e",
+    "error": null
+   },
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name": {
+    "sha256": "28b4f42a60110953a6b4feed3198bbaf03e41a299498f91d8d9ca6742daf45a1",
+    "error": null
+   },
+   "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count": {
+    "sha256": "aa027c9d02dceeebaa5132829d5d39dd75e2c43e414b12fd3faf649200819a9f",
+    "error": null
+   },
+   "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms": {
+    "sha256": "c920ed5c1a7efc29901c4c8eea0420650cb847a383e14eb114843bb19876fb3e",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx": {
+    "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+    "error": null
+   },
+   "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods": {
+    "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+    "error": null
+   },
+   "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx": {
+    "sha256": "a89eaa3d7f519bfa949c7cfa12f531b8c7a86c704adcb70e81f49567ae724a91",
+    "error": null
+   }
+  }
+ },
+ "results": [
+  {
+   "n": 1,
+   "id": "work.occshare.SOC2010.9000000.2021",
+   "page": "life/2021.html",
+   "text": "9.5%",
+   "value": 9.486995141657562,
+   "fresh_value": 9.486995141657562,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "9.487 shown as '9.5%'",
+   "cells": [
+    {
+     "id": "work.occ.SOC2010.9000000.2021",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps210-uk-calendar-annual.csv line 620",
+     "recorded": 3048200.0,
+     "same_file": false,
+     "fresh": 3048200.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.occ.SOC2010.0.2021",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps210-uk-calendar-annual.csv line 602",
+     "recorded": 32130300.0,
+     "same_file": false,
+     "fresh": 32130300.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "id": "avg.work.women.2009-2011",
+   "page": "life/compare/spans/2009-2011-and-2012-2014.html",
+   "text": "65.5%",
+   "value": 65.53333333333335,
+   "fresh_value": 65.53333333333333,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "65.5333 shown as '65.5%'",
+   "cells": [
+    {
+     "id": "work.women.2009",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "locator": "LF25 row '2009 Q2'",
+     "recorded": 65.7,
+     "same_file": true,
+     "fresh": 65.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.women.2010",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "locator": "LF25 row '2010 Q2'",
+     "recorded": 65.5,
+     "same_file": true,
+     "fresh": 65.5,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.women.2011",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "locator": "LF25 row '2011 Q2'",
+     "recorded": 65.4,
+     "same_file": true,
+     "fresh": 65.4,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "id": "rec.gdp.vat.2014-15",
+   "page": "taxes.html",
+   "text": "5.9%",
+   "value": 5.8882037843053965,
+   "fresh_value": 5.8882037843053965,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "5.8882 shown as '5.9%'",
+   "cells": [
+    {
+     "id": "rec.vat.2014-15",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Receipts (£bn)!C22",
+     "recorded": 111.176,
+     "same_file": true,
+     "fresh": 111.176,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "agg.gdpcash.2014-15",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Aggregates (£bn)!AE76",
+     "recorded": 1888.114,
+     "same_file": true,
+     "fresh": 1888.114,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "id": "gdp.tme.1957-58",
+   "page": "taxes.html",
+   "text": "35.2%",
+   "value": 35.19012082444918,
+   "fresh_value": 35.19012082444918,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "35.1901 shown as '35.2%'",
+   "cells": [
+    {
+     "id": "gdp.tme.1957-58",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Aggregates (per cent of GDP)!D14",
+     "recorded": 35.19012082444918,
+     "same_file": true,
+     "fresh": 35.19012082444918,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "id": "etbh.pall.1977.all",
+   "page": "household-tax.html",
+   "text": "38.1%",
+   "value": 38.072601555747625,
+   "fresh_value": 38.072601555747625,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "38.0726 shown as '38.1%'",
+   "cells": [
+    {
+     "id": "etbh.direct.1977.all",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1977!G51",
+     "recorded": 1060.0,
+     "same_file": true,
+     "fresh": 1060.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.indirect.1977.all",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1977!G78",
+     "recorded": 702.0,
+     "same_file": true,
+     "fresh": 702.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.gross.1977.all",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1977!G44",
+     "recorded": 4628.0,
+     "same_file": true,
+     "fresh": 4628.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "id": "spend.cash.order.2022-23",
+   "page": "spending.html",
+   "text": "£44.2bn",
+   "value": 44.2,
+   "fresh_value": 44.2,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "44.2 shown as '£44.2bn'",
+   "cells": [
+    {
+     "id": "spend.cash.order.2022-23",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_2!U11",
+     "recorded": 44.2,
+     "same_file": true,
+     "fresh": 44.2,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "id": "avg.school.primary.2011-2013",
+   "page": "life/compare/spans/2008-2010-and-2011-2013.html",
+   "text": "26.7",
+   "value": 26.733333333333334,
+   "fresh_value": 26.733333333333334,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "26.7333 shown as '26.7'",
+   "cells": [
+    {
+     "id": "school.primary.2011",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "locator": "Table 6b!O11",
+     "recorded": 26.6,
+     "same_file": true,
+     "fresh": 26.6,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "school.primary.2012",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "locator": "Table 6b!Q11",
+     "recorded": 26.8,
+     "same_file": true,
+     "fresh": 26.8,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "school.primary.2013",
+     "url": "https://assets.publishing.service.gov.uk/media/5a80c00fe5274a2e87dbb9a8/SFR16_2015_national_tables.xlsx",
+     "locator": "Table 6b!S11",
+     "recorded": 26.8,
+     "same_file": true,
+     "fresh": 26.8,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "id": "hist.real.debt.1974-75",
+   "page": "spending-history.html",
+   "text": "£25.9bn",
+   "value": 25.863195250659636,
+   "fresh_value": 25.863195250659636,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "25.8632 shown as '£25.9bn'",
+   "cells": [
+    {
+     "id": "hist.cash.debt.1974-75",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Spending (£m)!M281",
+     "recorded": 2.257,
+     "same_file": true,
+     "fresh": 2.257,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "agg.deflator.1974-75",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Aggregates (£bn)!AH36",
+     "recorded": 8.726686622150586,
+     "same_file": true,
+     "fresh": 8.726686622150586,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "id": "spend.cash.economic.2006-07",
+   "page": "spending.html",
+   "text": "£37.4bn",
+   "value": 37.4,
+   "fresh_value": 37.4,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "37.4 shown as '£37.4bn'",
+   "cells": [
+    {
+     "id": "spend.cash.economic.2006-07",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_2!E12",
+     "recorded": 37.4,
+     "same_file": true,
+     "fresh": 37.4,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "id": "thist.share.council.1953-54",
+   "page": "tax-history.html",
+   "text": "2.8%",
+   "value": 2.8391167192429023,
+   "fresh_value": 2.8391167192429023,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "2.83912 shown as '2.8%'",
+   "cells": [
+    {
+     "id": "thist.cash.council.1953-54",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!W260",
+     "recorded": 0.18,
+     "same_file": true,
+     "fresh": 0.18,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.cash.total.1953-54",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!Y260",
+     "recorded": 6.34,
+     "same_file": true,
+     "fresh": 6.34,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "id": "spread.p50.2009",
+   "page": "life/earnings.html",
+   "text": "£488",
+   "value": 488.5,
+   "fresh_value": 488.5,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "488.5 shown as '£488'",
+   "cells": [
+    {
+     "id": "spread.p50.2009",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-weekly-percentiles.csv line 454",
+     "recorded": 488.5,
+     "same_file": true,
+     "fresh": 488.5,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "id": "hist.gdp.social.1996-97",
+   "page": "spending-history.html",
+   "text": "10.3%",
+   "value": 10.290635289568522,
+   "fresh_value": 10.290635289568522,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "10.2906 shown as '10.3%'",
+   "cells": [
+    {
+     "id": "hist.gdp.social.1996-97",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Spending (per cent of GDP)!I303",
+     "recorded": 10.290635289568522,
+     "same_file": true,
+     "fresh": 10.290635289568522,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "id": "hist.gdp.health.1955-56",
+   "page": "spending-history.html",
+   "text": "2.8%",
+   "value": 2.8045017375432972,
+   "fresh_value": 2.8045017375432972,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "2.8045 shown as '2.8%'",
+   "cells": [
+    {
+     "id": "hist.gdp.health.1955-56",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Spending (per cent of GDP)!H262",
+     "recorded": 2.8045017375432972,
+     "same_file": true,
+     "fresh": 2.8045017375432972,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "id": "work.men.2005",
+   "page": "life/2005.html",
+   "text": "79.1%",
+   "value": 79.1,
+   "fresh_value": 79.1,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "79.1 shown as '79.1%'",
+   "cells": [
+    {
+     "id": "work.men.2005",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms",
+     "locator": "MGSV row '2005 Q2'",
+     "recorded": 79.1,
+     "same_file": true,
+     "fresh": 79.1,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "id": "spend.cash.education.2019-20",
+   "page": "spending.html",
+   "text": "£90.6bn",
+   "value": 90.6,
+   "fresh_value": 90.6,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "90.6 shown as '£90.6bn'",
+   "cells": [
+    {
+     "id": "spend.cash.education.2019-20",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_2!R22",
+     "recorded": 90.6,
+     "same_file": true,
+     "fresh": 90.6,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 16,
+   "id": "work.occshare.SOC2010.7000000.2019",
+   "page": "life/2019.html",
+   "text": "7.3%",
+   "value": 7.277833660941975,
+   "fresh_value": 7.277833660941975,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "7.27783 shown as '7.3%'",
+   "cells": [
+    {
+     "id": "work.occ.SOC2010.7000000.2019",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps210-uk-calendar-annual.csv line 496",
+     "recorded": 2365900.0,
+     "same_file": false,
+     "fresh": 2365900.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.occ.SOC2010.0.2019",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps210-uk-calendar-annual.csv line 482",
+     "recorded": 32508300.0,
+     "same_file": false,
+     "fresh": 32508300.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "id": "spend.real.environment.2024-25",
+   "page": "spending.html",
+   "text": "£17.8bn",
+   "value": 17.8,
+   "fresh_value": 17.8,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "17.8 shown as '£17.8bn'",
+   "cells": [
+    {
+     "id": "spend.real.environment.2024-25",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_3!W18",
+     "recorded": 17.8,
+     "same_file": true,
+     "fresh": 17.8,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 18,
+   "id": "work.women.2009",
+   "page": "life/2009.html",
+   "text": "65.7%",
+   "value": 65.7,
+   "fresh_value": 65.7,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "65.7 shown as '65.7%'",
+   "cells": [
+    {
+     "id": "work.women.2009",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+     "locator": "LF25 row '2009 Q2'",
+     "recorded": 65.7,
+     "same_file": true,
+     "fresh": 65.7,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 19,
+   "id": "jobs.share.C.1989",
+   "page": "life/1989.html",
+   "text": "17.3%",
+   "value": 17.32245516196771,
+   "fresh_value": 17.32245516196771,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "17.3225 shown as '17.3%'",
+   "cells": [
+    {
+     "id": "jobs.ind.C.1989",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "locator": "WFJ SA!E50",
+     "recorded": 5032.0,
+     "same_file": true,
+     "fresh": 5032.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "jobs.total.1989",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "locator": "WFJ SA!X50",
+     "recorded": 29049.0,
+     "same_file": true,
+     "fresh": 29049.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 20,
+   "id": "hist.gdp.total.1980-81",
+   "page": "spending-history.html",
+   "text": "42.9%",
+   "value": 42.87582822911256,
+   "fresh_value": 42.87582822911256,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "42.8758 shown as '42.9%'",
+   "cells": [
+    {
+     "id": "hist.gdp.total.1980-81",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Spending (per cent of GDP)!D287",
+     "recorded": 42.87582822911256,
+     "same_file": true,
+     "fresh": 42.87582822911256,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 21,
+   "id": "work.age.25_34.2005",
+   "page": "life/2005.html",
+   "text": "80.0%",
+   "value": 80.0,
+   "fresh_value": 80.0,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "80 shown as '80.0%'",
+   "cells": [
+    {
+     "id": "work.age.25_34.2005",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+     "locator": "YBUG row '2005 Q2'",
+     "recorded": 80.0,
+     "same_file": true,
+     "fresh": 80.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "id": "thist.gdp.other.2010-11",
+   "page": "tax-history.html",
+   "text": "7.8%",
+   "value": 7.831158301205658,
+   "fresh_value": 7.831158301205659,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "7.83116 shown as '7.8%'",
+   "cells": [
+    {
+     "id": "thist.gdp.total.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!Y317",
+     "recorded": 37.00819516287901,
+     "same_file": true,
+     "fresh": 37.00819516287901,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.income_tax.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!C317",
+     "recorded": 9.398861926041139,
+     "same_file": true,
+     "fresh": 9.398861926041139,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.nics.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!D317",
+     "recorded": 5.995005133476523,
+     "same_file": true,
+     "fresh": 5.995005133476523,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.vat.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!Q317",
+     "recorded": 6.212058579284307,
+     "same_file": true,
+     "fresh": 6.212058579284307,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.duties.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!R317",
+     "recorded": 3.3089150762293666,
+     "same_file": true,
+     "fresh": 3.3089150762293666,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.corp.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!I317",
+     "recorded": 2.694369858090347,
+     "same_file": true,
+     "fresh": 2.694369858090347,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.gdp.council.2010-11",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!W317",
+     "recorded": 1.5678262885516727,
+     "same_file": true,
+     "fresh": 1.5678262885516727,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 23,
+   "id": "avg.work.level.2021-2023",
+   "page": "life/compare/spans/2008-2010-and-2021-2023.html",
+   "text": "32.9 million",
+   "value": 32923.333333333336,
+   "fresh_value": 32923.333333333336,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "32.9233 shown as '32.9 million'",
+   "cells": [
+    {
+     "id": "work.level.2021",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "locator": "MGRZ row '2021 Q2'",
+     "recorded": 32443.0,
+     "same_file": true,
+     "fresh": 32443.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.level.2022",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "locator": "MGRZ row '2022 Q2'",
+     "recorded": 32992.0,
+     "same_file": true,
+     "fresh": 32992.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.level.2023",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+     "locator": "MGRZ row '2023 Q2'",
+     "recorded": 33335.0,
+     "same_file": true,
+     "fresh": 33335.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 24,
+   "id": "earn.place.real.ne.2016",
+   "page": "life/earnings.html",
+   "text": "£674",
+   "value": 673.9908548707754,
+   "fresh_value": 673.9908548707754,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "673.991 shown as '£674'",
+   "cells": [
+    {
+     "id": "earn.place.ne.2016",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-nations-regions-ft-median-weekly.csv line 578",
+     "recorded": 492.4,
+     "same_file": true,
+     "fresh": 492.4,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2025",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2025 APR'",
+     "recorded": 137.7,
+     "same_file": true,
+     "fresh": 137.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2016",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2016 APR'",
+     "recorded": 100.6,
+     "same_file": true,
+     "fresh": 100.6,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 25,
+   "id": "earn.real.pt.2010",
+   "page": "life/2010.html",
+   "text": "£235",
+   "value": 235.42258064516125,
+   "fresh_value": 235.42258064516125,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "235.423 shown as '£235'",
+   "cells": [
+    {
+     "id": "earn.pt.2010",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 82",
+     "recorded": 153.7,
+     "same_file": true,
+     "fresh": 153.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2025",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2025 APR'",
+     "recorded": 137.7,
+     "same_file": true,
+     "fresh": 137.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2010",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2010 APR'",
+     "recorded": 89.9,
+     "same_file": true,
+     "fresh": 89.9,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 26,
+   "id": "ci.hol.cty.spain.2010.rel",
+   "page": "life/2010.html",
+   "text": "±3.8%",
+   "value": 3.8232237545745917,
+   "fresh_value": 3.8232237545745917,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "3.82322 shown as '±3.8%'",
+   "cells": [
+    {
+     "id": "ci.hol.cty.spain.2010.rel",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+     "locator": "3.17!F33",
+     "recorded": 3.8232237545745917,
+     "same_file": true,
+     "fresh": 3.8232237545745917,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 27,
+   "id": "thist.share.income_tax.1974-75",
+   "page": "tax-history.html",
+   "text": "28.8%",
+   "value": 28.8332506592173,
+   "fresh_value": 28.8332506592173,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "28.8333 shown as '28.8%'",
+   "cells": [
+    {
+     "id": "thist.cash.income_tax.1974-75",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!C281",
+     "recorded": 11.044,
+     "same_file": true,
+     "fresh": 11.044,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.cash.total.1974-75",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!Y281",
+     "recorded": 38.303,
+     "same_file": true,
+     "fresh": 38.303,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 28,
+   "id": "thist.share.vat.2014-15",
+   "page": "tax-history.html",
+   "text": "18.6%",
+   "value": 18.57961159987721,
+   "fresh_value": 18.57961159987721,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "18.5796 shown as '18.6%'",
+   "cells": [
+    {
+     "id": "thist.cash.vat.2014-15",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!Q321",
+     "recorded": 128.316,
+     "same_file": true,
+     "fresh": 128.316,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "thist.cash.total.2014-15",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (£m)!Y321",
+     "recorded": 690.628,
+     "same_file": true,
+     "fresh": 690.628,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 29,
+   "id": "afford.ratio.em.2008",
+   "page": "life/house-prices.html",
+   "text": "6.10",
+   "value": 6.1,
+   "fresh_value": 6.1,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "6.1 shown as '6.10'",
+   "cells": [
+    {
+     "id": "afford.ratio.em.2008",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian/current/aff1ratioofhousepricetoworkplacebasedearnings.xlsx",
+     "locator": "1c!N9",
+     "recorded": 6.1,
+     "same_file": true,
+     "fresh": 6.1,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 30,
+   "id": "avg.earn.men.2020-2022",
+   "page": "life/compare/spans/2008-2010-and-2020-2022.html",
+   "text": "£795",
+   "value": 795.0431668868605,
+   "fresh_value": 795.0431668868605,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "795.043 shown as '£795'",
+   "cells": [
+    {
+     "id": "earn.ft_men.2020",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 164",
+     "recorded": 617.5,
+     "same_file": true,
+     "fresh": 617.5,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2025",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2025 APR'",
+     "recorded": 137.7,
+     "same_file": true,
+     "fresh": 137.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2020",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2020 APR'",
+     "recorded": 108.6,
+     "same_file": true,
+     "fresh": 108.6,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "earn.ft_men.2021",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 173",
+     "recorded": 650.7,
+     "same_file": true,
+     "fresh": 650.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2021",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2021 APR'",
+     "recorded": 110.4,
+     "same_file": true,
+     "fresh": 110.4,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "earn.ft_men.2022",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 182",
+     "recorded": 683.2,
+     "same_file": true,
+     "fresh": 683.2,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2022",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2022 APR'",
+     "recorded": 119.0,
+     "same_file": true,
+     "fresh": 119.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 31,
+   "id": "spi.age.meantax.75plus.women",
+   "page": "who-pays-age.html",
+   "text": "£2,760",
+   "value": 2760.0,
+   "fresh_value": 2760.0,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "2760 shown as '£2,760'",
+   "cells": [
+    {
+     "id": "spi.age.meantax.75plus.women",
+     "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+     "locator": "Table_3_2!G46",
+     "recorded": 2760.0,
+     "same_file": true,
+     "fresh": 2760.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 32,
+   "id": "moe.earn.real.ft_women.2016",
+   "page": "life/2016.html",
+   "text": "±£4",
+   "value": 3.86728944333996,
+   "fresh_value": 3.86728944333996,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "3.86729 shown as '±£4'",
+   "cells": [
+    {
+     "id": "earn.ft_women.2016",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 130",
+     "recorded": 480.5,
+     "same_file": true,
+     "fresh": 480.5,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2025",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2025 APR'",
+     "recorded": 137.7,
+     "same_file": true,
+     "fresh": 137.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2016",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2016 APR'",
+     "recorded": 100.6,
+     "same_file": true,
+     "fresh": 100.6,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cv.earn.ft_women.2016",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly-cv.csv line 259",
+     "recorded": 0.3,
+     "same_file": true,
+     "fresh": 0.3,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 33,
+   "id": "work.occshare.SOC2020.3000000.2023",
+   "page": "life/2023.html",
+   "text": "15.1%",
+   "value": 15.061909911661422,
+   "fresh_value": 15.061909911661422,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "15.0619 shown as '15.1%'",
+   "cells": [
+    {
+     "id": "work.occ.SOC2020.3000000.2023",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps218-uk-calendar-annual.csv line 128",
+     "recorded": 4958200.0,
+     "same_file": false,
+     "fresh": 4958200.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "work.occ.SOC2020.0.2023",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count",
+     "locator": "aps218-uk-calendar-annual.csv line 122",
+     "recorded": 32918800.0,
+     "same_file": false,
+     "fresh": 32918800.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 34,
+   "id": "work.age.18_24.2017",
+   "page": "life/2017.html",
+   "text": "62.2%",
+   "value": 62.2,
+   "fresh_value": 62.2,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "62.2 shown as '62.2%'",
+   "cells": [
+    {
+     "id": "work.age.18_24.2017",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+     "locator": "YBUD row '2017 Q2'",
+     "recorded": 62.2,
+     "same_file": true,
+     "fresh": 62.2,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 35,
+   "id": "ci.hol.cty.greece.2018.rel",
+   "page": "life/2018.html",
+   "text": "±12%",
+   "value": 12.042269362397288,
+   "fresh_value": 12.042269362397288,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "12.0423 shown as '±12%'",
+   "cells": [
+    {
+     "id": "ci.hol.cty.greece.2018.rel",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+     "locator": "3.17!AD19",
+     "recorded": 12.042269362397288,
+     "same_file": true,
+     "fresh": 12.042269362397288,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 36,
+   "id": "spend.gdp.order.2015-16",
+   "page": "spending.html",
+   "text": "1.6%",
+   "value": 1.6,
+   "fresh_value": 1.6,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "1.6 shown as '1.6%'",
+   "cells": [
+    {
+     "id": "spend.gdp.order.2015-16",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_4!N11",
+     "recorded": 1.6,
+     "same_file": true,
+     "fresh": 1.6,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 37,
+   "id": "etb.t16.ret.2019/20",
+   "page": "who-pays.html",
+   "text": "87.7%",
+   "value": 87.7,
+   "fresh_value": 87.7,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "87.7 shown as '87.7%'",
+   "cells": [
+    {
+     "id": "etb.t16.ret.2019/20",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "locator": "Table 16!F47",
+     "recorded": 87.7,
+     "same_file": true,
+     "fresh": 87.7,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 38,
+   "id": "hist.real.total.1974-75",
+   "page": "spending-history.html",
+   "text": "£502.7bn",
+   "value": 502.68792612137213,
+   "fresh_value": 502.68792612137213,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "502.688 shown as '£502.7bn'",
+   "cells": [
+    {
+     "id": "hist.cash.total.1974-75",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Spending (£m)!D281",
+     "recorded": 43.868,
+     "same_file": true,
+     "fresh": 43.868,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "agg.deflator.1974-75",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Aggregates (£bn)!AH36",
+     "recorded": 8.726686622150586,
+     "same_file": true,
+     "fresh": 8.726686622150586,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 39,
+   "id": "thist.gdp.total.1956-57",
+   "page": "tax-history.html",
+   "text": "35.6%",
+   "value": 35.573197240336455,
+   "fresh_value": 35.573197240336455,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "35.5732 shown as '35.6%'",
+   "cells": [
+    {
+     "id": "thist.gdp.total.1956-57",
+     "url": "https://obr.uk/download/historical-public-finances-database/",
+     "locator": "Receipts (per cent of GDP)!Y263",
+     "recorded": 35.573197240336455,
+     "same_file": true,
+     "fresh": 35.573197240336455,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 40,
+   "id": "earn.real.ft.2013",
+   "page": "life/2013.html",
+   "text": "£727",
+   "value": 726.9997959183673,
+   "fresh_value": 726.9997959183673,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "727 shown as '£727'",
+   "cells": [
+    {
+     "id": "earn.ft.2013",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "locator": "ashe-resident-uk-median-weekly.csv line 108",
+     "recorded": 517.4,
+     "same_file": true,
+     "fresh": 517.4,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2025",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2025 APR'",
+     "recorded": 137.7,
+     "same_file": true,
+     "fresh": 137.7,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "cpih.apr.2013",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "locator": "L522 row '2013 APR'",
+     "recorded": 98.0,
+     "same_file": true,
+     "fresh": 98.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 41,
+   "id": "hmrc.share.top1.2025 to 2026",
+   "page": "who-pays.html",
+   "text": "26.8%",
+   "value": 26.8,
+   "fresh_value": 26.8,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "26.8 shown as '26.8%'",
+   "cells": [
+    {
+     "id": "hmrc.share.top1.2025 to 2026",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "locator": "2_4_Taxpayer_share_tax!K29",
+     "recorded": 26.8,
+     "same_file": true,
+     "fresh": 26.8,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 42,
+   "id": "spend.perhousehold.health.2025-26",
+   "page": "spending.html",
+   "text": "£8,878",
+   "value": 8878.391890494087,
+   "fresh_value": 8878.391890494087,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "8878.39 shown as '£8,878'",
+   "cells": [
+    {
+     "id": "spend.cash.health.2025-26",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_2!X20",
+     "recorded": 257.5,
+     "same_file": true,
+     "fresh": 257.5,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "hh.uk.2025",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
+     "locator": "5!B21",
+     "recorded": 29003000.0,
+     "same_file": true,
+     "fresh": 29003000.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 43,
+   "id": "spend.gdp.general.2010-11",
+   "page": "spending.html",
+   "text": "4.8%",
+   "value": 4.8,
+   "fresh_value": 4.8,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "4.8 shown as '4.8%'",
+   "cells": [
+    {
+     "id": "spend.gdp.general.2010-11",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_4!I6",
+     "recorded": 4.8,
+     "same_file": true,
+     "fresh": 4.8,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 44,
+   "id": "spend.gdp.housing.2009-10",
+   "page": "spending.html",
+   "text": "1.0%",
+   "value": 1.0,
+   "fresh_value": 1.0,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "1 shown as '1.0%'",
+   "cells": [
+    {
+     "id": "spend.gdp.housing.2009-10",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_4!H19",
+     "recorded": 1.0,
+     "same_file": true,
+     "fresh": 1.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 45,
+   "id": "spend.cash.defence.2004-05",
+   "page": "spending.html",
+   "text": "£29.8bn",
+   "value": 29.8,
+   "fresh_value": 29.8,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "29.8 shown as '£29.8bn'",
+   "cells": [
+    {
+     "id": "spend.cash.defence.2004-05",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_2!C10",
+     "recorded": 29.8,
+     "same_file": true,
+     "fresh": 29.8,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 46,
+   "id": "etbh.pall.1987.q4",
+   "page": "household-tax.html",
+   "text": "38.7%",
+   "value": 38.68645973909132,
+   "fresh_value": 38.68645973909132,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "38.6865 shown as '38.7%'",
+   "cells": [
+    {
+     "id": "etbh.direct.1987.q4",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1987!E55",
+     "recorded": 3430.0,
+     "same_file": true,
+     "fresh": 3430.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.indirect.1987.q4",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1987!E83",
+     "recorded": 2590.0,
+     "same_file": true,
+     "fresh": 2590.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.gross.1987.q4",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "1987!E48",
+     "recorded": 15561.0,
+     "same_file": true,
+     "fresh": 15561.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 47,
+   "id": "hmrc.share.bottom50.2022 to 2023",
+   "page": "who-pays.html",
+   "text": "9.6%",
+   "value": 9.6,
+   "fresh_value": 9.6,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "9.6 shown as '9.6%'",
+   "cells": [
+    {
+     "id": "hmrc.share.bottom50.2022 to 2023",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "locator": "2_4_Taxpayer_share_tax!F26",
+     "recorded": 9.6,
+     "same_file": true,
+     "fresh": 9.6,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 48,
+   "id": "spend.real.defence.2005-06",
+   "page": "spending.html",
+   "text": "£52.3bn",
+   "value": 52.3,
+   "fresh_value": 52.3,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "52.3 shown as '£52.3bn'",
+   "cells": [
+    {
+     "id": "spend.real.defence.2005-06",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "locator": "4_3!D10",
+     "recorded": 52.3,
+     "same_file": true,
+     "fresh": 52.3,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 49,
+   "id": "etbh.pall.2010-11.q5",
+   "page": "household-tax.html",
+   "text": "33.6%",
+   "value": 33.601874208123164,
+   "fresh_value": 33.601874208123164,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "33.6019 shown as '33.6%'",
+   "cells": [
+    {
+     "id": "etbh.direct.2010-11.q5",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "2010-11!F56",
+     "recorded": 19773.0,
+     "same_file": true,
+     "fresh": 19773.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.indirect.2010-11.q5",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "2010-11!F86",
+     "recorded": 8339.0,
+     "same_file": true,
+     "fresh": 8339.0,
+     "error": null,
+     "match": true
+    },
+    {
+     "id": "etbh.gross.2010-11.q5",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+     "locator": "2010-11!F48",
+     "recorded": 83662.0,
+     "same_file": true,
+     "fresh": 83662.0,
+     "error": null,
+     "match": true
+    }
+   ]
+  },
+  {
+   "n": 50,
+   "id": "gdp.tme.2005-06",
+   "page": "taxes.html",
+   "text": "39.7%",
+   "value": 39.69928847246721,
+   "fresh_value": 39.69928847246721,
+   "page_rounds_from_value": true,
+   "page_matches_fresh_source": true,
+   "note": "39.6993 shown as '39.7%'",
+   "cells": [
+    {
+     "id": "gdp.tme.2005-06",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "locator": "Aggregates (per cent of GDP)!D62",
+     "recorded": 39.69928847246721,
+     "same_file": true,
+     "fresh": 39.69928847246721,
+     "error": null,
+     "match": true
+    }
+   ]
+  }
+ ]
+}

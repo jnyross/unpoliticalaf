@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "2 November 2026",
+        "pages": [("sources.html", "Sources"), ("life/work.html", "Work since 1971")],
+        "was": "The link to the original data for the two occupation sources (Annual Population Survey by occupation, SOC2010 and SOC2020) went to the whole Nomis dataset, which gives different figures, so a reader could not reproduce the numbers.",
+        "now": "The link is the exact Nomis query that gives the data used. A random check of 50 figures against the publishers’ files found every figure matched.",
+        "pr": 110,
+    },
+    {
+        "date": "2 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980"), ("life/compare/2024-2025.html", "2024 compared with 2025")],
         "was": "Holidays abroad in 2024 were compared with 2025 as if measured the same way, for example holiday visits abroad rising from 56.0 million to 58.4 million.",
         "now": "ONS says annual 2024 figures mix the old survey (January to June) and the new one (July to December), so 2024 is now compared with neither earlier years nor 2025.",

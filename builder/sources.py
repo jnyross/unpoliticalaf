@@ -84,7 +84,14 @@ SOURCES = {
         publisher="Office for National Statistics (via Nomis)",
         title="Annual Population Survey: employment by occupation (SOC2010), January to December",
         page="https://www.nomisweb.co.uk/datasets/aps210",
-        url="https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv",
+        # The query that reproduces the kept file: UK, January to December, all
+        # job types, sexes and major occupation groups, value and confidence.
+        url=("https://www.nomisweb.co.uk/api/v01/dataset/NM_210_1.data.csv?geography=K02000001"
+             "&date=2011-12,2012-12,2013-12,2014-12,2015-12,2016-12,2017-12,2018-12,2019-12,2020-12,2021-12"
+             "&jtype=0&ftpt=0&etype=0&c_sex=0,1,2"
+             "&c_occpuk11h_0=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701"
+             "&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,c_occpuk11h_0,"
+             "c_occpuk11h_0_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count"),
         file="data/life/sources/work-data/aps210-uk-calendar-annual.csv",
         sha256="9bd1e5427dab27003f08b2fde0c7b8df85717e0acaf221093ccc941ccacce285",
         published="Nomis dataset NM_210_1", retrieved="31 October 2026",
@@ -94,7 +101,11 @@ SOURCES = {
         publisher="Office for National Statistics (via Nomis)",
         title="Annual Population Survey: employment by occupation (SOC2020), January to December",
         page="https://www.nomisweb.co.uk/datasets/aps218",
-        url="https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv",
+        url=("https://www.nomisweb.co.uk/api/v01/dataset/NM_218_1.data.csv?geography=K02000001"
+             "&date=2021-12,2022-12,2023-12,2024-12,2025-12&jtype=0&ftpt=0&etype=0&c_sex=0,1,2"
+             "&soc2020_full=0,1000001,2000000,3000000,4000000,5000000,6000000,7000000,8000000,9000000&measures=20100,20701"
+             "&select=date,date_name,geography_code,geography_name,jtype_name,ftpt_name,etype_name,c_sex_name,soc2020_full,"
+             "soc2020_full_name,measure_name,measures_name,obs_value,obs_status,obs_status_name,obs_conf,obs_conf_name,record_count"),
         file="data/life/sources/work-data/aps218-uk-calendar-annual.csv",
         sha256="e4388e5746ea8e5db6da36c12066abab615036196bb395f37ead005d26161b25",
         published="Nomis dataset NM_218_1", retrieved="31 October 2026",

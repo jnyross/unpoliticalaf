@@ -1,0 +1,26 @@
+name: Accuracy check (random sample)
+# Downloads each sampled figure's source again from the publisher and compares
+# it with the page. Runs when the sample or the checker changes, or by hand.
+on:
+  push:
+    paths: ["docs/accuracy-check/sample.json", "scripts/accuracy_check.py", ".github/workflows/accuracy-check.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -q -r requirements.txt
+      - run: python3 scripts/accuracy_check.py check
+      - name: Commit results
+        run: |
+          git config user.name "unpolitical-fetch"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/accuracy-check/results.json
+          git diff --cached --quiet || git commit -m "Accuracy check: results from the publishers' files ($(date -u +%F))"
+          git push
