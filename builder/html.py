@@ -5,6 +5,7 @@ so the checker can confirm the text matches the stored fact and its source.
 Charts are plain HTML/CSS or inline SVG drawn at build time, so they work
 without JavaScript, and each one sits next to a complete table.
 """
+import json
 import math
 import re
 from html import escape
@@ -93,6 +94,10 @@ details[open]>summary::before{transform:rotate(45deg)}
 figure{margin:16px 0 8px}
 figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 4px}
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
+.csum{margin:8px 0 0;padding:8px 12px;background:var(--soft2);border-left:3px solid var(--line);font-size:.92rem}
+.csum .csum-h{font-weight:650;margin:0 0 2px;font-size:.92rem}.csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum .small{margin:4px 0 0}
+.readout{min-height:44px;margin:4px 0 0;font-size:.92rem;color:var(--ink2)}.readout b{font-weight:650}
+svg[data-chart]{touch-action:pan-y;cursor:crosshair}svg[data-chart]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 svg{display:block;overflow:visible}
 svg text{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#4a5158}
 svg text.lbl{font-weight:650;fill:#1f252b;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
@@ -216,6 +221,8 @@ def page(path, title, body, description="", scripts="", contents=True):
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
     if contents:
         body = toc(body)
+    if "data-chart=" in body:
+        scripts = scripts + CHART_JS
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -384,14 +391,23 @@ def details_table(summary, caption, head, rows):
     return f"<details><summary>{summary}</summary>{table(caption, head, rows)}</details>"
 
 
-def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None, ymin=None, ymax=None, height=240, desc="", scale=1, split_breaks=False):
+def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None, ymin=None, ymax=None, height=240, desc="", scale=1, split_breaks=False,
+               kind=None, ids=None, num=None, events=(), point_labels=None):
     """Inline SVG line chart.
 
     labels: list of x labels. series: list of (name, values list (None = gap), style 'a'|'b').
     Missing values break the line; nothing is interpolated.
     breaks: list of (index, text) drawn as dashed vertical lines between index-1 and index.
     forecast_from: index from which values are forecasts (dashed line, shaded area).
+    events: list of (index, text) for things that happened, such as Covid. Drawn as a grey
+    dotted line; unlike breaks they say nothing about definitions.
+    kind: number format (see fmt). With kind, the chart gets a written summary under it
+    (first, latest, highest and lowest values) and a tap or hover readout added by script.
+    ids: one list of fact ids per series, so the summary's numbers are traceable figures
+    (needs num). point_labels: longer names for each point used in the summary and readout,
+    such as "2008-09" where the axis shows "2008".
     """
+    raw = series
     W, H = 400, round(height * 400 / 480) + 20
     direct = len(series) <= 3 and all(len(nm) <= 26 for nm, _, _ in series) and len(series) > 1
     L, R, T, B = 44, 8, 14, 30
@@ -453,6 +469,14 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
             parts.append(f'<text x="{bx - 3:.1f}" y="{T + 12}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
         else:
             parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')
+    for i, text in events:
+        ex = x(i)
+        parts.append(f'<line x1="{ex:.1f}" x2="{ex:.1f}" y1="{T}" y2="{H - B}" stroke="#8d969e" stroke-dasharray="1 3" stroke-width="1.5"/>')
+        # Labelled at the foot of the chart, clear of the line ends and their labels
+        if ex > W * 0.65:
+            parts.append(f'<text x="{ex - 3:.1f}" y="{H - B - 6}" text-anchor="end">{esc(text)}</text>')
+        else:
+            parts.append(f'<text x="{ex + 3:.1f}" y="{H - B - 6}">{esc(text)}</text>')
     for name, vals, style in series:
         # a: dark thick line; b: grey line; c: dark thin line with a square at every point
         colour = "#8d969e" if style == "b" else "#3d4852"
@@ -485,8 +509,21 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
                     parts.append(f'<circle cx="{x(i):.1f}" cy="{y(v):.1f}" r="3" fill="{colour}"/>')
     if direct:
         parts.extend(_end_labels(series, x, y, T, H - B))
+    elif len(series) == 1 and kind:
+        parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T))
     label = f"{title}. {desc}" if desc else title
-    svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value.">'
+    attrs = ""
+    summary = ""
+    if kind:
+        names = [nm for nm, _, _ in raw]
+        plabels = list(point_labels or labels)
+        rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals, _ in raw] for i in range(n)]
+        read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows,
+                "fc": forecast_from}
+        attrs = f' data-chart="{esc(json.dumps(read, ensure_ascii=False, separators=(",", ":")))}"'
+        summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks,
+                                forecast_from=forecast_from, events=events)
+    svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value."{attrs}>'
            + "".join(parts) + "</svg>")
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
@@ -494,7 +531,94 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if forecast_from is not None:
             items.append('<span><i class="d"></i>Forecast (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption></figure>'
+    return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+
+
+def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
+    """Write the latest measured value beside the end of a single line."""
+    pts = [i for i, v in enumerate(vals) if v is not None and (forecast_from is None or i < forecast_from)]
+    if not pts:
+        return []
+    i = pts[-1]
+    ly = max(y(vals[i]) - 9, top + 12)
+    return [f'<text class="lbl" x="{x(i) - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(fmt(raw_vals[i], kind))}</text>']
+
+
+def _stretches(n, breaks, forecast_from):
+    """Runs of points that can be read together: split at every definition break,
+    even where the chart joins the line, and stop before any forecast years."""
+    end = n if forecast_from is None else min(n, forecast_from)
+    cuts = sorted(i for i, _ in breaks if 0 < i < end)
+    edges = [0] + cuts + [end]
+    return [(edges[k], edges[k + 1]) for k in range(len(edges) - 1) if edges[k + 1] > edges[k]]
+
+
+def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=()):
+    """A plain-English reading of a line chart: for each line, the first and latest
+    values, the highest and lowest, and any missing years. Built from the same values
+    as the chart. Nothing is compared across a definition break the chart splits at,
+    and forecasts are kept apart from measured years.
+    """
+    def show(si, i):
+        vals = series[si][1]
+        if ids and num and ids[si][i]:
+            return num(ids[si][i], kind)
+        return esc(fmt(vals[i], kind))
+
+    items = []
+    spans = _stretches(len(labels), breaks, forecast_from)
+    for si, (name, vals, _) in enumerate(series):
+        parts = []
+        for a, b in spans:
+            pts = [i for i in range(a, b) if vals[i] is not None]
+            if not pts:
+                continue
+            first, last = pts[0], pts[-1]
+            lead = f"{esc(labels[first])} to {esc(labels[last])}: " if len(spans) > 1 else ""
+            if first == last:
+                parts.append(f"{lead}{show(si, first)} in {esc(labels[first])}.")
+                continue
+            text = f"{lead}{show(si, first)} in {esc(labels[first])} and {show(si, last)} in {esc(labels[last])}."
+            if len(pts) >= 3:
+                hi = max(pts, key=lambda i: (vals[i], i))
+                lo = min(pts, key=lambda i: (vals[i], -i))
+                extra = []
+                if hi not in (first, last):
+                    extra.append(f"highest {show(si, hi)} ({esc(labels[hi])})")
+                if lo not in (first, last):
+                    extra.append(f"lowest {show(si, lo)} ({esc(labels[lo])})")
+                if extra:
+                    text += " In between: " + " and ".join(extra) + "."
+            gaps = [labels[i] for i in range(first, last + 1) if vals[i] is None]
+            if gaps:
+                text += f" No figure for {esc(_join(gaps))}."
+            parts.append(text)
+        if forecast_from is not None and forecast_from < len(labels):
+            fpts = [i for i in range(forecast_from, len(labels)) if vals[i] is not None]
+            if fpts:
+                parts.append(f"Forecast for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}.")
+        if parts:
+            who = f"<strong>{esc(name)}</strong>: " if len(series) > 1 else ""
+            items.append(f"<li>{who}{' '.join(parts)}</li>")
+    notes = []
+    for i, text in breaks:
+        if split_breaks:
+            notes.append(f"The line breaks at {esc(labels[i])} ({esc(text.lower())}), so values either side are not compared.")
+        else:
+            notes.append(f"The amber dashed line before {esc(labels[i])} marks a change ({esc(text.lower())}), so each side is read separately here.")
+    for i, text in events:
+        notes.append(f"The grey dotted line marks {esc(labels[i])} ({esc(text)}). It shows when it happened, not what it caused.")
+    if forecast_from is not None and forecast_from < len(labels):
+        notes.append(f"Years from {esc(labels[forecast_from])} are forecasts, not measurements.")
+    if not items:
+        return ""
+    note = f'<p class="small">{" ".join(notes)}</p>' if notes else ""
+    return f'<div class="csum"><p class="csum-h">What the chart shows</p><ul>{"".join(items)}</ul>{note}</div>'
+
+
+def _join(xs):
+    xs = [str(v) for v in xs]
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
 
 
 def _end_labels(series, x, y, top, bottom):
@@ -547,3 +671,26 @@ def _short(label):
     if len(s) == 7 and s[4] == "-":  # 2025-26 -> 2025-26
         return s
     return s
+
+
+# Added on top of the drawn charts: tap, hover or use the arrow keys to read one
+# year's values. Without JavaScript the chart, its summary and its table still work.
+CHART_JS = """<script>
+document.querySelectorAll('svg[data-chart]').forEach(function(svg){
+var d=JSON.parse(svg.getAttribute('data-chart')),ns='http://www.w3.org/2000/svg',cur=-1;
+var out=document.createElement('p');out.className='readout';out.setAttribute('aria-live','polite');
+out.textContent='Tap or hover on the chart, or select it and use the arrow keys, to read each year.';
+var cap=svg.parentNode.querySelector('figcaption');svg.parentNode.insertBefore(out,cap?cap.nextSibling:svg.nextSibling);
+var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);
+svg.setAttribute('tabindex','0');
+function show(i){if(i<0||i>=d.x.length)return;cur=i;var r=d.rows[i];g.setAttribute('x1',d.x[i]);g.setAttribute('x2',d.x[i]);g.style.display='';
+out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' (forecast)':'')+': ';out.appendChild(b);
+out.appendChild(document.createTextNode(d.names.length>1?d.names.map(function(n,k){return n+' '+r[k+1];}).join('; '):r[1]));}
+function near(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse()),best=0;
+d.x.forEach(function(v,k){if(Math.abs(v-q.x)<Math.abs(d.x[best]-q.x))best=k;});return best;}
+svg.addEventListener('pointermove',function(e){show(near(e));});svg.addEventListener('pointerdown',function(e){show(near(e));});
+svg.addEventListener('keydown',function(e){var k=e.key,i=cur<0?d.x.length-1:cur;
+if(k==='ArrowLeft'){i=Math.max(0,cur<0?i:i-1);}else if(k==='ArrowRight'){i=Math.min(d.x.length-1,cur<0?i:i+1);}else if(k==='Home'){i=0;}else if(k==='End'){i=d.x.length-1;}else{return;}
+e.preventDefault();show(i);});
+});
+</script>"""

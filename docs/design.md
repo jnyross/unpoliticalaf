@@ -27,6 +27,18 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   lines are named at their ends instead of in a key. Gaps and definition
   breaks are drawn as gaps and dashed lines, never joined. The visible title
   sits above the chart; the SVG's `aria-label` repeats it for screen readers.
+- **Chart summaries** (`chart_summary()`): pass `kind` (and `ids` with `num`, so
+  the numbers are traceable figures) to `line_chart()` and it writes "What the
+  chart shows" under the chart: each line's first and latest values, the highest
+  and lowest in between, and missing years. Each side of a definition break is
+  read separately, even where the line is joined, and forecasts are given on
+  their own. Write the facts only; never add a reason for a change.
+- **Events vs breaks**: `breaks` are definition changes (amber dashed line).
+  `events` are things that happened, such as Covid (grey dotted line, labelled
+  at the foot of the chart); the summary says they show timing, not cause.
+- **Readout**: charts with `kind` also get a small script (`CHART_JS`) that
+  shows one year's values on tap, hover or arrow keys. It only adds to the
+  chart; the summary and table work without it.
 - **Year lists** (`.stats`): label, value and the value's own period, used on
   the year pages instead of three-column tables.
 - **Source line** (`source_line()`): one or two sources are shown in full;

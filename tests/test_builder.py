@@ -46,6 +46,44 @@ class Charts(unittest.TestCase):
         self.assertNotEqual(pages_life.rooms_basis(2010), pages_life.rooms_basis(2011))
         self.assertEqual(pages_life.rooms_basis(2011), pages_life.rooms_basis(2024))
 
+    def test_summary_reads_first_latest_high_low_and_gaps(self):
+        svg = line_chart("t", ["2018", "2019", "2020", "2021", "2022"], [("a", [5.0, 9.0, None, 2.0, 4.0], "a")], "u", kind="pct")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("5.0% in 2018 and 4.0% in 2022", text)
+        self.assertIn("highest 9.0% (2019)", text)
+        self.assertIn("lowest 2.0% (2021)", text)
+        self.assertIn("No figure for 2020", text)
+
+    def test_summary_does_not_compare_across_a_definition_break(self):
+        svg = line_chart("t", ["1", "2", "3", "4", "5", "6"], [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")], "u",
+                         breaks=[(3, "New method")], kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1 to 3: 1.0 in 1 and 2.0 in 3", text)
+        self.assertIn("4 to 6: 3.0 in 4 and 4.0 in 6", text)
+        self.assertNotIn("9.0 in 1", text)
+
+    def test_summary_keeps_forecasts_apart(self):
+        svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 99.0], "a")], "u", forecast_from=3, kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1.0 in 1 and 3.0 in 3", text)
+        self.assertIn("Forecast for 4: 99.0", text)
+        self.assertIn("forecasts, not measurements", text)
+
+    def test_summary_numbers_are_traceable_figures(self):
+        facts = Facts()
+        for i, v in enumerate([1.0, 2.0, 3.0]):
+            facts.add(Fact(f"x.{i}", v, "%", str(i), "s", f"A{i + 1}"))
+        svg = line_chart("t", ["0", "1", "2"], [("a", [1.0, 2.0, 3.0], "a")], "u", kind="pct", num=Num(facts), ids=[["x.0", "x.1", "x.2"]])
+        summary = svg.split('class="csum"')[1]
+        self.assertIn('data-fact="x.0"', summary)
+        self.assertIn('data-fact="x.2"', summary)
+
+    def test_events_do_not_split_the_summary(self):
+        svg = line_chart("t", ["1", "2", "3"], [("a", [1.0, 5.0, 2.0], "a")], "u", events=[(1, "Covid")], kind="dp1")
+        text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
+        self.assertIn("1.0 in 1 and 2.0 in 3", text)
+        self.assertIn("not what it caused", text)
+
     def test_chart_has_text_alternative(self):
         svg = line_chart("Title", ["1", "2"], [("a", [1, 2], "a")], "u")
         self.assertIn('role="img"', svg)
