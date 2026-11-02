@@ -16,9 +16,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -q -r requirements.txt
-      - name: TEMP probe nomis codes
-        run: |
-          for ds in NM_210_1 NM_218_1; do for d in jtype ftpt etype c_sex measures; do echo "== $ds $d"; curl -s "https://www.nomisweb.co.uk/api/v01/dataset/$ds/$d.def.sdmx.json" | python3 -c "import json,sys; d=json.load(sys.stdin); [print(c['value'], c['description']['value']) for c in d['structure']['codelists']['codelist'][0]['code']][:0]" | head -12; done; done
       - run: python3 scripts/accuracy_check.py check
       - name: Commit results
         run: |
