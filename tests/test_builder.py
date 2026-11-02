@@ -485,7 +485,33 @@ class Folding(unittest.TestCase):
         lead, rest = fold(body).split('<details class="more">')
         self.assertIn(f"<li>r{KEEP_ROWS - 1}</li>", lead)
         self.assertNotIn(f"<li>r{KEEP_ROWS}</li>", lead)
-        self.assertIn(f'<ul class="cmp-list"><li>r{KEEP_ROWS}</li>', rest)
+        self.assertIn(f'<ul class="cmp-list cont"><li>r{KEEP_ROWS}</li>', rest)
+
+    def test_csv_download_beside_table_chart_and_list(self):
+        from builder import downloads
+        from builder.html import line_chart
+        downloads.FILES.clear()
+        chart = line_chart("Pay", ["2020", "2021"], [("Median", [500.0, None], "a")], "£ a week")
+        body = ('<h2 id="a">Pay</h2>' + chart
+                + '<div class="tablewrap" tabindex="0"><table><caption>Pay, £</caption><thead><tr><th scope="col">Year</th><th scope="col">Pay</th></tr></thead>'
+                  '<tbody><tr><th scope="row">2020</th><td><data value="500.0">£500</data></td></tr></tbody></table></div>'
+                + '<ul class="bars"><li><div class="lab"><span>A, B</span><span>1%</span></div></li></ul>')
+        out = downloads.add_links(body, "life/pay.html")
+        self.assertEqual(out.count('<p class="dl">'), 3)
+        self.assertNotIn("<!--csv:", out)
+        self.assertIn('href="../csv/life/pay/pay.csv" download', out)
+        self.assertEqual(downloads.FILES["csv/life/pay/pay.csv"], "\ufeffPeriod,Median\r\n2020,500\r\n2021,\r\n")
+        self.assertEqual(downloads.FILES["csv/life/pay/pay-2.csv"], "\ufeffYear,Pay\r\n2020,£500\r\n")
+        self.assertEqual(downloads.FILES["csv/life/pay/pay-3.csv"], '\ufeffGroup,Value\r\n"A, B",1%\r\n')
+
+    def test_folded_chart_keeps_its_download(self):
+        from builder.html import fold, KEEP_ROWS
+        rows = "".join(f"<li>r{i}</li>" for i in range(KEEP_ROWS + 3))
+        dl = '<p class="dl"><a href="x.csv" download>Download this data (CSV)</a></p>'
+        body = f'<h2 id="a">Work</h2><div class="answer"><p>x</p></div><ul class="cmp-list">{rows}</ul>{dl}<table></table>'
+        lead, rest = fold(body).split('<details class="more">')
+        self.assertIn(dl, lead)
+        self.assertNotIn(dl, rest)
 
     def test_spark_leaves_gaps_and_breaks(self):
         from builder.html import spark
@@ -680,14 +706,67 @@ class BeforeTwoThousandEight(unittest.TestCase):
         self.assertEqual(H.latest_comparable(self.facts, m, 2004), 2005)
         self.assertEqual(H.latest_comparable(self.facts, m, 2007), pages_life.LAST)
 
-    def test_early_year_page_shows_gaps_and_no_comparison_pages(self):
+    def test_early_year_page_shows_gaps_and_links_to_comparisons(self):
         from builder import pages_history as H
         from builder.html import Num
         num = Num(self.facts)
         html = H.early_year_page(self.facts, self.d, num, {}, 1975)
         self.assertIn("Not available: the earnings figures used here start in 2002", html)
         self.assertIn('data-fact="work.rate.1975"', html)
-        self.assertNotIn("compare/1975-", html)
+        self.assertIn(f'href="compare/1975-{pages_life.LAST}.html"', html)
+        self.assertIn('<option value="1975" selected>', html)
+
+
+class EarlyComparisons(unittest.TestCase):
+    """Gap 6: two years before 2008 can be compared, using only figures measured the same way."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        from builder.html import Num
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+        pages_life.init(cls.d)
+        cls.num = Num(cls.facts)
+
+    def page(self, a, b):
+        from builder import pages_early_compare as E
+        return E.compare_page(self.facts, self.d, self.num, {}, a, b)
+
+    def test_every_pair_with_an_earlier_year(self):
+        from builder import pages_early_compare as E
+        from builder.data import EARLY_YEARS, YEARS
+        n, m = len(EARLY_YEARS), len(YEARS)
+        self.assertEqual(len(E.pairs()), n * (n - 1) // 2 + n * m)
+        self.assertIn((1971, 1972), E.pairs())
+        self.assertNotIn((2008, 2009), E.pairs())  # those use the full comparison pages
+
+    def test_changes_only_between_years_measured_the_same_way(self):
+        html = self.page(2002, 2025)
+        self.assertIn('data-from="work.rate.2002" data-to="work.rate.2025"', html)
+        self.assertNotIn('data-from="earn.real.ft.2002"', html)  # pay survey methods changed in 2004 and 2006
+        self.assertIn("not comparable: definition changed (before 2004 method → 2006 method onwards)", html)
+        self.assertIn('<a href="2006-2025.html">2006 and 2025</a>', html)  # nearest pair for pay
+
+    def test_tenure_surveys_are_not_joined(self):
+        html = self.page(1995, 2010)
+        self.assertNotIn('data-from="house.lfs.private.1995" data-to="house.private.2010"', html)
+        self.assertIn("the Labour Force Survey tenure figures end in 2008", html)
+        self.assertIn('data-from="house.lfs.private.1995" data-to="house.lfs.private.2008"', self.page(1995, 2008))
+
+    def test_missing_years_are_explained_not_filled(self):
+        html = self.page(1985, 2025)
+        self.assertIn("No figure for 1985: before 1992 tenure was measured only in 1981, 1984, 1988 and 1991", html)
+        self.assertIn("No figure for 2025: this series of visits abroad stops at 2023", html)
+        self.assertIn("Not available: no earnings figure for 1985, because these figures start in 2002", html)
+        self.assertIn('<a href="1985-2023.html">1985 and 2023</a>', html)
+
+    def test_compare_form_offers_every_year(self):
+        form = pages_life.compare_form("")
+        self.assertIn('<option value="1971">', form)
+        self.assertIn(f'<option value="{pages_life.LAST}"', form)
 
 
 class MoneyViews(unittest.TestCase):

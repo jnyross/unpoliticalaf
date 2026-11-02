@@ -7,6 +7,8 @@ def home_page(facts, d, num, sources):
     y = "2025-26"
     L = 2025
     from .pages_life import year_spark, FIRST
+    from .data import EARLY_YEARS
+    E = EARLY_YEARS[0]
     per = d["spending"]["per100"]
     names = {k: v["name"] for k, v in d["spending"]["views"]["cash"]["series"].items()}
     top3 = sorted((k for k in names if k in per and k not in ("services", "adjustments", "tme", "debt_interest", "transport", "eu")),
@@ -56,14 +58,14 @@ def home_page(facts, d, num, sources):
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from 2008 to {L}, or compare two. Each topic shows the latest figure and what it covers, with a small chart of every year: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
+<p>Pick any year from {E} to {L}, or compare two. Every topic has figures from {FIRST}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p>{sparks["work"]}</a>
 <a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p>{sparks["schools"]}</a>
-<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from 2008 to {L} side by side, with what changed and where definitions changed.</p><span class="more">Choose two years</span></a>
+<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
 <h2 id="how">How to read this site</h2>
 <ul class="principles">
@@ -102,6 +104,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Margins of error</strong>: shown only where the publisher gives one (95%). Where ONS gives a coefficient of variation (CV), margin = 1.96 × CV ÷ 100 × figure. Where it gives lower and upper limits, margin = half the gap between them, as a share of its estimate. A change is compared with the two margins combined, √(a² + b²). See <a href="uncertainty.html">how sure are these figures?</a></li></ul>',
             '<h2 id="data">Every figure, machine-readable</h2>',
             f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Figures on each page are tagged with the same id.</p>',
+            '<p>Every chart and table also has a "Download this data (CSV)" link beside it. The file holds the same figures the page shows, written as they are shown, with their units. Tap a figure on the page to see where it comes from.</p>',
             '<h2 id="trace">Tracing a figure</h2><p>Tap or click any number on the site to see its source, period and the exact cell it was read from, or the calculation that produced it. The source line under each section leads to a record of every figure taken from that source. Without JavaScript, the source line still works. Mistakes we have fixed are listed on the <a href="corrections.html">corrections</a> page.</p>',
             '<h2 id="reproduce">How to reproduce the site</h2><p>With Python 3.10 or later: <code>make setup</code>, then <code>make build</code> and <code>make check</code>. The check re-opens every source file, re-reads each figure, and confirms that every number on every page matches its record.</p>',
             '<h2 id="sources">Sources</h2>']

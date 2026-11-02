@@ -1,6 +1,6 @@
 """Everyday life before 2008: the longer series, and one page for each earlier year.
 
-The year-by-year explorer covers every topic from 2008. Some official series reach
+Every topic in the year-by-year explorer has figures from 2008. Some official series reach
 further back: the employment rate from 1971, tenure in England from 1981, visits
 abroad from 1980, pay from 2002 and class sizes from 2006. Each is shown with its
 own survey, and changes are only calculated within a stretch measured the same way.
@@ -14,7 +14,7 @@ LAST = YEARS[-1]
 ALL = EARLY_YEARS + YEARS
 
 # The first year each topic's longer series reaches.
-FIRST_YEAR = {"work": 1971, "earnings": 2002, "housing": 1981, "holidays": 1980, "schools": 2006}
+FIRST_YEAR = L.FIRST_YEAR
 
 
 def earn_method(y):
@@ -262,7 +262,7 @@ def early_spark(facts, num, topic, y):
     pts = [(o, v) for o, v in pts if o >= first]
     last = pts[-1][0]
     aria = f"Dot chart of {label.lower()} for each year from {first} to {last}, with {y} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group, axis=(first, last))
+    svg = spark(pts, aria, highlight=y, group=group, axis=(first, last), kind=kind)
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
     cap = (f"<strong>{esc(label)}</strong>, {first} to {last}. The dark dot is {y}: {num(fid(y), kind)}. "
@@ -285,7 +285,7 @@ def early_year_page(facts, d, num, sources, y):
     names = _join([dict((k, t) for k, t, _ in L.TOPICS)[t].lower() for t in have]) if have else ""
     body.append(f'<div class="answer"><p>Fewer official figures reach back to {y}. '
                 + (f"This page shows those that do, for {esc(names)}, each beside the latest year measured the same way. " if have else "")
-                + f'Every topic is covered from 2008: see <a href="2008.html">2008</a> or <a href="compare/index.html">compare two years from 2008</a>.</p></div>')
+                + f'Every topic has figures from 2008: see <a href="2008.html">2008</a>. Or <a href="compare/{y}-{LAST}.html">compare {y} with {LAST}</a>.</p></div>')
     for key, title, _scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         rows = _topic_rows(facts, num, key, y)
@@ -300,6 +300,8 @@ def early_year_page(facts, d, num, sources, y):
         body.append(f'<div class="limit"><p>{esc(LIMITS[key])}</p></div>')
         body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in SOURCES[key] if s in sources], up=up))
+    body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
+    body.append(L.compare_form("", y, LAST))
     body.append(L.CAUSE)
     return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body),
-                f"The official figures on work, pay, housing, travel abroad and class sizes in the UK that reach back to {y}.", toc_after_first=True)
+                f"The official figures on work, pay, housing, travel abroad and class sizes in the UK that reach back to {y}.", scripts=L.COMPARE_JS, toc_after_first=True)
