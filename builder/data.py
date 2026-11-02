@@ -208,17 +208,43 @@ def receipts(facts):
     rows = [[c.value for c in r] for r in wb["Aggregates (£bn)"].iter_rows()]
     head = [str(v).strip() if v else "" for v in rows[3]]
     yrows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
-    want = {"tme": "Total managed expenditure", "psnb": "Public sector net borrowing", "psnd": "Public sector net debt"}
+    want = {"receipts": "Public sector current receipts", "tme": "Total managed expenditure", "psnb": "Public sector net borrowing",
+            "psnd": "Public sector net debt", "gdpcash": "Nominal GDP (£ billion)", "deflator": "GDP Deflator (2025-26=100)"}
     found = {}
     for key, label in want.items():
         js = [j for j, h in enumerate(head) if h.startswith(label)]
         if js:
             found[key] = js[0]
+    units = {"deflator": "index, 2025-26 = 100"}
     for y, i in yrows.items():
         for key, j in found.items():
-            facts.add(Fact(f"agg.{key}.{y}", num(rows[i][j]), "£bn", y, "obr", f"Aggregates (£bn)!{ref(i, j)}", status(y), note=head[j]))
+            src = "obr-prices" if key in ("receipts", "tme", "gdpcash", "deflator") else "obr"
+            facts.add(Fact(f"agg.{key}.{y}", num(rows[i][j]), units.get(key, "£bn"), y, src, f"Aggregates (£bn)!{ref(i, j)}", status(y), note=head[j]))
     out["agg_years"] = list(yrows)
     out["agg_keys"] = list(found)
+    # Real terms (2025-26 prices) with the OBR's GDP deflator, and shares of GDP for
+    # single taxes, so the money pages can switch between cash, real terms and % of GDP.
+    out["real_years"] = []
+    for y in yrows:
+        dfl = facts[f"agg.deflator.{y}"]
+        if dfl.value is None:
+            continue
+        out["real_years"].append(y)
+        for key in ("receipts", "tme"):
+            c = facts[f"agg.{key}.{y}"]
+            if c.value is not None:
+                facts.add(Fact(f"agg.real.{key}.{y}", c.value * 100 / dfl.value, "£bn (2025-26 prices)", y, "obr-prices", c.locator, "calculated",
+                               formula=f"{c.id} × 100 ÷ {dfl.id}", inputs=[c.id, dfl.id]))
+    for y in out["years"]:
+        dfl, gdp = facts.get(f"agg.deflator.{y}"), facts.get(f"agg.gdpcash.{y}")
+        for key in ("income_tax", "nics", "vat", "taxes"):
+            c = facts[f"rec.{key}.{y}"]
+            if dfl is not None and dfl.value is not None:
+                facts.add(Fact(f"rec.real.{key}.{y}", c.value * 100 / dfl.value, "£bn (2025-26 prices)", y, "obr-prices", c.locator, "calculated",
+                               formula=f"{c.id} × 100 ÷ {dfl.id}", inputs=[c.id, dfl.id]))
+            if gdp is not None and gdp.value is not None:
+                facts.add(Fact(f"rec.gdp.{key}.{y}", 100 * c.value / gdp.value, "% of GDP", y, "obr-prices", c.locator, "calculated",
+                               formula=f"100 × {c.id} ÷ {gdp.id}", inputs=[c.id, gdp.id]))
     # Receipts as % of GDP, long history (outturn and forecast marked)
     rows = [[c.value for c in r] for r in wb["Aggregates (per cent of GDP)"].iter_rows()]
     head = [str(v).strip() if v else "" for v in rows[3]]
@@ -1180,6 +1206,8 @@ def build_all():
     d["nations"] = data_nations.build(facts)
     from . import data_taxhist
     d["tax_history"] = data_taxhist.build(facts)
+    from . import data_spendhist
+    d["spend_history"] = data_spendhist.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)

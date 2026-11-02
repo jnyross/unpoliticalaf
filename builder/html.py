@@ -54,6 +54,8 @@ li{margin-bottom:4px}
 details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}details.src li a{display:inline-block;padding:4px 0}
 .note{border-left:3px solid var(--bar2);padding:2px 0 2px 12px;margin:16px 0;color:var(--ink2);font-size:.95rem}
 .moe,.moe-in{color:var(--muted);font-size:.88em;white-space:nowrap;font-variant-numeric:tabular-nums}.sure{font-size:.93rem;color:var(--ink2);margin:-6px 0 16px}.sure-check{margin:4px 0 0}
+.switch{margin:12px 0 18px}.seg{display:none;border:0;padding:0;margin:0 0 8px;min-width:0}.seg legend{font-size:.87rem;color:var(--muted);padding:0;margin:0 0 6px}.seg .opts{display:flex;flex-wrap:wrap;gap:6px}.seg input{position:absolute;opacity:0;width:1px;height:1px;margin:0}.seg label{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;font-size:.93rem;cursor:pointer;background:#fff}.seg input:checked+label{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}.seg input:focus-visible+label{outline:3px solid var(--focus);outline-offset:2px}.switch .vhead{font-weight:650;margin:14px 0 4px}.switch .vnote{font-size:.9rem;color:var(--ink2);margin:0 0 6px}
+@supports selector(:has(*)){.seg{display:block}.switch .panel{display:none}.switch .vhead{display:none}.switch:has(.v0:checked) .p0,.switch:has(.v1:checked) .p1,.switch:has(.v2:checked) .p2{display:block}}
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
 .scale{border-left:4px solid var(--line);padding:2px 0 2px 12px;margin:0 0 18px;font-size:.96rem}
 .illustration{border:2px dashed var(--bar2);border-radius:var(--r);padding:14px 16px;margin:24px 0;background:#fff}
@@ -718,6 +720,25 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
     return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+
+
+_SW_COUNT = [0]
+
+
+def switch(legend, views, default=0):
+    """Show one of several views of the same figures, such as cash, real terms and % of GDP.
+
+    views: list of (label, note, html). Works without JavaScript: radio buttons and
+    CSS :has() show the chosen view. Browsers without :has() support, and readers
+    with styles off, see every view in turn, each under its own heading.
+    """
+    _SW_COUNT[0] += 1
+    name = f"sw{_SW_COUNT[0]}"
+    opts = "".join(f'<input type="radio" name="{name}" id="{name}-{k}" class="v{k}"{" checked" if k == default else ""}>'
+                   f'<label for="{name}-{k}">{esc(label)}</label>' for k, (label, _, _) in enumerate(views))
+    panels = "".join(f'<div class="panel p{k}"><p class="vhead">{esc(label)}</p><p class="vnote">{note}</p>{html}</div>'
+                     for k, (label, note, html) in enumerate(views))
+    return f'<div class="switch"><fieldset class="seg"><legend>{esc(legend)}</legend><div class="opts">{opts}</div></fieldset>{panels}</div>'
 
 
 def _chart_attr(read):

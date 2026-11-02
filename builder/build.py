@@ -15,7 +15,7 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import version
-from . import pages_money, pages_life, pages_history, pages_home, glossary, trace, uncertainty
+from . import pages_money, pages_spendhist, pages_life, pages_history, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -41,6 +41,7 @@ def render():
     pages = {}
     # Order matters: pages that derive facts come before pages that use them.
     pages["spending.html"] = pages_money.spending_page(facts, d, num, sources)
+    pages["spending-history.html"] = pages_spendhist.spending_history_page(facts, d, num, sources)
     pages["taxes.html"] = pages_money.taxes_page(facts, d, num, sources)
     pages["who-pays.html"] = pages_money.who_pays_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
