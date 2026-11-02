@@ -9,6 +9,78 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 6: 2 November 2026 (strict re-score after PRs #102 to #108)
+
+- Commit audited: `fe0f5c2` on `main` (after #102 a chart within two phone
+  screens, #103 benchmark side-by-sides for D3, D4, D6, D8 and D10, #104
+  shorter phone pages, #105 holiday affordability and holiday and class-size
+  benchmarks, #106 a CSV download beside every chart and table, #107
+  comparisons between years before 2008 and fixed "since 2008" wording, #108
+  taxes by type since 1948-49 and per-household amounts).
+- Rubric: [goal-rubric.md](goal-rubric.md). Strict reading, as in Audits 4 and
+  5: a dimension reaches 4 only with a recorded side-by-side comparison with a
+  named benchmark page ([benchmark-comparison.md](benchmark-comparison.md)) or
+  an independent review, and a page that is in fact comparable. The
+  side-by-side record now covers D1 to D6, D8 and D10. It does not cover D7
+  (beyond headline figures) or D9.
+- How it was checked: a fresh build (1,755 pages, 6,558 CSV files); the home
+  page, all money pages including the new taxes-since-1948 page, the life hub,
+  every topic page, a recent and an early year page, the default 2009 vs 2023
+  comparison and an early (1981 vs 2001) comparison measured at 360 × 640 with
+  and without JavaScript (page length, sideways scrolling, where the first
+  chart starts, small tap targets); per-person and per-household figures
+  recomputed by hand; a scan of every reading page for causal or loaded words
+  (every hit was inside a quoted, attributed official explanation or the
+  site's own "not what it caused" notes); CI on `main` (build and checks)
+  green for `fe0f5c2`. The live-site check for `fe0f5c2` was still running
+  when this was written (this container cannot reach the live site), and it
+  passed for #107.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 36 out of 55** on the strict reading (39 lenient). Audit 5: 31
+strict, 37 lenient. Target: at least 49, every dimension at least 4, and the
+phone test passed. Not met.
+
+All seven gaps from Audit 5 were closed. The new benchmark records let five
+dimensions reach 4 on the strict reading. What holds the rest back is now
+smaller craft work (finding-led chart titles, chart summaries in words,
+shorter pages), two dimensions with no recorded check (D7, D9), and evidence
+only people can give (D11, the screen-reader test and outside review).
+
+| Dimension | Strict | Lenient | Why |
+|---|---|---|---|
+| D1 Public money answers | 4 | 4 | The two benchmark gaps that counted most are closed: taxes by type since 1948-49 with each replacement of a tax marked (#108), and spending and tax per household beside per person (#108; checked: £1,360bn ÷ 29.0 million households ≈ £46,900). Who pays covers income, age, retired or working and household type. Not 5: no international comparison (OBR, IFS and OWID all give one); no reader evidence. |
+| D2 Life: breadth and depth | 4 | 4 | Up from 3. Holidays now show the closest official measure to "who took a holiday" (could not afford a week away, EU-SILC 2005 to 2018) and say why no yearly share exists (#105); holidays and class sizes now have recorded side-by-sides, which found matching figures and fixed two problems (2024 travel method, class sizes a year behind). With work from 1971, pay spread, tenure from 1981 and affordability, this is comparable with the ONS and DfE pages. Not 5: DfE's large-class figures and infant / key stage 2 averages, ONS spending and nights abroad, and local-area detail are missing; housing costs and space are England only. |
+| D3 Life: choosing and comparing | 4 | 4 | Up from 3. Any two years from 1971 can now be compared (#107, 1,487 comparison pages), changes only within one method, with the nearest comparable pair linked; the side-by-side with ONS census comparisons and OWID (#103) found this comparable or ahead, and added "Timing matters" notes for recession and pandemic years. Not 5: no wider-area or long-run context beside each headline change (ONS has it); the default comparison is 10 phone screens; no reader evidence of one-handed use. |
+| D4 Explanation and understanding | 3 | 4 | Better: the Full Fact side-by-side (#103) found answers come before detail, and "tax burden" is now named and explained. Held at 3 (torn): chart titles describe rather than state the finding (for example "Public receipts by type, 1948-49 to 2022-23"), which the ONS benchmark does better; who pays, household tax and spending are still 10.5 to 10.6 phone screens; no international context for big numbers; no evidence a newcomer can explain a point back. |
+| D5 Visual design and charts | 4 | 4 | Up from 3. Both things the OWID side-by-side found clearly ahead are fixed: a chart now starts within about two phone screens on every key page (CI enforces it, #102; measured 0.9 to 2.1 screens), and every chart and table has its own CSV (#106). Small multiples share scales and mark breaks. Not 5: titles do not state the finding; some chart summaries in words only list the break lines (taxes since 1948); no reader evidence. |
+| D6 Phone experience | 3 | 4 | Shorter pages (#104): topic pages 7.6 to 10 screens, the default comparison 10, down from 12 to 15; no page scrolls sideways; the OBR and ONS side-by-side (#103) found this site shorter in words. Held at 3 (torn): Audit 5's target of about 8 screens is not met (spending 10.6, who pays 10.6, household tax 10.5, life hub 10.4); Sources is 118 screens and the glossary 18; nothing measures "answer in under a minute". |
+| D7 Accuracy and traceability | 3 | 4 | Every figure re-read from its cell on every build; one-tap tracing; corrections log; headline figures match OBR, IFS, ONS and DfE (#100, #105). Strict 3: those checks cover headline figures only, and no recorded check takes a random sample of figures from the pages back to the original publications. |
+| D8 Impartiality | 4 | 4 | Up from 3. The Full Fact side-by-side (#103) found framing comparable, with a stated rule for default years and no record claims; this audit's scan found no loaded or causal wording outside quoted, attributed official explanations. Not 5: no review by a person outside the project. |
+| D9 Accessibility and no JavaScript | 3 | 3 | axe WCAG 2.2 AA passes in CI; every page measured works without JavaScript at 360px with the same content. Held at 3: no VoiceOver or TalkBack test, no recorded side-by-side, and some chart summaries in words describe only the breaks, not the trend. |
+| D10 Honesty about limits | 4 | 4 | Up from 3. The ONS ASHE and Travel trends side-by-sides (#103, #105) found limits comparable and fixed two (2022 vs 2023 pay, 2024 mixed travel methods); early comparisons never cross a survey change (#107). Not 5: confidence intervals are shown for pay but not for most other headline survey figures; no outside review. |
+| D11 Reader evidence | 0 | 0 | Nobody has used the site in a test. |
+| **Total** | **36 / 55** | **39 / 55** | |
+
+### Gaps that a worker can do (largest score effect first)
+
+1. Rewrite every chart title on the money, topic and year pages to state what the chart shows (for example "Income Tax has raised about a quarter of receipts since 1948"), in neutral words, and make each chart's "in words" summary describe the trend as well as the breaks (D4, D5, D9).
+2. Shorten spending, who pays, household tax and the life hub from about 10.5 to about 8 phone screens folded, and split or index the 118-screen Sources page, keeping every section reachable (D6, D4).
+3. Record a random-sample accuracy check: trace at least 40 figures from the pages back to the original published tables (not the repository's own copy), record each result, and fix any mismatch (D7).
+4. Record an accessibility side-by-side against GOV.UK and ONS pages: keyboard-only walk-through, the browser accessibility tree for each chart type, and tap target sizes, and fix what it finds (D9).
+5. Add an international comparison of tax and spending as a share of GDP from an official source (OECD or Eurostat), with definitions and the year shown, or record why no comparable official source can be used (D1, D4).
+6. Add DfE large-class figures and infant / key stage 2 averages to class sizes, and ONS spending and nights abroad to holidays (D2).
+7. Show a longer-run or UK-wide reference beside each headline change on comparison pages (for example the change over the previous ten years), as the ONS comparisons do (D3).
+
+### Human-only steps (unchanged)
+
+1. A quick informal test with two or three people on phones (D11 to 2).
+2. The five-person phone test with the pack in `docs/user-test/` (D11 to 5; required for the goal).
+3. A VoiceOver (iPhone) and TalkBack (Android) test (D9 to 5).
+4. A review of accuracy and impartiality by a person outside the project (D7, D8, D10 to 5).
+
+---
+
 ## Audit 5: 2 November 2026 (strict re-score after PRs #92 to #100)
 
 - Commit audited: `4b60492` on `main` (after #92 live-site check, #93 one page
