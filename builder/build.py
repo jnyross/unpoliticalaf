@@ -8,14 +8,14 @@ import shutil
 import sys
 from collections import Counter
 
-from .data import build_all, YEARS
+from .data import build_all, YEARS, EARLY_YEARS
 from .html import Num, page
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import version
-from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
+from . import pages_money, pages_life, pages_history, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -51,6 +51,8 @@ def render():
     pages["life/jobs-by-industry.html"] = pages_life.industry_page(facts, d, num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
+    for y in EARLY_YEARS:
+        pages[f"life/{y}.html"] = pages_history.early_year_page(facts, d, num, sources, y)
     for a in YEARS:
         for b in YEARS:
             if a < b:

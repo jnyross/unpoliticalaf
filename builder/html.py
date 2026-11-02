@@ -450,10 +450,6 @@ def fmt(value, kind):
         return f"{value:+.1f} points"
     if kind == "dp1":
         return f"{value:.1f}"
-    if kind == "times":
-        return f"{value:.1f} times"
-    if kind == "times2":
-        return f"{value:.2f} times"
     if kind == "millions":
         return f"{value / 1000:.1f} million"
     if kind == "millions_people":
@@ -644,24 +640,21 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         fx = x(forecast_from) - (x(1) - x(0)) / 2
         parts.append(f'<rect x="{fx:.1f}" y="{T}" width="{W - R - fx:.1f}" height="{H - T - B}" fill="#f1f2f3"/>')
         parts.append(f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">{future.capitalize()}</text>')
-    placed = []  # (row, left, right) of break labels already drawn
+    taken = []  # x ranges of break labels already drawn
     for i, text in breaks:
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
         parts.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
         # Right-align the label when it would run past the chart's right edge
-        width = len(text) * 8  # generous: the label font is wider than the alignment rule assumes
-        right_aligned = bx > W * 0.65 or bx + 3 + len(text) * 6.6 > W
-        left, right = (bx - 3 - width, bx - 3) if right_aligned else (bx + 3, bx + 3 + width)
-        # Move a label down a row when it would overlap an earlier one
-        row = 0
-        while any(r == row and left < pr and right > pl for r, pl, pr in placed):
-            row += 1
-        placed.append((row, left, right))
-        ty = T + 12 + 13 * row
-        if right_aligned:
-            parts.append(f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
+        w = len(text) * 6.6
+        right = bx > W * 0.65 or bx + 3 + w > W
+        lo_, hi_ = (bx - 3 - w, bx - 3) if right else (bx + 3, bx + 3 + w)
+        if any(lo_ < b + 4 and hi_ > a - 4 for a, b in taken):
+            continue  # breaks close together share one label; the summary names each
+        taken.append((lo_, hi_))
+        if right:
+            parts.append(f'<text x="{bx - 3:.1f}" y="{T + 12}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
         else:
-            parts.append(f'<text x="{bx + 3:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')
     for i, text in events:
         ex = x(i)
         parts.append(f'<line x1="{ex:.1f}" x2="{ex:.1f}" y1="{T}" y2="{H - B}" stroke="#8d969e" stroke-dasharray="1 3" stroke-width="1.5"/>')

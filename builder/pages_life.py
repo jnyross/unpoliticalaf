@@ -9,7 +9,7 @@ definition are not calculated.
 """
 import re
 
-from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
+from .data import YEARS, EARLY_YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
 from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
@@ -172,13 +172,18 @@ def change_cell(facts, num, a_id, b_id, style, kind):
 
 
 def year_links(current, up, href=lambda y: f"{y}.html", strip=False):
-    out = []
-    for y in YEARS:
-        if y == current:
-            out.append(f'<li><span aria-current="page">{y}</span></li>')
-        else:
-            out.append(f'<li><a href="{up}{href(y)}">{y}</a></li>')
-    return f'<ul class="yearnav{" yearstrip" if strip else ""}">{"".join(out)}</ul>'
+    """Every year from 2008, then the earlier years (fewer figures) folded beneath."""
+    def items(years):
+        out = []
+        for y in years:
+            if y == current:
+                out.append(f'<li><span aria-current="page">{y}</span></li>')
+            else:
+                out.append(f'<li><a href="{up}{href(y)}">{y}</a></li>')
+        return "".join(out)
+    early = (f'<details class="early"{" open" if current in EARLY_YEARS else ""}><summary>Earlier years, {EARLY_YEARS[0]} to {EARLY_YEARS[-1]} (fewer figures)</summary>'
+             f'<ul class="yearnav{" yearstrip" if strip else ""}">{items(EARLY_YEARS)}</ul></details>')
+    return f'<ul class="yearnav{" yearstrip" if strip else ""}">{items(YEARS)}</ul>{early}'
 
 
 def compare_form(up, a=None, b=None):
@@ -323,7 +328,7 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
 def year_page(facts, d, num, sources, y):
     up = "../"
     body = [f"<h1>Everyday life in {y}</h1>"]
-    prev_l = f'<a href="{y - 1}.html">← {y - 1}</a>' if y > FIRST else "<span></span>"
+    prev_l = f'<a href="{y - 1}.html">← {y - 1}</a>' if y > FIRST or y - 1 in EARLY_YEARS else "<span></span>"
     next_l = f'<a href="{y + 1}.html">{y + 1} →</a>' if y < LAST else "<span></span>"
     body.append(f'<nav class="pager" aria-label="Previous and next year">{prev_l}{next_l}</nav>')
     body.append(f'<nav aria-label="Choose a year">{year_links(y, "", strip=True)}</nav>')
@@ -800,6 +805,9 @@ def topic_page(facts, d, num, sources, key):
     detail = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in detail]
     # The first chart stays in view; its tables fold away.
     first_chart = next(i for i, part in enumerate(detail) if "data-chart=" in part)
+    # The longer series before 2008 follows the first chart's table.
+    from . import pages_history
+    detail[first_chart + 2:first_chart + 2] = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in pages_history.block(facts, num, sources, key)]
     detail.insert(first_chart + 1, FOLD)
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer, topic_nav(key), CAUSE,
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>"]
@@ -824,6 +832,9 @@ def life_index(facts, d, num, sources):
     body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
+    body.append('<p class="small">Comparisons cover every topic from 2008. Some official series reach further back: the employment rate from 1971, '
+                'visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006. Each topic page has a '
+                '“Before 2008” section, and the earlier years above show what was measured then.</p>')
     body.append(CAUSE)
     for key, title, _ in TOPICS:
         answer, _detail = TOPIC_BUILDERS[key](facts, d, num, sources)

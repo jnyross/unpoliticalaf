@@ -524,6 +524,16 @@
    "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
    "find": "/file\\?uri=[^\"']*jobs02[^\"']*\\.xlsx?",
    "file": "ons/jobs02"
+  },
+  {
+   "id": "ons-ott-timeseries",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
+   "file": "ott/ott-timeseries.csv"
+  },
+  {
+   "id": "explain-ons-lfs-qmi",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
+   "file": "explain/ons-lfs-qmi.html"
   }
  ]
 }
