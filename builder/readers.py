@@ -1,0 +1,105 @@
+"""Small, dependency-light readers for the official source formats.
+
+Every reader returns plain Python values together with a locator string
+(sheet and cell, or CSV row label) so that each published number can be
+traced back to the exact place in the original file.
+"""
+import csv
+import io
+import re
+import zipfile
+import xml.etree.ElementTree as ET
+from functools import lru_cache
+from pathlib import Path
+
+import openpyxl
+from openpyxl.utils import get_column_letter
+
+ROOT = Path(__file__).resolve().parent.parent
+
+
+@lru_cache(maxsize=None)
+def xlsx(path):
+    return openpyxl.load_workbook(ROOT / path, data_only=True)
+
+
+def cell(path, sheet, ref):
+    """Return the value at sheet!ref in an .xlsx file."""
+    return xlsx(path)[sheet][ref].value
+
+
+def xlsx_rows(path, sheet):
+    ws = xlsx(path)[sheet]
+    return [[c.value for c in row] for row in ws.iter_rows()]
+
+
+_NS = {
+    "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
+    "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
+    "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
+}
+
+
+def _q(prefix, name):
+    return "{%s}%s" % (_NS[prefix], name)
+
+
+@lru_cache(maxsize=None)
+def ods(path):
+    """Read every sheet of an .ods file into {sheet: [[value, ...], ...]}.
+
+    Numbers come from office:value (the stored value, not the display text).
+    Repeated rows are expanded so row numbers match the spreadsheet; repeated
+    columns are expanded up to the last real value in each row.
+    """
+    with zipfile.ZipFile(ROOT / path) as z:
+        root = ET.fromstring(z.read("content.xml"))
+    sheets = {}
+    for table in root.iter(_q("table", "table")):
+        rows = []
+        for row in table.iter(_q("table", "table-row")):
+            values = []
+            for c in row:
+                if c.tag not in (_q("table", "table-cell"), _q("table", "covered-table-cell")):
+                    continue
+                repeat = int(c.get(_q("table", "number-columns-repeated"), "1"))
+                vtype = c.get(_q("office", "value-type"))
+                if vtype in ("float", "percentage", "currency"):
+                    v = float(c.get(_q("office", "value")))
+                else:
+                    text = "\n".join("".join(p.itertext()) for p in c.iter(_q("text", "p")))
+                    v = text if text != "" else None
+                values.extend([v] * min(repeat, 200))
+            while values and values[-1] is None:
+                values.pop()
+            repeat = int(row.get(_q("table", "number-rows-repeated"), "1"))
+            rows.append((values, repeat))
+        while rows and not rows[-1][0]:
+            rows.pop()  # trailing empty rows carry no data
+        rows = [values for values, repeat in rows for _ in range(repeat)]
+        sheets[table.get(_q("table", "name"))] = rows
+    return sheets
+
+
+def ref(row_index, col_index):
+    """Spreadsheet-style reference from 0-based indexes."""
+    return f"{get_column_letter(col_index + 1)}{row_index + 1}"
+
+
+def ons_series(path):
+    """Parse an ONS time-series CSV (generator format) into metadata and periods."""
+    text = (ROOT / path).read_text(encoding="utf-8-sig")
+    meta, data = {}, {}
+    for row in csv.reader(io.StringIO(text)):
+        if len(row) < 2:
+            continue
+        key, value = row[0], row[1]
+        if re.fullmatch(r"\d{4}( Q[1-4]| [A-Z]{3})?", key):
+            data[key] = None if value.strip() in ("", "x", "..") else float(value)
+        else:
+            meta[key] = value
+    return meta, data
+
+
+def csv_rows(path):
+    return list(csv.DictReader(io.StringIO((ROOT / path).read_text(encoding="utf-8-sig"))))
