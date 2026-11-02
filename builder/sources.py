@@ -50,6 +50,16 @@ SOURCES = {
         published="October 2026", retrieved="29 October 2026",
         geography="United Kingdom", population="Whole public sector",
     ),
+    "obrhist": dict(
+        publisher="Office for Budget Responsibility",
+        title="Historical public finances database (300 years of tax, spending, borrowing and debt)",
+        page="https://obr.uk/data/",
+        url="https://obr.uk/download/historical-public-finances-database/",
+        file="data/raw/OBR_Historical_public_finances_database.xlsx",
+        sha256="df154a4774807de330ad3b356db085c1d7adf4b1a4f7bcd13484ad9374f0e3f8",
+        published="20 July 2023 (latest edition on the OBR data page, checked 2 November 2026)", retrieved="30 October 2026",
+        geography="United Kingdom (Great Britain and Ireland before 1922-23)", population="Whole public sector",
+    ),
     "hmrc24": dict(
         publisher="HM Revenue and Customs",
         title="Income Tax statistics, Table 2.4: shares of total income and Income Tax for percentile groups",
@@ -101,6 +111,11 @@ SOURCES = {
         geography="England", population="State-funded schools; classes taught by one teacher",
     ),
 }
+
+# The OBR databank holds more figures than one record page can list, so the GDP,
+# GDP deflator and after-inflation figures have their own record page.
+SOURCES["obr-prices"] = dict(SOURCES["obr"], title="Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP")
+SOURCES["obrhist-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: spending by purpose in £ and after inflation")
 
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.

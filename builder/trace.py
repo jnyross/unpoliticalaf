@@ -169,6 +169,9 @@ def corrections_page():
 
 
 FULL_BUDGET = 330_000  # bytes; above this a page carries only each figure's source
+# Reading pages have a tighter size limit (build.MAX_READING_PAGE_BYTES); a reading
+# page that would pass it with full records falls back to source-only records instead.
+READING_BUDGET = 245_000
 
 FACT_RE = re.compile(r'data-fact="([^"]+)"')
 CHANGE_RE = re.compile(r'data-from="([^"]+)"[^>]*?data-to="([^"]+)"')
@@ -230,7 +233,8 @@ def add_trace(html, path, facts, sources):
             data["p"], data["t"] = periods, statuses
         return json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     text = blob(True)
-    if len(html.encode()) + len(text.encode()) > FULL_BUDGET:
+    budget = FULL_BUDGET if path.startswith(FIG_DIR + "/") else min(FULL_BUDGET, READING_BUDGET)
+    if len(html.encode()) + len(text.encode()) > budget:
         text = blob(False)
     up = "../" * path.count("/")
     tag = f'<script type="application/json" id="trace-data" data-up="{up}">{text}</script>\n{TRACE_JS}'
