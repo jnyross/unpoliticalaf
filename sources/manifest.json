@@ -550,6 +550,21 @@
    "id": "ons-families-households-page",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
    "file": "ons/families-households-page.html"
+  },
+  {
+   "id": "oecd-rs-tax",
+   "file": "oecd/revenue-statistics-tax-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-pf",
+   "file": "oecd/gov-at-a-glance-expenditure-revenue-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A..GE+GR.PT_B1GQ.S13..?startPeriod=1995&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-cofog",
+   "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels"
   }
  ]
 }

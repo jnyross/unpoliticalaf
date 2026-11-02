@@ -118,7 +118,7 @@ Interest on government debt here is the interest paid out (HM Treasury: “gross
     derive(facts, f"spend.realchange.tme.{first}.{y}", 100 * (tme_real[-1] / tme_real[0] - 1), "%", f"{first} to {y}", "pesa4",
            [f"spend.real.tme.{y}", f"spend.real.tme.{first}"], f"100 × (spend.real.tme.{y} ÷ spend.real.tme.{first} − 1)")
     body.append(f'''<div class="answer"><p>After adjusting for rising prices, total spending in {y} was {num(f"spend.realchange.tme.{first}.{y}", "pct0")} higher than in {first}.
-As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}", "pct")} to {num(f"spend.gdp.tme.{y}", "pct")}.</p></div>''')
+As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}", "pct")} to {num(f"spend.gdp.tme.{y}", "pct")}. <a href="international.html">How this compares with other countries</a>.</p></div>''')
     covid = [(years.index("2020-21"), "Covid")]
     tme_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     tme_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices (adjusted with the GDP deflator)", "gdp": "Per cent of GDP"}
@@ -252,7 +252,8 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>Shown as a share of GDP to start with, so that years with very different prices and economies can be compared. You can switch to amounts after inflation. Forecast years are shaded and dashed.</p>")
     body.append(f"<p>Taxes alone, without other receipts, were {num(f'rec.gdp.taxes.{y}', 'pct')} of GDP in {y}. News reports often call this share the <a href='glossary.html#tax-burden'>“tax burden”</a>. "
                 "It compares all tax, paid by people and businesses, with the size of the economy. It is not anyone's tax bill: "
-                "<a href='household-tax.html'>tax and income</a> shows what households pay.</p>")
+                "<a href='household-tax.html'>tax and income</a> shows what households pay. "
+                "<a href='international.html'>How the UK compares with other countries</a> uses the OECD's measure, which is the same for every country.</p>")
     rec_title = {"cash": "Receipts and spending in cash", "real": "Receipts and spending after inflation", "gdp": "Receipts and spending as a share of GDP"}
     rec_unit = {"cash": "£ billion, cash. Source: OBR public finances databank.", "real": "£ billion, 2025-26 prices (OBR GDP deflator). Source: OBR public finances databank.",
                 "gdp": "Per cent of GDP. Source: OBR public finances databank."}

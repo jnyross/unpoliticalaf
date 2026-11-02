@@ -1211,6 +1211,8 @@ def build_all():
     from . import data_taxmixhist
     d["tax_mix_history"] = data_taxmixhist.build(facts)
     d["households_years"] = data_taxmixhist.households(facts)
+    from . import data_intl
+    d["intl"] = data_intl.build(facts)
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
     population(facts)

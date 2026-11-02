@@ -59,6 +59,7 @@ def home_page(facts, d, num, sources):
 {v_hh}
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
+<p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
 <h2 id="life">Everyday life, year by year</h2>
 <p>Pick any year from {E} to {L}, or compare two. Every topic has figures from {FIRST}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
