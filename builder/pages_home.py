@@ -7,6 +7,8 @@ def home_page(facts, d, num, sources):
     y = "2025-26"
     L = 2025
     from .pages_life import year_spark, FIRST
+    from .data import EARLY_YEARS
+    E = EARLY_YEARS[0]
     per = d["spending"]["per100"]
     names = {k: v["name"] for k, v in d["spending"]["views"]["cash"]["series"].items()}
     top3 = sorted((k for k in names if k in per and k not in ("services", "adjustments", "tme", "debt_interest", "transport", "eu")),
@@ -56,14 +58,14 @@ def home_page(facts, d, num, sources):
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from 2008 to {L}, or compare two. Each topic shows the latest figure and what it covers, with a small chart of every year: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
+<p>Pick any year from {E} to {L}, or compare two. Every topic has figures from {FIRST}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p>{sparks["work"]}</a>
 <a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p>{sparks["schools"]}</a>
-<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from 2008 to {L} side by side, with what changed and where definitions changed.</p><span class="more">Choose two years</span></a>
+<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
 <h2 id="how">How to read this site</h2>
 <ul class="principles">

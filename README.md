@@ -12,7 +12,8 @@ first and the method close by:
 
 It also has **Everyday life, year by year** (`life/`): work and job types, pay
 after inflation, housing, holidays (abroad and within Great Britain, with the most visited countries) and school class sizes from 2008 to
-2025. Every year has its own page, and every pair of years has a comparison page,
+2025, with the longer official series reaching back to 1971. Every year from 1971 has its own page, and every pair of years has a comparison page
+(pairs with a year before 2008 compare only the figures measured the same way in both years),
 so the core answers and comparisons work without JavaScript.
 
 ## Rules the site follows

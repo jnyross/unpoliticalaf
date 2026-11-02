@@ -309,7 +309,7 @@ def check_pages(facts):
                 fail(f"{rel}: loaded wording '{w}'")
         if "worked example" in text and "illustration, not a statistic" not in text:
             fail(f"{rel}: worked example without the illustration label")
-        if "not available" not in text and "life/" in rel and rel.endswith("2008.html"):
+        if "not available" not in text and rel == "life/2008.html":
             fail(f"{rel}: expected 2008 gaps to be shown")
     return len(pages), shown
 
@@ -351,7 +351,7 @@ def check_structure():
         if not (SITE / w).exists():
             fail(f"missing page {w}")
     pages = sorted(int(p.stem) for p in (SITE / "life").glob("[0-9]*.html"))
-    # Every pair of explorer years (2008 on) has a comparison page; earlier years have a year page only.
+    # Every pair of years has a comparison page, including the years before 2008.
     compare = list((SITE / "life/compare").glob("*-*.html"))
     years = sorted({int(x) for p in compare for x in p.stem.split("-")})
     pairs = len(compare)
@@ -359,7 +359,7 @@ def check_structure():
         fail(f"{pairs} comparison pages for {len(years)} years")
     # Every pair of three-year spans that do not overlap has a comparison page.
     spans = [p.stem for p in (SITE / "life/compare/spans").glob("*-and-*.html")]
-    n = len(years) - 2
+    n = len([y for y in years if y >= 2008]) - 2
     if len(spans) != (n - 3) * (n - 2) // 2:
         fail(f"{len(spans)} span comparison pages for {n} spans")
     for y in years:
@@ -437,7 +437,7 @@ def main():
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
-                 "life/compare/2019-2024.html", "life/compare/index.html", "life/compare/spans/index.html",
+                 "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
