@@ -146,7 +146,7 @@ TOPIC_SOURCES = {
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
-    "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure are shown for each nation with what each one counts. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
+    "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure in each region and nation, with what each one counts, are on their own page. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years; ONS says annual 2024 mixes the old method (January to June) and the new one (July to December), so 2024 is not compared with 2025 either. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. No official statistic, published each year, gives the share of people who took a holiday. The nearest, the share of people whose household could not afford a week’s holiday away, is shown for the 2005 to 2018 surveys, the only years with UK figures. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
@@ -608,18 +608,27 @@ def compare_page(facts, d, num, sources, a, b):
     top = largest_changes(facts, num, a, b)
     if top:
         body.append(f'<h2 id="largest">Largest changes between {a} and {b}</h2>')
-        body.append('<p class="small">Every figure on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>')
+        body.append('<p class="small">Every comparable figure on this page, ranked by the size of its change. Shares and amounts are ranked separately; cash figures are left out in favour of after-inflation ones.</p>')
         body.append(top)
     body.append(timing_note(sources, "../../", (str(a), [int(a)]), (str(b), [int(b)])))
     body.append(CAUSE)
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
-        body.append(FOLD)
-        body.append(f'<p class="small">{esc(scope)}</p>')
+        # On a phone the section shows where the figures cover and one figure that
+        # "In brief" does not already give; the rest folds away.
+        where, _, more_scope = scope.partition(". ")
+        body.append(f'<p class="small">{esc(where + "." if more_scope else where)}</p>')
         ms = [m for m in MEAS if m[1] == key]
         ok = [m for m in ms if _status(facts, m, a, b) == "ok" and not m[0].endswith("cash")]
         breaks = [m for m in ms if _status(facts, m, a, b) == "break"]
         missing = [m for m in ms if _status(facts, m, a, b) == "missing"]
+        shown = next((m for m in ok if m[0] != KEY_MEASURES[key][0]), None)
+        if shown:
+            body.append(f'<ul class="cmp-list">{_row_card(facts, num, shown, a, b)}</ul>')
+            ok = [m for m in ok if m is not shown]
+        body.append(FOLD)
+        if more_scope:
+            body.append(f'<p class="small">{esc(more_scope)}</p>')
         if ok:
             body.append(f'<ul class="cmp-list">{"".join(_row_card(facts, num, m, a, b) for m in ok)}</ul>')
         if any(m[0].endswith("cash") and _status(facts, m, a, b) == "ok" for m in ms):
@@ -779,8 +788,7 @@ def _housing(facts, d, num, sources):
     body.extend(housing_costs_block(facts, num, d))
     body.extend(afford_block(facts, num, d))
     body.extend(housing_space_block(facts, num))
-    body.extend(housing_regions_block(facts, num))
-    body.extend(housing_nations_block(facts, num, d))
+    body.extend(housing_places_block(facts, num, d))
     return answer, body
 
 def _holidays(facts, d, num, sources):
@@ -880,7 +888,11 @@ def topic_page(facts, d, num, sources, key):
     first_chart = next(i for i, part in enumerate(detail) if "data-chart=" in part)
     # The longer series before 2008 follows the first chart's table.
     from . import pages_history
-    detail[first_chart + 2:first_chart + 2] = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in pages_history.block(facts, num, sources, key)]
+    history = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in pages_history.block(facts, num, sources, key)]
+    if key == "housing" and history:
+        # The long chart shows the same four groups as the chart above, so on a phone it waits in the fold.
+        history.append("<!--keepfold-->")
+    detail[first_chart + 2:first_chart + 2] = history
     detail.insert(first_chart + 1, FOLD)
     # On a phone the first chart comes straight after the answer. How sure the
     # figures are, and any notes, follow it; the topic links and the
@@ -890,9 +902,13 @@ def topic_page(facts, d, num, sources, key):
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>", before_toc(topic_nav(key) + CAUSE)]
     body.extend(detail)
     body.append("<h2 id='about'>About these figures</h2>")
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS[key])}</p></div>')
-    body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
+    # The first sentence of the limits stays in view; the rest folds away with the sources.
+    lead, _, more = TOPIC_LIMITS[key].partition(". ")
+    body.append(f'<div class="limit"><p>{esc(lead + "." if more else lead)}</p></div>')
     body.append(FOLD)
+    if more:
+        body.append(f'<div class="limit"><p>{esc(more)}</p></div>')
+    body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
     body.append("<h2 id='years'>One year, or two side by side</h2>")
@@ -986,6 +1002,45 @@ def places_block(facts, num, topic):
     return out
 
 
+PLACES_PAGE = "life/housing-places.html"
+
+
+def _places_answer(facts, num, d):
+    ys = [y for y in YEARS if _val(facts, f"house.reg.private.england.{y}") is not None]
+    b = ys[-1]
+    pr = {k: _val(facts, f"house.reg.private.{k}.{b}") for k, _, _ in REGIONS}
+    top, low = max(pr, key=pr.get), min(pr, key=pr.get)
+    names = {k: n for k, n, _ in REGIONS}
+    n = d["nations"]
+    nb = min(ys[-1], n["wales"][-1], n["scotland"][-1])
+    return (f'<div class="answer"><p>At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately: '
+            f'across the regions, from {num(f"house.reg.private.{low}.{b}", "pct0")} ({names[low]}) to {num(f"house.reg.private.{top}.{b}", "pct0")} ({names[top]}). '
+            f'In {nb}, {num(f"house.nat.private.wales.{nb}", "pct0")} of homes in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland were rented privately. '
+            f'Each nation measures housing its own way, so small gaps between nations should not be read as real differences.</p></div>')
+
+
+def housing_places_block(facts, num, d):
+    """The short version on the housing page: the answer and a link to the regions and nations page."""
+    return ["<h3 id='housing-places'>Each region and nation</h3>", NOFOLD, _places_answer(facts, num, d),
+            '<p class="more-link"><a href="housing-places.html">Homes by tenure in each region and nation</a>: '
+            'a chart of every English region and figures for Wales, Scotland and Northern Ireland.</p>']
+
+
+def places_page(facts, d, num, sources):
+    """A page of its own, so the housing page stays short on a phone."""
+    body = ['<p class="small"><a href="index.html">Everyday life, year by year</a> › <a href="housing.html">Housing</a></p>',
+            "<h1>Who owns and who rents in each region and nation?</h1>", _places_answer(facts, num, d), topic_nav("housing"), CAUSE]
+    parts = housing_regions_block(facts, num) + housing_nations_block(facts, num, d)
+    body.extend(_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in parts)
+    body.append("<h2 id='about'>About these figures</h2>")
+    body.append('<div class="limit"><p>Housing is run separately in each nation, and each counts homes in its own way, so figures for different nations are shown side by side '
+                'but never added into a UK total. These are counts of homes (dwellings), except Northern Ireland, which publishes a survey of households.</p></div>')
+    body.append(FOLD)
+    body.append(source_line(sources, [s for s in ("dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26") if s in sources], up="../"))
+    return page(PLACES_PAGE, "Housing in each region and nation", "\n".join(body),
+                "Homes owned and rented in each region of England and in Wales, Scotland and Northern Ireland, from official housing statistics.")
+
+
 def housing_regions_block(facts, num):
     ys = [y for y in YEARS if _val(facts, f"house.reg.owner.england.{y}") is not None]
     a, b = ys[0], ys[-1]
@@ -994,7 +1049,7 @@ def housing_regions_block(facts, num):
     pr = {k: _val(facts, f"house.reg.private.{k}.{b}") for k, _, _ in REGIONS}
     top = max(pr, key=pr.get)
     names = {k: n for k, n, _ in REGIONS}
-    out.append(f'<div class="answer"><p>These figures count homes (dwellings), not households, so they differ a little from the survey figures above. '
+    out.append(f'<div class="answer"><p>These figures count homes (dwellings), not households, so they differ a little from the survey figures on the <a href="housing.html">housing page</a>. '
                f'At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately, up from {num(f"house.reg.private.england.{a}", "pct0")} in {a}. '
                f'The share was highest in {names[top]} ({num(f"house.reg.private.{top}.{b}", "pct0")}), where {num(f"house.reg.owner.{top}.{b}", "pct0")} of homes were owner occupied.</p></div>')
     rows = []

@@ -3,7 +3,7 @@ pay spread (earnings), house prices against earnings (housing) and jobs by
 industry (work). Each returns a list of parts starting with an <h3>, which
 topic_page() turns into its own section.
 """
-from .html import details_table, esc, line_chart, table
+from .html import NOFOLD, details_table, esc, line_chart, table
 
 
 def _v(facts, fid):
@@ -90,7 +90,7 @@ def _afford_answer(facts, num, d):
 def afford_block(facts, num, d):
     """The short version on the housing page: the answer and a link to the full page."""
     first = d["life_extra"]["afford"]["years"][0]
-    return ["<h3 id='housing-afford'>House prices compared with earnings</h3>", _afford_answer(facts, num, d),
+    return ["<h3 id='housing-afford'>House prices compared with earnings</h3>", NOFOLD, _afford_answer(facts, num, d),
             f'<p class="more-link"><a href="house-prices.html">House prices and earnings since {first}</a>, with each region.</p>']
 
 
@@ -151,7 +151,7 @@ def _industry_answer(facts, num, d):
 def industry_block(facts, num, d):
     """The short version on the work page: the answer and a link to the full page."""
     first = d["life_extra"]["jobs"]["years"][0]
-    return ["<h3 id='work-industry'>Jobs by industry</h3>", _industry_answer(facts, num, d),
+    return ["<h3 id='work-industry'>Jobs by industry</h3>", NOFOLD, _industry_answer(facts, num, d),
             f'<p class="more-link"><a href="jobs-by-industry.html">Jobs by industry, every year since {first}</a>: a chart of six large industries and tables for all twenty.</p>']
 
 
