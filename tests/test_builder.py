@@ -821,3 +821,32 @@ class MoneyViews(unittest.TestCase):
         self.assertIsNone(f["hist.gdp.health.1942-43"].value)  # no figures during the Second World War
         self.assertIsNone(f["hist.gdp.social.1950-51"].value)  # social security starts in 1955-56
         self.assertIsNotNone(f["hist.gdp.defence.1942-43"].value)
+
+
+class International(unittest.TestCase):
+    """The OECD comparison: every member is shown or named as missing, and nothing is filled in."""
+
+    @classmethod
+    def setUpClass(cls):
+        from builder import data_intl
+        cls.facts = Facts()
+        cls.it = data_intl.build(cls.facts)
+
+    def test_every_member_shown_or_named(self):
+        it = self.it
+        self.assertEqual(len(it["members"]), 38)
+        for prefix, year, missing in (("intl.tax", it["tax_year"], it["tax_missing"]), ("intl.spend", it["spend_year"], it["spend_missing"])):
+            for a in it["members"]:
+                f = self.facts.get(f"{prefix}.{a}.{year}")
+                has = f is not None and f.value is not None
+                self.assertNotEqual(has, a in missing, f"{prefix} {a} {year}")
+
+    def test_uk_and_average_have_the_years_used(self):
+        it = self.it
+        for fid in (f"intl.tax.GBR.{it['tax_year']}", f"intl.tax.OECD_REP.{it['tax_year']}",
+                    f"intl.spend.GBR.{it['spend_year']}", f"intl.spend.OECD_REP.{it['spend_year']}"):
+            self.assertIsNotNone(self.facts[fid].value)
+        # Shares of GDP for a whole country: above zero, well below 100.
+        for f in self.facts.values():
+            if f.value is not None and not f.id.startswith("intl.fn."):
+                self.assertTrue(0 < f.value < 80, f.id)

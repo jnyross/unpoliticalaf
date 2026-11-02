@@ -11,6 +11,7 @@ import json
 from .readers import ROOT
 
 OGL = "Open Government Licence v3.0"
+OECD_TERMS = "Creative Commons Attribution 4.0 International (CC BY 4.0), OECD"
 GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
 
 
@@ -218,6 +219,9 @@ FETCHED = {
     "ons-jobs02": ("Office for National Statistics", "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted", "United Kingdom", "All workforce jobs: employee jobs, self-employment jobs, HM Forces and government-supported trainees"),
     "eurostat-ilc-mdes02-uk": ("Eurostat (survey run in the UK by the Office for National Statistics)", "EU statistics on income and living conditions (EU-SILC), table ilc_mdes02: inability to afford paying for one week annual holiday away from home", "United Kingdom", "People in private households"),
     "ons-families-households": ("Office for National Statistics", "Families and households in the UK, 1996 to 2025 (published 17 April 2026): Table 5, households by size", "United Kingdom", "Private households (Labour Force Survey, April to June each year)"),
+    "oecd-rs-tax": ("OECD", "Revenue Statistics, comparative tables: total tax revenue and main kinds of tax as % of GDP, OECD member countries", "38 OECD member countries", "General government (all levels) tax revenue"),
+    "oecd-gov-pf": ("OECD", "Government at a Glance, yearly updates: general government expenditure as % of GDP", "38 OECD member countries", "General government (central, state and local government and social security funds)"),
+    "oecd-gov-cofog": ("OECD", "Government at a Glance, yearly updates: general government expenditure by function (COFOG) as % of GDP", "38 OECD member countries", "General government (central, state and local government and social security funds)"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 
@@ -243,7 +247,7 @@ def all_sources():
                         file="data/fetched/" + r["file"], sha256=r["sha256"],
                         published="see publisher page", retrieved=r["retrieved"][:10],
                         geography=geography, population=population,
-                        licence=GBTS_TERMS if key.startswith("gbts-") else OGL)
+                        licence=GBTS_TERMS if key.startswith("gbts-") else OECD_TERMS if key.startswith("oecd-") else OGL)
     for alias, (key, title, geography, population) in FETCHED_ALIASES.items():
         if key in out:
             out[alias] = dict(out[key], id=alias, title=title, geography=geography, population=population)
