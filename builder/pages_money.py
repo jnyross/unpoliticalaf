@@ -202,7 +202,7 @@ def who_pays_page(facts, d, num, sources):
     body.append("<p>Two official sources answer this in different ways. Keep them separate: they count different people and different taxes.</p>")
     # HMRC
     body.append(f'''<h2 id="income-tax">1. Income Tax, by person</h2>
-<p>HM Revenue and Customs ranks everyone who owes Income Tax by their income, then adds up how much tax each group owes. People who owe no Income Tax are not included.</p>''')
+<p>HM Revenue and Customs ranks everyone who owes Income Tax by their income, then adds up how much tax each group owes. People who owe no Income Tax are not included. For Income Tax by age, see <a href="#age">section 6</a>.</p>''')
     items = [("Top 1% of taxpayers", f"hmrc.share.top1.{y}", ""), ("Top 10% of taxpayers", f"hmrc.share.top10.{y}", ""), ("Top 50% of taxpayers", f"hmrc.share.top50.{y}", ""), ("Bottom 50% of taxpayers", f"hmrc.share.bottom50.{y}", "alt")]
     body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
     rows = []
@@ -256,8 +256,9 @@ def who_pays_page(facts, d, num, sources):
     body.append(explain("retired-net", sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages per household, and retired and non-retired households differ in size, so the figures are not tax per person. Gross income includes cash benefits such as the State Pension. “Retired” describes the household, not each person in it. In the lowest-income fifths, a few people with large tax bills from earlier years can raise the average tax, which the Office for National Statistics warns about. Survey estimates for April 2023 to March 2024, for people in UK private households; care homes are not covered.</p></div>')
     body.append(source_line(sources, ["etb"], "Tables 3a (non-retired) and 4a (retired). Percentages calculated here as (direct + indirect taxes) ÷ gross income, the same method as ONS Table 8."))
-    from .pages_money_extra import household_types_section
+    from .pages_money_extra import household_types_section, income_tax_age_section
     body.append(household_types_section(facts, d, num, sources))
+    body.append(income_tax_age_section(facts, d, num, sources))
     return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.")
 
 
