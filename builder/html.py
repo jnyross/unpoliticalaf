@@ -176,7 +176,12 @@ footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;
 footer ul a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink2)}
 @media (min-width:640px){.cards{grid-template-columns:1fr 1fr}h1{font-size:2.2rem}.hero h1{font-size:2.5rem}.keyfigs{grid-template-columns:repeat(3,1fr)}.keyfigs li.wide{grid-column:auto}.principles{grid-template-columns:1fr 1fr}
 header.site .wrap{flex-direction:row;align-items:center;gap:16px}.brand{margin-right:auto}nav.main{margin:0}nav.main::after{display:none}nav.main ul{padding:0}nav.main a{min-height:56px}.yearstrip{flex-wrap:wrap;overflow:visible;margin:8px 0 16px;padding:0}}
-@media print{nav.main,.skip,form.pick,.toc{display:none}details{display:block;border:0;padding:0}}
+.tr data[data-fact],.tr data[data-from]{cursor:pointer}.tr data[data-fact]:hover,.tr data[data-from]:hover{background:var(--soft)}
+.trace{position:fixed;left:8px;right:8px;bottom:8px;max-width:560px;margin:0 auto;max-height:70vh;overflow:auto;background:#fff;border:1px solid var(--ink2);border-radius:var(--r);box-shadow:0 6px 24px rgba(0,0,0,.18);padding:12px 16px;z-index:20;font-size:.95rem}
+.trace .trace-h{font-weight:650;margin:0 0 6px}.trace .trace-v{margin:0 0 6px;color:var(--muted)}.trace dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0 0 4px}.trace dt{color:var(--muted)}.trace dd{margin:0;overflow-wrap:anywhere}.trace p{margin:4px 0 8px}
+.trace-x{min-height:44px;min-width:88px;font:inherit;color:var(--ink);border:1px solid var(--line);background:var(--soft);border-radius:8px;cursor:pointer}
+section.fig,section.correction{border-top:1px solid var(--line);padding:8px 0;scroll-margin-top:12px}section.fig:target{background:var(--warn)}section.fig h3{font-size:1rem;margin:4px 0;overflow-wrap:anywhere}section.fig dl,section.correction dl,dl.srcmeta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}section.fig dt,section.correction dt,dl.srcmeta dt{color:var(--muted)}section.fig dd,section.correction dd,dl.srcmeta dd{margin:0;overflow-wrap:anywhere}
+@media print{nav.main,.skip,form.pick,.toc,.trace{display:none}details{display:block;border:0;padding:0}}
 """
 
 NAV = [
@@ -243,7 +248,7 @@ def page(path, title, body, description="", scripts="", contents=True):
 </main>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
-<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Every figure links to its source on the <a href="{up}methods.html">sources and methods</a> page.</p>
+<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from, or see every source on the <a href="{up}methods.html">sources and methods</a> page. Mistakes we fix are listed under <a href="{up}corrections.html">corrections</a>.</p>
 <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
 </div></footer>
 {scripts}
@@ -319,7 +324,7 @@ def source_line(sources, ids, extra="", up=""):
     parts = []
     for sid in ids:
         s = sources[sid]
-        parts.append(f'<a href="{up}methods.html#src-{esc(sid)}">{esc(s["publisher"])}: {esc(s["title"])}</a>')
+        parts.append(f'<a href="{up}figures/{esc(sid)}.html">{esc(s["publisher"])}: {esc(s["title"])}</a>')
     if len(parts) <= 2:
         return f'<p class="src">Source: {"; ".join(parts)}.{(" " + extra) if extra else ""}</p>'
     # A long run of links buries the page on a phone: name the publishers, list the tables one tap away.

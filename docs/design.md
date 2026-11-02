@@ -53,6 +53,12 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
   tables, charts, existing links and text hidden from screen readers are left
   alone. To explain a new word, add it to `GROUPS` with the words that should
   link to it; don't write separate definitions on each page.
+- **Tracing figures** (`builder/trace.py`): every page gets the records of the
+  figures it shows, and tapping a number opens a panel with its source, period
+  and cell or calculation. Each source line links to `figures/<source>.html`,
+  a record of every figure used from that source. Nothing to do per page: wrap
+  numbers with `num()` as usual. When a published mistake is fixed, add it to
+  `CORRECTIONS` so it appears on `corrections.html`.
 - **Illustrations** keep the dashed border and the "Illustration, not a
   statistic" tag. Don't restyle them to look like measured figures.
 
