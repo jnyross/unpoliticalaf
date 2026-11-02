@@ -264,7 +264,8 @@ def who_pays(facts):
                 j = rows[1].index(label)
                 facts.add(Fact(f"hmrc.threshold.{key}", num(r[j]), "£ a year", "2023 to 2024", "hmrc24", f"2_4_Taxpayer_inc_quantiles!{ref(i, j)}", "outturn"))
     out["hmrc_latest_outturn"] = "2023 to 2024"
-    # ETB: average taxes paid per household, by income fifth (Table 2a)
+    # ETB Table 2a: average household income and taxes for fifths of individuals,
+    # ranked by equivalised household disposable income (ONS note 3)
     wb = xlsx("data/payers/raw/ons-etb-fye2024.xlsx")
     rows = [[c.value for c in r] for r in wb["Table 2a"].iter_rows()]
     hdr_i = next(i for i, r in enumerate(rows) if r and any(str(v).strip() == "Bottom" for v in r if v))
