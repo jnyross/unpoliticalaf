@@ -621,3 +621,14 @@ meets them; the 2024 travel method change is never crossed; class sizes have a
 4. Downloads (both). Queued as gap 4 of Audit 5.
 
 These are recorded as evidence for the next goal audit, not as new tickets.
+
+**Update (T44, Audit 6 gap 6):** items 1 and 2 are now on the site. The class
+sizes page shows the share of pupils in classes of more than 30 for primary and
+secondary schools from January 2006, and infant and key stage 2 averages and
+large-class counts from January 2016. Its January 2026 figures match the DfE
+release text: infant average 25.9, 39,509 infant pupils (DfE: 39,500) or 2.7%
+in classes over 30; key stage 2 average 27.6, 413,855 pupils (DfE: 413,900) or
+18.8%. The holidays page shows holiday spending (£58.8 billion in 2025, the
+holiday part of ONS's £83.9 billion for all visits), spending per visit in cash
+and after inflation, and nights per visit, from 2009, without crossing the 2024
+method change.
