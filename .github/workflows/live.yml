@@ -1,0 +1,33 @@
+name: Live site matches main
+
+# After every push to main, wait for Vercel to deploy it, then check that every
+# live file is exactly the build of that commit. Also runs daily, so a failed
+# or skipped production deploy shows up even when nothing new is pushed.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to main supersedes an older check.
+concurrency:
+  group: live-check
+  cancel-in-progress: true
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup
+      - run: make build
+      - name: Compare the live site with this build
+        run: python3 scripts/check_live.py --wait ${{ github.event_name == 'push' && 1500 || 60 }}
