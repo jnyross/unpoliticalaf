@@ -39,38 +39,6 @@
   "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
   "retrieved": "2026-11-02T08:58:39Z"
  },
- "dluhc-lt101-uk": {
-  "url": "https://assets.publishing.service.gov.uk/media/5b055108ed915d13371dc836/Discontinued_LT_101.xls",
-  "file": "nations/dluhc-LT_101-uk-tenure.xls",
-  "bytes": 39424,
-  "content_type": "application/vnd.ms-excel",
-  "sha256": "c880a9c6c04989ba04de35ff3da1a5480171b908392dfdbc85cc65fb4f1f149b",
-  "retrieved": "2026-11-02T15:16:07Z"
- },
- "dluhc-lt104-england": {
-  "url": "https://assets.publishing.service.gov.uk/media/6a0dcbcc40a9c699fd826eec/LiveTable104.ods",
-  "file": "nations/dluhc-LiveTable104-england-tenure.ods",
-  "bytes": 13637,
-  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
-  "sha256": "ecd02eb8e520e4fef7878bda35db002ca2360cb45112416db6619863b211a1fa",
-  "retrieved": "2026-11-02T15:16:18Z"
- },
- "dluhc-lt106-wales": {
-  "url": "https://assets.publishing.service.gov.uk/media/5ce6a1deed915d247979f95b/LT_106.xls",
-  "file": "nations/dluhc-LT_106-wales-tenure.xls",
-  "bytes": 36352,
-  "content_type": "application/vnd.ms-excel",
-  "sha256": "d716ad7379f7e3ef3e5de06d2fa5935d2ad537391d490645521ce20c13629d7c",
-  "retrieved": "2026-11-02T15:16:10Z"
- },
- "dluhc-lt107-scotland": {
-  "url": "https://assets.publishing.service.gov.uk/media/5ce6a1e9e5274a4873de09ba/LT_107.xls",
-  "file": "nations/dluhc-LT_107-scotland-tenure.xls",
-  "bytes": 50688,
-  "content_type": "application/vnd.ms-excel",
-  "sha256": "2fd6abc01a5f923a88957036604ec8aed0ce691a84675ec5648d76f63a0bfd6d",
-  "retrieved": "2026-11-02T15:16:14Z"
- },
  "dluhc-lt109": {
   "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
   "file": "dluhc/LiveTable109.ods",
@@ -311,7 +279,15 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
- "ni-housing-2025-26-t1": {
+ "ni-de-enrolments-2025-26": {
+  "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
+  "file": "nations/ni-school-enrolments-2025-26-page.html",
+  "bytes": 33612,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "037a1726d90f86fc36cc06c64732eb963c6709da46326fff1de5a6a506bdfd82",
+  "retrieved": "2026-11-02T15:17:56Z"
+ },
+ "ni-housing-2025-26": {
   "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
   "file": "nations/ni-housing-stats-25-26-tables1.ods",
   "bytes": 371994,
@@ -599,206 +575,6 @@
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
  },
- "probe-hbai-directory": {
-  "url": "https://assets.publishing.service.gov.uk/media/69c290be7e02b81c0d1c7763/directory-of-tables-hbai-2024-2025.ods",
-  "file": "probe/hbai-directory.ods",
-  "bytes": 30875,
-  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
-  "sha256": "5de22f450860fea1aad91204181171ecc905f172a816c92c3b90b76ea22011c1",
-  "retrieved": "2026-11-02T15:18:04Z"
- },
- "probe-hbai-report": {
-  "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025/households-below-average-income-an-analysis-of-the-uk-income-distribution-fye-1995-to-fye-2025",
-  "file": "probe/hbai-report.html",
-  "bytes": 418347,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "71dbd5e6300c5cb8b9311a0086644ce5ce4102250b2b14fb9a5298a7d87db683",
-  "retrieved": "2026-11-02T15:18:08Z"
- },
- "probe-hbai-tables": {
-  "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
-  "file": "probe/hbai-2025.html",
-  "bytes": 84611,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "64b0651d1ae6fe879338ef788e88b19b5216bf3d5633dc333c47872c1c8dfc0f",
-  "retrieved": "2026-11-02T15:16:47Z"
- },
- "probe-ni-enrol-2025-26": {
-  "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
-  "file": "probe/ni-enrol-2025-26.html",
-  "bytes": 33612,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "037a1726d90f86fc36cc06c64732eb963c6709da46326fff1de5a6a506bdfd82",
-  "retrieved": "2026-11-02T15:17:56Z"
- },
- "probe-ni-enrol-final": {
-  "url": "https://datavis.nisra.gov.uk/DEstatistics/annual-enrolments-at-grant-aided-schools-in-northern-ireland-202526.html",
-  "file": "probe/ni-enrol-final-2025-26.html",
-  "bytes": 4980471,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "5cb2b42f79ffeb795e7b5e14f4f265e472d0438e915d317b01e30ed0d3f24e3c",
-  "retrieved": "2026-11-02T15:19:32Z"
- },
- "probe-ni-enrol-further": {
-  "url": "https://www.education-ni.gov.uk/articles/school-enrolments-further-information",
-  "file": "probe/ni-enrol-further.html",
-  "bytes": 34774,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "2965098dbda961d45848451d5073326e739fd72b912bdc3890bd5567f5286a81",
-  "retrieved": "2026-11-02T15:18:00Z"
- },
- "probe-ni-housing-2025-26": {
-  "url": "https://www.communities-ni.gov.uk/publications/northern-ireland-housing-statistics-2025-26",
-  "file": "probe/ni-housing-2025-26.html",
-  "bytes": 53193,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "d05e117a0ae5afc57accb4cf019cbb7d4aa223c541a376781e75225d596481a0",
-  "retrieved": "2026-11-02T15:17:42Z"
- },
- "probe-ni-housing-article": {
-  "url": "https://www.communities-ni.gov.uk/articles/northern-ireland-housing-statistics",
-  "file": "probe/ni-housing-article.html",
-  "bytes": 51165,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "58b6995f54029500d695c0fc507c24ae9c916d680c166a1f2d6acf5a500123ce",
-  "retrieved": "2026-11-02T15:17:46Z"
- },
- "probe-ni-housing-stats": {
-  "url": "https://www.communities-ni.gov.uk/topics/housing-statistics",
-  "file": "probe/ni-housing-stats.html",
-  "bytes": 54807,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "01355af08cb0e4994436643cfd335cfbbe21000054fe9158ac17ba443d6291cd",
-  "retrieved": "2026-11-02T15:16:37Z"
- },
- "probe-ni-pupils-classes": {
-  "url": "https://www.education-ni.gov.uk/articles/pupils-and-classes",
-  "file": "probe/ni-pupils-classes.html",
-  "bytes": 40339,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "367a1dfd73c878cc8ca3076d3a95a26b63abbbdc675e48249207cf78f17f3e15",
-  "retrieved": "2026-11-02T15:16:41Z"
- },
- "probe-ni-school-enrolments": {
-  "url": "https://www.education-ni.gov.uk/articles/school-enrolments-overview",
-  "file": "probe/ni-school-enrolments.html",
-  "bytes": 40964,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "cc327b741ad16cdf3b10f9a0d794efbeaf7c18dca13477ce31187f4ace48afea",
-  "retrieved": "2026-11-02T15:16:44Z"
- },
- "probe-ni-summary-ods": {
-  "url": "https://www.education-ni.gov.uk/publications/northern-ireland-summary-data-ods-versions",
-  "file": "probe/ni-summary-ods.html",
-  "bytes": 35965,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "6b1e710828a0ff08f4ae405856f76c613e5fc7da1fd8b0da8f0438435e734a9d",
-  "retrieved": "2026-11-02T15:19:22Z"
- },
- "probe-scot-primary-class": {
-  "url": "https://www.gov.scot/publications/primary-school-class-sizes/",
-  "file": "probe/scot-primary-class-sizes.html",
-  "bytes": 57820,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "80675ff133f528ef226108bcb14789ed6f0b51f343ca4ef184ee73e93c9bd895",
-  "retrieved": "2026-11-02T15:17:49Z"
- },
- "probe-scot-pupil-census-supp": {
-  "url": "https://www.gov.scot/publications/pupil-census-supplementary-statistics/",
-  "file": "probe/scot-pupil-census-supp.html",
-  "bytes": 61848,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "5293ab5bbe46511db3c745220eb9e796f51b2b2aa1ec1d1bd9553ec2f1403398",
-  "retrieved": "2026-11-02T15:17:53Z"
- },
- "probe-scot-school-stats": {
-  "url": "https://www.gov.scot/collections/school-education-statistics/",
-  "file": "probe/scot-school-collection.html",
-  "bytes": 69905,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "7f870733dbfc63decfb0541fda0b707bcd1dcd22d15e5ef53d379385df225afc",
-  "retrieved": "2026-11-02T15:16:26Z"
- },
- "probe-scot-ssfs-2024": {
-  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/pages/classes-and-pupils/",
-  "file": "probe/scot-ssfs-2024-classes.html",
-  "bytes": 96628,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "8d7387210a7279e937890929ad57d0e97e1223e1a4cc671b714938d916cdefa0",
-  "retrieved": "2026-11-02T15:16:29Z"
- },
- "probe-scot-stock-tenure": {
-  "url": "https://www.gov.scot/publications/housing-statistics-stock-by-tenure/",
-  "file": "probe/scot-stock-tenure.html",
-  "bytes": 33032,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "904aa5a4a43171ce5f8ce616ba8d25c6016bc1d57b2e6a655669f3cdc0909c60",
-  "retrieved": "2026-11-02T15:16:22Z"
- },
- "probe-wales-api": {
-  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
-  "file": "probe/wales-api.json",
-  "bytes": 16672,
-  "content_type": "application/json; charset=utf-8",
-  "sha256": "7931404545e7769761ba9fbc3aa9ddc84fafc89179acb813238844bb4206caab",
-  "retrieved": "2026-11-02T15:20:59Z"
- },
- "probe-wales-api-csv": {
-  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
-  "file": "probe/wales-api.csv",
-  "bytes": 444935,
-  "content_type": "text/csv",
-  "sha256": "e510c9a85c407c5d575510a9dc050821236d1664214bc58a0ce4574cc6f91e72",
-  "retrieved": "2026-11-02T15:21:03Z"
- },
- "probe-wales-api-docs": {
-  "url": "https://api.stats.gov.wales/v1/docs",
-  "file": "probe/wales-api-docs.html",
-  "bytes": 3051,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "ff951a1edd2ebcc98d36fd243b857c675f42af3beb8fdbbbf7faec2bd6407a20",
-  "retrieved": "2026-11-02T15:21:07Z"
- },
- "probe-wales-dwelling": {
-  "url": "https://www.gov.wales/dwelling-stock-estimates",
-  "file": "probe/wales-dwelling-stock.html",
-  "bytes": 30123,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "e37b1fff85947d656f105a37269d083870d5b3158cd8bfc2ec68c8ad43c3bd4d",
-  "retrieved": "2026-11-02T15:16:33Z"
- },
- "probe-wales-dwelling-2025": {
-  "url": "https://www.gov.wales/dwelling-stock-estimates-31-march-2025",
-  "file": "probe/wales-dwelling-2025.html",
-  "bytes": 27117,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "d69731c162ac8fec5eb7feb9a94b190eef5d8101fe79b604d8b5863084469596",
-  "retrieved": "2026-11-02T15:17:38Z"
- },
- "probe-wales-dwelling-2025-html": {
-  "url": "https://www.gov.wales/dwelling-stock-estimates-31-march-2025-html",
-  "file": "probe/wales-dwelling-2025-html.html",
-  "bytes": 54912,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "13439f0b3bd3b685cf2146ded7c9fbcf7013dc180dd127c8eec1499fded88f7f",
-  "retrieved": "2026-11-02T15:19:15Z"
- },
- "probe-wales-start": {
-  "url": "https://stats.gov.wales/en-GB/6476cc20-ddeb-46a5-be64-10a23c8a159f/start",
-  "file": "probe/wales-start.html",
-  "bytes": 44698,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "302d87b45807da549e64244f96fa6fc7a5e3799eecbba2a71407a89fb00b0a0e",
-  "retrieved": "2026-11-02T15:20:55Z"
- },
- "probe-wales-stats-topic": {
-  "url": "https://stats.gov.wales/en-GB/topic/65/housing-stock-and-need",
-  "file": "probe/wales-stats-topic65.html",
-  "bytes": 11165,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "3eaf8a0d1fae811c5434dd8b516fac272b4d1bcdae4efbe1bb097e38d1baed73",
-  "retrieved": "2026-11-02T15:19:18Z"
- },
  "scot-primary-class-2025": {
   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
   "file": "nations/scot-primary-class-size-dataset-2025.xlsx",
@@ -822,6 +598,22 @@
   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
   "sha256": "b69149bdf5a5496cc9a79b109d2011ca7f8813c10f47eddd896fc5564002548b",
   "retrieved": "2026-11-02T15:17:34Z"
+ },
+ "wales-dwelling-stock": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+  "file": "nations/wales-dwelling-stock-by-tenure.csv",
+  "bytes": 444935,
+  "content_type": "text/csv",
+  "sha256": "e510c9a85c407c5d575510a9dc050821236d1664214bc58a0ce4574cc6f91e72",
+  "retrieved": "2026-11-02T15:21:03Z"
+ },
+ "wales-dwelling-stock-meta": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+  "file": "nations/wales-dwelling-stock-metadata.json",
+  "bytes": 16672,
+  "content_type": "application/json; charset=utf-8",
+  "sha256": "7931404545e7769761ba9fbc3aa9ddc84fafc89179acb813238844bb4206caab",
+  "retrieved": "2026-11-02T15:20:59Z"
  },
  "wg-schools-census-2025": {
   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",

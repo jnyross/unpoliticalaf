@@ -11,6 +11,7 @@ from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
 from .html import page, table, details_table, line_chart, source_line, fmt, esc
 from . import uncertainty as U
+from .pages_nations import housing_nations_block, schools_nations_block
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 
@@ -34,6 +35,10 @@ def crowd_period(y):
 
 def hol_basis(y):
     return "UK" if y <= 2023 else "GB"
+
+
+def scot_survey(y):
+    return "pandemic-affected survey" if y in (2020, 2021) else "usual survey"
 
 
 def gb_survey(y):
@@ -98,6 +103,10 @@ def measures(d):
         ("school.secondary", "schools", "Average class size, secondary schools", lambda y: f"school.secondary.{y}", "dp1", "abs", lambda y: f"January {y}", None),
         ("school.wales.infant", "schools", "Wales: average infant class (reception to year 2)", lambda y: f"school.wales.infant.{y}", "dp1", "abs", lambda y: f"January {y}", None),
         ("school.wales.junior", "schools", "Wales: average junior class (years 3 to 6)", lambda y: f"school.wales.junior.{y}", "dp1", "abs", lambda y: f"January {y}", None),
+        ("school.scotland", "schools", "Scotland: average primary class (all stages)", lambda y: f"school.scotland.primary.{y}", "dp1", "abs", lambda y: f"September {y}", None),
+        ("nat.house.private.wales", "housing", "Wales: homes rented privately", lambda y: f"house.nat.private.wales.{y}", "pct", "pp", lambda y: f"31 March {y}", None),
+        ("nat.house.private.scotland", "housing", "Scotland: homes rented privately", lambda y: f"house.nat.private.scotland.{y}", "pct", "pp", lambda y: f"31 March {y}", scot_survey),
+        ("nat.house.private.ni", "housing", "Northern Ireland: households renting privately", lambda y: f"house.nat.private.ni.{y}", "pct0", "pp", sy, None),
     ]
     return m
 
@@ -105,25 +114,25 @@ def measures(d):
 TOPICS = [
     ("work", "Work", "United Kingdom. Employment rates for the UK, by sex and by age, and the part-time share: Labour Force Survey, April to June. Employment rates for each nation and English region, and job types: Annual Population Survey, January to December."),
     ("earnings", "Earnings", "United Kingdom, and each nation by where employees live. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the UK-wide CPIH inflation index."),
-    ("housing", "Housing", "England only. English Housing Survey. A survey year runs from April to March, so “2015” means the 2015-16 survey. Rents are averages for households paying rent, before any housing support (such as Housing Benefit). Mortgage payments are averages for households buying with a mortgage. “After inflation” figures use the CPIH price index averaged over each survey year. Overcrowding uses the bedroom standard and is an average of three survey years."),
+    ("housing", "Housing", "Mainly England: English Housing Survey, plus homes by tenure in each English region. Wales and Scotland: homes by tenure at 31 March, from each government's dwelling stock estimates. Northern Ireland: households by tenure, Family Resources Survey. In the English Housing Survey a survey year runs from April to March, so “2015” means the 2015-16 survey. Rents are averages for households paying rent, before any housing support (such as Housing Benefit). Mortgage payments are averages for households buying with a mortgage. “After inflation” figures use the CPIH price index averaged over each survey year. Overcrowding uses the bedroom standard and is an average of three survey years."),
     ("holidays", "Holidays", "Trips abroad, by year of travel: up to 2023 UK residents (International Passenger Survey); from 2024 Great Britain residents, measured with a new method. Holidays at home: overnight trips within Great Britain by Great Britain residents whose main purpose was a holiday (Great Britain Tourism Survey); Northern Ireland is not covered. Every traveller, adult or child, counts as one trip. “Per 100 residents” divides trips by the mid-year population."),
-    ("schools", "Class sizes", "Primary and secondary figures: England only. State-funded schools, classes taught by one teacher, at the January school census. Wales: infant and junior classes in maintained schools at the January school census, from 2023. “2015” means January 2015, in the 2014/15 school year."),
+    ("schools", "Class sizes", "Primary and secondary figures: England only. State-funded schools, classes taught by one teacher, at the January school census. Wales: infant and junior classes in maintained schools at the January school census, from 2023. Scotland: primary classes (all stages) in publicly funded schools at the September pupil census; no secondary figure. Northern Ireland: no published average class size. “2015” means January 2015, in the 2014/15 school year."),
 ]
 
 TOPIC_SOURCES = {
     "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020"],
     "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "ons-l522"],
-    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109"],
+    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26"],
     "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop"],
-    "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025"],
+    "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025", "scot-pupil-census-2025", "ni-de-enrolments-2025-26"],
 }
 
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
-    "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys, which use different questions and years, so this section covers England. The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
-    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
-    "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland (which counts classes at a September census) and Northern Ireland are not shown yet, because their figures are not in the tables used here. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
+    "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure are shown for each nation with what each one counts. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
+    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. We found no official statistic, published each year, for the share of people who took a holiday, so none is shown. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
+    "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
 
 
@@ -259,6 +268,8 @@ def headline(facts, num, topic, y, gb=True):
              f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}.")
         if has(f"school.wales.infant.{y}"):
             s += (f" In Wales, infant classes averaged {num(f'school.wales.infant.{y}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{y}', 'dp1')}.")
+        if has(f"school.scotland.primary.{y}"):
+            s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{y}', 'dp1')} pupils at the September {y} census."
         return s
     return ""
 
@@ -354,6 +365,7 @@ BREAK_REASONS = {
     rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
     hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method.",
     gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
+    scot_survey: "Scotland’s statisticians advise against comparing its 2020 and 2021 private-renting figures with other years, because the pandemic disrupted the survey behind them.",
 }
 
 
@@ -361,6 +373,8 @@ def missing_reason(mkey, y):
     """Why a measure has no figure for year y, in plain words."""
     if mkey.startswith("work.occ.") and y < 2011:
         return "job-type figures in these tables start in 2011"
+    if mkey == "nat.house.private.ni":
+        return "the Northern Ireland table used here starts in 2012-13" if y < 2012 else f"Northern Ireland’s figures for {sy(y)} are not yet published"
     if mkey.startswith("house.crowd.") and y > 2022:
         return "the latest published overcrowding average ends in 2022-23"
     if mkey.startswith("house.") and y > 2024:
@@ -634,6 +648,7 @@ def life_index(facts, d, num, sources):
     body.extend(housing_costs_block(facts, num, d))
     body.extend(housing_space_block(facts, num))
     body.extend(housing_regions_block(facts, num))
+    body.extend(housing_nations_block(facts, num, d))
     body.append(explain.for_topic("housing", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
@@ -683,6 +698,7 @@ def life_index(facts, d, num, sources):
     body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
                       [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy]))
     body.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
+    body.extend(schools_nations_block(facts, num, d))
     body.append(explain.for_topic("schools", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["schools"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["schools"] if s in sources], up="../"))
@@ -763,7 +779,7 @@ def housing_regions_block(facts, num):
     out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
                              ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
     out.append(f'<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
-               f'Private renting is estimated from the Labour Force Survey and smoothed; figures from 2024 are provisional. Wales, Scotland and Northern Ireland measure housing with their own surveys and are not shown here.</p>')
+               f'Private renting is estimated from the Labour Force Survey and smoothed; figures from 2024 are provisional. Wales, Scotland and Northern Ireland are shown below.</p>')
     return out
 
 
