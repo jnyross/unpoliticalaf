@@ -276,6 +276,16 @@
    "id": "explain-ehs-2023-24-rented-report",
    "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
    "file": "explain/ehs-2023-24-rented-sectors.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch1",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
+   "file": "explain/ehs-2024-25-chapter-1.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch2",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
+   "file": "explain/ehs-2024-25-chapter-2.html"
   }
  ]
 }
