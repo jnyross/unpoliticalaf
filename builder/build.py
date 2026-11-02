@@ -12,7 +12,7 @@ from .html import Num, page
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .rates import read_rates
-from . import pages_money, pages_life, pages_home, glossary
+from . import pages_money, pages_life, pages_home, glossary, trace
 
 OUT = ROOT / "site"
 MAX_PAGE_BYTES = 400_000
@@ -48,7 +48,10 @@ def render():
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
     pages["glossary.html"] = glossary.glossary_page()
+    pages["corrections.html"] = trace.corrections_page()
+    pages.update(trace.figure_pages(facts, sources, num.used))
     pages = {path: glossary.link_terms(html, path) for path, html in pages.items()}
+    pages = {path: trace.add_trace(html, path, facts, sources) for path, html in pages.items()}
     return facts, sources, pages, num
 
 

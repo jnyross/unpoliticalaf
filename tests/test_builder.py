@@ -255,3 +255,45 @@ class Glossary(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Trace(unittest.TestCase):
+    def setUp(self):
+        from builder import trace
+        self.trace = trace
+        self.facts = Facts()
+        self.facts.add(Fact("a.2020", 10.0, "£bn", "2020-21", "s1", "4_2!B23"))
+        self.facts.add(Fact("b.1999 to 2000", 5.0, "%", "1999-00", "s2", "T1!C4"))
+        self.facts.add(Fact("c.2020", 2.0, "ratio", "2020-21", "s1", "", status="calculated",
+                            formula="a.2020 ÷ b.1999 to 2000", inputs=["a.2020", "b.1999 to 2000"]))
+        src = dict(publisher="P", title="T", geography="UK", population="All", published="2025", page="https://example.org", file="data/x.xlsx", licence="OGL")
+        self.sources = {"s1": src, "s2": dict(src, title="T2"), "s3": dict(src, title="Unused")}
+
+    def test_anchor_is_safe(self):
+        self.assertEqual(self.trace.anchor("b.1999 to 2000"), "f-b.1999_to_2000")
+
+    def test_where_reads_sheet_and_cell(self):
+        self.assertEqual(self.trace.where(self.facts["a.2020"]), "Sheet “4_2”, cell B23")
+
+    def test_record_pages_cover_inputs_and_every_source(self):
+        pages = self.trace.figure_pages(self.facts, self.sources, {"c.2020"})
+        self.assertEqual(set(pages), {"figures/s1.html", "figures/s2.html", "figures/s3.html"})
+        s1 = pages["figures/s1.html"]
+        # The calculation links to its inputs, including one on another source's page.
+        self.assertIn('id="f-c.2020"', s1)
+        self.assertIn('id="f-a.2020"', s1)
+        self.assertIn('href="s2.html#f-b.1999_to_2000"', s1)
+        self.assertIn('id="f-b.1999_to_2000"', pages["figures/s2.html"])
+        self.assertIn("No figure from this source is shown directly", pages["figures/s3.html"])
+
+    def test_page_gets_records_for_its_figures_only(self):
+        html = '<body><data value="10.0" data-fact="a.2020" data-kind="bn">£10bn</data></body>'
+        out = self.trace.add_trace(html, "life/2020.html", self.facts, self.sources)
+        self.assertIn('data-up="../"', out)
+        self.assertIn('"a.2020"', out)
+        self.assertNotIn('"c.2020"', out)
+        self.assertEqual(self.trace.add_trace("<body></body>", "x.html", self.facts, self.sources), "<body></body>")
+
+    def test_corrections_link_to_their_change(self):
+        out = self.trace.corrections_page()
+        self.assertIn("/pull/71", out)
