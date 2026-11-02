@@ -14,6 +14,7 @@ from . import explain
 from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
 from .pages_nations import housing_nations_block, schools_nations_block
+from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 
@@ -49,6 +50,11 @@ def gb_survey(y):
 
 # Each measure: key, topic, label, fact-id function, display kind, change style ('pp', 'pct' or None),
 # period function, comparability-group function (None = one consistent series)
+def spread_basis(y):
+    """ASHE method periods (ONS breaks in 2004 and 2006)."""
+    return "before 2004 method" if y < 2004 else ("2004 and 2005 method" if y < 2006 else "2006 method onwards")
+
+
 def measures(d):
     base = d["housing_costs"]["base"]
     occ_codes = {"prof": "2000000", "elem": "9000000", "caring": "6000000", "admin": "4000000", "skilled": "5000000", "managers": "1000001"}
@@ -60,6 +66,10 @@ def measures(d):
         ("work.women", "work", "Employment rate, women 16 to 64", lambda y: f"work.women.{y}", "pct", "pp", lambda y: f"Apr–Jun {y}", None),
         ("work.level", "work", "People in work, aged 16 and over", lambda y: f"work.level.{y}", "millions_people", "pct", lambda y: f"Apr–Jun {y}", None),
         ("work.pt", "work", "Workers who work part-time", lambda y: f"work.ptshare.{y}", "pct", "pp", lambda y: f"Apr–Jun {y}", None),
+    ]
+    m += [
+        ("work.ind.manuf", "work", "Share of jobs in manufacturing", lambda y: f"jobs.share.C.{y}", "pct", "pp", lambda y: f"June {y}", None),
+        ("work.ind.health", "work", "Share of jobs in health and social work", lambda y: f"jobs.share.Q.{y}", "pct", "pp", lambda y: f"June {y}", None),
     ]
     for key, label, _ in AGE_SERIES:
         m.append((f"work.age.{key}", "work", f"Employment rate, ages {label}", (lambda k: lambda y: f"work.age.{k}.{y}")(key), "pct", "pp", lambda y: f"Apr–Jun {y}", None))
@@ -76,6 +86,7 @@ def measures(d):
         ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", None),
         ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", None),
     ]
+    m.append(("earn.spread", "earnings", "Full-time pay: top-tenth line ÷ bottom-tenth line", lambda y: f"spread.ratio.{y}", "times", "pct", lambda y: f"April {y}", spread_basis))
     for key, name in NATIONS[1:]:
         m.append((f"earn.place.{key}", "earnings", f"Full-time, living in {name} (April 2025 prices)", (lambda k: lambda y: f"earn.place.real.{k}.{y}")(key), "pounds", "pct", lambda y: f"April {y}", None))
     m += [
@@ -90,6 +101,7 @@ def measures(d):
         ("house.rent.privatecash", "housing", "Average private rent a week (cash, at the time)", lambda y: f"house.rent.private.{y}", "pounds", "pct", sy, None),
         ("house.rent.socialcash", "housing", "Average social rent a week (cash, at the time)", lambda y: f"house.rent.social.{y}", "pounds", "pct", sy, None),
         ("house.mortpaycash", "housing", "Average mortgage payment a week (cash, at the time)", lambda y: f"house.mortpay.{y}", "pounds", "pct", sy, None),
+        ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), None),
         ("house.crowd.all", "housing", "Overcrowded households, all tenures", lambda y: f"house.crowd.all.{y}", "pct", "pp", crowd_period, None),
         ("house.crowd.owners", "housing", "Overcrowded: owner occupiers", lambda y: f"house.crowd.owners.{y}", "pct", "pp", crowd_period, None),
         ("house.crowd.social", "housing", "Overcrowded: social renters", lambda y: f"house.crowd.social.{y}", "pct", "pp", crowd_period, None),
@@ -122,9 +134,9 @@ TOPICS = [
 ]
 
 TOPIC_SOURCES = {
-    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020"],
-    "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "ons-l522"],
-    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26"],
+    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020", "ons-jobs02"],
+    "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "nomis-ashe-percentiles", "ons-l522"],
+    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ons-affordability", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26"],
     "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop"],
     "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025", "scot-pupil-census-2025", "ni-de-enrolments-2025-26"],
 }
@@ -407,6 +419,7 @@ KEY_MEASURES = {
 # Plain-English reasons for each definition change that stops a comparison.
 BREAK_REASONS = {
     occ_scheme: "Job types were regrouped in 2021, when the classification changed from SOC2010 to SOC2020, so the groups before and after are not the same.",
+    spread_basis: "The pay survey changed its method in 2004 and again in 2006, so pay spread is not compared across those years.",
     rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
     hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method.",
     gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
@@ -668,6 +681,7 @@ def _work(facts, d, num, sources):
                              years=oyears, breaks=[(oyears.index(2021), "New job classification")] if 2021 in oyears else (), split_breaks=True, ymin=0, kind="pct", num=num))
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
     body.extend(work_ages_block(facts, num))
+    body.extend(industry_block(facts, num, d))
     body.extend(places_block(facts, num, "work"))
     return answer, body
 
@@ -685,6 +699,7 @@ def _earnings(facts, d, num, sources):
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
     body.append('<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>')
+    body.extend(spread_block(facts, num, d, FIRST))
     body.extend(places_block(facts, num, "earnings"))
     return answer, body
 
@@ -705,6 +720,7 @@ def _housing(facts, d, num, sources):
                                 num(f"house.kids.private.{y}", "pct") if f"house.kids.private.{y}" in facts else "<span class='missing'>not available</span>"] for y in YEARS if f"house.private.{y}" in facts]
                               + [[f"{y}-{str(y + 1)[2:]}", "<span class='missing'>not yet published</span>", "", "", "", ""] for y in YEARS if f"house.private.{y}" not in facts]))
     body.extend(housing_costs_block(facts, num, d))
+    body.extend(afford_block(facts, num, d))
     body.extend(housing_space_block(facts, num))
     body.extend(housing_regions_block(facts, num))
     body.extend(housing_nations_block(facts, num, d))

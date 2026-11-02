@@ -450,6 +450,12 @@ def fmt(value, kind):
         return f"{value:+.1f} points"
     if kind == "dp1":
         return f"{value:.1f}"
+    if kind == "times":
+        return f"{value:.1f} times"
+    if kind == "times2":
+        return f"{value:.2f} times"
+    if kind == "dp2":
+        return f"{value:.2f}"
     if kind == "millions":
         return f"{value / 1000:.1f} million"
     if kind == "millions_people":

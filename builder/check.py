@@ -58,6 +58,14 @@ def cell_value(src_file, locator):
     if src_file.endswith(".xlsx"):
         sheet, ref = locator.rsplit("!", 1)
         return workbook(src_file)[sheet][ref].value
+    if src_file.endswith(".xls"):
+        import xlrd  # legacy Excel: read with xlrd, not the builder's code path
+        sheet, ref = locator.rsplit("!", 1)
+        m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
+        col = 0
+        for ch in m.group(1):
+            col = col * 26 + ord(ch) - 64
+        return xlrd.open_workbook(str(ROOT / src_file)).sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
         from .readers import ods  # ODS has no second reader available; the builder's reader expands repeats in full
         sheet, ref = locator.rsplit("!", 1)
@@ -366,7 +374,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
+                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/index.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")

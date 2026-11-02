@@ -447,6 +447,14 @@
   "sha256": "d306477a7ccbef51316cff40a1d94cfa12732b6619c065584afd00784919f8f9",
   "retrieved": "2026-11-02T11:14:06Z"
  },
+ "nomis-ashe-item-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/item.def.sdmx.json",
+  "file": "nomis/ashe-item-codes.json",
+  "bytes": 3907,
+  "content_type": "application/json",
+  "sha256": "80dd86c834dbbe2bc734f9e51af3e73fdbc518120eca45552f727a062b225985",
+  "retrieved": "2026-11-02T16:28:25Z"
+ },
  "nomis-ashe-measure-codes": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/measures.def.sdmx.json",
   "file": "nomis/ashe-measure-codes.json",
@@ -454,6 +462,14 @@
   "content_type": "application/json",
   "sha256": "2bc9bf9167737673c410ee4438b15ac9dda9594ffa8616408e537bf1ad0f978d",
   "retrieved": "2026-11-02T11:12:25Z"
+ },
+ "nomis-ashe-percentiles": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-uk-weekly-percentiles.csv",
+  "bytes": 185080,
+  "content_type": "text/csv",
+  "sha256": "fe8cac45c2c7ae15552192928dd242e0ce770ed5197568b41e3e968772a657cf",
+  "retrieved": "2026-11-02T16:28:29Z"
  },
  "nomis-ashe-places": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
@@ -487,6 +503,70 @@
   "sha256": "46aa0cc10d64a8adf3613af58c59e312a1425398b353bca6c524008cee02e693",
   "retrieved": "2026-11-02T08:58:36Z"
  },
+ "nomis-wfj-def": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.def.sdmx.json",
+  "file": "nomis/wfj-def.json",
+  "bytes": 2828,
+  "content_type": "application/json",
+  "sha256": "4234999fa3366b262c2fe3c1858e9ac8cc88c2f40a0798b6934b61865f0f6791",
+  "retrieved": "2026-11-02T16:28:39Z"
+ },
+ "nomis-wfj-industry-children": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
+  "file": "nomis/wfj-industry-children.json",
+  "bytes": 1025,
+  "content_type": "application/json",
+  "sha256": "7e108b7e7bfb95ec169ca7aa469dbeade1a4246d20c65d65bdcbe0c71f7c191f",
+  "retrieved": "2026-11-02T16:30:59Z"
+ },
+ "nomis-wfj-industry-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
+  "file": "nomis/wfj-industry-codes.json",
+  "bytes": 1025,
+  "content_type": "application/json",
+  "sha256": "78799590ee559b39c98b88eed118e46264a9b26fb07e42eea0652b33f7065c7e",
+  "retrieved": "2026-11-02T16:30:51Z"
+ },
+ "nomis-wfj-industry-types": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
+  "file": "nomis/wfj-industry-types.json",
+  "bytes": 684,
+  "content_type": "application/json",
+  "sha256": "12f7b7c7e05ff1e95a6925675ee1b4f6b7ab148111ffc693183c1bc333d1c422",
+  "retrieved": "2026-11-02T16:30:55Z"
+ },
+ "nomis-wfj-latest": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
+  "file": "nomis/wfj-uk-latest.csv",
+  "bytes": 3662,
+  "content_type": "text/csv",
+  "sha256": "e2f1caf9a311c240703566024b70218f7274d7eb44425bca7e2e9d739a3212c5",
+  "retrieved": "2026-11-02T16:28:43Z"
+ },
+ "nomis-wfj-search": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/def.sdmx.json?search=*workforce*",
+  "file": "nomis/wfj-search.json",
+  "bytes": 11168,
+  "content_type": "application/json",
+  "sha256": "ef80d0385019a69e46c5d09e600d3d96d9d2fbd4b3e1c06bc80a35b5e7900f84",
+  "retrieved": "2026-11-02T16:28:35Z"
+ },
+ "nomis-wfj-uk-industry": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/wfj-uk-industry.csv",
+  "bytes": 29178,
+  "content_type": "text/csv",
+  "sha256": "1c937a449c4bb7d246630d95f125ecb3bbe42ae215a13a1d54284150a2a6bbdd",
+  "retrieved": "2026-11-02T16:29:58Z"
+ },
+ "nomis-wfj-uk-industry-long": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/wfj-uk-industry-long.csv",
+  "bytes": 14308,
+  "content_type": "text/csv",
+  "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
+  "retrieved": "2026-11-02T16:30:02Z"
+ },
  "ons-a3wx": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
   "file": "ons/a3wx.csv",
@@ -494,6 +574,22 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "de61ee291cca0c336ba3ae5b3dcee36da8c38ed165d2d9d8672809f84a34aeb7",
   "retrieved": "2026-11-02T08:58:34Z"
+ },
+ "ons-affordability": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian/current/aff1ratioofhousepricetoworkplacebasedearnings.xlsx",
+  "file": "ons/affordability-workplace.xlsx",
+  "bytes": 513860,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "585bc98112e801fc3dd45dbc5238d05c6507d4e48dc3ec3afab4867eded1c2f4",
+  "retrieved": "2026-11-02T16:28:46Z"
+ },
+ "ons-affordability-page": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
+  "file": "ons/affordability-workplace-page.html",
+  "bytes": 41924,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "a0127c61683ad15550260ac3d05565866b951e220b7ebcc86b0b69bcee2c0702",
+  "retrieved": "2026-11-02T16:28:49Z"
  },
  "ons-ashe-qmi": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
@@ -510,6 +606,22 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "a912da34f98c17bcc2ca6ffe125b79c05c4491923f9cc9678b866c83e8062a6f",
   "retrieved": "2026-11-02T09:55:39Z"
+ },
+ "ons-jobs02": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+  "file": "ons/jobs02.xls",
+  "bytes": 375296,
+  "content_type": "application/vnd.ms-excel;charset=utf-8",
+  "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+  "retrieved": "2026-11-02T16:31:03Z"
+ },
+ "ons-jobs02-page": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+  "file": "ons/jobs02-page.html",
+  "bytes": 42551,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "43224da73347bdbd3789913e947fcf70af3ea8a1dd71538efdf191ef0064e616",
+  "retrieved": "2026-11-02T16:28:53Z"
  },
  "ons-l522": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",

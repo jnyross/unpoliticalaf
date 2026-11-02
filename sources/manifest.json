@@ -454,6 +454,78 @@
    "file": "etb/hist-dataset-page.html"
   },
   {
+   "id": "nomis-ashe-item-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/item.def.sdmx.json",
+   "file": "nomis/ashe-item-codes.json"
+  },
+  {
+   "id": "nomis-ashe-percentiles",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-uk-weekly-percentiles.csv"
+  },
+  {
+   "id": "nomis-wfj-search",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/def.sdmx.json?search=*workforce*",
+   "file": "nomis/wfj-search.json"
+  },
+  {
+   "id": "nomis-wfj-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.def.sdmx.json",
+   "file": "nomis/wfj-def.json"
+  },
+  {
+   "id": "nomis-wfj-latest",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
+   "file": "nomis/wfj-uk-latest.csv"
+  },
+  {
+   "id": "ons-affordability",
+   "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
+   "find": "/file\\?uri=[^\"']*ratioofhousepricetoworkplacebasedearnings[^\"']*\\.xlsx?",
+   "file": "ons/affordability-workplace"
+  },
+  {
+   "id": "ons-affordability-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
+   "file": "ons/affordability-workplace-page.html"
+  },
+  {
+   "id": "ons-jobs02-page",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+   "file": "ons/jobs02-page.html"
+  },
+  {
+   "id": "nomis-wfj-uk-industry",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/wfj-uk-industry.csv"
+  },
+  {
+   "id": "nomis-wfj-uk-industry-long",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/wfj-uk-industry-long.csv"
+  },
+  {
+   "id": "nomis-wfj-industry-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
+   "file": "nomis/wfj-industry-codes.json"
+  },
+  {
+   "id": "nomis-wfj-industry-types",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
+   "file": "nomis/wfj-industry-types.json"
+  },
+  {
+   "id": "nomis-wfj-industry-children",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
+   "file": "nomis/wfj-industry-children.json"
+  },
+  {
+   "id": "ons-jobs02",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+   "find": "/file\\?uri=[^\"']*jobs02[^\"']*\\.xlsx?",
+   "file": "ons/jobs02"
+  },
+  {
    "id": "ons-ott-timeseries",
    "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
    "file": "ott/ott-timeseries.csv"
