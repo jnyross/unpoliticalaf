@@ -735,6 +735,30 @@
   "sha256": "904aa5a4a43171ce5f8ce616ba8d25c6016bc1d57b2e6a655669f3cdc0909c60",
   "retrieved": "2026-11-02T15:16:22Z"
  },
+ "probe-wales-api": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+  "file": "probe/wales-api.json",
+  "bytes": 16672,
+  "content_type": "application/json; charset=utf-8",
+  "sha256": "7931404545e7769761ba9fbc3aa9ddc84fafc89179acb813238844bb4206caab",
+  "retrieved": "2026-11-02T15:20:59Z"
+ },
+ "probe-wales-api-csv": {
+  "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+  "file": "probe/wales-api.csv",
+  "bytes": 444935,
+  "content_type": "text/csv",
+  "sha256": "e510c9a85c407c5d575510a9dc050821236d1664214bc58a0ce4574cc6f91e72",
+  "retrieved": "2026-11-02T15:21:03Z"
+ },
+ "probe-wales-api-docs": {
+  "url": "https://api.stats.gov.wales/v1/docs",
+  "file": "probe/wales-api-docs.html",
+  "bytes": 3051,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "ff951a1edd2ebcc98d36fd243b857c675f42af3beb8fdbbbf7faec2bd6407a20",
+  "retrieved": "2026-11-02T15:21:07Z"
+ },
  "probe-wales-dwelling": {
   "url": "https://www.gov.wales/dwelling-stock-estimates",
   "file": "probe/wales-dwelling-stock.html",
@@ -758,6 +782,14 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "13439f0b3bd3b685cf2146ded7c9fbcf7013dc180dd127c8eec1499fded88f7f",
   "retrieved": "2026-11-02T15:19:15Z"
+ },
+ "probe-wales-start": {
+  "url": "https://stats.gov.wales/en-GB/6476cc20-ddeb-46a5-be64-10a23c8a159f/start",
+  "file": "probe/wales-start.html",
+  "bytes": 44698,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "302d87b45807da549e64244f96fa6fc7a5e3799eecbba2a71407a89fb00b0a0e",
+  "retrieved": "2026-11-02T15:20:55Z"
  },
  "probe-wales-stats-topic": {
   "url": "https://stats.gov.wales/en-GB/topic/65/housing-stock-and-need",
