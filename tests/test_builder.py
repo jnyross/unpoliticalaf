@@ -489,3 +489,41 @@ class Explanations(unittest.TestCase):
             if "topic" in e:
                 self.assertIn(e["topic"], {t[0] for t in pages_life.TOPICS}, key)
                 self.assertTrue(set(e["years"]) <= set(pages_life.YEARS), key)
+
+
+class HouseholdTaxHistory(unittest.TestCase):
+    """Scorecard gap 4: household tax over time, two ONS methods kept apart."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+
+    def test_series_covers_1977_to_latest_with_one_overlap_year(self):
+        t = self.d["tax_history"]
+        self.assertEqual(t["households"][0], "1977")
+        self.assertEqual(t["households"][-1], t["people"][0])
+        self.assertEqual(t["people"][-1], "2023/24")
+
+    def test_published_2023_24_matches_table_8(self):
+        self.assertEqual(self.facts["etbp.all.2023-24.all"].value, self.facts["etb.t8.gross.all.all"].value)
+
+    def test_wording_about_fifths_matches_the_data(self):
+        f, t = self.facts, self.d["tax_history"]
+        from builder.data_taxhist import key
+        below = [p for p in t["households"] if f[f"etbh.pall.{key(p)}.q1"].value < f[f"etbh.pall.{key(p)}.q5"].value]
+        self.assertEqual(below, [str(y) for y in range(1977, 1988)])
+        for p in t["people"][1:]:
+            self.assertLess(abs(f[f"etbp.all.{key(p)}.q1"].value - f[f"etbp.all.{key(p)}.q5"].value), 5, p)
+
+    def test_methods_are_not_joined_on_the_page(self):
+        from builder.pages_money_extra import tax_history_section
+        src = {"publisher": "ONS", "title": "t", "page": "", "id": "x"}
+        ids = ["etb-hist-quintile-all", "etb-hist-quintile-all-2", "etb-fye2018", "etb-fye2019", "etb-fye2020",
+               "etb-fye2021", "etb-fye2022", "etb-fye2023", "etb"]
+        html = tax_history_section(self.facts, self.d, Num(self.facts), {i: dict(src, id=i) for i in ids})
+        self.assertIn("The line breaks at 2018/19", html)
+        self.assertIn("People, no top-income adjustment", html)

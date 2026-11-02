@@ -407,6 +407,51 @@
    "id": "wales-dwelling-stock",
    "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
    "file": "nations/wales-dwelling-stock-by-tenure.csv"
+  },
+  {
+   "id": "etb-hist-quintile-all",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+   "file": "etb/hist-quintile-all.xlsx"
+  },
+  {
+   "id": "etb-hist-deflator",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/deflator/deflator.xlsx",
+   "file": "etb/hist-deflator.xlsx"
+  },
+  {
+   "id": "etb-fye2018",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2018/etb2018referencetablesv3final.xlsx",
+   "file": "etb/fye2018.xlsx"
+  },
+  {
+   "id": "etb-fye2019",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending/etb2019referencetablesfinal1.xlsx",
+   "file": "etb/fye2019.xlsx"
+  },
+  {
+   "id": "etb-fye2020",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2020/201920etbtablesrevised.xlsx",
+   "file": "etb/fye2020.xlsx"
+  },
+  {
+   "id": "etb-fye2021",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2021/etb2021correctionuploadv3.xlsx",
+   "file": "etb/fye2021.xlsx"
+  },
+  {
+   "id": "etb-fye2022",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2022/etbreferencetablesfye2022correction2.xlsx",
+   "file": "etb/fye2022.xlsx"
+  },
+  {
+   "id": "etb-fye2023",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2023/etbreferencetablesfye202223.xlsx",
+   "file": "etb/fye2023.xlsx"
+  },
+  {
+   "id": "etb-hist-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets",
+   "file": "etb/hist-dataset-page.html"
   }
  ]
 }
