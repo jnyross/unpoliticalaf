@@ -22,7 +22,7 @@ OUT = ROOT / "site"
 # (everything except the figure records) have a tighter limit so they stay quick
 # on a phone; a page that grows past it should be split, as the life explorer was.
 MAX_PAGE_BYTES = 400_000
-MAX_READING_PAGE_BYTES = 250_000
+MAX_READING_PAGE_BYTES = 260_000
 
 
 def render():

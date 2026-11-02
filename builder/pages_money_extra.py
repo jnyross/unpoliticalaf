@@ -10,7 +10,8 @@ from .explain import box as explain
 
 def _plain_years(rule):
     """A title rule that names years without the "(calendar year)" note the readout uses."""
-    return lambda labels, series, stretches: rule([lab.replace(" (calendar year)", "") for lab in labels], series, stretches)
+    return F.describes(lambda labels, series, stretches: rule([lab.replace(" (calendar year)", "") for lab in labels], series, stretches),
+                       lambda st: F.lines_of(rule, st))
 
 
 # Taxes shown one by one in the tax-mix section, in the order of the main taxes page.
