@@ -3,7 +3,7 @@ by type of household (scorecard gap 6).
 
 Kept in their own module so the main page functions only gain one call each.
 """
-from .html import bars, change_bars, details_table, line_chart, source_line, table, esc
+from .html import FOLD, bars, change_bars, details_table, line_chart, small_multiples, source_line, table, esc
 from .pages_money import derive
 from .explain import box as explain
 
@@ -169,4 +169,81 @@ Income Tax only: it leaves out National Insurance, which people do not pay on ea
 The figures are estimates from a sample of about 1 million tax records. HMRC does not publish margins of error for this table, so small differences between neighbouring age ranges may not be meaningful (see HMRC's <a href="{esc(q)}">background quality report</a>).
 HMRC rounds numbers to three significant figures, so shares calculated here can be slightly out. A change in how the survey samples State Pension recipients in {yr} means older age groups are not directly comparable with earlier years.</p></div>''')
     out.append(source_line(sources, ["hmrc-spi-2324-tables"], f"Table 3.2, tax year {yr} (UK taxpayers only). Totals and shares calculated here."))
+    return "\n".join(out)
+
+
+FIFTHS = (("q1", "Lowest-income fifth"), ("q2", "Second fifth"), ("q3", "Middle fifth"), ("q4", "Fourth fifth"), ("q5", "Highest-income fifth"))
+
+
+def tax_history_section(facts, d, num, sources):
+    """Taxes as a share of gross household income, 1977 to the latest year (scorecard gap 4).
+
+    Two ONS methods, never joined: households ranked (1977 to 2017/18) and people ranked
+    (2017/18 on, with top incomes adjusted from 2018/19). See builder/data_taxhist.py.
+    """
+    from .data_taxhist import key
+    t = d["tax_history"]
+    hh, pp = t["households"], t["people"]
+    first, ov, last, adj = hh[0], t["overlap"], pp[-1], t["top_adjusted_from"]
+    labels = hh + pp[1:]
+    cut = labels.index(adj)
+
+    def fid(m, p, q):
+        """Share of gross income: households method up to the overlap year, people method after it."""
+        if labels.index(p) < cut:
+            return f"etbh.p{m}.{key(p)}.{q}" if m != "all" else f"etbh.pall.{key(p)}.{q}"
+        return f"etbp.{m}.{key(p)}.{q}"
+
+    def series_ids(q, m="all"):
+        return [fid(m, p, q) for p in labels]
+
+    def vals(ids):
+        return [facts[i].value for i in ids]
+
+    pl = [p if "/" in p else f"{p} (calendar year)" for p in labels]
+    hall, oall = f"etbh.pall.{key(first)}.all", f"etbh.pall.{key(ov)}.all"
+    out = [f'''<h2 id="over-time">How has this changed since {first}?</h2>
+<div class="answer"><p class="lede">On the ONS’s older method, taxes took {num(hall, "pct")} of gross household income in {first} and {num(oall, "pct")} in {ov}. On its current method, they took {num(f"etbp.all.{key(adj)}.all", "pct")} in {adj} and {num(f"etbp.all.{key(last)}.all", "pct")} in {last}.</p>
+<p>The two methods give different figures for the same year, so they are shown as separate lines and not joined. The older method put households into fifths; the current one puts people into fifths and, from {adj}, adds an estimate of income that very high earners do not report in the survey.
+For {ov}, the one year published both ways, the share for everyone was {num(oall, "pct")} on the older method and {num(f"etbp.all.{key(ov)}.all", "pct")} on the current way of ranking, before the top-income adjustment.</p></div>''']
+    out.append(line_chart(f"All taxes as a share of gross household income, UK, {first} to {last}", labels,
+                          [("Everyone", vals(series_ids("all")), "a")],
+                          f"Per cent of gross household income, average across all households to {ov} and across all people from {adj}. Calendar years to 1993, then financial years (April to March).",
+                          breaks=[(cut, "Method changed")], split_breaks=True, ymin=0, ymax=50,
+                          events=[(labels.index("2020/21"), "Covid")] if "2020/21" in labels else (),
+                          kind="pct", ids=[series_ids("all")], num=num, point_labels=pl))
+    out.append(FOLD)  # keep the main chart in view on phones
+    out.append(f'''<p>On the older method, the share for the lowest-income fifth was below the share for the highest-income fifth in every year from 1977 to 1987, and above it in every year from 1988 to 2017/18. On the current method the two have been within five percentage points of each other, with the order changing from year to year. The make-up differs: for the lowest-income fifth most tax is indirect, such as VAT, and for the highest-income fifth most is direct, such as Income Tax. The panels below show each fifth on the same scale.</p>''')
+    out.append(small_multiples(f"All taxes as a share of gross household income, by fifth, UK, {first} to {last}", labels,
+                               [(lab, vals(series_ids(q))) for q, lab in FIFTHS],
+                               "Per cent of gross household income. Fifths of households to 2017/18; fifths of people from 2018/19.", "pct",
+                               ids=[series_ids(q) for q, _ in FIFTHS], num=num, breaks=[(cut, "Method changed")], split_breaks=True,
+                               ymin=0, point_labels=pl))
+    # every year, both methods, including the overlap year on the people method
+    rows = []
+    for p in hh:
+        rows.append([esc(p), "Households"] + [num(f"etbh.pall.{key(p)}.{q}", "pct") for q, _ in FIFTHS] + [num(f"etbh.pall.{key(p)}.all", "pct")])
+    for p in pp:
+        how = "People, top incomes adjusted" if labels.index(p) >= cut else "People, no top-income adjustment"
+        rows.append([esc(p), how] + [num(f"etbp.all.{key(p)}.{q}", "pct") for q, _ in FIFTHS] + [num(f"etbp.all.{key(p)}.all", "pct")])
+    out.append(details_table("Show every year, by fifth", f"All taxes as a percentage of gross household income, {first} to {last}",
+                             ["Year", "Method", "Lowest fifth", "Second", "Middle", "Fourth", "Highest fifth", "Everyone"], rows))
+    rows = []
+    for p in hh:
+        rows.append([esc(p), "Households"] + [num(f"etbh.p{m}.{key(p)}.all", "pct") for m in ("direct", "indirect")] + [num(f"etbh.pall.{key(p)}.all", "pct")])
+    for p in pp:
+        how = "People, top incomes adjusted" if labels.index(p) >= cut else "People, no top-income adjustment"
+        rows.append([esc(p), how] + [num(f"etbp.{m}.{key(p)}.all", "pct") for m in ("direct", "indirect", "all")])
+    out.append(details_table("Show direct and indirect taxes, every year", f"Direct and indirect taxes as a percentage of gross household income, everyone, {first} to {last}",
+                             ["Year", "Method", "Direct taxes", "Indirect taxes", "All taxes"], rows))
+    out.append(f'''<div class="limit"><p><strong>Limits.</strong> These are survey estimates for private households in the UK, and a share of income, not anyone’s tax rate.</p>
+<ul>
+<li><strong>Two methods, not joined.</strong> To {ov}, households were ranked by their income adjusted for household size and split into fifths with equal numbers of households; “everyone” is the average household. From {ov}, people are ranked by their household’s adjusted income and split into fifths with equal numbers of people; “everyone” is the average across people.</li>
+<li><strong>Top incomes.</strong> From {adj}, the ONS adjusts for very high earners being missing or under-recorded in the survey (from {adj} tables onwards, applied back to 2001/02 in its own time series). The older tables used here were published before that change and do not include it.</li>
+<li><strong>Deferred tax payments.</strong> From {t["lump_sums_from"]}, direct taxes include lump-sum payments of tax put off from earlier years. The ONS warns this can make direct taxes look high for the lowest-income fifths.</li>
+<li><strong>Years and taxes change.</strong> Figures are for calendar years to 1993 and financial years (April to March) from 1994/95. Local taxes changed from domestic rates to the community charge to Council Tax, and in some years the older tables count water charges with local taxes.</li>
+<li><strong>Not counted.</strong> Taxes paid by companies, such as Corporation Tax, are not allocated to households. Some taxes paid by businesses are counted as indirect taxes passed on in prices.</li>
+</ul></div>''')
+    out.append(source_line(sources, ["etb-hist-quintile-all", "etb-hist-quintile-all-2", "etb-fye2018", "etb-fye2019", "etb-fye2020", "etb-fye2021", "etb-fye2022", "etb-fye2023", "etb"],
+                           f"Older method: historical tables, one sheet per year; shares calculated here as (total direct taxes + total indirect taxes) ÷ gross income. Current method: Table 8 of each year’s reference tables, all individuals."))
     return "\n".join(out)

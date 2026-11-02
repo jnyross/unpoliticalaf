@@ -173,7 +173,21 @@ FETCHED = {
     "explain-ons-travel-2021": ("Office for National Statistics", "Travel trends: 2021 (article)", "United Kingdom residents and overseas visitors", "Visits abroad and visits to the UK"),
     "explain-ons-travel-2022": ("Office for National Statistics", "Travel trends: 2022 (article)", "United Kingdom residents and overseas visitors", "Visits abroad and visits to the UK"),
     "explain-ons-travel-2024": ("Office for National Statistics", "Travel trends: 2024 (article)", "United Kingdom and Great Britain residents and overseas visitors", "Visits abroad and visits to the UK"),
+    "etb-hist-quintile-all": ("Office for National Statistics", "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1977 to 1996/97)", "United Kingdom", "Private households"),
+    "etb-fye2018": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2018, reference tables", "United Kingdom", "People in private households"),
+    "etb-fye2019": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2019, reference tables", "United Kingdom", "People in private households"),
+    "etb-fye2020": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2020, reference tables (revised)", "United Kingdom", "People in private households"),
+    "etb-fye2021": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2021, reference tables (corrected)", "United Kingdom", "People in private households"),
+    "etb-fye2022": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2022, reference tables (corrected)", "United Kingdom", "People in private households"),
+    "etb-fye2023": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2023, reference tables", "United Kingdom", "People in private households"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
+}
+
+
+# A second registry entry for the same fetched file, so that its figure records fit on
+# two pages: {alias: (fetched id, title, geography, population)}.
+FETCHED_ALIASES = {
+    "etb-hist-quintile-all-2": ("etb-hist-quintile-all", "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1997/98 to 2017/18)", "United Kingdom", "Private households"),
 }
 
 
@@ -191,6 +205,9 @@ def all_sources():
                         published="see publisher page", retrieved=r["retrieved"][:10],
                         geography=geography, population=population,
                         licence=GBTS_TERMS if key.startswith("gbts-") else OGL)
+    for alias, (key, title, geography, population) in FETCHED_ALIASES.items():
+        if key in out:
+            out[alias] = dict(out[key], id=alias, title=title, geography=geography, population=population)
     return out
 
 
