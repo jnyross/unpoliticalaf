@@ -9,6 +9,84 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 4: 2 November 2026 (strict re-score after PRs #87 to #90)
+
+- Commit audited: `192539d` on `main` (after #87 shorter phone pages, #88 Income
+  Tax by age, #89 tenure and class sizes for the other nations, #90 small-multiple
+  charts).
+- Rubric: [goal-rubric.md](goal-rubric.md).
+- How it was checked: a fresh build (259 pages); every main page, the life
+  explorer, a year page and the 2010 vs 2025 comparison read at 360px with and
+  without JavaScript, both folded (as a reader first sees them) and with every
+  section open; page sizes and screen counts measured; the live site fetched and
+  compared with `main`; CI on `main` (build, checks, axe) confirmed green.
+- Who scored it: a Claude session that did not build the site. It is the same kind
+  of agent as the builders and as the Audit 3 reviewer.
+
+**How strict this is.** John asked for a stricter score. The rubric lets a
+dimension reach 4 only with a recorded independent review or a recorded
+side-by-side comparison with a named benchmark page. The only review so far was
+done by another Claude session, so this audit does not count it as independent:
+every dimension it lifted to 4 is scored 3 here. No side-by-side benchmark
+comparison has been recorded yet. Where the strict and lenient readings differ,
+both are shown.
+
+**Total: 30 out of 55** on the strict reading (33 on the lenient reading that
+Audit 3 used; Audit 3 gave 34, or 30 strict). Target: at least 49, every
+dimension at least 4, and the phone test passed. Not met.
+
+PRs #87 to #90 improved breadth (other nations), charts (no hidden groups) and
+page length, but none of them moved a dimension up a whole level, and the live
+site does not yet show them (see "Live site" below).
+
+| Dimension | Strict | Lenient | Why |
+|---|---|---|---|
+| D1 Public money answers | 3 | 3 | Correct, sourced answers with per-person scale, the tax mix since 1999-00, quoted official explanations and who pays by income, retired or not, household type and now age. Lenient score drops from 4: measured against the OBR's brief guide and IFS TaxLab, "how much household income goes on tax" is a single year (2023/24) with no history, although ONS publishes the series back to 1977; spending by purpose starts only in 2003-04; there is no single switch between cash, real terms and share of GDP; and on a phone the over-time charts are folded away under "More", so the reader sees a sentence, not the trend. |
+| D2 Life: breadth and depth | 3 | 3 | Better: tenure for all four nations, Scotland's and Wales's class sizes, regions and nations for work and pay. Still well short of 5: every topic starts in 2008 although longer reliable series are already in the repository (the employment rate in `data/fetched/ons/lf24.csv` goes back to 1971; `FT1101_Trends_in_tenure.ods` is a long trends table); pay has no spread (low and high earners), housing has no house prices or affordability, work has occupation but not industry, and there is no official yearly share of people who took a holiday (the page says so). |
+| D3 Life: choosing and comparing | 3 | 3 | Comparison pages now lead with "In brief" bars and explain each "not comparable" in place. Held at 3: ranges cannot be compared; the default pair (2010 vs 2025) leaves housing and holidays uncompared because 2025 has no comparable figure, so a newcomer's first comparison shows two of five topics as "not compared"; the year chooser is a grid of 18 links with no preview of what each year holds. |
+| D4 Explanation and understanding | 3 | 3 | Question headings, answer boxes, glossary links and quoted explanations work well. Held at 3: who pays is still about 12 screens of mostly prose when folded; the home page and life explorer give answers only as text; no evidence a newcomer can explain the point back. |
+| D5 Visual design and charts | 3 | 3 | Small multiples (#90) fixed hidden groups, with a shared scale, faint context lines and a summary. Held at 3: on a phone almost every chart is folded under "More on ...", so the first view of the life explorer, the year pages, the home page and most money sections is text only; the home page has no visual at all; small-multiple panels are about 150px wide with tiny axis text; the best explainers lead with the chart. |
+| D6 Phone experience | 3 | 3 | Folding (#87) cut pages to 6 to 12 screens at 360px (who pays 11.6, taxes 8.5, life explorer 7.7). Held at 3: the menu still runs off the right edge (the "Tax and income" item is cut off and later items are hidden); `life/index.html` is 443KB, the heaviest page, near the 475KB build limit and slow on a weak connection; opened fully the life explorer is about 100 screens. |
+| D7 Accuracy and traceability | 3 | 4 | Every figure re-read from its cell on every build; one-tap tracing; corrections log; an AI review found no errors. Strict 3: no independent (non-AI) check against the original publications. |
+| D8 Impartiality | 3 | 4 | Neutral wording, fixed windows, a page explaining choices, and no loaded words found in this audit. Strict 3: no review by a person outside the project; content added since the review (#88 to #90) has had no impartiality check beyond this audit. |
+| D9 Accessibility and no JavaScript | 3 | 3 | axe WCAG 2.2 AA runs in CI and passes on `main`; core answers and comparisons work without JavaScript (checked at 360px with JavaScript off). Held at 3: no VoiceOver or TalkBack test. |
+| D10 Honesty about limits | 3 | 4 | Breaks, gaps, margins of error and "not compared" reasons are a strength, and the small multiples split job types at the 2021 change. Strict 3: same reason as D7 and D8. |
+| D11 Reader evidence | 0 | 0 | Nobody has used the site in a test. |
+| **Total** | **30 / 55** | **33 / 55** | |
+
+### Live site
+
+The live site is behind `main`. On 2 November 2026 (checked at 15:47 and again
+at 15:53 UTC) the live `who-pays.html` had five sections; `main` has six (Income
+Tax by age, #88, is missing), although a preview deployment of this audit's own
+branch built successfully at 15:52. The repository has no `vercel.json`, so every
+pushed branch makes a Vercel preview deployment, and the account's
+100-deployments-a-day limit was hit today. The goal is judged on the live site,
+and the phone test must use the same live commit as the reviews, so this has to
+be fixed before any test.
+
+### Gaps that a worker can do (largest score effect first)
+
+1. Make the live site match `main`: find out why production is not updating while previews deploy (production branch setting, failed production builds or the daily cap), add a `vercel.json` that stops preview deployments for other branches so they cannot use up the cap, and add a check that the live pages match the latest build. Needed before any reader test or review.
+2. Split the life explorer (`life/index.html`, 443KB) into one page per topic (work, earnings, housing, holidays, class sizes) under a short hub, each well under 150KB, with links, contents and comparisons updated (D6, D5).
+3. Show the key chart in view, not folded: on every money page, topic page and year page keep each section's main chart under its answer and fold only tables, limits and sources; give each home-page card a small visual (D5, D1, D4).
+4. Show how much household income goes on tax over time: direct, indirect and all taxes as a share of gross income by income fifth from ONS's historical tables since 1977, with breaks marked (D1).
+5. Extend the life explorer back before 2008 where reliable series exist (employment rate from 1971 is already fetched; tenure trends; pay from 1997; class sizes), with breaks shown and the year chooser widened (D2, D3).
+6. Add the missing core measures: pay spread (10th and 90th percentile, ASHE), house prices against earnings (ONS affordability ratio), and jobs by industry (D2).
+7. Add one cash / real terms / share of GDP switch to the money charts that works without JavaScript, and a longer history of spending by purpose where an official series exists (D1).
+8. Improve comparisons: let readers compare ranges (for example 2010-12 against 2022-24), and make the default and suggested pairs ones where every topic has comparable figures (D3).
+9. Fix the menu at 360px so every section is visible without sideways scrolling (two rows or a "Menu" disclosure) (D6).
+10. Record side-by-side comparisons of named benchmark pages (OBR brief guide, IFS TaxLab, Our World in Data, ONS) against the matching pages here, so level 4 can be judged on evidence (D1, D2, D5).
+
+### Human-only steps
+
+1. A quick informal test with two or three people on phones (lifts D11 to 2 and finds problems cheaply).
+2. The five-person phone test with the pack in `docs/user-test/` (D11 to 5; required for the goal).
+3. A VoiceOver (iPhone) and TalkBack (Android) test (D9 above 3).
+4. A review of accuracy and impartiality by a person outside the project (D7, D8, D10 to 4 on the strict reading).
+
+---
+
 ## Audit 3: 2 November 2026 (after the independent review)
 
 - Commit audited: `b3dd569` on `main` (after PRs #74 to #85), plus the small
