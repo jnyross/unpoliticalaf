@@ -48,9 +48,8 @@ def tax_mix_section(facts, d, num, sources):
     moves = sorted(keys, key=lambda kv: facts[f"rec.sharechange.{kv[0]}.{first}.{last}"].value)
     fell, rose = moves[0], moves[-1]
     out = [f"<h2 id='mix'>How the mix of taxes has changed since {first}</h2>"]
-    out.append(f'''<p>Total tax raised has grown a lot in cash terms, so a like-for-like way to see the mix is each tax's <strong>share of all taxes</strong> in each year.
-The comparison runs from {first}, the first year in the OBR databank, to {last}, the latest year that has been measured rather than forecast.
-For the mix back to 1948-49, from an older OBR database, see <a href="tax-history.html">which taxes raised the money since 1948</a>.</p>
+    out.append(f'''<p>Each tax's <strong>share of all taxes</strong>, a like-for-like measure when cash totals grow, from {first} (the first year in the OBR databank) to {last}, the latest measured year.
+For the mix since 1948-49, see <a href="tax-history.html">which taxes raised the money since 1948</a>.</p>
 <div class="answer"><p class="lede">The three biggest taxes, Income Tax, National Insurance and VAT, raised {num(f"rec.big3sharemix.{first}", "pct0")} of all tax in {first} and {num(f"rec.big3sharemix.{last}", "pct0")} in {last}.</p>
 <p>The largest fall was in <strong>{esc(fell[1])}</strong>: {num(f"rec.share.{fell[0]}.{first}", "pct")} of all tax in {first}, {num(f"rec.share.{fell[0]}.{last}", "pct")} in {last}.
 The largest rise was in <strong>{esc(rose[1])}</strong>: {num(f"rec.share.{rose[0]}.{first}", "pct")} to {num(f"rec.share.{rose[0]}.{last}", "pct")}.
@@ -63,6 +62,9 @@ A smaller share does not have to mean less money: it can also mean other taxes g
                           desc=f"Income Tax {facts[f'rec.share.income_tax.{first}'].value:.1f}% in {first} and {facts[f'rec.share.income_tax.{last}'].value:.1f}% in {last}; "
                                f"National Insurance {facts[f'rec.share.nics.{first}'].value:.1f}% and {facts[f'rec.share.nics.{last}'].value:.1f}%; "
                                f"VAT {facts[f'rec.share.vat.{first}'].value:.1f}% and {facts[f'rec.share.vat.{last}'].value:.1f}%."))
+    # The answer gives the shares; on a phone the chart waits in the fold, and
+    # tax-history.html has the mix back to 1948-49 as a chart.
+    out.append("<!--keepfold-->")
     items = [(esc(n), f"rec.sharechange.{k}.{first}.{last}",
               f'{num(f"rec.share.{k}.{first}", "pct")} of all tax in {first}, {num(f"rec.share.{k}.{last}", "pct")} in {last}') for k, n in moves[::-1]]
     out.append(change_bars(items, "pts", num, caption=f"Change in each tax's share of all taxes, {first} to {last}, in percentage points. "

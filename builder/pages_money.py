@@ -230,30 +230,30 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     body.append(bars(items, "bn", num, maxval=top))
     # The chart comes first on a phone; the per-person scale follows the section.
     body.append(before_toc(scale_box(num, tpp, pop, f"tax raised in {y}", hid=tph, hh=hh,
-                                     extra=f" Borrowing was {num(bpp, 'pounds')} per person, or {num(bph, 'pounds')} per household. These are all taxes, including those paid by businesses, divided by everyone, including children and people who pay little or no tax, so they are not anyone's tax bill. For what households actually pay, see <a href=\"who-pays.html\">who pays</a>.")))
-    body.append('<p class="small">“All other taxes” includes business rates, vehicle and air passenger duties, insurance premium tax, environmental levies and others. Income Tax combines PAYE, self assessment and other Income Tax; Corporation Tax includes North Sea profits.</p>')
+                                     extra=f" Borrowing was {num(bpp, 'pounds')} per person, or {num(bph, 'pounds')} per household. These divide all tax, including tax paid by businesses, by everyone, including children and people who pay little or no tax, so they are not anyone's tax bill: see <a href=\"who-pays.html\">who pays</a>.")))
     body.append(f'''<h3>2. Other receipts (not taxes): {num(f"rec.nontax.{y}", "bn")}</h3>
 <p>Interest and dividends the public sector receives, the operating surplus of public bodies, and similar income.</p>
 <h3>3. Borrowing: {num(f"agg.psnb.{y}", "bn")}</h3>
 <p>Borrowing is not income from tax. It is the gap between spending ({num(f"agg.tme.{y}", "bn")} on this basis) and receipts ({num(f"rec.total.{y}", "bn")}), and it adds to the national debt.</p>''')
     body.append(FOLD)
+    body.append('<p class="small">“All other taxes” includes business rates, vehicle and air passenger duties, insurance premium tax, environmental levies and others. Income Tax combines PAYE, self assessment and other Income Tax; Corporation Tax includes North Sea profits.</p>')
     rows = [[esc(n), num(f"rec.{k}.{y}", "bn1")] for k, n in groups] + [["All other taxes", num(f"rec.othertax.{y}", "bn1")],
             ["<strong>All taxes</strong>", num(f"rec.taxes.{y}", "bn1")], ["Other receipts (not taxes)", num(f"rec.nontax.{y}", "bn1")],
             ["<strong>All receipts</strong>", num(f"rec.total.{y}", "bn1")], ["Borrowing (public sector net borrowing)", num(f"agg.psnb.{y}", "bn1")],
             ["<strong>Total spending (OBR basis)</strong>", num(f"agg.tme.{y}", "bn1")]]
     body.append(details_table("Show these figures as a table", f"Public sector receipts and borrowing, {y}, £ billion", ["Item", "£bn"], rows))
     body.append(f'''<h2 id="debt">Borrowing is not the same as debt</h2>
-<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026, equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP (public sector net debt). Shared across the whole UK population, the debt is about {num(dpp, "pounds")} per person, or {num(dph, "pounds")} per household.</p>''')
+<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026 (public sector net debt), equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP, or about {num(dpp, "pounds")} per person ({num(dph, "pounds")} per household).</p>''')
     body.append(source_line(sources, ["obr"], f"Sheets “Receipts (£bn)” and “Aggregates (£bn)”. {y} is outturn and can still be revised; years from {rc['forecast_from']} are OBR forecasts."))
 
     # history as % of GDP
     gy = [g for g in rc["gdp_years"] if facts.get(f"gdp.receipts.{g}") and facts[f"gdp.receipts.{g}"].value is not None]
     fc = next((i for i, g in enumerate(gy) if g >= rc["forecast_from"]), None)
-    body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>Shown as a share of GDP to start with, so that years with very different prices and economies can be compared. You can switch to amounts after inflation. Forecast years are shaded and dashed.</p>")
-    body.append(f"<p>Taxes alone, without other receipts, were {num(f'rec.gdp.taxes.{y}', 'pct')} of GDP in {y}. News reports often call this share the <a href='glossary.html#tax-burden'>“tax burden”</a>. "
-                "It compares all tax, paid by people and businesses, with the size of the economy. It is not anyone's tax bill: "
+    body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2>")
+    body.append(f"<p>Taxes alone were {num(f'rec.gdp.taxes.{y}', 'pct')} of GDP in {y}, a share news reports often call the <a href='glossary.html#tax-burden'>“tax burden”</a>. "
+                "It compares all tax, paid by people and businesses, with the size of the economy, so it is not anyone's tax bill: "
                 "<a href='household-tax.html'>tax and income</a> shows what households pay. "
-                "<a href='international.html'>How the UK compares with other countries</a> uses the OECD's measure, which is the same for every country.</p>")
+                "<a href='international.html'>How the UK compares with other countries</a> uses the OECD's measure, the same for every country.</p>")
     rec_title = {"cash": "Receipts and spending in cash", "real": "Receipts and spending after inflation", "gdp": "Receipts and spending as a share of GDP"}
     rec_unit = {"cash": "£ billion, cash. Source: OBR public finances databank.", "real": "£ billion, 2025-26 prices (OBR GDP deflator). Source: OBR public finances databank.",
                 "gdp": "Per cent of GDP. Source: OBR public finances databank."}
@@ -269,8 +269,8 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     first_real = rc["real_years"][0]
     body.append(views(rec_chart, order=("gdp", "real"), default="gdp",
                       notes={"real": VIEW_NOTES["real"] + f" The OBR's deflator starts in {first_real}, so this view starts there."}))
-    body.append('<p class="small">Cash amounts are not shown for this long period because prices rose many times over, so they cannot be compared across the years. Cash figures for each tax since 1999-00 are below.</p>')
     body.append(FOLD)
+    body.append('<p class="small">Cash amounts are not shown for this long period because prices rose many times over, so they cannot be compared across the years. Cash figures for each tax since 1999-00 are below.</p>')
     body.append(explain("borrowing-records", sources))
     rows = [[g + (" (forecast)" if g >= rc["forecast_from"] else ""), num(f"gdp.receipts.{g}", "pct"), num(f"gdp.tme.{g}", "pct"), num(f"gdp.psnb.{g}", "pct"), num(f"gdp.psnd.{g}", "pct")] for g in gy]
     body.append(details_table("Show every year", f"Receipts, spending, borrowing and debt, % of GDP, {gy[0]} to {gy[-1]}", ["Year", "Receipts", "Spending", "Borrowing", "Debt"], rows))

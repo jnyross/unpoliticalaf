@@ -376,9 +376,19 @@ CHART_EARLY = ["spending.html", "taxes.html", "tax-history.html", "international
                "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html"]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
 # Pages that must stay short on a 360px phone with every "More on ..." section closed,
-# in phone screens of 640px (goal audit 6: about 8 screens, Sources split).
+# in phone screens of 640px (goal audits 6 and 7: about 8 screens, Sources split).
+# DEFAULT_COMPARE stands for the comparison the life hub starts with, which moves with the data.
+DEFAULT_COMPARE = "default comparison"
 MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.5,
+               "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
+               "life/holidays.html": 8.8, "life/schools.html": 8.8, DEFAULT_COMPARE: 8.8,
                "methods.html": 9.5, "sources.html": 4}
+
+
+def default_compare():
+    """The comparison page the life hub links first ("Start with ...")."""
+    m = re.search(r'Start with <a href="(compare/\d+-\d+\.html)"', (SITE / "life/index.html").read_text(encoding="utf-8"))
+    return "life/" + m.group(1) if m else None
 FIRST_CHART_JS = """() => {
   const els = [...document.querySelectorAll('main figure, main ul.bars, main ul.cmp-list, main svg[role=img]')]
     .filter(e => e.offsetParent !== null && e.getBoundingClientRect().height > 30);
@@ -438,10 +448,11 @@ def run_axe(paths):
                     top = page.evaluate(FIRST_CHART_JS)
                     if top is None or top > 2 * PHONE_SCREEN - CHART_SHOWN:
                         fail(f"{path}: first chart starts at {top}px, not within the first two phone screens")
-                if width == 360 and path in MAX_SCREENS:
+                limit = MAX_SCREENS.get(DEFAULT_COMPARE if path == default_compare() else path)
+                if width == 360 and limit:
                     screens = page.evaluate("document.documentElement.scrollHeight") / PHONE_SCREEN
-                    if screens > MAX_SCREENS[path]:
-                        fail(f"{path}: {screens:.1f} phone screens long, over the {MAX_SCREENS[path]} limit")
+                    if screens > limit:
+                        fail(f"{path}: {screens:.1f} phone screens long, over the {limit} limit")
                 if width == 360:
                     # WCAG 2.2 2.5.8: targets at least 24 x 24 px, unless inside a sentence or well spaced
                     for t in page.evaluate(TARGETS_JS):
@@ -504,7 +515,10 @@ def main():
     n_csv = check_downloads()
     n_findings = check_findings()
     if "--axe" in sys.argv:
-        run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html",
+        dc = default_compare()
+        if dc is None:
+            fail("life/index.html: no 'Start with' comparison link")
+        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
