@@ -2,6 +2,7 @@
 
 Usage: python -m builder.build
 """
+import hashlib
 import json
 import shutil
 import sys
@@ -13,6 +14,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
+from . import version
 from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
@@ -62,6 +64,24 @@ def render():
     return facts, sources, pages, num
 
 
+BUILD_RECORD = "build.json"
+
+
+def write_build_record():
+    """Write site/build.json: the commit built and a SHA-256 for every file served.
+
+    scripts/check_live.py compares this with the live site to show whether the
+    live pages are exactly the latest build.
+    """
+    files = {}
+    for p in sorted(OUT.rglob("*")):
+        rel = p.relative_to(OUT).as_posix()
+        if p.is_file() and rel != BUILD_RECORD:
+            files[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
+    record = {"commit": version.commit(), "files": files}
+    (OUT / BUILD_RECORD).write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+
+
 def main():
     facts, sources, pages, num = render()
     if OUT.exists():
@@ -76,6 +96,7 @@ def main():
     (OUT / "data").mkdir(exist_ok=True)
     (OUT / "data/facts.json").write_text(json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1), encoding="utf-8")
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
+    write_build_record()
     print(f"Built {len(pages)} pages, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
     if num.absent:
         print(f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}")

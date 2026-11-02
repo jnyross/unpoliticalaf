@@ -26,7 +26,9 @@ holidays and class sizes, choosing a year and comparing two.
 ## Before the test
 
 1. **Fix the version.** Pick the deployed commit everyone will test and write its
-   short commit id on every marking sheet. Don't merge or deploy anything until all
+   short commit id on every marking sheet. The live commit is shown as "Site
+   version" at the foot of every page; `make live` confirms the live site is
+   exactly that build. Don't merge or deploy anything until all
    five people have finished. If the site changes, start again with the new version.
 2. **Check the answer key against that version.** Run `make build` and
    `python scripts/user_test.py check` on that commit. It confirms every answer is
