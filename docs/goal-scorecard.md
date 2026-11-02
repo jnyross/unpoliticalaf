@@ -9,6 +9,97 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 7: 2 November 2026 (strict re-score after PRs #110 to #116)
+
+- Commit audited: `871f814` on `main` (after #110 a 50-figure random accuracy
+  check against the publishers' own files, #111 shorter phone pages and a
+  split Sources page, #112 chart titles that state the finding and summaries
+  that describe the trend, #113 an accessibility side-by-side with GOV.UK and
+  ONS and its fixes, #114 large classes, infant and key stage 2 class sizes,
+  and holiday spending and nights abroad, #115 longer-run context beside each
+  headline change on comparison pages, #116 UK tax and spending against every
+  OECD country).
+- Rubric: [goal-rubric.md](goal-rubric.md). Strict reading, as in Audits 4 to
+  6: a dimension reaches 4 only with a recorded side-by-side comparison with a
+  named benchmark page ([benchmark-comparison.md](benchmark-comparison.md)) or
+  a recorded check, and a page that is in fact comparable. Level 5 needs real
+  readers, so 4 is the highest any dimension can reach until people test the
+  site.
+- How it was checked: a fresh build (1,762 pages, 6,573 CSV files); 27 pages
+  measured at 360 × 640 with and without JavaScript (page length, sideways
+  scrolling, where the first chart starts, words); the home page, all money
+  pages, the new OECD page, the life hub, every topic page and the default
+  2009 vs 2023 comparison read in full; the OECD ranking counted by hand ("21
+  of 36 countries collected a larger share"); every finding-led chart title on
+  the key pages checked against the chart's own CSV. CI (build and checks) was
+  green for #113; for `871f814` it and the live-site check were still running
+  when this was written (this container cannot reach the live site).
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 37 out of 55** on the strict reading (40 lenient). Audit 6: 36
+strict, 39 lenient. Target: at least 49, every dimension at least 4, and the
+phone test passed. Not met.
+
+All seven gaps from Audit 6 were closed. Every dimension except D11 now
+reaches 4 on the lenient reading, which is the most the site can score
+without real readers. One problem holds the strict total back: the rule that
+writes chart titles describes a line with only one turning point, so two
+titles state a trend the data does not show. That is a misleading chart under
+the rubric, which caps D5 at 1 until it is fixed.
+
+**Misleading chart titles found (D5 capped at 1 until fixed):**
+
+- Holidays: "Holiday visits abroad by UK residents fell until 2020, then rose
+  above the 2009 level". The chart's own figures rose from 41.2 million (2009)
+  to 58.7 million (2019) before the 2020 fall to 4.4 million. A reader asked
+  "did holidays abroad rise or fall in the 2010s?" would answer wrongly from
+  the title. The "in words" summary has the same shape ("fell from 41.2
+  million in 2009 to a low of 4.4 million in 2020"), with the 2019 high only
+  in a side note.
+- Spending: "As a share of GDP, total public spending rose until 2020-21, then
+  fell back part of the way". The share fell from 46.0% (2009-10) to 39.1%
+  (2018-19 and 2019-20) before rising to 52.3% in 2020-21. Hiding a ten-year
+  fall in a contested period is also an impartiality risk, though the rule is
+  applied the same way to every chart and is not partisan.
+- Cause: `builder/findings.py` `shape()` picks either a peak or a low and
+  ignores any other large move. The same rule gives the weaker "Visits abroad
+  per 100 residents rose between 1980 and 2023" (true, but silent about the
+  2020-21 fall to 29). Other titles on the key pages were checked and match
+  their data.
+
+| Dimension | Strict | Lenient | Why |
+|---|---|---|---|
+| D1 Public money answers | 4 | 4 | The last benchmark gap is closed: a new page puts UK tax (34.4% of GDP in 2024, OECD average 34.1%) and spending (46.2%, average 44.5%) beside every OECD country, over time from 1965, and by kind of tax and area of spending, with missing countries named (#116). Per person, per household, long history, attributed explanations, the cash / after inflation / share of GDP switch and several kinds of group were already in place. Not 5: no reader evidence. |
+| D2 Life: breadth and depth | 4 | 4 | Class sizes now have the share in classes over 30 from 2006 and infant and key stage 2 figures (#114); holidays have spending, spending per visit after inflation and nights per visit from 2009 (#114). Not 5: no reader evidence; housing costs and space are England only; no local-area detail. |
+| D3 Life: choosing and comparing | 4 | 4 | Each lead change on a comparison page now has the longer run beside it (first to latest year on the same method, lowest and highest year, link to every year) (#115), which was the ONS feature it lacked. Not 5: no reader evidence; the default comparison is 10.5 phone screens. |
+| D4 Explanation and understanding | 4 | 4 | Up from 3. Every reason Audit 6 held it back is fixed: titles state findings (#112), the four long money and hub pages are about 8 screens (#111), and big numbers now have international context (#116); the Full Fact side-by-side (#103) is the recorded comparison. Not 5: no evidence that a newcomer can explain a point back; the two misleading titles above also teach the wrong trend until fixed. |
+| D5 Visual design and charts | 1 | 4 | Lenient 4: finding-led titles and trend summaries (#112), a chart within about two screens on every key page (0.9 to 2.0 measured), a CSV beside every chart. Strict 1: two titles misstate the trend of their own chart (see above), and the rubric caps a dimension with a misleading chart at 1 until it is fixed. |
+| D6 Phone experience | 4 | 4 | Up from 3. The four pages Audit 6 named are now 8.0 to 8.2 screens (spending 8.1, who pays 8.2, household tax 8.0, life hub 8.2) and CI keeps them there (#111); Sources is 2.8 screens instead of 118; no page scrolls sideways with or without JavaScript; the OBR and ONS phone side-by-side (#103) found the site shorter in words. Not 5: topic pages are 10 to 11.3 screens (holidays 11.0 and class sizes 11.3 grew with #114), taxes 10.2, the default comparison 10.5; nothing measures "answer in under a minute". |
+| D7 Accuracy and traceability | 4 | 4 | Up from 3. A recorded random-sample check traced 50 figures (40 random from 9,723 shown, 10 from headline pages; 94 input cells from 29 sources) to fresh downloads from the publishers, with a checker that imports nothing from the builder: 50 of 50 match, and the one problem found (occupation sources linking to the wrong Nomis slice) was fixed and logged (#110). Not 5: no review by a person outside the project. |
+| D8 Impartiality | 4 | 4 | Unchanged. The OECD page ranks every country by value with the UK and the average marked, and calls the average "not a country". The spending-share title above hides a ten-year fall; it is counted under D5, and does not look partisan because the same rule writes every title, but it should be fixed. Not 5: no outside review. |
+| D9 Accessibility and no JavaScript | 4 | 4 | Up from 3. The GOV.UK and ONS side-by-side (#113) measured keyboard stops, focus styles, skip links, chart accessibility trees and tap targets on 10 pages against 6 benchmark pages: comparable or ahead on each, with the problems found fixed and kept by CI; chart summaries now describe the trend (#112). Not 5: no VoiceOver or TalkBack test by a person. |
+| D10 Honesty about limits | 4 | 4 | Unchanged. New figures keep the 2024 travel method change and the 2020 gap visible, and the OECD page names missing countries and explains that the early average covers fewer countries. Not 5: no outside review; margins are shown for pay and holidays abroad but not for most other survey figures. |
+| D11 Reader evidence | 0 | 0 | Nobody has used the site in a test. |
+| **Total** | **37 / 55** | **40 / 55** | |
+
+### Gaps that a worker can do
+
+1. Fix the chart-title and "in words" rule in `builder/findings.py` so a line with more than one large turn is described by all of them (for example "rose until 2019, fell sharply in 2020, then rose again"), correct the holiday visits and spending share-of-GDP titles, and add a check that fails when a title omits a move of at least 30% of the line's range (D5, D4, D8).
+2. Bring the topic pages (work 10.1, earnings 10.3, housing 10.0, holidays 11.0, class sizes 11.3 screens), taxes (10.2) and the default comparison (10.5) to about 8 phone screens folded, and add them to the CI screen limits (D6).
+
+Once gap 1 is fixed, every dimension except D11 is at 4, the most possible
+without real readers. The remaining distance to 49 is only reachable through
+the human-only steps below.
+
+### Human-only steps (unchanged)
+
+1. A quick informal test with two or three people on phones (D11 to 2).
+2. The five-person phone test with the pack in `docs/user-test/` (D11 to 5; required for the goal).
+3. A VoiceOver (iPhone) and TalkBack (Android) test (D9 to 5).
+4. A review of accuracy and impartiality by a person outside the project (D7, D8, D10 to 5).
+
+---
+
 ## Audit 6: 2 November 2026 (strict re-score after PRs #102 to #108)
 
 - Commit audited: `fe0f5c2` on `main` (after #102 a chart within two phone
