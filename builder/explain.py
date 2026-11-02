@@ -66,6 +66,13 @@ EXPLANATIONS = {
         title="Effects of taxes and benefits on UK household income: financial year ending 2024", date="25 September 2025",
         quote=["For retired households, 90.1% were net recipients, largely reflecting the 10.1% uprating to state pensions and pension credits (classified as cash benefits)."],
         gloss="“Net recipients” are people in households that receive more in benefits, including services such as the NHS and education, than they pay in taxes."),
+    "taxpayers-age": dict(
+        question="Why are there more Income Tax payers aged 75 and over?",
+        source="explain-hmrc-spi-2324-commentary", publisher="HM Revenue and Customs",
+        title="Personal Incomes Statistics 2023 to 2024: commentary", date="29 April 2026",
+        quote=["The proportion of taxpayers in the 75 and over range continues to increase, reflecting the UK’s ageing population. 11.6% of taxpayers were in the 75 and over age range in the tax year 2023 to 2024, compared to 10.5% of taxpayers in the tax year 2022 to 2023.",
+               "For the 2023 to 2024 tax year, there has also been a revision in the sampling methodology for recipients of the state pension in the SPI. This methodological change has added up to an estimated 196,000 taxpaying state pensioners across the total distribution, with the majority being basic rate taxpayers."],
+        gloss="The SPI is HMRC's Survey of Personal Incomes, the source of the figures in this section. The second passage means part of the rise in older taxpayers comes from a change in how the survey counts people receiving the State Pension, not only from changes in people's lives."),
     # ------------------------------------------------------------ household tax
     "average-rates": dict(
         question="How much Income Tax do people at different incomes pay, as a share of their income?",
@@ -192,6 +199,7 @@ def page_text(path):
     if path not in _text_cache:
         raw = (ROOT / path).read_text(encoding="utf-8", errors="replace")
         raw = re.sub(r"(?is)<(script|style|noscript)\b.*?</\1>", " ", raw)
+        raw = re.sub(r"(?i)</?(abbr|acronym)\b[^>]*>", "", raw)  # inline: "the <abbr>UK</abbr>’s" reads "the UK’s"
         raw = re.sub(r"<[^>]+>", " ", raw)
         _text_cache[path] = norm(_html.unescape(raw))
     return _text_cache[path]

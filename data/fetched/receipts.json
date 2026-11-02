@@ -151,6 +151,22 @@
   "sha256": "a014a38563622e3361db3fb4b3d70689dd74f23f1aebe625c1393f2c0e9fa15d",
   "retrieved": "2026-11-02T10:24:32Z"
  },
+ "explain-hmrc-spi-2324-commentary": {
+  "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
+  "file": "explain/hmrc-spi-2023-24-commentary.html",
+  "bytes": 213855,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "87160b66c7b163366f8f3187e79c0f2fac4de7f1882f36f980cb96cfa37c9c6c",
+  "retrieved": "2026-11-02T15:15:33Z"
+ },
+ "explain-hmrc-spi-quality": {
+  "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
+  "file": "explain/hmrc-spi-quality-report.html",
+  "bytes": 240912,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
+  "retrieved": "2026-11-02T15:15:37Z"
+ },
  "explain-ons-2008-recession": {
   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
   "file": "explain/ons-2008-recession.html",
@@ -278,6 +294,14 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
+ },
+ "hmrc-spi-2324-tables": {
+  "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+  "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
+  "bytes": 166693,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "ad063b06b2bdeef8600dbbb09d48153337a4966f8c7eea50df7a2e0304ebd73e",
+  "retrieved": "2026-11-02T15:15:29Z"
  },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
