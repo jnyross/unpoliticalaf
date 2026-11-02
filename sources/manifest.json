@@ -357,6 +357,21 @@
    "id": "explain-ehs-2024-25-ch2",
    "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
    "file": "explain/ehs-2024-25-chapter-2.html"
+  },
+  {
+   "id": "hmrc-spi-2324-tables",
+   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods"
+  },
+  {
+   "id": "explain-hmrc-spi-2324-commentary",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
+   "file": "explain/hmrc-spi-2023-24-commentary.html"
+  },
+  {
+   "id": "explain-hmrc-spi-quality",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
+   "file": "explain/hmrc-spi-quality-report.html"
   }
  ]
 }
