@@ -9,7 +9,7 @@ definition are not calculated.
 """
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import page, table, details_table, line_chart, source_line, fmt, esc
+from .html import FOLD, page, table, details_table, line_chart, source_line, fmt, esc
 from . import uncertainty as U
 from .pages_nations import housing_nations_block, schools_nations_block
 
@@ -494,9 +494,9 @@ def compare_page(facts, d, num, sources, a, b):
     titles = dict((t[0], t[1]) for t in TOPICS)
     body = [f"<h1>{a} compared with {b}</h1>"]
     body.append(f'<p><a href="../{a}.html">Everyday life in {a}</a> · <a href="../{b}.html">Everyday life in {b}</a> · <a href="index.html">Choose two other years</a></p>')
-    body.append(compare_form("../", a, b))
-    # Summary: the same lead measure for every topic, then the biggest changes by a fixed rule.
-    body.append('<h2 id="summary">In brief</h2>')
+    # Summary first: the same lead measure for every topic, then the biggest changes by a fixed rule.
+    # "In brief" has no id, so the contents list goes after it and the answers come first.
+    body.append('<h2 class="brief">In brief</h2>')
     body.append('<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved. Each figure covers its own period, shown in brackets.</p>')
     for key, title, _ in TOPICS:
         body.append(f'<div class="cmp-key"><h3>{esc(title)}</h3>{key_sentence(facts, num, key, a, b)}</div>')
@@ -508,6 +508,7 @@ def compare_page(facts, d, num, sources, a, b):
     body.append(CAUSE)
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
+        body.append(FOLD)
         body.append(f'<p class="small">{esc(scope)}</p>')
         ms = [m for m in MEAS if m[1] == key]
         ok = [m for m in ms if _status(facts, m, a, b) == "ok" and not m[0].endswith("cash")]
@@ -564,6 +565,8 @@ def compare_page(facts, d, num, sources, a, b):
                     body.append(f'<p class="small">{a} counts UK residents and {b} Great Britain residents measured with a new method, so the numbers are listed side by side but not compared.</p>')
         body.append(f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(TOPIC_LIMITS[key])}</p></details>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
+    body.append(f'<h2 id="other">Compare other years</h2>')
+    body.append(compare_form("../", a, b))
     body.append('<p class="small">Changes in percentages are shown in percentage points: a rise from 20% to 25% is +5 percentage points. Changes in money and counts are shown as a percentage of the earlier year. Class sizes change in pupils.</p>')
     return page(f"life/compare/{a}-{b}.html", f"{a} compared with {b}", "\n".join(body), f"How work, pay, housing, holidays and class sizes differed between {a} and {b}.", scripts=COMPARE_JS)
 

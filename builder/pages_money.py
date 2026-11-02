@@ -1,7 +1,7 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
 from .explain import box as explain
-from .html import page, bars, change_bars, keyfigs, table, details_table, line_chart, source_line, fmt, esc
+from .html import FOLD, page, bars, change_bars, keyfigs, table, details_table, line_chart, source_line, fmt, esc
 
 
 def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
@@ -54,6 +54,7 @@ def spending_page(facts, d, num, sources):
 <h2 id="per100">Out of every £100 spent on services, {y}</h2>''')
     items = [(esc(name), per[k], "") for k, name in order]
     body.append(bars(items, "per100", num, caption="Rounded to the nearest pound, so the amounts may not add up to exactly £100."))
+    body.append(FOLD)
     body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. State pensions alone cost {num(sp["oldage"], "bn")} in {y}, inside social protection.</p>''')
     body.append(explain("debt-interest-2022", sources))
     rows = []
@@ -101,6 +102,7 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
         rows.append([esc(name), num(f"spend.real.{k}.{ten}", "bn1"), num(f"spend.real.{k}.{y}", "bn1"), num(cid, "pct0"),
                      num(f"spend.gdp.{k}.{ten}", "pct"), num(f"spend.gdp.{k}.{y}", "pct")])
     body.append(change_bars(citems, "pct0", num, caption=f"Change in spending after inflation, {ten} to {y}. Bars to the right are rises, to the left falls. Under each area: £ billion in 2025-26 prices, then and now."))
+    body.append(FOLD)
     body.append(details_table("Show the amounts and shares of GDP", f"Spending by area, {ten} and {y}", ["Area", f"{ten} £bn*", f"{y} £bn*", "Change", f"{ten} % GDP", f"{y} % GDP"], rows))
     body.append('<p class="small">* £ billion in 2025-26 prices.</p>')
     # full history tables per view
@@ -147,6 +149,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
 <p>Interest and dividends the public sector receives, the operating surplus of public bodies, and similar income.</p>
 <h3>3. Borrowing: {num(f"agg.psnb.{y}", "bn")}</h3>
 <p>Borrowing is not income from tax. It is the gap between spending ({num(f"agg.tme.{y}", "bn")} on this basis) and receipts ({num(f"rec.total.{y}", "bn")}), and it adds to the national debt.</p>''')
+    body.append(FOLD)
     rows = [[esc(n), num(f"rec.{k}.{y}", "bn1")] for k, n in groups] + [["All other taxes", num(f"rec.othertax.{y}", "bn1")],
             ["<strong>All taxes</strong>", num(f"rec.taxes.{y}", "bn1")], ["Other receipts (not taxes)", num(f"rec.nontax.{y}", "bn1")],
             ["<strong>All receipts</strong>", num(f"rec.total.{y}", "bn1")], ["Borrowing (public sector net borrowing)", num(f"agg.psnb.{y}", "bn1")],
@@ -165,6 +168,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
                             ("Spending, % of GDP", [facts[f"gdp.tme.{g}"].value for g in gy], "b")],
                            "Per cent of GDP. Source: OBR public finances databank.", forecast_from=fc, ymin=0,
                            kind="pct", num=num, ids=[[f"gdp.receipts.{g}" for g in gy], [f"gdp.tme.{g}" for g in gy]]))
+    body.append(FOLD)
     body.append(explain("borrowing-records", sources))
     rows = [[g + (" (forecast)" if g >= rc["forecast_from"] else ""), num(f"gdp.receipts.{g}", "pct"), num(f"gdp.tme.{g}", "pct"), num(f"gdp.psnb.{g}", "pct"), num(f"gdp.psnd.{g}", "pct")] for g in gy]
     body.append(details_table("Show every year", f"Receipts, spending, borrowing and debt, % of GDP, {gy[0]} to {gy[-1]}", ["Year", "Receipts", "Spending", "Borrowing", "Debt"], rows))
@@ -177,10 +181,10 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     body.append(details_table("Show main taxes for every year", f"Main taxes, £ billion cash, {ty[0]} to {ty[-1]}",
                               ["Year", "Income Tax", "National Insurance", "VAT", "Corporation Tax", "Council Tax", "All taxes"], rows))
     body.append(explain("frozen-thresholds", sources))
-    from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
-    body.append(tax_mix_section(facts, d, num, sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> Forecasts are the OBR\'s October 2026 projections, not measurements. Debt and borrowing use the public sector definitions in the OBR databank; other published debt measures give different totals.</p></div>')
     body.append(source_line(sources, ["obr"], "Sheets “Aggregates (per cent of GDP)” and “Receipts (£bn)”."))
+    from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
+    body.append(tax_mix_section(facts, d, num, sources))
     return page("taxes.html", "Which taxes raise the money?", "\n".join(body), "UK tax receipts by tax, other receipts and borrowing, with history.")
 
 
@@ -205,6 +209,7 @@ def who_pays_page(facts, d, num, sources):
 <p>HM Revenue and Customs ranks everyone who owes Income Tax by their income, then adds up how much tax each group owes. People who owe no Income Tax are not included.</p>''')
     items = [("Top 1% of taxpayers", f"hmrc.share.top1.{y}", ""), ("Top 10% of taxpayers", f"hmrc.share.top10.{y}", ""), ("Top 50% of taxpayers", f"hmrc.share.top50.{y}", ""), ("Bottom 50% of taxpayers", f"hmrc.share.bottom50.{y}", "alt")]
     body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
+    body.append(FOLD)
     rows = []
     for key, label, thr in (("top1", "Top 1%", "hmrc.threshold.top1"), ("top10", "Top 10%", "hmrc.threshold.top10"), ("top50", "Top 50%", "hmrc.threshold.top50"), ("bottom50", "Bottom 50%", None)):
         rows.append([label, num(thr, "pounds") if thr else "below " + num("hmrc.threshold.top50", "pounds"), num(f"hmrc.income.{key}.{y}", "pct"), num(f"hmrc.share.{key}.{y}", "pct")])
@@ -231,6 +236,7 @@ def who_pays_page(facts, d, num, sources):
         rows.append([label, num(f"etb.2a.gross.{q}", "pounds"), num(f"etb.2a.direct.{q}", "pounds"), num(f"etb.2a.indirect.{q}", "pounds"), num(f"etb.2a.alltax.{q}", "pounds")])
     body.append(bars([(lab, f"etb.2a.alltax.{q}", "alt" if q == "all" else "") for q, lab in QUINTS], "pounds", num,
                      caption="Average taxes paid by the households that people in each fifth live in, £ a year, financial year ending 2024 (April 2023 to March 2024)."))
+    body.append(FOLD)
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
     body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
     body.append('<p>For how big these taxes are compared with each group\'s income, see <a href="household-tax.html">how much of household income goes on tax</a>.</p>')
@@ -243,6 +249,7 @@ def who_pays_page(facts, d, num, sources):
     groups = [("nonret", "Non-retired people"), ("ret", "Retired people")]
     body.append(bars([(lab, f"etb.{g}.alltax.all", "") for g, lab in groups], "pounds", num,
                      caption="Average taxes paid by the households that retired and non-retired people live in, £ a year, 2023/24."))
+    body.append(FOLD)
     rows = [[lab, num(f"etb.{g}.people.all", "millions_people"), num(f"etb.{g}.hhsize.all", "dp1"), num(f"etb.{g}.gross.all", "pounds"),
              num(f"etb.{g}.direct.all", "pounds"), num(f"etb.{g}.indirect.all", "pounds"), num(f"etb.{g}.alltax.all", "pounds"), num(f"etb.{g}.taxshare.all", "pct")]
             for g, lab in groups]
@@ -278,9 +285,10 @@ def household_tax_page(facts, d, num, sources, rates):
         items.append((lab, f"etb.t8.gross.all.{q}", "alt" if q == "all" else ""))
     body.append('<h2 id="by-income">Taxes as a share of gross income, by household income</h2>')
     body.append(bars(items, "pct", num, maxval=50, caption="All taxes as a percentage of gross household income, 2023/24."))
+    body.append(f'''<p>For people in the highest-income fifth, most of their household's tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth, most is indirect ({num("etb.t8.gross.indirect.q1", "pct")} of gross household income), because their households spend a larger part of their income, and some spend savings or borrowed money as well.</p>''')
+    body.append(FOLD)
     rows = [[lab, num(f"etb.t8.gross.direct.{q}", "pct"), num(f"etb.t8.gross.indirect.{q}", "pct"), num(f"etb.t8.gross.all.{q}", "pct")] for q, lab in QUINTS]
     body.append(table("Taxes as a percentage of gross household income, 2023/24", ["Fifth of people", "Direct taxes", "Indirect taxes", "All taxes"], rows))
-    body.append(f'''<p>For people in the highest-income fifth, most of their household's tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth, most is indirect ({num("etb.t8.gross.indirect.q1", "pct")} of gross household income), because their households spend a larger part of their income, and some spend savings or borrowed money as well.</p>''')
     body.append(explain("fiscal-drag", sources))
     body.append(explain("redistribution", sources))
     body.append(source_line(sources, ["etb"], "Table 8, all individuals, grouped by equivalised household disposable income."))
@@ -291,7 +299,6 @@ def household_tax_page(facts, d, num, sources, rates):
 <li><p><strong>A personal tax rate.</strong> The basic rate of Income Tax is {esc(rates["basic"])}. It applies only to the part of someone's income inside that band, after the tax-free Personal Allowance of {esc(rates["allowance"])}. So a person's tax bill as a share of their pay is lower than the rate of their top band.</p></li>
 <li><p><strong>A share of all tax raised.</strong> “Income Tax raised {num(f"rec.incomesharetaxes.{y}", "pct0")} of all taxes in {y}” is about the government's total income. It says nothing about any household's bill.</p></li>
 </ol>''')
-    body.append(explain("average-rates", sources))
     # illustration
     ill = rates["illustration"]
     body.append(f'''<aside class="illustration" aria-labelledby="ill-title">
@@ -307,10 +314,13 @@ def household_tax_page(facts, d, num, sources, rates):
 </ul>
 <p class="small">This leaves out VAT and other taxes on spending, employer National Insurance and Council Tax, which depend on circumstances. Rates from GOV.UK: <a href="methods.html#src-gov-income-tax-rates">Income Tax rates</a> and <a href="methods.html#src-gov-ni-rates">National Insurance rates</a>, retrieved {esc(rates["retrieved"])}.</p>
 </aside>''')
+    body.append(FOLD)
+    body.append(explain("average-rates", sources))
     # denominators
     body.append('<h2 id="denominators">Why the same tax can look bigger or smaller</h2><p>The percentage depends on what you divide by. Indirect taxes look much heavier for the lowest-income fifth when compared with their income than when compared with their spending.</p>')
     rows = [[lab, num(f"etb.t8.gross.indirect.{q}", "pct"), num(f"etb.t8.disposable.indirect.{q}", "pct"), num(f"etb.t8.spend.indirect.{q}", "pct")] for q, lab in QUINTS]
     body.append(table("Indirect taxes compared with three different totals, 2023/24", ["Fifth of people", "% of gross income", "% of disposable income", "% of spending"], rows))
+    body.append(FOLD)
     body.append('<div class="limit"><p><strong>Limits.</strong> Survey estimates for April 2023 to March 2024, for people in private households in the UK. People are ranked by their household’s income, adjusted for household size, and split into fifths with equal numbers of people. Taxes paid by companies, such as Corporation Tax, are not allocated to households here.</p></div>')
     body.append(source_line(sources, ["etb", "obr"], "ETB Table 8; OBR receipts for the share of all taxes."))
     return page("household-tax.html", "How much of household income goes on tax?", "\n".join(body), "Taxes as a share of UK household income, and how this differs from tax rates and shares of revenue.")

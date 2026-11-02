@@ -15,6 +15,16 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
    headings with ids). Give every `h2` an id.
 5. **Sections**, each in this order: question or finding as the `h2`, chart,
    "Show … as a table" (`details_table()`), limits (`.limit`), source line.
+6. **Folding** (`fold()`, run by `page()`): on a phone each section shows its
+   heading and its answer, and everything after that (charts, tables, limits,
+   official words, sources) goes into one "More on …" disclosure that names
+   what it holds. The answer is everything up to the end of the section's
+   first `.answer` box, or everything before a `FOLD` marker. Put `FOLD` right
+   after the chart or sentences that answer the section's question, and keep
+   anything needed to read that answer correctly (an illustration's label, a
+   definition the answer depends on) above it. `NOFOLD` keeps a section open;
+   sections with neither an answer box nor a marker stay open too. Nothing is
+   reordered, and `<details>` works without JavaScript.
 
 ## Components
 
