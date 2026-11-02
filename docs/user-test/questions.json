@@ -189,7 +189,7 @@
       "why": "Year by year, Earnings: £767 a week in April 2025, about the same as April 2008 (£771 in April 2025 prices). Before allowing for prices it rose from £479, about 60%, which is why A is wrong.",
       "evidence": [
         {
-          "page": "life/index.html",
+          "page": "life/earnings.html",
           "text": "that was about the same as in April 2008"
         }
       ]
@@ -253,11 +253,11 @@
       "why": "Year by year, Housing: 19% of households in England rented privately in 2024-25, against 14% in 2008-09.",
       "evidence": [
         {
-          "page": "life/index.html",
+          "page": "life/housing.html",
           "text": "In 2024-25, 65% of households in England owned their home and 19% rented privately."
         },
         {
-          "page": "life/index.html",
+          "page": "life/housing.html",
           "text": "In 2008-09, 14% rented privately."
         }
       ]

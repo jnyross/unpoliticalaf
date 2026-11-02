@@ -1,5 +1,5 @@
-"""Everyday life, year by year: an overview, one page per year and a page for
-every pair of years.
+"""Everyday life, year by year: a short overview, one page per topic, one page
+per year and a page for every pair of years.
 
 Years are calendar labels, but each topic is measured over its own period
 (for example April to June, the April survey date, a survey year running into
@@ -7,9 +7,11 @@ the next calendar year, or a January school census). Every value is shown with
 its own period. Missing years stay missing, and comparisons across a change of
 definition are not calculated.
 """
+import re
+
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import FOLD, page, table, details_table, line_chart, small_multiples, source_line, fmt, esc
+from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, fmt, esc
 from . import uncertainty as U
 from .pages_nations import housing_nations_block, schools_nations_block
 
@@ -295,6 +297,7 @@ def year_page(facts, d, num, sources, y):
             body.append(country_table(facts, num, d, y, 10))
         body.append(explain.for_year(key, y, sources, up=up))
         body.append(f'<p class="small">{esc(scope)}</p>')
+        body.append(f'<p class="small"><a href="{key}.html">{esc(title)} in every year since {FIRST}</a></p>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up=up))
     body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
     links = []
@@ -598,18 +601,11 @@ def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=
                            split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years], summary_note=summary_note)
 
 
-def life_index(facts, d, num, sources):
-    body = ["<h1>Everyday life, year by year</h1>"]
-    body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed since {FIRST}?</p>
-<p>Pick a year to see it on its own, or compare two years. Every figure is an official statistic, shown with the period and place it covers.</p></div>''')
-    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
-    body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
-    body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
-    body.append(CAUSE)
+def _work(facts, d, num, sources):
+    """(answer box, detail parts) for the work topic."""
+    body = []
     y = LAST
-    # Work
-    body.append("<h2 id='work'>Work</h2>")
-    body.append(f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num))
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
@@ -631,14 +627,15 @@ def life_index(facts, d, num, sources):
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
     body.extend(work_ages_block(facts, num))
     body.extend(places_block(facts, num, "work"))
-    body.append(explain.for_topic("work", sources, up="../"))
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["work"])}</p></div>')
-    body.append(source_line(sources, [s for s in TOPIC_SOURCES["work"] if s in sources], up="../"))
-    # Earnings
-    body.append("<h2 id='earnings'>Earnings</h2>")
+    return answer, body
+
+def _earnings(facts, d, num, sources):
+    """(answer box, detail parts) for the earnings topic."""
+    body = []
+    y = LAST
     ch = 100 * (_val(facts, f"earn.real.ft.{LAST}") / _val(facts, f"earn.real.ft.{FIRST}") - 1)
     how = "about the same as" if abs(ch) < 2 else (f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than")
-    body.append(f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
+    answer = (f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
                              "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num))
@@ -647,13 +644,14 @@ def life_index(facts, d, num, sources):
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
     body.append('<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>')
     body.extend(places_block(facts, num, "earnings"))
-    body.append(explain.for_topic("earnings", sources, up="../"))
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["earnings"])}</p></div>')
-    body.append(source_line(sources, [s for s in TOPIC_SOURCES["earnings"] if s in sources], up="../"))
-    # Housing
-    body.append("<h2 id='housing'>Housing</h2>")
+    return answer, body
+
+def _housing(facts, d, num, sources):
+    """(answer box, detail parts) for the housing topic."""
+    body = []
+    y = LAST
     hy = max(yy for yy in YEARS if _val(facts, f"house.private.{yy}") is not None)
-    body.append(f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
     body.append(U.topic_line(num, "housing", LAST))
     hyears = [y for y in YEARS if y <= hy]
     body.append(groups_chart(facts, "How households in England live", [("Own outright", lambda y: f"house.outright.{y}"), ("Own with a mortgage", lambda y: f"house.mortgage.{y}"),
@@ -668,17 +666,18 @@ def life_index(facts, d, num, sources):
     body.extend(housing_space_block(facts, num))
     body.extend(housing_regions_block(facts, num))
     body.extend(housing_nations_block(facts, num, d))
-    body.append(explain.for_topic("housing", sources, up="../"))
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
-    body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
-    # Holidays
-    body.append("<h2 id='holidays'>Holidays</h2>")
+    return answer, body
+
+def _holidays(facts, d, num, sources):
+    """(answer box, detail parts) for the holidays topic."""
+    body = []
+    y = LAST
     names = d["countries"]["names"]
     tl = top_countries(facts, d, LAST, 3)
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
-    body.append(f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to {num("hol.world.holiday.2020", "millions")}. {headline(facts, num, "holidays", LAST)}</p>
+    answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to {num("hol.world.holiday.2020", "millions")}. {headline(facts, num, "holidays", LAST)}</p>
 <p>{"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, followed by {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
-<p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019; see the table below.</p>
+<p>Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019.</p>
 <p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience.</p></div>''')
     body.append(U.topic_line(num, "holidays", LAST))
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
@@ -700,12 +699,13 @@ def life_index(facts, d, num, sources):
                               ["Country"] + [str(y) for y in cyears],
                               [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
     body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
-    body.append(explain.for_topic("holidays", sources, up="../"))
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["holidays"])}</p></div>')
-    body.append(source_line(sources, [s for s in TOPIC_SOURCES["holidays"] if s in sources], up="../"))
-    # Schools
-    body.append("<h2 id='schools'>Class sizes</h2>")
-    body.append(f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
+    return answer, body
+
+def _schools(facts, d, num, sources):
+    """(answer box, detail parts) for the schools topic."""
+    body = []
+    y = LAST
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
                              "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num))
@@ -718,9 +718,69 @@ def life_index(facts, d, num, sources):
                       [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy]))
     body.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
     body.extend(schools_nations_block(facts, num, d))
-    body.append(explain.for_topic("schools", sources, up="../"))
-    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["schools"])}</p></div>')
-    body.append(source_line(sources, [s for s in TOPIC_SOURCES["schools"] if s in sources], up="../"))
+    return answer, body
+
+
+# key -> (page question, what the topic page covers, one-line hub link text)
+TOPIC_PAGES = {
+    "work": ("How has work changed since {first}?", "employment by sex and age, the kinds of jobs people do, and each nation and region"),
+    "earnings": ("How has pay changed after inflation since {first}?", "pay for men, women and part-time employees, and each nation and region"),
+    "housing": ("How has housing changed since {first}?", "who owns and rents, what housing costs, space and overcrowding, regions and nations"),
+    "holidays": ("How have holidays changed since {first}?", "holidays abroad and at home, and the countries people visit"),
+    "schools": ("How have class sizes changed since {first}?", "primary and secondary classes in England, and figures for Wales and Scotland"),
+}
+TOPIC_BUILDERS = {"work": _work, "earnings": _earnings, "housing": _housing, "holidays": _holidays, "schools": _schools}
+TREND_HEADINGS = {"work": "Employment over time", "earnings": "Pay over time", "housing": "Who owns and who rents",
+                  "holidays": "Holidays over time", "schools": "Class sizes in England"}
+_SUB_H3 = re.compile(r"<h3 id='([^']+)'>(.*?)</h3>")
+
+
+def topic_nav(current):
+    items = []
+    for key, title, _ in TOPICS:
+        items.append(f'<li><span aria-current="page">{esc(title)}</span></li>' if key == current else f'<li><a href="{key}.html">{esc(title)}</a></li>')
+    return f'<nav aria-label="Topics"><ul class="yearnav">{"".join(items)}</ul></nav>'
+
+
+def topic_page(facts, d, num, sources, key):
+    """One topic over every year: the answer, its charts and tables, then how it is measured."""
+    title = dict((k, t) for k, t, _ in TOPICS)[key]
+    question = TOPIC_PAGES[key][0].format(first=FIRST)
+    answer, detail = TOPIC_BUILDERS[key](facts, d, num, sources)
+    # Sub-sections become sections of their own, so each keeps its answer in view on a phone.
+    detail = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in detail]
+    # The first chart stays in view; its tables fold away.
+    first_chart = next(i for i, part in enumerate(detail) if "data-chart=" in part)
+    detail.insert(first_chart + 1, FOLD)
+    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer, topic_nav(key), CAUSE,
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>"]
+    body.extend(detail)
+    body.append("<h2 id='about'>About these figures</h2>")
+    body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS[key])}</p></div>')
+    body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
+    body.append(FOLD)
+    body.append(explain.for_topic(key, sources, up="../"))
+    body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
+    body.append("<h2 id='years'>One year, or two side by side</h2>")
+    body.append(NOFOLD + f'<p>See <a href="index.html#years">everyday life in a single year</a>, or <a href="compare/index.html">compare two years</a> across every topic.</p>')
+    return page(f"life/{key}.html", f"{title} since {FIRST}", "\n".join(body),
+                f"{title} in the UK every year since {FIRST}, from official statistics: {TOPIC_PAGES[key][1]}.")
+
+
+def life_index(facts, d, num, sources):
+    """A light hub: each topic's answer, a link to its own page, and the year and comparison choosers."""
+    body = ["<h1>Everyday life, year by year</h1>"]
+    body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed since {FIRST}?</p>
+<p>Each topic has its own page with charts and every year’s figures. Or pick a single year, or compare two years. Every figure is an official statistic, shown with the period and place it covers.</p></div>''')
+    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
+    body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
+    body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
+    body.append(CAUSE)
+    for key, title, _ in TOPICS:
+        answer, _detail = TOPIC_BUILDERS[key](facts, d, num, sources)
+        body.append(f"<h2 id='{key}'>{esc(title)}</h2>{NOFOLD}")
+        body.append(answer)
+        body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST}</a>: {esc(TOPIC_PAGES[key][1])}.</p>')
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), "How work, earnings, housing, holidays and class sizes have changed in the UK since 2008.", scripts=COMPARE_JS)
 
 
