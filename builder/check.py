@@ -314,6 +314,37 @@ def check_pages(facts):
     return len(pages), shown
 
 
+DL_RE = re.compile(r'<p class="dl"><a href="([^"]+\.csv)" download>')
+
+
+def check_downloads():
+    """Every table and chart on a reading page has a CSV download beside it, and each file holds its rows."""
+    import csv as _csv
+    files = 0
+    for p in sorted(SITE.rglob("*.html")):
+        rel = p.relative_to(SITE).as_posix()
+        if rel.startswith("figures/"):
+            continue
+        html = p.read_text(encoding="utf-8")
+        main = html[html.find("<main"):html.find("</main>")]
+        links = DL_RE.findall(main)
+        charts = len(re.findall(r"<figure\b", main)) + len(re.findall(r'(?<!aria-hidden="true">)<ul class="(?:bars|bars change)">', main))
+        tables = main.count("<table")
+        # The rest of a long comparison list folded away ("cont") is covered by the download under its first part.
+        lists = len(re.findall(r'<ul class="cmp-list">', main))
+        if len(links) != charts + tables + lists:
+            fail(f"{rel}: {charts} charts, {lists} lists and {tables} tables but {len(links)} CSV downloads")
+        for href in links:
+            f = (p.parent / href).resolve()
+            if not f.exists():
+                continue  # reported as a broken link
+            rows = list(_csv.reader(f.read_text(encoding="utf-8-sig").splitlines()))
+            if len(rows) < 2 or any(len(r) != len(rows[0]) for r in rows):
+                fail(f"{rel}: {href} is not a complete table")
+            files += 1
+    return files
+
+
 def check_structure():
     want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
     for w in want:
@@ -402,6 +433,7 @@ def main():
     years, pairs = check_structure()
     n_pages, shown = check_pages(facts)
     n_quotes = check_explanations()
+    n_csv = check_downloads()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
@@ -409,6 +441,7 @@ def main():
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
+    print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
     if problems:
         print(f"\n{len(problems)} problems:")

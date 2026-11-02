@@ -360,7 +360,7 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
     breaks = bool(group) and len({group(yr) for yr in YEARS}) > 1
     yl = sy if topic == "housing" else str  # housing figures are for survey years, April to March
     aria = f"Dot chart of {label.lower()} for each year from {yl(FIRST)} to {yl(LAST)}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(FIRST), yl(LAST)))
+    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(FIRST), yl(LAST)), kind=kind, point_label=yl)
     if not caption:
         return svg
     lo = min(have, key=lambda t: t[1])
