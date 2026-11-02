@@ -485,7 +485,33 @@ class Folding(unittest.TestCase):
         lead, rest = fold(body).split('<details class="more">')
         self.assertIn(f"<li>r{KEEP_ROWS - 1}</li>", lead)
         self.assertNotIn(f"<li>r{KEEP_ROWS}</li>", lead)
-        self.assertIn(f'<ul class="cmp-list"><li>r{KEEP_ROWS}</li>', rest)
+        self.assertIn(f'<ul class="cmp-list cont"><li>r{KEEP_ROWS}</li>', rest)
+
+    def test_csv_download_beside_table_chart_and_list(self):
+        from builder import downloads
+        from builder.html import line_chart
+        downloads.FILES.clear()
+        chart = line_chart("Pay", ["2020", "2021"], [("Median", [500.0, None], "a")], "£ a week")
+        body = ('<h2 id="a">Pay</h2>' + chart
+                + '<div class="tablewrap" tabindex="0"><table><caption>Pay, £</caption><thead><tr><th scope="col">Year</th><th scope="col">Pay</th></tr></thead>'
+                  '<tbody><tr><th scope="row">2020</th><td><data value="500.0">£500</data></td></tr></tbody></table></div>'
+                + '<ul class="bars"><li><div class="lab"><span>A, B</span><span>1%</span></div></li></ul>')
+        out = downloads.add_links(body, "life/pay.html")
+        self.assertEqual(out.count('<p class="dl">'), 3)
+        self.assertNotIn("<!--csv:", out)
+        self.assertIn('href="../csv/life/pay/pay.csv" download', out)
+        self.assertEqual(downloads.FILES["csv/life/pay/pay.csv"], "\ufeffPeriod,Median\r\n2020,500\r\n2021,\r\n")
+        self.assertEqual(downloads.FILES["csv/life/pay/pay-2.csv"], "\ufeffYear,Pay\r\n2020,£500\r\n")
+        self.assertEqual(downloads.FILES["csv/life/pay/pay-3.csv"], '\ufeffGroup,Value\r\n"A, B",1%\r\n')
+
+    def test_folded_chart_keeps_its_download(self):
+        from builder.html import fold, KEEP_ROWS
+        rows = "".join(f"<li>r{i}</li>" for i in range(KEEP_ROWS + 3))
+        dl = '<p class="dl"><a href="x.csv" download>Download this data (CSV)</a></p>'
+        body = f'<h2 id="a">Work</h2><div class="answer"><p>x</p></div><ul class="cmp-list">{rows}</ul>{dl}<table></table>'
+        lead, rest = fold(body).split('<details class="more">')
+        self.assertIn(dl, lead)
+        self.assertNotIn(dl, rest)
 
     def test_spark_leaves_gaps_and_breaks(self):
         from builder.html import spark

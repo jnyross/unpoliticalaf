@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "2 November 2026",
+        "pages": [("life/holidays.html", "Holidays since 1980"), ("life/compare/2024-2025.html", "2024 compared with 2025")],
+        "was": "Holidays abroad in 2024 were compared with 2025 as if measured the same way, for example holiday visits abroad rising from 56.0 million to 58.4 million.",
+        "now": "ONS says annual 2024 figures mix the old survey (January to June) and the new one (July to December), so 2024 is now compared with neither earlier years nor 2025.",
+        "pr": 105,
+    },
+    {
+        "date": "2 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980"), ("life/work.html", "Work since 1971")],
         "was": "The holidays section said “The pandemic cut holidays abroad to 4.4 million in 2020”, which states a cause in our own words. The chart titled “Employment rate by age” showed only three of the five age groups.",
         "now": "“In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to 4.4 million.” The chart is titled with the three age groups it shows, and says the other two are in the table.",

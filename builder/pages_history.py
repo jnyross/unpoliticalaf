@@ -262,7 +262,7 @@ def early_spark(facts, num, topic, y):
     pts = [(o, v) for o, v in pts if o >= first]
     last = pts[-1][0]
     aria = f"Dot chart of {label.lower()} for each year from {first} to {last}, with {y} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group, axis=(first, last))
+    svg = spark(pts, aria, highlight=y, group=group, axis=(first, last), kind=kind)
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
     cap = (f"<strong>{esc(label)}</strong>, {first} to {last}. The dark dot is {y}: {num(fid(y), kind)}. "

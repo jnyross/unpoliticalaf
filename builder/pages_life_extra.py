@@ -189,3 +189,53 @@ def industry_page(facts, d, num, sources):
     body.append(source_line(sources, ["ons-jobs02"], up="../"))
     return page(INDUSTRY_PAGE, f"Jobs by industry since {first}", "\n".join(body),
                 f"How many jobs there are in each industry in the UK, every June since {first}, from ONS workforce jobs statistics.")
+
+
+# ---------------------------------------------------------------- holidays: who could afford a week away?
+
+def holiday_afford_block(facts, num, d):
+    """The nearest official yearly measure to 'how many people take a holiday', with its limits."""
+    ha = d["life_extra"]["holafford"]
+    years = ha["years"]
+    out = ["<h3 id='holidays-afford'>How many people take a holiday?</h3>"]
+    if not years:
+        out.append('<p>No official statistic, published each year, gives the share of people who took a holiday. The travel surveys count trips, not travellers.</p>')
+        return out
+    first, last = years[0], years[-1]
+    cuts = [y for y in ha["breaks"] if y in years and y != first]
+    runs, start = [], first
+    for c in cuts + [last + 1]:
+        run = [y for y in years if start <= y < c]
+        if run:
+            runs.append(run)
+        start = c
+    moves = []
+    for run in runs:
+        if len(run) < 3:
+            continue
+        a, b = run[0], run[-1]
+        va, vb = _v(facts, f"holafford.all.{a}"), _v(facts, f"holafford.all.{b}")
+        word = "rose" if vb > va else ("fell" if vb < va else "was unchanged")
+        moves.append(f"from {a} to {b} it {word} from {num(f'holafford.all.{a}', 'pct')} to {num(f'holafford.all.{b}', 'pct')}")
+    run_text = ", ".join(f"{r[0]} to {r[-1]}" if len(r) > 1 else str(r[0]) for r in runs)
+    out.append(f'<div class="answer"><p>No official statistic, published each year, gives the share of people who took a holiday: the travel surveys above count trips, not travellers. '
+               f'The nearest yearly official figure answers a different question: could the household afford a week’s holiday away from home? '
+               f'In the {last} survey, {num(f"holafford.all.{last}", "pct")} of people in the UK lived in a household that could not. '
+               f'In {last}, {num(f"holafford.low.{last}", "pct")} of people in low-income households could not afford a week away, compared with {num(f"holafford.notlow.{last}", "pct")} of people in other households.</p>'
+               + (f'<p>The survey changed in {" and ".join(str(c) for c in cuts)}, so only years within the same run ({run_text}) are compared: {"; ".join(moves)}.</p>' if moves else "")
+               + '</div>')
+    out.append(_chart(facts, num, "People whose household could not afford a week’s holiday away from home", years,
+                      [("Low-income households", lambda y: f"holafford.low.{y}", "b"), ("Everyone", lambda y: f"holafford.all.{y}", "a"),
+                       ("Other households", lambda y: f"holafford.notlow.{y}", "c")],
+                      "% of people, United Kingdom, EU-SILC survey year", "pct", breaks=[(y, "Series break") for y in ha["breaks"]], ymin=0))
+    out.append(details_table("Show who could not afford a week’s holiday, every year",
+                             "People whose household could not afford a week’s holiday away from home, % of people, United Kingdom",
+                             ["Survey year"] + [esc(label) for _, _, _, label in ha["groups"]],
+                             [[str(y) + (" (series break)" if y in ha["breaks"] else "")] + [num(f"holafford.{gk}.{y}", "pct") for gk, _, _, _ in ha["groups"]] for y in years]))
+    out.append(f'<div class="limit"><p>This is not the share of people who went on holiday. It counts people whose household said it could not afford a week away; '
+               f'people who chose not to go, or who took shorter breaks, are not counted, and one answer covers everyone in the household, children included. '
+               f'Low income means below 60% of the middle (median) household income, after adjusting for household size. '
+               f'Eurostat marks breaks in the series in {" and ".join(str(y) for y in ha["breaks"])}, so changes across those years are not like-for-like. '
+               f'The figures come from the EU statistics on income and living conditions survey, which the Office for National Statistics ran in the UK; Eurostat’s table has UK figures for the {first} to {last} surveys only, because the UK stopped supplying them after leaving the EU. '
+               f'The Department for Work and Pensions’ Family Resources Survey asks a similar question every year, but publishes it only as one item inside combined measures of deprivation for children and pensioners, whose questions have changed several times, so it is not shown here.</p></div>')
+    return out

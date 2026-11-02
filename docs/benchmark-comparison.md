@@ -7,7 +7,8 @@ recorded side-by-side comparison with a named benchmark page". This is that
 record for D1 (public money answers), D2 (life: breadth and depth) and D5
 (visual design and charts), and, in [Part 2](#part-2-d3-d4-d6-d8-and-d10), for
 D3 (comparing years), D4 (explanation), D6 (phone use), D8 (impartiality) and
-D10 (honesty about limits). It does not score anything: the next goal audit
+D10 (honesty about limits), and, in [Part 3](#part-3-holidays-and-class-sizes-d2),
+for holidays and class sizes (D2). It does not score anything: the next goal audit
 decides what the evidence is worth.
 
 ## How this was done
@@ -481,5 +482,142 @@ default years and no record claims (D8).
 4. International comparison (Full Fact, OBR) (D1, D4).
 5. Neither benchmark set has been checked by a person outside the project, and
    neither has this site; on the strict reading, D8 and D10 still need that.
+
+These are recorded as evidence for the next goal audit, not as new tickets.
+
+---
+
+## Part 3: holidays and class sizes (D2)
+
+Added for ticket T35 (gap 5 of Audit 5): "Add the official share of people who
+took a holiday, or record which official source comes closest and why none is
+yearly, and add class-size and holiday benchmark comparisons."
+
+### How this was done
+
+- Date: 2 November 2026.
+- Site version: `main` at `e1cf7dd` (after PR #103), built locally with
+  `make build`, plus the changes in the same PR as this section.
+- Benchmark pages: read on 2 November 2026 through a web-reading tool that
+  returns page text (the cloud container cannot open these sites directly), so
+  charts and layout could not be checked. Figures quoted are as published.
+- Who did it: a Claude session that did not build the pages compared. As in
+  Parts 1 and 2, a strict auditor may treat this as the auditor's own judgement.
+
+### Pages compared
+
+| # | Benchmark page | This site | Dimensions |
+|---|---|---|---|
+| 13 | ONS, [Travel trends: 2025](https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2025) (16 October 2026, official statistics in development) | [Holidays](https://unpoliticalaf.vercel.app/life/holidays.html) | D2, D10 |
+| 14 | DfE, [Schools, pupils and their characteristics: academic year 2025/26](https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics/2025-26) (4 June 2026, updated 16 October 2026), "Class size" section | [Class sizes](https://unpoliticalaf.vercel.app/life/schools.html) | D2, D10 |
+| 15 | Eurostat, EU-SILC table [ilc_mdes02](https://ec.europa.eu/eurostat/databrowser/view/ilc_mdes02/default/table) "Inability to afford paying for one week annual holiday away from home" (updated 20 October 2026) | New section on [Holidays](https://unpoliticalaf.vercel.app/life/holidays.html#holidays-afford) | D2 |
+
+### 13. ONS Travel trends against Holidays
+
+**Figures.**
+
+| 2025, Great Britain residents | ONS Travel trends 2025 | This site | Matches? |
+|---|---|---|---|
+| Visits abroad | 95.5 million | 95.5 million (95,453 thousand) | Yes |
+| Most visited country | Spain, 19.1 million | Spain, 19.1 million | Yes |
+| Second and third | France 9.1 million, Italy 5.7 million | France 9.1 million, Italy 5.7 million | Yes |
+| Holiday visits | Not in the bulletin text (in the linked datasets) | 58.4 million, 61% of visits | Not comparable on the page; the site's figure is from the ONS dataset |
+| UK residents (including Northern Ireland) | 99.9 million | Not shown for 2025; the site uses Great Britain residents from 2024, as the ONS tables by purpose do | Different coverage, stated on the page |
+
+**What ONS does that this site does not.**
+
+- Spending abroad (£83.9 billion by GB residents in 2025) and nights away.
+- Quarterly figures, and visits to the UK by overseas residents.
+- A PDF download and four linked datasets.
+
+**What this site does that ONS does not.**
+
+- Puts holidays abroad, holidays within Great Britain (VisitBritain's survey)
+  and the main countries on one page, with per-100-residents rates and the
+  2009 and 2019 rankings beside the latest year.
+- Shows the 2024 method change as a split line and never compares across it.
+  The ONS article warns that "Comparisons between 2024 and 2025 require
+  caution because the annual 2024 estimates combine two survey
+  methodologies". This site quoted the ONS 2024 article on the mixed year, but
+  its comparison pages still compared 2024 with 2025 as one method (for
+  example "Holiday visits abroad" 56.0 million to 58.4 million). **Fixed in
+  this PR**: 2024 is now its own basis ("GB, mixed methods"), so it is compared
+  with neither earlier years nor 2025, the chart marks a second break at 2025,
+  and the limits say why.
+- Says on the page that these are counts of trips, not people. ONS says so only
+  in its glossary ("The figures for visits relate to the number of completed
+  visits, not the number of visitors").
+
+**The share of people who took a holiday.** Neither the ONS bulletin nor its
+datasets give the number or share of people who travelled: both surveys count
+trips. No official source found publishes a yearly UK share of people who took
+a holiday. The closest official yearly measure is a different question asked
+of households: could they afford a week's holiday away from home?
+
+- **Eurostat EU-SILC, table ilc_mdes02** (the survey was run in the UK by
+  ONS): UK figures for the 2005 to 2018 surveys, with series breaks marked in
+  2012 and 2017. The UK stopped supplying them after leaving the EU, so there
+  are no later UK years. **Added to the holidays page in this PR**, for
+  everyone, low-income and other households, and households with and without
+  dependent children, with its limits (it is not the share who went; one answer
+  covers the household; breaks).
+- **DWP Family Resources Survey** (Households Below Average Income): asks a
+  similar question each year, but DWP publishes it only inside combined
+  material deprivation measures for children and pensioners. Its questions
+  changed in 2010-11, 2011-12 and 2023-24, and DWP advises against comparing
+  across the pandemic years. Not shown; the holidays page says why.
+
+### 14. DfE class size statistics against Class sizes
+
+**Figures.**
+
+| England, state-funded | DfE 2025/26 release | This site before this PR | This site after |
+|---|---|---|---|
+| Primary average, January 2026 | 26.1 ("decreased slightly by 0.3") | Not shown (latest was January 2025: 26.4) | 26.1 |
+| Secondary average, January 2026 | 22.6 ("increased slightly by 0.1") | Not shown (January 2025: 22.5) | 22.6 |
+| Infant classes (reception to year 2) | 25.9 | Not shown | Not shown |
+| Key stage 2 (years 3 to 6) | 27.6 | Not shown | Not shown |
+| Infant pupils in classes over the legal limit of 30 | 39,500, 2.7% | Not shown | Not shown |
+
+The January 2025 figures match DfE's (26.1 + 0.3 = 26.4; 22.6 − 0.1 = 22.5).
+**This site was a year behind**: the DfE data set already in the repository
+held January 2026, but the year explorer stops at 2025, so the class sizes
+page dropped it. **Fixed in this PR**: the class sizes page now shows January
+2026 in its answer, chart and table, and says that it appears on that page
+only, because the other topics have no 2026 figures yet.
+
+**What DfE does that this site does not.**
+
+- Infant and key stage 2 averages, and the number and share of pupils in
+  large classes (infant classes over the statutory limit of 30; key stage 2
+  classes of 31 or more: 413,900, 18.8%). This site quotes the legal limit but
+  shows no large-class figures.
+- Downloadable data and a table builder.
+
+**What this site does that DfE does not.**
+
+- A series from January 2006 to January 2026 on one chart and table. The DfE
+  page compares with the previous year only and says the infant figure is "the
+  lowest infant class size since 2008/09".
+- Wales and Scotland beside England, with the reason they are not compared,
+  and a note that Northern Ireland publishes no average class size. The DfE
+  page covers England only and does not say so on the page.
+- States the definition (classes taught by one teacher, January census) with
+  every figure. DfE gives this as a note under its tables.
+
+### Summary for Part 3
+
+**Comparable with or ahead of the benchmarks:** headline figures match ONS
+and DfE exactly; trips are labelled as trips, not people, where the reader
+meets them; the 2024 travel method change is never crossed; class sizes have a
+20-year series and other nations.
+
+**Where the benchmarks are still ahead:**
+
+1. Large classes and infant / key stage 2 averages (DfE) (D2).
+2. Spending and nights abroad (ONS) (D2).
+3. No official yearly share of people who took a holiday exists; the nearest
+   (could not afford a week away) stops in 2018 for the UK (D2, D10).
+4. Downloads (both). Queued as gap 4 of Audit 5.
 
 These are recorded as evidence for the next goal audit, not as new tickets.

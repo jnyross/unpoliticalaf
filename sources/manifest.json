@@ -534,6 +534,11 @@
    "id": "explain-ons-lfs-qmi",
    "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
    "file": "explain/ons-lfs-qmi.html"
+  },
+  {
+   "id": "eurostat-ilc-mdes02-uk",
+   "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_mdes02?geo=UK&unit=PC&format=JSON&lang=en",
+   "file": "eurostat/ilc-mdes02-uk.json"
   }
  ]
 }
