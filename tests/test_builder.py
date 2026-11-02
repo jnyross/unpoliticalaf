@@ -161,9 +161,6 @@ class Sources(unittest.TestCase):
         self.assertEqual(verify_hashes(all_sources()), [])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class Holidays(unittest.TestCase):
     def test_only_single_countries_are_ranked(self):
@@ -176,6 +173,50 @@ class Holidays(unittest.TestCase):
         self.assertEqual(pages_life.gb_survey(2022), pages_life.gb_survey(2025))
 
 
+class Glossary(unittest.TestCase):
+    def wrap(self, main):
+        return f'<html><body><nav>VAT</nav><main id="main" class="wrap">{main}</main><footer><p>VAT</p></footer></body></html>'
+
+    def test_first_use_in_text_is_linked_once(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap("<p>VAT is a tax. VAT again.</p>"), "taxes.html")
+        self.assertEqual(out.count('href="glossary.html#vat"'), 1)
+        self.assertIn('<a class="term" href="glossary.html#vat">VAT</a> is a tax. VAT again.', out)
+
+    def test_headings_links_figures_and_tables_are_left_alone(self):
+        from builder.glossary import link_terms
+        main = ('<h2 id="x">VAT</h2><p><a href="a.html">VAT</a> <data value="1" data-fact="f" data-kind="int">GDP</data></p>'
+                "<table><caption>VAT</caption><tr><td>VAT</td></tr></table><p><strong>VAT</strong></p>")
+        out = link_terms(self.wrap(main), "taxes.html")
+        self.assertNotIn('class="term"', out)
+
+    def test_links_work_from_subfolders_and_skip_the_glossary(self):
+        from builder.glossary import link_terms
+        self.assertIn('href="../../glossary.html#median"', link_terms(self.wrap("<p>The median rose.</p>"), "life/compare/2010-2025.html"))
+        self.assertNotIn('class="term"', link_terms(self.wrap("<p>The median rose.</p>"), "glossary.html"))
+
+    def test_longer_phrase_wins_and_case_matters_for_names(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap("<p>Taxes took 30% of gross household income. The vat was full.</p>"), "x.html")
+        self.assertIn('glossary.html#gross-income">gross household income</a>', out)
+        self.assertNotIn("#vat", out)
+
+    def test_text_hidden_from_screen_readers_is_left_alone(self):
+        from builder.glossary import link_terms
+        out = link_terms(self.wrap('<div aria-hidden="true"><p>VAT</p></div><p>VAT</p>'), "x.html")
+        self.assertIn('<div aria-hidden="true"><p>VAT</p></div><p><a class="term"', out)
+
+    def test_every_term_has_an_anchor_and_words(self):
+        from builder.glossary import GROUPS
+        anchors = [a for _, _, terms in GROUPS for a, _, _, _ in terms]
+        self.assertEqual(len(anchors), len(set(anchors)))
+        for _, _, terms in GROUPS:
+            for a, name, text, words in terms:
+                self.assertTrue(words and text.strip(), a)
+
+
+if __name__ == "__main__":
+    unittest.main()
 class Explanations(unittest.TestCase):
     """Quoted explanations must match their source and always say who said them."""
 

@@ -32,6 +32,15 @@ working without JavaScript. All styles live in `CSS` in `builder/html.py`.
 - **Source line** (`source_line()`): one or two sources are shown in full;
   more are folded into "Sources: publishers (N tables)" so they don't bury the
   page on a phone, but stay one tap away.
+- **Scale line** (`scale_box()` in `pages_money.py`): a national total divided
+  by the UK population, per year and per week. Always say it is an average
+  across everyone, including children, and never call it a bill.
+- **Glossary links** (`builder/glossary.py`): every word explained on
+  `glossary.html` is linked, with a dotted underline, the first time it appears
+  in ordinary text on each page (at most 12 per page). Headings, figures,
+  tables, charts, existing links and text hidden from screen readers are left
+  alone. To explain a new word, add it to `GROUPS` with the words that should
+  link to it; don't write separate definitions on each page.
 - **Illustrations** keep the dashed border and the "Illustration, not a
   statistic" tag. Don't restyle them to look like measured figures.
 

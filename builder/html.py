@@ -17,6 +17,8 @@ CSS = """
 html{-webkit-text-size-adjust:100%;scroll-padding-top:12px}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 a{color:var(--link);text-underline-offset:2px}
+a.term{color:inherit;text-decoration:underline dotted var(--muted);text-decoration-thickness:1.5px;text-underline-offset:3px}a.term:hover{text-decoration-style:solid}
+dl.glossary{margin:0 0 24px}dl.glossary dt{font-weight:650;margin-top:18px;scroll-margin-top:12px}dl.glossary dt:target{background:var(--warn)}dl.glossary dd{margin:2px 0 0}
 a:focus-visible,summary:focus-visible,select:focus-visible,button:focus-visible,.tablewrap:focus-visible,nav.main ul:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
 header.site{border-bottom:1px solid var(--line);background:#fff}
@@ -49,6 +51,7 @@ li{margin-bottom:4px}
 details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}
 .note{border-left:3px solid var(--bar2);padding:2px 0 2px 12px;margin:16px 0;color:var(--ink2);font-size:.95rem}
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
+.scale{border-left:4px solid var(--line);padding:2px 0 2px 12px;margin:0 0 18px;font-size:.96rem}
 .illustration{border:2px dashed var(--bar2);border-radius:var(--r);padding:14px 16px;margin:24px 0;background:#fff}
 .illustration .tag{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--ink);color:#fff;padding:3px 8px;border-radius:4px;margin-bottom:6px}
 .keyfigs{list-style:none;margin:16px 0 20px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -183,6 +186,7 @@ NAV = [
     ("who-pays.html", "Who pays"),
     ("household-tax.html", "Tax and income"),
     ("life/index.html", "Year by year"),
+    ("glossary.html", "Glossary"),
     ("methods.html", "Sources"),
 ]
 

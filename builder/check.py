@@ -266,7 +266,7 @@ def check_pages(facts):
                 tp.feed(target.read_text(encoding="utf-8"))
                 if frag not in tp.ids:
                     fail(f"{rel}: missing anchor {href}")
-        QUOTED_PAGES.append((rel, " ".join(pp.quoted)))
+        QUOTED_PAGES.append((rel, "".join(pp.quoted)))
         text = " ".join(pp.text).lower()
         for w in LOADED:
             if re.search(r"\b" + re.escape(w) + r"\b", text):
@@ -336,7 +336,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
+                 "glossary.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
