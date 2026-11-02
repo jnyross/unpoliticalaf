@@ -1,0 +1,291 @@
+{
+  "title": "Unpolitical phone test",
+  "time_limit_seconds": 480,
+  "pass_rules": {
+    "participants": 5,
+    "min_correct_each": 9,
+    "min_correct_total": 48
+  },
+  "not_sure": "Not sure",
+  "questions": [
+    {
+      "id": 1,
+      "topic": "Where public money goes",
+      "question": "In 2025-26, which area received the largest share of UK public spending on services?",
+      "options": {
+        "A": "Social protection (pensions, benefits and social care)",
+        "B": "Health",
+        "C": "Defence",
+        "D": "Education"
+      },
+      "answer": "A",
+      "critical": false,
+      "why": "Spending page: of every £100 spent on services, the largest share, £33, went on social protection. Health was next with £21.",
+      "evidence": [
+        {
+          "page": "spending.html",
+          "text": "the largest share, £33, went on social protection"
+        },
+        {
+          "page": "spending.html",
+          "text": "Health was next with £21"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "topic": "Which taxes raise the money",
+      "question": "Which three taxes raised the most money in 2025-26?",
+      "options": {
+        "A": "Corporation Tax, Council Tax and fuel duties",
+        "B": "VAT, Inheritance Tax and Capital Gains Tax",
+        "C": "Income Tax, National Insurance and VAT",
+        "D": "Council Tax, VAT and stamp duties"
+      },
+      "answer": "C",
+      "critical": false,
+      "why": "Taxes page: Income Tax (£329bn), National Insurance (£204bn) and VAT (£180bn) raised 65% of all tax.",
+      "evidence": [
+        {
+          "page": "taxes.html",
+          "text": "Three taxes raised 65% of all tax: Income Tax (£329bn), National Insurance (£204bn) and VAT (£180bn)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "topic": "Taxes, other receipts and borrowing",
+      "question": "The taxes page shows £134bn of borrowing in 2025-26. What is this borrowing?",
+      "options": {
+        "A": "A tax that most working people pay through their wages",
+        "B": "The total the government still owes from all past years",
+        "C": "Interest and dividends that the public sector receives each year",
+        "D": "The gap between what was spent and what came in, which adds to the national debt"
+      },
+      "answer": "D",
+      "critical": false,
+      "why": "Taxes page: borrowing is not income from tax; it is the gap between spending and receipts, and it adds to the national debt. Debt (the total owed) is a different number, £2,917bn.",
+      "evidence": [
+        {
+          "page": "taxes.html",
+          "text": "Borrowing is not income from tax. It is the gap between spending"
+        },
+        {
+          "page": "taxes.html",
+          "text": "and it adds to the national debt"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "topic": "Who pays",
+      "question": "In tax year 2023 to 2024, roughly what share of all Income Tax was paid by the top 1% of Income Tax payers?",
+      "options": {
+        "A": "About 1%",
+        "B": "About 10%",
+        "C": "About 27%",
+        "D": "About 59%"
+      },
+      "answer": "C",
+      "critical": false,
+      "why": "Who pays page: the top 1% of Income Tax payers paid 27.2% of all Income Tax. 59.1% is the top 10%.",
+      "evidence": [
+        {
+          "page": "who-pays.html",
+          "text": "the top 1% of Income Tax payers paid 27.2% of all Income Tax"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "topic": "Household income and tax",
+      "question": "The site says taxes took 33.6% of gross household income in 2023/24. Which statement about that figure is correct?",
+      "options": {
+        "A": "It is an average across households, counting all taxes, and it is not the tax rate any one person pays",
+        "B": "It is the Income Tax rate that most workers pay on their earnings",
+        "C": "It is Income Tax's share of all the tax the government raised that year",
+        "D": "Every household paid exactly 33.6% of its income in tax that year"
+      },
+      "answer": "A",
+      "critical": true,
+      "critical_area": "Tax interpretation",
+      "why": "Tax and income page, 'Three numbers that are easy to mix up': 33.6% is an average across all people using their household's income and taxes. It is not the tax rate any one person pays, and it is not a share of all tax raised.",
+      "evidence": [
+        {
+          "page": "household-tax.html",
+          "text": "taxes took 33.6% of gross household income in 2023/24"
+        },
+        {
+          "page": "household-tax.html",
+          "text": "It is not the tax rate any one person pays"
+        },
+        {
+          "page": "index.html",
+          "text": "That is an average across households, not anyone's tax rate"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "topic": "Household income and tax",
+      "question": "For people in the lowest-income fifth, which kind of tax makes up most of their household's tax?",
+      "options": {
+        "A": "Income Tax",
+        "B": "Taxes on spending, such as VAT",
+        "C": "Corporation Tax",
+        "D": "Inheritance Tax"
+      },
+      "answer": "B",
+      "critical": false,
+      "why": "Tax and income page: for people in the lowest-income fifth, most of their household's tax is indirect (taxes on spending), 21.0% of gross household income.",
+      "evidence": [
+        {
+          "page": "household-tax.html",
+          "text": "For people in the lowest-income fifth, most is indirect"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "topic": "Illustrative households",
+      "question": "The 'Tax and income' page shows an employee on £30,000 a year paying £4,879 in Income Tax and National Insurance. What is this?",
+      "options": {
+        "A": "The tax paid by a typical UK family, measured in an official survey",
+        "B": "The average tax paid by UK workers, measured by HM Revenue and Customs",
+        "C": "The measured tax bill of the middle UK worker in 2026",
+        "D": "A made-up example that shows how the tax rules work, not a measured figure"
+      },
+      "answer": "D",
+      "critical": true,
+      "critical_area": "Illustrative households",
+      "why": "The example is headed 'Illustration, not a statistic'. The person is invented to show how the rules work, is not typical or average, and the result is not a measured figure.",
+      "evidence": [
+        {
+          "page": "household-tax.html",
+          "text": "Illustration, not a statistic"
+        },
+        {
+          "page": "household-tax.html",
+          "text": "This person is invented to show how the rules work. They are not a typical or average person, and this is not a measured figure."
+        },
+        {
+          "page": "household-tax.html",
+          "text": "Together: £4,879"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "topic": "Earnings after inflation",
+      "question": "After allowing for rising prices, how did the weekly pay of the middle full-time employee in April 2025 compare with April 2008?",
+      "options": {
+        "A": "About 60% higher",
+        "B": "About the same",
+        "C": "About a third lower",
+        "D": "The site has no figure for 2008"
+      },
+      "answer": "B",
+      "critical": false,
+      "why": "Year by year, Earnings: £767 a week in April 2025, about the same as April 2008 (£771 in April 2025 prices). Before allowing for prices it rose from £479, about 60%, which is why A is wrong.",
+      "evidence": [
+        {
+          "page": "life/index.html",
+          "text": "that was about the same as in April 2008"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "topic": "Schools: choose a year",
+      "question": "Choose the year 2019. What was the average class size in state primary schools, and which part of the UK does that figure cover?",
+      "options": {
+        "A": "27.1 pupils, England only",
+        "B": "27.1 pupils, the whole UK",
+        "C": "21.7 pupils, England only",
+        "D": "30.0 pupils, the whole UK"
+      },
+      "answer": "A",
+      "critical": false,
+      "why": "Everyday life in 2019, Class sizes: 27.1 pupils in an English state primary school in January 2019; the figures are for England only. 21.7 is secondary.",
+      "evidence": [
+        {
+          "page": "life/2019.html",
+          "text": "the average class in an English state primary school had 27.1 pupils"
+        },
+        {
+          "page": "life/2019.html",
+          "text": "England only. State-funded schools"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "topic": "Holidays: compare two years",
+      "question": "Compare 2015 with 2025. What does the site say about the change in the number of holiday visits abroad?",
+      "options": {
+        "A": "It rose by about 20%",
+        "B": "It fell",
+        "C": "The two years are not compared, because the way it is measured changed",
+        "D": "There are no holiday figures for 2015"
+      },
+      "answer": "C",
+      "critical": false,
+      "why": "2015 compared with 2025, Holidays: 'not comparable: definition changed (UK → GB)'. From 2024 the figures cover Great Britain residents with a new method.",
+      "evidence": [
+        {
+          "page": "life/compare/2015-2025.html",
+          "text": "not comparable: definition changed (UK → GB)"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "topic": "Housing",
+      "question": "In England, how did the share of households renting privately change between 2008-09 and 2024-25?",
+      "options": {
+        "A": "It fell from about 19% to about 14%",
+        "B": "It rose from about 14% to about 19%",
+        "C": "It stayed at about 19%",
+        "D": "The site has no figures for renting"
+      },
+      "answer": "B",
+      "critical": false,
+      "why": "Year by year, Housing: 19% of households in England rented privately in 2024-25, against 14% in 2008-09.",
+      "evidence": [
+        {
+          "page": "life/index.html",
+          "text": "In 2024-25, 65% of households in England owned their home and 19% rented privately."
+        },
+        {
+          "page": "life/index.html",
+          "text": "In 2008-09, 14% rented privately."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "topic": "Causation",
+      "question": "Between 2015 and 2025 the employment rate for women aged 16 to 64 rose from 68.7% to 72.3%. What does the site say these figures tell you about why it rose?",
+      "options": {
+        "A": "It rose because of government policy",
+        "B": "It rose because the economy grew",
+        "C": "It rose because there were more part-time jobs",
+        "D": "Nothing: the figures show what changed, not why"
+      },
+      "answer": "D",
+      "critical": true,
+      "critical_area": "Causation",
+      "why": "Every year and comparison page says 'Change is not cause': the figures show what changed between years, not why, and they cannot separate the economy, prices, population and government policy.",
+      "evidence": [
+        {
+          "page": "life/compare/2015-2025.html",
+          "text": "Change is not cause. These figures show what changed between years. They do not show why."
+        },
+        {
+          "page": "life/compare/2015-2025.html",
+          "text": "Employment rate, women 16 to 64 68.7% 72.3% +3.6 percentage points"
+        }
+      ]
+    }
+  ]
+}
