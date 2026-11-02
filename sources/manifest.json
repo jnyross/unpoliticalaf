@@ -552,34 +552,29 @@
    "file": "ons/families-households-page.html"
   },
   {
-   "id": "probe-oecd-0",
-   "file": "oecd/probe-0.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS/DSD_REV_COMP_OECD@DF_RSOECD/latest?references=all&detail=referencepartial"
+   "id": "oecd-rs-tax",
+   "file": "oecd/revenue-statistics-tax-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels"
   },
   {
-   "id": "probe-oecd-1",
-   "file": "oecd/probe-1.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_EXP/latest?references=all&detail=referencepartial"
+   "id": "probe-oecd-naag6",
+   "file": "oecd/probe-naag6.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAAG_VI@DF_NAAG_VI,/all?startPeriod=2022&format=csvfilewithlabels"
   },
   {
-   "id": "probe-oecd-2",
-   "file": "oecd/probe-2.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_REV/latest?references=all&detail=referencepartial"
+   "id": "probe-oecd-naag6a",
+   "file": "oecd/probe-naag6a.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAAG_VI@DF_NAAG_OTEF,/all?startPeriod=2022&format=csvfilewithlabels"
   },
   {
-   "id": "probe-oecd-3",
-   "file": "oecd/probe-3.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE11/latest?references=all&detail=referencepartial"
+   "id": "probe-oecd-govpf",
+   "file": "oecd/probe-govpf.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/all?startPeriod=2022&format=csvfilewithlabels"
   },
   {
-   "id": "probe-oecd-4",
-   "file": "oecd/probe-4.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12/latest?references=all&detail=referencepartial"
-  },
-  {
-   "id": "probe-oecd-list",
-   "file": "oecd/probe-list.xml",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/all/all/latest?detail=allstubs"
+   "id": "probe-oecd-govcofog",
+   "file": "oecd/probe-govcofog.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/all?startPeriod=2022&format=csvfilewithlabels"
   }
  ]
 }

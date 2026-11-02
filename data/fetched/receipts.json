@@ -823,54 +823,6 @@
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
  },
- "probe-oecd-0": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS/DSD_REV_COMP_OECD@DF_RSOECD/latest?references=all&detail=referencepartial",
-  "file": "oecd/probe-0.xml",
-  "bytes": 874599,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "a6ca0d435d5780e1180995da3b3af72055fa1038142bfdd5c749d781133e8c5c",
-  "retrieved": "2026-11-02T20:16:14Z"
- },
- "probe-oecd-1": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_EXP/latest?references=all&detail=referencepartial",
-  "file": "oecd/probe-1.xml",
-  "bytes": 774670,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "00d03cca00c23053ade26f40a2330508a0e9ac2ca767e838212255075d00d669",
-  "retrieved": "2026-11-02T20:16:18Z"
- },
- "probe-oecd-2": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_REV/latest?references=all&detail=referencepartial",
-  "file": "oecd/probe-2.xml",
-  "bytes": 774697,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "7defe20b323b8252442b74593d198a7e0b7926345690a2c126004d475416b193",
-  "retrieved": "2026-11-02T20:16:23Z"
- },
- "probe-oecd-3": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE11/latest?references=all&detail=referencepartial",
-  "file": "oecd/probe-3.xml",
-  "bytes": 668045,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "653c5fc3bd203d000c7de2c2c758c6cb61384afd8747412bafcfebba719721eb",
-  "retrieved": "2026-11-02T20:16:27Z"
- },
- "probe-oecd-4": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12/latest?references=all&detail=referencepartial",
-  "file": "oecd/probe-4.xml",
-  "bytes": 778066,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "95a83542972ec1c00e8cf8d151998b00c034954692c377427f67b48fa1980a1e",
-  "retrieved": "2026-11-02T20:16:31Z"
- },
- "probe-oecd-list": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/all/all/latest?detail=allstubs",
-  "file": "oecd/probe-list.xml",
-  "bytes": 739501,
-  "content_type": "application/vnd.sdmx.structure+xml; version=2.1; charset=utf-8",
-  "sha256": "1b92f20e397a333cac465ee4e738a904ffc31d5ef6a2f19507eca0d6326d6bd7",
-  "retrieved": "2026-11-02T20:16:35Z"
- },
  "scot-primary-class-2025": {
   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
   "file": "nations/scot-primary-class-size-dataset-2025.xlsx",
