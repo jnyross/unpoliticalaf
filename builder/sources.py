@@ -115,6 +115,9 @@ SOURCES = {
 # The OBR databank holds more figures than one record page can list, so the GDP,
 # GDP deflator and after-inflation figures have their own record page.
 SOURCES["obr-prices"] = dict(SOURCES["obr"], title="Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP")
+SOURCES["obrhist-receipts"] = dict(SOURCES["obrhist"], title="Historical public finances database: receipts by type of tax as a share of GDP")
+SOURCES["obrhist-receipts-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: receipts by type of tax in £")
+SOURCES["obrhist-receipts-shares"] = dict(SOURCES["obrhist"], title="Historical public finances database: each type of tax's share of all receipts (calculated from the £ figures)")
 SOURCES["obrhist-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: spending by purpose in £ and after inflation")
 
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
@@ -203,6 +206,7 @@ FETCHED = {
     "ons-affordability": ("Office for National Statistics", "House price to workplace-based earnings ratio (median), by country and region, 1997 to 2025", "England and Wales, and each English region", "Homes sold (all residential sales); full-time employees working in the area"),
     "ons-jobs02": ("Office for National Statistics", "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted", "United Kingdom", "All workforce jobs: employee jobs, self-employment jobs, HM Forces and government-supported trainees"),
     "eurostat-ilc-mdes02-uk": ("Eurostat (survey run in the UK by the Office for National Statistics)", "EU statistics on income and living conditions (EU-SILC), table ilc_mdes02: inability to afford paying for one week annual holiday away from home", "United Kingdom", "People in private households"),
+    "ons-families-households": ("Office for National Statistics", "Families and households in the UK, 1996 to 2025 (published 17 April 2026): Table 5, households by size", "United Kingdom", "Private households (Labour Force Survey, April to June each year)"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 

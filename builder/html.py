@@ -825,6 +825,11 @@ def spark(points, label, highlight=None, group=None, axis=None):
     return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>'
 
 
+def _lower_first(text):
+    """Lower-case the first letter for use mid-sentence, keeping acronyms such as VAT or IFS."""
+    return text if text[1:2].isupper() else text[:1].lower() + text[1:]
+
+
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
                     ymin=None, scale=1, point_labels=None, desc="", summary_note=""):
     """One small line chart per group, so no group is hidden behind a key.
@@ -1009,9 +1014,9 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
     notes = []
     for i, text in breaks:
         if split_breaks:
-            notes.append(f"The line breaks at {esc(labels[i])} ({esc(text.lower())}), so values either side are not compared.")
+            notes.append(f"The line breaks at {esc(labels[i])} ({esc(_lower_first(text))}), so values either side are not compared.")
         else:
-            notes.append(f"The amber dashed line before {esc(labels[i])} marks a change ({esc(text.lower())}), so each side is read separately here.")
+            notes.append(f"The amber dashed line before {esc(labels[i])} marks a change ({esc(_lower_first(text))}), so each side is read separately here.")
     for i, text in events:
         notes.append(f"The grey dotted line marks {esc(labels[i])} ({esc(text)}). It shows when it happened, not what it caused.")
     if forecast_from is not None and forecast_from < len(labels):

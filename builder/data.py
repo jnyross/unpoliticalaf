@@ -1208,6 +1208,9 @@ def build_all():
     d["tax_history"] = data_taxhist.build(facts)
     from . import data_spendhist
     d["spend_history"] = data_spendhist.build(facts)
+    from . import data_taxmixhist
+    d["tax_mix_history"] = data_taxmixhist.build(facts)
+    d["households_years"] = data_taxmixhist.households(facts)
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
     population(facts)
