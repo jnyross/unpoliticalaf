@@ -14,7 +14,7 @@ from . import explain
 from .html import FOLD, NOFOLD, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
 from .pages_nations import housing_nations_block, schools_nations_block
-from .pages_life_extra import spread_block, afford_block, industry_block, industry_page
+from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 
@@ -52,7 +52,7 @@ def gb_survey(y):
 # period function, comparability-group function (None = one consistent series)
 def spread_basis(y):
     """ASHE method periods (ONS breaks in 2004 and 2006)."""
-    return "survey method before 2004" if y < 2004 else ("survey method of 2004-05" if y < 2006 else "survey method from 2006")
+    return "before 2004 method" if y < 2004 else ("2004 and 2005 method" if y < 2006 else "2006 method onwards")
 
 
 def measures(d):
@@ -66,6 +66,10 @@ def measures(d):
         ("work.women", "work", "Employment rate, women 16 to 64", lambda y: f"work.women.{y}", "pct", "pp", lambda y: f"Apr–Jun {y}", None),
         ("work.level", "work", "People in work, aged 16 and over", lambda y: f"work.level.{y}", "millions_people", "pct", lambda y: f"Apr–Jun {y}", None),
         ("work.pt", "work", "Workers who work part-time", lambda y: f"work.ptshare.{y}", "pct", "pp", lambda y: f"Apr–Jun {y}", None),
+    ]
+    m += [
+        ("work.ind.manuf", "work", "Share of jobs in manufacturing", lambda y: f"jobs.share.C.{y}", "pct", "pp", lambda y: f"June {y}", None),
+        ("work.ind.health", "work", "Share of jobs in health and social work", lambda y: f"jobs.share.Q.{y}", "pct", "pp", lambda y: f"June {y}", None),
     ]
     for key, label, _ in AGE_SERIES:
         m.append((f"work.age.{key}", "work", f"Employment rate, ages {label}", (lambda k: lambda y: f"work.age.{k}.{y}")(key), "pct", "pp", lambda y: f"Apr–Jun {y}", None))

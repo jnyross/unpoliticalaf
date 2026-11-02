@@ -51,9 +51,9 @@ def spread_block(facts, num, d, first):
                       f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005", "pounds",
                       breaks=sorted(sp["breaks"].items()), ymin=0))
     out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
-                             ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line",
+                             ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line (times)",
                               f"Bottom line ({base} prices)", f"Top line ({base} prices)"],
-                             [[str(y), num(f"spread.p10.{y}", "pounds"), num(f"spread.p50.{y}", "pounds"), num(f"spread.p90.{y}", "pounds"), num(f"spread.ratio.{y}", "times"),
+                             [[str(y), num(f"spread.p10.{y}", "pounds"), num(f"spread.p50.{y}", "pounds"), num(f"spread.p90.{y}", "pounds"), num(f"spread.ratio.{y}", "dp1"),
                                num(f"spread.real.p10.{y}", "pounds"), num(f"spread.real.p90.{y}", "pounds")] for y in years]))
     out.append(f'<p class="small">The 10th and 90th percentiles are the pay of the employee one tenth of the way up the ladder and nine tenths of the way up. '
                f'They are lines on the ladder, not averages of the groups. Only full-time employees are counted: part-time workers and the self-employed are not, and pay is for one job before tax, '
@@ -64,7 +64,14 @@ def spread_block(facts, num, d, first):
 
 # ---------------------------------------------------------------- housing: house prices against earnings
 
-def afford_block(facts, num, d):
+AFFORD_PAGE = "life/house-prices.html"
+
+
+def _the(n):
+    return ("the " if n.split()[0] in ("North", "South", "East", "West") else "") + n
+
+
+def _afford_answer(facts, num, d):
     af = d["life_extra"]["afford"]
     years = af["years"]
     first, last = years[0], years[-1]
@@ -73,31 +80,52 @@ def afford_block(facts, num, d):
     peak = max(years, key=lambda y: (_v(facts, f"afford.ratio.ew.{y}"), y))
     hi = max(regions, key=lambda k: _v(facts, f"afford.ratio.{k}.{last}"))
     lo = min(regions, key=lambda k: _v(facts, f"afford.ratio.{k}.{last}"))
-    def the(n):
-        return ("the " if n.split()[0] in ("North", "South", "East", "West") else "") + n
-
-    out = ["<h3 id='housing-afford'>House prices compared with earnings</h3>"]
     peak_txt = (f' The highest ratio was {num(f"afford.ratio.ew.{peak}", "times2")} in {peak}.' if peak != last else " That was the highest since the series began.")
-    out.append(f'<div class="answer"><p>In {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
-               f'and the middle full-time employee working there earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
-               f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}.{peak_txt}</p>'
-               f'<p>The ratio differs a lot by place: in {last} it was {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(the(names[lo]))}.</p></div>')
-    out.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
-                      [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
-                      "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0))
-    out.append(details_table("Show house prices and earnings for every year", "England and Wales: median house price, median full-time annual earnings and the ratio",
-                             ["Year", "Median house price", "Median full-time earnings (a year)", "Ratio"],
-                             [[str(y), num(f"afford.price.ew.{y}", "pounds"), num(f"afford.earn.ew.{y}", "pounds"), num(f"afford.ratio.ew.{y}", "times2")] for y in years]))
+    return (f'<div class="answer"><p>In {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
+            f'and the middle full-time employee working there earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
+            f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}.{peak_txt}</p>'
+            f'<p>The ratio differs a lot by place: in {last} it was {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.</p></div>')
+
+
+def afford_block(facts, num, d):
+    """The short version on the housing page: the answer and a link to the full page."""
+    first = d["life_extra"]["afford"]["years"][0]
+    return ["<h3 id='housing-afford'>House prices compared with earnings</h3>", _afford_answer(facts, num, d),
+            f'<p class="more-link"><a href="house-prices.html">House prices and earnings since {first}</a>, with each region.</p>']
+
+
+def afford_page(facts, d, num, sources):
+    """A page of its own, so the housing page stays within its size limit."""
+    from .html import page, source_line, FOLD
+    from .pages_life import topic_nav, CAUSE
+    af = d["life_extra"]["afford"]
+    years = af["years"]
+    first, last = years[0], years[-1]
+    body = ['<p class="small"><a href="index.html">Everyday life, year by year</a> › <a href="housing.html">Housing</a></p>',
+            f"<h1>How do house prices compare with earnings, and how has that changed since {first}?</h1>", _afford_answer(facts, num, d), topic_nav("housing"), CAUSE]
+    body.append("<h2 id='trend'>The ratio over time</h2>")
+    body.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
+                       [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
+                       "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0))
+    body.append(FOLD)
+    body.append(details_table("Show house prices and earnings for every year", "England and Wales: median house price, median full-time annual earnings and the ratio",
+                              ["Year", "Median house price", "Median full-time earnings (a year)", "Ratio (times a year’s earnings)"],
+                              [[str(y), num(f"afford.price.ew.{y}", "pounds"), num(f"afford.earn.ew.{y}", "pounds"), num(f"afford.ratio.ew.{y}", "dp2")] for y in years]))
     mid = 2008 if 2008 in years else years[len(years) // 2]
-    out.append(details_table("Show the ratio in each English region", f"Median house price ÷ median full-time earnings, {first}, {mid} and {last}",
-                             ["Place", str(first), str(mid), str(last)],
-                             [[esc(n), num(f"afford.ratio.{k}.{first}", "times2"), num(f"afford.ratio.{k}.{mid}", "times2"), num(f"afford.ratio.{k}.{last}", "times2")]
-                              for k, n in af["places"]]))
-    out.append(f'<p class="small">England and Wales only: Scotland and Northern Ireland publish their own house price figures, which are measured differently, so they are not shown here. '
-               f'House prices are the middle price of all homes sold in the year ending September, including homes bought without a mortgage; they are not the price of the same homes each year. '
-               f'Earnings are for one full-time employee working in the area, not household income, and {first} and {first + 1} use weekly pay scaled up to a year, which ONS says is not directly comparable with later years. '
-               f'The ratio does not include mortgage interest rates, deposits or rents, so it is not a measure of monthly housing costs (those are shown above). ONS revises these figures each year.</p>')
-    return out
+    body.append("<h2 id='regions'>Each nation and region</h2>")
+    body.append(table(f"Median house price ÷ median full-time earnings (times a year’s earnings), {first}, {mid} and {last}",
+                      ["Place", str(first), str(mid), str(last)],
+                      [[esc(n), num(f"afford.ratio.{k}.{first}", "dp2"), num(f"afford.ratio.{k}.{mid}", "dp2"), num(f"afford.ratio.{k}.{last}", "dp2")]
+                       for k, n in af["places"]]))
+    body.append("<h2 id='about'>About these figures</h2>")
+    body.append(f'<div class="limit"><p>England and Wales only: Scotland and Northern Ireland publish their own house price figures, which are measured differently, so they are not shown here. '
+                f'House prices are the middle price of all homes sold in the year ending September, including homes bought without a mortgage; they are not the price of the same homes each year. '
+                f'Earnings are for one full-time employee working in the area, not household income, and {first} and {first + 1} use weekly pay scaled up to a year, which ONS says is not directly comparable with later years. '
+                f'The ratio does not include mortgage interest rates, deposits or rents, so it is not a measure of monthly housing costs: see <a href="housing.html#housing-costs">what housing costs</a>. '
+                f'ONS publishes the ratio rounded to two decimal places and revises these figures each year.</p></div>')
+    body.append(source_line(sources, ["ons-affordability"], up="../"))
+    return page(AFFORD_PAGE, f"House prices and earnings since {first}", "\n".join(body),
+                f"Median house prices compared with median full-time earnings in England and Wales and each English region, every year since {first}, from ONS.")
 
 
 # ---------------------------------------------------------------- work: jobs by industry
