@@ -9,6 +9,7 @@ import json
 import math
 import re
 from html import escape
+from . import version
 
 SITE = "Unpolitical"
 
@@ -342,6 +343,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
 <p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from, or see every source on the <a href="{up}methods.html">sources and methods</a> page. Mistakes we fix are listed under <a href="{up}corrections.html">corrections</a>. Survey figures are estimates: see <a href="{up}uncertainty.html">how sure they are</a>.</p>
 <p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+<p class="version">Site version {version.short()}</p>
 </div></footer>
 {scripts}
 </body>

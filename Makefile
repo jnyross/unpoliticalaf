@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch
+.PHONY: setup setup-dev build site check test verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -34,3 +34,7 @@ a11y:
 # Download the sources listed in sources/manifest.json (needs open network access).
 fetch:
 	$(RUN_PYTHON) scripts/fetch_sources.py
+
+# Check the live site serves exactly this build (needs network access).
+live: build
+	$(RUN_PYTHON) scripts/check_live.py
