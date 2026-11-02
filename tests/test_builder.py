@@ -174,3 +174,41 @@ class Holidays(unittest.TestCase):
     def test_survey_change_blocks_comparison(self):
         self.assertNotEqual(pages_life.gb_survey(2019), pages_life.gb_survey(2022))
         self.assertEqual(pages_life.gb_survey(2022), pages_life.gb_survey(2025))
+
+
+class WhoPaysAndTaxMix(unittest.TestCase):
+    """Scorecard gap 6: tax mix over time and household-type splits."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+
+    def test_points_format_is_signed(self):
+        self.assertEqual(fmt(2.04, "pts"), "+2.0 points")
+        self.assertEqual(fmt(-4.3, "pts"), "-4.3 points")
+
+    def test_tax_shares_add_up_to_all_taxes(self):
+        from builder.pages_money_extra import tax_mix_section
+        num = Num(self.facts)
+        tax_mix_section(self.facts, self.d, num, {"obr": {"publisher": "OBR", "title": "t", "page": "", "id": "obr"}})
+        rc = self.d["receipts"]
+        keys = [k for k, _ in rc["groups"]] + ["othertax"]
+        for y in [y for y in rc["years"] if y < rc["forecast_from"]]:
+            total = sum(self.facts[f"rec.share.{k}.{y}"].value for k in keys)
+            self.assertAlmostEqual(total, 100, places=6, msg=y)
+        self.assertFalse(any(f.startswith("rec.share.") and f.endswith(rc["forecast_from"]) for f in self.facts))
+
+    def test_household_types_and_benefits_series(self):
+        w = self.d["who_types"]
+        self.assertEqual(len(w["types"]), 11)
+        for k, _, _ in w["types"]:
+            self.assertIsNotNone(self.facts[f"etb.t12.{k}.alltax"].value)
+        ys = w["t16_years"]
+        self.assertEqual(ys[0], "1977")
+        self.assertIn("1994/95", ys)
+        self.assertEqual(len(ys), len(set(ys)))
+        self.assertTrue(all(0 < self.facts[f"etb.t16.ret.{y}"].value <= 100 for y in ys))

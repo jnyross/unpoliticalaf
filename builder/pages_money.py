@@ -140,6 +140,8 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
         rows.append([t + (" (forecast)" if t >= rc["forecast_from"] else "")] + [num(f"rec.{k}.{t}", "bn1") for k in ("income_tax", "nics", "vat", "corp", "council")] + [num(f"rec.taxes.{t}", "bn1")])
     body.append(details_table("Show main taxes for every year", f"Main taxes, £ billion cash, {ty[0]} to {ty[-1]}",
                               ["Year", "Income Tax", "National Insurance", "VAT", "Corporation Tax", "Council Tax", "All taxes"], rows))
+    from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
+    body.append(tax_mix_section(facts, d, num, sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> Forecasts are the OBR\'s October 2026 projections, not measurements. Debt and borrowing use the public sector definitions in the OBR databank; other published debt measures give different totals.</p></div>')
     body.append(source_line(sources, ["obr"], "Sheets “Aggregates (per cent of GDP)” and “Receipts (£bn)”."))
     return page("taxes.html", "Which taxes raise the money?", "\n".join(body), "UK tax receipts by tax, other receipts and borrowing, with history.")
@@ -214,6 +216,8 @@ def who_pays_page(facts, d, num, sources):
                               ["Fifth within the group", "Non-retired: £ a year", "Non-retired: % of gross income", "Retired: £ a year", "Retired: % of gross income"], rows))
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages per household, and retired and non-retired households differ in size, so the figures are not tax per person. Gross income includes cash benefits such as the State Pension. “Retired” describes the household, not each person in it. In the lowest-income fifths, a few people with large tax bills from earlier years can raise the average tax, which the Office for National Statistics warns about. Survey estimates for April 2023 to March 2024, for people in UK private households; care homes are not covered.</p></div>')
     body.append(source_line(sources, ["etb"], "Tables 3a (non-retired) and 4a (retired). Percentages calculated here as (direct + indirect taxes) ÷ gross income, the same method as ONS Table 8."))
+    from .pages_money_extra import household_types_section
+    body.append(household_types_section(facts, d, num, sources))
     return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.")
 
 
