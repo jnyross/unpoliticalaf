@@ -326,7 +326,8 @@ def check(local=False):
             "downloads": {u: {"sha256": d["sha256"], "error": d["error"]} for u, d in downloads.items()}}
     (OUT / "results.json").write_text(json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False) + "\n")
     good = sum(1 for r in results if r["page_matches_fresh_source"])
-    print(f"{good} of {len(results)} figures match the {'repository copies' if local else 'publishers' files downloaded today'}")
+    where = "the repository's copies" if local else "the publishers' files downloaded today"
+    print(f"{good} of {len(results)} figures match {where}")
 
 
 def item_file(plan, url):
