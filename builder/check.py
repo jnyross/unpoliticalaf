@@ -33,6 +33,9 @@ LOADED = ["shocking", "staggering", "soared", "soaring", "plummeted", "plunged",
           "burden", "fair share", "unfair", "sadly", "unfortunately", "good news", "bad news", "only just", "skyrocket", "skyrocketed",
           "slashed", "splurge", "handout", "handouts", "scrounger", "typical family", "average family"]
 
+# Loaded terms the site may name, only in curly quotation marks, in order to explain them.
+NAMED_TERMS = ["“tax burden”"]
+
 problems = []
 QUOTED_PAGES = []
 
@@ -295,6 +298,9 @@ def check_pages(facts):
                     fail(f"{rel}: missing anchor {href}")
         QUOTED_PAGES.append((rel, "".join(pp.quoted)))
         text = " ".join(pp.text).lower()
+        # Naming a term other people use, in quotation marks, to explain it is not adopting it.
+        for term in NAMED_TERMS:
+            text = text.replace(term, "")
         for w in LOADED:
             if re.search(r"\b" + re.escape(w) + r"\b", text):
                 fail(f"{rel}: loaded wording '{w}'")

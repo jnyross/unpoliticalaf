@@ -5,7 +5,9 @@ matching pages on this site. The [goal rubric](goal-rubric.md) lets a dimension
 reach level 4 only with "a recorded independent review of that dimension or a
 recorded side-by-side comparison with a named benchmark page". This is that
 record for D1 (public money answers), D2 (life: breadth and depth) and D5
-(visual design and charts). It does not score anything: the next goal audit
+(visual design and charts), and, in [Part 2](#part-2-d3-d4-d6-d8-and-d10), for
+D3 (comparing years), D4 (explanation), D6 (phone use), D8 (impartiality) and
+D10 (honesty about limits). It does not score anything: the next goal audit
 decides what the evidence is worth.
 
 ## How this was done
@@ -265,5 +267,219 @@ This PR adds that explanation to the spending page.
    (D2, D5).
 4. International comparison (OBR, IFS, OWID) (D1).
 5. Downloadable data behind each chart (ONS, OWID) (D5).
+
+These are recorded as evidence for the next goal audit, not as new tickets.
+
+---
+
+## Part 2: D3, D4, D6, D8 and D10
+
+Added for ticket T31 (gap 1 of Audit 5).
+
+### How this was done
+
+- Date: 2 November 2026.
+- Site version: `main` at `1ba40fa` (after PR #101), built locally with
+  `make build` (415 pages), plus the fixes in the same PR as this section.
+  Phone measurements: Chromium at 360 × 640 pixels, sections folded as a reader
+  first sees them, JavaScript on; "screens" = page height ÷ 640.
+- Benchmark pages: read on 2 November 2026 from the live pages listed below.
+  The cloud container cannot open these sites directly, so the pages were read
+  through a web-reading tool that returns their text. That tool does not render
+  layout, so benchmark lengths below are word counts, not screens, and chart
+  controls that only exist in a browser could not be checked.
+- Who did it: a Claude session that did not build the pages compared. As in
+  Part 1, a strict auditor may treat this as the auditor's own judgement rather
+  than independent evidence.
+
+### Pages compared
+
+| # | Benchmark page | This site | Dimensions |
+|---|---|---|---|
+| 8 | ONS, [How life has changed in Haringey: Census 2021](https://www.ons.gov.uk/visualisations/censusareachanges/E09000014/) (19 January 2023), one of the ONS's two-census comparison articles | [2009 compared with 2023](https://unpoliticalaf.vercel.app/life/compare/2009-2023.html) (the default comparison) and the [range comparisons](https://unpoliticalaf.vercel.app/life/compare/spans/index.html) | D3, D10 |
+| 9 | Our World in Data, [Employment rate, United Kingdom](https://ourworldindata.org/grapher/employment-to-population-ratio?country=~GBR) (updated 27 July 2026) | [Work](https://unpoliticalaf.vercel.app/life/work.html) and the comparison pages | D3, D10 |
+| 10 | Full Fact, [What is the UK's 'tax burden' – and how much tax is paid on workers' earnings?](https://fullfact.org/economy/tax-revenue-worker-explainer/) (23 September 2026) and [Is the 'tax burden' at the highest level in 70 years?](https://fullfact.org/politics/tax-burden-70-years/) (22 July 2024) | [Taxes](https://unpoliticalaf.vercel.app/taxes.html), [Tax and income](https://unpoliticalaf.vercel.app/household-tax.html), [Glossary](https://unpoliticalaf.vercel.app/glossary.html) | D4, D8 |
+| 11 | OBR, [A brief guide to the public finances](https://obr.uk/forecasts-in-depth/brief-guides-and-explainers/public-finances/) (as served on 2 November 2026) | [Taxes](https://unpoliticalaf.vercel.app/taxes.html), [Spending](https://unpoliticalaf.vercel.app/spending.html) | D6, D4 |
+| 12 | ONS, [Employee earnings in the UK: 2025](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025) (ASHE bulletin) | [Earnings](https://unpoliticalaf.vercel.app/life/earnings.html) | D6, D10, D4 |
+
+### 8–9. Comparing years (D3): ONS census comparisons and OWID against the comparison pages
+
+**What the ONS article does.** Each section has a headline that states the
+change ("The rate of home ownership in Haringey decreased by 1.6 percentage
+points"), a paragraph in plain words, and a chart with the same figures for
+London and England beside the local ones, so the reader can tell whether a
+change is local or national. It says once which measure it uses ("The
+percentage point change is also used to show the difference between the 2011
+and 2021 percentages"). It warns about timing in place: "Working hours may have
+been affected by the coronavirus (COVID-19) pandemic", and "Caution should be
+taken when making comparisons between 2011 and 2021 because of changes in
+question wording". Topics with no comparable 2011 figure are left out and the
+"About the data" section says so. Every chart has PNG and CSV downloads.
+
+**What OWID does.** The chart page names its source and gives a "Sources and
+processing" section with a definition break: "data using the newer definitions
+is not fully comparable with data based on the 13th ICLS". It offers the full
+data and the displayed data as CSV. Its year controls could not be checked in
+the text copy (see "How this was done").
+
+**What this site does that they do not.**
+
+- Any two years from 2008 to 2025 (153 pages) and any two three-year ranges,
+  not one fixed pair. The ONS article only compares the two censuses.
+- "In brief" gives the same lead figure for every topic whichever way it moved,
+  then the largest changes ranked by a fixed, stated rule. The ONS article orders
+  topics "automatically based on how relevant they are for each area", which
+  is less transparent.
+- Each "not compared" reason is given where the figure would be, with the
+  nearest comparable pair linked. The ONS states exclusions once, at the end.
+- Margins of error beside survey changes, with a plain sentence on whether the
+  change is bigger than sampling noise. The ONS article has none.
+
+**What they do that this site did not.**
+
+1. **Said when a compared year was unusual.** The ONS flags the pandemic where
+   the reader meets the change. This site's comparison pages did not mention
+   that 2009 was in the 2008 recession, so the default comparison (2009 against
+   2023) started in a recession year without saying so. The pandemic was only
+   mentioned inside folded topic notes about survey methods. **Fixed in this PR**
+   (see "Fixes" below).
+2. A wider-area benchmark beside each change (London and England in the ONS
+   article). This site shows the UK and each nation in the topic sections, but
+   the "In brief" figures have no UK-wide or long-run context. Not fixed; noted
+   for the next audit.
+3. Per-chart CSV downloads (ONS and OWID). Already queued as gap 4 of Audit 5.
+4. Headlines that state the change. This site's section headings are topic
+   names ("Work"); the change is in the first sentence below. Comparable, not
+   fixed.
+
+### 10. Explanation and framing (D4, D8): Full Fact against Taxes and Tax and income
+
+**What Full Fact does.** The explainer (about 1,300 words, no charts) is
+organised as four questions: "What is the 'tax burden'?", "How much tax is
+paid on the average worker's earnings?", "How does the UK compare
+internationally?" and "What don't these figures tell us?". It defines the term
+first ("the amount of tax revenue collected by the government each year as a
+percentage of gross domestic product (GDP)") and notes that it "looks at all
+tax revenue collected by the government, including taxes paid by both people
+... and businesses". The fact check gives the exact record ("the highest level
+since 1949 ... and the second highest since records began in 1948"), keeps
+outturn and forecasts apart, attributes each forecast to the OBR or the IFS
+and the plans it assumes, and gives no causes. Neither page opens with the
+answer: both start with the political claims being checked.
+
+**What this site does that Full Fact does not.**
+
+- Answers first: each page opens with the figure and a plain sentence, then
+  explains. Full Fact opens with the political claims.
+- Charts with a table and a plain "What the chart shows" summary; Full Fact's
+  explainer has no chart.
+- Separates household tax shares, personal tax rates and shares of revenue in
+  a named section ("Three numbers that are easy to mix up"). Full Fact does not
+  say outright that the tax burden is not an individual's tax bill; it says the
+  measure is "not necessarily the most useful way" to judge what workers pay.
+- Every figure traces to a cell; Full Fact links to its sources but not to cells.
+
+**What Full Fact does that this site did not.**
+
+1. **Explained the term "tax burden".** It is the phrase a newcomer is most
+   likely to hear about tax, and this site never named it, because its own
+   wording check treats "burden" as loaded. So a reader could not connect what
+   they hear in the news with the "taxes as a share of GDP" figures here.
+   **Fixed in this PR**: the taxes page names the term in quotation marks,
+   gives this site's figure (taxes 36.0% of GDP in 2025-26) and says it is not
+   anyone's tax bill; the glossary explains it. The wording check still fails
+   any unquoted use.
+2. **The OBR's own "tax burden" figure is a slightly different measure.** Full
+   Fact quotes the OBR at 36.3% of GDP for 2022-23; this site's taxes total from
+   the OBR receipts table gives 35.3% for the same year (£929.0bn ÷ £2,634.3bn,
+   October 2026 vintage). The difference is most likely the measure (the OBR's
+   figure counts taxes on the national accounts basis, which includes some
+   items its receipts table treats differently) and the vintage; this record
+   did not reconcile the two item by item. The glossary now says the two can
+   differ by about one percentage point. This site does not claim a record.
+3. An international comparison (OECD tax wedge). Already noted in Part 1 as a
+   gap for D1.
+4. A heading that asks "What don't these figures tell us?". This site's
+   "Limits" boxes do the same job under a less inviting name. Comparable.
+
+### 11–12. Phone reading (D6): OBR guide and ONS bulletin against the money pages and Earnings
+
+| Page | Words (main text) | Contents list | Answer first? |
+|---|---|---|---|
+| OBR brief guide | about 2,000 | No | No: opens "The independent Office for Budget Responsibility was established in 2010..." |
+| ONS ASHE 2025 bulletin | about 2,000 to 2,500 | Yes, numbered, above "Main points" | Yes: "Main points" list |
+| Full Fact explainer | about 1,300 | No | No |
+| This site: Taxes | 917 | Yes | Yes (figure cards, then three sentences) |
+| This site: Spending | 887 | Yes | Yes |
+| This site: Who pays | 1,426 | Yes | Yes |
+| This site: Earnings | 1,532 | Yes | Yes |
+| This site: Housing | 1,825 | Yes | Yes |
+| This site: 2009 compared with 2023 | 1,392 | Yes, after "In brief" | Yes |
+
+Measured at 360px with sections folded, this site's pages are 8 to 17 screens
+(Taxes 9.4, Spending 10.6, Who pays 14.3, Earnings 12.7, Housing 17.4, the
+default comparison 14.3). The benchmark pages could not be measured in screens.
+On words alone, every page here is shorter than the OBR guide and the ONS
+bulletin, and the long screen counts come from tables, bars and folded
+sections rather than prose. Both points need a real phone check; the page
+length work (gap 3 of Audit 5) is with another ticket.
+
+What the benchmarks do that this site does not: the ONS bulletin's chart
+titles state the finding ("Median weekly earnings for full-time employee jobs
+was £766.60 in April 2025"), where this site's chart titles name the measure
+and put the finding in a summary under the chart. What this site does that
+they do not: contents on every page, answers before detail, and no sideways
+scrolling at 360px.
+
+### 12 (continued). Honesty about limits (D10): ONS ASHE against Earnings
+
+**What the ONS bulletin says.** "All estimates for 2025 are provisional";
+"Estimates for 2024 have been revised"; "Data for 2020 and 2021 are subject to
+more uncertainty and should be treated with caution"; and: "In 2024, we
+introduced changes to the way we validated data, particularly higher earners'
+returns ... these changes have not been applied to our back series and
+comparisons between 2022 and 2023 data should be treated with caution." Its
+"Uncertainty" section is one sentence: "Sampling variability for ASHE
+estimates are provided in our accompanying datasets."
+
+**This site against that.** The earnings page already said 2025 is provisional,
+quoted the ONS on 2020 and 2021, marked the 2011 and 2021 coding breaks, and
+shows margins of error beside the headline and every comparison, which the
+bulletin leaves to its datasets. **It did not mention the 2022 to 2023 caution.**
+That matters most for the pay spread (high earners). **Fixed in this PR**: the
+earnings limits now say so in one sentence.
+
+### Fixes made in this PR
+
+1. **Timing note on comparison pages (D3, D8, D10).** When either year compared
+   was in the 2008 recession (2008, 2009) or the coronavirus pandemic (2020,
+   2021), or a compared range includes one of those years, a "Timing matters"
+   box under the largest changes says so in one sentence each, with the ONS
+   source, and says that a comparison starting or ending in an unusual year can
+   show a bigger or smaller change than the years around it. It appears on 62 of
+   153 two-year pages and on range pages that include those years. It describes
+   timing, not cause, and is shown whichever way the figures moved.
+2. **"Tax burden" named and explained (D4, D8).** One sentence on the taxes
+   page with this site's figure, a glossary entry, and a narrow exception in the
+   wording check (only the quoted term “tax burden”).
+3. **ONS caution on comparing pay in 2022 and 2023 (D10).** Added to the
+   earnings limits shown on the topic, year and comparison pages.
+
+### Summary for Part 2
+
+**Comparable with or ahead of the benchmarks:** choosing and comparing any
+years and ranges with a fixed rule for what is shown first (D3); answers before
+detail and shorter pages in words (D4, D6); "not compared" reasons and margins
+of error where the reader meets the figure (D10); a stated rule for choosing
+default years and no record claims (D8).
+
+**Where the benchmarks are still ahead:**
+
+1. A wider-area or long-run benchmark beside each headline change (ONS) (D3).
+2. Per-chart downloads (ONS, OWID) (D3, D5). Queued as gap 4.
+3. Chart titles that state the finding (ONS) (D4, D5).
+4. International comparison (Full Fact, OBR) (D1, D4).
+5. Neither benchmark set has been checked by a person outside the project, and
+   neither has this site; on the strict reading, D8 and D10 still need that.
 
 These are recorded as evidence for the next goal audit, not as new tickets.

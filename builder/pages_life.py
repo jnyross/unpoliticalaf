@@ -143,7 +143,7 @@ TOPIC_SOURCES = {
 
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
-    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
+    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
     "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure are shown for each nation with what each one counts. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. We found no official statistic, published each year, for the share of people who took a holiday, so none is shown. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
@@ -213,6 +213,45 @@ var lo=Math.min(a,b),hi=Math.max(a,b);location.href=base+lo+'-'+hi+'.html';});})
 (function(){var p=new URLSearchParams(location.search),a=+p.get('from'),b=+p.get('to');
 if(a&&b&&document.body.hasAttribute('data-compare-index')){if(a===b){location.replace('../'+a+'.html');}else{location.replace(Math.min(a,b)+'-'+Math.max(a,b)+'.html');}}})();
 </script>"""
+
+# Years that official sources describe as unusual. A comparison that starts or
+# ends in one of them can show a bigger or smaller change than the long-run
+# trend, so comparison pages say so where the reader sees the change. Wording
+# follows the linked ONS publications; it describes timing, not cause.
+TIMING = [
+    (range(2008, 2010), "the 2008 recession, when the UK economy shrank by more than 6%", "explain-ons-2008-recession"),
+    (range(2020, 2022), "the coronavirus pandemic, when travel was restricted, many employees were furloughed and several of the surveys used here were disrupted", "explain-ons-ashe-2022"),
+]
+
+
+def _years_text(ys):
+    ys = list(ys)
+    return str(ys[0]) if len(ys) == 1 else f"{ys[0]} to {ys[-1]}" if len(ys) > 2 else f"{ys[0]} and {ys[1]}"
+
+
+def timing_note(sources, up, *periods):
+    """One plain note when a compared year (or any year in a compared range) was unusual."""
+    lines, used = [], []
+    for label, years in periods:
+        years = list(years)
+        for yrs, text, src in TIMING:
+            hit = [y for y in years if y in yrs]
+            if not hit:
+                continue
+            if len(years) == 1:
+                lines.append(f"{label} was in {text}.")
+            else:
+                lines.append(f"{label} includes {_years_text(hit)}, in {text}.")
+            if src in sources and src not in used:
+                used.append(src)
+    if not lines:
+        return ""
+    links = "; ".join(f'<a href="{up}figures/{esc(s)}.html">{esc(sources[s]["publisher"])}: {esc(sources[s]["title"])}</a>' for s in used)
+    return ('<div class="limit" id="timing"><p><strong>Timing matters.</strong> ' + " ".join(esc(x) for x in lines)
+            + " A comparison that starts or ends in an unusual year can show a bigger or smaller change than the years around it."
+            + " The topic pages show every year, so you can see whether a change is part of a longer pattern.</p>"
+            + (f'<p class="small">Source: {links}.</p>' if links else "") + "</div>")
+
 
 CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures show what changed between years. They do not show why. Many things happen at once, including changes in the economy, prices, population and government policy, and these statistics cannot separate them.</p>'
 
@@ -569,6 +608,7 @@ def compare_page(facts, d, num, sources, a, b):
         body.append(f'<h2 id="largest">Largest changes between {a} and {b}</h2>')
         body.append('<p class="small">Every figure on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>')
         body.append(top)
+    body.append(timing_note(sources, "../../", (str(a), [int(a)]), (str(b), [int(b)])))
     body.append(CAUSE)
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
