@@ -98,7 +98,10 @@ figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
 .csum{margin:8px 0 0;padding:8px 12px;background:var(--soft2);border-left:3px solid var(--line);font-size:.92rem}
 .csum .csum-h{font-weight:650;margin:0 0 2px;font-size:.92rem}.csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum .small{margin:4px 0 0}
 .readout{min-height:44px;margin:4px 0 0;font-size:.92rem;color:var(--ink2)}.readout b{font-weight:650}
-svg[data-chart]{touch-action:pan-y;cursor:crosshair}svg[data-chart]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+svg[data-chart],.sm svg{touch-action:pan-y;cursor:crosshair}[data-chart]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.sm{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin:6px 0 4px}.sm>div{display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+.sm .smt{font-size:.87rem;font-weight:650;line-height:1.25;margin:0 0 2px;color:var(--ink)}.smkey{font-size:.87rem;color:var(--ink2);margin:2px 0 6px}
+.sm use.c,.sm use.o{fill:none;stroke-linecap:round;stroke-linejoin:round}.sm use.c{stroke:#d5d9dd;stroke-width:1}.sm use.o{stroke:#3d4852;stroke-width:2.5}
 svg{display:block;overflow:visible}
 svg text{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#4a5158}
 svg text.lbl{font-weight:650;fill:#1f252b;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
@@ -181,7 +184,7 @@ details.more{border-color:var(--line2)}details.more>summary{flex-wrap:wrap;row-g
 footer{border-top:1px solid var(--line);background:var(--soft2);padding:20px 0 36px;font-size:.88rem;color:var(--muted)}
 footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:0 18px}
 footer ul a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink2)}
-@media (min-width:640px){.cards{grid-template-columns:1fr 1fr}h1{font-size:2.2rem}.hero h1{font-size:2.5rem}.keyfigs{grid-template-columns:repeat(3,1fr)}.keyfigs li.wide{grid-column:auto}.principles{grid-template-columns:1fr 1fr}
+@media (min-width:640px){.sm{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:1fr 1fr}h1{font-size:2.2rem}.hero h1{font-size:2.5rem}.keyfigs{grid-template-columns:repeat(3,1fr)}.keyfigs li.wide{grid-column:auto}.principles{grid-template-columns:1fr 1fr}
 header.site .wrap{flex-direction:row;align-items:center;gap:16px}.brand{margin-right:auto}nav.main{margin:0}nav.main::after{display:none}nav.main ul{padding:0}nav.main a{min-height:56px}.yearstrip{flex-wrap:wrap;overflow:visible;margin:8px 0 16px;padding:0}}
 .tr data[data-fact],.tr data[data-from]{cursor:pointer}.tr data[data-fact]:hover,.tr data[data-from]:hover{background:var(--soft)}
 .trace{position:fixed;left:8px;right:8px;bottom:8px;max-width:560px;margin:0 auto;max-height:70vh;overflow:auto;background:#fff;border:1px solid var(--ink2);border-radius:var(--r);box-shadow:0 6px 24px rgba(0,0,0,.18);padding:12px 16px;z-index:20;font-size:.95rem}
@@ -625,7 +628,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals, _ in raw] for i in range(n)]
         read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows,
                 "fc": forecast_from}
-        attrs = f' data-chart="{esc(json.dumps(read, ensure_ascii=False, separators=(",", ":")))}"'
+        attrs = _chart_attr(read)
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks,
                                 forecast_from=forecast_from, events=events, future=future)
     svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label)} The table below gives every value."{attrs}>'
@@ -637,6 +640,125 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
     return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+
+
+def _chart_attr(read):
+    """The readout data as a single-quoted attribute, so JSON quotes need no escaping."""
+    text = json.dumps(read, ensure_ascii=False, separators=(",", ":"))
+    return " data-chart='" + text.replace("&", "&amp;").replace("<", "&lt;").replace("'", "&#39;") + "'"
+
+
+_SM_COUNT = [0]
+
+
+def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
+                    ymin=None, scale=1, point_labels=None, desc="", summary_note=""):
+    """One small line chart per group, so no group is hidden behind a key.
+
+    Used instead of line_chart() when more than three groups matter. Every panel
+    has the same scale, so heights can be compared across panels, and shows the
+    other groups as faint grey lines for context. The group is named above its
+    panel and its latest value is written at the line's end.
+
+    series: list of (name, values list (None = gap)). Missing values break the
+    line; nothing is interpolated. breaks: (index, text) definition changes,
+    drawn as amber dashed lines and read separately in the summary (the text is
+    given in the summary, as panels are too small to label). kind, ids, num and
+    point_labels work as in line_chart(): one "What the chart shows" summary for
+    all groups and one tap/hover/arrow readout that marks the year in every panel.
+    summary_note: where a table right beside the chart already gives each group's
+    first and latest figures, say so in this sentence instead of repeating them.
+    """
+    raw = [(nm, vals, "a") for nm, vals in series]
+    scaled = [[None if v is None else v / scale for v in vals] for _, vals in series]
+    W, H = 180, 120
+    L, R, T, B = 34, 6, 18, 22
+    n = len(labels)
+    allv = [v for vals in scaled for v in vals if v is not None]
+    lo = min(allv) if ymin is None else ymin
+    hi = max(allv)
+    if hi == lo:
+        hi = lo + 1
+    step_v = _nice_step((hi - lo) / 2)
+    lo2 = lo if ymin is not None else step_v * math.floor(lo / step_v)
+    hi2 = step_v * math.ceil(hi / step_v)
+    if hi2 <= hi:
+        hi2 += step_v
+
+    def x(i):
+        return L + (W - L - R) * (i / max(1, n - 1))
+
+    def y(v):
+        return T + (H - T - B) * (1 - (v - lo2) / (hi2 - lo2))
+
+    split_at = {i for i, _ in breaks} if split_breaks else set()
+
+    def segments(vals):
+        segs, cur = [], []
+        for i, v in enumerate(vals):
+            if (i in split_at and cur) or v is None:
+                if cur:
+                    segs.append(cur)
+                cur = [] if v is None else [(i, v)]
+                continue
+            cur.append((i, v))
+        if cur:
+            segs.append(cur)
+        return segs
+
+    def path(seg):
+        if len(seg) == 1:  # a lone year: a round dot drawn by the line cap
+            i, v = seg[0]
+            return f"M{x(i):.1f},{y(v):.1f}h0.1"
+        return " ".join(f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}" for k, (i, v) in enumerate(seg))
+
+    # The axes and every group's line are drawn once, in the first panel, and
+    # reused by the others (<use>), which keeps pages with many panels small.
+    _SM_COUNT[0] += 1
+    pid = f"sm{_SM_COUNT[0]}"
+    frame = []
+    v = lo2
+    while v <= hi2 + step_v / 1000:
+        yy = y(v)
+        frame.append(f'<line x1="{L}" x2="{W - R}" y1="{yy:.1f}" y2="{yy:.1f}" stroke="#e3e5e8"/>')
+        frame.append(f'<text x="{L - 5}" y="{yy + 5:.1f}" text-anchor="end">{_tick(v, step_v)}</text>')
+        v += step_v
+    frame.append(f'<text x="{x(0):.1f}" y="{H - 4}" text-anchor="start">{esc(_short(labels[0]))}</text>')
+    if n > 1:
+        frame.append(f'<text x="{x(n - 1):.1f}" y="{H - 4}" text-anchor="end">{esc(_short(labels[-1]))}</text>')
+    for i, _ in breaks:
+        bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
+        frame.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
+    drawn = {si: " ".join(path(seg) for seg in segments(vals)) for si, vals in enumerate(scaled)}
+    # Each panel draws every line in light grey, then its own group in black on top.
+    defs = (f'<defs><g id="{pid}f">{"".join(frame)}</g>'
+            + "".join(f'<path id="{pid}s{si}" d="{d}"/>' for si, d in drawn.items() if d)
+            + f'<g id="{pid}a">' + "".join(f'<use href="#{pid}s{si}"/>' for si, d in drawn.items() if d) + "</g></defs>")
+    panels = []
+    for si, (name, vals) in enumerate(series):
+        parts = [defs] if si == 0 else []
+        parts.append(f'<use href="#{pid}f"/><use href="#{pid}a" class="c"/>')
+        if drawn[si]:
+            parts.append(f'<use href="#{pid}s{si}" class="o"/>')
+            parts.extend(_end_value(vals, scaled[si], kind, None, x, y, T - 2))
+        else:
+            parts.append(f'<text x="{(L + W - R) / 2:.1f}" y="{(T + H - B) / 2 + 5:.1f}" text-anchor="middle">No figures</text>')
+        svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(name)}">'
+               + "".join(parts) + "</svg>")
+        panels.append(f'<div><p class="smt" aria-hidden="true">{esc(name)}</p>{svg}</div>')
+    plabels = list(point_labels or labels)
+    names = [nm for nm, _ in series]
+    rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals in series] for i in range(n)]
+    read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows, "fc": None}
+    label = f"{title}. {desc} " if desc else f"{title}. "
+    grid = (f'<div class="sm" role="group" aria-label="{esc(label)}One small chart for each of {len(series)} groups, all on the same scale. The summary and table below give every value."'
+            f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
+    key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
+    if summary_note:
+        summary = f'<div class="csum"><p class="csum-h">What the chart shows</p><p>{summary_note}</p></div>'
+    else:
+        summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
+    return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
 
 def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
@@ -658,11 +780,13 @@ def _stretches(n, breaks, forecast_from):
     return [(edges[k], edges[k + 1]) for k in range(len(edges) - 1) if edges[k + 1] > edges[k]]
 
 
-def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast"):
+def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast",
+                  extremes=True):
     """A plain-English reading of a line chart: for each line, the first and latest
     values, the highest and lowest, and any missing years. Built from the same values
     as the chart. Nothing is compared across a definition break the chart splits at,
-    and forecasts are kept apart from measured years.
+    and forecasts are kept apart from measured years. extremes=False leaves out the
+    highest and lowest, for small multiples with many groups, where each panel shows them.
     """
     def show(si, i):
         vals = series[si][1]
@@ -684,7 +808,7 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
                 parts.append(f"{lead}{show(si, first)} in {esc(labels[first])}.")
                 continue
             text = f"{lead}{show(si, first)} in {esc(labels[first])} and {show(si, last)} in {esc(labels[last])}."
-            if len(pts) >= 3:
+            if extremes and len(pts) >= 3:
                 hi = max(pts, key=lambda i: (vals[i], i))
                 lo = min(pts, key=lambda i: (vals[i], -i))
                 extra = []
@@ -781,20 +905,22 @@ def _short(label):
 # Added on top of the drawn charts: tap, hover or use the arrow keys to read one
 # year's values. Without JavaScript the chart, its summary and its table still work.
 CHART_JS = """<script>
-document.querySelectorAll('svg[data-chart]').forEach(function(svg){
-var d=JSON.parse(svg.getAttribute('data-chart')),ns='http://www.w3.org/2000/svg',cur=-1;
+document.querySelectorAll('[data-chart]').forEach(function(el){
+var d=JSON.parse(el.getAttribute('data-chart')),ns='http://www.w3.org/2000/svg',cur=-1;
+var svgs=el.tagName.toLowerCase()==='svg'?[el]:Array.prototype.slice.call(el.querySelectorAll('svg'));
 var out=document.createElement('p');out.className='readout';out.setAttribute('aria-live','polite');
 out.textContent='Tap or hover on the chart, or select it and use the arrow keys, to read each year.';
-var cap=svg.parentNode.querySelector('figcaption');svg.parentNode.insertBefore(out,cap?cap.nextSibling:svg.nextSibling);
-var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);
-svg.setAttribute('tabindex','0');
-function show(i){if(i<0||i>=d.x.length)return;cur=i;var r=d.rows[i];g.setAttribute('x1',d.x[i]);g.setAttribute('x2',d.x[i]);g.style.display='';
+var cap=el.parentNode.querySelector('figcaption');el.parentNode.insertBefore(out,cap?cap.nextSibling:el.nextSibling);
+var gs=svgs.map(function(svg){var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);return g;});
+el.setAttribute('tabindex','0');
+function show(i){if(i<0||i>=d.x.length)return;cur=i;var r=d.rows[i];gs.forEach(function(g){g.setAttribute('x1',d.x[i]);g.setAttribute('x2',d.x[i]);g.style.display='';});
 out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' (forecast)':'')+': ';out.appendChild(b);
 out.appendChild(document.createTextNode(d.names.length>1?d.names.map(function(n,k){return n+' '+r[k+1];}).join('; '):r[1]));}
+svgs.forEach(function(svg){
 function near(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse()),best=0;
 d.x.forEach(function(v,k){if(Math.abs(v-q.x)<Math.abs(d.x[best]-q.x))best=k;});return best;}
-svg.addEventListener('pointermove',function(e){show(near(e));});svg.addEventListener('pointerdown',function(e){show(near(e));});
-svg.addEventListener('keydown',function(e){var k=e.key,i=cur<0?d.x.length-1:cur;
+svg.addEventListener('pointermove',function(e){show(near(e));});svg.addEventListener('pointerdown',function(e){show(near(e));});});
+el.addEventListener('keydown',function(e){var k=e.key,i=cur<0?d.x.length-1:cur;
 if(k==='ArrowLeft'){i=Math.max(0,cur<0?i:i-1);}else if(k==='ArrowRight'){i=Math.min(d.x.length-1,cur<0?i:i+1);}else if(k==='Home'){i=0;}else if(k==='End'){i=d.x.length-1;}else{return;}
 e.preventDefault();show(i);});
 });
