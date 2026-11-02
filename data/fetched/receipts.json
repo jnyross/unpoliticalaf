@@ -297,7 +297,7 @@
  },
  "ons-lfs-a11": {
   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11/current/a11oct2026.xlsx",
-  "file": "ons/lfs-sampling-variability-a11.bin",
+  "file": "ons/lfs-sampling-variability-a11.xlsx",
   "bytes": 32573,
   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
   "sha256": "64eba09d43c2f55fcee4efc2c8e27ce442f4f45af46b26e9012b875aa3641443",
