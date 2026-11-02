@@ -70,14 +70,14 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .toc ol{margin:0;padding:0;list-style:none}
 .toc li{margin:0;border-top:1px solid var(--line2)}
 .toc li:first-child{border-top:0}
-.toc a{display:flex;align-items:center;min-height:40px;text-decoration:none;line-height:1.3;padding:4px 0}
+.toc a{display:flex;align-items:center;min-height:34px;text-decoration:none;line-height:1.25;padding:3px 0}
 .toc a::before{content:"↓";color:var(--muted);margin-right:10px;font-size:.85em}
 .bars{margin:14px 0 6px;padding:0;list-style:none}
-.bars li{margin:0 0 10px}
+.bars li{margin:0 0 8px}
 .bars .lab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.95rem;line-height:1.35}
 .bars .lab span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
-.bars .track{height:14px;background:var(--soft);margin-top:4px;border-radius:3px;overflow:hidden}
-.bars .fill{height:14px;background:var(--bar);border-radius:3px}
+.bars .track{height:12px;background:var(--soft);margin-top:3px;border-radius:3px;overflow:hidden}
+.bars .fill{height:12px;background:var(--bar);border-radius:3px}
 .bars .fill.alt{background:var(--bar2)}
 .bars .track.ctr{position:relative;background:linear-gradient(var(--ink2),var(--ink2)) center/1.5px 100% no-repeat,var(--soft)}.bars .track.ctr .fill{position:absolute;top:0;border-radius:0}.bars .fill.neg{background:var(--bar2)}.bars .sub{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}.bars .dir{font-weight:400;color:var(--muted);font-size:.85em}
 .bars .fill.fc{background:repeating-linear-gradient(45deg,var(--bar2) 0 4px,#fff 4px 7px)}
@@ -103,8 +103,8 @@ figure.yearspark{margin:4px 0 14px}figure.yearspark figcaption{font-size:.87rem;
 a.card .mini{margin:6px 0 4px}.cards .mini li{border:0;border-radius:0;padding:0}a.card .mini .bars{margin:8px 0 2px}a.card .mini .bars li{margin:0 0 6px}a.card .mini .bars .lab{font-size:.84rem;color:var(--ink2)}a.card .mini .bars .track,a.card .mini .bars .fill{height:8px}
 figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 4px}
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
-.csum{margin:8px 0 0;padding:8px 12px;background:var(--soft2);border-left:3px solid var(--line);font-size:.92rem}
-.csum .csum-h{font-weight:650;margin:0 0 2px;font-size:.92rem}.csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum .small{margin:4px 0 0}
+details.csum{margin:6px 0 0;padding:0 12px;background:var(--soft2);border:0;border-left:3px solid var(--line);border-radius:0;font-size:.92rem}details.csum[open]{padding-bottom:6px}details.csum>summary{min-height:44px;font-size:.9rem;font-weight:500}
+.csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum p{margin:0 0 4px}.csum-note{margin:6px 0 0}
 .readout{min-height:44px;margin:4px 0 0;font-size:.92rem;color:var(--ink2)}.readout b{font-weight:650}
 svg[data-chart],.sm svg{touch-action:pan-y;cursor:crosshair}[data-chart]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .sm{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin:6px 0 4px}.sm>div{display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
@@ -280,7 +280,7 @@ def _contents_hint(html):
 _CHART_OPEN = re.compile(r'<(figure)\b[^>]*>|<(ul) class="(?:bars|cmp-list)[^"]*">')
 _CAPTION = re.compile(r'<p class="small">(?:(?!</p>).)*</p>\s*$', re.S)
 _NEST = re.compile(r'<(/?)(details|aside|div|figure|ul|blockquote|table)\b[^>]*>')
-KEEP_ROWS = 4  # rows of a long comparison list kept in view; the rest fold away
+KEEP_ROWS = 2  # rows of a comparison list kept in view; the rest fold away
 
 
 def _first_chart(rest):
@@ -315,7 +315,7 @@ def _split_long_list(chart):
     if not m:
         return chart, ""
     rows = re.findall(r'<li>.*?</li>(?=<li>|$)', m.group(2), re.S)
-    if len(rows) <= KEEP_ROWS + 1:
+    if len(rows) <= KEEP_ROWS:
         return chart, ""
     return (m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3),
             '<ul class="cmp-list">' + "".join(rows[KEEP_ROWS:]) + "</ul>")
@@ -384,7 +384,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     depth = path.count("/")
     up = "../" * depth
     nav = "".join(
-        f'<li><a href="{up}{href}"{" aria-current=page" if href == path or (href == "life/index.html" and path.startswith("life/")) else ""}>{esc(label)}</a></li>'
+        f'<li><a href="{up}{href}"{" aria-current=page" if href == path or (href == "life/index.html" and path.startswith("life/")) or (href == "who-pays.html" and path.startswith("who-pays-")) else ""}>{esc(label)}</a></li>'
         for href, label in NAV)
     foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
@@ -908,7 +908,7 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
             f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
     key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
     if summary_note:
-        summary = f'<div class="csum"><p class="csum-h">What the chart shows</p><p>{summary_note}</p></div>'
+        summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{summary_note}</p></details>'
     else:
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
     return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
@@ -931,6 +931,9 @@ def _stretches(n, breaks, forecast_from):
     cuts = sorted(i for i, _ in breaks if 0 < i < end)
     edges = [0] + cuts + [end]
     return [(edges[k], edges[k + 1]) for k in range(len(edges) - 1) if edges[k + 1] > edges[k]]
+
+
+CSUM_LABEL = "What the chart shows, in words"
 
 
 def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast",
@@ -994,8 +997,9 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
         notes.append(f"Years from {esc(labels[forecast_from])} are {future}s, not measurements.")
     if not items:
         return ""
-    note = f'<p class="small">{" ".join(notes)}</p>' if notes else ""
-    return f'<div class="csum"><p class="csum-h">What the chart shows</p><ul>{"".join(items)}</ul>{note}</div>'
+    # Breaks and forecasts stay in view; the line-by-line reading folds away to keep phone pages short.
+    note = f'<p class="small csum-note">{" ".join(notes)}</p>' if notes else ""
+    return f'<details class="csum"><summary>{CSUM_LABEL}</summary><ul>{"".join(items)}</ul></details>{note}'
 
 
 def _join(xs):
