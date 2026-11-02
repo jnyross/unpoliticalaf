@@ -175,6 +175,14 @@
   "sha256": "e766c0ad54e247fd8f8f3c5bca875f701fc85072e847fbe81e2a74fe380ce803",
   "retrieved": "2026-11-02T08:58:39Z"
  },
+ "ott-2009to2019": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+  "file": "ott/section3-2009to2019.xlsx",
+  "bytes": 451291,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "bf32e86ac75e8230fcf576f7e70629e83ddfd3d628b20c23ff4942f49c50ad6b",
+  "retrieved": "2026-11-02T09:00:30Z"
+ },
  "ott-2019to2023": {
   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2019to2023/traveltrendssection3ukresidentsvisitsabroad.xlsx",
   "file": "ott/section3-2019to2023.xlsx",
@@ -182,6 +190,22 @@
   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
   "sha256": "b0c85be28f8af3b9a3a9eebb49320f4227a2ac8fbaa72c652edc1e85558155d1",
   "retrieved": "2026-11-02T08:58:58Z"
+ },
+ "ott-2024": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
+  "file": "ott/ukresidents2024annual.xlsx",
+  "bytes": 172474,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "479fd06c58a7adda2a282d1d6b50f8504a2aad41682ae7c63d006eca7a15b999",
+  "retrieved": "2026-11-02T09:00:33Z"
+ },
+ "ott-2025": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
+  "file": "ott/ukresidents2025annual.xlsx",
+  "bytes": 172447,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "978dabb5e0abe36274f8f3d19af3fe3004b3049a158515a83c9dc158180f5d4d",
+  "retrieved": "2026-11-02T09:00:26Z"
  },
  "ott-uk-residents-page": {
   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad",
