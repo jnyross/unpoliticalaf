@@ -254,7 +254,11 @@
       "evidence": [
         {
           "page": "life/index.html",
-          "text": "In 2024-25, 65% of households in England owned their home and 19% rented privately. In 2008-09, 14% rented privately."
+          "text": "In 2024-25, 65% of households in England owned their home and 19% rented privately."
+        },
+        {
+          "page": "life/index.html",
+          "text": "In 2008-09, 14% rented privately."
         }
       ]
     },
