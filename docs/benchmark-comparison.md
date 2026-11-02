@@ -8,7 +8,9 @@ record for D1 (public money answers), D2 (life: breadth and depth) and D5
 (visual design and charts), and, in [Part 2](#part-2-d3-d4-d6-d8-and-d10), for
 D3 (comparing years), D4 (explanation), D6 (phone use), D8 (impartiality) and
 D10 (honesty about limits), and, in [Part 3](#part-3-holidays-and-class-sizes-d2),
-for holidays and class sizes (D2). It does not score anything: the next goal audit
+for holidays and class sizes (D2), and, in
+[Part 4](#part-4-accessibility-side-by-side-with-govuk-and-ons-d9), for
+accessibility (D9). It does not score anything: the next goal audit
 decides what the evidence is worth.
 
 ## How this was done
@@ -621,3 +623,127 @@ meets them; the 2024 travel method change is never crossed; class sizes have a
 4. Downloads (both). Queued as gap 4 of Audit 5.
 
 These are recorded as evidence for the next goal audit, not as new tickets.
+
+## Part 4: accessibility side-by-side with GOV.UK and ONS (D9)
+
+Gap 4 of Audit 6 asked for keyboard-only use, how charts read to screen
+readers, and tap target sizes to be compared with GOV.UK and ONS pages, and for
+what turns up to be fixed.
+
+### How this was done
+
+- Date: 2 November 2026. Site version: `main` at `ecfd61a` (after PR #111),
+  then the same pages again after the fixes below.
+- One script measures every page the same way:
+  [`scripts/a11y_benchmark.py`](../scripts/a11y_benchmark.py), in Chromium at a
+  360 x 640 phone viewport. The benchmark pages were measured on GitHub by the
+  "Accessibility side-by-side" workflow
+  (`.github/workflows/a11y-benchmark.yml`), because the build machine cannot
+  reach GOV.UK or ONS. Anyone can run it again from the Actions tab.
+- Keyboard: Tab is pressed until focus comes back to the start. Each stop is
+  checked for a visible focus style (an outline, or a change of shadow,
+  background, colour, border or underline), for being hidden or off-screen,
+  and the first stop is checked for a working skip link.
+- Charts: the accessibility tree that Chromium gives screen readers, for up to
+  six charts on each page.
+- Tap targets: every link, button, summary and form control. Under 24 x 24
+  pixels fails WCAG 2.2 success criterion 2.5.8 (AA) unless the link is inside
+  a sentence or has room around it. "Under 44px" counts targets that miss the
+  stricter 44 x 44 pixels of 2.5.5 (AAA), leaving out links inside sentences.
+- Who did it: a Claude session. The measurements are mechanical and can be
+  repeated; the judgements in "What this means" are the session's own. This is
+  not a test with a screen reader user, which is still needed (see the end).
+
+### Pages compared
+
+| Site | Page |
+|---|---|
+| GOV.UK | [Income Tax rates and Personal Allowances](https://www.gov.uk/income-tax-rates) |
+| GOV.UK | [Public Spending Statistics release: July 2025](https://www.gov.uk/government/statistics/public-spending-statistics-release-july-2025) |
+| GOV.UK | [How public spending was calculated in your tax summary](https://www.gov.uk/government/publications/how-public-spending-was-calculated-in-your-tax-summary) |
+| ONS | [Employee earnings in the UK: 2025](https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025) |
+| ONS | [Effects of taxes and benefits on UK household income: FYE 2024](https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024) |
+| ONS | [Housing affordability in England and Wales: 2025](https://www.ons.gov.uk/peoplepopulationandcommunity/housing/bulletins/housingaffordabilityinenglandandwales/2025) |
+| This site | Home, Spending, Taxes, Who pays, Tax and income, Everyday life, Earnings, 2010 compared with 2025, Everyday life in 2015, Methods |
+
+### Results
+
+| Page | Tab stops | Skip link first, and works | Presses to reach main content | Stops with no focus style | Hidden stops | Fail 2.5.8 (under 24px) | Under 44px, not in a sentence |
+|---|---|---|---|---|---|---|---|
+| GOV.UK Income Tax rates | 77 | no (cookie banner first) | 9 | 0 | 0 | 0 of 73 | 56 |
+| GOV.UK Spending statistics | 80 | yes, yes | 7 | 0 | 0 | 0 of 95 | 50 |
+| GOV.UK Tax summary spending | 51 | yes, yes | 7 | 0 | 0 | 0 of 51 | 46 |
+| ONS Employee earnings | 121 | no | 10 | 7 (a "Hide" button and chart frames) | 1 | 0 of 104 | 50 |
+| ONS Taxes and benefits | 112 | yes, yes | 8 | 2 (chart frames) | 1 | 0 of 105 | 41 |
+| ONS Housing affordability | 600+ (stopped) | yes, yes | 8 | not reliable: focus went inside embedded charts | 0 | 0 of 105 | 54 |
+| This site, 10 pages | 34 to 77 | yes, yes on all | 11 | 0 on all | 0 on all | 0 on all (after fixes) | 2 to 13 |
+
+How the charts read to a screen reader:
+
+- **ONS** draws most charts with Highcharts or in embedded frames. In the
+  earnings bulletin each chart is an image with no name, followed by its axis
+  labels read as one run of text ("All FT PT 2025 2023 2021 … 0 100 200 … £").
+  In the taxes and benefits bulletin the charts have no image role at all, so
+  only the axis labels are read. Charts in frames are announced as "frame"
+  with no title. ONS does offer a download for each chart, and the housing
+  bulletin puts its main figures in a real table.
+- **GOV.UK** pages here have no data charts: figures are in tables or text,
+  and the only images are badges and icons, which are named or hidden.
+- **This site**: each line chart is an image named with what it shows and
+  its first and latest values, followed by a caption, a "What the chart shows,
+  in words" summary and a full table. Bar charts are lists that read as
+  "Health £21". Small multiples are a named group with one named image per
+  panel.
+
+### What this means
+
+**Comparable with or ahead of the benchmarks:**
+
+- Every Tab stop on every page measured shows a focus style, and none is
+  hidden. ONS had stops with no visible focus and a hidden stop.
+- A skip link is the first stop and works on every page; it was missing or
+  behind a cookie banner on two benchmark pages.
+- No tap target fails 2.5.8 on any page, as on GOV.UK and ONS. Far fewer
+  targets miss 44px: 2 to 13 a page, against 41 to 56 on the benchmarks,
+  because navigation, contents, year links and summaries are 44px tall here.
+- Charts have names, summaries in words and tables. The ONS charts measured
+  have none of these in the accessibility tree.
+
+**Where the benchmarks are ahead, or this site had problems (fixed in this PR
+unless stated):**
+
+1. **Axis labels inside charts were exposed.** The image name was right, but
+   Chromium also exposed each axis label inside the chart, and some screen
+   readers (VoiceOver on iOS among them) can read these one by one. They are now
+   hidden from screen readers, so a chart reads as its name, then its summary
+   and table. **Fixed.**
+2. **Small-multiple panels lost their figure.** Once axis labels were hidden,
+   each panel read only as "England". Each panel's name now includes its
+   latest figure, such as "England: £770 in 2025". **Fixed.**
+3. **"Pick an earlier year" was a row of small year links** (34 x 16 pixels,
+   close together) on the Work, Earnings, Housing, Holidays and Class sizes
+   pages. They are now a list of 44px year buttons, like the year links
+   elsewhere. **Fixed.**
+4. **"Tap any figure to see where it comes from" did not work with a
+   keyboard.** Making every figure a Tab stop would add hundreds of stops to
+   each page. The footer now says to use the Sources line under each section,
+   which reaches the same records by keyboard. **Wording fixed; a keyboard
+   way to open one figure's record is still missing.** Neither benchmark has
+   this feature.
+5. **Two more presses to reach the content without the skip link** (11
+   against 7 to 10), because the site's eight main sections are all in the
+   header. The skip link takes two presses. **Not changed.**
+
+### Kept from now on
+
+`make a11y` (run in CI) now also runs `scripts/a11y_benchmark.py --strict`,
+which fails if any of the ten pages lacks a working skip link, has a Tab stop
+with no focus style or a hidden Tab stop, or has a tap target under 24 pixels.
+The axe check also fails on any target under 24 pixels on all 35 pages it
+reads.
+
+### Still needed
+
+A test with real screen readers (VoiceOver on iPhone and TalkBack on Android)
+by a person, which the goal audits ask for. This record shows what Chromium
+exposes, not what a person hears.

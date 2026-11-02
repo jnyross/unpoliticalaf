@@ -5,6 +5,7 @@ Usage:
   python scripts/a11y_benchmark.py                 # this site's built pages (site/)
   python scripts/a11y_benchmark.py --benchmarks    # GOV.UK and ONS pages (needs network)
   python scripts/a11y_benchmark.py --json out.json # also write the raw results
+  python scripts/a11y_benchmark.py --strict        # fail on a keyboard or tap-target problem (make a11y)
 
 For each page, at a 360 x 640 phone viewport, it records:
 
@@ -72,36 +73,9 @@ BLUR_JS = """() => {
   return r;
 }"""
 
-TARGETS_JS = """() => {
-  // Content of a closed <details> still has a size in Chromium, but cannot be seen or tapped.
-  const hiddenIn = e => { const d = e.closest('details:not([open])'); return !!d && !(e.closest('summary') && e.closest('summary').parentElement === d); };
-  const sel = 'a[href], button, summary, input:not([type=hidden]), select, textarea, [tabindex]:not([tabindex="-1"])';
-  const out = [];
-  for (const e of document.querySelectorAll(sel)) {
-    let t = e;
-    // Hidden radio and checkbox inputs are tapped through their label.
-    if (e.matches('input[type=radio], input[type=checkbox]') && e.labels && e.labels.length) t = e.labels[0];
-    const r = t.getBoundingClientRect(), s = getComputedStyle(t);
-    if (r.width === 0 || r.height === 0 || s.visibility === 'hidden' || r.right < 0 || hiddenIn(t)) continue;
-    if (e.classList.contains('skip') || e.closest('.govuk-skip-link, .skiplink, [class*=skip]')) continue;
-    // A link inside running text is exempt from 2.5.8.
-    const p = e.closest('p, li, dd, td, th, figcaption, blockquote');
-    let inline = false;
-    if (e.tagName === 'A' && p && s.display === 'inline') {
-      const txt = (p.innerText || '').trim(), own = (e.innerText || '').trim();
-      inline = txt.length > own.length + 10;
-    }
-    // Or has a 24px circle of space around its centre that no other target overlaps.
-    out.push({tag: e.tagName.toLowerCase(), text: (e.getAttribute('aria-label') || e.innerText || '').trim().replace(/\\s+/g, ' ').slice(0, 50),
-              w: Math.round(r.width * 10) / 10, h: Math.round(r.height * 10) / 10, inline,
-              cx: r.left + r.width / 2, cy: r.top + scrollY + r.height / 2});
-  }
-  // Spacing exception: a small target passes if a 24px circle on its centre touches no other target's circle.
-  for (const t of out) {
-    t.spaced = !out.some(o => o !== t && Math.hypot(o.cx - t.cx, o.cy - t.cy) < 24);
-  }
-  return out;
-}"""
+sys.path.insert(0, str(ROOT))
+from builder.check import TARGETS_JS  # noqa: E402  (shared with the CI check)
+
 
 CHARTS_JS = """() => {
   const els = [...document.querySelectorAll('main svg, main figure, main ul.bars, main ul.cmp-list, main [role=img], main canvas, main .highcharts-container, main iframe')];
@@ -249,7 +223,27 @@ def main():
     if "--json" in sys.argv:
         Path(sys.argv[sys.argv.index("--json") + 1]).write_text(json.dumps(results, indent=1))
     print(report(results))
+    if "--strict" in sys.argv:
+        bad = []
+        for r in results:
+            if "error" in r:
+                bad.append(f"{r['url']}: {r['error']}")
+                continue
+            k, t = r["keyboard"], r["tap"]
+            name = r["url"].split("/site/")[-1]
+            if not (k["skip_first"] and k["skip_works"]):
+                bad.append(f"{name}: the first Tab stop is not a working skip link")
+            if k["no_focus_style"]:
+                bad.append(f"{name}: {k['no_focus_style']} Tab stops show no focus style: {k['no_focus_examples']}")
+            if k["hidden_stops"]:
+                bad.append(f"{name}: {k['hidden_stops']} Tab stops are hidden: {k['hidden_examples']}")
+            if t["fail_2_5_8"]:
+                bad.append(f"{name}: {t['fail_2_5_8']} tap targets under 24px: {t['fail_examples']}")
+        for b in bad:
+            print("FAIL", b, file=sys.stderr)
+        return 1 if bad else 0
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -406,6 +406,17 @@ def fold(body):
     return "".join(out)
 
 
+_SVG_IMG = re.compile(r'(<svg\b[^>]*\brole="img"[^>]*>)(.*?)(</svg>)', re.S)
+
+
+def hide_chart_marks(body):
+    """A chart drawn as an image is read out by its name (and its summary and
+    table), so screen readers should not also read its axis labels one by one.
+    Some, such as VoiceOver on iOS, otherwise do."""
+    return _SVG_IMG.sub(lambda m: m.group(0) if 'aria-hidden' in m.group(2)[:40]
+                        else f'{m.group(1)}<g aria-hidden="true">{m.group(2)}</g>{m.group(3)}', body)
+
+
 def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
     depth = path.count("/")
     up = "../" * depth
@@ -420,6 +431,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     if contents:
         body = toc(body, after_first=toc_after_first)
     body = re.sub(r'<!--/?beforetoc-->', '', body)
+    body = hide_chart_marks(body)
     if "data-chart=" in body:
         scripts = scripts + CHART_JS
     return f"""<!doctype html>
@@ -442,7 +454,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 </main>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
-<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from. See also <a href="{up}methods.html">methods</a>, <a href="{up}corrections.html">corrections</a> and <a href="{up}uncertainty.html">how sure the survey figures are</a>. Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap or click any figure to see where it comes from; with a keyboard, use the Sources line under each section. See also <a href="{up}methods.html">methods</a>, <a href="{up}corrections.html">corrections</a> and <a href="{up}uncertainty.html">how sure the survey figures are</a>. Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
 <p class="version">Site version {version.short()}</p>
 </div></footer>
 {scripts}
@@ -933,7 +945,10 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
             parts.extend(_end_value(vals, scaled[si], kind, None, x, y, T - 2))
         else:
             parts.append(f'<text x="{(L + W - R) / 2:.1f}" y="{(T + H - B) / 2 + 5:.1f}" text-anchor="middle">No figures</text>')
-        svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(name)}">'
+        # The panel's name read by screen readers also gives its latest figure, as the line end does on screen.
+        last = max((i for i, v in enumerate(vals) if v is not None), default=None)
+        spoken = name if last is None else f"{name}: {fmt(vals[last], kind)} in {(point_labels or labels)[last]}"
+        svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(spoken)}">'
                + "".join(parts) + "</svg>")
         panels.append(f'<div><p class="smt" aria-hidden="true">{esc(name)}</p>{svg}</div>')
     plabels = list(point_labels or labels)

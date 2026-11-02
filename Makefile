@@ -30,6 +30,7 @@ verify: build check test
 # axe-core accessibility checks at phone and desktop width.
 a11y:
 	$(RUN_PYTHON) -m builder.check --axe
+	$(RUN_PYTHON) scripts/a11y_benchmark.py --strict > /dev/null
 
 # Download the sources listed in sources/manifest.json (needs open network access).
 fetch:

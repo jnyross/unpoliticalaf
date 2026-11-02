@@ -221,14 +221,14 @@ def block(facts, num, sources, topic):
            f'<div class="answer"><p>{answer(facts, num, topic)}</p></div>',
            chart(facts, num, topic), table_for(facts, num, topic)]
     out.append(f'<div class="limit"><p>{esc(LIMITS[topic])}</p></div>')
-    out.append(f'<p class="small">Pick an earlier year: {early_links("", topic)}</p>')
+    out.append(f'<p class="small" id="early-{topic}">Pick an earlier year:</p><ul class="yearnav" aria-labelledby="early-{topic}">{early_links("", topic)}</ul>')
     out.append(source_line(sources, [s for s in SOURCES[topic] if s in sources], up="../"))
     return out
 
 
 def early_links(up, topic=None):
     years = [y for y in EARLY_YEARS if topic is None or y >= FIRST_YEAR[topic]]
-    return " ".join(f'<a href="{up}{y}.html">{y}</a>' for y in years)
+    return "".join(f'<li><a href="{up}{y}.html">{y}</a></li>' for y in years)
 
 
 def _topic_rows(facts, num, topic, y):

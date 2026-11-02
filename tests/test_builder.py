@@ -90,14 +90,25 @@ class Charts(unittest.TestCase):
         self.assertIn("aria-label", svg)
 
 
+class ChartMarks(unittest.TestCase):
+    def test_axis_labels_hidden_inside_chart_images(self):
+        from builder.html import hide_chart_marks
+        out = hide_chart_marks('<svg role="img" aria-label="x"><text>0</text></svg><svg><text>a</text></svg>')
+        self.assertEqual(out, '<svg role="img" aria-label="x"><g aria-hidden="true"><text>0</text></g></svg><svg><text>a</text></svg>')
+        self.assertEqual(hide_chart_marks(out), out)  # running twice changes nothing
+
+
 class SmallMultiples(unittest.TestCase):
     SERIES = [("North", [1.0, 2.0, 3.0]), ("South", [4.0, None, 6.0]), ("East", [7.0, 8.0, 9.0]), ("West", [None, None, None])]
 
     def test_one_labelled_panel_per_group(self):
         fig = small_multiples("t", ["1", "2", "3"], self.SERIES, "u", "dp1")
         self.assertEqual(fig.count('role="img"'), 4)
-        for name, _ in self.SERIES:
-            self.assertIn(f'aria-label="{name}"', fig)
+        for name, _ in self.SERIES[:3]:
+            self.assertIn(f'aria-label="{name}: ', fig)
+        # Each panel's spoken name gives its latest figure; a panel with none gives just the name
+        self.assertIn('aria-label="South: 6.0 in 3"', fig)
+        self.assertIn('aria-label="West"', fig)
         self.assertIn("No figures", fig)  # a group with no data says so, it is not drawn as zero
 
     def test_gaps_are_not_joined(self):
