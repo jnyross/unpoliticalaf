@@ -539,6 +539,17 @@
    "id": "eurostat-ilc-mdes02-uk",
    "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_mdes02?geo=UK&unit=PC&format=JSON&lang=en",
    "file": "eurostat/ilc-mdes02-uk.json"
+  },
+  {
+   "id": "ons-families-households",
+   "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
+   "find": "/file\\?uri=[^\"']*familiesandhouseholds[^\"']*\\.xlsx?",
+   "file": "ons/families-households"
+  },
+  {
+   "id": "ons-families-households-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
+   "file": "ons/families-households-page.html"
   }
  ]
 }

@@ -43,7 +43,8 @@ def tax_mix_section(facts, d, num, sources):
     fell, rose = moves[0], moves[-1]
     out = [f"<h2 id='mix'>How the mix of taxes has changed since {first}</h2>"]
     out.append(f'''<p>Total tax raised has grown a lot in cash terms, so a like-for-like way to see the mix is each tax's <strong>share of all taxes</strong> in each year.
-The comparison runs from {first}, the first year in the OBR databank, to {last}, the latest year that has been measured rather than forecast.</p>
+The comparison runs from {first}, the first year in the OBR databank, to {last}, the latest year that has been measured rather than forecast.
+For the mix back to 1948-49, from an older OBR database, see <a href="tax-history.html">which taxes raised the money since 1948</a>.</p>
 <div class="answer"><p class="lede">The three biggest taxes, Income Tax, National Insurance and VAT, raised {num(f"rec.big3sharemix.{first}", "pct0")} of all tax in {first} and {num(f"rec.big3sharemix.{last}", "pct0")} in {last}.</p>
 <p>The largest fall was in <strong>{esc(fell[1])}</strong>: {num(f"rec.share.{fell[0]}.{first}", "pct")} of all tax in {first}, {num(f"rec.share.{fell[0]}.{last}", "pct")} in {last}.
 The largest rise was in <strong>{esc(rose[1])}</strong>: {num(f"rec.share.{rose[0]}.{first}", "pct")} to {num(f"rec.share.{rose[0]}.{last}", "pct")}.

@@ -47,7 +47,9 @@ def main(only=None, refresh=False):
             body, ctype = get(url)
             name = s["file"]
             if "find" in s:
-                name += Path(urllib.parse.urlparse(url).path).suffix or ".bin"
+                u = urllib.parse.urlparse(url)  # ONS links are /file?uri=/…/name.xlsx
+                inner = urllib.parse.parse_qs(u.query).get("uri", [""])[0]
+                name += Path(u.path).suffix or Path(inner).suffix or ".bin"
             path = OUT / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(body)
