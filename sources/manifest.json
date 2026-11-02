@@ -191,6 +191,86 @@
    "id": "ehs-fa1422",
    "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
    "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
+  },
+  {
+   "id": "explain-obr-energy",
+   "url": "https://obr.uk/box/the-cost-of-the-governments-energy-support-policies/",
+   "file": "explain/obr-energy-support.html"
+  },
+  {
+   "id": "explain-obr-debt-interest",
+   "url": "https://obr.uk/box/the-sensitivity-and-volatility-of-debt-interest-spending/",
+   "file": "explain/obr-debt-interest.html"
+  },
+  {
+   "id": "explain-obr-thresholds",
+   "url": "https://obr.uk/box/fiscal-implications-of-personal-tax-threshold-freezes-and-reductions/",
+   "file": "explain/obr-threshold-freezes.html"
+  },
+  {
+   "id": "explain-obr-receipts-recovered",
+   "url": "https://obr.uk/box/why-have-receipts-recovered-so-strongly-in-the-wake-of-the-pandemic/",
+   "file": "explain/obr-receipts-recovered.html"
+  },
+  {
+   "id": "explain-obr-income-tax-strong",
+   "url": "https://obr.uk/box/why-is-the-economy-generating-such-strong-income-tax-revenues/",
+   "file": "explain/obr-income-tax-strong.html"
+  },
+  {
+   "id": "explain-obr-spa",
+   "url": "https://obr.uk/box/reviews-of-the-state-pension-age/",
+   "file": "explain/obr-state-pension-age.html"
+  },
+  {
+   "id": "explain-ons-psf-2021-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
+   "file": "explain/ons-psf-march2021.html"
+  },
+  {
+   "id": "explain-ons-2008-recession",
+   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
+   "file": "explain/ons-2008-recession.html"
+  },
+  {
+   "id": "explain-ons-etb-fye2024",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2024",
+   "file": "explain/ons-etb-fye2024.html"
+  },
+  {
+   "id": "explain-ons-ashe-2025",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025",
+   "file": "explain/ons-ashe-2025.html"
+  },
+  {
+   "id": "explain-ons-ashe-2022",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
+   "file": "explain/ons-ashe-2022.html"
+  },
+  {
+   "id": "explain-ons-lmo-latest",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
+   "file": "explain/ons-labour-market-latest.html"
+  },
+  {
+   "id": "explain-ons-travel-2020",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2020",
+   "file": "explain/ons-travel-trends-2020.html"
+  },
+  {
+   "id": "explain-ons-travel-2024",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
+   "file": "explain/ons-travel-trends-2024.html"
+  },
+  {
+   "id": "explain-hmrc-itl-page",
+   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
+   "file": "explain/hmrc-itl-page.html"
+  },
+  {
+   "id": "explain-ehs-collection",
+   "url": "https://www.gov.uk/government/collections/english-housing-survey",
+   "file": "explain/ehs-collection.html"
   }
  ]
 }
