@@ -127,6 +127,22 @@
   "sha256": "90044967d57932ef93266b52ef6fd6f594df3cbb608e5a76e1f9eacc6f494df4",
   "retrieved": "2026-11-02T10:27:31Z"
  },
+ "explain-ehs-2024-25-ch1": {
+  "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
+  "file": "explain/ehs-2024-25-chapter-1.html",
+  "bytes": 133900,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "e71716f8ea2d1c2ac8e2807b0d8fdf7bbfd2243c83f3c48344a472fb0272f66b",
+  "retrieved": "2026-11-02T10:28:25Z"
+ },
+ "explain-ehs-2024-25-ch2": {
+  "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
+  "file": "explain/ehs-2024-25-chapter-2.html",
+  "bytes": 107313,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "09a315dd280cf757b9d75c0e251985f7d086eda4d9d8104b8efd2f5e661bb47e",
+  "retrieved": "2026-11-02T10:28:29Z"
+ },
  "explain-ehs-2024-25-chapters": {
   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
   "file": "explain/ehs-2024-25-chapters-page.html",
