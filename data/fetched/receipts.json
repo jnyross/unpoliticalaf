@@ -503,14 +503,6 @@
   "sha256": "4234999fa3366b262c2fe3c1858e9ac8cc88c2f40a0798b6934b61865f0f6791",
   "retrieved": "2026-11-02T16:28:39Z"
  },
- "nomis-wfj-industry-codes": {
-  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json",
-  "file": "nomis/wfj-industry-codes.json",
-  "bytes": 1025,
-  "content_type": "application/json",
-  "sha256": "112076f473126e90f760224be2d40fb8108e7c049e63f0dd85a61544ea192fa6",
-  "retrieved": "2026-11-02T16:29:55Z"
- },
  "nomis-wfj-latest": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
   "file": "nomis/wfj-uk-latest.csv",

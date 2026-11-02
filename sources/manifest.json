@@ -495,11 +495,6 @@
    "file": "ons/jobs02-page.html"
   },
   {
-   "id": "nomis-wfj-industry-codes",
-   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json",
-   "file": "nomis/wfj-industry-codes.json"
-  },
-  {
    "id": "nomis-wfj-uk-industry",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
    "file": "nomis/wfj-uk-industry.csv"
@@ -508,6 +503,27 @@
    "id": "nomis-wfj-uk-industry-long",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
    "file": "nomis/wfj-uk-industry-long.csv"
+  },
+  {
+   "id": "nomis-wfj-industry-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
+   "file": "nomis/wfj-industry-codes.json"
+  },
+  {
+   "id": "nomis-wfj-industry-types",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
+   "file": "nomis/wfj-industry-types.json"
+  },
+  {
+   "id": "nomis-wfj-industry-children",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
+   "file": "nomis/wfj-industry-children.json"
+  },
+  {
+   "id": "ons-jobs02",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+   "find": "/file\\?uri=[^\"']*jobs02[^\"']*\\.xlsx?",
+   "file": "ons/jobs02"
   }
  ]
 }

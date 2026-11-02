@@ -1,7 +1,0 @@
-{
-
-"structure" :{"codelists" :{"codelist" :[
-{"agencyid" :"NOMIS","id" :"CL_130_1_INDUSTRY","code" :[
-{"annotations" :{"annotation" :[
-{"annotationtext" :"True","annotationtitle" :"IsTotal"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"industry","annotationtitle" :"TypeName"},{"annotationtext" :9,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"Total","lang" :"en"},"value" :37748736}],"name" :{"value" :"industry","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_130_1","prepared" :"2026-11-02T16:29:54Z","sender" :{"contact" :{"email" :"support@nomisweb.co.uk","name" :"Nomis","uri" :"https://www.nomisweb.co.uk"},"id" :"NOMIS"},"test" :"false"},"xmlns" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message","common" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common","structure" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/structure","xsi" :"http://www.w3.org/2001/XMLSchema-instance","schemalocation" :"http://sdmx.org/docs/2_0/SDMXMessage.xsd"}
-}
