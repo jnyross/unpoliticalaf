@@ -502,6 +502,31 @@
    "id": "probe-ni-enrol-final",
    "url": "https://datavis.nisra.gov.uk/DEstatistics/annual-enrolments-at-grant-aided-schools-in-northern-ireland-202526.html",
    "file": "probe/ni-enrol-final-2025-26.html"
+  },
+  {
+   "id": "probe-wales-start",
+   "url": "https://stats.gov.wales/en-GB/6476cc20-ddeb-46a5-be64-10a23c8a159f/start",
+   "file": "probe/wales-start.html"
+  },
+  {
+   "id": "probe-wales-api",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+   "file": "probe/wales-api.json"
+  },
+  {
+   "id": "probe-wales-api-csv",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+   "file": "probe/wales-api.csv"
+  },
+  {
+   "id": "probe-wales-api-docs",
+   "url": "https://api.stats.gov.wales/v1/docs",
+   "file": "probe/wales-api-docs.html"
+  },
+  {
+   "id": "probe-wales-dl",
+   "url": "https://stats.gov.wales/en-GB/6476cc20-ddeb-46a5-be64-10a23c8a159f/download?format=csv",
+   "file": "probe/wales-dl.csv"
   }
  ]
 }
