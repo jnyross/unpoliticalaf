@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "2 November 2026",
+        "pages": [("life/holidays.html", "Holidays since 1980"), ("spending.html", "Where does public money go?")],
+        "was": "Two chart titles named only one turn in a line that turned more than once: “Holiday visits abroad by UK residents fell until 2020, then rose above the 2009 level” (they rose from 41.2 million in 2009 to 58.7 million in 2019 first), and “As a share of GDP, total public spending rose until 2020-21, then fell back part of the way” (it fell from 46.0% in 2009-10 to 39.1% in 2018-19 first).",
+        "now": "Chart titles and their summaries in words name every large rise and fall in order, for example “Holiday visits abroad by UK residents rose until 2019, fell in 2020, then rose back to about the 2019 level”. A build check now fails if a title leaves one out.",
+        "pr": 118,
+    },
+    {
+        "date": "2 November 2026",
         "pages": [("sources.html", "Sources"), ("life/work.html", "Work since 1971")],
         "was": "The link to the original data for the two occupation sources (Annual Population Survey by occupation, SOC2010 and SOC2020) went to the whole Nomis dataset, which gives different figures, so a reader could not reproduce the numbers.",
         "now": "The link is the exact Nomis query that gives the data used. A random check of 50 figures against the publishers’ files found every figure matched.",

@@ -25,11 +25,53 @@ def measured(vals, a=0, b=None):
     return [i for i in range(a, b) if vals[i] is not None]
 
 
-def shape(vals, a=0, b=None):
-    """How a line moves between a and b: 'up', 'down', 'flat', 'peak', 'trough' or 'same'.
+def legs(vals, a=0, b=None):
+    """The big rises and falls of a line between a and b, in order, as (start, end, +1 or -1).
 
-    Returns a dict with the kind and the indices of the first, last, highest
-    and lowest measured points, or None with fewer than two points.
+    A move counts when the line goes at least TURN of its whole range one way
+    before turning back by at least as much. Smaller wiggles are folded into the
+    move around them, and a small change after the last big move is folded into it,
+    so the last move ends at the last measured point. A peak or low held for several
+    years is dated by its first year.
+    Returns [] for a line with no move that large.
+    """
+    pts = measured(vals, a, b)
+    if len(pts) < 2:
+        return []
+    span = max(vals[i] for i in pts) - min(vals[i] for i in pts)
+    if span <= 0:
+        return []
+    thr = TURN * span
+    f = pts[0]
+    turns, way, ext = [f], 0, f
+    lo = hi = f  # before the first big move, its start can be any earlier point
+    for i in pts[1:]:
+        v = vals[i]
+        if way == 0:
+            if v - vals[lo] >= thr:
+                way, ext = 1, i
+            elif vals[hi] - v >= thr:
+                way, ext = -1, i
+            lo = i if v < vals[lo] else lo
+            hi = i if v > vals[hi] else hi
+        elif (v - vals[ext]) * way > 0:
+            ext = i
+        elif (vals[ext] - v) * way >= thr:
+            turns.append(ext)
+            way, ext = -way, i
+    if way == 0:
+        return []
+    turns.append(pts[-1])
+    return [(s0, e0, 1 if vals[e0] > vals[s0] else -1) for s0, e0 in zip(turns, turns[1:])]
+
+
+def shape(vals, a=0, b=None):
+    """How a line moves between a and b: 'up', 'down', 'flat', 'peak', 'trough',
+    'turns' (three or more big moves) or 'same'.
+
+    Returns a dict with the kind, the indices of the first, last, highest and
+    lowest measured points, and its big moves ("legs", see legs()), or None with
+    fewer than two points.
     """
     pts = measured(vals, a, b)
     if len(pts) < 2:
@@ -39,7 +81,7 @@ def shape(vals, a=0, b=None):
     hi = max(pts, key=lambda i: (vals[i], -i))
     lo = min(pts, key=lambda i: (vals[i], i))
     span = vals[hi] - vals[lo]
-    out = {"f": f, "l": l, "hi": hi, "lo": lo, "most": False, "flat": True, "net": vl - vf}
+    out = {"f": f, "l": l, "hi": hi, "lo": lo, "most": False, "flat": True, "net": vl - vf, "legs": []}
     if span <= 0:
         out["kind"] = "same"
         return out
@@ -49,19 +91,16 @@ def shape(vals, a=0, b=None):
         out["kind"] = "flat"
         return out
     flat = abs(net) <= FLAT * span or abs(net) <= 0.01 * max(abs(vf), abs(vl))
-    up = vals[hi] - max(vf, vl)
-    down = min(vf, vl) - vals[lo]
-    peak = hi not in (f, l) and up >= TURN * span
-    trough = lo not in (f, l) and down >= TURN * span
-    if peak and trough:
-        peak, trough = up >= down, down > up
     out["flat"] = flat
-    if peak:
-        out["kind"] = "peak"
-    elif trough:
-        out["kind"] = "trough"
+    lg = legs(vals, a, b)
+    out["legs"] = lg
+    if len(lg) >= 3:
+        out["kind"] = "turns"
+    elif len(lg) == 2:
+        out["kind"] = "peak" if lg[0][2] > 0 else "trough"
     elif flat:
         out["kind"] = "flat"
+        out["legs"] = []
     else:
         out["kind"] = "up" if net > 0 else "down"
         steps = [vals[j] - vals[i] for i, j in zip(pts, pts[1:])]
@@ -70,9 +109,31 @@ def shape(vals, a=0, b=None):
     return out
 
 
+def _until(vals, labels, s0, e0, up):
+    """'rose until 2019', or 'fell in 2020' when the move took one step."""
+    verb = "rose" if up else "fell"
+    pts = measured(vals, s0, e0 + 1)
+    return f"{verb} in {labels[e0]}" if len(pts) == 2 else f"{verb} until {labels[e0]}"
+
+
+def _back(vals, labels, lg, s):
+    """How far the last move took the line compared with where the move before it
+    started: ' above the 2019 level', ' back to about the 2019 level' or ' back part of the way'."""
+    ref = lg[-2][0]
+    up = lg[-1][2] > 0
+    span = vals[s["hi"]] - vals[s["lo"]]
+    d = vals[lg[-1][1]] - vals[ref]
+    if abs(d) <= FLAT * span:
+        return f" back to about the {labels[ref]} level"
+    if (d > 0) == up:
+        return f" {'above' if up else 'below'} the {labels[ref]} level"
+    return " back part of the way"
+
+
 def phrase(labels, vals, a=0, b=None, short=False):
     """A few neutral words on how a line moved, for a title: 'rose between 2008 and 2025'.
-    short leaves out how far a line came back after a peak or low."""
+    Every big rise and fall is named in order: 'rose until 2019, fell in 2020, then rose'.
+    short leaves out how far a line came back after its last turn."""
     s = shape(vals, a, b)
     if s is None:
         return ""
@@ -86,17 +147,12 @@ def phrase(labels, vals, a=0, b=None, short=False):
         return f"fell between {f} and {l}"
     if k == "flat":
         return f"changed little between {f} and {l}"
-    if k == "peak":
-        if short:
-            return f"rose until {hi}, then fell"
-        if s["flat"]:
-            return f"rose until {hi}, then fell back to about the {f} level"
-        return f"rose until {hi}, then fell" + (" back part of the way" if s["net"] > 0 else f" below the {f} level")
-    if short:
-        return f"fell until {lo}, then rose"
-    if s["flat"]:
-        return f"fell until {lo}, then rose back to about the {f} level"
-    return f"fell until {lo}, then rose" + (" back part of the way" if s["net"] < 0 else f" above the {f} level")
+    lg = s["legs"]
+    words = [_until(vals, labels, s0, e0, w > 0) for s0, e0, w in lg[:-1]]
+    last = "then rose" if lg[-1][2] > 0 else "then fell"
+    if not short:
+        last += _back(vals, labels, lg, s)
+    return ", ".join(words + [last])
 
 
 def sentence(labels, vals, show, a=0, b=None, extremes=True):
@@ -121,14 +177,25 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
         if s["most"]:
             text += f", {ing} in most years"
         text += "."
-    elif k == "peak":
-        text = f"Rose from {show(f)} in {labels[f]} to a high of {show(hi)} in {labels[hi]}, then fell to {show(l)} in {labels[l]}."
-        said.add(hi)
-    elif k == "trough":
-        text = f"Fell from {show(f)} in {labels[f]} to a low of {show(lo)} in {labels[lo]}, then rose to {show(l)} in {labels[l]}."
-        said.add(lo)
-    else:
+    elif k == "flat":
         text = f"{show(f)} in {labels[f]} and {show(l)} in {labels[l]}: little changed overall."
+    else:
+        lg = s["legs"]
+        parts = []
+        for n, (s0, e0, w) in enumerate(lg):
+            verb = "rose" if w > 0 else "fell"
+            if n == len(lg) - 1:
+                parts.append(f"then {verb} to {show(e0)} in {labels[e0]}")
+            else:
+                high = "high" if w > 0 else "low"
+                parts.append(f"{verb} to a {high} of {show(e0)} in {labels[e0]}")
+                said.add(e0)
+        text = f"From {show(f)} in {labels[f]}, " + ", ".join(parts) + "."
+        if len(lg) == 2:  # keep the familiar wording for a single turn
+            w0, e0 = lg[0][2], lg[0][1]
+            high = "high" if w0 > 0 else "low"
+            text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to a {high} of {show(e0)} in {labels[e0]}, "
+                    f"then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
     if extremes and len(pts) >= 3:
         extra = []
         if hi not in said:
@@ -190,6 +257,19 @@ def lower_first(text):
 
 # ---------------------------------------------------------------- title rules
 # Each returns a function (labels, series, stretches) -> str.
+# A rule that describes how lines moved also carries .lines: a function
+# (stretches) -> [(series index, a, b)] naming the lines and years it describes.
+# The chart writes these beside its heading, so builder/check.py can confirm the
+# heading names every big rise and fall of those lines.
+
+def describes(rule, lines):
+    rule.lines = lines
+    return rule
+
+
+def lines_of(rule, stretches):
+    """The (series index, a, b) runs a title rule describes, or [] for other rules."""
+    return list(getattr(rule, "lines", lambda st: [])(stretches))
 
 def _stretch(stretches, which):
     if which == "last":
@@ -206,7 +286,7 @@ def trend(subject, si=0, which="last"):
         a, b = _stretch(stretches, which)
         p = phrase(labels, series[si][1], a, b)
         return f"{subject} {p}" if p else ""
-    return rule
+    return describes(rule, lambda st: [(si, *_stretch(st, which))])
 
 
 def gap(first_name, second_name, si=0, sj=1, which="all"):
@@ -336,7 +416,7 @@ def pair(subject_a, subject_b, si=0, sj=1, which="all", together=None):
             pb = pb[: -len(tail)]
         joiner = "; " if pa.split()[0] == pb.split()[0] else ", while "
         return f"{subject_a} {pa}{joiner}{subject_b} {pb}"
-    return rule
+    return describes(rule, lambda st: [(si, *_stretch(st, which)), (sj, *_stretch(st, which))])
 
 
 def within(template, fmt_value, si=0, which="all"):
@@ -358,7 +438,7 @@ def both(*rules, sep="; "):
     def rule(labels, series, stretches):
         parts = [r(labels, series, stretches) for r in rules]
         return sep.join(p for p in parts if p)
-    return rule
+    return describes(rule, lambda st: [x for r in rules for x in lines_of(r, st)])
 
 
 def place(points, y, group=None):

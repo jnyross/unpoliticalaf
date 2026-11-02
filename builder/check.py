@@ -22,6 +22,7 @@ import io
 import json
 import re
 import sys
+from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -482,6 +483,85 @@ def check_findings():
     return n
 
 
+# A rise or fall of at least this share of a line's range must be named in a trend heading.
+BIG_MOVE = 0.3
+_NUMBER = re.compile(r"[-+]?\d[\d,]*(?:\.\d+)?")
+
+
+def _value(cell):
+    m = _NUMBER.search(cell.replace("\u2212", "-")) if cell and cell != "no figure" else None
+    return float(m.group().replace(",", "")) if m else None
+
+
+def big_turns(vals):
+    """Points where a line turns after a big move: a peak or low that stands out from
+    the line on both sides by at least BIG_MOVE of the line's range (its prominence).
+    Worked out from the figures the chart shows, without the builder's own rule.
+    Returns a list of (indices, 'peak' or 'low'); a run of equal values is one turn."""
+    pts = [i for i, v in enumerate(vals) if v is not None]
+    if len(pts) < 3:
+        return []
+    span = max(vals[i] for i in pts) - min(vals[i] for i in pts)
+    if span <= 0 or span < 0.02 * max(abs(vals[i]) for i in pts):
+        return []  # every year within 2% of the others: "changed little" is a fair reading
+    out = []
+    k = 1
+    while k < len(pts) - 1:
+        j = k
+        while j + 1 < len(pts) - 1 and vals[pts[j + 1]] == vals[pts[k]]:
+            j += 1  # a flat top or bottom counts once
+        run = pts[k:j + 1]
+        v = vals[run[0]]
+        for sign, kind in ((1, "peak"), (-1, "low")):
+            def base(side):
+                seq = pts[:k][::-1] if side < 0 else pts[j + 1:]
+                b = v
+                for i in seq:
+                    if (vals[i] - v) * sign > 0:
+                        break
+                    b = min(b, vals[i]) if sign > 0 else max(b, vals[i])
+                return b
+            left, right = base(-1), base(1)
+            if not pts[:k] or not pts[j + 1:]:
+                continue
+            prom = (v - max(left, right)) if sign > 0 else (min(left, right) - v)
+            if prom >= BIG_MOVE * span - 1e-9:
+                out.append((run, kind))
+        k = j + 1
+    return out
+
+
+def check_trend_titles():
+    """A heading that says how a line moved names every big rise and fall: each peak or
+    low that the line moves at least BIG_MOVE of its range into and back out of."""
+    n = 0
+    for path in SITE.rglob("*.html"):
+        if path.parts[len(SITE.parts)] == "figures":
+            continue
+        html = path.read_text(encoding="utf-8")
+        for fig in re.finditer(r"<figure>(.*?)</figure>", html, re.S):
+            t = re.search(r'<p class="ctitle"[^>]*data-lines="([^"]*)"[^>]*>(.*?)</p>', fig.group(1))
+            if not t:
+                continue
+            n += 1
+            rel = path.relative_to(SITE)
+            title = html_unescape(t.group(2))
+            d = re.search(r"data-chart='([^']*)'", fig.group(1))
+            if not d:
+                fail(f"{rel}: trend heading “{title}” has no chart figures to check it against")
+                continue
+            rows = json.loads(html_unescape(d.group(1)))["rows"]
+            for part in t.group(1).split():
+                si, a, b = (int(x) for x in part.split(":"))
+                vals = [_value(r[si + 1]) for r in rows[a:b]]
+                labels = [str(r[0]).replace(" (calendar year)", "") for r in rows[a:b]]
+                for run, kind in big_turns(vals):
+                    named = any(re.search(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title) for i in run)
+                    if not named or "rose" not in title or "fell" not in title:
+                        fail(f"{rel}: heading “{title}” leaves out the {kind} in {labels[run[-1]]}, a move of at least {BIG_MOVE:.0%} of the line's range")
+    return n
+
+
 def check_explanations():
     sys.path.insert(0, str(ROOT))
     from builder.explain import EXPLANATIONS, missing_quotes, norm
@@ -503,6 +583,7 @@ def main():
     n_quotes = check_explanations()
     n_csv = check_downloads()
     n_findings = check_findings()
+    n_trends = check_trend_titles()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
@@ -512,6 +593,7 @@ def main():
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
     print(f"Checked that {n_findings} chart headings state their finding in neutral words.")
+    print(f"Checked that {n_trends} trend headings name every big rise and fall of their line.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
     if problems:
         print(f"\n{len(problems)} problems:")
