@@ -550,6 +550,36 @@
    "id": "ons-families-households-page",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
    "file": "ons/families-households-page.html"
+  },
+  {
+   "id": "probe-oecd-0",
+   "file": "oecd/probe-0.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS/DSD_REV_COMP_OECD@DF_RSOECD/latest?references=all&detail=referencepartial"
+  },
+  {
+   "id": "probe-oecd-1",
+   "file": "oecd/probe-1.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_EXP/latest?references=all&detail=referencepartial"
+  },
+  {
+   "id": "probe-oecd-2",
+   "file": "oecd/probe-2.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12_REV/latest?references=all&detail=referencepartial"
+  },
+  {
+   "id": "probe-oecd-3",
+   "file": "oecd/probe-3.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE11/latest?references=all&detail=referencepartial"
+  },
+  {
+   "id": "probe-oecd-4",
+   "file": "oecd/probe-4.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.NAD/DSD_NASEC10@DF_TABLE12/latest?references=all&detail=referencepartial"
+  },
+  {
+   "id": "probe-oecd-list",
+   "file": "oecd/probe-list.xml",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/all/all/latest?detail=allstubs"
   }
  ]
 }
