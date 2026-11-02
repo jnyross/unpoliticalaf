@@ -1,4 +1,6 @@
-"""Home page and the sources and methods page."""
+"""Home page, the methods page and the list of sources."""
+import re
+
 from .html import page, esc, table, bars
 
 
@@ -78,8 +80,8 @@ def home_page(facts, d, num, sources):
 
 
 def methods_page(facts, sources, used_counts):
-    body = ['<h1>Sources and methods</h1>',
-            '<p>Every number on this site is copied or calculated from the official files listed below. The files are kept in the site’s public code repository, and the build stops if any file changes without its record being updated.</p>',
+    body = ['<h1>Methods</h1>',
+            '<p>Every number on this site is copied or calculated from the official files in the <a href="sources.html">list of sources</a>. The files are kept in the site’s public code repository, and the build stops if any file changes without its record being updated.</p>',
             '<h2 id="principles">Principles</h2><ul>'
             '<li><strong>Official sources only.</strong> Figures come from UK government departments, the Office for National Statistics and the Office for Budget Responsibility.</li>'
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
@@ -107,20 +109,51 @@ def methods_page(facts, sources, used_counts):
             '<p>Every chart and table also has a "Download this data (CSV)" link beside it. The file holds the same figures the page shows, written as they are shown, with their units. Tap a figure on the page to see where it comes from.</p>',
             '<h2 id="trace">Tracing a figure</h2><p>Tap or click any number on the site to see its source, period and the exact cell it was read from, or the calculation that produced it. The source line under each section leads to a record of every figure taken from that source. Without JavaScript, the source line still works. Mistakes we have fixed are listed on the <a href="corrections.html">corrections</a> page.</p>',
             '<h2 id="reproduce">How to reproduce the site</h2><p>With Python 3.10 or later: <code>make setup</code>, then <code>make build</code> and <code>make check</code>. The check re-opens every source file, re-reads each figure, and confirms that every number on every page matches its record.</p>',
-            '<h2 id="sources">Sources</h2>']
-    for sid, s in sorted(sources.items(), key=lambda kv: (kv[1]["publisher"], kv[1]["title"])):
-        n = used_counts.get(sid, 0)
-        body.append(f'''<section class="source" id="src-{esc(sid)}"><h3>{esc(s["title"])}</h3>
-<dl>
-<dt>Publisher</dt><dd>{esc(s["publisher"])}</dd>
-<dt>Where</dt><dd>{esc(s["geography"])}</dd>
-<dt>Who or what</dt><dd>{esc(s["population"])}</dd>
-<dt>Published</dt><dd>{esc(s["published"])}</dd>
-<dt>Retrieved</dt><dd>{esc(s["retrieved"])}</dd>
-<dt>Link</dt><dd><a href="{esc(s["page"])}">{esc(s["page"])}</a></dd>
-<dt>File kept</dt><dd><code>{esc(s["file"])}</code></dd>
-<dt>SHA-256</dt><dd><code class="hash">{esc(s["sha256"])}</code></dd>
-<dt>Figures used</dt><dd>{n:,} (<a href="figures/{esc(sid)}.html">see each one</a>)</dd>
-<dt>Licence</dt><dd>{esc(s["licence"])}</dd>
-</dl></section>''')
-    return page("methods.html", "Sources and methods", "\n".join(body), "Where every figure on Unpolitical comes from and how it is calculated.")
+            '<h2 id="sources">Sources</h2>',
+            f'<p>The site uses {len(sources)} official files. The <a href="sources.html">list of sources</a> groups them by publisher; each one links to its full record: '
+            'publisher, place and people covered, publication and retrieval dates, the original link, the copy kept, its SHA-256 fingerprint and every figure used from it.</p>',
+            # Old links to a source record on this page (methods.html#src-...) go to its new place.
+            '<script>if(/^#src-/.test(location.hash))location.replace("sources.html"+location.hash)</script>']
+    return page("methods.html", "Methods", "\n".join(body), "How Unpolitical chooses, calculates and checks every figure.")
+
+
+def publisher_group(publisher):
+    """The organisation a source is listed under: the publisher without notes in brackets."""
+    name = publisher if publisher.endswith("(Northern Ireland)") else re.sub(r"\s*\(.*\)$", "", publisher).strip()
+    return "Office for National Statistics" if name == "Nomis" else name
+
+
+def group_id(name):
+    return "pub-" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def sources_page(sources, used_counts):
+    """Every official file the site uses, grouped by publisher, each linking to its full record."""
+    groups = {}
+    for sid, s in sources.items():
+        groups.setdefault(publisher_group(s["publisher"]), []).append((sid, s))
+    order = sorted(groups, key=lambda g: (-len(groups[g]), g))
+    body = ['<h1>Sources</h1>',
+            f'<p>Every number on this site is copied or calculated from the {len(sources)} official files below. Each title opens the full record: who published it, '
+            'the place and people it covers, when it was published and retrieved, the original link, the copy kept in the public repository, and every figure used from it. '
+            'How figures are chosen and calculated is on the <a href="methods.html">methods</a> page.</p>']
+    for g in order:
+        items = []
+        for sid, s in sorted(groups[g], key=lambda kv: kv[1]["title"]):
+            n = used_counts.get(sid, 0)
+            figs = f"{n:,} figure{'s' if n != 1 else ''} used" if n else "used for rates or quoted explanations"
+            items.append(f'<li id="src-{esc(sid)}"><a href="figures/{esc(sid)}.html">{esc(s["title"])}</a> '
+                         f'<span class="small">{esc(s["published"])}; {figs}</span></li>')
+        # One closed list per publisher keeps the page short on a phone; a link to one source opens its list.
+        body.append(f'<details class="srcgroup" id="{group_id(g)}"><summary>{esc(g)} ({len(items)})</summary><ul class="srclist">' + "".join(items) + "</ul></details>")
+    body.append(f'<p class="small">{len(sources)} files from {len(order)} publishers. Every figure taken from them is also in the <a href="data/facts.json">downloadable data</a>.</p>')
+    return page("sources.html", "Sources", "\n".join(body), "Every official file Unpolitical uses, grouped by publisher, with a full record for each.",
+                folded=False, contents=False, scripts=OPEN_TARGET_JS)
+
+
+# Opens the publisher list that holds a linked source (sources.html#src-...), for browsers
+# that do not open a closed <details> on their own when its contents are the link target.
+OPEN_TARGET_JS = """<script>
+(function(){function go(){var h=location.hash.slice(1);if(!h)return;var e=document.getElementById(h);if(!e)return;
+var d=e.closest('details');if(d&&!d.open){d.open=true;e.scrollIntoView()}}go();window.addEventListener('hashchange',go)})();
+</script>"""

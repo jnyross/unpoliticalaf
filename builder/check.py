@@ -346,7 +346,7 @@ def check_downloads():
 
 
 def check_structure():
-    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
+    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
@@ -375,6 +375,10 @@ def check_structure():
 CHART_EARLY = ["spending.html", "taxes.html", "tax-history.html", "who-pays.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html",
                "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html"]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
+# Pages that must stay short on a 360px phone with every "More on ..." section closed,
+# in phone screens of 640px (goal audit 6: about 8 screens, Sources split).
+MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.5,
+               "methods.html": 9.5, "sources.html": 4}
 FIRST_CHART_JS = """() => {
   const els = [...document.querySelectorAll('main figure, main ul.bars, main ul.cmp-list, main svg[role=img]')]
     .filter(e => e.offsetParent !== null && e.getBoundingClientRect().height > 30);
@@ -401,6 +405,10 @@ def run_axe(paths):
                     top = page.evaluate(FIRST_CHART_JS)
                     if top is None or top > 2 * PHONE_SCREEN - CHART_SHOWN:
                         fail(f"{path}: first chart starts at {top}px, not within the first two phone screens")
+                if width == 360 and path in MAX_SCREENS:
+                    screens = page.evaluate("document.documentElement.scrollHeight") / PHONE_SCREEN
+                    if screens > MAX_SCREENS[path]:
+                        fail(f"{path}: {screens:.1f} phone screens long, over the {MAX_SCREENS[path]} limit")
                 # Open every folded section, so tables and source lists are checked too
                 page.evaluate("document.querySelectorAll('details').forEach(d => d.open = true)")
                 if page.evaluate("document.documentElement.scrollWidth") > width + 1:
@@ -458,7 +466,7 @@ def main():
     n_csv = check_downloads()
     n_findings = check_findings()
     if "--axe" in sys.argv:
-        run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html",
+        run_axe(["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])

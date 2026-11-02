@@ -41,7 +41,7 @@ nav.main li:first-child a{padding-left:0}
 .wrap{max-width:44rem;margin:0 auto;padding-left:16px;padding-right:16px}
 main{padding-bottom:56px}
 h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px}
-h2{font-size:1.38rem;line-height:1.25;letter-spacing:-.01em;margin:48px 0 12px;padding-top:20px;border-top:1px solid var(--line)}
+h2{font-size:1.38rem;line-height:1.25;letter-spacing:-.01em;margin:36px 0 10px;padding-top:16px;border-top:1px solid var(--line)}
 h3{font-size:1.1rem;line-height:1.3;margin:28px 0 8px}
 p{margin:0 0 12px}
 ul,ol{padding-left:1.3em}
@@ -163,6 +163,7 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .source dl{display:grid;grid-template-columns:8rem 1fr;gap:4px 12px;font-size:.92rem}
 .source dt{color:var(--muted)}.source dd{margin:0;overflow-wrap:anywhere}
 .hash{font-size:.8rem}
+.srclist{list-style:none;padding:0;margin:8px 0 12px}.srclist li{margin:0;padding:6px 0;border-bottom:1px solid var(--line2);line-height:1.35}.srclist a{display:inline}.srclist .small{display:block;margin-top:2px}details.srcgroup{margin:8px 0}details.srcgroup>summary{color:var(--ink)}
 .change-up::before{content:"▲ ";font-size:.75em}.change-down::before{content:"▼ ";font-size:.75em}
 .cmp-key{border-left:4px solid var(--bar);background:var(--soft);padding:10px 12px;margin:10px 0}
 .cmp-key h3{margin:0 0 4px;font-size:1rem}
@@ -193,7 +194,7 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .explain blockquote p{margin:0}
 details.limit summary{color:var(--ink)}
 details.more{border-color:var(--line2)}details.more>summary{flex-wrap:wrap;row-gap:0;padding:6px 0}details.more>summary .hint{flex-basis:100%;padding-left:24px;font-weight:400;font-size:.85rem;color:var(--muted)}
-footer{border-top:1px solid var(--line);background:var(--soft2);padding:20px 0 36px;font-size:.88rem;color:var(--muted)}
+footer{border-top:1px solid var(--line);background:var(--soft2);padding:16px 0 28px;font-size:.88rem;color:var(--muted)}
 footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:0 18px}
 footer ul a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink2)}
 @media (min-width:640px){.sm{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:1fr 1fr}h1{font-size:2.2rem}.hero h1{font-size:2.5rem}.keyfigs{grid-template-columns:repeat(3,1fr)}.keyfigs li.wide{grid-column:auto}.principles{grid-template-columns:1fr 1fr}
@@ -214,7 +215,7 @@ NAV = [
     ("household-tax.html", "Tax and income"),
     ("life/index.html", "Year by year"),
     ("glossary.html", "Glossary"),
-    ("methods.html", "Sources"),
+    ("sources.html", "Sources"),
 ]
 
 
@@ -442,8 +443,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 </main>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
-<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from, or see every source on the <a href="{up}methods.html">sources and methods</a> page. Mistakes we fix are listed under <a href="{up}corrections.html">corrections</a>. Survey figures are estimates: see <a href="{up}uncertainty.html">how sure they are</a>.</p>
-<p>Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+<p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap any figure to see where it comes from. See also <a href="{up}methods.html">methods</a>, <a href="{up}corrections.html">corrections</a> and <a href="{up}uncertainty.html">how sure the survey figures are</a>. Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
 <p class="version">Site version {version.short()}</p>
 </div></footer>
 {scripts}

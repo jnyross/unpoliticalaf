@@ -606,7 +606,8 @@ class Trace(unittest.TestCase):
         self.facts.add(Fact("b.1999 to 2000", 5.0, "%", "1999-00", "s2", "T1!C4"))
         self.facts.add(Fact("c.2020", 2.0, "ratio", "2020-21", "s1", "", status="calculated",
                             formula="a.2020 ÷ b.1999 to 2000", inputs=["a.2020", "b.1999 to 2000"]))
-        src = dict(publisher="P", title="T", geography="UK", population="All", published="2025", page="https://example.org", file="data/x.xlsx", licence="OGL")
+        src = dict(publisher="P", title="T", geography="UK", population="All", published="2025", page="https://example.org", file="data/x.xlsx", licence="OGL",
+                   retrieved="2026-01-01", sha256="0" * 64)
         self.sources = {"s1": src, "s2": dict(src, title="T2"), "s3": dict(src, title="Unused")}
 
     def test_anchor_is_safe(self):
@@ -663,7 +664,7 @@ class Explanations(unittest.TestCase):
             out = self.explain.box(key, self.sources)
             self.assertIn(f"In the words of the {e['publisher']}", out)
             self.assertIn("<blockquote", out)
-            self.assertIn(f'methods.html#src-{e["source"]}', out)
+            self.assertIn(f'sources.html#src-{e["source"]}', out)
             self.assertIn(self.sources[e["source"]]["page"], out)
 
     def test_life_quotes_have_a_topic_and_years(self):
