@@ -232,7 +232,7 @@ def box(key, sources, up="", heading=None):
 <p class="who">In the words of the {esc(e['publisher'])}:</p>
 <blockquote cite="{esc(s['page'])}"><p>“{q}”</p></blockquote>
 {f'<p class="small">{esc(e["gloss"])}</p>' if e.get("gloss") else ""}
-<p class="src">Quoted word for word from <a href="{esc(s['page'])}">{esc(e['title'])}</a> ({esc(e['date'])}). {esc(e.get('note', 'Figures inside the quote are as the publisher gave them at the time and may since have been revised.'))} <a href="{up}methods.html#src-{esc(e['source'])}">Source record</a>.</p>
+<p class="src">Quoted word for word from <a href="{esc(s['page'])}">{esc(e['title'])}</a> ({esc(e['date'])}). {esc(e.get('note', 'Figures inside the quote are as the publisher gave them at the time and may since have been revised.'))} <a href="{up}sources.html#src-{esc(e['source'])}">Source record</a>.</p>
 </aside>'''
 
 

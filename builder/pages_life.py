@@ -929,31 +929,46 @@ def topic_page(facts, d, num, sources, key):
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True)
 
 
+def _hub_holidays(facts, d, num):
+    """The holidays answer, shortened for the hub: the latest year only."""
+    return f'<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p></div>'
+
+
+def _hub_schools(facts, d, num):
+    """The class sizes answer, shortened for the hub: the newer January census stays on the topic page."""
+    return (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were '
+            f'{num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
+
+
+# Shorter answers for the hub, where every topic shares one page.
+HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools}
+
+
 def life_index(facts, d, num, sources):
     """A light hub: each topic's answer, a link to its own page, and the year and comparison choosers."""
     body = ["<h1>Everyday life, year by year</h1>"]
     body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed over time?</p>
-<p>Each topic has its own page with charts and every year’s figures, from {FIRST} for every topic and further back where official series reach. Or pick a single year, or compare two years. Every figure is an official statistic, shown with the period and place it covers.</p></div>''')
+<p>Each topic below links to its own page with every year’s figures. Or <a href="#years">pick a single year</a>, or <a href="#compare">compare two years</a>.</p></div>''')
     # Each topic's answer and chart come first, so a chart shows within the
     # first two phone screens; the year and comparison choosers follow.
     for key, title, _ in TOPICS:
         answer, _detail = TOPIC_BUILDERS[key](facts, d, num, sources)
+        answer = HUB_ANSWERS[key](facts, d, num) if key in HUB_ANSWERS else answer
         body.append(f"<h2 id='{key}'>{esc(title)}</h2>{NOFOLD}")
         body.append(answer)
         body.append(year_spark(facts, num, key, None))
         if key == TOPICS[0][0]:
             body.append(before_toc(CAUSE))
-        body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a>: {esc(TOPIC_PAGES[key][1])}.</p>')
+        body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
     body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
     a, b = DEFAULT_PAIR
-    body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared. '
-                'Or <a href="compare/spans/index.html">compare two sets of years</a>, such as the average of three years with three later years.</p>')
-    body.append(f'<p class="small">Every topic can be compared from {FIRST}. Some official series reach further back: the employment rate from 1971, '
-                'visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006. You can compare any two years '
-                'from 1971, using only the figures that reach back that far. Each topic page has a “Before 2008” section, and the earlier years above show what was measured then.</p>')
-    return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS, toc_after_first=True)
+    body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared, '
+                'or <a href="compare/spans/index.html">compare two sets of years</a>.</p>')
+    body.append(f'<p class="small">Every topic can be compared from {FIRST}. Comparisons with earlier years, back to 1971, use only the figures measured then: '
+                'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
+    return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS, contents=False)
 
 
 def work_ages_block(facts, num):

@@ -44,11 +44,13 @@ def render():
     pages = {}
     # Order matters: pages that derive facts come before pages that use them.
     pages["spending.html"] = pages_money.spending_page(facts, d, num, sources)
+    pages["spending-areas.html"] = pages_money.spending_areas_page(facts, d, num, sources)
     pages["spending-history.html"] = pages_spendhist.spending_history_page(facts, d, num, sources)
     pages["taxes.html"] = pages_money.taxes_page(facts, d, num, sources)
     pages["tax-history.html"] = pages_taxmixhist.tax_history_page(facts, d, num, sources)
     pages["who-pays.html"] = pages_money.who_pays_page(facts, d, num, sources)
     pages["who-pays-age.html"] = pages_money_extra.income_tax_age_page(facts, d, num, sources)
+    pages["who-pays-households.html"] = pages_money_extra.households_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
@@ -76,6 +78,7 @@ def render():
     pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
+    pages["sources.html"] = pages_home.sources_page(sources, used)
     pages["uncertainty.html"] = uncertainty.uncertainty_page(facts, d, num, sources, YEARS[-1])
     pages["glossary.html"] = glossary.glossary_page()
     pages["corrections.html"] = trace.corrections_page()

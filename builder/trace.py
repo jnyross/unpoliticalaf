@@ -151,8 +151,10 @@ def figure_pages(facts, sources, used):
 <dt>Original</dt><dd><a href="{esc(s["page"])}">{esc(s["page"])}</a></dd>
 <dt>File kept</dt><dd><code>{esc(s["file"])}</code> (<a href="{REPO}/blob/main/{esc(s["file"])}">in the public repository</a>)</dd>
 <dt>Licence</dt><dd>{esc(s["licence"])}</dd>
+<dt>Retrieved</dt><dd>{esc(s["retrieved"])}</dd>
+<dt>SHA-256</dt><dd><code class="hash">{esc(s["sha256"])}</code></dd>
 </dl>
-<p><a href="{up}methods.html#src-{esc(sid)}">Back to sources and methods</a></p>
+<p><a href="{up}sources.html#src-{esc(sid)}">Back to the list of sources</a></p>
 <h2 id="figures">{len(fids):,} figures</h2>''' + ("" if fids else "<p>No figure from this source is shown directly. It is used for rates or explanations quoted in the text.</p>")
         pages[f"{FIG_DIR}/{sid}.html"] = page(f"{FIG_DIR}/{sid}.html", f"Figures from {s['title']}", intro + "\n".join(rows),
                                              f"Every figure Unpolitical uses from {s['publisher']}: {s['title']}, with its cell or calculation.", contents=False)
