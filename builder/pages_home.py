@@ -46,6 +46,8 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Changes in percentages</strong> are shown in percentage points; changes in money and counts as a percentage of the earlier figure.</li>'
             '<li><strong>Non-tax receipts</strong>: total current receipts minus taxes (OBR).</li>'
             '<li><strong>Families with children renting privately</strong>: private-renting families ÷ all families, adding couples, single lone parents and previously married lone parents (EHS FT1241).</li>'
+            '<li><strong>Housing costs after inflation</strong>: cash rent or mortgage payment × (average CPIH over the latest survey year ÷ average CPIH over that survey year). A survey year runs from April to the following March, so each average uses the twelve monthly CPIH values (ONS series L522) for those months.</li>'
+            '<li><strong>Households with five or more rooms</strong>: the published percentages with five, six, seven, and eight or more rooms, added together (EHS FA1401).</li>'
             '<li><strong>Holiday share of visits</strong> and <strong>Europe share</strong>: holiday visits ÷ all visits, and holiday visits to Europe ÷ all holiday visits.</li></ul>',
             '<h2 id="data">Every figure, machine-readable</h2>',
             f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Figures on each page are tagged with the same id.</p>',

@@ -17,6 +17,19 @@ def occ_scheme(y):
     return "SOC2010" if y <= 2020 else "SOC2020"
 
 
+def sy(y):
+    """Survey-year label: 2015 -> '2015-16'."""
+    return f"{y}-{str(y + 1)[2:]}"
+
+
+def rooms_basis(y):
+    return "utility rooms counted" if y <= 2010 else "utility rooms not counted"
+
+
+def crowd_period(y):
+    return f"average of {sy(y - 2)} to {sy(y)}"
+
+
 def hol_basis(y):
     return "UK" if y <= 2023 else "GB"
 
@@ -24,6 +37,7 @@ def hol_basis(y):
 # Each measure: key, topic, label, fact-id function, display kind, change style ('pp', 'pct' or None),
 # period function, comparability-group function (None = one consistent series)
 def measures(d):
+    base = d["housing_costs"]["base"]
     occ_codes = {"prof": "2000000", "elem": "9000000", "caring": "6000000", "admin": "4000000", "skilled": "5000000", "managers": "1000001"}
     occ_names = {"prof": "Professional occupations", "managers": "Managers, directors and senior officials", "admin": "Administrative and secretarial",
                  "skilled": "Skilled trades", "caring": "Caring, leisure and other services", "elem": "Elementary occupations (e.g. cleaners, labourers)"}
@@ -49,6 +63,17 @@ def measures(d):
         ("house.social", "housing", "Households renting from a council or housing association", lambda y: f"house.social.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.private", "housing", "Households renting privately", lambda y: f"house.private.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.kids", "housing", "Families with dependent children renting privately", lambda y: f"house.kids.private.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
+        ("house.rent.private", "housing", f"Average private rent a week ({sy(base)} prices)", lambda y: f"house.real.rent.private.{y}", "pounds", "pct", sy, None),
+        ("house.rent.social", "housing", f"Average social rent a week ({sy(base)} prices)", lambda y: f"house.real.rent.social.{y}", "pounds", "pct", sy, None),
+        ("house.mortpay", "housing", f"Average mortgage payment a week ({sy(base)} prices)", lambda y: f"house.real.mortpay.{y}", "pounds", "pct", sy, None),
+        ("house.rent.privatecash", "housing", "Average private rent a week (cash, at the time)", lambda y: f"house.rent.private.{y}", "pounds", "pct", sy, None),
+        ("house.rent.socialcash", "housing", "Average social rent a week (cash, at the time)", lambda y: f"house.rent.social.{y}", "pounds", "pct", sy, None),
+        ("house.mortpaycash", "housing", "Average mortgage payment a week (cash, at the time)", lambda y: f"house.mortpay.{y}", "pounds", "pct", sy, None),
+        ("house.crowd.all", "housing", "Overcrowded households, all tenures", lambda y: f"house.crowd.all.{y}", "pct", "pp", crowd_period, None),
+        ("house.crowd.owners", "housing", "Overcrowded: owner occupiers", lambda y: f"house.crowd.owners.{y}", "pct", "pp", crowd_period, None),
+        ("house.crowd.social", "housing", "Overcrowded: social renters", lambda y: f"house.crowd.social.{y}", "pct", "pp", crowd_period, None),
+        ("house.crowd.private", "housing", "Overcrowded: private renters", lambda y: f"house.crowd.private.{y}", "pct", "pp", crowd_period, None),
+        ("house.rooms5", "housing", "Households with five or more rooms", lambda y: f"house.rooms5.{y}", "pct", "pp", sy, rooms_basis),
         ("hol.visits", "holidays", "Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "millions", "pct", lambda y: f"Jan–Dec {y}", hol_basis),
         ("hol.share", "holidays", "Visits abroad that were holidays", lambda y: f"hol.holshare.{y}", "pct", "pp", lambda y: f"Jan–Dec {y}", hol_basis),
         ("hol.europe", "holidays", "Holiday visits that were to Europe", lambda y: f"hol.europeshare.{y}", "pct", "pp", lambda y: f"Jan–Dec {y}", hol_basis),
@@ -61,7 +86,7 @@ def measures(d):
 TOPICS = [
     ("work", "Work", "United Kingdom. Employment rates and part-time share: Labour Force Survey, April to June. Job types: Annual Population Survey, January to December, people aged 16 and over in work."),
     ("earnings", "Earnings", "United Kingdom. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the CPIH inflation index."),
-    ("housing", "Housing", "England only. English Housing Survey, all households. A survey year runs from April to March, so “2015” means the 2015-16 survey."),
+    ("housing", "Housing", "England only. English Housing Survey. A survey year runs from April to March, so “2015” means the 2015-16 survey. Rents are averages for households paying rent, before any housing support (such as Housing Benefit). Mortgage payments are averages for households buying with a mortgage. “After inflation” figures use the CPIH price index averaged over each survey year. Overcrowding uses the bedroom standard and is an average of three survey years."),
     ("holidays", "Holidays abroad", "Trips abroad, by year of travel. Up to 2023: UK residents (International Passenger Survey). From 2024: Great Britain residents, measured with a new method. Trips within the UK are not included."),
     ("schools", "Class sizes", "England only. State-funded schools, classes taught by one teacher, at the January school census. “2015” means January 2015, in the 2014/15 school year."),
 ]
@@ -69,7 +94,7 @@ TOPICS = [
 TOPIC_SOURCES = {
     "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "aps2010", "aps2020"],
     "earnings": ["nomis-ashe-resident", "ons-l522"],
-    "housing": ["ehs-ft1101", "ehs-ft1241"],
+    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401"],
     "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025"],
     "schools": ["dfe-spc-2015-tables", "dfe_api"],
 }
@@ -77,7 +102,7 @@ TOPIC_SOURCES = {
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain.",
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional.",
-    "housing": "The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents).",
+    "housing": "The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years.",
     "schools": "Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
@@ -176,7 +201,13 @@ def headline(facts, num, topic, y):
         if not has(f"house.private.{y}"):
             return f"The English Housing Survey for {y}-{str(y + 1)[2:]} is not yet published."
         own = f"house.owners.{y}"
-        return (f"In {y}-{str(y + 1)[2:]}, {num(own, 'pct0')} of households in England owned their home and {num(f'house.private.{y}', 'pct0')} rented privately.")
+        s = f"In {sy(y)}, {num(own, 'pct0')} of households in England owned their home and {num(f'house.private.{y}', 'pct0')} rented privately."
+        if has(f"house.rent.private.{y}"):
+            s += (f" The average private rent was {num(f'house.rent.private.{y}', 'pounds')} a week, social rent {num(f'house.rent.social.{y}', 'pounds')}"
+                  f" and the average mortgage payment {num(f'house.mortpay.{y}', 'pounds')} (cash, at the time).")
+        if has(f"house.crowd.all.{y}"):
+            s += f" Over the three survey years to {sy(y)}, {num(f'house.crowd.all.{y}', 'pct')} of households were overcrowded."
+        return s
     if topic == "holidays":
         if not has(f"hol.world.holiday.{y}"):
             return f"No figure for holidays abroad in {y} in the tables used here."
@@ -338,6 +369,8 @@ def life_index(facts, d, num, sources):
                               [[f"{y}-{str(y + 1)[2:]}", num(f"house.outright.{y}", "pct"), num(f"house.mortgage.{y}", "pct"), num(f"house.social.{y}", "pct"), num(f"house.private.{y}", "pct"),
                                 num(f"house.kids.private.{y}", "pct") if f"house.kids.private.{y}" in facts else "<span class='missing'>not available</span>"] for y in YEARS if f"house.private.{y}" in facts]
                               + [[f"{y}-{str(y + 1)[2:]}", "<span class='missing'>not yet published</span>", "", "", "", ""] for y in YEARS if f"house.private.{y}" not in facts]))
+    body.extend(housing_costs_block(facts, num, d))
+    body.extend(housing_space_block(facts, num))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
     # Holidays
@@ -362,6 +395,55 @@ def life_index(facts, d, num, sources):
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["schools"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["schools"] if s in sources], up="../"))
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), "How work, earnings, housing, holidays and class sizes have changed in the UK since 2008.", scripts=COMPARE_JS)
+
+
+def housing_costs_block(facts, num, d):
+    base = d["housing_costs"]["base"]
+    b = sy(base)
+    ys = [y for y in YEARS if f"house.rent.private.{y}" in facts]
+    out = ["<h3 id='housing-costs'>What housing costs</h3>"]
+    out.append(f'<div class="answer"><p>In {b}, households renting privately in England paid {num(f"house.rent.private.{base}", "pounds")} a week on average, '
+               f'social renters {num(f"house.rent.social.{base}", "pounds")} and households with a mortgage {num(f"house.mortpay.{base}", "pounds")}. '
+               f'After allowing for rising prices, the average private rent in {sy(FIRST)} was {num(f"house.real.rent.private.{FIRST}", "pounds")} in {b} prices, '
+               f'social rent {num(f"house.real.rent.social.{FIRST}", "pounds")} and the average mortgage payment {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p></div>')
+    out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
+                            [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
+                             ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
+                            f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0))
+    out.append(details_table("Show housing costs for every year", f"Average (mean) weekly rent before housing support and mortgage payment, England",
+                             ["Survey year", "Private rent (cash)", f"Private rent ({b} prices)", "Social rent (cash)", f"Social rent ({b} prices)",
+                              "Mortgage (cash)", f"Mortgage ({b} prices)"],
+                             [[sy(y), num(f"house.rent.private.{y}", "pounds"), num(f"house.real.rent.private.{y}", "pounds"), num(f"house.rent.social.{y}", "pounds"),
+                               num(f"house.real.rent.social.{y}", "pounds"), num(f"house.mortpay.{y}", "pounds"), num(f"house.real.mortpay.{y}", "pounds")] for y in ys]
+                             + [[sy(y), "<span class='missing'>not yet published</span>", "", "", "", "", ""] for y in YEARS if y not in ys]))
+    return out
+
+
+def housing_space_block(facts, num):
+    cy = [y for y in YEARS if f"house.crowd.all.{y}" in facts]
+    last = cy[-1]
+    out = ["<h3 id='housing-space'>Space and overcrowding</h3>"]
+    out.append(f'<div class="answer"><p>Over the three survey years {sy(last - 2)} to {sy(last)}, {num(f"house.crowd.all.{last}", "pct")} of households in England were overcrowded: '
+               f'{num(f"house.crowd.social.{last}", "pct")} of social renters, {num(f"house.crowd.private.{last}", "pct")} of private renters and '
+               f'{num(f"house.crowd.owners.{last}", "pct")} of owner occupiers. For {sy(FIRST - 2)} to {sy(FIRST)} the figures were '
+               f'{num(f"house.crowd.social.{FIRST}", "pct")}, {num(f"house.crowd.private.{FIRST}", "pct")} and {num(f"house.crowd.owners.{FIRST}", "pct")}.</p></div>')
+    out.append(series_chart(facts, "Overcrowded households in England, by tenure",
+                            [("Social renters", lambda y: f"house.crowd.social.{y}", "a"), ("Private renters", lambda y: f"house.crowd.private.{y}", "b"),
+                             ("Owner occupiers", lambda y: f"house.crowd.owners.{y}", "c")],
+                            "Per cent of households below the bedroom standard, three-year average ending in the survey year shown", ymin=0))
+    out.append(details_table("Show overcrowding for every year", "Overcrowded households, England, % (three-year averages, bedroom standard)",
+                             ["Three survey years", "All households", "Owner occupiers", "Social renters", "Private renters"],
+                             [[f"{sy(y - 2)} to {sy(y)}", num(f"house.crowd.all.{y}", "pct"), num(f"house.crowd.owners.{y}", "pct"), num(f"house.crowd.social.{y}", "pct"),
+                               num(f"house.crowd.private.{y}", "pct")] for y in cy]
+                             + [[f"{sy(y - 2)} to {sy(y)}", "<span class='missing'>not yet published</span>", "", "", ""] for y in YEARS if y not in cy]))
+    ry = [y for y in YEARS if f"house.rooms5.{y}" in facts]
+    rows = []
+    for y in ry:
+        rows.append([f"{sy(y)} ({rooms_basis(y)})"] + [num(f"house.rooms.{k}.{y}", "pct") for k in ("r12", "r3", "r4", "r5", "r6", "r7", "r8")] + [num(f"house.rooms5.{y}", "pct")])
+    out.append(details_table("Show number of rooms for every year", "Households by number of rooms, England, % of all households",
+                             ["Survey year", "1 or 2", "3", "4", "5", "6", "7", "8 or more", "5 or more"], rows))
+    out.append('<p class="small">Room counts before and after 2011-12 are not comparable: from 2011-12 utility rooms were no longer counted.</p>')
+    return out
 
 
 MEAS = []

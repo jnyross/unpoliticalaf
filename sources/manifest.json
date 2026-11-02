@@ -136,6 +136,31 @@
    "id": "ott-2024",
    "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
    "file": "ott/ukresidents2024annual.xlsx"
+  },
+  {
+   "id": "ehs-fa3201",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
+   "file": "ehs/FA3201_rent_before_housing_support.ods"
+  },
+  {
+   "id": "ehs-fa2555",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4da2f96a73e62ba1029999/FA2555_mortgage_payment_per_week__by_type_of_mortgage_age_economic_status.ods",
+   "file": "ehs/FA2555_mortgage_payment_per_week.ods"
+  },
+  {
+   "id": "ehs-fa2501",
+   "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
+   "file": "ehs/FA2501_mortgage_payment_per_week_2021-22.ods"
+  },
+  {
+   "id": "ehs-fa1401",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
+   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods"
+  },
+  {
+   "id": "ehs-fa1422",
+   "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
+   "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
   }
  ]
 }
