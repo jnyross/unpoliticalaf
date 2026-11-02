@@ -1,6 +1,7 @@
 """How UK tax and government spending compare with other OECD countries, as a share of GDP."""
 from .html import FOLD, page, details_table, bars, line_chart, switch, source_line, esc, fmt
 from .pages_money import derive
+from . import findings as F
 
 UK, AVG = "GBR", "OECD_REP"
 
@@ -81,11 +82,11 @@ Government spending was above the average in {len(s_above)} of the {s_both} year
         ("Taxes", f"All taxes as a % of GDP, {tyears[0]} to {ty}.",
          line_chart(f"Taxes as a share of GDP, UK and OECD average, {tyears[0]} to {ty}", tyears,
                     [("United Kingdom", tv[0], "a"), ("OECD average", tv[1], "b")], "Per cent of GDP. Calendar years. Source: OECD Revenue Statistics.",
-                    ymin=0, kind="pct", num=num, ids=tax_ids)),
+                    ymin=0, kind="pct", num=num, ids=tax_ids, finding=F.gap("The UK's tax share of GDP", "the OECD average"))),
         ("Spending", f"General government spending as a % of GDP, {syears[0]} to {sy}. The OECD's yearly series starts in {syears[0]}.",
          line_chart(f"Government spending as a share of GDP, UK and OECD average, {syears[0]} to {sy}", syears,
                     [("United Kingdom", sv[0], "a"), ("OECD average", sv[1], "b")], "Per cent of GDP. Calendar years. Source: OECD Government at a Glance.",
-                    ymin=0, kind="pct", num=num, ids=sp_ids, events=covid)),
+                    ymin=0, kind="pct", num=num, ids=sp_ids, events=covid, finding=F.gap("The UK's spending share of GDP", "the OECD average"))),
     ]))
     body.append("<p class='small'>The OECD average covers the countries that are members today, using the figures each had in each year. Some countries' figures start later than others, so the early average is based on fewer countries.</p>")
     body.append(FOLD)
