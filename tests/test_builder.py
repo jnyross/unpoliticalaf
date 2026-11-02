@@ -4,7 +4,7 @@ import unittest
 
 from builder.data import Fact, Facts
 from builder.html import fmt, line_chart, small_multiples, Num
-from builder import pages_life
+from builder import pages_life, pages_ranges
 
 
 class Formatting(unittest.TestCase):
@@ -208,6 +208,103 @@ class ComparisonPage(unittest.TestCase):
 
     def test_shared_label_prefix_is_written_once(self):
         self.assertEqual(pages_life._join_labels(["Share in: A", "Share in: B"]), "Share in: A; B")
+
+
+class SpanComparisons(unittest.TestCase):
+    """Averages over several years: only when every year has a figure measured the same way."""
+
+    def setUp(self):
+        self.saved = list(pages_life.MEAS)
+        f = Facts()
+        for y in range(2008, 2026):
+            f.add(Fact(f"rate.{y}", 60.0 + y - 2008, "%", str(y), "s", "A1"))
+            if y != 2016:
+                f.add(Fact(f"gap.{y}", 10.0, "%", str(y), "s", "B1"))
+            f.add(Fact(f"occ.{y}", 20.0, "%", str(y), "s", "C1"))
+        self.facts = f
+        pages_life.MEAS[:] = [
+            ("work.rate", "work", "Employment rate", lambda y: f"rate.{y}", "pct", "pp", str, None),
+            ("work.gap", "work", "Has a gap", lambda y: f"gap.{y}", "pct", "pp", str, None),
+            ("work.occ.prof", "work", "Professional", lambda y: f"occ.{y}", "pct", "pp", str, pages_life.occ_scheme),
+            ("house.crowd.all", "housing", "Overcrowded", lambda y: f"rate.{y}", "pct", "pp", str, None),
+        ]
+        pages_ranges.add_range_facts(f)
+        self.num = Num(f)
+
+    def tearDown(self):
+        pages_life.MEAS[:] = self.saved
+
+    def m(self, key):
+        return next(m for m in pages_life.MEAS if m[0] == key)
+
+    def test_average_is_recorded_with_its_formula(self):
+        a = self.facts["avg.work.rate.2009-2011"]
+        self.assertAlmostEqual(a.value, 62.0)
+        self.assertEqual(a.status, "calculated")
+        self.assertEqual(a.inputs, ["rate.2009", "rate.2010", "rate.2011"])
+        self.assertEqual(a.formula, "(rate.2009 + rate.2010 + rate.2011) ÷ 3")
+
+    def test_no_average_over_a_missing_year_or_a_definition_change(self):
+        self.assertNotIn("avg.work.gap.2015-2017", self.facts)
+        self.assertIn("avg.work.gap.2017-2019", self.facts)
+        self.assertNotIn("avg.work.occ.prof.2019-2021", self.facts)  # SOC changed in 2021
+        self.assertNotIn("avg.house.crowd.all.2009-2011", self.facts)  # already a three-year average
+        out = pages_ranges._not_compared(self.facts, self.m("work.gap"), (2015, 2017), (2019, 2021))
+        self.assertIn("no figure for 2016", out)
+        out = pages_ranges._not_compared(self.facts, self.m("work.occ.prof"), (2019, 2021), (2022, 2024))
+        self.assertIn("definition changed within 2019 to 2021", out)
+
+    def test_spans_either_side_of_a_change_are_not_compared(self):
+        self.assertEqual(pages_ranges.span_status(self.facts, self.m("work.occ.prof"), (2011, 2013), (2022, 2024)), "break")
+        self.assertEqual(pages_ranges.span_status(self.facts, self.m("work.occ.prof"), (2011, 2013), (2016, 2018)), "ok")
+
+    def test_change_between_averages(self):
+        out = pages_ranges.key_sentence(self.facts, self.num, "work", (2009, 2011), (2017, 2019))
+        self.assertIn("+8.0 percentage points", out)
+        self.assertIn('data-from="avg.work.rate.2009-2011"', out)
+
+    def test_spans_never_overlap(self):
+        for a, b in pages_ranges.span_pairs():
+            self.assertGreater(b[0], a[1])
+
+
+class DefaultComparison(unittest.TestCase):
+    """The default pair fills every topic and is picked by a rule that ignores which way figures moved."""
+
+    def setUp(self):
+        self.saved = list(pages_life.MEAS)
+        f = Facts()
+        for y in range(2008, 2026):
+            for k in ("w", "e", "s"):
+                f.add(Fact(f"{k}.{y}", 50.0, "%", str(y), "s", "A1"))
+            if y <= 2024:
+                f.add(Fact(f"h.{y}", 20.0, "%", str(y), "s", "A1"))
+            if y >= 2009:
+                f.add(Fact(f"v.{y}", 70.0, "n", str(y), "s", "A1"))
+        self.facts = f
+        pages_life.MEAS[:] = [
+            ("work.rate", "work", "W", lambda y: f"w.{y}", "pct", "pp", str, None),
+            ("earn.ft", "earnings", "E", lambda y: f"e.{y}", "pct", "pp", str, None),
+            ("house.private", "housing", "H", lambda y: f"h.{y}", "pct", "pp", str, None),
+            ("hol.per100", "holidays", "V", lambda y: f"v.{y}", "int", "pct", str, pages_life.hol_basis),
+            ("school.primary", "schools", "S", lambda y: f"s.{y}", "dp1", "abs", str, None),
+        ]
+        pages_ranges.add_range_facts(f)
+
+    def tearDown(self):
+        pages_life.MEAS[:] = self.saved
+
+    def test_default_years_fill_all_five_topics(self):
+        a, b = pages_ranges.default_years(self.facts)
+        self.assertEqual((a, b), (2009, 2023))
+        for x, y in pages_ranges.suggested_years(self.facts):
+            self.assertTrue(pages_ranges.full_pair(self.facts, x, y))
+
+    def test_default_spans_fill_all_five_topics_and_avoid_the_pandemic(self):
+        a, b = pages_ranges.default_spans(self.facts)
+        self.assertTrue(pages_ranges.full_pair(self.facts, a, b))
+        for sp in (a, b):
+            self.assertFalse(any(y in (2020, 2021) for y in range(sp[0], sp[1] + 1)))
 
 
 class Rates(unittest.TestCase):

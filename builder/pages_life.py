@@ -190,12 +190,18 @@ def year_links(current, up, href=lambda y: f"{y}.html", strip=False):
     return f'<ul class="yearnav{" yearstrip" if strip else ""}">{items(YEARS)}</ul>{early}'
 
 
+# The default and suggested pairs of years. build.py sets these from
+# pages_ranges.default_years / suggested_years once the facts are loaded.
+DEFAULT_PAIR = [2010, LAST]
+SUGGESTED = []
+
+
 def compare_form(up, a=None, b=None):
     def opts(sel):
         return "".join(f'<option value="{y}"{" selected" if y == sel else ""}>{y}</option>' for y in YEARS)
     return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare>
-<label>First year <select name="from">{opts(a or 2010)}</select></label>
-<label>Second year <select name="to">{opts(b or LAST)}</select></label>
+<label>First year <select name="from">{opts(a or DEFAULT_PAIR[0])}</select></label>
+<label>Second year <select name="to">{opts(b or DEFAULT_PAIR[1])}</select></label>
 <button type="submit">Compare</button></form>'''
 
 
@@ -630,7 +636,15 @@ def compare_page(facts, d, num, sources, a, b):
 
 
 def compare_index(sources):
+    from .pages_ranges import DEFAULT_RULE
     body = ["<h1>Compare two years</h1>", "<p>Pick two years to see work, pay, housing, holidays and class sizes side by side.</p>", compare_form("../")]
+    if SUGGESTED:
+        a, b = SUGGESTED[0]
+        links = "".join(f'<li><a href="{x}-{y}.html">{x} compared with {y}</a></li>' for x, y in SUGGESTED)
+        body.append(f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
+                    f'<p class="small">{esc(DEFAULT_RULE)} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
+                    'Years from 2024 cannot be compared for holidays abroad, because the survey changed then, and housing figures for 2025 are not yet published.</p></div>')
+    body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
     for a in YEARS[:-1]:
         links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in YEARS if b > a)
@@ -836,6 +850,9 @@ def life_index(facts, d, num, sources):
     body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
+    a, b = DEFAULT_PAIR
+    body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared. '
+                'Or <a href="compare/spans/index.html">compare two sets of years</a>, such as the average of three years with three later years.</p>')
     body.append('<p class="small">Comparisons cover every topic from 2008. Some official series reach further back: the employment rate from 1971, '
                 'visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006. Each topic page has a '
                 '“Before 2008” section, and the earlier years above show what was measured then.</p>')
