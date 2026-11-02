@@ -39,70 +39,6 @@
   "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
   "retrieved": "2026-11-02T08:58:39Z"
  },
- "discovery-dwelling-stock-page": {
-  "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants",
-  "file": "discovery/dwelling-stock-page.html",
-  "bytes": 156387,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "43ace95f5e9b8a8d643e916037e9cd4711b1d45b72b5fd86b6314077dd4c38a5",
-  "retrieved": "2026-11-02T10:26:38Z"
- },
- "discovery-ni-enrolments": {
-  "url": "https://www.education-ni.gov.uk/publications/school-enrolments-northern-ireland-summary-data",
-  "file": "discovery/ni-enrolments.html",
-  "bytes": 35515,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "82a0d48f261e22de8cd95d987de4d8795e7fac7edca7641cc99893a6babcde90",
-  "retrieved": "2026-11-02T10:27:06Z"
- },
- "discovery-scot-pupil-census-supp": {
-  "url": "https://www.gov.scot/publications/pupil-census-supplementary-statistics/",
-  "file": "discovery/scot-pupil-census-supp.html",
-  "bytes": 61848,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "71aa052a17e865f6052e48717b209c58737ac9b7248e6c349f752e66ec4a0de6",
-  "retrieved": "2026-11-02T10:28:52Z"
- },
- "discovery-scot-school-stats": {
-  "url": "https://www.gov.scot/collections/school-education-statistics/",
-  "file": "discovery/scot-school-stats.html",
-  "bytes": 69905,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "a63acf43a4bd9ecc41c7cdb2c6c6c216021703451a0fa5f735e9f456676e841d",
-  "retrieved": "2026-11-02T10:28:59Z"
- },
- "discovery-scot-schools-2024": {
-  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/",
-  "file": "discovery/scot-schools-2024.html",
-  "bytes": 37135,
-  "content_type": "text/html;charset=UTF-8",
-  "sha256": "9bbc9eb9b491e84a7dcaa6132ac271802298f6568f99882f83e63ee14c695b96",
-  "retrieved": "2026-11-02T10:28:56Z"
- },
- "discovery-scot-schools-2024-classes": {
-  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/pages/classes-and-pupils/",
-  "file": "discovery/scot-schools-2024-classes.html",
-  "bytes": 0,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "retrieved": "2026-11-02T10:31:23Z"
- },
- "discovery-scot-schools-2024-docs": {
-  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/documents/",
-  "file": "discovery/scot-schools-2024-docs.html",
-  "bytes": 0,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "retrieved": "2026-11-02T10:31:20Z"
- },
- "discovery-wales-census-2025": {
-  "url": "https://www.gov.wales/schools-census-results-january-2025",
-  "file": "discovery/wales-census-2025.html",
-  "bytes": 30569,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "b47d1c799483ffa09b8548926869f66a1616cc907e2db8066b5b05a1bf076107",
-  "retrieved": "2026-11-02T10:27:03Z"
- },
  "dluhc-lt109": {
   "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
   "file": "dluhc/LiveTable109.ods",
@@ -239,7 +175,7 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
- "nomis-aps-emp-nations": {
+ "nomis-aps-emp-places": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
   "file": "nomis/aps-employment-rate-nations-regions.csv",
   "bytes": 382725,
@@ -247,7 +183,7 @@
   "sha256": "39efbc62386147ae214072d5496344b8cb8003ee1208aa96b46928cbca2e3998",
   "retrieved": "2026-11-02T10:26:23Z"
  },
- "nomis-ashe-nations": {
+ "nomis-ashe-places": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
   "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
   "bytes": 123468,
@@ -430,14 +366,6 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
- },
- "scot-pupil-census-2025": {
-  "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
-  "file": "scot/pupil-census-supplementary-2025.xlsx",
-  "bytes": 0,
-  "content_type": "text/html; charset=UTF-8",
-  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "retrieved": "2026-11-02T10:31:16Z"
  },
  "wg-schools-census-2025": {
   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",

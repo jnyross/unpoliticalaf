@@ -193,29 +193,14 @@
    "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
   },
   {
-   "id": "nomis-aps-emp-nations",
+   "id": "nomis-aps-emp-places",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
    "file": "nomis/aps-employment-rate-nations-regions.csv"
   },
   {
-   "id": "nomis-ashe-nations",
+   "id": "nomis-ashe-places",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
    "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
-  },
-  {
-   "id": "discovery-dwelling-stock-page",
-   "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants",
-   "file": "discovery/dwelling-stock-page.html"
-  },
-  {
-   "id": "discovery-wales-census-2025",
-   "url": "https://www.gov.wales/schools-census-results-january-2025",
-   "file": "discovery/wales-census-2025.html"
-  },
-  {
-   "id": "discovery-ni-enrolments",
-   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-northern-ireland-summary-data",
-   "file": "discovery/ni-enrolments.html"
   },
   {
    "id": "ons-ybud",
@@ -251,36 +236,6 @@
    "id": "wg-schools-census-2025",
    "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
    "file": "wg/schools-census-results-january-2025.ods"
-  },
-  {
-   "id": "discovery-scot-pupil-census-supp",
-   "url": "https://www.gov.scot/publications/pupil-census-supplementary-statistics/",
-   "file": "discovery/scot-pupil-census-supp.html"
-  },
-  {
-   "id": "discovery-scot-schools-2024",
-   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/",
-   "file": "discovery/scot-schools-2024.html"
-  },
-  {
-   "id": "discovery-scot-school-stats",
-   "url": "https://www.gov.scot/collections/school-education-statistics/",
-   "file": "discovery/scot-school-stats.html"
-  },
-  {
-   "id": "scot-pupil-census-2025",
-   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
-   "file": "scot/pupil-census-supplementary-2025.xlsx"
-  },
-  {
-   "id": "discovery-scot-schools-2024-docs",
-   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/documents/",
-   "file": "discovery/scot-schools-2024-docs.html"
-  },
-  {
-   "id": "discovery-scot-schools-2024-classes",
-   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/pages/classes-and-pupils/",
-   "file": "discovery/scot-schools-2024-classes.html"
   }
  ]
 }
