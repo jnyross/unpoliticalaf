@@ -1,7 +1,22 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
 from .explain import box as explain
-from .html import FOLD, page, bars, change_bars, keyfigs, table, details_table, line_chart, source_line, fmt, esc
+from .html import FOLD, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, source_line, fmt, esc
+
+# What each way of showing money means, in one sentence, shown with every cash / real / GDP switch.
+VIEW_NOTES = {
+    "cash": "Pounds as they were at the time. Not adjusted for rising prices, so earlier years look smaller partly because prices were lower.",
+    "real": "Adjusted to 2025-26 prices with the GDP deflator, a measure of prices across the whole economy (not the prices households pay), so different years can be compared.",
+    "gdp": "As a share of GDP, the value of everything produced in the UK that year. A share can fall while the amount rises, if the economy grows faster.",
+}
+VIEW_LABELS = {"cash": "Cash", "real": "After inflation", "gdp": "Share of GDP"}
+VIEW_LEGEND = "Show amounts as"
+
+
+def views(make, order=("cash", "real", "gdp"), default="real", notes=None):
+    """A cash / real terms / % of GDP switch. make(view) returns the chart for that view."""
+    notes = notes or {}
+    return switch(VIEW_LEGEND, [(VIEW_LABELS[v], notes.get(v, VIEW_NOTES[v]), make(v)) for v in order], default=list(order).index(default))
 
 
 def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
@@ -80,12 +95,18 @@ Areas follow the international COFOG classification. “Defence” here excludes
            [f"spend.real.tme.{y}", f"spend.real.tme.{first}"], f"100 × (spend.real.tme.{y} ÷ spend.real.tme.{first} − 1)")
     body.append(f'''<div class="answer"><p>After adjusting for rising prices, total spending in {y} was {num(f"spend.realchange.tme.{first}.{y}", "pct0")} higher than in {first}.
 As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}", "pct")} to {num(f"spend.gdp.tme.{y}", "pct")}.</p></div>''')
-    body.append(line_chart("Total public spending after inflation", years, [("Total managed expenditure, £bn in 2025-26 prices", tme_real, "a")],
-                           "£ billion, 2025-26 prices (adjusted with the GDP deflator)", events=[(years.index("2020-21"), "Covid")], desc=f"From {fmt(tme_real[0], 'bn')} in {first} to {fmt(tme_real[-1], 'bn')} in {y}.",
-                           kind="bn", num=num, ids=[[f"spend.real.tme.{yy}" for yy in years]]))
-    body.append(line_chart("Total public spending as a share of GDP", years, [("Total managed expenditure, % of GDP", tme_gdp, "a")],
-                           "Per cent of GDP", desc=f"From {tme_gdp[0]:.1f}% in {first} to {tme_gdp[-1]:.1f}% in {y}.",
-                           kind="pct", num=num, ids=[[f"spend.gdp.tme.{yy}" for yy in years]]))
+    covid = [(years.index("2020-21"), "Covid")]
+    tme_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
+    tme_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices (adjusted with the GDP deflator)", "gdp": "Per cent of GDP"}
+    tme_title = {"cash": "Total public spending in cash", "real": "Total public spending after inflation", "gdp": "Total public spending as a share of GDP"}
+
+    def tme_chart(v):
+        vals = [facts[f"spend.{v}.tme.{yy}"].value for yy in years]
+        return line_chart(tme_title[v], years, [("Total managed expenditure", vals, "a")], tme_unit[v], events=covid,
+                          desc=f"From {fmt(vals[0], tme_kind[v])} in {first} to {fmt(vals[-1], tme_kind[v])} in {y}.",
+                          kind=tme_kind[v], num=num, ids=[[f"spend.{v}.tme.{yy}" for yy in years]], ymin=0 if v != "gdp" else None)
+    body.append(views(tme_chart))
+    body.append(FOLD)
     body.append(explain("covid-spending", sources))
     body.append(explain("energy-2022", sources))
     rows = [[yy, num(f"spend.cash.tme.{yy}", "bn1"), num(f"spend.real.tme.{yy}", "bn1"), num(f"spend.gdp.tme.{yy}", "pct")] for yy in years]
@@ -105,6 +126,19 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     body.append(FOLD)
     body.append(details_table("Show the amounts and shares of GDP", f"Spending by area, {ten} and {y}", ["Area", f"{ten} £bn*", f"{y} £bn*", "Change", f"{ten} % GDP", f"{y} % GDP"], rows))
     body.append('<p class="small">* £ billion in 2025-26 prices.</p>')
+    body.append(f"<h2 id='area-history'>Each area, every year from {first} to {y}</h2>")
+    body.append(f'<p>One small chart for each area, so you can see when each one rose or fell. Switch between cash, after inflation and share of GDP. '
+                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>.</p>')
+    area_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
+    area_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices", "gdp": "Per cent of GDP"}
+
+    def area_chart(v):
+        return small_multiples(f"Spending by area, {first} to {y}", [yy[:4] for yy in years], [(n.split(" (")[0], [facts[f"spend.{v}.{k}.{yy}"].value for yy in years]) for k, n in order],
+                               area_unit[v] + ". Axis years are financial years starting in April of the year shown.", area_kind[v], point_labels=years, ids=[[f"spend.{v}.{k}.{yy}" for yy in years] for k, _ in order], num=num,
+                               summary_note="The tables below give every area's figure for every year.", ymin=0 if v != "gdp" else None,
+                               breaks=[(years.index("2011-12"), "Education: student loans removed")] if "2011-12" in years else ())
+    body.append(views(area_chart))
+    body.append(FOLD)
     # full history tables per view
     for view, label, kind in (("real", "£ billion, 2025-26 prices", "bn1"), ("gdp", "% of GDP", "pct"), ("cash", "£ billion, cash (not adjusted for inflation)", "bn1")):
         head = ["Year"] + [esc(n.split(" (")[0]) for _, n in order] + ["Total"]
@@ -162,19 +196,50 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     # history as % of GDP
     gy = [g for g in rc["gdp_years"] if facts.get(f"gdp.receipts.{g}") and facts[f"gdp.receipts.{g}"].value is not None]
     fc = next((i for i, g in enumerate(gy) if g >= rc["forecast_from"]), None)
-    body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>As a share of GDP, so that years with very different prices and economies can be compared. Forecast years are shaded and dashed.</p>")
-    body.append(line_chart("Receipts and spending as a share of GDP", gy,
-                           [("Receipts, % of GDP", [facts[f"gdp.receipts.{g}"].value for g in gy], "a"),
-                            ("Spending, % of GDP", [facts[f"gdp.tme.{g}"].value for g in gy], "b")],
-                           "Per cent of GDP. Source: OBR public finances databank.", forecast_from=fc, ymin=0,
-                           kind="pct", num=num, ids=[[f"gdp.receipts.{g}" for g in gy], [f"gdp.tme.{g}" for g in gy]]))
+    body.append(f"<h2 id='history'>Receipts and spending since {gy[0]}</h2><p>Shown as a share of GDP to start with, so that years with very different prices and economies can be compared. You can switch to amounts after inflation. Forecast years are shaded and dashed.</p>")
+    rec_title = {"cash": "Receipts and spending in cash", "real": "Receipts and spending after inflation", "gdp": "Receipts and spending as a share of GDP"}
+    rec_unit = {"cash": "£ billion, cash. Source: OBR public finances databank.", "real": "£ billion, 2025-26 prices (OBR GDP deflator). Source: OBR public finances databank.",
+                "gdp": "Per cent of GDP. Source: OBR public finances databank."}
+    rec_ids = {"cash": ("agg.receipts", "agg.tme"), "real": ("agg.real.receipts", "agg.real.tme"), "gdp": ("gdp.receipts", "gdp.tme")}
+
+    def rec_chart(v):
+        a, b = rec_ids[v]
+        ids = [[f"{a}.{g}" if f"{a}.{g}" in facts else None for g in gy], [f"{b}.{g}" if f"{b}.{g}" in facts else None for g in gy]]
+        vals = [[facts[i].value if i else None for i in row] for row in ids]
+        return line_chart(rec_title[v], gy, [("Receipts", vals[0], "a"), ("Spending", vals[1], "b")], rec_unit[v], forecast_from=fc, ymin=0,
+                          kind="pct" if v == "gdp" else "bn", num=num, ids=ids)
+    first_real = rc["real_years"][0]
+    body.append(views(rec_chart, order=("gdp", "real"), default="gdp",
+                      notes={"real": VIEW_NOTES["real"] + f" The OBR's deflator starts in {first_real}, so this view starts there."}))
+    body.append('<p class="small">Cash amounts are not shown for this long period because prices rose many times over, so they cannot be compared across the years. Cash figures for each tax since 1999-00 are below.</p>')
     body.append(FOLD)
     body.append(explain("borrowing-records", sources))
     rows = [[g + (" (forecast)" if g >= rc["forecast_from"] else ""), num(f"gdp.receipts.{g}", "pct"), num(f"gdp.tme.{g}", "pct"), num(f"gdp.psnb.{g}", "pct"), num(f"gdp.psnd.{g}", "pct")] for g in gy]
     body.append(details_table("Show every year", f"Receipts, spending, borrowing and debt, % of GDP, {gy[0]} to {gy[-1]}", ["Year", "Receipts", "Spending", "Borrowing", "Debt"], rows))
+    rg = [g for g in gy if f"agg.real.receipts.{g}" in facts]
+    rows = [[g + (" (forecast)" if g >= rc["forecast_from"] else ""), num(f"agg.real.receipts.{g}", "bn1"), num(f"agg.real.tme.{g}", "bn1")] for g in rg]
+    body.append(details_table("Show every year after inflation", f"Receipts and spending, £ billion in 2025-26 prices, {rg[0]} to {rg[-1]}",
+                              ["Year", "Receipts", "Spending"], rows))
+    body.append(f'<p class="small">After-inflation amounts = cash × 100 ÷ GDP deflator (2025-26 = 100). The cash amounts and the deflator for every year are in the source record linked from each figure. The deflator in this databank starts in {first_real}. It measures prices across the whole economy, not only what households buy. Forecast years use OBR forecasts of prices and GDP.</p>')
     # taxes by type over time
     ty = rc["years"]
-    body.append(f"<h3>Main taxes since {ty[0]}</h3><p>Cash amounts, not adjusted for inflation. Forecast years are labelled.</p>")
+    body.append(f"<h3>The three largest taxes since {ty[0]}</h3><p>Income Tax, National Insurance and VAT. Forecast years are shaded and dashed.</p>")
+    tfc = next((i for i, t in enumerate(ty) if t >= rc["forecast_from"]), None)
+    big = [("income_tax", "Income Tax", "a"), ("nics", "National Insurance", "b"), ("vat", "VAT", "c")]
+    tax_pre = {"cash": "rec", "real": "rec.real", "gdp": "rec.gdp"}
+    tax_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices (OBR GDP deflator)", "gdp": "Per cent of GDP (cash receipts ÷ nominal GDP for the same year)"}
+
+    def tax_chart(v):
+        ids = [[f"{tax_pre[v]}.{k}.{t}" for t in ty] for k, _, _ in big]
+        return line_chart(f"Income Tax, National Insurance and VAT, {VIEW_LABELS[v].lower()}", ty,
+                          [(n, [facts[i].value for i in row], st) for (k, n, st), row in zip(big, ids)], tax_unit[v], forecast_from=tfc, ymin=0,
+                          kind="pct" if v == "gdp" else "bn", num=num, ids=ids)
+    body.append(views(tax_chart))
+    rows = [[t + (" (forecast)" if t >= rc["forecast_from"] else "")] + [num(f"rec.real.{k}.{t}", "bn1") for k, _, _ in big] + [num(f"rec.gdp.{k}.{t}", "pct") for k, _, _ in big] for t in ty]
+    body.append(details_table("Show these three taxes after inflation and as a share of GDP", f"Income Tax, National Insurance and VAT, {ty[0]} to {ty[-1]}: £ billion in 2025-26 prices, and % of GDP",
+                              ["Year", "Income Tax £bn*", "NI £bn*", "VAT £bn*", "Income Tax % GDP", "NI % GDP", "VAT % GDP"], rows))
+    body.append('<p class="small">* £ billion in 2025-26 prices, using the OBR\'s GDP deflator (2025-26 = 100). Forecast years use the OBR\'s forecast deflator and GDP.</p>')
+    body.append("<p>Every main tax in cash, as published:</p>")
     rows = []
     for t in ty:
         rows.append([t + (" (forecast)" if t >= rc["forecast_from"] else "")] + [num(f"rec.{k}.{t}", "bn1") for k in ("income_tax", "nics", "vat", "corp", "council")] + [num(f"rec.taxes.{t}", "bn1")])
@@ -182,7 +247,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
                               ["Year", "Income Tax", "National Insurance", "VAT", "Corporation Tax", "Council Tax", "All taxes"], rows))
     body.append(explain("frozen-thresholds", sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> Forecasts are the OBR\'s October 2026 projections, not measurements. Debt and borrowing use the public sector definitions in the OBR databank; other published debt measures give different totals.</p></div>')
-    body.append(source_line(sources, ["obr"], "Sheets “Aggregates (per cent of GDP)” and “Receipts (£bn)”."))
+    body.append(source_line(sources, ["obr", "obr-prices"], "Sheets “Aggregates (per cent of GDP)”, “Aggregates (£bn)” (including GDP and the GDP deflator) and “Receipts (£bn)”."))
     from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
     body.append(tax_mix_section(facts, d, num, sources))
     return page("taxes.html", "Which taxes raise the money?", "\n".join(body), "UK tax receipts by tax, other receipts and borrowing, with history.")

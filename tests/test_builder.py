@@ -576,3 +576,56 @@ class BeforeTwoThousandEight(unittest.TestCase):
         self.assertIn("Not available: the earnings figures used here start in 2002", html)
         self.assertIn('data-fact="work.rate.1975"', html)
         self.assertNotIn("compare/1975-", html)
+
+
+class MoneyViews(unittest.TestCase):
+    """Cash, after inflation and share of GDP: the switch and the figures behind it."""
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+
+    def test_switch_works_without_javascript(self):
+        from builder.html import switch
+        out = switch("Show amounts as", [("Cash", "n1", "<p>a</p>"), ("After inflation", "n2", "<p>b</p>"), ("Share of GDP", "n3", "<p>c</p>")], default=1)
+        self.assertNotIn("<script", out)
+        self.assertEqual(out.count('type="radio"'), 3)
+        self.assertEqual(out.count(" checked"), 1)
+        self.assertIn('class="v1" checked', out)
+        # Every view is in the page, each under its own heading, for browsers that cannot switch.
+        for label in ("Cash", "After inflation", "Share of GDP"):
+            self.assertIn(f'<p class="vhead">{label}</p>', out)
+
+    def test_real_terms_use_the_obr_deflator(self):
+        f = self.facts
+        self.assertEqual(f["agg.deflator.2025-26"].value, 100)
+        y = "2010-11"
+        self.assertAlmostEqual(f[f"rec.real.vat.{y}"].value, f[f"rec.vat.{y}"].value * 100 / f[f"agg.deflator.{y}"].value)
+        self.assertAlmostEqual(f[f"agg.real.receipts.{y}"].value, f[f"agg.receipts.{y}"].value * 100 / f[f"agg.deflator.{y}"].value)
+
+    def test_tax_shares_of_gdp_match_the_obr_for_all_receipts(self):
+        # Our share of GDP for single taxes divides by the same GDP the OBR uses for its receipts share.
+        f = self.facts
+        for y in ("2008-09", "2025-26"):
+            self.assertAlmostEqual(100 * f[f"agg.receipts.{y}"].value / f[f"agg.gdpcash.{y}"].value, f[f"gdp.receipts.{y}"].value, places=6)
+
+    def test_no_real_terms_before_the_deflator_starts(self):
+        f = self.facts
+        self.assertIsNone(f["agg.deflator.1950-51"].value)
+        self.assertNotIn("agg.real.tme.1950-51", f)
+        self.assertNotIn("hist.real.health.1950-51", f)
+
+    def test_long_history_stops_before_estimated_year(self):
+        h = self.d["spend_history"]
+        self.assertEqual(h["years"][-1], "2021-22")  # 2022-23 is grown by the OBR, not measured
+        self.assertNotIn("hist.gdp.health.2022-23", self.facts)
+
+    def test_long_history_gaps_stay_missing(self):
+        f = self.facts
+        self.assertIsNone(f["hist.gdp.health.1942-43"].value)  # no figures during the Second World War
+        self.assertIsNone(f["hist.gdp.social.1950-51"].value)  # social security starts in 1955-56
+        self.assertIsNotNone(f["hist.gdp.defence.1942-43"].value)
