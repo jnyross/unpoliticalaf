@@ -195,6 +195,178 @@ def holiday_afford(facts):
     return {"years": sorted(years), "breaks": sorted(breaks), "groups": HOLIDAY_AFFORD_GROUPS}
 
 
+# ---------------------------------------------------------------- schools: large classes, infant and key stage 2
+
+CLASS_API_FILE = "data/life/sources/schools/dfe-national-class-sizes-1.0.json"
+CLASS_BANDS = {"zeoRF": "le30", "kxKDh": "31to35", "u2cKo": "36plus", "XdTUf": "total"}
+CLASS_TYPES = {"TaWMP": "infant", "cDwC3": "ks2", "5kyxd": "primary", "tfHTE": "secondary"}
+
+
+def class_detail(facts):
+    """Large classes (more than 30 pupils) and infant / key stage 2 averages, England.
+
+    January 2006 to 2015: DfE SFR16/2015 Table 6b, percentage of pupils in classes of
+    31-35 and of 36 or more (primary and secondary only). January 2016 onwards: the DfE
+    class sizes API, pupils in each class-size band for infant, key stage 2, primary
+    and secondary classes. Both count classes taught by one teacher in state-funded schools."""
+    out = {"large": {}, "infant": {}, "ks2": {}}
+    rows = [[c.value for c in r] for r in xlsx("data/fetched/dfe/spc-2015-national-tables.xlsx")["Table 6b"].iter_rows()]
+    yr_i = next(i for i, r in enumerate(rows) if any(str(v).strip() == "2006" for v in r if v))
+    ycols = {int(str(v).strip()): j for j, v in enumerate(rows[yr_i]) if v and re.fullmatch(r"\d{4}", str(v).strip())}
+
+    def find(label, start):
+        return next(i for i in range(start, len(rows)) if any(str(v).strip() == label for v in rows[i] if v))
+    for phase, head in (("primary", "STATE-FUNDED PRIMARY SCHOOLS (1)(2)"), ("secondary", "STATE-FUNDED SECONDARY SCHOOLS (1)(3)")):
+        start = find(head, 0)
+        pupils = find("Percentage of pupils in classes with", start)
+        r31, r36 = find("31-35 pupils", pupils), find("36 or more pupils", pupils)
+        for y, j in ycols.items():
+            ids = []
+            for band, i in (("31to35", r31), ("36plus", r36)):
+                fid = f"school.pctpupils.{phase}.{band}.{y}"
+                facts.add(Fact(fid, num(rows[i][j]), "% of pupils", f"January {y} census", "dfe-spc-2015-tables", f"Table 6b!{ref(i, j)}", "published"))
+                ids.append(fid)
+            facts.add(Fact(f"school.large.{phase}.{y}", facts[ids[0]].value + facts[ids[1]].value, "% of pupils in classes of more than 30",
+                           f"January {y} census ({y - 1}/{str(y)[2:]} school year)", "dfe-spc-2015-tables", facts[ids[0]].locator, "calculated",
+                           formula=f"{ids[0]} + {ids[1]}", inputs=ids, note="Sum of two percentages each rounded by DfE to 1 decimal place."))
+            out["large"].setdefault(phase, {})[y] = f"school.large.{phase}.{y}"
+    import json
+    data = json.loads((ROOT / CLASS_API_FILE).read_text())
+    cells = {}
+    for k, r in enumerate(data["results"]):
+        band, kind = CLASS_BANDS.get(r["filters"].get("cAd31")), CLASS_TYPES.get(r["filters"].get("5cGdi"))
+        if band and kind:
+            cells[(kind, band, int(r["timePeriod"]["period"][-4:]))] = k
+    for (kind, band, y), k in sorted(cells.items(), key=lambda kv: (kv[0][2], kv[0][0], kv[0][1])):
+        period = data["results"][k]["timePeriod"]["period"]
+        facts.add(Fact(f"school.pupils.{kind}.{band}.{y}", float(data["results"][k]["values"]["QtxWw"]), "pupils",
+                       f"January {y} census ({period[:4]}/{period[-2:]} school year)", "dfe_api", f"results[{k}] values.QtxWw", "published"))
+        if band == "total" and kind in ("infant", "ks2"):
+            v = round(float(data["results"][k]["values"]["Wc9V2"]), 1)
+            facts.add(Fact(f"school.{kind}.{y}", v, "pupils per class", f"January {y} census ({period[:4]}/{period[-2:]} school year)", "dfe_api",
+                           f"results[{k}] values.Wc9V2", "published", note="API gives unrounded value; rounded to 1 decimal place as in DfE publications."))
+            out[kind][y] = f"school.{kind}.{y}"
+    for kind in CLASS_TYPES.values():
+        for y in sorted({yy for (kk, _, yy) in cells if kk == kind}):
+            ids = [f"school.pupils.{kind}.{b}.{y}" for b in ("31to35", "36plus", "total")]
+            if not all(i in facts for i in ids):
+                continue
+            big = f"school.pupils.{kind}.over30.{y}"
+            facts.add(Fact(big, facts[ids[0]].value + facts[ids[1]].value, "pupils in classes of more than 30", facts[ids[2]].period, "dfe_api",
+                           facts[ids[0]].locator, "calculated", formula=f"{ids[0]} + {ids[1]}", inputs=ids[:2]))
+            fid = f"school.large.{kind}.{y}"
+            facts.add(Fact(fid, 100 * facts[big].value / facts[ids[2]].value, "% of pupils in classes of more than 30", facts[ids[2]].period, "dfe_api",
+                           facts[ids[2]].locator, "calculated", formula=f"100 × {big} ÷ {ids[2]}", inputs=[big, ids[2]]))
+            out["large"].setdefault(kind, {})[y] = fid
+    return {k: ({p: dict(sorted(v.items())) for p, v in d.items()} if k == "large" else dict(sorted(d.items()))) for k, d in out.items()}
+
+
+# ---------------------------------------------------------------- holidays: spending and nights abroad
+
+def _ott_years_table(path, sheet, source, header_col, scale):
+    """Region heading rows then purpose rows, one column per year; the first column for each year
+    wins (table 3.05 repeats the years for average length of stay)."""
+    rows = [[c.value for c in r] for r in xlsx(path)[sheet].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if len(r) > header_col and str(r[header_col]).strip() == "2009")
+    years = {}
+    for j, v in enumerate(rows[hdr_i]):
+        if v is not None and re.fullmatch(r"\d{4}", str(v).strip()) and int(str(v).strip()) not in years:
+            years[int(str(v).strip())] = j
+    region, out = None, {}
+    for i in range(hdr_i + 1, len(rows)):
+        a = str(rows[i][0]).strip() if rows[i][0] else ""
+        if a and all(v is None for v in rows[i][2:13]):
+            region = a
+            continue
+        if a and region:
+            for y, j in years.items():
+                out[(region, a, y)] = (num(rows[i][j]), f"{sheet}!{ref(i, j)}", source, scale)
+    return out
+
+
+def _ott_new_table(path, sheet, source, col_for_year, scale):
+    """2019 to 2023 layout: region, purpose, then a column per year (headers like '2019' or 'Nights\n2019')."""
+    rows = [[c.value for c in r] for r in xlsx(path)[sheet].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r[0] and str(r[0]).strip() == "Region of Visit")
+    years = {}
+    for j, v in enumerate(rows[hdr_i]):
+        m = re.fullmatch(col_for_year, str(v).strip()) if v is not None else None
+        if m:
+            years[int(m.group(1))] = j
+    out = {}
+    for i in range(hdr_i + 1, len(rows)):
+        if rows[i][0] and rows[i][1]:
+            for y, j in years.items():
+                out[(str(rows[i][0]).strip(), str(rows[i][1]).strip(), y)] = (num(rows[i][j]), f"{sheet}!{ref(i, j)}", source, scale)
+    return out
+
+
+def _ott_annual_cols(path, source, year):
+    """2024 onwards: table 2 with Visits, Spending and Nights columns for one year."""
+    rows = [[c.value for c in r] for r in xlsx(path)["2"].iter_rows()]
+    hdr_i = next(i for i, r in enumerate(rows) if r[0] and str(r[0]).strip() == "Region of Visit")
+    head = [str(v).strip() if v else "" for v in rows[hdr_i]]
+    js, jn = head.index("Spending"), head.index("Nights")
+    spend, nights = {}, {}
+    for i in range(hdr_i + 1, len(rows)):
+        if rows[i][0] and rows[i][1]:
+            key = (str(rows[i][0]).strip(), str(rows[i][1]).strip(), year)
+            spend[key] = (num(rows[i][js]), f"2!{ref(i, js)}", source, 1)
+            nights[key] = (num(rows[i][jn]), f"2!{ref(i, jn)}", source, 0.001)
+    return spend, nights
+
+
+def holiday_spend(facts):
+    """ONS Travel trends: spending on and nights of holiday visits abroad, with spending
+    per visit (also in 2025 prices, using annual CPIH) and average nights per visit."""
+    old_s = _ott_years_table("data/fetched/ott/section3-2009to2019.xlsx", "3.04", "ott-2009to2019", 2, 1)
+    old_n = _ott_years_table("data/fetched/ott/section3-2009to2019.xlsx", "3.05", "ott-2009to2019", 2, 1)
+    # 2019 appears in both files: the later publication (2019 to 2023) is used, as for visits
+    old_s.update(_ott_new_table("data/fetched/ott/section3-2019to2023.xlsx", "3", "ott-2019to2023", r"(\d{4})", 1))
+    old_n.update(_ott_new_table("data/fetched/ott/section3-2019to2023.xlsx", "4", "ott-2019to2023", r"Nights\s+(\d{4})", 0.001))
+    for y, path, sid in ((2024, "data/fetched/ott/ukresidents2024annual.xlsx", "ott-2024"), (2025, "data/fetched/ott/ukresidents2025annual.xlsx", "ott-2025")):
+        if (ROOT / path).exists():
+            s, n = _ott_annual_cols(path, sid, y)
+            old_s.update(s)
+            old_n.update(n)
+    _, cpih = ons_series("data/fetched/ons/l522.csv")
+    years = sorted({y for (r, p, y) in old_s if r == "Total World" and p in ("Holiday", "Holiday - All")})
+    base_year = years[-1]
+
+    def cpih_fact(y):
+        fid = f"cpih.cal.{y}"
+        if fid not in facts:
+            facts.add(Fact(fid, cpih.get(str(y)), "index (2015=100)", f"{y} (calendar year average)", "ons-l522", f"L522 row '{y}'"))
+        return fid
+    out = {"years": [], "base": base_year}
+    for y in years:
+        basis = "UK residents" if y <= 2023 else "Great Britain residents"
+        for key, cells, unit in (("spend", old_s, "£ million"), ("nights", old_n, "thousand nights")):
+            cand = next((c for c in (("Total World", "Holiday - All", y), ("Total World", "Holiday", y)) if c in cells), None)
+            fid = f"hol.{key}.holiday.{y}"
+            if cand is None or cells[cand][0] is None:
+                facts.add(Fact(fid, None, unit, str(y), (cells[cand][2] if cand else "ott-2019to2023"), "not published", "missing",
+                               note="Not available in the source for this year (survey suspended in 2020)."))
+                continue
+            v, loc, sid, scale = cells[cand]
+            facts.add(Fact(fid, v * scale, unit, str(y), sid, loc, "published", note=f"{basis}; Total World, holiday visits", scale=scale))
+        sp, ni, vi = f"hol.spend.holiday.{y}", f"hol.nights.holiday.{y}", f"hol.world.holiday.{y}"
+        if facts[sp].value is None or vi not in facts or facts[vi].value is None:
+            continue
+        out["years"].append(y)
+        facts.add(Fact(f"hol.spendbn.holiday.{y}", facts[sp].value / 1000, "£ billion", str(y), facts[sp].source, facts[sp].locator,
+                       "calculated", formula=f"{sp} ÷ 1000", inputs=[sp]))
+        facts.add(Fact(f"hol.spendper.{y}", 1000 * facts[sp].value / facts[vi].value, "£ per holiday visit (cash)", str(y), facts[sp].source, facts[sp].locator,
+                       "calculated", formula=f"1000 × {sp} ÷ {vi}", inputs=[sp, vi], note="Spending in £ million divided by visits in thousands."))
+        facts.add(Fact(f"hol.spendper.real.{y}", facts[f"hol.spendper.{y}"].value * cpih[str(base_year)] / cpih[str(y)], f"£ per holiday visit, {base_year} prices",
+                       str(y), facts[sp].source, facts[sp].locator, "calculated", formula=f"hol.spendper.{y} × {cpih_fact(base_year)} ÷ {cpih_fact(y)}",
+                       inputs=[f"hol.spendper.{y}", f"cpih.cal.{base_year}", f"cpih.cal.{y}"]))
+        if facts[ni].value is not None:
+            facts.add(Fact(f"hol.stay.{y}", facts[ni].value / facts[vi].value, "nights per holiday visit", str(y), facts[ni].source, facts[ni].locator,
+                           "calculated", formula=f"{ni} ÷ {vi}", inputs=[ni, vi]))
+    return out
+
+
 def build(facts):
     return {"spread": pay_spread(facts), "afford": affordability(facts), "jobs": jobs_by_industry(facts),
-            "holafford": holiday_afford(facts)}
+            "holafford": holiday_afford(facts), "classes": class_detail(facts), "holspend": holiday_spend(facts)}
