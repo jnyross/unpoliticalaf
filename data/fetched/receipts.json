@@ -111,6 +111,22 @@
   "sha256": "d9c57564b9755a347f7840cb18cf4e0d62f3174bc91bd62707ce9c3e4ea630f2",
   "retrieved": "2026-11-02T08:58:37Z"
  },
+ "explain-ehs-2023-24-rented": {
+  "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors",
+  "file": "explain/ehs-2023-24-rented-sectors-page.html",
+  "bytes": 83409,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "8d80f1da73d223cbaf0b8a912b77f843c80ed4b426868cbceaabd59f1dfbd23a",
+  "retrieved": "2026-11-02T10:24:39Z"
+ },
+ "explain-ehs-2024-25-demographics": {
+  "url": "https://www.gov.uk/government/collections/english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience",
+  "file": "explain/ehs-2024-25-demographics-collection.html",
+  "bytes": 76537,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "1656a2b47ca3d77646533e350a92b68cbe372f35774de62b0557b2d7343d9b29",
+  "retrieved": "2026-11-02T10:24:35Z"
+ },
  "explain-ehs-collection": {
   "url": "https://www.gov.uk/government/collections/english-housing-survey",
   "file": "explain/ehs-collection.html",
@@ -118,6 +134,14 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "9b59aa45f15b783f922ecb00693404facde99673075977e7afec077357f52685",
   "retrieved": "2026-11-02T10:18:35Z"
+ },
+ "explain-hmrc-itl-commentary": {
+  "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
+  "file": "explain/hmrc-itl-commentary.html",
+  "bytes": 189775,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "a014a38563622e3361db3fb4b3d70689dd74f23f1aebe625c1393f2c0e9fa15d",
+  "retrieved": "2026-11-02T10:24:32Z"
  },
  "explain-hmrc-itl-page": {
   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027",
@@ -151,6 +175,14 @@
   "sha256": "b04c66bfb449b839df5e55b882e4d5cd34c7119a27caaa96df55548c9aa01711",
   "retrieved": "2026-11-02T10:18:09Z"
  },
+ "explain-ons-etb-latest": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
+  "file": "explain/ons-etb-latest.html",
+  "bytes": 96972,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "a470de852f588effc79adcf99aa4e424ff409f62a013033a277ddf9c0f8df7fc",
+  "retrieved": "2026-11-02T10:24:42Z"
+ },
  "explain-ons-lmo-latest": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
   "file": "explain/ons-labour-market-latest.html",
@@ -166,6 +198,30 @@
   "content_type": "text/html;charset=utf-8",
   "sha256": "c1c5182d5e85f003ae42427faedef94659d452704fbc65eb7378f23c0cde59d4",
   "retrieved": "2026-11-02T10:17:22Z"
+ },
+ "explain-ons-psf-2023-03": {
+  "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
+  "file": "explain/ons-psf-march2023.html",
+  "bytes": 126031,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "e4461b02aac2a6d35570958d18b152189a6e3240a0dc6f0ac8717bb0aa28466e",
+  "retrieved": "2026-11-02T10:26:23Z"
+ },
+ "explain-ons-travel-2021": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
+  "file": "explain/ons-travel-trends-2021.html",
+  "bytes": 91217,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "39e8aefc320c36e76bd0db6e71a48c2139fae0948e1a590db209a81c1370a403",
+  "retrieved": "2026-11-02T10:26:26Z"
+ },
+ "explain-ons-travel-2022": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
+  "file": "explain/ons-travel-trends-2022.html",
+  "bytes": 91015,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "cd9bb083b4b03b101509f239c646b4573292e927e12fc17c8226363f15da4503",
+  "retrieved": "2026-11-02T10:26:30Z"
  },
  "explain-ons-travel-2024": {
   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
