@@ -503,6 +503,30 @@
   "sha256": "4234999fa3366b262c2fe3c1858e9ac8cc88c2f40a0798b6934b61865f0f6791",
   "retrieved": "2026-11-02T16:28:39Z"
  },
+ "nomis-wfj-industry-children": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
+  "file": "nomis/wfj-industry-children.json",
+  "bytes": 1025,
+  "content_type": "application/json",
+  "sha256": "7e108b7e7bfb95ec169ca7aa469dbeade1a4246d20c65d65bdcbe0c71f7c191f",
+  "retrieved": "2026-11-02T16:30:59Z"
+ },
+ "nomis-wfj-industry-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
+  "file": "nomis/wfj-industry-codes.json",
+  "bytes": 1025,
+  "content_type": "application/json",
+  "sha256": "78799590ee559b39c98b88eed118e46264a9b26fb07e42eea0652b33f7065c7e",
+  "retrieved": "2026-11-02T16:30:51Z"
+ },
+ "nomis-wfj-industry-types": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
+  "file": "nomis/wfj-industry-types.json",
+  "bytes": 684,
+  "content_type": "application/json",
+  "sha256": "12f7b7c7e05ff1e95a6925675ee1b4f6b7ab148111ffc693183c1bc333d1c422",
+  "retrieved": "2026-11-02T16:30:55Z"
+ },
  "nomis-wfj-latest": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
   "file": "nomis/wfj-uk-latest.csv",
@@ -574,6 +598,14 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "a912da34f98c17bcc2ca6ffe125b79c05c4491923f9cc9678b866c83e8062a6f",
   "retrieved": "2026-11-02T09:55:39Z"
+ },
+ "ons-jobs02": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+  "file": "ons/jobs02.bin",
+  "bytes": 375296,
+  "content_type": "application/vnd.ms-excel;charset=utf-8",
+  "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+  "retrieved": "2026-11-02T16:31:03Z"
  },
  "ons-jobs02-page": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
