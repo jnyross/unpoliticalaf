@@ -39,6 +39,30 @@
   "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
   "retrieved": "2026-11-02T08:58:39Z"
  },
+ "discovery-dwelling-stock-page": {
+  "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants",
+  "file": "discovery/dwelling-stock-page.html",
+  "bytes": 156387,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "43ace95f5e9b8a8d643e916037e9cd4711b1d45b72b5fd86b6314077dd4c38a5",
+  "retrieved": "2026-11-02T10:26:38Z"
+ },
+ "discovery-ni-enrolments": {
+  "url": "https://www.education-ni.gov.uk/publications/school-enrolments-northern-ireland-summary-data",
+  "file": "discovery/ni-enrolments.html",
+  "bytes": 35515,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "82a0d48f261e22de8cd95d987de4d8795e7fac7edca7641cc99893a6babcde90",
+  "retrieved": "2026-11-02T10:27:06Z"
+ },
+ "discovery-wales-census-2025": {
+  "url": "https://www.gov.wales/schools-census-results-january-2025",
+  "file": "discovery/wales-census-2025.html",
+  "bytes": 30569,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "b47d1c799483ffa09b8548926869f66a1616cc907e2db8066b5b05a1bf076107",
+  "retrieved": "2026-11-02T10:27:03Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
@@ -167,6 +191,30 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "nomis-aps-emp-nations": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+  "file": "nomis/aps-employment-rate-nations-regions.csv",
+  "bytes": 382725,
+  "content_type": "text/csv",
+  "sha256": "39efbc62386147ae214072d5496344b8cb8003ee1208aa96b46928cbca2e3998",
+  "retrieved": "2026-11-02T10:26:23Z"
+ },
+ "nomis-aps-variables": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/variable.def.sdmx.json",
+  "file": "nomis/aps-variable-codes.json",
+  "bytes": 561264,
+  "content_type": "application/json",
+  "sha256": "1a6b6e4cccdbba3bda52b04962ba17e5ec1197f05ac200650b772b63995947d5",
+  "retrieved": "2026-11-02T10:26:27Z"
+ },
+ "nomis-ashe-nations": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
+  "bytes": 123468,
+  "content_type": "text/csv",
+  "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+  "retrieved": "2026-11-02T10:26:31Z"
+ },
  "nomis-ashe-resident": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
   "file": "nomis/ashe-resident-uk-median-weekly.csv",
@@ -182,6 +230,14 @@
   "content_type": "application/json",
   "sha256": "46aa0cc10d64a8adf3613af58c59e312a1425398b353bca6c524008cee02e693",
   "retrieved": "2026-11-02T08:58:36Z"
+ },
+ "ons-a05sa": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentunemploymentandeconomicinactivitybyagegroupseasonallyadjusteda05sa/current/a05saoct2026.xls",
+  "file": "ons/a05sa.bin",
+  "bytes": 1563648,
+  "content_type": "application/vnd.ms-excel;charset=utf-8",
+  "sha256": "a06a04193e6e2b545ea01b3e0a5c65b89eed87ca98323ff86436aba04e223d58",
+  "retrieved": "2026-11-02T10:26:35Z"
  },
  "ons-a3wx": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
