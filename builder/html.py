@@ -220,20 +220,32 @@ def esc(s):
     return escape(str(s), quote=True)
 
 
-def toc(body):
+def toc(body, after_first=False):
     """'On this page' jump links, built from the h2 headings that have ids.
 
     Long phone pages need a way to skip ahead. Only added when a page has at
     least three such sections. Placed before the first h2 with an id, so the
     answer (and any heading without an id, such as "In brief") comes first.
+    With after_first, it goes after the first section instead, so that
+    section's chart shows within the first two phone screens.
     """
     found = re.findall(r'<h2 id=["\']([^"\']+)["\']>(.*?)</h2>', body, flags=re.S)
     if len(found) < 3:
         return body
     items = "".join(f'<li><a href="#{esc(i)}">{re.sub(r"<[^>]+>", "", t)}</a></li>' for i, t in found)
     nav = f'<nav class="toc" aria-labelledby="toc-h"><h2 id="toc-h">On this page</h2><ol>{items}</ol></nav>'
-    k = re.search(r'<h2 id=', body)
+    m = re.search(r'<!--beforetoc-->(.*?)<!--/beforetoc-->', body, re.S)
+    if m:
+        # Notes a page wants straight after its first section, above the contents.
+        body = body[:m.start()] + body[m.end():]
+        nav = m.group(1) + nav
+    k = list(re.finditer(r'<h2 id=', body))[1 if after_first else 0]
     return body[:k.start()] + nav + "\n" + body[k.start():]
+
+
+def before_toc(html):
+    """Wrap notes so they sit just above the contents list, outside any fold."""
+    return f"<!--beforetoc-->{html}<!--/beforetoc-->"
 
 
 # Marker a page writer puts in a section to say "fold everything after this".
@@ -339,6 +351,31 @@ def keep_chart(lead, rest):
     return lead + "\n" + shown, rest[:c[0]] + more + rest[c[1]:]
 
 
+_BEFORE_TOC = re.compile(r'<!--beforetoc-->.*?<!--/beforetoc-->', re.S)
+
+
+def _fold_section(h, sec):
+    """One section, with its detail folded away (see fold)."""
+    head = h.group(0)
+    if NOFOLD in sec:
+        return head + sec.replace(NOFOLD, "")
+    if FOLD in sec:
+        lead, rest = sec.split(FOLD, 1)
+    else:
+        a = _top_answer(sec)
+        if not a:
+            return head + sec
+        lead, rest = sec[:a[1]], sec[a[1]:]
+    lead, rest = keep_chart(lead, rest)
+    if not rest.strip():
+        return head + lead
+    name = re.sub(r"<[^>]+>", "", h.group(2)).strip()
+    name = re.sub(r"^\d+\.\s*", "", name)
+    hint = _contents_hint(rest)
+    hint = f'<span class="hint">{esc(hint)}</span>' if hint else ""
+    return f'{head}{lead}\n<details class="more"><summary><span>More on {esc(name)}</span>{hint}</summary>\n{rest}\n</details>\n'
+
+
 def fold(body):
     """Fold the detail of each section so a phone reader sees the answers first.
 
@@ -356,31 +393,14 @@ def fold(body):
     out = [body[:heads[0].start()]]
     for k, h in enumerate(heads):
         end = heads[k + 1].start() if k + 1 < len(heads) else len(body)
-        head, sec = body[h.start():h.end()], body[h.end():end]
-        if NOFOLD in sec:
-            out.append(head + sec.replace(NOFOLD, ""))
-            continue
-        if FOLD in sec:
-            lead, rest = sec.split(FOLD, 1)
-        else:
-            a = _top_answer(sec)
-            if not a:
-                out.append(head + sec)
-                continue
-            lead, rest = sec[:a[1]], sec[a[1]:]
-        lead, rest = keep_chart(lead, rest)
-        if not rest.strip():
-            out.append(head + lead)
-            continue
-        name = re.sub(r"<[^>]+>", "", h.group(2)).strip()
-        name = re.sub(r"^\d+\.\s*", "", name)
-        hint = _contents_hint(rest)
-        hint = f'<span class="hint">{esc(hint)}</span>' if hint else ""
-        out.append(f'{head}{lead}\n<details class="more"><summary><span>More on {esc(name)}</span>{hint}</summary>\n{rest}\n</details>\n')
+        sec = body[h.end():end]
+        # Notes meant for above the contents list never go inside a fold.
+        kept = "".join(_BEFORE_TOC.findall(sec))
+        out.append(_fold_section(h, _BEFORE_TOC.sub("", sec)) + kept)
     return "".join(out)
 
 
-def page(path, title, body, description="", scripts="", contents=True, folded=True):
+def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
     depth = path.count("/")
     up = "../" * depth
     nav = "".join(
@@ -391,7 +411,8 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     if folded:
         body = fold(body)
     if contents:
-        body = toc(body)
+        body = toc(body, after_first=toc_after_first)
+    body = re.sub(r'<!--/?beforetoc-->', '', body)
     if "data-chart=" in body:
         scripts = scripts + CHART_JS
     return f"""<!doctype html>

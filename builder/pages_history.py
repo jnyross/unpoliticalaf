@@ -7,7 +7,7 @@ own survey, and changes are only calculated within a stretch measured the same w
 Years with no published figure stay empty.
 """
 from .data import YEARS, EARLY_YEARS, AGE_SERIES
-from .html import page, table, details_table, line_chart, source_line, esc, _join
+from .html import page, table, details_table, line_chart, source_line, spark, esc, _join
 from . import pages_life as L
 
 LAST = YEARS[-1]
@@ -249,6 +249,31 @@ def _topic_rows(facts, num, topic, y):
     return rows
 
 
+def early_spark(facts, num, topic, y):
+    """Where year y sits in the topic's longest measure, as a small dot chart of every year."""
+    m = next((m for m in LONG if m[1] == topic and _has(facts, m[3](y))), None)
+    if not m:
+        return ""
+    _, _, label, fid, kind, _, _, group, end = m
+    years = [o for o in ALL if (end is None or o <= end)]
+    pts = [(o, facts[fid(o)].value if _has(facts, fid(o)) else None) for o in years]
+    have = [(o, v) for o, v in pts if v is not None]
+    first = have[0][0]
+    pts = [(o, v) for o, v in pts if o >= first]
+    last = pts[-1][0]
+    aria = f"Dot chart of {label.lower()} for each year from {first} to {last}, with {y} shown as a larger dark dot. The caption gives the values."
+    svg = spark(pts, aria, highlight=y, group=group, axis=(first, last))
+    lo = min(have, key=lambda t: t[1])
+    hi = max(have, key=lambda t: t[1])
+    cap = (f"<strong>{esc(label)}</strong>, {first} to {last}. The dark dot is {y}: {num(fid(y), kind)}. "
+           f"The scale runs from {num(fid(lo[0]), kind)} ({lo[0]}) to {num(fid(hi[0]), kind)} ({hi[0]}) and does not start at zero.")
+    if len(have) < len(pts):
+        cap += " Years with no figure have no dot."
+    if group and len({group(o) for o, _ in pts}) > 1:
+        cap += " The dashed line marks a change of definition, so dots either side are not joined."
+    return f'<figure class="yearspark">{svg}<figcaption>{cap}</figcaption></figure>'
+
+
 def early_year_page(facts, d, num, sources, y):
     """One earlier year: the figures that reach back this far, each against the latest year measured the same way."""
     up = "../"
@@ -270,10 +295,11 @@ def early_year_page(facts, d, num, sources, y):
             body.append(f'<p class="missing">Not available: {esc(why)}.</p>')
             body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} before 2008</a></p>')
             continue
+        body.append(early_spark(facts, num, key, y))
         body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable year", "Change"], rows))
         body.append(f'<div class="limit"><p>{esc(LIMITS[key])}</p></div>')
         body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in SOURCES[key] if s in sources], up=up))
     body.append(L.CAUSE)
     return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body),
-                f"The official figures on work, pay, housing, travel abroad and class sizes in the UK that reach back to {y}.")
+                f"The official figures on work, pay, housing, travel abroad and class sizes in the UK that reach back to {y}.", toc_after_first=True)

@@ -1,7 +1,7 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
 from .explain import box as explain
-from .html import FOLD, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, source_line, fmt, esc
+from .html import FOLD, before_toc, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, source_line, fmt, esc
 
 # What each way of showing money means, in one sentence, shown with every cash / real / GDP switch.
 VIEW_NOTES = {
@@ -64,11 +64,12 @@ def spending_page(facts, d, num, sources):
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
 <p>Of every £100 spent on public services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}.</p></div>''')
-    body.append(scale_box(num, pp, pop, f"spending in {y}", extra=" This is an average across everyone, including children, not the amount spent on any one person."))
-    body.append(f'''<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>
-<h2 id="per100">Out of every £100 spent on services, {y}</h2>''')
+    body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
     body.append(bars(items, "per100", num, caption="Rounded to the nearest pound, so the amounts may not add up to exactly £100."))
+    # The chart comes first on a phone; scale and definitions follow it.
+    body.append(before_toc(scale_box(num, pp, pop, f"spending in {y}", extra=" This is an average across everyone, including children, not the amount spent on any one person.")
+                           + "<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>"))
     body.append(FOLD)
     body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. State pensions alone cost {num(sp["oldage"], "bn")} in {y}, inside social protection.</p>''')
     body.append(explain("debt-interest-2022", sources))
@@ -149,7 +150,7 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
 Network Rail is counted under transport only from 2015-16. Spending in 2020-21 and 2021-22 includes temporary Covid-19 measures. These notes come from HM Treasury's table footnotes.</p></div>''')
     body.append(source_line(sources, ["pesa4"], "Tables 4.2 (cash), 4.3 (real terms, GDP deflator from the ONS released 30 June 2026) and 4.4 (% of GDP)."))
     body.append('<p class="small">Other publications give slightly different totals for the same year because they are published at different times and use different scopes. For example, the OBR databank used on the <a href="taxes.html">taxes page</a> puts 2025-26 spending at £1,366bn.</p>')
-    return page("spending.html", "Where does public money go?", "\n".join(body), "UK public spending by area, with history after inflation and as a share of GDP.")
+    return page("spending.html", "Where does public money go?", "\n".join(body), "UK public spending by area, with history after inflation and as a share of GDP.", toc_after_first=True)
 
 
 # ---------------------------------------------------------------- taxes
@@ -172,13 +173,14 @@ def taxes_page(facts, d, num, sources):
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector received {num(f"rec.total.{y}", "bn")}. Most of it, {num(f"rec.taxes.{y}", "bn")}, was tax.</p>
 <p>Three taxes raised {num(f"rec.big3share.{y}", "pct0")} of all tax: Income Tax ({num(f"rec.income_tax.{y}", "bn")}), National Insurance ({num(f"rec.nics.{y}", "bn")}) and VAT ({num(f"rec.vat.{y}", "bn")}).
 Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y}", "bn")} to cover the gap.</p></div>''')
-    body.append(scale_box(num, tpp, pop, f"tax raised in {y}",
-                          extra=f" Borrowing was {num(bpp, 'pounds')} per person. This is total tax divided by everyone, including children and people who pay little or no tax, so it is not anyone's tax bill. For what households actually pay, see <a href=\"who-pays.html\">who pays</a>."))
     body.append(f'<h2 id="where">Where the {y} money came from</h2><p>Three different kinds of money pay for public spending. Only the first is tax.</p>')
     items = [(esc(n), f"rec.{k}.{y}", "") for k, n in groups] + [("All other taxes", f"rec.othertax.{y}", "")]
     top = facts[f"rec.income_tax.{y}"].value
     body.append(f"<h3>1. Taxes: {num(f'rec.taxes.{y}', 'bn')}</h3>")
     body.append(bars(items, "bn", num, maxval=top))
+    # The chart comes first on a phone; the per-person scale follows the section.
+    body.append(before_toc(scale_box(num, tpp, pop, f"tax raised in {y}",
+                                     extra=f" Borrowing was {num(bpp, 'pounds')} per person. This is total tax divided by everyone, including children and people who pay little or no tax, so it is not anyone's tax bill. For what households actually pay, see <a href=\"who-pays.html\">who pays</a>.")))
     body.append('<p class="small">“All other taxes” includes business rates, vehicle and air passenger duties, insurance premium tax, environmental levies and others. Income Tax combines PAYE, self assessment and other Income Tax; Corporation Tax includes North Sea profits.</p>')
     body.append(f'''<h3>2. Other receipts (not taxes): {num(f"rec.nontax.{y}", "bn")}</h3>
 <p>Interest and dividends the public sector receives, the operating surplus of public bodies, and similar income.</p>
@@ -251,7 +253,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     body.append(source_line(sources, ["obr", "obr-prices"], "Sheets “Aggregates (per cent of GDP)”, “Aggregates (£bn)” (including GDP and the GDP deflator) and “Receipts (£bn)”."))
     from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
     body.append(tax_mix_section(facts, d, num, sources))
-    return page("taxes.html", "Which taxes raise the money?", "\n".join(body), "UK tax receipts by tax, other receipts and borrowing, with history.")
+    return page("taxes.html", "Which taxes raise the money?", "\n".join(body), "UK tax receipts by tax, other receipts and borrowing, with history.", toc_after_first=True)
 
 
 # ---------------------------------------------------------------- who pays
@@ -267,13 +269,14 @@ def who_pays_page(facts, d, num, sources):
                          (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
                          (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
-<p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p></div>''')
-    body.append("<p>Two official sources answer this in different ways. Keep them separate: they count different people and different taxes.</p>")
-    # HMRC
-    body.append(f'''<h2 id="income-tax">1. Income Tax, by person</h2>
-<p>HM Revenue and Customs ranks everyone who owes Income Tax by income and adds up the tax each group owes. People who owe no Income Tax are not included.</p>''')
+<p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p>
+</div>''')
+    # HMRC. The chart comes first on a phone; how it is counted follows it.
+    body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
     items = [("Top 1% of taxpayers", f"hmrc.share.top1.{y}", ""), ("Top 10% of taxpayers", f"hmrc.share.top10.{y}", ""), ("Top 50% of taxpayers", f"hmrc.share.top50.{y}", ""), ("Bottom 50% of taxpayers", f"hmrc.share.bottom50.{y}", "alt")]
     body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
+    body.append('''<p>HM Revenue and Customs ranks everyone who owes Income Tax by income and adds up the tax each group owes. People who owe no Income Tax are not included.</p>''')
+    body.append(before_toc("<p>Two official sources answer who pays in different ways: HM Revenue and Customs (section 1) and the Office for National Statistics (section 2). Keep them separate: they count different people and different taxes.</p>"))
     body.append(FOLD)
     rows = []
     for key, label, thr in (("top1", "Top 1%", "hmrc.threshold.top1"), ("top10", "Top 10%", "hmrc.threshold.top10"), ("top50", "Top 50%", "hmrc.threshold.top50"), ("bottom50", "Bottom 50%", None)):
@@ -337,7 +340,7 @@ def who_pays_page(facts, d, num, sources):
     from .pages_money_extra import household_types_section, income_tax_age_section
     body.append(household_types_section(facts, d, num, sources))
     body.append(income_tax_age_section(facts, d, num, sources))
-    return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.")
+    return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.", toc_after_first=True)
 
 
 # ---------------------------------------------------------------- household tax
