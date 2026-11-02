@@ -317,6 +317,11 @@ def check_structure():
     pairs = len(compare)
     if pairs != len(years) * (len(years) - 1) // 2:
         fail(f"{pairs} comparison pages for {len(years)} years")
+    # Every pair of three-year spans that do not overlap has a comparison page.
+    spans = [p.stem for p in (SITE / "life/compare/spans").glob("*-and-*.html")]
+    n = len(years) - 2
+    if len(spans) != (n - 3) * (n - 2) // 2:
+        fail(f"{len(spans)} span comparison pages for {n} spans")
     for y in years:
         if y not in pages:
             fail(f"missing year page life/{y}.html")
@@ -375,7 +380,8 @@ def main():
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
-                 "life/compare/2019-2024.html", "life/compare/index.html", "figures/etb.html"])
+                 "life/compare/2019-2024.html", "life/compare/index.html", "life/compare/spans/index.html",
+                 "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")

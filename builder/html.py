@@ -168,6 +168,8 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .cmp-label{font-weight:600;margin:0 0 4px}
 .cmp-bar{display:grid;grid-template-columns:3.2em 1fr auto;gap:8px;align-items:center;font-size:.92rem;margin:2px 0}
 .cmp-y{color:var(--muted)}
+.cmp-bar.cmp-span{grid-template-columns:4.4em 1fr auto}
+.spanlist{list-style:none;padding:0;margin:6px 0 12px}.spanlist li{margin:0 0 6px}.spanlist a{display:inline-block;min-height:24px;padding:2px 0}
 .cmp-v{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
 .cmp-track{height:12px;background:#fff;border:1px solid var(--line)}
 .cmp-key .cmp-track{background:#fff}

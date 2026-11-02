@@ -15,7 +15,7 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import version
-from . import pages_money, pages_life, pages_history, pages_home, glossary, trace, uncertainty
+from . import pages_money, pages_life, pages_history, pages_home, pages_ranges, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -37,6 +37,9 @@ def render():
     uncertainty.add_facts(facts, d)
     rates = read_rates(sources)
     pages_life.init(d)
+    pages_ranges.add_range_facts(facts)
+    pages_life.DEFAULT_PAIR[:] = pages_ranges.default_years(facts)
+    pages_life.SUGGESTED[:] = pages_ranges.suggested_years(facts)
     num = Num(facts)
     pages = {}
     # Order matters: pages that derive facts come before pages that use them.
@@ -59,6 +62,9 @@ def render():
             if a < b:
                 pages[f"life/compare/{a}-{b}.html"] = pages_life.compare_page(facts, d, num, sources, a, b)
     pages["life/compare/index.html"] = pages_life.compare_index(sources)
+    for a, b in pages_ranges.span_pairs():
+        pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(facts, d, num, sources, a, b)
+    pages["life/compare/spans/index.html"] = pages_ranges.span_index(facts)
     # The old single life page moved to life/index.html; keep the address working.
     moved = page("life.html", "Everyday life, year by year", '<h1>This page has moved</h1><p><a href="life/index.html">Go to Everyday life, year by year</a>.</p>')
     pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)

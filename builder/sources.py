@@ -194,6 +194,7 @@ FETCHED = {
 # A second registry entry for the same fetched file, so that its figure records fit on
 # two pages: {alias: (fetched id, title, geography, population)}.
 FETCHED_ALIASES = {
+    "nomis-ashe-places-2": ("nomis-ashe-places", "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay of full-time employees, by nation and English region (averages of several years)", "United Kingdom nations and English regions (where employees live)", "Full-time employees on adult rates whose pay was not affected by absence"),
     "etb-hist-quintile-all-2": ("etb-hist-quintile-all", "Effects of taxes and benefits on household income: historical datasets, income, tax and benefit data by income quintile for all households, 1977 to 2017/18 (sheets 1997/98 to 2017/18)", "United Kingdom", "Private households"),
 }
 
