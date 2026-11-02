@@ -1046,7 +1046,7 @@ def schools(facts):
             continue
         period = r["timePeriod"]["period"]
         y = int(period[-4:])
-        if y not in YEARS:
+        if y not in YEARS and y != YEARS[-1] + 1:  # keep a census newer than the explorer's range for the class sizes page
             continue
         v = round(float(r["values"]["Wc9V2"]), 1)
         facts.add(Fact(f"school.{phase}.{y}", v, "pupils per class", f"January {y} census ({period[:4]}/{period[-2:]} school year)", "dfe_api",

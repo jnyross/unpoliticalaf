@@ -37,7 +37,9 @@ def crowd_period(y):
 
 
 def hol_basis(y):
-    return "UK" if y <= 2023 else "GB"
+    # ONS: annual 2024 combines the old survey (January to June) and the new one (July to December),
+    # so 2024 is compared with neither earlier years nor 2025.
+    return "UK" if y <= 2023 else ("GB, mixed methods" if y == 2024 else "GB")
 
 
 def scot_survey(y):
@@ -137,7 +139,7 @@ TOPIC_SOURCES = {
     "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020", "ons-jobs02"],
     "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "nomis-ashe-percentiles", "ons-l522"],
     "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ons-affordability", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109", "wales-dwelling-stock", "scot-stock-by-tenure", "ni-housing-2025-26"],
-    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop"],
+    "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop", "eurostat-ilc-mdes02-uk"],
     "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025", "scot-pupil-census-2025", "ni-de-enrolments-2025-26"],
 }
 
@@ -145,7 +147,7 @@ TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
     "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
     "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure are shown for each nation with what each one counts. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
-    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. We found no official statistic, published each year, for the share of people who took a holiday, so none is shown. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
+    "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years; ONS says annual 2024 mixes the old method (January to June) and the new one (July to December), so 2024 is not compared with 2025 either. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. No official statistic, published each year, gives the share of people who took a holiday. The nearest, the share of people whose household could not afford a week’s holiday away, is shown for the 2005 to 2018 surveys, the only years with UK figures. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
 
@@ -466,7 +468,7 @@ BREAK_REASONS = {
     occ_scheme: "Job types were regrouped in 2021, when the classification changed from SOC2010 to SOC2020, so the groups before and after are not the same.",
     spread_basis: "The pay survey changed its method in 2004 and again in 2006, so pay spread is not compared across those years.",
     rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
-    hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method.",
+    hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method. ONS says 2024 mixes the two methods (old for January to June, new for July to December), so 2024 is not compared with 2025 either.",
     gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
     scot_survey: "Scotland’s statisticians advise against comparing its 2020 and 2021 private-renting figures with other years, because the pandemic disrupted the survey behind them.",
 }
@@ -666,7 +668,8 @@ def compare_page(facts, d, num, sources, a, b):
                     crow.append([str(i + 1), cell(ta, a), cell(tb, b)])
                 body.append(table(f"Five most visited countries, {a} and {b}: all visits abroad, millions", ["Rank", str(a), str(b)], crow))
                 if hol_basis(a) != hol_basis(b):
-                    body.append(f'<p class="small">{a} counts UK residents and {b} Great Britain residents measured with a new method, so the numbers are listed side by side but not compared.</p>')
+                    desc = {"UK": "UK residents", "GB, mixed methods": "Great Britain residents, half with the old method and half with the new", "GB": "Great Britain residents measured with the new method"}
+                    body.append(f'<p class="small">{a} counts {desc[hol_basis(a)]} and {b} {desc[hol_basis(b)]}, so the numbers are listed side by side but not compared.</p>')
         body.append(f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(TOPIC_LIMITS[key])}</p></details>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
     body.append(f'<h2 id="other">Compare other years</h2>')
@@ -683,7 +686,7 @@ def compare_index(sources):
         links = "".join(f'<li><a href="{x}-{y}.html">{x} compared with {y}</a></li>' for x, y in SUGGESTED)
         body.append(f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
                     f'<p class="small">{esc(DEFAULT_RULE)} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
-                    'Years from 2024 cannot be compared for holidays abroad, because the survey changed then, and housing figures for 2025 are not yet published.</p></div>')
+                    'Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods), and housing figures for 2025 are not yet published.</p></div>')
     body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
     for a in YEARS[:-1]:
@@ -794,7 +797,7 @@ def _holidays(facts, d, num, sources):
     body.append('<p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
                 'Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019.</p>')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
-                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num))
+                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), num(f"hol.world.holiday.{y}", "millions"), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
@@ -805,6 +808,8 @@ def _holidays(facts, d, num, sources):
                               [[str(y), gb_survey(y), num(f"hol.gb.holiday.{y}", "millions"), num(f"hol.gb.per100.{y}", "int")] if y in gb_years
                                else [str(y), "", '<span class="missing">not available</span>', ""] for y in YEARS if y >= 2019]))
     body.append('<p class="small">2020 and 2021 have no full-year figures because of the pandemic. The survey changed method after 2019, so 2019 is not compared with later years. Earlier years used yet other methods and are not shown.</p>')
+    from .pages_life_extra import holiday_afford_block
+    body.extend(holiday_afford_block(facts, num, d))
     body.append(country_table(facts, num, d, LAST, 10))
     cyears = [2009, 2019, LAST]
     top = top_countries(facts, d, LAST, 10)
@@ -818,13 +823,22 @@ def _schools(facts, d, num, sources):
     """(answer box, detail parts) for the schools topic."""
     body = []
     y = LAST
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
+    # England's January census can be a year newer than the explorer's range: show it here
+    newer = [y for y in (LAST + 1,) if _val(facts, f"school.primary.{y}") is not None and _val(facts, f"school.secondary.{y}") is not None]
+    sy = YEARS + newer
+    latest = (f' The latest census, January {newer[-1]} ({newer[-1] - 1}/{str(newer[-1])[2:]} school year), found {num(f"school.primary.{newer[-1]}", "dp1")} in primary '
+              f'and {num(f"school.secondary.{newer[-1]}", "dp1")} in secondary; it is shown on this page only, because the other topics have no {newer[-1]} figures yet.') if newer else ""
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p></div>')
     body.append(U.topic_line(num, "schools", LAST))
-    body.append(series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
+    body.append(line_chart("Average class size in England", [str(y) for y in sy],
+                             [(n, [_val(facts, f(y)) for y in sy], st) for n, f, st in (("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b"))],
+                             "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num,
+                             ids=[[f(y) for y in sy] for f in (lambda y: f"school.primary.{y}", lambda y: f"school.secondary.{y}")])
+                  if newer else series_chart(facts, "Average class size in England", [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")],
                              "Pupils per class, January school census, state-funded schools in England", ymin=15, kind="dp1", num=num))
     body.append(details_table("Show class sizes for every year", "Average class size, England, January census",
                               ["January census", "School year", "Primary", "Secondary"],
-                              [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.primary.{y}", "dp1"), num(f"school.secondary.{y}", "dp1")] for y in YEARS]))
+                              [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.primary.{y}", "dp1"), num(f"school.secondary.{y}", "dp1")] for y in sy]))
     wy = [y for y in YEARS if _val(facts, f"school.wales.infant.{y}") is not None]
     body.append("<h3 id='schools-wales'>Wales</h3>")
     body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
@@ -839,7 +853,7 @@ TOPIC_PAGES = {
     "work": ("How has work changed since {first}?", "employment by sex and age, the kinds of jobs people do, and each nation and region"),
     "earnings": ("How has pay changed after inflation since {first}?", "pay for men, women and part-time employees, and each nation and region"),
     "housing": ("How has housing changed since {first}?", "who owns and rents, what housing costs, space and overcrowding, regions and nations"),
-    "holidays": ("How have holidays changed since {first}?", "holidays abroad and at home, and the countries people visit"),
+    "holidays": ("How have holidays changed since {first}?", "holidays abroad and at home, the countries people visit, and who could afford a week away"),
     "schools": ("How have class sizes changed since {first}?", "primary and secondary classes in England, and figures for Wales and Scotland"),
 }
 TOPIC_BUILDERS = {"work": _work, "earnings": _earnings, "housing": _housing, "holidays": _holidays, "schools": _schools}

@@ -98,8 +98,11 @@ def cell_value(src_file, locator):
                     return row[1]
             return None
     if src_file.endswith(".json"):
-        m = re.fullmatch(r"results\[(\d+)\] values\.(\w+)", locator)
         data = json.loads((ROOT / src_file).read_text())
+        m = re.fullmatch(r"value\[(\d+)\]", locator)
+        if m:  # JSON-stat (Eurostat): flat value list keyed by position
+            return data["value"].get(m.group(1))
+        m = re.fullmatch(r"results\[(\d+)\] values\.(\w+)", locator)
         return data["results"][int(m.group(1))]["values"][m.group(2)]
     if src_file.endswith(".pdf"):
         # Read the page text afresh and find the anchor, the line and the nth number on it

@@ -143,5 +143,58 @@ def jobs_by_industry(facts):
     return out
 
 
+# ---------------------------------------------------------------- holidays: who could afford a week away?
+
+HOLIDAY_AFFORD_FILE = "data/fetched/eurostat/ilc-mdes02-uk.json"
+# (fact key, Eurostat household composition code, poverty-threshold code, label)
+HOLIDAY_AFFORD_GROUPS = [
+    ("all", "TOTAL", "TOTAL", "Everyone"),
+    ("low", "TOTAL", "B_60", "People in households with low income (below 60% of the middle income)"),
+    ("notlow", "TOTAL", "A_60", "People in other households"),
+    ("kids", "DCH", "TOTAL", "People in households with dependent children"),
+    ("nokids", "NDCH", "TOTAL", "People in households without dependent children"),
+]
+
+
+def holiday_afford(facts):
+    """Eurostat EU-SILC table ilc_mdes02 (JSON-stat): share of people in the UK whose
+    household could not afford a week's annual holiday away from home. The UK sent
+    EU-SILC data up to the 2018 survey only. Flag 'b' marks Eurostat's series breaks."""
+    if not (ROOT / HOLIDAY_AFFORD_FILE).exists():
+        return {"years": [], "breaks": [], "groups": HOLIDAY_AFFORD_GROUPS}
+    import json
+    data = json.loads((ROOT / HOLIDAY_AFFORD_FILE).read_text())
+    dims, sizes = data["id"], data["size"]
+    index = {d: data["dimension"][d]["category"]["index"] for d in dims}
+    years_all = sorted(index["time"], key=lambda t: index["time"][t])
+    flags = data.get("status", {})
+
+    def key(**want):
+        k = 0
+        for d, n in zip(dims, sizes):
+            code = want.get(d)
+            pos = index[d][code] if code is not None else 0
+            k = k * n + pos
+        return k
+
+    years, breaks = set(), set()
+    for gk, hh, pov, _ in HOLIDAY_AFFORD_GROUPS:
+        for t in years_all:
+            k = key(freq="A", hhcomp=hh, rskpovth=pov, unit="PC", geo="UK", time=t)
+            v = data["value"].get(str(k))
+            if v is None:
+                continue
+            y = int(t)
+            years.add(y)
+            flag = flags.get(str(k), "")
+            if "b" in flag:
+                breaks.add(y)
+            facts.add(Fact(f"holafford.{gk}.{y}", float(v), "% of people", f"EU-SILC {y} survey", "eurostat-ilc-mdes02-uk",
+                           f"value[{k}]", "published",
+                           note=f"Household composition {hh}, income group {pov}" + ("; Eurostat marks a break in series this year" if "b" in flag else "")))
+    return {"years": sorted(years), "breaks": sorted(breaks), "groups": HOLIDAY_AFFORD_GROUPS}
+
+
 def build(facts):
-    return {"spread": pay_spread(facts), "afford": affordability(facts), "jobs": jobs_by_industry(facts)}
+    return {"spread": pay_spread(facts), "afford": affordability(facts), "jobs": jobs_by_industry(facts),
+            "holafford": holiday_afford(facts)}
