@@ -33,12 +33,17 @@ LONG = [
 ] + [
     (f"work.age.{k}", "work", f"Employment rate, ages {label}", (lambda k: lambda y: f"work.age.{k}.{y}")(k), "pct", "pp", lambda y: f"Apr–Jun {y}", None, None)
     for k, label, _ in AGE_SERIES
+ ] + [
+    ("work.ind.manuf", "work", "Share of jobs in manufacturing", lambda y: f"jobs.share.C.{y}", "pct", "pp", lambda y: f"June {y}", None, None),
+    ("work.ind.health", "work", "Share of jobs in health and social work", lambda y: f"jobs.share.Q.{y}", "pct", "pp", lambda y: f"June {y}", None, None),
 ] + [
     ("earn.ft", "earnings", "Median weekly pay, full-time employees (April 2025 prices)", lambda y: f"earn.real.ft.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.ftcash", "earnings", "Median weekly pay, full-time employees (cash, at the time)", lambda y: f"earn.ft.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.men", "earnings", "Full-time men (April 2025 prices)", lambda y: f"earn.real.ft_men.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
+    ("earn.spread", "earnings", "Full-time pay: top-tenth line ÷ bottom-tenth line", lambda y: f"spread.ratio.{y}", "times", "pct", lambda y: f"April {y}", earn_method, None),
+    ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), None, None),
     ("house.lfs.outright", "housing", "Households that own outright", lambda y: f"house.lfs.outright.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
     ("house.lfs.mortgage", "housing", "Households buying with a mortgage", lambda y: f"house.lfs.mortgage.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
     ("house.lfs.social", "housing", "Households renting from a council or housing association", lambda y: f"house.lfs.social.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
@@ -50,9 +55,9 @@ LONG = [
 ]
 
 SOURCES = {
-    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "explain-ons-lfs-qmi"],
-    "earnings": ["nomis-ashe-resident", "ons-l522", "ons-ashe-qmi"],
-    "housing": ["ehs-ft1101"],
+    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "explain-ons-lfs-qmi", "ons-jobs02"],
+    "earnings": ["nomis-ashe-resident", "nomis-ashe-percentiles", "ons-l522", "ons-ashe-qmi"],
+    "housing": ["ehs-ft1101", "ons-affordability"],
     "holidays": ["ons-ott-timeseries", "ons-ukpop"],
     "schools": ["dfe-spc-2015-tables"],
 }
@@ -62,7 +67,8 @@ LIMITS = {
     "work": ("The Labour Force Survey began in 1973. It ran every two years until 1983 and once a year from 1984 to 1991, and it has run every quarter "
              "since spring 1992 (ONS, Labour Force Survey quality and methodology information). So the April to June figures before 1992 are not all "
              "from a survey carried out in that quarter, and 1971 and 1972 come before the survey began. ONS publishes them as one series from 1971; "
-             "read the early years as the long-run pattern, not exact year-to-year moves. Part-time and age-group figures start in 1992."),
+             "read the early years as the long-run pattern, not exact year-to-year moves. Part-time and age-group figures start in 1992. "
+             "Jobs by industry come from a different source, ONS workforce jobs, which counts jobs rather than people, every June from 1978."),
     "earnings": ("Pay comes from the Annual Survey of Hours and Earnings, which replaced the New Earnings Survey in 2004. ONS says changes to its methods "
                  "caused breaks in the series in 2004, 2006 and 2011, and job coding changed again in 2021. Changes are only worked out between years "
                  "measured the same way, so on this page 2002 and 2003 are compared only with each other, and 2004 and 2005 likewise. The earlier "
@@ -72,7 +78,8 @@ LIMITS = {
                 "calendar years, and the English Housing Survey uses survey years (April to March) and a different sample, so the two are shown side by side "
                 "but changes are not calculated between them. In 2008 both measured tenure, so the table shows how close they were. Figures for 1997 to 2008 "
                 "use reweighted Labour Force Survey data from August 2008 (note in table FT1101). The table splits council and housing association renting "
-                "only from 2008-09. There are no figures for the years between 1981, 1984, 1988 and 1991."),
+                "only from 2008-09. There are no figures for the years between 1981, 1984, 1988 and 1991. House prices compared with earnings cover "
+                "England and Wales from 1997; ONS says the 1997 and 1998 earnings are weekly pay scaled up to a year, so they are not directly comparable with later years."),
     "holidays": ("Before 2009 the holiday-only figures on this page are not in the tables used here. The longer series counts every visit abroad by UK "
                  "residents, whatever the purpose: holidays, visiting friends or family, business and other trips. It comes from the International "
                  "Passenger Survey, the same survey behind the holiday figures up to 2023. From 2024 visits abroad are counted for Great Britain residents "

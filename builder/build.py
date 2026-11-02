@@ -49,6 +49,8 @@ def render():
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
     for key, _, _ in pages_life.TOPICS:
         pages[f"life/{key}.html"] = pages_life.topic_page(facts, d, num, sources, key)
+    pages["life/jobs-by-industry.html"] = pages_life.industry_page(facts, d, num, sources)
+    pages["life/house-prices.html"] = pages_life.afford_page(facts, d, num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for y in EARLY_YEARS:

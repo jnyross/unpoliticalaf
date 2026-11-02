@@ -198,6 +198,10 @@ FETCHED = {
     "etb-fye2021": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2021, reference tables (corrected)", "United Kingdom", "People in private households"),
     "etb-fye2022": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2022, reference tables (corrected)", "United Kingdom", "People in private households"),
     "etb-fye2023": ("Office for National Statistics", "Effects of taxes and benefits on household income: financial year ending 2023, reference tables", "United Kingdom", "People in private households"),
+    "nomis-ashe-percentiles": ("Office for National Statistics (via Nomis)", "Annual Survey of Hours and Earnings (ASHE), resident analysis: gross weekly pay of full-time employees at the 10th, 50th (median) and 90th percentiles", "United Kingdom", "Full-time employees on adult rates whose pay was not affected by absence"),
+    "nomis-ashe-item-codes": ("Office for National Statistics (via Nomis)", "Annual Survey of Hours and Earnings (NM_30_1): list of items, including percentiles", "United Kingdom", "Not applicable (code list)"),
+    "ons-affordability": ("Office for National Statistics", "House price to workplace-based earnings ratio (median), by country and region, 1997 to 2025", "England and Wales, and each English region", "Homes sold (all residential sales); full-time employees working in the area"),
+    "ons-jobs02": ("Office for National Statistics", "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted", "United Kingdom", "All workforce jobs: employee jobs, self-employment jobs, HM Forces and government-supported trainees"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 

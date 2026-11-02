@@ -1208,6 +1208,8 @@ def build_all():
     d["tax_history"] = data_taxhist.build(facts)
     from . import data_spendhist
     d["spend_history"] = data_spendhist.build(facts)
+    from . import data_life_extra
+    d["life_extra"] = data_life_extra.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)
