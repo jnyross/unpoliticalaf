@@ -652,7 +652,7 @@ _SM_COUNT = [0]
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
-                    ymin=None, scale=1, point_labels=None, desc=""):
+                    ymin=None, scale=1, point_labels=None, desc="", summary_note=""):
     """One small line chart per group, so no group is hidden behind a key.
 
     Used instead of line_chart() when more than three groups matter. Every panel
@@ -666,6 +666,8 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     given in the summary, as panels are too small to label). kind, ids, num and
     point_labels work as in line_chart(): one "What the chart shows" summary for
     all groups and one tap/hover/arrow readout that marks the year in every panel.
+    summary_note: where a table right beside the chart already gives each group's
+    first and latest figures, say so in this sentence instead of repeating them.
     """
     raw = [(nm, vals, "a") for nm, vals in series]
     scaled = [[None if v is None else v / scale for v in vals] for _, vals in series]
@@ -752,7 +754,10 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     grid = (f'<div class="sm" role="group" aria-label="{esc(label)}One small chart for each of {len(series)} groups, all on the same scale. The summary and table below give every value."'
             f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
     key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
-    summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
+    if summary_note:
+        summary = f'<div class="csum"><p class="csum-h">What the chart shows</p><p>{summary_note}</p></div>'
+    else:
+        summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
     return f'<figure><p class="ctitle" aria-hidden="true">{esc(title)}</p>{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
 
 

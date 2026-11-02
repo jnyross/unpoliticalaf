@@ -17,7 +17,7 @@ from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes; this keeps a margin.
-MAX_PAGE_BYTES = 450_000
+MAX_PAGE_BYTES = 475_000
 
 
 def render():

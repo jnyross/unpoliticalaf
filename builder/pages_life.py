@@ -589,13 +589,13 @@ def series_chart(facts, title, items, unit, breaks=(), ymin=None, scale=1, split
                       kind=kind, ids=ids, num=num, point_labels=[point_label(y) for y in YEARS])
 
 
-def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=False, ymin=None, kind=None, num=None, point_label=str):
+def groups_chart(facts, title, items, unit, years=None, breaks=(), split_breaks=False, ymin=None, kind=None, num=None, point_label=str, summary_note=""):
     """Small multiples: one panel per group, all on one scale. items: (name, fid(year))."""
     years = list(years or YEARS)
     series = [(name, [_val(facts, fid(y)) for y in years]) for name, fid in items]
     ids = [[fid(y) if _val(facts, fid(y)) is not None else None for y in years] for _, fid in items]
     return small_multiples(title, [str(y) for y in years], series, unit, kind, ids=ids, num=num, breaks=breaks,
-                           split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years])
+                           split_breaks=split_breaks, ymin=ymin, point_labels=[point_label(y) for y in years], summary_note=summary_note)
 
 
 def life_index(facts, d, num, sources):
@@ -771,9 +771,9 @@ def places_block(facts, num, topic):
         moe = num(U.MARGINS[fid(k, b)][0], mk) if U.has(fid(k, b)) else '<span class="missing">not published</span>'
         rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
     out.append(groups_chart(facts, f"{what.split(',')[0]}: the four nations", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n in NATIONS[1:]],
-                            what, years=ys, kind=kind, num=num))
+                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year."))
     out.append(groups_chart(facts, f"{what.split(',')[0]}: regions of England", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n, _ in REGIONS],
-                            what, years=ys, kind=kind, num=num))
+                            what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year."))
     out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), f"Margin of error, {b}", "Change"], rows))
     out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
@@ -799,7 +799,8 @@ def housing_regions_block(facts, num):
     out.append(table(f"Homes by tenure, England and its regions, 31 March {a} and {b}, % of homes",
                      ["Place", f"Owner occupied {a}", f"Owner occupied {b}", f"Private rent {a}", f"Private rent {b}", f"Social rent {a}", f"Social rent {b}"], rows))
     out.append(groups_chart(facts, "Homes rented privately in each region of England", [("All of England" if k == "england" else n, (lambda k: lambda y: f"house.reg.private.{k}.{y}")(k)) for k, n in places],
-                            "Per cent of homes rented privately, 31 March each year", years=ys, ymin=0, kind="pct", num=num))
+                            "Per cent of homes rented privately, 31 March each year", years=ys, ymin=0, kind="pct", num=num,
+                            summary_note=f"One panel for each place, on the same scale. The table above gives every region's figures for {a} and {b}, and the table below gives every year."))
     out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
                              ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
     out.append(f'<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
