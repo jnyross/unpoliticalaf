@@ -79,14 +79,6 @@
   "sha256": "f15a9066129dd7d38406b5000391e8b1d15d2ebaaaa33707beda0734c906eb35",
   "retrieved": "2026-11-02T09:50:52Z"
  },
- "ehs-fa3211": {
-  "url": "https://assets.publishing.service.gov.uk/media/6a4d864c09605a87f435450f/FA3211_Mean_and_median_rent_before_housing_support_by_type_of_accommodation.ods",
-  "file": "ehs/FA3211_rent_by_type_of_accommodation.ods",
-  "bytes": 26002,
-  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
-  "sha256": "c371c89764f568e86e74f2a3ccd6bfe1b4966d20bae87379aab7a856d339f0c8",
-  "retrieved": "2026-11-02T09:50:56Z"
- },
  "ehs-ft1101": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
   "file": "ehs/FT1101_Trends_in_tenure.ods",
@@ -110,30 +102,6 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "2aa18c5cce29b1f362cd1b7ec8cb623b945114e311e13a37ec78502cbacd0a2c",
   "retrieved": "2026-11-02T08:58:48Z"
- },
- "ehs-ft3232": {
-  "url": "https://assets.publishing.service.gov.uk/media/6a4d8bd56a73e62ba1029993/FT3232_Trends_in_mean_rent_after_housing_support_.ods",
-  "file": "ehs/FT3232_Trends_in_mean_rent_after_housing_support.ods",
-  "bytes": 8890,
-  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
-  "sha256": "05b9d5d9e6057e525c19e1a8734845632154ca1b8a627c949da2b5de7319be1d",
-  "retrieved": "2026-11-02T09:50:48Z"
- },
- "ehs-owners-page": {
-  "url": "https://www.gov.uk/government/statistical-data-sets/owner-occupiers-recent-first-time-buyers-and-second-homes",
-  "file": "ehs/owners-page.html",
-  "bytes": 111657,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "6cb2f712b931601b379af475d0bcac86d3314fdcaf75c062ff24688335919a51",
-  "retrieved": "2026-11-02T09:50:45Z"
- },
- "ehs-renters-page": {
-  "url": "https://www.gov.uk/government/statistical-data-sets/social-and-private-renters",
-  "file": "ehs/renters-page.html",
-  "bytes": 124102,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "b6c089cf9167ccb4ce77961c6fabac54d08b1a1bdb7f133be5f57f666205e3df",
-  "retrieved": "2026-11-02T09:50:41Z"
  },
  "ehs-tenure-page": {
   "url": "https://www.gov.uk/government/statistical-data-sets/tenure-trends-and-cross-tenure-analysis",

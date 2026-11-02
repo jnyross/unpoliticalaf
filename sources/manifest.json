@@ -138,29 +138,9 @@
    "file": "ott/ukresidents2024annual.xlsx"
   },
   {
-   "id": "ehs-renters-page",
-   "url": "https://www.gov.uk/government/statistical-data-sets/social-and-private-renters",
-   "file": "ehs/renters-page.html"
-  },
-  {
-   "id": "ehs-owners-page",
-   "url": "https://www.gov.uk/government/statistical-data-sets/owner-occupiers-recent-first-time-buyers-and-second-homes",
-   "file": "ehs/owners-page.html"
-  },
-  {
-   "id": "ehs-ft3232",
-   "url": "https://assets.publishing.service.gov.uk/media/6a4d8bd56a73e62ba1029993/FT3232_Trends_in_mean_rent_after_housing_support_.ods",
-   "file": "ehs/FT3232_Trends_in_mean_rent_after_housing_support.ods"
-  },
-  {
    "id": "ehs-fa3201",
    "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
    "file": "ehs/FA3201_rent_before_housing_support.ods"
-  },
-  {
-   "id": "ehs-fa3211",
-   "url": "https://assets.publishing.service.gov.uk/media/6a4d864c09605a87f435450f/FA3211_Mean_and_median_rent_before_housing_support_by_type_of_accommodation.ods",
-   "file": "ehs/FA3211_rent_by_type_of_accommodation.ods"
   },
   {
    "id": "ehs-fa2555",
