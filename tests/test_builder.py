@@ -336,3 +336,37 @@ class Trace(unittest.TestCase):
     def test_corrections_link_to_their_change(self):
         out = self.trace.corrections_page()
         self.assertIn("/pull/71", out)
+class Explanations(unittest.TestCase):
+    """Quoted explanations must match their source and always say who said them."""
+
+    def setUp(self):
+        from builder.sources import all_sources
+        from builder import explain
+        self.explain, self.sources = explain, all_sources()
+
+    def test_every_quote_is_in_its_source(self):
+        self.assertEqual(self.explain.missing_quotes(self.sources), [])
+
+    def test_a_changed_quote_is_caught(self):
+        key = next(iter(self.explain.EXPLANATIONS))
+        e = self.explain.EXPLANATIONS[key]
+        original = e["quote"]
+        try:
+            e["quote"] = [original[0].replace(" ", "  ", 1) + " and more"]
+            self.assertTrue(self.explain.missing_quotes(self.sources))
+        finally:
+            e["quote"] = original
+
+    def test_box_names_the_publisher_and_links_the_source(self):
+        for key, e in self.explain.EXPLANATIONS.items():
+            out = self.explain.box(key, self.sources)
+            self.assertIn(f"In the words of the {e['publisher']}", out)
+            self.assertIn("<blockquote", out)
+            self.assertIn(f'methods.html#src-{e["source"]}', out)
+            self.assertIn(self.sources[e["source"]]["page"], out)
+
+    def test_life_quotes_have_a_topic_and_years(self):
+        for key, e in self.explain.EXPLANATIONS.items():
+            if "topic" in e:
+                self.assertIn(e["topic"], {t[0] for t in pages_life.TOPICS}, key)
+                self.assertTrue(set(e["years"]) <= set(pages_life.YEARS), key)

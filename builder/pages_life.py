@@ -8,6 +8,7 @@ its own period. Missing years stay missing, and comparisons across a change of
 definition are not calculated.
 """
 from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
+from . import explain
 from .html import page, table, details_table, line_chart, source_line, fmt, esc
 from . import uncertainty as U
 
@@ -281,6 +282,7 @@ def year_page(facts, d, num, sources, y):
         if key == "holidays":
             body.append(holiday_regions(facts, num, y))
             body.append(country_table(facts, num, d, y, 10))
+        body.append(explain.for_year(key, y, sources, up=up))
         body.append(f'<p class="small">{esc(scope)}</p>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up=up))
     body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
@@ -598,6 +600,7 @@ def life_index(facts, d, num, sources):
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
     body.extend(work_ages_block(facts, num))
     body.extend(places_block(facts, num, "work"))
+    body.append(explain.for_topic("work", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["work"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["work"] if s in sources], up="../"))
     # Earnings
@@ -613,6 +616,7 @@ def life_index(facts, d, num, sources):
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
     body.append('<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>')
     body.extend(places_block(facts, num, "earnings"))
+    body.append(explain.for_topic("earnings", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["earnings"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["earnings"] if s in sources], up="../"))
     # Housing
@@ -630,6 +634,7 @@ def life_index(facts, d, num, sources):
     body.extend(housing_costs_block(facts, num, d))
     body.extend(housing_space_block(facts, num))
     body.extend(housing_regions_block(facts, num))
+    body.append(explain.for_topic("housing", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
     # Holidays
@@ -661,6 +666,7 @@ def life_index(facts, d, num, sources):
                               ["Country"] + [str(y) for y in cyears],
                               [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
     body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
+    body.append(explain.for_topic("holidays", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["holidays"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["holidays"] if s in sources], up="../"))
     # Schools
@@ -677,6 +683,7 @@ def life_index(facts, d, num, sources):
     body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
                       [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy]))
     body.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
+    body.append(explain.for_topic("schools", sources, up="../"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["schools"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["schools"] if s in sources], up="../"))
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), "How work, earnings, housing, holidays and class sizes have changed in the UK since 2008.", scripts=COMPARE_JS)

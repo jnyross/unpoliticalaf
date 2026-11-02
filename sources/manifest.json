@@ -292,6 +292,71 @@
    "id": "ons-uncertainty-guide",
    "url": "https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit",
    "file": "ons/uncertainty-guide.html"
+  },
+  {
+   "id": "explain-ons-psf-2021-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
+   "file": "explain/ons-psf-march2021.html"
+  },
+  {
+   "id": "explain-ons-2008-recession",
+   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
+   "file": "explain/ons-2008-recession.html"
+  },
+  {
+   "id": "explain-ons-ashe-2022",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
+   "file": "explain/ons-ashe-2022.html"
+  },
+  {
+   "id": "explain-ons-lmo-latest",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
+   "file": "explain/ons-labour-market-latest.html"
+  },
+  {
+   "id": "explain-ons-travel-2024",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
+   "file": "explain/ons-travel-trends-2024.html"
+  },
+  {
+   "id": "explain-hmrc-itl-commentary",
+   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
+   "file": "explain/hmrc-itl-commentary.html"
+  },
+  {
+   "id": "explain-ons-etb-latest",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
+   "file": "explain/ons-etb-latest.html"
+  },
+  {
+   "id": "explain-ons-psf-2023-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
+   "file": "explain/ons-psf-march2023.html"
+  },
+  {
+   "id": "explain-ons-travel-2021",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
+   "file": "explain/ons-travel-trends-2021.html"
+  },
+  {
+   "id": "explain-ons-travel-2022",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
+   "file": "explain/ons-travel-trends-2022.html"
+  },
+  {
+   "id": "explain-ehs-2023-24-rented-report",
+   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
+   "file": "explain/ehs-2023-24-rented-sectors.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch1",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
+   "file": "explain/ehs-2024-25-chapter-1.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch2",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
+   "file": "explain/ehs-2024-25-chapter-2.html"
   }
  ]
 }

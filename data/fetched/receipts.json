@@ -119,6 +119,110 @@
   "sha256": "d9c57564b9755a347f7840cb18cf4e0d62f3174bc91bd62707ce9c3e4ea630f2",
   "retrieved": "2026-11-02T08:58:37Z"
  },
+ "explain-ehs-2023-24-rented-report": {
+  "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
+  "file": "explain/ehs-2023-24-rented-sectors.html",
+  "bytes": 293768,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "90044967d57932ef93266b52ef6fd6f594df3cbb608e5a76e1f9eacc6f494df4",
+  "retrieved": "2026-11-02T10:27:31Z"
+ },
+ "explain-ehs-2024-25-ch1": {
+  "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
+  "file": "explain/ehs-2024-25-chapter-1.html",
+  "bytes": 133900,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "e71716f8ea2d1c2ac8e2807b0d8fdf7bbfd2243c83f3c48344a472fb0272f66b",
+  "retrieved": "2026-11-02T10:28:25Z"
+ },
+ "explain-ehs-2024-25-ch2": {
+  "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
+  "file": "explain/ehs-2024-25-chapter-2.html",
+  "bytes": 107313,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "09a315dd280cf757b9d75c0e251985f7d086eda4d9d8104b8efd2f5e661bb47e",
+  "retrieved": "2026-11-02T10:28:29Z"
+ },
+ "explain-hmrc-itl-commentary": {
+  "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
+  "file": "explain/hmrc-itl-commentary.html",
+  "bytes": 189775,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "a014a38563622e3361db3fb4b3d70689dd74f23f1aebe625c1393f2c0e9fa15d",
+  "retrieved": "2026-11-02T10:24:32Z"
+ },
+ "explain-ons-2008-recession": {
+  "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
+  "file": "explain/ons-2008-recession.html",
+  "bytes": 49194,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "58c65d32d59483f31ba59cd301b8b4e3513a19153d6986be76aed4e8c097cc94",
+  "retrieved": "2026-11-02T10:17:25Z"
+ },
+ "explain-ons-ashe-2022": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
+  "file": "explain/ons-ashe-2022.html",
+  "bytes": 112125,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "c3797e451ce06b9ba92c9821e997451f0ecf2498bb5052741b3972f39f38d397",
+  "retrieved": "2026-11-02T10:18:12Z"
+ },
+ "explain-ons-etb-latest": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
+  "file": "explain/ons-etb-latest.html",
+  "bytes": 96972,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "a470de852f588effc79adcf99aa4e424ff409f62a013033a277ddf9c0f8df7fc",
+  "retrieved": "2026-11-02T10:24:42Z"
+ },
+ "explain-ons-lmo-latest": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
+  "file": "explain/ons-labour-market-latest.html",
+  "bytes": 71950,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "437e97eabdfb29532c793323cff9476b0b2d8edbb1c933abe43c8ce878756960",
+  "retrieved": "2026-11-02T10:18:15Z"
+ },
+ "explain-ons-psf-2021-03": {
+  "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
+  "file": "explain/ons-psf-march2021.html",
+  "bytes": 229574,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "c1c5182d5e85f003ae42427faedef94659d452704fbc65eb7378f23c0cde59d4",
+  "retrieved": "2026-11-02T10:17:22Z"
+ },
+ "explain-ons-psf-2023-03": {
+  "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
+  "file": "explain/ons-psf-march2023.html",
+  "bytes": 126031,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "e4461b02aac2a6d35570958d18b152189a6e3240a0dc6f0ac8717bb0aa28466e",
+  "retrieved": "2026-11-02T10:26:23Z"
+ },
+ "explain-ons-travel-2021": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
+  "file": "explain/ons-travel-trends-2021.html",
+  "bytes": 91217,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "39e8aefc320c36e76bd0db6e71a48c2139fae0948e1a590db209a81c1370a403",
+  "retrieved": "2026-11-02T10:26:26Z"
+ },
+ "explain-ons-travel-2022": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
+  "file": "explain/ons-travel-trends-2022.html",
+  "bytes": 91015,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "cd9bb083b4b03b101509f239c646b4573292e927e12fc17c8226363f15da4503",
+  "retrieved": "2026-11-02T10:26:30Z"
+ },
+ "explain-ons-travel-2024": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
+  "file": "explain/ons-travel-trends-2024.html",
+  "bytes": 50141,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "ce572f701943247919febab9393574f50e6f32f0a6bcb337be036fc076b98b54",
+  "retrieved": "2026-11-02T10:18:29Z"
+ },
  "gbts-2019-gb-summary": {
   "url": "https://www.visitbritain.org/media/3009/download?attachment",
   "file": "gbts/gbts-2019-gb-summary.xlsx",

@@ -42,7 +42,7 @@ def home_page(facts, d, num, sources):
 <li><strong>Every number has a source.</strong> Each section names the official source, and the sources page gives the exact file, table and cell.</li>
 <li><strong>Gaps stay gaps.</strong> When a year is missing or a definition changed, we say so and don't fill it in.</li>
 <li><strong>Illustrations are labelled.</strong> Anything invented to explain a rule, such as a worked example, is marked “Illustration, not a statistic”.</li>
-<li><strong>Change is not cause.</strong> Figures show what changed, not why it changed.</li>
+<li><strong>Change is not cause.</strong> Figures show what changed, not why. Where an official body has explained a change, we quote its own words and say who said it.</li>
 </ul>''']
     return page("index.html", "Unpolitical", "\n".join(body), contents=False, description="Independent, plain-English answers about UK public spending, taxes and everyday life, from official statistics.")
 
@@ -54,7 +54,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Official sources only.</strong> Figures come from UK government departments, the Office for National Statistics and the Office for Budget Responsibility.</li>'
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
             '<li><strong>No invented households presented as fact.</strong> Where a made-up person helps explain a rule, it is labelled “Illustration, not a statistic” and kept apart from the official figures.</li>'
-            '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why.</li>'
+            '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why in its own words. Where an official body such as the Office for National Statistics or HM Revenue and Customs has published its own explanation, we quote it word for word, name who said it, and link to it. The check confirms that every quote still matches the publication.</li>'
             '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li></ul>',
             '<h2 id="calculations">Calculations</h2><ul>'
             '<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is shown as a share of total managed expenditure.</li>'

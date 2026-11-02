@@ -1,5 +1,6 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
+from .explain import box as explain
 from .html import page, bars, change_bars, keyfigs, table, details_table, line_chart, source_line, fmt, esc
 
 
@@ -54,6 +55,7 @@ def spending_page(facts, d, num, sources):
     items = [(esc(name), per[k], "") for k, name in order]
     body.append(bars(items, "per100", num, caption="Rounded to the nearest pound, so the amounts may not add up to exactly £100."))
     body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. State pensions alone cost {num(sp["oldage"], "bn")} in {y}, inside social protection.</p>''')
+    body.append(explain("debt-interest-2022", sources))
     rows = []
     for k, name in order:
         rows.append([esc(name), num(f"spend.cash.{k}.{y}", "bn1"), num(per[k], "dp1"),
@@ -83,6 +85,8 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     body.append(line_chart("Total public spending as a share of GDP", years, [("Total managed expenditure, % of GDP", tme_gdp, "a")],
                            "Per cent of GDP", desc=f"From {tme_gdp[0]:.1f}% in {first} to {tme_gdp[-1]:.1f}% in {y}.",
                            kind="pct", num=num, ids=[[f"spend.gdp.tme.{yy}" for yy in years]]))
+    body.append(explain("covid-spending", sources))
+    body.append(explain("energy-2022", sources))
     rows = [[yy, num(f"spend.cash.tme.{yy}", "bn1"), num(f"spend.real.tme.{yy}", "bn1"), num(f"spend.gdp.tme.{yy}", "pct")] for yy in years]
     body.append(details_table("Show total spending for every year", "Total managed expenditure, every year",
                               ["Year", "Cash £bn", "£bn, 2025-26 prices", "% of GDP"], rows))
@@ -161,6 +165,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
                             ("Spending, % of GDP", [facts[f"gdp.tme.{g}"].value for g in gy], "b")],
                            "Per cent of GDP. Source: OBR public finances databank.", forecast_from=fc, ymin=0,
                            kind="pct", num=num, ids=[[f"gdp.receipts.{g}" for g in gy], [f"gdp.tme.{g}" for g in gy]]))
+    body.append(explain("borrowing-records", sources))
     rows = [[g + (" (forecast)" if g >= rc["forecast_from"] else ""), num(f"gdp.receipts.{g}", "pct"), num(f"gdp.tme.{g}", "pct"), num(f"gdp.psnb.{g}", "pct"), num(f"gdp.psnd.{g}", "pct")] for g in gy]
     body.append(details_table("Show every year", f"Receipts, spending, borrowing and debt, % of GDP, {gy[0]} to {gy[-1]}", ["Year", "Receipts", "Spending", "Borrowing", "Debt"], rows))
     # taxes by type over time
@@ -171,6 +176,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
         rows.append([t + (" (forecast)" if t >= rc["forecast_from"] else "")] + [num(f"rec.{k}.{t}", "bn1") for k in ("income_tax", "nics", "vat", "corp", "council")] + [num(f"rec.taxes.{t}", "bn1")])
     body.append(details_table("Show main taxes for every year", f"Main taxes, £ billion cash, {ty[0]} to {ty[-1]}",
                               ["Year", "Income Tax", "National Insurance", "VAT", "Corporation Tax", "Council Tax", "All taxes"], rows))
+    body.append(explain("frozen-thresholds", sources))
     from .pages_money_extra import tax_mix_section  # local import: that module imports derive from here
     body.append(tax_mix_section(facts, d, num, sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> Forecasts are the OBR\'s October 2026 projections, not measurements. Debt and borrowing use the public sector definitions in the OBR databank; other published debt measures give different totals.</p></div>')
@@ -212,6 +218,7 @@ def who_pays_page(facts, d, num, sources):
                            "Per cent. Gap at 2008-09: HMRC has no figures for that year. Years from 2024-25 are HMRC projections.",
                            breaks=[(hy.index("2016 to 2017"), "Dividend rules changed")], forecast_from=fc, ymin=0,
                            kind="pct", num=num, ids=[[f"hmrc.share.top1.{h}" for h in hy], [f"hmrc.income.top1.{h}" for h in hy]]))
+    body.append(explain("top1-share", sources))
     rows = [[h + (" (projection)" if int(h[:4]) >= 2024 else ""), num(f"hmrc.share.top1.{h}", "pct"), num(f"hmrc.share.top10.{h}", "pct"), num(f"hmrc.share.bottom50.{h}", "pct")] for h in hy]
     body.append(details_table("Show every year", "Share of all Income Tax by group of taxpayers", ["Tax year", "Top 1%", "Top 10%", "Bottom 50%"], rows))
     body.append(f'''<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num("rec.income_tax.2025-26", "bn")} of the {num("rec.taxes.2025-26", "bn")} of all taxes in 2025-26. It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09.</p></div>''')
@@ -246,6 +253,7 @@ def who_pays_page(facts, d, num, sources):
             for q, lab in fifths]
     body.append(details_table("Show by income fifth within each group", "All taxes by income fifth within each group, 2023/24. Each group is split into its own fifths, so these are not the same fifths as in section 2.",
                               ["Fifth within the group", "Non-retired: £ a year", "Non-retired: % of gross income", "Retired: £ a year", "Retired: % of gross income"], rows))
+    body.append(explain("retired-net", sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages per household, and retired and non-retired households differ in size, so the figures are not tax per person. Gross income includes cash benefits such as the State Pension. “Retired” describes the household, not each person in it. In the lowest-income fifths, a few people with large tax bills from earlier years can raise the average tax, which the Office for National Statistics warns about. Survey estimates for April 2023 to March 2024, for people in UK private households; care homes are not covered.</p></div>')
     body.append(source_line(sources, ["etb"], "Tables 3a (non-retired) and 4a (retired). Percentages calculated here as (direct + indirect taxes) ÷ gross income, the same method as ONS Table 8."))
     from .pages_money_extra import household_types_section
@@ -273,6 +281,8 @@ def household_tax_page(facts, d, num, sources, rates):
     rows = [[lab, num(f"etb.t8.gross.direct.{q}", "pct"), num(f"etb.t8.gross.indirect.{q}", "pct"), num(f"etb.t8.gross.all.{q}", "pct")] for q, lab in QUINTS]
     body.append(table("Taxes as a percentage of gross household income, 2023/24", ["Fifth of people", "Direct taxes", "Indirect taxes", "All taxes"], rows))
     body.append(f'''<p>For people in the highest-income fifth, most of their household's tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth, most is indirect ({num("etb.t8.gross.indirect.q1", "pct")} of gross household income), because their households spend a larger part of their income, and some spend savings or borrowed money as well.</p>''')
+    body.append(explain("fiscal-drag", sources))
+    body.append(explain("redistribution", sources))
     body.append(source_line(sources, ["etb"], "Table 8, all individuals, grouped by equivalised household disposable income."))
     # three numbers
     body.append(f'''<h2 id="three-numbers">Three numbers that are easy to mix up</h2>
@@ -281,6 +291,7 @@ def household_tax_page(facts, d, num, sources, rates):
 <li><p><strong>A personal tax rate.</strong> The basic rate of Income Tax is {esc(rates["basic"])}. It applies only to the part of someone's income inside that band, after the tax-free Personal Allowance of {esc(rates["allowance"])}. So a person's tax bill as a share of their pay is lower than the rate of their top band.</p></li>
 <li><p><strong>A share of all tax raised.</strong> “Income Tax raised {num(f"rec.incomesharetaxes.{y}", "pct0")} of all taxes in {y}” is about the government's total income. It says nothing about any household's bill.</p></li>
 </ol>''')
+    body.append(explain("average-rates", sources))
     # illustration
     ill = rates["illustration"]
     body.append(f'''<aside class="illustration" aria-labelledby="ill-title">

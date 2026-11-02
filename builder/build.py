@@ -11,6 +11,7 @@ from .data import build_all, YEARS
 from .html import Num, page
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
+from .explain import missing_quotes
 from .rates import read_rates
 from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
@@ -23,6 +24,9 @@ def render():
     problems = verify_hashes(sources)
     if problems:
         raise SystemExit("Source files changed:\n" + "\n".join(problems))
+    problems = missing_quotes(sources)
+    if problems:
+        raise SystemExit("Quoted explanations do not match their sources:\n" + "\n".join(problems))
     facts, d = build_all()
     uncertainty.add_facts(facts, d)
     rates = read_rates(sources)
