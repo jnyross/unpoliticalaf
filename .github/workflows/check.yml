@@ -20,7 +20,8 @@ jobs:
       - run: make verify
 
   accessibility:
-    runs-on: ubuntu-latest
+    # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
