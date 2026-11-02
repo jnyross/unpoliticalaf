@@ -5,6 +5,7 @@ Kept in their own module so the main page functions only gain one call each.
 """
 from .html import bars, change_bars, details_table, line_chart, source_line, table, esc
 from .pages_money import derive
+from .explain import box as explain
 
 # Taxes shown one by one in the tax-mix section, in the order of the main taxes page.
 MIX_LINES = (("income_tax", "Income Tax", "a"), ("nics", "National Insurance", "b"), ("vat", "VAT", "c"))
@@ -124,4 +125,48 @@ The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the 
 Households with children count the value of their state schooling as a benefit. Taxes paid by companies, such as Corporation Tax, and some other taxes are not counted against any household, while not every public service is counted as a benefit, so the two sides do not add up to the government's totals.
 From 2001/02 the ONS adjusts for top earners being under-recorded in the survey, which makes earlier and later years less directly comparable.</p></div>''')
     out.append(source_line(sources, ["etb"], "Table 16. Benefits are cash benefits plus benefits in kind; taxes are direct plus indirect taxes (ONS note 16)."))
+    return "\n".join(out)
+
+
+def income_tax_age_section(facts, d, num, sources):
+    """HMRC Survey of Personal Incomes Table 3.2: Income Tax payers, income and tax by age (review gap 4)."""
+    w = d["who_age"]
+    ages = w["ages"]
+    yr = w["year"].replace(" to ", "-")[:5] + w["year"][-2:]
+    lab = {k: (v if k in ("u20", "75plus") else v.replace("-", " to ")) for k, v in ages}
+    q = sources["explain-hmrc-spi-quality"]["page"]
+    top = max((k for k, _ in ages), key=lambda k: facts[f"spi.age.meantax.{k}.all"].value)
+    out = [f'''<h2 id="age">6. Income Tax, by age</h2>
+<p>HM Revenue and Customs also publishes Income Tax by age, from the same survey of tax records as section 1. It covers only people who owe some Income Tax, about {num("spi.age.n.all.all", "millions_people")} people in tax year {yr}.
+It says nothing about people who owe none, so it cannot show what share of each age group pays Income Tax.</p>
+<div class="answer"><p class="lede">In tax year {yr}, taxpayers aged 30 to 64 were {num("spi.age.sharen.30_64", "pct0")} of all Income Tax payers and owed about {num("spi.age.sharetax.30_64", "pct0")} of all Income Tax.
+Taxpayers aged 65 and over were {num("spi.age.sharen.65plus", "pct0")} of taxpayers and owed about {num("spi.age.sharetax.65plus", "pct0")}; those under 30 were {num("spi.age.sharen.u30", "pct0")} and owed about {num("spi.age.sharetax.u30", "pct0")}.</p>
+<p>The age groups that owed the most tax per taxpayer also had the highest incomes. The highest average (mean) Income Tax was {num(f"spi.age.meantax.{top}.all", "pounds")} a year for taxpayers aged {lab[top]}, on an average income of {num(f"spi.age.meaninc.{top}.all", "pounds")}.
+The middle (median) taxpayer in that group owed much less, {num(f"spi.age.medtax.{top}.all", "pounds")}: a small number of taxpayers with very high incomes and tax bills raise the mean.</p></div>''']
+    items = [(esc(lab[k]), f"spi.age.meantax.{k}.all", "alt" if k in ("65_69", "70_74", "75plus") else "") for k, _ in ages]
+    out.append(bars(items, "pounds", num, caption=f"Average (mean) Income Tax owed per taxpayer, by age, £ a year, tax year {yr}. Grey bars: ages 65 and over. Taxpayers only."))
+    items = [(esc(lab[k]), f"spi.age.sharetax.{k}", "alt" if k in ("65_69", "70_74", "75plus") else "") for k, _ in ages]
+    out.append(bars(items, "pct", num, caption=f"Share of all Income Tax owed by each age range, per cent, tax year {yr}. Calculated here from HMRC's rounded figures, so approximate."))
+    rows = [[esc(lab[k]), num(f"spi.age.n.{k}.all", "millions_people"), num(f"spi.age.sharen.{k}", "pct"), num(f"spi.age.sharetax.{k}", "pct"),
+             num(f"spi.age.medinc.{k}.all", "pounds"), num(f"spi.age.medtax.{k}.all", "pounds"), num(f"spi.age.meaninc.{k}.all", "pounds"),
+             num(f"spi.age.meantax.{k}.all", "pounds"), num(f"spi.age.rate.{k}", "pct")] for k, _ in ages]
+    rows.append(["All ages", num("spi.age.n.all.all", "millions_people"), "100%", "100%", num("spi.age.medinc.all.all", "pounds"), num("spi.age.medtax.all.all", "pounds"),
+                 num("spi.age.meaninc.all.all", "pounds"), num("spi.age.meantax.all.all", "pounds"), ""])
+    out.append(details_table("Show the full table: taxpayers, income and tax by age", f"Income Tax payers, income and Income Tax by age, tax year {yr}",
+                     ["Age", "Taxpayers", "Share of taxpayers", "Share of all Income Tax", "Median income", "Median tax", "Mean income", "Mean tax", "Tax as % of the group's income"], rows))
+    out.append(f'''<p class="small">Income is total income before tax for the year: earnings, self-employment profits, pensions (including the State Pension), property, savings and dividends.
+“Median” is the middle taxpayer in each age range. “Mean” is the total divided by the number of taxpayers. Shares and “tax as % of the group's income” are calculated here: number of taxpayers × mean, and mean tax ÷ mean income.
+Added up this way, all ages come to {num("spi.age.tottax.sum.all", "bn")} of Income Tax on {num("spi.age.totinc.sum.all", "bn")} of income.</p>''')
+    rows = []
+    for k, _ in ages:
+        rows.append([esc(lab[k]), num(f"spi.age.n.{k}.men", "millions_people"), num(f"spi.age.medtax.{k}.men", "pounds"), num(f"spi.age.meantax.{k}.men", "pounds"),
+                     num(f"spi.age.n.{k}.women", "millions_people"), num(f"spi.age.medtax.{k}.women", "pounds"), num(f"spi.age.meantax.{k}.women", "pounds")])
+    out.append(details_table("Show men and women separately", f"Income Tax payers and Income Tax by age and sex, tax year {yr}",
+                             ["Age", "Men: taxpayers", "Men: median tax", "Men: mean tax", "Women: taxpayers", "Women: median tax", "Women: mean tax"], rows))
+    out.append(explain("taxpayers-age", sources))
+    out.append(f'''<div class="limit"><p><strong>Limits.</strong> One tax year only: this is a snapshot of different people at different ages, not one person's tax over their life, and it does not say why the groups differ.
+Income Tax only: it leaves out National Insurance, which people do not pay on earnings once they reach State Pension age, and taxes on spending such as VAT. People who owe no Income Tax are not counted.
+The figures are estimates from a sample of about 1 million tax records. HMRC does not publish margins of error for this table, so small differences between neighbouring age ranges may not be meaningful (see HMRC's <a href="{esc(q)}">background quality report</a>).
+HMRC rounds numbers to three significant figures, so shares calculated here can be slightly out. A change in how the survey samples State Pension recipients in {yr} means older age groups are not directly comparable with earlier years.</p></div>''')
+    out.append(source_line(sources, ["hmrc-spi-2324-tables"], f"Table 3.2, tax year {yr} (UK taxpayers only). Totals and shares calculated here."))
     return "\n".join(out)
