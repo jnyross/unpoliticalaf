@@ -55,6 +55,30 @@
   "sha256": "82a0d48f261e22de8cd95d987de4d8795e7fac7edca7641cc99893a6babcde90",
   "retrieved": "2026-11-02T10:27:06Z"
  },
+ "discovery-scot-pupil-census-supp": {
+  "url": "https://www.gov.scot/publications/pupil-census-supplementary-statistics/",
+  "file": "discovery/scot-pupil-census-supp.html",
+  "bytes": 61848,
+  "content_type": "text/html;charset=UTF-8",
+  "sha256": "71aa052a17e865f6052e48717b209c58737ac9b7248e6c349f752e66ec4a0de6",
+  "retrieved": "2026-11-02T10:28:52Z"
+ },
+ "discovery-scot-school-stats": {
+  "url": "https://www.gov.scot/collections/school-education-statistics/",
+  "file": "discovery/scot-school-stats.html",
+  "bytes": 69905,
+  "content_type": "text/html;charset=UTF-8",
+  "sha256": "a63acf43a4bd9ecc41c7cdb2c6c6c216021703451a0fa5f735e9f456676e841d",
+  "retrieved": "2026-11-02T10:28:59Z"
+ },
+ "discovery-scot-schools-2024": {
+  "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2024/",
+  "file": "discovery/scot-schools-2024.html",
+  "bytes": 37135,
+  "content_type": "text/html;charset=UTF-8",
+  "sha256": "9bbc9eb9b491e84a7dcaa6132ac271802298f6568f99882f83e63ee14c695b96",
+  "retrieved": "2026-11-02T10:28:56Z"
+ },
  "discovery-wales-census-2025": {
   "url": "https://www.gov.wales/schools-census-results-january-2025",
   "file": "discovery/wales-census-2025.html",
@@ -62,6 +86,14 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "b47d1c799483ffa09b8548926869f66a1616cc907e2db8066b5b05a1bf076107",
   "retrieved": "2026-11-02T10:27:03Z"
+ },
+ "dluhc-lt109": {
+  "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
+  "file": "dluhc/LiveTable109.ods",
+  "bytes": 81649,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "2fb92e0ad64000e96279cd7afbae29bdc686b0779ae3aaa834789deb1b25f8a9",
+  "retrieved": "2026-11-02T10:28:45Z"
  },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
@@ -263,6 +295,22 @@
   "sha256": "068ff25e22f17fca3a8130ca8db62224b397c52a3c440aa2dfdde363b8e23747",
   "retrieved": "2026-11-02T08:58:24Z"
  },
+ "ons-lf2u": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf2u/lms",
+  "file": "ons/lf2u.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "3454d3aa08564fc402a35d2bba8d1103ef4ef205665979c1da85948ef27d268b",
+  "retrieved": "2026-11-02T10:28:39Z"
+ },
+ "ons-lfk6": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lfk6/lms",
+  "file": "ons/lfk6.csv",
+  "bytes": 10035,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "6a4c1fe23a5f81d5a746120aabf6cbba95777a467812b1c31f1ba5947b6ab781",
+  "retrieved": "2026-11-02T10:28:42Z"
+ },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
   "file": "ons/mgrz.csv",
@@ -286,6 +334,30 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "88f8285509f69313fb14f9f3e77d0e04b272dcbfe5a9c109bedf392da5abd90f",
   "retrieved": "2026-11-02T09:55:36Z"
+ },
+ "ons-ybud": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+  "file": "ons/ybud.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "c920ed5c1a7efc29901c4c8eea0420650cb847a383e14eb114843bb19876fb3e",
+  "retrieved": "2026-11-02T10:28:29Z"
+ },
+ "ons-ybug": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+  "file": "ons/ybug.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "fb818e40eb9e4c8448835294a71627a6d3da99e90aaf4a9d6302004ecbd0cc82",
+  "retrieved": "2026-11-02T10:28:32Z"
+ },
+ "ons-ybuj": {
+  "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybuj/lms",
+  "file": "ons/ybuj.csv",
+  "bytes": 10425,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "221cf5804d9236babfc4399b72ab9337ea0e6fd68633d046c96e43c1ae4c4b2f",
+  "retrieved": "2026-11-02T10:28:35Z"
  },
  "ons-ycbe": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",
@@ -342,5 +414,13 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "wg-schools-census-2025": {
+  "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
+  "file": "wg/schools-census-results-january-2025.ods",
+  "bytes": 75586,
+  "content_type": "application/octet-stream",
+  "sha256": "c323b03444f3cb9ce9df7de61f8bb9c65d1417a51f2cea59e360ac5bc1bc2d45",
+  "retrieved": "2026-11-02T10:28:49Z"
  }
 }
