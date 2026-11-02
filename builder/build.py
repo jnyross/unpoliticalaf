@@ -16,8 +16,11 @@ from .rates import read_rates
 from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
-# The product spec requires every page to be under 500,000 bytes; this keeps a margin.
-MAX_PAGE_BYTES = 475_000
+# The product spec requires every page to be under 500,000 bytes. Reading pages
+# (everything except the figure records) have a tighter limit so they stay quick
+# on a phone; a page that grows past it should be split, as the life explorer was.
+MAX_PAGE_BYTES = 400_000
+MAX_READING_PAGE_BYTES = 250_000
 
 
 def render():
@@ -41,6 +44,8 @@ def render():
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
+    for key, _, _ in pages_life.TOPICS:
+        pages[f"life/{key}.html"] = pages_life.topic_page(facts, d, num, sources, key)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for a in YEARS:
@@ -68,8 +73,9 @@ def main():
         shutil.rmtree(OUT)
     for path, html in pages.items():
         size = len(html.encode())
-        if size > MAX_PAGE_BYTES:
-            raise SystemExit(f"{path} is {size:,} bytes, over the {MAX_PAGE_BYTES:,} limit")
+        limit = MAX_PAGE_BYTES if path.startswith(trace.FIG_DIR + "/") else MAX_READING_PAGE_BYTES
+        if size > limit:
+            raise SystemExit(f"{path} is {size:,} bytes, over the {limit:,} limit")
         p = OUT / path
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(html, encoding="utf-8")

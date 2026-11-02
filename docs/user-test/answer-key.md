@@ -87,7 +87,7 @@ Year by year, Earnings: £767 a week in April 2025, about the same as April 2008
 
 Where the site says it:
 
-- `life/index.html`: "that was about the same as in April 2008"
+- `life/earnings.html`: "that was about the same as in April 2008"
 
 ## 9. A: 27.1 pupils, England only
 
@@ -112,8 +112,8 @@ Year by year, Housing: 19% of households in England rented privately in 2024-25,
 
 Where the site says it:
 
-- `life/index.html`: "In 2024-25, 65% of households in England owned their home and 19% rented privately."
-- `life/index.html`: "In 2008-09, 14% rented privately."
+- `life/housing.html`: "In 2024-25, 65% of households in England owned their home and 19% rented privately."
+- `life/housing.html`: "In 2008-09, 14% rented privately."
 
 ## 12. D: Nothing: the figures show what changed, not why
 

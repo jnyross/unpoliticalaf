@@ -293,7 +293,7 @@ def check_pages(facts):
 
 
 def check_structure():
-    want = ["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html", "life/index.html", "life/compare/index.html"]
+    want = ["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
@@ -353,7 +353,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
+                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/index.html", "figures/etb.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")

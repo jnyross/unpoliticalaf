@@ -23,7 +23,7 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "2 November 2026",
-        "pages": [("life/index.html", "Everyday life, year by year")],
+        "pages": [("life/holidays.html", "Holidays since 2008"), ("life/work.html", "Work since 2008")],
         "was": "The holidays section said “The pandemic cut holidays abroad to 4.4 million in 2020”, which states a cause in our own words. The chart titled “Employment rate by age” showed only three of the five age groups.",
         "now": "“In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to 4.4 million.” The chart is titled with the three age groups it shows, and says the other two are in the table.",
         "pr": 86,
@@ -189,7 +189,7 @@ function open(target,ids,title){
 box.innerHTML='';var h=t('p','Where this number comes from','trace-h');h.id='trace-h';box.appendChild(h);
 if(title)box.appendChild(t('p',title,'trace-v'));
 ids.forEach(function(id){var r=F[id];if(r===undefined)return;var dl=t('dl'),full=typeof r!=='number';
-row(dl,'Source',src(id)[1]);if(full){row(dl,'Period',r[1]);if(r[2])row(dl,'Status',r[2]);row(dl,r[4]?'Calculated':'Read from',r[3])}
+row(dl,'Source',src(id)[1]);if(full){row(dl,'Period',D.p[r[1]]);if(D.t[r[2]])row(dl,'Status',D.t[r[2]]);row(dl,r[4]?'Calculated':'Read from',r[3])}
 box.appendChild(dl);var p=t('p');p.appendChild(link(id,full?'See the full record':'See its period and exact cell'));box.appendChild(p)});
 var b=t('button','Close','trace-x');b.type='button';b.onclick=close;box.appendChild(b);
 back=target;target.setAttribute('tabindex','-1');box.hidden=false;b.focus()}
@@ -216,12 +216,18 @@ def add_trace(html, path, facts, sources):
     # Pages with very many figures (the explorer) carry only each figure's
     # source, to stay small on phones; the record is one more tap away.
     def blob(full):
+        # Periods and statuses repeat across many figures, so each is listed once and referred to by number.
+        periods = sorted({facts[i].period for i in ids})
+        statuses = sorted({STATUS.get(facts[i].status, facts[i].status) for i in ids})
+        pi, ti = {v: n for n, v in enumerate(periods)}, {v: n for n, v in enumerate(statuses)}
         data = {
             "s": [[sid, f'{sources[sid]["publisher"]}: {sources[sid]["title"]}'] for sid in srcs],
-            "f": {i: ([si[facts[i].source], facts[i].period, STATUS.get(facts[i].status, facts[i].status),
+            "f": {i: ([si[facts[i].source], pi[facts[i].period], ti[STATUS.get(facts[i].status, facts[i].status)],
                        facts[i].formula or where(facts[i]), 1 if facts[i].formula else 0] if full else si[facts[i].source])
                   for i in sorted(ids)},
         }
+        if full:
+            data["p"], data["t"] = periods, statuses
         return json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     text = blob(True)
     if len(html.encode()) + len(text.encode()) > FULL_BUDGET:
