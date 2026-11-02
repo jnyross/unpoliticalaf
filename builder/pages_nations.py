@@ -57,19 +57,27 @@ def housing_nations_block(facts, num, d):
     return out
 
 
-def schools_nations_block(facts, num, d):
+def schools_nations_block(facts, num, d, wy, wales_table):
+    """Wales, Scotland and Northern Ireland in one section: each nation's latest figure
+    in view, its table and notes in the fold. wy is Wales's latest January census."""
     sy = sorted(d["nations"]["school_scotland"])
     a, b = sy[0], sy[-1]
-    out = ["<h3 id='schools-scotland'>Scotland</h3>"]
-    out.append(f'<div class="answer"><p>In Scotland the average primary class had {num(f"school.scotland.primary.{b}", "dp1")} pupils at the September {b} pupil census, '
-               f'compared with {num(f"school.scotland.primary.{a}", "dp1")} in September {a}.</p></div>')
+    out = ["<h3 id='schools-nations'>Wales, Scotland and Northern Ireland</h3>"]
+    out.append(f'<div class="answer"><p>In Wales, infant classes (reception to year 2) averaged {num(f"school.wales.infant.{wy}", "dp1")} pupils and junior classes (years 3 to 6) '
+               f'{num(f"school.wales.junior.{wy}", "dp1")} in January {wy}. In Scotland the average primary class had {num(f"school.scotland.primary.{b}", "dp1")} pupils '
+               f'at the September {b} pupil census, compared with {num(f"school.scotland.primary.{a}", "dp1")} in September {a}. '
+               'Northern Ireland publishes no average class size.</p></div>')
+    out.append("<h3>Wales</h3>")
+    out.append(wales_table)
+    out.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
+    out.append("<h3>Scotland</h3>")
     out.append(details_table("Show Scotland’s primary class sizes for every year", "Average class size, primary schools (all stages, P1 to P7), Scotland, September census",
                              ["September census", "School year", "Primary, all stages"],
                              [[str(y), f"{y}/{str(y + 1)[2:]}", num(f"school.scotland.primary.{y}", "dp1")] for y in sy]))
     out.append('<p class="small">Scotland counts classes in September, at the start of the school year, while England and Wales count in January, '
                'and Scotland calculates its average in its own way, so its figures are not compared with England’s. '
                'The Scottish tables used here give no average for secondary classes. Classes in publicly funded schools.</p>')
-    out.append("<h3 id='schools-ni'>Northern Ireland</h3>")
+    out.append("<h3>Northern Ireland</h3>")
     out.append('<p>The Department of Education in Northern Ireland publishes yearly school enrolment statistics, but they do not include an average class size, '
                'so there is no Northern Ireland figure to show here.</p>')
     return out

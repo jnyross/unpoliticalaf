@@ -66,8 +66,7 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .keyfigs .big{display:block;font-size:1.6rem;line-height:1.1;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:4px}
 .keyfigs .what{display:block;font-size:.86rem;line-height:1.35;color:var(--ink2)}
 .keyfigs li.wide{grid-column:1/-1}
-.toc{border:1px solid var(--line);border-radius:var(--r);padding:10px 14px 6px;margin:20px 0 8px;font-size:.95rem}
-.toc h2{font-size:.8rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 2px;padding:0;border:0}
+.toc{margin:20px 0 8px;font-size:.95rem}.toc details{margin:0}
 .toc ol{margin:0;padding:0;list-style:none}
 .toc li{margin:0;border-top:1px solid var(--line2)}
 .toc li:first-child{border-top:0}
@@ -107,7 +106,7 @@ figure .ctitle{font-weight:650;font-size:.98rem;margin:0 0 2px}figure .csub{font
 figcaption{font-size:.86rem;color:var(--muted);line-height:1.45;margin-top:4px}
 details.csum{margin:6px 0 0;padding:0 12px;background:var(--soft2);border:0;border-left:3px solid var(--line);border-radius:0;font-size:.92rem}details.csum[open]{padding-bottom:6px}details.csum>summary{min-height:44px;font-size:.9rem;font-weight:500}
 .csum ul{margin:0;padding-left:1.1em}.csum li{margin:0 0 4px}.csum p{margin:0 0 4px}.csum-note{margin:6px 0 0}
-.readout{min-height:44px;margin:4px 0 0;font-size:.92rem;color:var(--ink2)}.readout b{font-weight:650}
+.readout{min-height:44px;margin:4px 0 0;font-size:.92rem;color:var(--ink2)}.readout.later{min-height:0}.readout b{font-weight:650}
 svg[data-chart],.sm svg{touch-action:pan-y;cursor:crosshair}[data-chart]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .sm{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin:6px 0 4px}.sm>div{display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
 .sm .smt{font-size:.87rem;font-weight:650;line-height:1.25;margin:0 0 2px;color:var(--ink)}.smkey{font-size:.87rem;color:var(--ink2);margin:2px 0 6px}
@@ -193,7 +192,7 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .explain blockquote{margin:0 0 8px;padding:0}
 .explain blockquote p{margin:0}
 details.limit summary{color:var(--ink)}
-details.more{border-color:var(--line2)}details.more>summary{flex-wrap:wrap;row-gap:0;padding:6px 0}details.more>summary .hint{flex-basis:100%;padding-left:24px;font-weight:400;font-size:.85rem;color:var(--muted)}
+details.more{border-color:var(--line2)}details.more>summary{display:grid;grid-template-columns:12px 1fr;column-gap:10px;align-content:center;line-height:1.35;padding:6px 0}details.more>summary .hint{grid-column:2;font-weight:400;font-size:.85rem;color:var(--muted)}
 footer{border-top:1px solid var(--line);background:var(--soft2);padding:16px 0 28px;font-size:.88rem;color:var(--muted)}
 footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:0 18px}
 footer ul a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink2)}
@@ -236,7 +235,9 @@ def toc(body, after_first=False):
     if len(found) < 3:
         return body
     items = "".join(f'<li><a href="#{esc(i)}">{re.sub(r"<[^>]+>", "", t)}</a></li>' for i, t in found)
-    nav = f'<nav class="toc" aria-labelledby="toc-h"><h2 id="toc-h">On this page</h2><ol>{items}</ol></nav>'
+    # Folded, so on a phone the contents list costs one line rather than a screen.
+    nav = (f'<nav class="toc" aria-label="On this page"><details><summary>On this page: {len(found)} sections</summary>'
+           f'<ol>{items}</ol></details></nav>')
     m = re.search(r'<!--beforetoc-->(.*?)<!--/beforetoc-->', body, re.S)
     if m:
         # Notes a page wants straight after its first section, above the contents.
@@ -1148,11 +1149,11 @@ def _short(label):
 # Added on top of the drawn charts: tap, hover or use the arrow keys to read one
 # year's values. Without JavaScript the chart, its summary and its table still work.
 CHART_JS = """<script>
-document.querySelectorAll('[data-chart]').forEach(function(el){
+document.querySelectorAll('[data-chart]').forEach(function(el,idx){
 var d=JSON.parse(el.getAttribute('data-chart')),ns='http://www.w3.org/2000/svg',cur=-1;
 var svgs=el.tagName.toLowerCase()==='svg'?[el]:Array.prototype.slice.call(el.querySelectorAll('svg'));
 var out=document.createElement('p');out.className='readout';out.setAttribute('aria-live','polite');
-out.textContent='Tap or hover on the chart, or select it and use the arrow keys, to read each year.';
+if(idx===0){out.textContent='Tap or hover on the chart, or select it and use the arrow keys, to read each year.';}else{out.className='readout later';}
 var cap=el.parentNode.querySelector('figcaption');el.parentNode.insertBefore(out,cap?cap.nextSibling:el.nextSibling);
 var gs=svgs.map(function(svg){var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);return g;});
 el.setAttribute('tabindex','0');

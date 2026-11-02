@@ -254,7 +254,7 @@ def timing_note(sources, up, *periods):
     links = "; ".join(f'<a href="{up}figures/{esc(s)}.html">{esc(sources[s]["publisher"])}: {esc(sources[s]["title"])}</a>' for s in used)
     return ('<div class="limit" id="timing"><p><strong>Timing matters.</strong> ' + " ".join(esc(x) for x in lines)
             + " A comparison that starts or ends in an unusual year can show a bigger or smaller change than the years around it."
-            + " The topic pages show every year, so you can see whether a change is part of a longer pattern.</p>"
+            + " The longer run beside each lead figure shows whether a change is part of a longer pattern.</p>"
             + (f'<p class="small">Source: {links}.</p>' if links else "") + "</div>")
 
 
@@ -611,7 +611,11 @@ def long_run(facts, num, m, b, href):
     def at(v):
         ys = [y for y in years if vals[y] == v]
         when = [esc(period(y)) for y in ys]
-        when = ", ".join(when[:-1]) + " and " + when[-1] if len(when) > 1 else when[0]
+        if len(ys) > 2 and ys == list(range(ys[0], ys[-1] + 1)):
+            # A run of tied years reads as one span, not a list.
+            when = f"each year, {when[0]} to {when[-1]}"
+        else:
+            when = ", ".join(when[:-1]) + " and " + when[-1] if len(when) > 1 else when[0]
         return f"{num(fid(ys[0]), kind)}{unit} ({when})"
 
     gaps = (last - first + 1) - len(years)
@@ -645,31 +649,28 @@ def compare_page(facts, d, num, sources, a, b):
     # Summary first: the same lead measure for every topic, then the biggest changes by a fixed rule.
     # "In brief" has no id, so the contents list goes after it and the answers come first.
     body.append('<h2 class="brief">In brief</h2>')
-    body.append('<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved. Each figure covers its own period, shown in brackets.</p>')
+    body.append('<p class="small">The same lead figure for each topic on every comparison page, whichever way it moved, each for its own period (in brackets). '
+                'Shares change in percentage points: 20% to 25% is +5 percentage points. Money and counts change in per cent, class sizes in pupils.</p>')
     for key, title, _ in TOPICS:
         body.append(f'<div class="cmp-key"><h3>{esc(title)}</h3>{key_sentence(facts, num, key, a, b)}</div>')
     top = largest_changes(facts, num, a, b)
     if top:
         body.append(f'<h2 id="largest">Largest changes between {a} and {b}</h2>')
-        body.append('<p class="small">Every comparable figure on this page, ranked by the size of its change. Shares and amounts are ranked separately; cash figures are left out in favour of after-inflation ones.</p>')
+        body.append('<p class="small">Every comparable figure on this page, ranked by the size of its change: shares and amounts separately, after-inflation figures rather than cash.</p>')
         body.append(top)
     body.append(timing_note(sources, "../../", (str(a), [int(a)]), (str(b), [int(b)])))
     body.append(CAUSE)
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
-        # On a phone the section shows where the figures cover and one figure that
-        # "In brief" does not already give; the rest folds away.
+        # On a phone the section shows where the figures cover; "In brief" already gives
+        # the lead figure, so every other figure waits in the fold.
         where, _, more_scope = scope.partition(". ")
         body.append(f'<p class="small">{esc(where + "." if more_scope else where)}</p>')
         ms = [m for m in MEAS if m[1] == key]
         ok = [m for m in ms if _status(facts, m, a, b) == "ok" and not m[0].endswith("cash")]
         breaks = [m for m in ms if _status(facts, m, a, b) == "break"]
         missing = [m for m in ms if _status(facts, m, a, b) == "missing"]
-        shown = next((m for m in ok if m[0] != KEY_MEASURES[key][0]), None)
-        if shown:
-            body.append(f'<ul class="cmp-list">{_row_card(facts, num, shown, a, b)}</ul>')
-            ok = [m for m in ok if m is not shown]
-        body.append(FOLD)
+        body.append(FOLD + "<!--keepfold-->")
         if more_scope:
             body.append(f'<p class="small">{esc(more_scope)}</p>')
         if ok:
@@ -726,7 +727,6 @@ def compare_page(facts, d, num, sources, a, b):
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
     body.append(f'<h2 id="other">Compare other years</h2>')
     body.append(compare_form("../", a, b))
-    body.append('<p class="small">Changes in percentages are shown in percentage points: a rise from 20% to 25% is +5 percentage points. Changes in money and counts are shown as a percentage of the earlier year. Class sizes change in pupils.</p>')
     return page(f"life/compare/{a}-{b}.html", f"{a} compared with {b}", "\n".join(body), f"How work, pay, housing, holidays and class sizes differed between {a} and {b}.", scripts=COMPARE_JS)
 
 
@@ -862,12 +862,12 @@ def _holidays(facts, d, num, sources):
     names = d["countries"]["names"]
     tl = top_countries(facts, d, LAST, 3)
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
-    answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", 2019, gb=False)} In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to {num("hol.world.holiday.2020", "millions")}. {headline(facts, num, "holidays", LAST)}</p>
-<p>{"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, followed by {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
+    answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
+<p>Before the pandemic, in 2019, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad; in 2020 this fell to {num("hol.world.holiday.2020", "millions")}. {"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, then {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
 </div>''')
     body.append(U.topic_line(num, "holidays", LAST))
-    body.append('<p>These are counts of trips, not of people. Some people take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
-                'Holiday trips within Great Britain are measured by a separate survey, which changed method after 2019.</p>')
+    body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
+                'Trips within Great Britain come from a separate survey, which changed method after 2019.</p>')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method)", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
                              finding=F.trend("Holiday visits abroad by UK residents", which="first")))
@@ -900,8 +900,8 @@ def _schools(facts, d, num, sources):
     # England's January census can be a year newer than the explorer's range: show it here
     newer = [y for y in (LAST + 1,) if _val(facts, f"school.primary.{y}") is not None and _val(facts, f"school.secondary.{y}") is not None]
     sy = YEARS + newer
-    latest = (f' The latest census, January {newer[-1]} ({newer[-1] - 1}/{str(newer[-1])[2:]} school year), found {num(f"school.primary.{newer[-1]}", "dp1")} in primary '
-              f'and {num(f"school.secondary.{newer[-1]}", "dp1")} in secondary; it is shown on this page only, because the other topics have no {newer[-1]} figures yet.') if newer else ""
+    latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
+              f'{num(f"school.secondary.{newer[-1]}", "dp1")}; only this page shows it, as the other topics have no {newer[-1]} figures yet.') if newer else ""
     answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p></div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
@@ -916,11 +916,9 @@ def _schools(facts, d, num, sources):
     from .pages_life_extra import class_detail_blocks
     body.extend(class_detail_blocks(facts, num, d))
     wy = [y for y in YEARS if _val(facts, f"school.wales.infant.{y}") is not None]
-    body.append("<h3 id='schools-wales'>Wales</h3>")
-    body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
-                      [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy]))
-    body.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
-    body.extend(schools_nations_block(facts, num, d))
+    wales = table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
+                  [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy])
+    body.extend(schools_nations_block(facts, num, d, wy[-1], wales))
     return answer, body
 
 
@@ -957,8 +955,9 @@ def topic_page(facts, d, num, sources, key):
     # The longer series before 2008 follows the first chart's table.
     from . import pages_history
     history = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in pages_history.block(facts, num, sources, key)]
-    if key == "housing" and history:
-        # The long chart shows the same four groups as the chart above, so on a phone it waits in the fold.
+    if history:
+        # The long chart shows the same measure as the chart above, over more years, so on a
+        # phone it waits in the fold; the answer box above it gives the long-run change.
         history.append("<!--keepfold-->")
     detail[first_chart + 2:first_chart + 2] = history
     detail.insert(first_chart + 1, FOLD)
@@ -1087,6 +1086,8 @@ def places_block(facts, num, topic):
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
                              [[str(y)] + [num(fid(k, y), kind) for k, _ in places] for y in ys]))
     out.append('<p class="small">The nine English regions together make up England.</p>')
+    # The answer names the highest and lowest places; the panels wait in the fold on a phone.
+    out.append("<!--keepfold-->")
     return out
 
 
@@ -1102,16 +1103,15 @@ def _places_answer(facts, num, d):
     n = d["nations"]
     nb = min(ys[-1], n["wales"][-1], n["scotland"][-1])
     return (f'<div class="answer"><p>At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately: '
-            f'across the regions, from {num(f"house.reg.private.{low}.{b}", "pct0")} ({names[low]}) to {num(f"house.reg.private.{top}.{b}", "pct0")} ({names[top]}). '
-            f'In {nb}, {num(f"house.nat.private.wales.{nb}", "pct0")} of homes in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland were rented privately. '
+            f'from {num(f"house.reg.private.{low}.{b}", "pct0")} ({names[low]}) to {num(f"house.reg.private.{top}.{b}", "pct0")} ({names[top]}). '
+            f'In {nb} it was {num(f"house.nat.private.wales.{nb}", "pct0")} in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland. '
             f'Each nation measures housing its own way, so small gaps between nations should not be read as real differences.</p></div>')
 
 
 def housing_places_block(facts, num, d):
     """The short version on the housing page: the answer and a link to the regions and nations page."""
     return ["<h3 id='housing-places'>Each region and nation</h3>", NOFOLD, _places_answer(facts, num, d),
-            '<p class="more-link"><a href="housing-places.html">Homes by tenure in each region and nation</a>: '
-            'a chart of every English region and figures for Wales, Scotland and Northern Ireland.</p>']
+            '<p class="more-link"><a href="housing-places.html">Homes by tenure in each region and nation</a>, with a chart of every English region.</p>']
 
 
 def places_page(facts, d, num, sources):
@@ -1163,8 +1163,8 @@ def housing_costs_block(facts, num, d):
     out = ["<h3 id='housing-costs'>What housing costs</h3>"]
     out.append(f'<div class="answer"><p>In {b}, households renting privately in England paid {num(f"house.rent.private.{base}", "pounds")} a week on average, '
                f'social renters {num(f"house.rent.social.{base}", "pounds")} and households with a mortgage {num(f"house.mortpay.{base}", "pounds")}. '
-               f'After allowing for rising prices, the average private rent in {sy(FIRST)} was {num(f"house.real.rent.private.{FIRST}", "pounds")} in {b} prices, '
-               f'social rent {num(f"house.real.rent.social.{FIRST}", "pounds")} and the average mortgage payment {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p></div>')
+               f'After inflation, in {b} prices, the {sy(FIRST)} figures were {num(f"house.real.rent.private.{FIRST}", "pounds")}, '
+               f'{num(f"house.real.rent.social.{FIRST}", "pounds")} and {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p></div>')
     out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
                             [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
@@ -1185,8 +1185,8 @@ def housing_space_block(facts, num):
     out = ["<h3 id='housing-space'>Space and overcrowding</h3>"]
     out.append(f'<div class="answer"><p>Over the three survey years {sy(last - 2)} to {sy(last)}, {num(f"house.crowd.all.{last}", "pct")} of households in England were overcrowded: '
                f'{num(f"house.crowd.social.{last}", "pct")} of social renters, {num(f"house.crowd.private.{last}", "pct")} of private renters and '
-               f'{num(f"house.crowd.owners.{last}", "pct")} of owner occupiers. For {sy(FIRST - 2)} to {sy(FIRST)} the figures were '
-               f'{num(f"house.crowd.social.{FIRST}", "pct")}, {num(f"house.crowd.private.{FIRST}", "pct")} and {num(f"house.crowd.owners.{FIRST}", "pct")}.</p></div>')
+               f'{num(f"house.crowd.owners.{last}", "pct")} of owner occupiers, against {num(f"house.crowd.social.{FIRST}", "pct")}, {num(f"house.crowd.private.{FIRST}", "pct")} '
+               f'and {num(f"house.crowd.owners.{FIRST}", "pct")} for {sy(FIRST - 2)} to {sy(FIRST)}.</p></div>')
     out.append(series_chart(facts, "Overcrowded households in England, by tenure",
                             [("Social renters", lambda y: f"house.crowd.social.{y}", "a"), ("Private renters", lambda y: f"house.crowd.private.{y}", "b"),
                              ("Owner occupiers", lambda y: f"house.crowd.owners.{y}", "c")],
@@ -1204,6 +1204,8 @@ def housing_space_block(facts, num):
     out.append(details_table("Show number of rooms for every year", "Households by number of rooms, England, % of all households",
                              ["Survey year", "1 or 2", "3", "4", "5", "6", "7", "8 or more", "5 or more"], rows))
     out.append('<p class="small">Room counts before and after 2011-12 are not comparable: from 2011-12 utility rooms were no longer counted.</p>')
+    # The answer gives each group's figures; the chart waits in the fold on a phone.
+    out.append("<!--keepfold-->")
     return out
 
 

@@ -299,8 +299,8 @@ def topic_line(num, topic, last, up="../"):
     if topic == "work":
         places = [f"work.place.{k}.{last}" for k, _ in NATIONS[1:]] + [f"work.place.{k}.{last}" for k, _, _ in REGIONS]
         rng = _range(num, places, "pm_pp")
-        s = (f"These rates are survey estimates. For the latest period ONS publishes ({esc_(INFO['lfs_period'])}), the margin of error on the UK rate was "
-             f"{num('moe.lfs.rate.latest', 'pm_pp')}, and {num('moe.lfs.rate.change_year', 'pm_pp')} on its change over a year, so a change over a year smaller than that could be sampling noise.")
+        s = (f"These are survey estimates. For {esc_(INFO['lfs_period'])}, the margin of error on the UK rate was "
+             f"{num('moe.lfs.rate.latest', 'pm_pp')}, and {num('moe.lfs.rate.change_year', 'pm_pp')} on its change over a year, so a smaller change could be sampling noise.")
         if rng:
             s += f" Rates for each nation and region in {last} have margins {rng}."
     elif topic == "earnings":
@@ -311,14 +311,13 @@ def topic_line(num, topic, last, up="../"):
         if rng:
             s += f" Figures for each nation and region are less precise, with margins {rng} a week."
     elif topic == "housing":
-        s = ("These are survey estimates, but the English Housing Survey tables used here do not publish margins of error, so none are shown. "
-             "The tables leave out figures based on very small samples.")
+        s = "These are survey estimates; the English Housing Survey tables used here publish no margins of error and leave out figures from very small samples."
     elif topic == "holidays":
         y = max(y for y in (2024, 2025) if f"hol.world.holiday.{y}" in MARGINS)
-        s = (f"Trips abroad are estimated from a survey of passengers. ONS gives a margin of error of {num(MARGINS[f'hol.world.holiday.{y}'][0], 'pm_pct')} "
-             f"for holiday visits abroad in {y}; margins for single countries are wider. The survey of holidays within Great Britain publishes no margins in the tables used here.")
+        s = (f"Trips abroad come from a survey of passengers, with a margin of error of {num(MARGINS[f'hol.world.holiday.{y}'][0], 'pm_pct')} "
+             f"for holiday visits abroad in {y}; single countries have wider margins. The survey of holidays within Great Britain publishes none in the tables used here.")
     elif topic == "schools":
-        s = "Class sizes come from the school census, which counts every class in every state school, not a sample, so they have no sampling margin of error."
+        s = "The school census counts every class in every state school, not a sample, so there is no sampling margin of error."
     else:
         return ""
     return f'<p class="sure"><strong>How sure?</strong> {s} {link}</p>'
@@ -357,9 +356,9 @@ def check_sentence(facts, num, a_id, b_id, style, labels=("earlier", "later"), u
         return ""
     ch, m = change_check(facts, a_id, b_id)
     if abs(ch) > m:
-        verdict = f"bigger than the two margins combined ({cell}), so sampling noise alone is unlikely to explain it"
+        verdict = f"bigger than both margins combined ({cell}), so it is unlikely to be sampling noise alone"
     else:
-        verdict = f"within the two margins combined ({cell}), so it could be sampling noise"
+        verdict = f"within both margins combined ({cell}), so it could be sampling noise"
     return (f'<p class="small sure-check">Margins of error: {esc_(labels[0])} {pm(num, a_id, "moe-in").strip()}, {esc_(labels[1])} {pm(num, b_id, "moe-in").strip()}. '
             f'The change is {verdict}. <a href="{up}{PAGE}#compare">How this is checked</a></p>')
 
