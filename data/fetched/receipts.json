@@ -39,6 +39,46 @@
   "sha256": "22260725e61d269d031e97381216582033477bc17ab507e6678781ec08618ea3",
   "retrieved": "2026-11-02T08:58:39Z"
  },
+ "ehs-fa1401": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
+  "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
+  "bytes": 68295,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "bb2bf349c1464bd1a8571846334186cd13d571e41bd6dba457b23efdf98d9f94",
+  "retrieved": "2026-11-02T09:51:07Z"
+ },
+ "ehs-fa1422": {
+  "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
+  "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
+  "bytes": 28305,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "c704cfa68d6d53e0fc533d47f7898fb5528b842f6735cb17a36ae39a9a8651fe",
+  "retrieved": "2026-11-02T09:51:10Z"
+ },
+ "ehs-fa2501": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
+  "file": "ehs/FA2501_mortgage_payment_per_week_2021-22.ods",
+  "bytes": 36640,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "6e69e8619d2886a7d128e12fe6d46accb25ed60c4919b0e6f07bea97b1906374",
+  "retrieved": "2026-11-02T09:51:03Z"
+ },
+ "ehs-fa2555": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4da2f96a73e62ba1029999/FA2555_mortgage_payment_per_week__by_type_of_mortgage_age_economic_status.ods",
+  "file": "ehs/FA2555_mortgage_payment_per_week.ods",
+  "bytes": 36317,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "244b490166cacae10633bd4cca2f9504ac7fe4186ab09419db28af756c92de85",
+  "retrieved": "2026-11-02T09:50:59Z"
+ },
+ "ehs-fa3201": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
+  "file": "ehs/FA3201_rent_before_housing_support.ods",
+  "bytes": 62688,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "f15a9066129dd7d38406b5000391e8b1d15d2ebaaaa33707beda0734c906eb35",
+  "retrieved": "2026-11-02T09:50:52Z"
+ },
  "ehs-ft1101": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
   "file": "ehs/FT1101_Trends_in_tenure.ods",

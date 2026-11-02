@@ -46,6 +46,8 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>Changes in percentages</strong> are shown in percentage points; changes in money and counts as a percentage of the earlier figure.</li>'
             '<li><strong>Non-tax receipts</strong>: total current receipts minus taxes (OBR).</li>'
             '<li><strong>Families with children renting privately</strong>: private-renting families ÷ all families, adding couples, single lone parents and previously married lone parents (EHS FT1241).</li>'
+            '<li><strong>Housing costs after inflation</strong>: cash rent or mortgage payment × (average CPIH over the latest survey year ÷ average CPIH over that survey year). A survey year runs from April to the following March, so each average uses the twelve monthly CPIH values (ONS series L522) for those months.</li>'
+            '<li><strong>Households with five or more rooms</strong>: the published percentages with five, six, seven, and eight or more rooms, added together (EHS FA1401).</li>'
             '<li><strong>Holiday share of visits</strong> and <strong>Europe share</strong>: holiday visits ÷ all visits, and holiday visits to Europe ÷ all holiday visits.</li>'
             '<li><strong>Holidays per 100 residents</strong>: holiday trips × 100 ÷ mid-year population (ONS UKPOP up to 2023 for trips abroad, GBPOP from 2024 and for trips within Great Britain). This is an average over everyone, including children and people who took no holiday.</li>'
             '<li><strong>Most visited countries</strong>: single countries ranked by visits in that year; groups such as “Rest of Europe” are left out.</li></ul>',

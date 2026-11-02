@@ -36,6 +36,16 @@ class Charts(unittest.TestCase):
         svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1, 2, 3, 4], "a")], "u", breaks=[(2, "New method")], split_breaks=True)
         self.assertEqual(svg.count("<path"), 2)
 
+    def test_axis_labels_are_not_rounded_away(self):
+        svg = line_chart("t", ["2018", "2019", "2020"], [("a", [0.5, 6, 9.4], "a")], "units", ymin=0)
+        labels = re.findall(r'text-anchor="end">([0-9.,]+)</text>', svg)
+        self.assertIn("2.5", labels)
+        self.assertIn("7.5", labels)
+
+    def test_room_counts_not_compared_across_definition_change(self):
+        self.assertNotEqual(pages_life.rooms_basis(2010), pages_life.rooms_basis(2011))
+        self.assertEqual(pages_life.rooms_basis(2011), pages_life.rooms_basis(2024))
+
     def test_chart_has_text_alternative(self):
         svg = line_chart("Title", ["1", "2"], [("a", [1, 2], "a")], "u")
         self.assertIn('role="img"', svg)

@@ -484,6 +484,142 @@ def housing(facts):
     return out
 
 
+# Housing costs and space (England, English Housing Survey).
+
+def _sheet_year(name):
+    m = re.fullmatch(r"(\d{4})-\d{2}", name.strip())
+    return int(m.group(1)) if m else None
+
+
+def _row(rows, label):
+    """Index of the first row whose first cell is exactly label (footnote digits allowed)."""
+    for i, r in enumerate(rows):
+        if r and isinstance(r[0], str) and re.fullmatch(re.escape(label) + r"\d?", r[0].strip()):
+            return i
+    raise KeyError(label)
+
+
+def _col(rows, header):
+    for r in rows[:8]:
+        for j, v in enumerate(r):
+            if isinstance(v, str) and v.replace("\n", " ").strip() == header:
+                return j
+    raise KeyError(header)
+
+
+MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
+
+def _cpih_survey_year(facts, cpih, y):
+    """Average CPIH over a survey year, April y to March y+1 (calculated)."""
+    fid = f"cpih.sy.{y}"
+    if fid in facts:
+        return fid
+    ids = []
+    for yy, mon in [(y, m) for m in MONTHS[3:]] + [(y + 1, m) for m in MONTHS[:3]]:
+        mid = f"cpih.m.{yy}.{mon}"
+        if mid not in facts:
+            facts.add(Fact(mid, cpih.get(f"{yy} {mon}"), "index (2015=100)", f"{mon.title()} {yy}", "ons-l522", f"L522 row '{yy} {mon}'"))
+        ids.append(mid)
+    vals = [facts[i].value for i in ids]
+    facts.add(Fact(fid, None if None in vals else sum(vals) / 12, "index (2015=100)", f"April {y} to March {y + 1}", "ons-l522",
+                   ", ".join(facts[i].locator for i in ids), "calculated", formula=f"({' + '.join(ids)}) ÷ 12", inputs=ids))
+    return fid
+
+
+def housing_costs(facts):
+    """Mean weekly rent (before housing support) and mortgage payment, cash and after inflation."""
+    _, cpih = ons_series("data/fetched/ons/l522.csv")
+    out = {"cash": {}, "years": []}
+    # Rents: FA3201, one sheet per survey year, mean column.
+    path = "data/fetched/ehs/FA3201_rent_before_housing_support.ods"
+    for name, rows in ods(path).items():
+        y = _sheet_year(name)
+        if y not in YEARS:
+            continue
+        j = _col(rows, "mean")
+        for key, label in (("social", "all social renters"), ("private", "all private renters")):
+            i = _row(rows, label)
+            facts.add(Fact(f"house.rent.{key}.{y}", num(rows[i][j]), "£ a week", f"{name} survey year", "ehs-fa3201", f"{name}!{ref(i, j)}", "published",
+                           note=f"{label}, mean weekly rent before housing support"))
+        out["years"].append(y)
+    # Mortgage payments: FA2501 (2008-09 to 2021-22) and FA2555 (2022-23 onwards), mean payment column.
+    for sid, path in (("ehs-fa2501", "data/fetched/ehs/FA2501_mortgage_payment_per_week_2021-22.ods"),
+                      ("ehs-fa2555", "data/fetched/ehs/FA2555_mortgage_payment_per_week.ods")):
+        for name, rows in ods(path).items():
+            y = _sheet_year(name)
+            if y not in YEARS:
+                continue
+            j = _col(rows, "mean payment")
+            i = _row(rows, "all mortgage types")
+            facts.add(Fact(f"house.mortpay.{y}", num(rows[i][j]), "£ a week", f"{name} survey year", sid, f"{name}!{ref(i, j)}", "published",
+                           note="owners buying with a mortgage (including shared owners), mean weekly mortgage payment"))
+    latest = max(y for y in YEARS if f"house.rent.private.{y}" in facts)
+    base = _cpih_survey_year(facts, cpih, latest)
+    out["base"] = latest
+    for key in ("rent.social", "rent.private", "mortpay"):
+        for y in YEARS:
+            fid = f"house.{key}.{y}"
+            if fid not in facts:
+                continue
+            idx = _cpih_survey_year(facts, cpih, y)
+            v, b, i = facts[fid].value, facts[base].value, facts[idx].value
+            facts.add(Fact(f"house.real.{key}.{y}", None if None in (v, b, i) else v * b / i, f"£ a week, {latest}-{str(latest + 1)[2:]} prices",
+                           facts[fid].period, facts[fid].source, facts[fid].locator, "calculated",
+                           formula=f"{fid} × {base} ÷ {idx}", inputs=[fid, base, idx]))
+    return out
+
+
+def housing_space(facts):
+    """Overcrowding by tenure (bedroom standard, three-year averages) and number of rooms."""
+    out = {"crowd": {}, "rooms": {}}
+    rows = ods("data/fetched/ehs/FT1421_Trends_in_overcrowding_by_tenure.ods")["FT1421"]
+    cols = {"owners": 1, "social": 2, "private": 3, "all": 4}
+    for i, r in enumerate(rows):
+        if not r or not re.fullmatch(r"\d{4}-\d{2}", str(r[0])):
+            continue
+        y = int(str(r[0])[:4])
+        if y not in YEARS:
+            continue
+        for key, j in cols.items():
+            facts.add(Fact(f"house.crowd.{key}.{y}", num(r[j]), "% of households (three-year average)", f"{y - 2}-{str(y - 1)[2:]} to {r[0]} survey years",
+                           "ehs-ft1421", f"FT1421!{ref(i, j)}", "published"))
+        out["crowd"][y] = str(r[0])
+    # FA1422 adds the three years to 2022-23, which FT1421 does not yet cover.
+    sheets = ods("data/fetched/ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods")
+    for name, rows in sheets.items():
+        y = _sheet_year(name)
+        if y not in YEARS or y in out["crowd"]:
+            continue
+        pct = next(i for i, r in enumerate(rows) if len(r) > 5 and r[5] == "percentages")
+        for key, label in (("owners", "owner occupiers"), ("social", "social renters"), ("private", "private renters"), ("all", "all tenures")):
+            i = _row(rows[pct:], label) + pct
+            facts.add(Fact(f"house.crowd.{key}.{y}", num(rows[i][1]), "% of households (three-year average)", f"{y - 2}-{str(y - 1)[2:]} to {name} survey years",
+                           "ehs-fa1422", f"{name}!{ref(i, 1)}", "published"))
+        out["crowd"][y] = name
+    # Rooms: FA1401, all tenures, percentage block. Five or more rooms = five + six + seven + eight or more.
+    path = "data/fetched/ehs/FA1401_number_of_rooms_by_tenure.ods"
+    bands = [("r12", "one or two"), ("r3", "three"), ("r4", "four"), ("r5", "five"), ("r6", "six"), ("r7", "seven"), ("r8", "eight or more")]
+    for name, rows in ods(path).items():
+        y = _sheet_year(name)
+        if y not in YEARS:
+            continue
+        pct = next(i for i, r in enumerate(rows) if "percentages" in r)
+        i = _row(rows[pct:], "all tenures") + pct
+        ids = []
+        for key, head in bands:
+            j = _col(rows, head)
+            fid = f"house.rooms.{key}.{y}"
+            facts.add(Fact(fid, num(rows[i][j]), "% of households", f"{name} survey year", "ehs-fa1401", f"{name}!{ref(i, j)}", "published"))
+            ids.append(fid)
+        big = ids[3:]
+        vals = [facts[f].value for f in big]
+        facts.add(Fact(f"house.rooms5.{y}", None if None in vals else sum(vals), "% of households", f"{name} survey year", "ehs-fa1401",
+                       ", ".join(facts[f].locator for f in big), "calculated", formula=" + ".join(big), inputs=big))
+        out["rooms"][y] = name
+    return out
+
+
 # ---------------------------------------------------------------- life: holidays
 
 def _ott_block_table(path, sheet, source):
@@ -757,6 +893,8 @@ def build_all():
         "work": work(facts),
         "earnings": earnings(facts),
         "housing": housing(facts),
+        "housing_costs": housing_costs(facts),
+        "housing_space": housing_space(facts),
         "holidays": holidays(facts),
         "countries": holiday_countries(facts),
         "gb_holidays": holidays_gb(facts),
