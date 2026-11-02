@@ -503,6 +503,14 @@
   "sha256": "4234999fa3366b262c2fe3c1858e9ac8cc88c2f40a0798b6934b61865f0f6791",
   "retrieved": "2026-11-02T16:28:39Z"
  },
+ "nomis-wfj-industry-codes": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json",
+  "file": "nomis/wfj-industry-codes.json",
+  "bytes": 1025,
+  "content_type": "application/json",
+  "sha256": "112076f473126e90f760224be2d40fb8108e7c049e63f0dd85a61544ea192fa6",
+  "retrieved": "2026-11-02T16:29:55Z"
+ },
  "nomis-wfj-latest": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
   "file": "nomis/wfj-uk-latest.csv",
@@ -518,6 +526,22 @@
   "content_type": "application/json",
   "sha256": "ef80d0385019a69e46c5d09e600d3d96d9d2fbd4b3e1c06bc80a35b5e7900f84",
   "retrieved": "2026-11-02T16:28:35Z"
+ },
+ "nomis-wfj-uk-industry": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/wfj-uk-industry.csv",
+  "bytes": 29178,
+  "content_type": "text/csv",
+  "sha256": "1c937a449c4bb7d246630d95f125ecb3bbe42ae215a13a1d54284150a2a6bbdd",
+  "retrieved": "2026-11-02T16:29:58Z"
+ },
+ "nomis-wfj-uk-industry-long": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/wfj-uk-industry-long.csv",
+  "bytes": 14308,
+  "content_type": "text/csv",
+  "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
+  "retrieved": "2026-11-02T16:30:02Z"
  },
  "ons-a3wx": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
