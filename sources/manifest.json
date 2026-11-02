@@ -191,6 +191,52 @@
    "id": "ehs-fa1422",
    "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
    "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
+  },
+  {
+   "id": "nomis-aps-emp-nations",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+   "file": "nomis/aps-employment-rate-nations-regions.csv"
+  },
+  {
+   "id": "nomis-aps-variables",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/variable.def.sdmx.json",
+   "file": "nomis/aps-variable-codes.json"
+  },
+  {
+   "id": "nomis-ashe-nations",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
+  },
+  {
+   "id": "ons-a05sa",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentunemploymentandeconomicinactivitybyagegroupseasonallyadjusteda05sa",
+   "find": "/file\\?uri=[^\"']*a05sa[^\"']*\\.xlsx?",
+   "file": "ons/a05sa"
+  },
+  {
+   "id": "discovery-dwelling-stock-page",
+   "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-dwelling-stock-including-vacants",
+   "file": "discovery/dwelling-stock-page.html"
+  },
+  {
+   "id": "discovery-scot-schools-2025",
+   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2025/",
+   "file": "discovery/scot-schools-2025.html"
+  },
+  {
+   "id": "discovery-scot-schools-docs-2025",
+   "url": "https://www.gov.scot/publications/summary-statistics-for-schools-in-scotland-2025/documents/",
+   "file": "discovery/scot-schools-2025-documents.html"
+  },
+  {
+   "id": "discovery-wales-census-2025",
+   "url": "https://www.gov.wales/schools-census-results-january-2025",
+   "file": "discovery/wales-census-2025.html"
+  },
+  {
+   "id": "discovery-ni-enrolments",
+   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-northern-ireland-summary-data",
+   "file": "discovery/ni-enrolments.html"
   }
  ]
 }
