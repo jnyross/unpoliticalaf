@@ -102,7 +102,8 @@ def lead_sentence(facts, num, topic, a, b):
         same = abs(v) < 0.05
         verb = "was about the same:" if same else ("went up from" if v > 0 else "went down from")
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if same else 'to'} {num(fb, m[4])} ({esc(m[6](b))})."
-                f"{'' if same else ' Change: ' + ch + '.'}</p>" + L._pair_bars(facts, num, _m8(m), a, b))
+                f"{'' if same else ' Change: ' + ch + '.'}</p>" + L._pair_bars(facts, num, _m8(m), a, b)
+                + L.long_run(facts, num, _m8(m), b, f"../{topic}.html"))
     return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>. {esc(not_compared(facts, m, a, b))}{_near_link(facts, m, a, b)}</p>"
 
 

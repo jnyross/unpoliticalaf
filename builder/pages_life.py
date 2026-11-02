@@ -570,7 +570,8 @@ def key_sentence(facts, num, topic, a, b):
         v, ch = _change(facts, num, m, a, b)
         verb = "went up from" if v > 0.049 else ("went down from" if v < -0.049 else "was about the same:")
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if abs(v) < 0.05 else 'to'} {num(fb, m[4])} ({esc(m[6](b))}).{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>"
-                + _pair_bars(facts, num, m, a, b) + U.check_sentence(facts, num, fa, fb, m[5], (str(a), str(b))))
+                + _pair_bars(facts, num, m, a, b) + U.check_sentence(facts, num, fa, fb, m[5], (str(a), str(b)))
+                + long_run(facts, num, m, b, f"../{topic}.html"))
     near = _nearest_pair(facts, m, a, b)
     link = f' The nearest pair of years with comparable figures is <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
     if st == "break":
@@ -579,6 +580,45 @@ def key_sentence(facts, num, topic, a, b):
     missing = [y for y in (a, b) if _val(facts, m[3](y)) is None]
     y = missing[0]
     return f"<p>{esc(subject)}: <strong>not compared</strong>, because {esc(missing_reason(mkey, y))}.{link}</p>"
+
+
+def _same_way(m):
+    """Every comparability rule that applies to a measure, as one function of the year.
+
+    The year explorer and the longer series can each record a change of method
+    (pay, for example, breaks in 2004 and 2006 only in the longer series), so a
+    year counts as measured the same way only if it matches on all of them."""
+    from .pages_history import LONG
+    rules = [g for g in [m[7]] + [x[7] for x in MEAS + LONG if x[0] == m[0] and x[3](2010) == m[3](2010)] if g]
+    return lambda y: tuple(g(y) for g in rules)
+
+
+def long_run(facts, num, m, b, href):
+    """Longer-run context beside a headline change, by a fixed rule.
+
+    Over every year measured the same way as year b: the change from the first
+    year to the last, and the lowest and highest yearly figures. Years without a
+    figure are counted and said, never filled in."""
+    fid, kind, style, period = m[3], m[4], m[5], m[6]
+    same = _same_way(m)
+    years = [y for y in EARLY_YEARS + YEARS if _val(facts, fid(y)) is not None and same(y) == same(b)]
+    if len(years) < 3:
+        return ""
+    first, last = years[0], years[-1]
+    vals = {y: _val(facts, fid(y)) for y in years}
+    unit = " pupils" if style == "abs" else ""
+
+    def at(v):
+        ys = [y for y in years if vals[y] == v]
+        when = [esc(period(y)) for y in ys]
+        when = ", ".join(when[:-1]) + " and " + when[-1] if len(when) > 1 else when[0]
+        return f"{num(fid(ys[0]), kind)}{unit} ({when})"
+
+    gaps = (last - first + 1) - len(years)
+    gap_text = f" {gaps} of these years have no figure." if gaps else ""
+    return (f'<p class="small cmp-long">Longer run, {esc(period(first))} to {esc(period(last))}, same method: '
+            f'{change_cell(facts, num, fid(first), fid(last), style, kind)}. Lowest {at(min(vals.values()))}, '
+            f'highest {at(max(vals.values()))}.{gap_text} <a href="{href}">Chart of every year</a></p>')
 
 
 def largest_changes(facts, num, a, b, n=3):

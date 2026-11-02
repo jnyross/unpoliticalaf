@@ -246,6 +246,27 @@ class ComparisonPage(unittest.TestCase):
         self.assertIn("went up from", out)
         self.assertIn("+5.0 percentage points", out)
 
+    def test_lead_sentence_gives_longer_run_context(self):
+        out = pages_life.key_sentence(self.facts, self.num, "work", 2010, 2019)
+        self.assertIn("Longer run, 2010 to 2025, same method", out)
+        self.assertIn('data-from="work.rate.2010" data-to="work.rate.2025"', out)
+        self.assertIn("Lowest", out)
+        self.assertIn("(2010)", out)
+        self.assertIn("(2025)", out)
+        self.assertIn("13 of these years have no figure", out)
+        self.assertIn('href="../work.html"', out)
+
+    def test_longer_run_stays_within_one_definition(self):
+        f = self.facts
+        for y in (2011, 2015, 2020):
+            f.add(Fact(f"occ.{pages_life.occ_scheme(y)}.{y}", 21.0, "%", str(y), "s", "B1"))
+        m = self.m("work.occ.prof")
+        out = pages_life.long_run(f, self.num, m, 2025, "x.html")
+        self.assertEqual(out, "")  # only 2021 and 2025 use SOC2020: too few years
+        out = pages_life.long_run(f, self.num, m, 2019, "x.html")
+        self.assertIn("2011 to 2020", out)
+        self.assertNotIn("2025", out)
+
     def test_small_percentage_changes_keep_a_decimal(self):
         out = pages_life.change_cell(self.facts, self.num, "pay.2010", "pay.2019", "pct", "pounds")
         self.assertIn("+4.0%", out)
