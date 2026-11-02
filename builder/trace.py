@@ -26,7 +26,7 @@ CORRECTIONS = [
         "pages": [("index.html", "Every page (footer)")],
         "was": "The footer said every figure links to its source, but figures could only be traced through the source line under each section, which leads to the whole table rather than the figure.",
         "now": "Tapping any figure shows its source, period and the exact cell or calculation, and each source line leads to a record of every figure taken from that source.",
-        "pr": 83,
+        "pr": 84,
     },
     {
         "date": "2 November 2026",
