@@ -428,6 +428,90 @@ def earnings(facts):
     return out
 
 
+# ---------------------------------------------------------------- life: nations, regions and age groups
+
+NATIONS = [("uk", "United Kingdom"), ("england", "England"), ("wales", "Wales"), ("scotland", "Scotland"), ("ni", "Northern Ireland")]
+REGIONS = [("ne", "North East", "E12000001"), ("nw", "North West", "E12000002"), ("yh", "Yorkshire and The Humber", "E12000003"),
+           ("em", "East Midlands", "E12000004"), ("wm", "West Midlands", "E12000005"), ("east", "East of England", "E12000006"),
+           ("london", "London", "E12000007"), ("se", "South East", "E12000008"), ("sw", "South West", "E12000009")]
+NATION_CODES = {"K02000001": "uk", "E92000001": "england", "W92000004": "wales", "S92000003": "scotland", "N92000002": "ni"}
+REGION_CODES = {code: key for key, _, code in REGIONS}
+
+
+def _geo_key(r):
+    """Map a Nomis row to one of our place keys, using each place once (countries, or English regions)."""
+    code, gtype = r["GEOGRAPHY_CODE"], r["GEOGRAPHY_TYPE"]
+    if gtype == "countries" and code in NATION_CODES:
+        return NATION_CODES[code]
+    if gtype == "regions" and code in REGION_CODES:
+        return REGION_CODES[code]
+    return None
+
+
+def work_places(facts):
+    """Employment rate, ages 16 to 64, by nation and English region (Annual Population Survey, January to December)."""
+    path = "data/fetched/nomis/aps-employment-rate-nations-regions.csv"
+    out = {}
+    for line, r in enumerate(csv_rows(path), start=2):
+        m = re.fullmatch(r"Jan (\d{4})-Dec (\d{4})", r["DATE_NAME"])
+        if not m or r["MEASURES_NAME"] != "Variable" or r["VARIABLE_NAME"] != "Employment rate - aged 16-64":
+            continue
+        key, y = _geo_key(r), int(m.group(1))
+        if key is None or y not in YEARS:
+            continue
+        fid = f"work.place.{key}.{y}"
+        if fid in facts:
+            continue
+        facts.add(Fact(fid, num(r["OBS_VALUE"]), "%", f"January to December {y}", "nomis-aps-emp-places",
+                       f"aps-employment-rate-nations-regions.csv line {line}", "published", note=f"{r['GEOGRAPHY_NAME']}, employment rate aged 16-64"))
+        out.setdefault(key, {})[y] = fid
+    return out
+
+
+AGE_SERIES = [("18_24", "18 to 24", "ybud"), ("25_34", "25 to 34", "ybug"), ("35_49", "35 to 49", "ybuj"), ("50_64", "50 to 64", "lf2u"), ("65", "65 and over", "lfk6")]
+
+
+def work_ages(facts):
+    """Employment rate by age group, United Kingdom, Labour Force Survey, April to June."""
+    out = {}
+    for key, label, cdid in AGE_SERIES:
+        meta, data = ons_series(f"data/fetched/ons/{cdid}.csv")
+        for y in YEARS:
+            fid = f"work.age.{key}.{y}"
+            facts.add(Fact(fid, _q2(data, y), "%", f"April to June {y}", f"ons-{cdid}", f"{meta.get('CDID')} row '{y} Q2'", "published",
+                           note=meta.get("Title", "")))
+            out.setdefault(key, {})[y] = fid
+    return out
+
+
+def earnings_places(facts):
+    """Median gross weekly pay of full-time employees by nation and English region, where they live (ASHE), cash and after inflation."""
+    path = "data/fetched/nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
+    meta, cpih = ons_series("data/fetched/ons/l522.csv")
+    rows = csv_rows(path)
+    base_year = max(int(r["DATE_NAME"]) for r in rows)
+    base = cpih[f"{base_year} APR"]
+    out = {"cash": {}, "real": {}, "base_year": base_year}
+    for line, r in enumerate(rows, start=2):
+        if r["MEASURES_NAME"] != "Value" or r["SEX_NAME"] != "Full Time Workers":
+            continue
+        key, y = _geo_key(r), int(r["DATE_NAME"])
+        if key is None or y not in YEARS or f"earn.place.{key}.{y}" in facts:
+            continue
+        fid = f"earn.place.{key}.{y}"
+        st = "provisional" if y == base_year else "published"
+        facts.add(Fact(fid, num(r["OBS_VALUE"]), "£ a week", f"April {y}", "nomis-ashe-places", f"ashe-resident-nations-regions-ft-median-weekly.csv line {line}", st,
+                       note=f"{r['GEOGRAPHY_NAME']}, full-time employees living there, median gross weekly pay"))
+        idx = cpih.get(f"{y} APR")
+        v = facts[fid].value
+        rid = f"earn.place.real.{key}.{y}"
+        facts.add(Fact(rid, None if v is None or idx is None else v * base / idx, f"£ a week, April {base_year} prices", f"April {y}", "nomis-ashe-places",
+                       facts[fid].locator, "calculated", formula=f"{fid} × cpih.apr.{base_year} ÷ cpih.apr.{y}", inputs=[fid, f"cpih.apr.{base_year}", f"cpih.apr.{y}"]))
+        out["cash"].setdefault(key, {})[y] = fid
+        out["real"].setdefault(key, {})[y] = rid
+    return out
+
+
 # ---------------------------------------------------------------- life: housing
 
 def housing(facts):
@@ -884,6 +968,61 @@ def schools(facts):
     return out
 
 
+def housing_regions(facts):
+    """Share of homes (dwellings) by tenure in each English region, at 31 March (DLUHC live table 109)."""
+    path = "data/fetched/dluhc/LiveTable109.ods"
+    rows = ods(path)["LT_109a_proportion"]
+    hi = next(i for i, r in enumerate(rows) if r and r[0] == "Tenure")
+    head = rows[hi]
+    cols = {"england": 2}
+    for key, name, _ in REGIONS:
+        cols[key] = next(j for j, h in enumerate(head) if str(h).strip().lower() == name.lower())
+    tenures = {"Owner occupied": "owner", "Rented privately or with a job or business": "private",
+               "Rented from local authorities": "council", "Rented from private registered providers": "ha"}
+    out = {}
+    for i in range(hi + 1, len(rows)):
+        r = rows[i]
+        if not r or r[0] not in tenures or not isinstance(r[1], (int, float)):
+            continue
+        y, t = int(r[1]), tenures[r[0]]
+        if y not in YEARS:
+            continue
+        note = str(r[12]) if len(r) > 12 and r[12] else ""
+        for key, j in cols.items():
+            facts.add(Fact(f"house.reg.{t}.{key}.{y}", None if num(r[j]) is None else 100 * num(r[j]), "% of homes", f"31 March {y}", "dluhc-lt109",
+                           f"LT_109a_proportion!{ref(i, j)}", "provisional" if "[p]" in note else "published", scale=100))
+            out.setdefault(key, set()).add(y)
+    for key in out:
+        for y in out[key]:
+            a, b = facts[f"house.reg.council.{key}.{y}"], facts[f"house.reg.ha.{key}.{y}"]
+            if a.value is not None and b.value is not None:
+                facts.add(Fact(f"house.reg.social.{key}.{y}", a.value + b.value, "% of homes", f"31 March {y}", "dluhc-lt109", a.locator, "calculated",
+                               formula=f"{a.id} + {b.id}", inputs=[a.id, b.id]))
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def schools_wales(facts):
+    """Average class size in Wales, infant and junior classes, January census (Welsh Government, table 16 and 17)."""
+    path = "data/fetched/wg/schools-census-results-january-2025.ods"
+    book = ods(path)
+    out = {}
+    for sheet, phase in (("Table_16", "infant"), ("Table_17", "junior")):
+        rows = book[sheet]
+        hi = next(i for i, r in enumerate(rows) if r and r[0] == "Measure")
+        ri = next(i for i, r in enumerate(rows) if r and str(r[0]).strip() == "Average class size")
+        for j, h in enumerate(rows[hi]):
+            m = re.fullmatch(r"(\d{4}) - number", str(h).strip())
+            if not m:
+                continue
+            y = int(m.group(1))
+            v = num(rows[ri][j])
+            fid = f"school.wales.{phase}.{y}"
+            facts.add(Fact(fid, v, "pupils per class", f"January {y} census ({y - 1}/{str(y)[2:]} school year)",
+                           "wg-schools-census-2025", f"{sheet}!{ref(ri, j)}", "published", note="Unrounded in the source; shown to 1 decimal place."))
+            out.setdefault(phase, {})[y] = fid
+    return out
+
+
 def build_all():
     facts = Facts()
     d = {
@@ -892,6 +1031,9 @@ def build_all():
         "who": who_pays(facts),
         "work": work(facts),
         "earnings": earnings(facts),
+        "work_places": work_places(facts),
+        "work_ages": work_ages(facts),
+        "earn_places": earnings_places(facts),
         "housing": housing(facts),
         "housing_costs": housing_costs(facts),
         "housing_space": housing_space(facts),
@@ -899,6 +1041,8 @@ def build_all():
         "countries": holiday_countries(facts),
         "gb_holidays": holidays_gb(facts),
         "schools": schools(facts),
+        "housing_regions": housing_regions(facts),
+        "schools_wales": schools_wales(facts),
     }
     population(facts)
     holiday_rates(facts, d["gb_holidays"])

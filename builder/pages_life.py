@@ -7,7 +7,7 @@ the next calendar year, or a January school census). Every value is shown with
 its own period. Missing years stay missing, and comparisons across a change of
 definition are not calculated.
 """
-from .data import YEARS
+from .data import YEARS, NATIONS, REGIONS, AGE_SERIES
 from .html import page, table, details_table, line_chart, source_line, fmt, esc
 
 FIRST, LAST = YEARS[0], YEARS[-1]
@@ -52,6 +52,10 @@ def measures(d):
         ("work.level", "work", "People in work, aged 16 and over", lambda y: f"work.level.{y}", "millions_people", "pct", lambda y: f"Apr–Jun {y}", None),
         ("work.pt", "work", "Workers who work part-time", lambda y: f"work.ptshare.{y}", "pct", "pp", lambda y: f"Apr–Jun {y}", None),
     ]
+    for key, label, _ in AGE_SERIES:
+        m.append((f"work.age.{key}", "work", f"Employment rate, ages {label}", (lambda k: lambda y: f"work.age.{k}.{y}")(key), "pct", "pp", lambda y: f"Apr–Jun {y}", None))
+    for key, name in NATIONS[1:]:
+        m.append((f"work.place.{key}", "work", f"Employment rate 16 to 64: {name}", (lambda k: lambda y: f"work.place.{k}.{y}")(key), "pct", "pp", lambda y: f"Jan–Dec {y}", None))
     for k in ("prof", "managers", "admin", "skilled", "caring", "elem"):
         code = occ_codes[k]
         m.append((f"work.occ.{k}", "work", f"Share of workers in: {occ_names[k]}", (lambda c: lambda y: f"work.occshare.{occ_scheme(y)}.{c}.{y}")(code), "pct", "pp",
@@ -62,6 +66,10 @@ def measures(d):
         ("earn.men", "earnings", "Full-time men (April 2025 prices)", lambda y: f"earn.real.ft_men.{y}", "pounds", "pct", lambda y: f"April {y}", None),
         ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", None),
         ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", None),
+    ]
+    for key, name in NATIONS[1:]:
+        m.append((f"earn.place.{key}", "earnings", f"Full-time, living in {name} (April 2025 prices)", (lambda k: lambda y: f"earn.place.real.{k}.{y}")(key), "pounds", "pct", lambda y: f"April {y}", None))
+    m += [
         ("house.outright", "housing", "Households that own outright", lambda y: f"house.outright.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.mortgage", "housing", "Households buying with a mortgage", lambda y: f"house.mortgage.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.social", "housing", "Households renting from a council or housing association", lambda y: f"house.social.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
@@ -86,32 +94,34 @@ def measures(d):
         ("hol.europe", "holidays", "Holiday visits that were to Europe", lambda y: f"hol.europeshare.{y}", "pct", "pp", lambda y: f"Jan–Dec {y}", hol_basis),
         ("school.primary", "schools", "Average class size, primary schools", lambda y: f"school.primary.{y}", "dp1", "abs", lambda y: f"January {y}", None),
         ("school.secondary", "schools", "Average class size, secondary schools", lambda y: f"school.secondary.{y}", "dp1", "abs", lambda y: f"January {y}", None),
+        ("school.wales.infant", "schools", "Wales: average infant class (reception to year 2)", lambda y: f"school.wales.infant.{y}", "dp1", "abs", lambda y: f"January {y}", None),
+        ("school.wales.junior", "schools", "Wales: average junior class (years 3 to 6)", lambda y: f"school.wales.junior.{y}", "dp1", "abs", lambda y: f"January {y}", None),
     ]
     return m
 
 
 TOPICS = [
-    ("work", "Work", "United Kingdom. Employment rates and part-time share: Labour Force Survey, April to June. Job types: Annual Population Survey, January to December, people aged 16 and over in work."),
-    ("earnings", "Earnings", "United Kingdom. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the CPIH inflation index."),
+    ("work", "Work", "United Kingdom. Employment rates for the UK, by sex and by age, and the part-time share: Labour Force Survey, April to June. Employment rates for each nation and English region, and job types: Annual Population Survey, January to December."),
+    ("earnings", "Earnings", "United Kingdom, and each nation by where employees live. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the UK-wide CPIH inflation index."),
     ("housing", "Housing", "England only. English Housing Survey. A survey year runs from April to March, so “2015” means the 2015-16 survey. Rents are averages for households paying rent, before any housing support (such as Housing Benefit). Mortgage payments are averages for households buying with a mortgage. “After inflation” figures use the CPIH price index averaged over each survey year. Overcrowding uses the bedroom standard and is an average of three survey years."),
     ("holidays", "Holidays", "Trips abroad, by year of travel: up to 2023 UK residents (International Passenger Survey); from 2024 Great Britain residents, measured with a new method. Holidays at home: overnight trips within Great Britain by Great Britain residents whose main purpose was a holiday (Great Britain Tourism Survey); Northern Ireland is not covered. Every traveller, adult or child, counts as one trip. “Per 100 residents” divides trips by the mid-year population."),
-    ("schools", "Class sizes", "England only. State-funded schools, classes taught by one teacher, at the January school census. “2015” means January 2015, in the 2014/15 school year."),
+    ("schools", "Class sizes", "Primary and secondary figures: England only. State-funded schools, classes taught by one teacher, at the January school census. Wales: infant and junior classes in maintained schools at the January school census, from 2023. “2015” means January 2015, in the 2014/15 school year."),
 ]
 
 TOPIC_SOURCES = {
-    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "aps2010", "aps2020"],
-    "earnings": ["nomis-ashe-resident", "ons-l522"],
-    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401"],
+    "work": ["ons-lf24", "ons-mgsv", "ons-lf25", "ons-mgrz", "ons-ycbe", "ons-ycbh", "ons-ybud", "ons-ybug", "ons-ybuj", "ons-lf2u", "ons-lfk6", "nomis-aps-emp-places", "aps2010", "aps2020"],
+    "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "ons-l522"],
+    "housing": ["ehs-ft1101", "ehs-ft1241", "ehs-fa3201", "ehs-fa2501", "ehs-fa2555", "ons-l522", "ehs-ft1421", "ehs-fa1422", "ehs-fa1401", "dluhc-lt109"],
     "holidays": ["ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "gbts-2019-gb-summary", "gbts-2022to2023-tables", "gbts-2024-q4-annual-tables", "gbts-2025-toplines", "ons-ukpop", "ons-gbpop"],
-    "schools": ["dfe-spc-2015-tables", "dfe_api"],
+    "schools": ["dfe-spc-2015-tables", "dfe_api", "wg-schools-census-2025"],
 }
 
 TOPIC_LIMITS = {
-    "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain.",
-    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional.",
-    "housing": "The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
+    "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
+    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
+    "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys, which use different questions and years, so this section covers England. The survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so 2020 figures are partial and have no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
-    "schools": "Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
+    "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland (which counts classes at a September census) and Northern Ireland are not shown yet, because their figures are not in the tables used here. Average class size is not the same as the number of pupils per teacher. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
 }
 
 
@@ -243,8 +253,11 @@ def headline(facts, num, topic, y, gb=True):
     if topic == "schools":
         if not has(f"school.primary.{y}"):
             return f"No class-size figure for January {y}."
-        return (f"In January {y}, the average class in an English state primary school had {num(f'school.primary.{y}', 'dp1')} pupils; "
-                f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}.")
+        s = (f"In January {y}, the average class in an English state primary school had {num(f'school.primary.{y}', 'dp1')} pupils; "
+             f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}.")
+        if has(f"school.wales.infant.{y}"):
+            s += (f" In Wales, infant classes averaged {num(f'school.wales.infant.{y}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{y}', 'dp1')}.")
+        return s
     return ""
 
 
@@ -574,6 +587,8 @@ def life_index(facts, d, num, sources):
             rows.append([f"{yy} ({s})"] + [num(f"work.occshare.{s}.{c}.{yy}", "pct") for c in groups["SOC2020"] if c != "0"])
     head = ["Year"] + [esc(n.split(" occupations")[0].split(",")[0]) for c, n in groups["SOC2020"].items() if c != "0"]
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
+    body.extend(work_ages_block(facts, num))
+    body.extend(places_block(facts, num, "work"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["work"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["work"] if s in sources], up="../"))
     # Earnings
@@ -587,6 +602,7 @@ def life_index(facts, d, num, sources):
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
     body.append('<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>')
+    body.extend(places_block(facts, num, "earnings"))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["earnings"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["earnings"] if s in sources], up="../"))
     # Housing
@@ -602,6 +618,7 @@ def life_index(facts, d, num, sources):
                               + [[f"{y}-{str(y + 1)[2:]}", "<span class='missing'>not yet published</span>", "", "", "", ""] for y in YEARS if f"house.private.{y}" not in facts]))
     body.extend(housing_costs_block(facts, num, d))
     body.extend(housing_space_block(facts, num))
+    body.extend(housing_regions_block(facts, num))
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["housing"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["housing"] if s in sources], up="../"))
     # Holidays
@@ -642,9 +659,89 @@ def life_index(facts, d, num, sources):
     body.append(details_table("Show class sizes for every year", "Average class size, England, January census",
                               ["January census", "School year", "Primary", "Secondary"],
                               [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.primary.{y}", "dp1"), num(f"school.secondary.{y}", "dp1")] for y in YEARS]))
+    wy = [y for y in YEARS if _val(facts, f"school.wales.infant.{y}") is not None]
+    body.append("<h3 id='schools-wales'>Wales</h3>")
+    body.append(table("Average class size, Wales, January census", ["January census", "School year", "Infant classes (reception to year 2)", "Junior classes (years 3 to 6)"],
+                      [[str(y), f"{y - 1}/{str(y)[2:]}", num(f"school.wales.infant.{y}", "dp1"), num(f"school.wales.junior.{y}", "dp1")] for y in wy]))
+    body.append('<p class="small">Welsh infant and junior figures are not the same groups as England’s primary figure, so they are not compared with it.</p>')
     body.append(f'<div class="limit"><p>{esc(TOPIC_LIMITS["schools"])}</p></div>')
     body.append(source_line(sources, [s for s in TOPIC_SOURCES["schools"] if s in sources], up="../"))
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), "How work, earnings, housing, holidays and class sizes have changed in the UK since 2008.", scripts=COMPARE_JS)
+
+
+def work_ages_block(facts, num):
+    out = ["<h3 id='work-age'>By age</h3>"]
+    young, old = f"work.age.18_24.{LAST}", f"work.age.50_64.{LAST}"
+    out.append(f'<div class="answer"><p>In April to June {LAST}, {num(f"work.age.25_34.{LAST}", "pct")} of people aged 25 to 34 and {num(f"work.age.35_49.{LAST}", "pct")} of those aged 35 to 49 were in work. '
+               f'The rate was lower for 18 to 24 year olds ({num(young, "pct")}), many of whom are studying, and for 50 to 64 year olds ({num(old, "pct")}). '
+               f'{num(f"work.age.65.{LAST}", "pct")} of people aged 65 and over were in work, compared with {num(f"work.age.65.{FIRST}", "pct")} in {FIRST}.</p></div>')
+    out.append(series_chart(facts, "Employment rate by age", [("50 to 64", lambda y: f"work.age.50_64.{y}", "a"), ("18 to 24", lambda y: f"work.age.18_24.{y}", "b"),
+                                                            ("65 and over", lambda y: f"work.age.65.{y}", "c")],
+                            "Per cent of each age group in work, April to June each year, United Kingdom", ymin=0))
+    out.append(details_table("Show employment by age for every year", "Employment rate by age group, United Kingdom, April to June, %",
+                             ["Year"] + [lab for _, lab, _ in AGE_SERIES],
+                             [[str(y)] + [num(f"work.age.{k}.{y}", "pct") for k, _, _ in AGE_SERIES] for y in YEARS]))
+    out.append('<p class="small">The rate for each age group is the share of everyone in that group who did any paid work in the survey week, including students with part-time jobs.</p>')
+    return out
+
+
+def places_block(facts, num, topic):
+    """A nation-and-region table: first year, latest year and change, plus every year on request."""
+    if topic == "work":
+        fid, kind, style = (lambda k, y: f"work.place.{k}.{y}"), "pct", "pp"
+        title, what = "By nation and region", "Employment rate, ages 16 to 64, January to December, %"
+    else:
+        fid, kind, style = (lambda k, y: f"earn.place.real.{k}.{y}"), "pounds", "pct"
+        title, what = "By nation and region", "Median weekly pay of full-time employees, by where they live, April each year, in April 2025 prices"
+    places = [(k, n) for k, n in NATIONS] + [(k, n) for k, n, _ in REGIONS]
+    ys = [y for y in YEARS if _val(facts, fid("uk", y)) is not None]
+    a, b = ys[0], ys[-1]
+    out = [f"<h3 id='{topic}-places'>{title}</h3>"]
+    vals = {k: _val(facts, fid(k, b)) for k, _ in NATIONS[1:]}
+    hi, lo = max(vals, key=vals.get), min(vals, key=vals.get)
+    names = dict(NATIONS)
+    rnames = {k: n for k, n, _ in REGIONS}
+    rv = {k: _val(facts, fid(k, b)) for k in rnames}
+    rtop, rlo = max(rv, key=rv.get), min(rv, key=rv.get)
+    if topic == "work":
+        out.append(f'<div class="answer"><p>In {b}, the employment rate was highest in {names[hi]} ({num(fid(hi, b), kind)}) and lowest in {names[lo]} ({num(fid(lo, b), kind)}). '
+                   f'Every nation had a higher rate than in {a}.</p></div>' if all(_val(facts, fid(k, b)) > _val(facts, fid(k, a)) for k in vals) else
+                   f'<div class="answer"><p>In {b}, the employment rate was highest in {names[hi]} ({num(fid(hi, b), kind)}) and lowest in {names[lo]} ({num(fid(lo, b), kind)}).</p></div>')
+    else:
+        out.append(f'<div class="answer"><p>In April {b}, full-time employees living in {names[hi]} had the highest median pay of the four nations ({num(fid(hi, b), kind)} a week) '
+                   f'and those in {names[lo]} the lowest ({num(fid(lo, b), kind)}). Within England, pay was highest for people living in {rnames[rtop]} ({num(fid(rtop, b), kind)}) and lowest in {rnames[rlo]} ({num(fid(rlo, b), kind)}). '
+                   f'Pay does not show what money buys: prices, especially housing costs, differ between places.</p></div>')
+    rows = []
+    for k, n in places:
+        rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
+    out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), "Change"], rows))
+    out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
+                             [[str(y)] + [num(fid(k, y), kind) for k, _ in places] for y in ys]))
+    out.append('<p class="small">The nine English regions together make up England.</p>')
+    return out
+
+
+def housing_regions_block(facts, num):
+    ys = [y for y in YEARS if _val(facts, f"house.reg.owner.england.{y}") is not None]
+    a, b = ys[0], ys[-1]
+    places = [("england", "England")] + [(k, n) for k, n, _ in REGIONS]
+    out = ["<h3 id='housing-regions'>Homes by tenure in each region</h3>"]
+    pr = {k: _val(facts, f"house.reg.private.{k}.{b}") for k, _, _ in REGIONS}
+    top = max(pr, key=pr.get)
+    names = {k: n for k, n, _ in REGIONS}
+    out.append(f'<div class="answer"><p>These figures count homes (dwellings), not households, so they differ a little from the survey figures above. '
+               f'At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately, up from {num(f"house.reg.private.england.{a}", "pct0")} in {a}. '
+               f'The share was highest in {names[top]} ({num(f"house.reg.private.{top}.{b}", "pct0")}), where {num(f"house.reg.owner.{top}.{b}", "pct0")} of homes were owner occupied.</p></div>')
+    rows = []
+    for k, n in places:
+        rows.append([esc(n)] + [num(f"house.reg.{t}.{k}.{y}", "pct") for t in ("owner", "private", "social") for y in (a, b)])
+    out.append(table(f"Homes by tenure, England and its regions, 31 March {a} and {b}, % of homes",
+                     ["Place", f"Owner occupied {a}", f"Owner occupied {b}", f"Private rent {a}", f"Private rent {b}", f"Social rent {a}", f"Social rent {b}"], rows))
+    out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
+                             ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
+    out.append(f'<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
+               f'Private renting is estimated from the Labour Force Survey and smoothed; figures from 2024 are provisional. Wales, Scotland and Northern Ireland measure housing with their own surveys and are not shown here.</p>')
+    return out
 
 
 def housing_costs_block(facts, num, d):
