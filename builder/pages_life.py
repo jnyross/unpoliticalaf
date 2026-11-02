@@ -188,6 +188,9 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
             value = num(fact_id, kind)
             per = esc(period(y)) + (f" ({group(y)})" if group else "")
         rows.append(f'<div><dt>{esc(label)}</dt><dd>{value}</dd><dd class="per">{per}</dd></div>')
+    if all(fid(y) not in facts or facts[fid(y)].value is None for _, _, _, fid, *_ in ms):
+        # One clear line instead of a long list of identical gaps.
+        return f'<p class="missing">Not available: none of the {len(ms)} measures in this section has a figure for this year.</p>'
     return f'<dl class="stats">{"".join(rows)}</dl>'
 
 
