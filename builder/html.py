@@ -177,6 +177,7 @@ a.button{display:inline-flex;align-items:center;min-height:48px;padding:6px 20px
 .explain blockquote{margin:0 0 8px;padding:0}
 .explain blockquote p{margin:0}
 details.limit summary{color:var(--ink)}
+details.more{border-color:var(--line2)}details.more>summary{flex-wrap:wrap;row-gap:0;padding:6px 0}details.more>summary .hint{flex-basis:100%;padding-left:24px;font-weight:400;font-size:.85rem;color:var(--muted)}
 footer{border-top:1px solid var(--line);background:var(--soft2);padding:20px 0 36px;font-size:.88rem;color:var(--muted)}
 footer ul{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:0 18px}
 footer ul a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink2)}
@@ -210,19 +211,99 @@ def toc(body):
     """'On this page' jump links, built from the h2 headings that have ids.
 
     Long phone pages need a way to skip ahead. Only added when a page has at
-    least three such sections. Placed before the first h2, so the answer
-    still comes first.
+    least three such sections. Placed before the first h2 with an id, so the
+    answer (and any heading without an id, such as "In brief") comes first.
     """
     found = re.findall(r'<h2 id=["\']([^"\']+)["\']>(.*?)</h2>', body, flags=re.S)
     if len(found) < 3:
         return body
     items = "".join(f'<li><a href="#{esc(i)}">{re.sub(r"<[^>]+>", "", t)}</a></li>' for i, t in found)
     nav = f'<nav class="toc" aria-labelledby="toc-h"><h2 id="toc-h">On this page</h2><ol>{items}</ol></nav>'
-    k = re.search(r'<h2[ >]', body)
+    k = re.search(r'<h2 id=', body)
     return body[:k.start()] + nav + "\n" + body[k.start():]
 
 
-def page(path, title, body, description="", scripts="", contents=True):
+# Marker a page writer puts in a section to say "fold everything after this".
+FOLD = "<!--fold-->"
+# Marker that keeps a section fully open, even when it has an answer box.
+NOFOLD = "<!--nofold-->"
+
+_H2 = re.compile(r'<h2 id=["\']([^"\']+)["\']>(.*?)</h2>', re.S)
+
+
+def _top_answer(sec):
+    """(start, end) of the first .answer div at the top level of a section, or None."""
+    m = re.search(r'<div class="answer">', sec)
+    if not m:
+        return None
+    depth, i = 0, m.start()
+    for t in re.finditer(r'<(/?)div\b[^>]*>', sec[m.start():]):
+        depth += -1 if t.group(1) else 1
+        if depth == 0:
+            return m.start(), m.start() + t.end()
+    return None
+
+
+def _contents_hint(html):
+    """What a folded part holds, in a few words, so readers know whether to open it."""
+    kinds = []
+    if "<figure" in html or 'class="bars' in html or 'class="cmp-list' in html:
+        kinds.append("chart")
+    if "<table" in html:
+        kinds.append("table")
+    if 'class="limit' in html or "class=\"note" in html:
+        kinds.append("limits")
+    if 'class="official' in html or "What official bodies say" in html:
+        kinds.append("official words")
+    if 'class="src' in html or 'class="source' in html:
+        kinds.append("sources")
+    if not kinds:
+        return ""
+    if len(kinds) == 1:
+        return kinds[0]
+    return ", ".join(kinds[:-1]) + " and " + kinds[-1]
+
+
+def fold(body):
+    """Fold the detail of each section so a phone reader sees the answers first.
+
+    A section runs from an h2 with an id to the next one. The heading and the
+    section's answer stay in view; the rest (charts, tables, limits, sources)
+    goes into one "More on ..." disclosure, which works without JavaScript.
+    What stays in view is everything up to the end of the section's first
+    top-level .answer box, or everything before a FOLD marker. Sections with
+    neither, or with NOFOLD, are left as they are. Nothing is reordered.
+    """
+    heads = list(_H2.finditer(body))
+    if not heads:
+        return body
+    out = [body[:heads[0].start()]]
+    for k, h in enumerate(heads):
+        end = heads[k + 1].start() if k + 1 < len(heads) else len(body)
+        head, sec = body[h.start():h.end()], body[h.end():end]
+        if NOFOLD in sec:
+            out.append(head + sec.replace(NOFOLD, ""))
+            continue
+        if FOLD in sec:
+            lead, rest = sec.split(FOLD, 1)
+        else:
+            a = _top_answer(sec)
+            if not a:
+                out.append(head + sec)
+                continue
+            lead, rest = sec[:a[1]], sec[a[1]:]
+        if not rest.strip():
+            out.append(head + lead)
+            continue
+        name = re.sub(r"<[^>]+>", "", h.group(2)).strip()
+        name = re.sub(r"^\d+\.\s*", "", name)
+        hint = _contents_hint(rest)
+        hint = f'<span class="hint">{esc(hint)}</span>' if hint else ""
+        out.append(f'{head}{lead}\n<details class="more"><summary><span>More on {esc(name)}</span>{hint}</summary>\n{rest}\n</details>\n')
+    return "".join(out)
+
+
+def page(path, title, body, description="", scripts="", contents=True, folded=True):
     depth = path.count("/")
     up = "../" * depth
     nav = "".join(
@@ -230,6 +311,8 @@ def page(path, title, body, description="", scripts="", contents=True):
         for href, label in NAV)
     foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
+    if folded:
+        body = fold(body)
     if contents:
         body = toc(body)
     if "data-chart=" in body:
