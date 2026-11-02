@@ -41,7 +41,7 @@ def tax_mix_section(facts, d, num, sources):
     moves = sorted(keys, key=lambda kv: facts[f"rec.sharechange.{kv[0]}.{first}.{last}"].value)
     fell, rose = moves[0], moves[-1]
     out = [f"<h2 id='mix'>How the mix of taxes has changed since {first}</h2>"]
-    out.append(f'''<p>Total tax raised has grown a lot in cash terms, so the fairest way to see the mix is each tax's <strong>share of all taxes</strong> in each year.
+    out.append(f'''<p>Total tax raised has grown a lot in cash terms, so a like-for-like way to see the mix is each tax's <strong>share of all taxes</strong> in each year.
 The comparison runs from {first}, the first year in the OBR databank, to {last}, the latest year that has been measured rather than forecast.</p>
 <div class="answer"><p class="lede">The three biggest taxes, Income Tax, National Insurance and VAT, raised {num(f"rec.big3sharemix.{first}", "pct0")} of all tax in {first} and {num(f"rec.big3sharemix.{last}", "pct0")} in {last}.</p>
 <p>The largest fall was in <strong>{esc(fell[1])}</strong>: {num(f"rec.share.{fell[0]}.{first}", "pct")} of all tax in {first}, {num(f"rec.share.{fell[0]}.{last}", "pct")} in {last}.

@@ -18,3 +18,16 @@ jobs:
           python-version: "3.12"
       - run: make setup
       - run: make verify
+
+  accessibility:
+    # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-dev
+      - run: .venv/bin/python -m playwright install --with-deps chromium
+      - run: make build
+      - run: make a11y

@@ -20,7 +20,7 @@ def home_page(facts, d, num, sources):
 <span class="more">Taxes, other receipts and borrowing</span></a>
 <a class="card" href="who-pays.html"><h3>Who pays?</h3>
 <span class="big">{num("hmrc.share.top1.2023 to 2024", "pct")}</span>
-<p>of all Income Tax was paid by the top 1% of Income Tax payers in 2023 to 2024. Every household also pays taxes on spending, such as VAT.</p>
+<p>of all Income Tax was paid by the top 1% of Income Tax payers in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
 <span class="more">Income Tax and all taxes, by group</span></a>
 <a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
@@ -55,7 +55,10 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
             '<li><strong>No invented households presented as fact.</strong> Where a made-up person helps explain a rule, it is labelled “Illustration, not a statistic” and kept apart from the official figures.</li>'
             '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why in its own words. Where an official body such as the Office for National Statistics or HM Revenue and Customs has published its own explanation, we quote it word for word, name who said it, and link to it. The check confirms that every quote still matches the publication.</li>'
-            '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li></ul>',
+            '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li>'
+            '<li><strong>How we choose what to show.</strong> Headline figures use the publisher’s own main measure for the latest year it has measured. '
+            'Comparisons over time use fixed windows (ten years for spending by area, the first and latest year for each series) and the same lead figure on every comparison page, '
+            'whichever way it moved, so years are not picked for the result. Bars always start at zero. Line charts show their scale on the axis and may not start at zero, so that change is visible.</li></ul>',
             '<h2 id="calculations">Calculations</h2><ul>'
             '<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is shown as a share of total managed expenditure.</li>'
             '<li><strong>Real terms (spending)</strong>: HM Treasury’s own 2025-26 prices (PESA Table 4.3).</li>'
