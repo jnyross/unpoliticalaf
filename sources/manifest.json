@@ -417,6 +417,56 @@
    "id": "probe-hbai-tables",
    "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025",
    "file": "probe/hbai-2025.html"
+  },
+  {
+   "id": "scot-stock-by-tenure",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2018/09/housing-statistics-stock-by-tenure/documents/stock-by-tenure-2017/stock-by-tenure-2017/govscot%3Adocument/2025%2B-%2BStock%2Bby%2Btenure.xlsx",
+   "file": "nations/scot-stock-by-tenure-2025.xlsx"
+  },
+  {
+   "id": "probe-wales-dwelling-2025",
+   "url": "https://www.gov.wales/dwelling-stock-estimates-31-march-2025",
+   "file": "probe/wales-dwelling-2025.html"
+  },
+  {
+   "id": "probe-ni-housing-2025-26",
+   "url": "https://www.communities-ni.gov.uk/publications/northern-ireland-housing-statistics-2025-26",
+   "file": "probe/ni-housing-2025-26.html"
+  },
+  {
+   "id": "probe-ni-housing-article",
+   "url": "https://www.communities-ni.gov.uk/articles/northern-ireland-housing-statistics",
+   "file": "probe/ni-housing-article.html"
+  },
+  {
+   "id": "probe-scot-primary-class",
+   "url": "https://www.gov.scot/publications/primary-school-class-sizes/",
+   "file": "probe/scot-primary-class-sizes.html"
+  },
+  {
+   "id": "probe-scot-pupil-census-supp",
+   "url": "https://www.gov.scot/publications/pupil-census-supplementary-statistics/",
+   "file": "probe/scot-pupil-census-supp.html"
+  },
+  {
+   "id": "probe-ni-enrol-2025-26",
+   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
+   "file": "probe/ni-enrol-2025-26.html"
+  },
+  {
+   "id": "probe-ni-enrol-further",
+   "url": "https://www.education-ni.gov.uk/articles/school-enrolments-further-information",
+   "file": "probe/ni-enrol-further.html"
+  },
+  {
+   "id": "probe-hbai-directory",
+   "url": "https://assets.publishing.service.gov.uk/media/69c290be7e02b81c0d1c7763/directory-of-tables-hbai-2024-2025.ods",
+   "file": "probe/hbai-directory.ods"
+  },
+  {
+   "id": "probe-hbai-report",
+   "url": "https://www.gov.uk/government/statistics/households-below-average-income-for-financial-years-ending-1995-to-2025/households-below-average-income-an-analysis-of-the-uk-income-distribution-fye-1995-to-fye-2025",
+   "file": "probe/hbai-report.html"
   }
  ]
 }
