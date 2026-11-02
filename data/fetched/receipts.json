@@ -199,14 +199,6 @@
   "sha256": "39efbc62386147ae214072d5496344b8cb8003ee1208aa96b46928cbca2e3998",
   "retrieved": "2026-11-02T10:26:23Z"
  },
- "nomis-aps-variables": {
-  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/variable.def.sdmx.json",
-  "file": "nomis/aps-variable-codes.json",
-  "bytes": 561264,
-  "content_type": "application/json",
-  "sha256": "1a6b6e4cccdbba3bda52b04962ba17e5ec1197f05ac200650b772b63995947d5",
-  "retrieved": "2026-11-02T10:26:27Z"
- },
  "nomis-ashe-nations": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
   "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
@@ -230,14 +222,6 @@
   "content_type": "application/json",
   "sha256": "46aa0cc10d64a8adf3613af58c59e312a1425398b353bca6c524008cee02e693",
   "retrieved": "2026-11-02T08:58:36Z"
- },
- "ons-a05sa": {
-  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentunemploymentandeconomicinactivitybyagegroupseasonallyadjusteda05sa/current/a05saoct2026.xls",
-  "file": "ons/a05sa.bin",
-  "bytes": 1563648,
-  "content_type": "application/vnd.ms-excel;charset=utf-8",
-  "sha256": "a06a04193e6e2b545ea01b3e0a5c65b89eed87ca98323ff86436aba04e223d58",
-  "retrieved": "2026-11-02T10:26:35Z"
  },
  "ons-a3wx": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
