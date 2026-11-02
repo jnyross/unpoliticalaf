@@ -1,0 +1,10 @@
+{
+
+"structure" :{"codelists" :{"codelist" :[
+{"agencyid" :"NOMIS","id" :"CL_17_5_MEASURES","code" :[
+{"annotations" :{"annotation" :[
+{"annotationtext" :"Variable","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"Variable","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"Variable","lang" :"en"},"value" :20599},{"annotations" :{"annotation" :[
+{"annotationtext" :"Numerator","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"numerator","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"Numerator","lang" :"en"},"value" :21001},{"annotations" :{"annotation" :[
+{"annotationtext" :"Denominator","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"numerator","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"Denominator","lang" :"en"},"value" :21002},{"annotations" :{"annotation" :[
+{"annotationtext" :"Confidence","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"numerator","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"Confidence","lang" :"en"},"value" :21003}],"name" :{"value" :"measures","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_17_5","prepared" :"2026-11-02T11:12:18Z","sender" :{"contact" :{"email" :"labour.market@ons.gov.uk","name" :"Labour Market Statistics Helpline"},"id" :"NOMIS"},"test" :"false"},"xmlns" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message","common" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common","structure" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/structure","xsi" :"http://www.w3.org/2001/XMLSchema-instance","schemalocation" :"http://sdmx.org/docs/2_0/SDMXMessage.xsd"}
+}

@@ -1,0 +1,9 @@
+{
+
+"structure" :{"codelists" :{"codelist" :[
+{"agencyid" :"NOMIS","id" :"CL_30_1_MEASURES","code" :[
+{"annotations" :{"annotation" :[
+{"annotationtext" :"Value","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"value","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"value","lang" :"en"},"value" :20100},{"annotations" :{"annotation" :[
+{"annotationtext" :"Percent","annotationtitle" :"Description"},{"annotationtext" :"percent","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"percent","lang" :"en"},"value" :20301},{"annotations" :{"annotation" :[
+{"annotationtext" :"Confidence","annotationtitle" :"Description"},{"annotationtext" :"True","annotationtitle" :"IsDefault"},{"annotationtext" :"confidence","annotationtitle" :"TypeName"},{"annotationtext" :0,"annotationtitle" :"TypeCode"}]},"description" :{"value" :"confidence","lang" :"en"},"value" :20701}],"name" :{"value" :"measures","lang" :"en"},"uri" :""}]},"header" :{"id" :"NM_30_1","prepared" :"2026-11-02T11:12:25Z","sender" :{"contact" :{"email" :"earnings@ons.gov.uk","name" :"Earnings Helpline","telephone" :"\u002B44(0) 1633 456120"},"id" :"NOMIS"},"test" :"false"},"xmlns" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/message","common" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/common","structure" :"http://www.SDMX.org/resources/SDMXML/schemas/v2_0/structure","xsi" :"http://www.w3.org/2001/XMLSchema-instance","schemalocation" :"http://sdmx.org/docs/2_0/SDMXMessage.xsd"}
+}

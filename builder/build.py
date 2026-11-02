@@ -13,7 +13,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money, pages_life, pages_home, glossary, trace
+from . import pages_money, pages_life, pages_home, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 MAX_PAGE_BYTES = 400_000
@@ -28,6 +28,7 @@ def render():
     if problems:
         raise SystemExit("Quoted explanations do not match their sources:\n" + "\n".join(problems))
     facts, d = build_all()
+    uncertainty.add_facts(facts, d)
     rates = read_rates(sources)
     pages_life.init(d)
     num = Num(facts)
@@ -51,6 +52,7 @@ def render():
     pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
+    pages["uncertainty.html"] = uncertainty.uncertainty_page(facts, d, num, sources, YEARS[-1])
     pages["glossary.html"] = glossary.glossary_page()
     pages["corrections.html"] = trace.corrections_page()
     pages.update(trace.figure_pages(facts, sources, num.used))

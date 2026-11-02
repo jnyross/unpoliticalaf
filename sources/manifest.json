@@ -238,6 +238,62 @@
    "file": "wg/schools-census-results-january-2025.ods"
   },
   {
+   "id": "nomis-aps-emp-places-ci",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21003&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+   "file": "nomis/aps-employment-rate-nations-regions-ci.csv"
+  },
+  {
+   "id": "nomis-aps-measure-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/measures.def.sdmx.json",
+   "file": "nomis/aps-measure-codes.json"
+  },
+  {
+   "id": "nomis-ashe-resident-cv",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-uk-median-weekly-cv.csv"
+  },
+  {
+   "id": "nomis-ashe-measure-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/measures.def.sdmx.json",
+   "file": "nomis/ashe-measure-codes.json"
+  },
+  {
+   "id": "ons-lfs-a11",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
+   "find": "/file\\?uri=[^\"']*a11[^\"']*\\.xlsx?",
+   "file": "ons/lfs-sampling-variability-a11"
+  },
+  {
+   "id": "ons-lfs-a11-page",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
+   "file": "ons/lfs-sampling-variability-a11-page.html"
+  },
+  {
+   "id": "nomis-ashe-article",
+   "url": "https://www.nomisweb.co.uk/articles/1320.aspx",
+   "file": "nomis/ashe-article-1320.html"
+  },
+  {
+   "id": "nomis-ashe-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.def.sdmx.json",
+   "file": "nomis/ashe-dataset-def.json"
+  },
+  {
+   "id": "nomis-aps-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.def.sdmx.json",
+   "file": "nomis/aps-dataset-def.json"
+  },
+  {
+   "id": "ons-ashe-qmi",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
+   "file": "ons/ashe-qmi.pdf"
+  },
+  {
+   "id": "ons-uncertainty-guide",
+   "url": "https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit",
+   "file": "ons/uncertainty-guide.html"
+  },
+  {
    "id": "explain-ons-psf-2021-03",
    "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
    "file": "explain/ons-psf-march2021.html"

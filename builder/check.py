@@ -101,7 +101,7 @@ def as_number(v):
         return None
     if isinstance(v, (int, float)):
         return float(v)
-    s = str(v).strip().replace(",", "")
+    s = str(v).strip().replace(",", "").lstrip("±").strip()
     try:
         return float(s)
     except ValueError:
@@ -254,6 +254,17 @@ def check_pages(facts):
                 if not close(v, float(attrs["value"]), 1e-9):
                     fail(f"{rel}: change {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}")
                 shown += 1
+            elif "data-margin" in attrs:
+                # Combined margin of error for a change: √(a² + b²), each margin in the figure's own units
+                va, vb = facts[attrs["data-from"]]["value"], facts[attrs["data-to"]]["value"]
+                ma, mb = facts[attrs["data-ma"]]["value"], facts[attrs["data-mb"]]["value"]
+                ma = va * ma / 100 if attrs["data-ka"] == "pm_pct" else ma
+                mb = vb * mb / 100 if attrs["data-kb"] == "pm_pct" else mb
+                v = (ma ** 2 + mb ** 2) ** 0.5
+                v = 100 * v / va if attrs["data-margin"] == "pct" else v
+                if not close(v, float(attrs["value"]), 1e-9):
+                    fail(f"{rel}: combined margin {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}")
+                shown += 1
         for href in pp.links:
             if re.match(r"^(https?:|mailto:)", href):
                 continue
@@ -339,7 +350,7 @@ def main():
     n_quotes = check_explanations()
     if "--axe" in sys.argv:
         run_axe(["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html", "methods.html",
-                 "glossary.html", "corrections.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
+                 "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/2008.html", "life/2021.html", "life/compare/2010-2025.html", "life/compare/index.html"])
     print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
     print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
