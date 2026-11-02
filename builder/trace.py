@@ -23,6 +23,20 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "2 November 2026",
+        "pages": [("life/index.html", "Everyday life, year by year")],
+        "was": "The holidays section said “The pandemic cut holidays abroad to 4.4 million in 2020”, which states a cause in our own words. The chart titled “Employment rate by age” showed only three of the five age groups.",
+        "now": "“In 2020, the first year of the Covid-19 pandemic, holidays abroad fell to 4.4 million.” The chart is titled with the three age groups it shows, and says the other two are in the table.",
+        "pr": 86,
+    },
+    {
+        "date": "2 November 2026",
+        "pages": [("index.html", "Home"), ("who-pays.html", "Who pays?")],
+        "was": "The top 1% share of Income Tax was given without their share of income, which a reader needs to judge it.",
+        "now": "Both figures are given together: in 2023-24 the top 1% of Income Tax payers paid 27.2% of Income Tax and had 12.4% of Income Tax payers’ income.",
+        "pr": 86,
+    },
+    {
+        "date": "2 November 2026",
         "pages": [("index.html", "Every page (footer)")],
         "was": "The footer said every figure links to its source, but figures could only be traced through the source line under each section, which leads to the whole table rather than the figure.",
         "now": "Tapping any figure shows its source, period and the exact cell or calculation, and each source line leads to a record of every figure taken from that source.",
