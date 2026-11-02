@@ -9,6 +9,73 @@ dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
 generous.
 
+## Audit 5: 2 November 2026 (strict re-score after PRs #92 to #100)
+
+- Commit audited: `4b60492` on `main` (after #92 live-site check, #93 one page
+  per life topic, #94 charts in view and home visuals, #95 household tax since
+  1977, #96 life figures back to 1971, #97 pay spread, house prices and jobs by
+  industry, #98 cash / after inflation / share of GDP switch and spending since
+  1900, #99 comparing sets of years, #100 benchmark side-by-sides).
+- Rubric: [goal-rubric.md](goal-rubric.md). Strict reading, as in Audit 4: an
+  AI review is not independent, so a dimension reaches 4 only with a recorded
+  side-by-side comparison with a named benchmark page
+  ([benchmark-comparison.md](benchmark-comparison.md)) and a page that is in
+  fact comparable. The side-by-side record covers D1, D2 and D5 only.
+- How it was checked: a fresh build (415 pages); the home page, all four money
+  pages, spending since 1900, the life hub, every topic page, a year page, the
+  default 2009 vs 2023 comparison and a span comparison read at 360px with and
+  without JavaScript; page lengths and sideways scrolling measured; a scan of
+  every reading page for causal or loaded words; CI on `main` (build, checks,
+  axe) confirmed green. The live-site check passed for #98; for #100 it was
+  still running when this was written (this container cannot reach the live
+  site directly).
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 31 out of 55** on the strict reading (37 lenient). Audit 4: 30 strict,
+33 lenient. Target: at least 49, every dimension at least 4, and the phone test
+passed. Not met.
+
+The work since Audit 4 closed all ten of its gaps. Most of it widened and
+deepened what was already at level 3; only D1 has both the depth and the
+recorded benchmark evidence to reach 4 on the strict reading. Most of the
+remaining distance is now evidence that only people can give (D11, and outside
+review for D7 to D10), plus side-by-side records for the dimensions that have
+none (D3, D4, D6, D8 to D10).
+
+| Dimension | Strict | Lenient | Why |
+|---|---|---|---|
+| D1 Public money answers | 4 | 4 | Up from 3. Since Audit 4: household tax as a share of income from 1977 (#95), one switch between cash, after inflation and share of GDP that works without JavaScript (#98), spending by purpose since 1900 on its own page (#98), and the recorded side-by-side (#100) found every headline figure matches the OBR, IFS and ONS for the same measure and vintage, with the one unexplained difference (gross against net debt interest) now explained. The two biggest gaps that record lists (long history, one switch) were closed by #98. Not 5: tax by type starts in 1999-00 (IFS from 1948-49); scale is per person only (the OBR also gives per household); no international comparison; no reader evidence. |
+| D2 Life: breadth and depth | 3 | 4 | Much deeper: work from 1971 and jobs by industry from 1978, tenure from 1981, pay spread, house prices against earnings. The side-by-side covers earnings and affordability only. Held at 3 (torn, so the lower level): holidays still have no share of people who took a holiday; class sizes, holidays and work have no benchmark comparison; housing costs and space are England only; ONS offers local-area detail the site lacks. |
+| D3 Life: choosing and comparing | 3 | 4 | Ranges can now be compared (91 span pages, #99) and the default pair (2009 vs 2023) fills all five topics, leading with "In brief" bars. Strict 3: no side-by-side or independent review of comparisons recorded. Smaller problems: the home page still says "Pick any year from 2008 to 2025" and the life hub asks "since 2008?" although year pages now reach back to 1971; years before 2008 cannot be compared with each other. |
+| D4 Explanation and understanding | 3 | 3 | Question headings, answer boxes, glossary, quoted explanations, and home-page visuals. Held at 3: who pays is still 12.4 screens at 360px; topic pages run 7 to 15 screens; no evidence a newcomer can explain a point back; no benchmark record for explanation (Full Fact, ONS explainers). |
+| D5 Visual design and charts | 3 | 4 | Home cards have sparklines and bars (#94), small multiples share scales, the switch works without JavaScript. The OWID side-by-side lists charts-first pages and per-chart downloads as clearly ahead. Held at 3 (torn): on spending, taxes, who pays, the life hub, holidays, housing and year pages the first two phone screens hold no chart; the only download is one 6.6MB `facts.json` linked from Sources. |
+| D6 Phone experience | 3 | 3 | The menu now fits at 360px in two rows (#94); no page scrolls sideways; the life explorer is split into topic pages (#93), the largest reading page is about 240KB. Held at 3: housing is 15 screens, who pays and the default comparison 12.4, Sources 97; no benchmark or reader timing for "answer in under a minute". |
+| D7 Accuracy and traceability | 3 | 4 | Every figure re-read from its cell on every build; one-tap tracing; corrections log; headline figures match OBR, IFS and ONS publications (#100). Strict 3: those checks were made by an AI session; no non-AI check. |
+| D8 Impartiality | 3 | 4 | Default comparison years are now picked by a fixed, stated rule (#99), and a scan of every reading page found no loaded or causal wording in the site's own words. Strict 3: no outside review; no side-by-side with a neutral benchmark such as Full Fact. |
+| D9 Accessibility and no JavaScript | 3 | 3 | axe WCAG 2.2 AA passes in CI on `main`; the new switch and span pages work without JavaScript. Held at 3: no VoiceOver or TalkBack test. |
+| D10 Honesty about limits | 3 | 4 | Breaks are explained where they occur, including the new pre-2008 series (the Labour Force Survey's early years, the change from the older housing surveys to the English Housing Survey); span averages are made only when every year is measured the same way. Strict 3: no independent check. |
+| D11 Reader evidence | 0 | 0 | Nobody has used the site in a test. |
+| **Total** | **31 / 55** | **37 / 55** | |
+
+### Gaps that a worker can do (largest score effect first)
+
+1. Record side-by-side comparisons for the dimensions that have none: comparing periods against the ONS and OWID explorers (D3), explanation against Full Fact and ONS explainers (D4), phone reading against the OBR guide and ONS bulletins at 360px (D6), and framing and limits against Full Fact and the ONS (D8, D10), and fix what they find.
+2. Put a chart within the first two phone screens of the spending, taxes, who pays, life hub, housing, holidays and year pages, so each page shows its answer visually before the reader scrolls (D5).
+3. Shorten the longest reading pages at 360px (housing 15 screens, who pays 12.4, the default comparison 12.4) to about 8 screens folded, keeping every section reachable (D6, D4).
+4. Add a "download this data" CSV link beside every chart and table, built from the same checked facts (D5).
+5. Add the official share of people who took a holiday, or record which official source comes closest and why none is yearly, and add class-size and holiday benchmark comparisons (D2).
+6. Make the year wording match the data: the home page, life hub and topic headings still say "since 2008" or "2008 to 2025" where year pages reach back to 1971, and let readers compare two earlier years where figures exist (D3).
+7. Extend the tax mix by type back to 1948-49 from the OBR historical database, and add per-household scale beside per-person scale on the money pages (D1).
+
+### Human-only steps (unchanged)
+
+1. A quick informal test with two or three people on phones (D11 to 2).
+2. The five-person phone test with the pack in `docs/user-test/` (D11 to 5; required for the goal).
+3. A VoiceOver (iPhone) and TalkBack (Android) test (D9 above 3).
+4. A review of accuracy and impartiality by a person outside the project (D7, D8, D10 to 4 on the strict reading).
+
+---
+
 ## Audit 4: 2 November 2026 (strict re-score after PRs #87 to #90)
 
 - Commit audited: `192539d` on `main` (after #87 shorter phone pages, #88 Income
