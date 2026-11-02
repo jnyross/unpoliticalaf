@@ -84,7 +84,8 @@ def spending_page(facts, d, num, sources):
                               ["Area", "£bn", "£ per £100", "£ per person*"], rows))
     body.append(f'<p class="small">* Spending divided by the UK population in mid-{y[:4]} ({num(pop, "millions_raw")}), including children. An average across everyone, not what is spent on any one person.</p>')
     body.append(f'''<div class="limit"><p><strong>Limits.</strong> The £100 split uses spending on services ({num(f"spend.cash.services.{y}", "bn")}), not total spending. The difference, {num(adj, "bn")}, is accounting adjustments that HM Treasury does not divide between areas.
-Areas follow the international COFOG classification. “Defence” here excludes military pensions, which count as social protection, so it differs from the NATO defence figure.</p></div>''')
+Areas follow the international COFOG classification. “Defence” here excludes military pensions, which count as social protection, so it differs from the NATO defence figure.
+Interest on government debt here is the interest paid out (HM Treasury: “gross payments to the private sector and overseas”). The OBR and the IFS often quote “net” debt interest, which subtracts interest the public sector receives, so their figure for the same year is lower.</p></div>''')
     body.append(source_line(sources, ["pesa4", "pesa5"], f"Tables 4.2 and 5.2, outturn for {first} to {y}. Outturn figures can still be revised."))
 
     # change over time
