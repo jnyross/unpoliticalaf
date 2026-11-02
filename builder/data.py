@@ -264,7 +264,8 @@ def who_pays(facts):
                 j = rows[1].index(label)
                 facts.add(Fact(f"hmrc.threshold.{key}", num(r[j]), "£ a year", "2023 to 2024", "hmrc24", f"2_4_Taxpayer_inc_quantiles!{ref(i, j)}", "outturn"))
     out["hmrc_latest_outturn"] = "2023 to 2024"
-    # ETB: average taxes paid per household, by income fifth (Table 2a)
+    # ETB Table 2a: average household income and taxes for fifths of individuals,
+    # ranked by equivalised household disposable income (ONS note 3)
     wb = xlsx("data/payers/raw/ons-etb-fye2024.xlsx")
     rows = [[c.value for c in r] for r in wb["Table 2a"].iter_rows()]
     hdr_i = next(i for i, r in enumerate(rows) if r and any(str(v).strip() == "Bottom" for v in r if v))
@@ -287,6 +288,37 @@ def who_pays(facts):
         d, ind = facts[f"etb.2a.direct.{q}"], facts[f"etb.2a.indirect.{q}"]
         facts.add(Fact(f"etb.2a.alltax.{q}", d.value + ind.value, "£ a year per household", "2023/24", "etb", f"{d.locator} + {ind.locator}",
                        "calculated", formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
+    # ETB Tables 3a (non-retired) and 4a (retired): same layout as Table 2a, but the
+    # fifths are ranked within each group, so they do not line up with Table 2a's fifths.
+    # "Retired" means living in a retired household (ONS note 12).
+    for grp, sheet in (("nonret", "Table 3a"), ("ret", "Table 4a")):
+        rows = [[c.value for c in r] for r in wb[sheet].iter_rows()]
+        hdr = next(r for r in rows if r and any(str(v).strip() == "Bottom" for v in r if v))
+        gcols = {q: next(j for j, v in enumerate(hdr) if v and str(v).strip() == lab) for q, lab in
+                 (("q1", "Bottom"), ("q2", "2nd"), ("q3", "3rd"), ("q4", "4th"), ("q5", "Top"), ("all", "All individuals"))}
+
+        def grp_row(label, rows=rows):
+            for i, r in enumerate(rows):
+                if len(r) > 1 and r[1] and " ".join(str(r[1]).split()) == label:
+                    return i
+            raise KeyError(label)
+        for key, label, unit in (("gross", "Gross income", "£ a year per household"), ("direct", "Total direct taxes", "£ a year per household"),
+                                 ("indirect", "Total indirect taxes", "£ a year per household"),
+                                 ("people", "Number of individuals in the population (thousands)", "thousands of people"),
+                                 ("households", "Number of households in the population (thousands)", "thousands of households")):
+            i = grp_row(label)
+            for q, j in gcols.items():
+                facts.add(Fact(f"etb.{grp}.{key}.{q}", num(rows[i][j]), unit, "2023/24", "etb", f"{sheet}!{ref(i, j)}", "outturn"))
+        for q in gcols:
+            d, ind, g = facts[f"etb.{grp}.direct.{q}"], facts[f"etb.{grp}.indirect.{q}"], facts[f"etb.{grp}.gross.{q}"]
+            facts.add(Fact(f"etb.{grp}.alltax.{q}", d.value + ind.value, "£ a year per household", "2023/24", "etb", f"{d.locator} + {ind.locator}",
+                           "calculated", formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
+            facts.add(Fact(f"etb.{grp}.taxshare.{q}", 100 * (d.value + ind.value) / g.value, "% of gross household income", "2023/24", "etb",
+                           f"{d.locator} + {ind.locator}, ÷ {g.locator}", "calculated",
+                           formula=f"100 × ({d.id} + {ind.id}) ÷ {g.id}", inputs=[d.id, ind.id, g.id]))
+        p, h = facts[f"etb.{grp}.people.all"], facts[f"etb.{grp}.households.all"]
+        facts.add(Fact(f"etb.{grp}.hhsize.all", p.value / h.value, "people per household", "2023/24", "etb", f"{p.locator} ÷ {h.locator}",
+                       "calculated", formula=f"{p.id} ÷ {h.id}", inputs=[p.id, h.id]))
     # ETB Table 8: taxes as a % of gross income / disposable income / expenditure
     rows = [[c.value for c in r] for r in wb["Table 8"].iter_rows()]
     hdr = rows[3]
