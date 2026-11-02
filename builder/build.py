@@ -12,7 +12,7 @@ from .html import Num, page
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .rates import read_rates
-from . import pages_money, pages_life, pages_home
+from . import pages_money, pages_life, pages_home, glossary
 
 OUT = ROOT / "site"
 MAX_PAGE_BYTES = 400_000
@@ -47,6 +47,8 @@ def render():
     pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
+    pages["glossary.html"] = glossary.glossary_page()
+    pages = {path: glossary.link_terms(html, path) for path, html in pages.items()}
     return facts, sources, pages, num
 
 

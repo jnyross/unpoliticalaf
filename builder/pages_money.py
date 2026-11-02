@@ -9,6 +9,22 @@ def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
     return fid
 
 
+def per_person(facts, fid, pop, prefix, period, source):
+    """£ billion spread across every UK resident: an average, not anyone's bill."""
+    out = derive(facts, f"{prefix}.{period}", facts[fid].value * 1e9 / facts[pop].value, "£ per person", period, source,
+                 [fid, pop], f"{fid} × 1000000000 ÷ {pop}",
+                 note="Average across the whole UK population, including children; mid-year population estimate.")
+    derive(facts, f"{out}.week", facts[out].value / 52, "£ per person per week", period, source, [out], f"{out} ÷ 52",
+           note="A year counted as 52 weeks.")
+    return out
+
+
+def scale_box(num, fid, pop, what, extra=""):
+    """A sense of scale for a national total, labelled as an average across everyone."""
+    return (f'<p class="scale"><strong>For scale:</strong> {what} works out at about {num(fid, "pounds")} for every person living in the UK '
+            f'({num(pop, "millions_raw")} people in mid-{fid.rsplit(".", 1)[-1][:4]}), or about {num(fid + ".week", "pounds")} a week.{extra}</p>')
+
+
 # ---------------------------------------------------------------- spending
 
 def spending_page(facts, d, num, sources):
@@ -23,6 +39,8 @@ def spending_page(facts, d, num, sources):
     order = sorted(funcs, key=lambda kv: -facts[per[kv[0]]].value)
     top, second = order[0], order[1]
     adj = f"spend.cash.adjustments.{y}"
+    pop = f"pop.uk.{y[:4]}"  # mid-year population, 30 June, inside the financial year
+    pp = per_person(facts, f"spend.cash.tme.{y}", pop, "spend.perperson.tme", y, "pesa4")
     body = [f"<h1>Where does public money go?</h1>"]
     body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
                          (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
@@ -30,6 +48,7 @@ def spending_page(facts, d, num, sources):
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
 <p>Of every £100 spent on public services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}.</p></div>''')
+    body.append(scale_box(num, pp, pop, f"spending in {y}", extra=" This is an average across everyone, including children, not the amount spent on any one person."))
     body.append(f'''<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>
 <h2 id="per100">Out of every £100 spent on services, {y}</h2>''')
     items = [(esc(name), per[k], "") for k, name in order]
@@ -37,12 +56,15 @@ def spending_page(facts, d, num, sources):
     body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. State pensions alone cost {num(sp["oldage"], "bn")} in {y}, inside social protection.</p>''')
     rows = []
     for k, name in order:
-        rows.append([esc(name), num(f"spend.cash.{k}.{y}", "bn1"), num(per[k], "dp1")])
-    rows.append(["<strong>Spending on services</strong>", num(f"spend.cash.services.{y}", "bn1"), "100.0"])
-    rows.append(["Accounting adjustments (not split by area)", num(adj, "bn1"), "–"])
-    rows.append(["<strong>Total managed expenditure</strong>", num(f"spend.cash.tme.{y}", "bn1"), "–"])
-    body.append(details_table("Show these figures as a table", f"Public spending by area, {y}, £ billion (cash) and £ per £100 of spending on services",
-                              ["Area", "£bn", "£ per £100"], rows))
+        rows.append([esc(name), num(f"spend.cash.{k}.{y}", "bn1"), num(per[k], "dp1"),
+                     num(per_person(facts, f"spend.cash.{k}.{y}", pop, f"spend.perperson.{k}", y, "pesa4"), "pounds")])
+    rows.append(["<strong>Spending on services</strong>", num(f"spend.cash.services.{y}", "bn1"), "100.0",
+                 num(per_person(facts, f"spend.cash.services.{y}", pop, "spend.perperson.services", y, "pesa4"), "pounds")])
+    rows.append(["Accounting adjustments (not split by area)", num(adj, "bn1"), "–", "–"])
+    rows.append(["<strong>Total managed expenditure</strong>", num(f"spend.cash.tme.{y}", "bn1"), "–", num(pp, "pounds")])
+    body.append(details_table("Show these figures as a table", f"Public spending by area, {y}, £ billion (cash), £ per £100 of spending on services, and £ per UK resident",
+                              ["Area", "£bn", "£ per £100", "£ per person*"], rows))
+    body.append(f'<p class="small">* Spending divided by the UK population in mid-{y[:4]} ({num(pop, "millions_raw")}), including children. An average across everyone, not what is spent on any one person.</p>')
     body.append(f'''<div class="limit"><p><strong>Limits.</strong> The £100 split uses spending on services ({num(f"spend.cash.services.{y}", "bn")}), not total spending. The difference, {num(adj, "bn")}, is accounting adjustments that HM Treasury does not divide between areas.
 Areas follow the international COFOG classification. “Defence” here excludes military pensions, which count as social protection, so it differs from the NATO defence figure.</p></div>''')
     body.append(source_line(sources, ["pesa4", "pesa5"], f"Tables 4.2 and 5.2, outturn for {first} to {y}. Outturn figures can still be revised."))
@@ -96,6 +118,10 @@ def taxes_page(facts, d, num, sources):
     big3 = sum(facts[f"rec.{k}.{y}"].value for k in ("income_tax", "nics", "vat"))
     derive(facts, f"rec.big3share.{y}", 100 * big3 / facts[f"rec.taxes.{y}"].value, "% of all taxes", y, "obr",
            [f"rec.income_tax.{y}", f"rec.nics.{y}", f"rec.vat.{y}", f"rec.taxes.{y}"], f"100 × (rec.income_tax + rec.nics + rec.vat) ÷ rec.taxes, {y}")
+    pop = f"pop.uk.{y[:4]}"
+    tpp = per_person(facts, f"rec.taxes.{y}", pop, "rec.perperson.taxes", y, "obr")
+    bpp = per_person(facts, f"agg.psnb.{y}", pop, "agg.perperson.psnb", y, "obr")
+    dpp = per_person(facts, f"agg.psnd.{y}", pop, "agg.perperson.psnd", y, "obr")
     body = ["<h1>Which taxes raise the money?</h1>"]
     body.append(keyfigs([(num(f"rec.taxes.{y}", "bn"), f"raised in taxes in {y}", True),
                          (num(f"rec.big3share.{y}", "pct0"), "of all tax came from Income Tax, National Insurance and VAT", False),
@@ -103,6 +129,8 @@ def taxes_page(facts, d, num, sources):
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector received {num(f"rec.total.{y}", "bn")}. Most of it, {num(f"rec.taxes.{y}", "bn")}, was tax.</p>
 <p>Three taxes raised {num(f"rec.big3share.{y}", "pct0")} of all tax: Income Tax ({num(f"rec.income_tax.{y}", "bn")}), National Insurance ({num(f"rec.nics.{y}", "bn")}) and VAT ({num(f"rec.vat.{y}", "bn")}).
 Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y}", "bn")} to cover the gap.</p></div>''')
+    body.append(scale_box(num, tpp, pop, f"tax raised in {y}",
+                          extra=f" Borrowing was {num(bpp, 'pounds')} per person. This is total tax divided by everyone, including children and people who pay little or no tax, so it is not anyone's tax bill. For what households actually pay, see <a href=\"who-pays.html\">who pays</a>."))
     body.append(f'<h2 id="where">Where the {y} money came from</h2><p>Three different kinds of money pay for public spending. Only the first is tax.</p>')
     items = [(esc(n), f"rec.{k}.{y}", "") for k, n in groups] + [("All other taxes", f"rec.othertax.{y}", "")]
     top = facts[f"rec.income_tax.{y}"].value
@@ -119,7 +147,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
             ["<strong>Total spending (OBR basis)</strong>", num(f"agg.tme.{y}", "bn1")]]
     body.append(details_table("Show these figures as a table", f"Public sector receipts and borrowing, {y}, £ billion", ["Item", "£bn"], rows))
     body.append(f'''<h2 id="debt">Borrowing is not the same as debt</h2>
-<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026, equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP (public sector net debt).</p>''')
+<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026, equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP (public sector net debt). Shared across the whole UK population, the debt is about {num(dpp, "pounds")} per person.</p>''')
     body.append(source_line(sources, ["obr"], f"Sheets “Receipts (£bn)” and “Aggregates (£bn)”. {y} is outturn and can still be revised; years from {rc['forecast_from']} are OBR forecasts."))
 
     # history as % of GDP
