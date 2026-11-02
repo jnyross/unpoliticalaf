@@ -69,6 +69,80 @@ class Comparisons(unittest.TestCase):
         self.assertIn("no figure", out)
 
 
+class ComparisonPage(unittest.TestCase):
+    """The two-year comparison leads with fixed figures and explains every gap in place."""
+
+    def setUp(self):
+        self.saved = list(pages_life.MEAS)
+        f = Facts()
+        for y, v in ((2010, 70.0), (2019, 74.0), (2025, 75.0)):
+            f.add(Fact(f"work.rate.{y}", v, "%", str(y), "s", "A1"))
+        for y, v in ((2019, 20.0), (2025, 26.0)):
+            f.add(Fact(f"occ.{pages_life.occ_scheme(y)}.{y}", v, "%", str(y), "s", "B1"))
+        for y, v in ((2010, 500.0), (2019, 520.0), (2025, 600.0)):
+            f.add(Fact(f"pay.{y}", v, "£", str(y), "s", "C1"))
+            f.add(Fact(f"paycash.{y}", v / 2, "£", str(y), "s", "D1"))
+        for y, v in ((2010, 17.0), (2019, 19.0)):
+            f.add(Fact(f"house.private.{y}", v, "%", str(y), "s", "E1"))
+        self.facts = f
+        self.num = Num(f)
+        pages_life.MEAS[:] = [
+            ("work.rate", "work", "Employment rate", lambda y: f"work.rate.{y}", "pct", "pp", str, None),
+            ("work.occ.prof", "work", "Share of workers in: Professional", lambda y: f"occ.{pages_life.occ_scheme(y)}.{y}", "pct", "pp", str, pages_life.occ_scheme),
+            ("earn.ft", "earnings", "Pay", lambda y: f"pay.{y}", "pounds", "pct", str, None),
+            ("earn.ftcash", "earnings", "Pay in cash", lambda y: f"paycash.{y}", "pounds", "pct", str, None),
+            ("house.private", "housing", "Renting privately", lambda y: f"house.private.{y}", "pct", "pp", str, None),
+        ]
+
+    def tearDown(self):
+        pages_life.MEAS[:] = self.saved
+
+    def m(self, key):
+        return next(m for m in pages_life.MEAS if m[0] == key)
+
+    def test_status(self):
+        self.assertEqual(pages_life._status(self.facts, self.m("work.rate"), 2010, 2025), "ok")
+        self.assertEqual(pages_life._status(self.facts, self.m("work.occ.prof"), 2019, 2025), "break")
+        self.assertEqual(pages_life._status(self.facts, self.m("house.private"), 2010, 2025), "missing")
+
+    def test_largest_changes_leave_out_breaks_gaps_and_cash(self):
+        out = pages_life.largest_changes(self.facts, self.num, 2019, 2025)
+        self.assertIn("Employment rate", out)
+        self.assertIn("Pay", out)
+        self.assertNotIn("Professional", out)
+        self.assertNotIn("Renting privately", out)
+        self.assertNotIn("Pay in cash", out)
+
+    def test_missing_figure_is_explained_with_nearest_pair(self):
+        out = pages_life.key_sentence(self.facts, self.num, "housing", 2010, 2025)
+        self.assertIn("not compared", out)
+        self.assertIn("not yet published", out)
+        self.assertIn('href="2010-2019.html"', out)
+        self.assertNotIn("data-change", out)
+
+    def test_definition_change_is_explained_and_not_calculated(self):
+        pages_life.KEY_MEASURES["work"], saved = ("work.occ.prof", "Professional share"), pages_life.KEY_MEASURES["work"]
+        try:
+            out = pages_life.key_sentence(self.facts, self.num, "work", 2019, 2025)
+        finally:
+            pages_life.KEY_MEASURES["work"] = saved
+        self.assertIn("not compared", out)
+        self.assertIn("SOC2010 to SOC2020", out)
+        self.assertNotIn("data-change", out)
+
+    def test_lead_sentence_says_direction_and_change(self):
+        out = pages_life.key_sentence(self.facts, self.num, "work", 2010, 2025)
+        self.assertIn("went up from", out)
+        self.assertIn("+5.0 percentage points", out)
+
+    def test_small_percentage_changes_keep_a_decimal(self):
+        out = pages_life.change_cell(self.facts, self.num, "pay.2010", "pay.2019", "pct", "pounds")
+        self.assertIn("+4.0%", out)
+
+    def test_shared_label_prefix_is_written_once(self):
+        self.assertEqual(pages_life._join_labels(["Share in: A", "Share in: B"]), "Share in: A; B")
+
+
 class Rates(unittest.TestCase):
     def test_worked_example_from_saved_pages(self):
         from builder.rates import read_rates
