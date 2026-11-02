@@ -831,38 +831,6 @@
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
  },
- "probe-oecd-govcofog": {
-  "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/all?startPeriod=2022&format=csvfilewithlabels",
-  "file": "oecd/probe-govcofog.csv",
-  "bytes": 7539265,
-  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
-  "sha256": "b520996aad378c891789d3d69ab6c396a159c89caee7fe236021913fdc31a60b",
-  "retrieved": "2026-11-02T20:17:44Z"
- },
- "probe-oecd-govpf": {
-  "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/all?startPeriod=2022&format=csvfilewithlabels",
-  "file": "oecd/probe-govpf.csv",
-  "bytes": 1333289,
-  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
-  "sha256": "9341bf84cf4aa676fb30872a29d3a267ed3854fc7dbd784ebd11d44a4d964cd6",
-  "retrieved": "2026-11-02T20:17:38Z"
- },
- "probe-oecd-naag6": {
-  "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAAG_VI@DF_NAAG_VI,/all?startPeriod=2022&format=csvfilewithlabels",
-  "file": "oecd/probe-naag6.csv",
-  "bytes": 3139912,
-  "content_type": "application/vnd.sdmx.data+csv; labels=name; version=2; charset=utf-8",
-  "sha256": "6648e58c0b1a94426ff27628b4d88ba4517c05cb47bebb69ed13aced2b574934",
-  "retrieved": "2026-11-02T20:17:30Z"
- },
- "probe-oecd-naag6a": {
-  "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAAG_VI@DF_NAAG_OTEF,/all?startPeriod=2022&format=csvfilewithlabels",
-  "file": "oecd/probe-naag6a.csv",
-  "bytes": 809805,
-  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
-  "sha256": "2b4b37fb131396ef8bc4a0593b8eacd89a3fedeb91c02cf59767994e1b60ef8d",
-  "retrieved": "2026-11-02T20:17:34Z"
- },
  "scot-primary-class-2025": {
   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
   "file": "nations/scot-primary-class-size-dataset-2025.xlsx",
