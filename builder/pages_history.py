@@ -139,7 +139,7 @@ def chart(facts, num, topic):
     if topic == "holidays":
         years = list(range(first, 2024))
         items = [("Visits abroad per 100 residents", lambda y: f"hol.ips.per100.{y}", "a")]
-        return _line(facts, num, "Visits abroad by UK residents since 1980, per 100 residents", years, items,
+        return _line(facts, num, "Visits abroad since 1980, per 100 UK residents", years, items,
                      "Visits abroad for any purpose, per 100 UK residents, January to December, International Passenger Survey", "int", ymin=0,
                      events=[(years.index(2020), "Covid")], finding=F.trend("Visits abroad per 100 residents", which="all", after="; the series ends in 2023, before the method changed"))
     if topic == "schools":
