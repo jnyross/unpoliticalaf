@@ -1,0 +1,86 @@
+{
+ "reader": "I3",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 14,
+ "url": "life/compare/1990-2025.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 4480
+  },
+  {
+   "url": "life/compare/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "1990"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Compare two years See any two years from 1971 to 2025 side by side, with what ch",
+  "choose [11] First year = 1990",
+  "choose [12] Second year = 2025",
+  "tap [13] button: Compare 1990 and 2025",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a13/shots/I3",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Median"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "after inflation"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "2011 and 2020"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "tenure"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "1991 and 2008"
+  }
+ ]
+}

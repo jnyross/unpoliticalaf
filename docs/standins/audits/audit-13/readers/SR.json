@@ -1,0 +1,26 @@
+{
+ "reader": "SR",
+ "site_commit": "7ab0f27",
+ "budget": 40,
+ "actions_used": 13,
+ "with_site": {
+  "1": "A",
+  "2": "C",
+  "3": "D",
+  "4": "C",
+  "5": "A",
+  "6": "B",
+  "7": "D",
+  "8": "B",
+  "9": "A",
+  "10": "B",
+  "11": "B",
+  "12": "D"
+ },
+ "confusions": [
+  "Compare-years page (life/compare/index.html): the combobox for first/second year announces 55 options one by one in reading order, and the full list of all-pair links follows, so reaching the answer means a very long listen; not blocking.",
+  "Home page (index.html): the four-question cards are single links whose accessible name includes the whole paragraph of figures, so each link is announced at great length; not blocking.",
+  "Class sizes page (life/schools.html): the 2019 figure was not on the page itself, only in collapsed table/chart groups, so I found 2019 via a comparison page instead; not blocking.",
+  "Comparison pages: the Housing 2024-25 figure was not stated directly on the 2008 to 2025 route I used, so I inferred about 18.8% from 14.2% plus the stated +4.6 points; not blocking."
+ ]
+}
