@@ -1,0 +1,76 @@
+{
+ "reader": "R5-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 15,
+ "url": "life/index.html#schools",
+ "ops": [],
+ "scroll": 3951,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [7] link: Year by year",
+  "tap [16] link: Compare years",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [6] link: Class sizes",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R5",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(5) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes in every year since 2006"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "First year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "Second year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+   "kind": "button",
+   "label": "Compare 2011 and 2019"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2011 compared with 2019"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "compare two sets of years"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "employment rate"
+  }
+ ]
+}

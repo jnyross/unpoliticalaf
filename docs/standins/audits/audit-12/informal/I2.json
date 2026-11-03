@@ -1,0 +1,35 @@
+{
+ "reader": "I2",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 10,
+ "url": "life/housing.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "life/work.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Work 75.1% of people aged 16 to 64 were in work, April to June 2026, UK. 1971 20",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Housing",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/I2",
+ "items": []
+}

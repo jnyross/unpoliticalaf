@@ -1,0 +1,16 @@
+{"reader": "R3", "profile": "P5", "site_commit": "1f64e04", "budget": 40,
+ "actions_used": 34, "new_actions_used": 10,
+ "without_site": {"1":"E","2":"E","3":"E","4":"E","5":"E","6":"E","7":"E","8":"E","9":"E","10":"E","11":"E","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"E","11":"B","12":"D"},
+ "new_without_site": {"1":"B","2":"A","3":"E","4":"A","5":"B","6":"A","7":"A","8":"E","9":"C","10":"E","11":"E","12":"E","13":"E","14":"E","15":"E","16":"A","17":"E","18":"B","19":"E","20":"A","21":"E","22":"E","23":"E","24":"E"},
+ "new_with_site": {"1":"B","2":"A","3":"B","4":"A","5":"B","6":"A","7":"A","8":"B","9":"C","10":"C","11":"A","12":"E","13":"B","14":"A","15":"B","16":"E","17":"B","18":"B","19":"A","20":"A","21":"E","22":"B","23":"E","24":"B"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"D","J1.3":"E","J1.4":"C","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "confusions": [
+  "I scrolled down and the menu buttons disappeared, so I had to go back to the start page just to reach another page.",
+  "Some pages jump a lot when I scroll, and I skipped the 33.6% part and had to scroll back up.",
+  "The year-by-year page has no 2015 or 2025 holiday numbers I could find, so I could not answer the holiday question.",
+  "The number for 2019 class size was hidden behind a year picker and I almost guessed it from the chart.",
+  "I could not find debt, borrowing cost or interest comparisons for other countries; I only found the word explanations in the glossary.",
+  "Lots of long lists of countries made me lose the UK row."
+ ]}

@@ -1,0 +1,19 @@
+{"reader": "R1", "profile": "P6", "site_commit": "1f64e04", "budget": 40,
+ "actions_used": 39, "new_actions_used": 19,
+ "without_site": {"1":"B","2":"C","3":"D","4":"E","5":"E","6":"E","7":"E","8":"E","9":"E","10":"E","11":"E","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"E","9":"E","10":"C","11":"E","12":"D"},
+ "new_without_site": {"1":"B","2":"A","3":"B","4":"A","5":"B","6":"A","7":"A","8":"B","9":"C","10":"E","11":"E","12":"E","13":"E","14":"E","15":"B","16":"A","17":"B","18":"B","19":"A","20":"A","21":"E","22":"E","23":"E","24":"E"},
+ "new_with_site": {"1":"B","2":"A","3":"B","4":"A","5":"B","6":"A","7":"A","8":"B","9":"C","10":"C","11":"A","12":"A","13":"B","14":"A","15":"B","16":"A","17":"B","18":"B","19":"A","20":"A","21":"B","22":"B","23":"B","24":"B"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"C","J1.3":"E","J1.4":"C","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "confusions": [
+  "I tapped a word with a dotted underline by mistake and ended up on a glossary page, which wasted one of my taps.",
+  "The numbers on the yellow tags change on every screen, so I tapped the wrong link a couple of times.",
+  "I could not find a year-by-year page for class sizes in 2019 or the 2021 pay figure from the Compare years page, so I had to leave those as not sure.",
+  "The Compare years page said 'not compared' for pay, housing and holidays, and I could not tell what that meant for the actual change.",
+  "The Spending page has a lot of text before the chart, and I had to scroll a long way to get to the tax pages.",
+  "I looked for how the UK's debt and borrowing costs compare with other countries and could not find them anywhere, only tax and spending.",
+  "Tax and income shows 33.6% next to a worked example and a tax-rate section, and I nearly mixed up which number was which.",
+  "The Work section talks about types of jobs, not industries, so I wasn't sure whether it told me where most people work.",
+  "A phone page with nine or ten screens is too long for a short gap, and the menu is only at the very top or bottom."
+ ]}

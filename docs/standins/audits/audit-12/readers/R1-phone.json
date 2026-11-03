@@ -1,0 +1,111 @@
+{
+ "reader": "R1-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 39,
+ "url": "life/compare/2015-2025.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 4454
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 4513
+  },
+  {
+   "url": "life/index.html#compare",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025"
+    }
+   ],
+   "scroll": 4075
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [4] link: interest on government debt",
+  "scroll down",
+  "back",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll up",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Year by year",
+  "tap [16] link: Compare years",
+  "choose [1] First year = 2015",
+  "choose [2] Second year = 2025",
+  "tap [3] button: Compare 2015 and 2025",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "2015 and 2020"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2015 and 2024"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2015 and 2023"
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+ "phone_test": false,
+ "prior_knowledge": true,
+ "new_questions": true,
+ "screen_reader": true,
+ "johns_questions": false,
+ "johns_gaps": [
+  "J1.3: readers could not answer \"How does UK government debt, as a share of GDP, compare with the other G7 countries in the latest year shown?\" from the site (1 of 5 right); see their confusion notes.",
+  "J1.5: readers could not answer \"In the latest year shown, does the UK government pay more or less to borrow for 10 years than the other G7 governments?\" from the site (1 of 5 right); see their confusion notes.",
+  "J1.6: readers could not answer \"How does the interest the UK government pays on its debt, as a share of GDP, compare with the other G7 countries?\" from the site (1 of 5 right); see their confusion notes.",
+  "J1.7: readers could not answer \"According to the site, which of these affect what a government pays to borrow?\" from the site (1 of 5 right); see their confusion notes."
+ ],
+ "d11_ready_for_5": false
+}

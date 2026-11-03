@@ -1,0 +1,67 @@
+{
+ "reader": "R2-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 31,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 2240,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 4454
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 3882
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [7] link: Year by year",
+  "tap [14] link: Holidays",
+  "tap [2] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "tap [2] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R2",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Since 2008, in more detail chart and table"
+  }
+ ]
+}

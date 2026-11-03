@@ -1,0 +1,37 @@
+{
+ "reader": "R4-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 6,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R4",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "National Insurance"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Worked example: one made-up employee on £30,000 a year limits and source"
+  }
+ ]
+}

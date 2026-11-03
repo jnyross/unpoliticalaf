@@ -1,0 +1,137 @@
+{
+ "reader": "R5-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 36,
+ "url": "spending.html",
+ "ops": [],
+ "scroll": 4454,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "international.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)"
+    }
+   ],
+   "scroll": 6435
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [3] link: beside other countries",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [3] input: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Borrowing",
+  "back",
+  "back",
+  "scroll down",
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R5",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Change by area over ten years: 2015-16 to 2025-26 table"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Home"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "methods"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "corrections"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "how sure the survey figures are"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(4)",
+   "kind": "link",
+   "label": "Open Government Licence v3.0"
+  }
+ ]
+}
