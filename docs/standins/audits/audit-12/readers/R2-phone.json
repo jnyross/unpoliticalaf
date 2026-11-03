@@ -1,0 +1,172 @@
+{
+ "reader": "R2-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 36,
+ "url": "life/2019.html",
+ "ops": [],
+ "scroll": 3920,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#earnings",
+   "ops": [],
+   "scroll": 4739
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll up",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll up",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "tap [12] link: Earnings",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [12] link: 2019",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R2",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Class sizes sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2008"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2009"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2010"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2011"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2012"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2013"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2014"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2015"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2016"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2017"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(11) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2018"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(13) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2020"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(14) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2021"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(15) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2022"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(16) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2023"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(17) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2024"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(18) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2025"
+  }
+ ]
+}

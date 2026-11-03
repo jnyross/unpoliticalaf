@@ -11,6 +11,93 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 12: 3 November 2026 (rubric v3, after the audit 11 fixes #141 to #148)
+
+- Commit audited: `1f64e04` on `main` (site build). The "Live site matches
+  main" check for it is green
+  ([run 41698025008](https://github.com/jnyross/unpoliticalaf/actions/runs/41698025008)).
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure
+  [standins/README.md](standins/README.md). All evidence is in
+  [standins/audits/audit-12/](standins/audits/audit-12/).
+- Stand-ins run, each a fresh session that did not build the site: a question
+  writer (24 new questions, sealed in `c6aeb6d` before any reader started; two
+  were replaced before sealing because the site had no single clear answer: a
+  statutory VAT rate and the shape of real pay around 2008); 3 informal readers
+  (profiles P7, P2, P9); 5 phone readers (P6, P10, P5, P3, P8, drawn at
+  random); a screen-reader reader; an adversarial fact-checker; a left critic,
+  a right critic and a judge. Readers ran on a smaller model than the reviewers.
+- Automated checks: no keyboard traps on the 9 main pages; all 1,324 charts
+  have a text summary with figures; axe (`make a11y`) runs in CI on this PR.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 46 out of 55. Target not met (simulated).** Audit 11: 35. For the
+first time no stand-in found a material problem: the fact-checker, the judge
+and the critics all came back with minor points only, and every audit 11 cap is
+gone. Two things still fail the target: one phone reader (R4) used up the
+budget and missed critical question 12 on change and cause, and four of the
+five readers could not find the debt and borrowing-costs page, so four of
+John's probes failed.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 51/60; R1 9, R2 12, R3 11, R4 8, R5 11; R4 missed critical question 12 (marked not sure) | 48/60 and each reader 9/12 with the critical questions | No (R4) |
+| New questions (24, sealed) | 108/120 with the site (90%), 49 without | 80% | Yes |
+| Prior-knowledge check | 4/60 without the site, 51 with it (+47) | +20 | Yes |
+| John's questions | J1.1, J1.2, J1.4 pass (4 or 5 of 5); J1.3, J1.5, J1.6, J1.7 1 of 5 each: four readers never reached `borrowing.html` | every probe answered, 4 of 5 right | No |
+| Informal check | 3 readers; all found an answer to all three questions, nothing blocking (audit 11: all three blocked on change since they were young) | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 15 actions; no blocking barrier (long 55-year selects, long home card links) | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 0 material, 9 minor ([claims.md](standins/audits/audit-12/fact-check/claims.md)) | no material errors | Yes |
+| Impartiality critics and judge | 0 material, 5 critic examples upheld as minor, 15 rejected; the judge found 2 more minor breaches ([judgement.md](standins/audits/audit-12/impartiality/judgement.md)) | no upheld material finding | Yes |
+
+The fact-checker's 30 figures (`fact-check/sample.json`) are re-downloaded from
+the publishers by the "Accuracy check" workflow when this PR lands on `main`,
+which commits `fact-check/results.json`. Every value the fact-checker
+recalculated from the repository's copies of the source files matched. A
+mismatch there would reopen D7.
+
+### Material findings
+
+None.
+
+### Scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | No finding against the answers. Not 5: the phone test did not pass, and four readers could not find how UK debt, borrowing costs and debt interest compare with the G7, which sits on a page linked only from the home page and the end of the countries page. |
+| D2 Life: breadth and depth | 4 | The longest history now comes first and no informal reader was blocked. Not 5: the phone test did not pass. |
+| D3 Life: choosing and comparing | 4 | Not 5: three readers missed the 2015 against 2025 holiday question because they could not find or understand "not compared", and readers found the year-by-year page a long scroll with one year at a time. |
+| D4 Explanation and understanding | 4 | Every reader who reached them got the household-average and illustration questions right. Not 5: R4 marked the change-and-cause question not sure, and two readers nearly mixed up 33.6%, 27.2% and 36.7%. |
+| D5 Visual design and charts | 4 | Audit 11's holiday title is fixed; bars start at zero, above-zero axes are captioned, panels share a scale. Not 5: the taxes page's after-inflation chart labels its axis from 1948-49 when its data start in 1955-56, and the phone test did not pass. |
+| D6 Phone experience | 4 | No sideways scrolling and the "Top and menu" button no longer covers text. Not 5: three readers still lost the menu once they had scrolled, and long country lists tired four readers. |
+| D7 Accuracy and traceability | 5 | The fact-checker found no material error in 30 headline claims, every recalculated figure matched, and corrections are logged. Its 9 minor points are listed below. |
+| D8 Impartiality | 5 | The judge upheld no material finding; start years, scales and group order follow the rule, and the methods page explains how the site chooses what to show. Minor points listed below. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocking barrier, no keyboard traps, every chart has a text summary; axe in CI. |
+| D10 Honesty about limits | 4 | No change is shown across a marked break. Not 5: the who-pays net-recipients chart (1977 to 2023/24) does not mark the ONS's 2001/02 top-income adjustment that its own Limits note mentions. |
+| D11 Reader evidence | 3 | The simulated phone test is recorded and audit 11's reader problems are fixed. Not 5: the phone test and John's questions did not pass. |
+| **Total** | **46 / 55** | |
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' confusion notes only.
+
+1. Make the debt and borrowing-costs page easy to find: readers looking for how UK debt, 10-year borrowing costs and debt interest compare with the G7 went to the countries page, the glossary or the taxes and spending pages and never reached it (4 of 5 readers, John's J1.3, J1.5, J1.6, J1.7).
+2. Make the year-by-year route answer the questions readers bring to it: they arrive there for class sizes, holidays and employment and miss the infant class legal limit (3 readers), the most visited country for holidays (4 readers), the change-is-not-cause note (one critical miss) and a 2015 against 2025 holiday comparison, because the page is a long scroll of one year at a time.
+3. Explain "not compared" in plain words where a comparison crosses the 2024 holiday method break (and for pay and housing), so readers can tell that the site deliberately does not compare those years (3 readers missed the 2015 against 2025 holiday question).
+4. Keep a way to the menu within reach once a reader has scrolled down a long page, and shorten or collapse the long G7 and OECD country lists so readers do not lose the UK row (three and four readers).
+5. Fix the smaller points: the housing mini-chart's "2025-26" when the latest is 2024-25; men's employment "low of 75.4% in 2010" beside a lowest of 75.1% in 1993; England and Wales pay rises called "equal"; "households that retired people live in" for ONS retired households; "Corporation Tax includes North Sea profits" when the Energy Profits Levy sits in other taxes; Scotland's private renting including tied homes; the `rec.othertax.2025-26` figure record listing 7 of the 10 taxes it subtracts; the "27% to 36%" range on household types; the class sizes comparison starting at 2008 when the series starts in 2006; the unmarked 2001/02 adjustment on the net-recipients chart; the taxes after-inflation axis labelled from 1948-49; and the judge's minor framing points (home card tax shares without their denominator note, borrowing page without the OECD average, Corporation Tax incidence in the glossary, who-pays cash amounts without shares, the default 2011 against 2019 comparison).
+
+John's questions: J1.3, J1.5, J1.6 and J1.7 failed on findability (the answers are on `borrowing.html`); none is open.
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are
+not five people; screenshots are not a phone in the hand; an accessibility
+tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 11: 3 November 2026 (rubric v3, after the audit 10 fixes #133 to #139)
 
 - Commit audited: `b08069b` on `main` (site build). The "Live site matches

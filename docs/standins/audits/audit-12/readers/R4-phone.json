@@ -1,0 +1,90 @@
+{
+ "reader": "R4-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 34,
+ "url": "life/index.html",
+ "ops": [],
+ "scroll": 3920,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll up",
+  "tap [2] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "back",
+  "back",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/R4",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(5) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes in every year since 2006"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "First year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "Second year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+   "kind": "button",
+   "label": "Compare 2011 and 2019"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2011 compared with 2019"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "compare two sets of years"
+  }
+ ]
+}

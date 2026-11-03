@@ -1,0 +1,6 @@
+{"reader": "SR", "site_commit": "1f64e04", "budget": 40, "actions_used": 15,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+  "Year-by-year page (life/index.html) and year pages: the year picker is a 55-option select, and the compare page has two such selects, which is long to step through by ear.",
+  "Home page (index.html): the card links are announced as one very long run of text (heading, figure and explanation together), which is tiring to hear before reaching the next link."
+ ]}

@@ -1,0 +1,79 @@
+{
+ "reader": "R5-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 37,
+ "url": "life/index.html",
+ "ops": [
+  {
+   "op": "choose",
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+   "value": "2019"
+  }
+ ],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll down",
+  "tap [2] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "back",
+  "back",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "choose [1] Go to a year = 2019",
+  "tap [2] button: Go",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up"
+ ],
+ "shots": "/tmp/a12/shots/R5",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Holidays in every year since 1980"
+  },
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Top and menu"
+  }
+ ]
+}

@@ -1,0 +1,98 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 17,
+ "url": "life/housing.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "life/work.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "scroll down",
+  "tap [1] link: Where does public money go? £1,360bn spent by the public sector in 2025-26. HM T",
+  "scroll down",
+  "scroll up",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "tap [4] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Housing",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a12/shots/I1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Who owns and who rents since 1981 table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Earnings"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Holidays"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Compare two years of housing"
+  }
+ ]
+}

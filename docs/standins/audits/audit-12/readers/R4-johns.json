@@ -1,0 +1,49 @@
+{
+ "reader": "R4-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 24,
+ "url": "glossary.html#borrowing",
+ "ops": [],
+ "scroll": 3178,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [3] link: beside other countries",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [4] link: interest on government debt",
+  "back",
+  "tap [3] link: beside other countries",
+  "tap [11] expand: On this page: 5 sections",
+  "scroll down",
+  "back",
+  "back",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Borrowing"
+ ],
+ "shots": "/tmp/a12/shots/R4",
+ "items": []
+}
