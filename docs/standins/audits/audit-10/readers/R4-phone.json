@@ -1,0 +1,63 @@
+{
+ "reader": "R4-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 16,
+ "url": "life/2019.html",
+ "ops": [],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "life/earnings.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: Earnings £767 a week before tax for the middle full-time employee, April 2025, U",
+  "tap [10] link: Everyday life, year by year",
+  "choose [17] Go to a year = 2019",
+  "tap [18] button: Go",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up"
+ ],
+ "shots": "/tmp/claude-0/shots/R4",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Holidays table and sources"
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "reader": "R4-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 34,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R4-new",
+ "items": []
+}

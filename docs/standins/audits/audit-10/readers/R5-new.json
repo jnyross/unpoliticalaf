@@ -1,0 +1,80 @@
+{
+ "reader": "R5-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 34,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 4483
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 3920
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Glossary",
+  "tap [13] link: People, households and income",
+  "scroll down",
+  "back",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R5-new",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on How many pupils are in classes of more than 30? table"
+  }
+ ]
+}

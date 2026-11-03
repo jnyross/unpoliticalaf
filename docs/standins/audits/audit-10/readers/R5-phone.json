@@ -1,0 +1,118 @@
+{
+ "reader": "R5-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "life/earnings.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019"
+    }
+   ],
+   "scroll": 0
+  },
+  {
+   "url": "life/2019.html#schools",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(3) > details:nth-of-type(1) > summary:nth-of-type(1)"
+    }
+   ],
+   "scroll": 4432
+  },
+  {
+   "url": "life/index.html#compare",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2008"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2024"
+    }
+   ],
+   "scroll": 4972
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: Earnings £767 a week before tax for the middle full-time employee, April 2025, U",
+  "scroll down",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "choose [17] Go to a year = 2019",
+  "tap [18] button: Go",
+  "scroll down",
+  "tap [3] expand: On this page: 6 sections",
+  "scroll down",
+  "tap [6] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Year by year",
+  "tap [16] link: Compare years",
+  "choose [1] First year = 2015",
+  "choose [2] Second year = 2025",
+  "tap [3] button: Compare",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "choose [1] First year = 2008",
+  "choose [2] Second year = 2024",
+  "tap [3] button: Compare",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll down",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R5",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on How has this changed since 1977? chart, table, limits and sources"
+  }
+ ]
+}
