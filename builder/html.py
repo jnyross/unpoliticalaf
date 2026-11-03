@@ -778,7 +778,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if forecast_from is not None:
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure>{_titles(heading, title, described)}{key}{svg}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title, described)}{key}{svg}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
 
 
 _SW_COUNT = [0]
@@ -977,7 +977,21 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
         summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{over} {summary_note}</p></details>'
     else:
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
-    return f'<figure>{_titles(heading, title)}{key}{grid}<figcaption>{esc(unit_label)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title)}{key}{grid}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
+
+
+def _caption(unit_label, lo, step):
+    """A line chart's caption: its units, and where the scale starts when that is above zero,
+    so a reader does not judge a change by the height of the line from the bottom."""
+    cap = esc(unit_label)
+    if lo <= 0:
+        return cap
+    note = ZERO_NOTE.format(_tick(lo, step))
+    return f"{cap.rstrip('. ')}. {note}" if cap else note
+
+
+# Said under every line chart whose scale starts above zero (builder/check.py looks for it).
+ZERO_NOTE = "The scale starts at {}, not at zero."
 
 
 def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
