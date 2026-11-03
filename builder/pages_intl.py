@@ -78,6 +78,36 @@ def nth(n):
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
+COMPARE_WITH = ["USA", "FRA"]
+
+
+def _uk_us_fr(facts, num, it, sy):
+    """UK government spending beside the United States and France, shown without a click.
+
+    Plain words, computed from the figures: 'close to' within 1 point, otherwise 'higher than'
+    or 'lower than'. Returns nothing if any of the three figures is missing, so no gap is hidden.
+    """
+    ids = {a: f"intl.spend.{a}.{sy}" for a in [UK] + COMPARE_WITH}
+    if any(i not in facts or facts[i].value is None for i in ids.values()):
+        return []
+
+    def rel(gap):
+        return "close to" if abs(gap) < 1 else ("higher than" if gap > 0 else "lower than")
+
+    uk, us, fr = (facts[ids[a]].value for a in [UK] + COMPARE_WITH)
+    lede = (f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: "
+            f"{rel(uk - us)} the United States ({num(ids['USA'], 'pct')}) "
+            f"and {rel(uk - fr)} France ({num(ids['FRA'], 'pct')}).")
+    order = sorted([UK] + COMPARE_WITH, key=lambda a: -facts[ids[a]].value)
+    items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]),
+              ids[a], "" if a == UK else "alt") for a in order]
+    return [
+        f'<div class="answer"><p class="lede">{lede}</p></div>',
+        bars(items, "pct", num, maxval=60,
+             caption=f"Government spending, % of GDP, {sy}. The UK has the darker bar."),
+    ]
+
+
 def _g7(facts, num, it, ty, sy):
     """The UK's place among the G7, the group of seven large economies, on tax and on spending."""
     def order(prefix, year):
@@ -99,6 +129,7 @@ def _g7(facts, num, it, ty, sy):
                  for a in order_]
         return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar.")
     out = [f'<h2 id="g7">The UK beside the other G7 countries</h2>',
+           *_uk_us_fr(facts, num, it, sy),
            f"<p>The G7 is a group of seven large economies. Among them, the UK had the {place_word(tp, len(t))} tax as a share of GDP in {ty}{among(len(t))}, and the {place_word(sp, len(s))} government spending as a share of GDP in {sy}{among(len(s))}.</p>",
            switch("Show the G7", [
                ("Taxes", f"The UK ranked {nth(tp)} of {len(t)} on tax in {ty}, where 1st is the highest.", g7_bars(t, "intl.tax", ty, "All taxes, including social security contributions,")),
