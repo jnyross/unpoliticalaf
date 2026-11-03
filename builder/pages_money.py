@@ -241,7 +241,9 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
     body.append(bars(items, "bn", num, maxval=top))
     # The chart comes first on a phone; the per-person scale follows the section.
     body.append(before_toc(scale_box(num, tpp, pop, f"tax raised in {y}", hid=tph, hh=hh,
-                                     extra=f" Borrowing was {num(bpp, 'pounds')} per person, or {num(bph, 'pounds')} per household. These divide all tax, including tax paid by businesses, by everyone, including children and people who pay little or no tax, so they are not anyone's tax bill: see <a href=\"who-pays.html\">who pays</a>.")))
+                                     extra=f" Borrowing was {num(bpp, 'pounds')} per person, or {num(bph, 'pounds')} per household. These divide all tax, including tax paid by businesses, by everyone, including children and people who pay little or no tax, so they are not anyone's tax bill: see <a href=\"who-pays.html\">who pays</a>.")
+                           # Readers looked here for the £30,000 employee (audit 10 gap 2); it lives on Tax and income, apart from these measured totals.
+                           + '<p>What one employee pays is on Tax and income: a <a href="household-tax.html#worked-example">worked example of a made-up employee on £30,000</a> (an illustration, not a statistic).</p>'))
     body.append(f'''<h3>2. Other receipts (not taxes): {num(f"rec.nontax.{y}", "bn")}</h3>
 <p>Interest and dividends the public sector receives, the operating surplus of public bodies, and similar income.</p>
 <h3>3. Borrowing: {num(f"agg.psnb.{y}", "bn")}</h3>
@@ -400,6 +402,8 @@ def household_tax_page(facts, d, num, sources, rates):
                          (num("etb.t8.gross.indirect.all", "pct"), "in indirect taxes, such as VAT", False)]))
     body.append(f'''<div class="answer"><p class="lede">Across everyone in UK private households, taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24.</p>
 <p>The share was similar for the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")}) and the highest-income fifth ({num("etb.t8.gross.all.q5", "pct")}), but it was made up of different taxes.</p></div>''')
+    # Readers looking for "what one person pays" could not find the worked example (audit 10 gap 2).
+    body.append(f'<p>Looking for what one person pays? See the <a href="#worked-example">worked example of a made-up employee on £{rates["illustration"]["salary"]:,}</a>. It is an illustration of the tax rules, not a measured statistic.</p>')
     items = []
     for q, lab in QUINTS:
         items.append((lab, f"etb.t8.gross.all.{q}", "alt" if q == "all" else ""))
@@ -419,8 +423,6 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(explain("fiscal-drag", sources))
     body.append(explain("redistribution", sources))
     body.append(source_line(sources, ["etb"], "Table 8, all individuals, grouped by equivalised household disposable income."))
-    from .pages_money_extra import tax_history_section
-    body.append(tax_history_section(facts, d, num, sources))
     # three numbers
     body.append(f'''<h2 id="three-numbers">Three numbers that are easy to mix up</h2>
 <ol>
@@ -430,9 +432,9 @@ def household_tax_page(facts, d, num, sources, rates):
 </ol>''')
     # illustration
     ill = rates["illustration"]
-    body.append(f'''<aside class="illustration" aria-labelledby="ill-title">
+    body.append(f'''<aside class="illustration" aria-labelledby="worked-example">
 <span class="tag">Illustration, not a statistic</span>
-<h3 id="ill-title">Worked example: one made-up employee on £{ill["salary"]:,} a year</h3>
+<h2 id="worked-example">Worked example: one made-up employee on £{ill["salary"]:,} a year</h2>
 <p>This person is invented to show how the rules work. They are not a typical or average person, and this is not a measured figure.</p>
 <p>Assumptions: tax year {esc(rates["year"])}; lives in England, Wales or Northern Ireland; employee in National Insurance category A; no other income, pension contributions or benefits.</p>
 <ul>
@@ -447,4 +449,6 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(explain("average-rates", sources))
     body.append('<div class="limit"><p><strong>Limits.</strong> Survey estimates for April 2023 to March 2024, for people in private households in the UK. People are ranked by their household’s income, adjusted for household size, and split into fifths with equal numbers of people. Taxes paid by companies, such as Corporation Tax, are not allocated to households here.</p></div>')
     body.append(source_line(sources, ["etb", "obr"], "ETB Table 8; OBR receipts for the share of all taxes."))
+    from .pages_money_extra import tax_history_section
+    body.append(tax_history_section(facts, d, num, sources))
     return page("household-tax.html", "How much of household income goes on tax?", "\n".join(body), "Taxes as a share of UK household income, and how this differs from tax rates and shares of revenue.")

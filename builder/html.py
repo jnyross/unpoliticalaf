@@ -60,6 +60,7 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
 .scale{border-left:4px solid var(--line);padding:2px 0 2px 12px;margin:0 0 18px;font-size:.96rem}
 .illustration{border:2px dashed var(--bar2);border-radius:var(--r);padding:14px 16px;margin:24px 0;background:#fff}
+.illustration h2{scroll-margin-top:72px;border-top:0;padding-top:0;margin-top:6px}
 .illustration .tag{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--ink);color:#fff;padding:3px 8px;border-radius:4px;margin-bottom:6px}
 .keyfigs{list-style:none;margin:16px 0 20px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .keyfigs li{margin:0;border:1px solid var(--line);border-radius:var(--r);padding:12px 12px 10px;background:#fff}
