@@ -342,8 +342,8 @@ def who_pays_page(facts, d, num, sources):
     y = w["hmrc_latest_outturn"]
     body = ["<h1>Who pays?</h1>"]
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
-                         (num("etb.2a.alltax.q5", "pounds"), f'a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24: {num("etb.t8.gross.all.q5", "pct")} of their gross income', False),
-                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24: {num("etb.t8.gross.all.q1", "pct")} of their gross income', False)]))
+                         (num("etb.2a.alltax.q5", "pounds"), f'a year in all taxes, on average, by the households of the highest-income fifth of people ({num("etb.t8.gross.all.q5", "pct")} of their gross income), 2023/24', False),
+                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, by the households of the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")} of their gross income), 2023/24', False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 <p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')

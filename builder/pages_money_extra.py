@@ -165,13 +165,13 @@ def net_section(facts, d, num, sources):
     out.append(line_chart(f"People in households receiving more in benefits than they pay in taxes, {first} to {last}", ys,
                           [("Retired", [facts[f"etb.t16.ret.{y}"].value for y in ys], "b"),
                            ("Non-retired", [facts[f"etb.t16.nonret.{y}"].value for y in ys], "a")],
-                          "Per cent of people. Calendar years to 1993, then financial years (April to March) from 1994/95. A second dashed line marks 2001/02, from when the ONS adjusts for top incomes being under-recorded.",
+                          "Per cent of people. Calendar years to 1993, then financial years (April to March) from 1994/95. Second dashed line: top incomes adjusted from 2001/02.",
                           breaks=[(fy, "Financial years")] + ([(ys.index("2001/02"), "Top incomes adjusted from here")] if "2001/02" in ys else []), ymin=0, ymax=100,
                           finding=F.gap("The share for people in retired households", "for people in non-retired households"),
                           desc=f"Retired: {facts[f'etb.t16.ret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.ret.{last}'].value:.1f}% in {last}. "
                                f"Non-retired: {facts[f'etb.t16.nonret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.nonret.{last}'].value:.1f}% in {last}. The figures for everyone are in the table. Years before 2001/02 are less directly comparable with later years."))
     out.append(FOLD)
-    out.append(f'<p>The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series. Years before 2001/02 do not include the ONS adjustment for top incomes (see Limits), so they are less directly comparable with {last}.</p>')
+    out.append(f'<p>The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series, before the 2001/02 change (see Limits).</p>')
     out.append('<p>What is counted: the ONS estimates, one year at a time, how many people live in households that receive more in benefits than they pay in taxes. '
                'Benefits are cash benefits such as the State Pension and Universal Credit plus the estimated value of public services used. '
                '“Taxes” are the direct and indirect taxes in sections 2 and 3.</p>')
@@ -340,8 +340,8 @@ def households_short(facts, d, num):
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
     return f'''<h2 id="household-type">3. Retired people and other kinds of household</h2>
-<div class="answer"><p class="lede">Retired households, where more than half the income comes from retired people, paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired households), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
-<p>Across the {len(types)} kinds of household shown, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income. The ONS also splits one-adult households by sex, and some of those narrower groups fall a little outside this range.</p></div>
+<div class="answer"><p class="lede">Retired households (where retired people bring in over half the income) paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired households), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
+<p>Across the {len(types)} kinds of household shown, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income.</p></div>
 {NOFOLD}<p class="more-link"><a href="{HOUSEHOLDS_PAGE}">Retired people and kinds of household</a>: the taxes each group pays, who counts as retired, families with and without children, and the full tables.</p>'''
 
 
