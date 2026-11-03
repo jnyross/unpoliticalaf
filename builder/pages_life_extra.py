@@ -73,10 +73,17 @@ def _the(n):
     return ("the " if n.split()[0] in ("North", "South", "East", "West") else "") + n
 
 
+def comparable_from(years):
+    """ONS: 1997 and 1998 earnings are weekly pay scaled up to a year, not directly
+    comparable with later years, so changes are worked out from 1999."""
+    return next(y for y in years if y >= 1999)
+
+
 def _afford_answer(facts, num, d):
     af = d["life_extra"]["afford"]
     years = af["years"]
-    first, last = years[0], years[-1]
+    last = years[-1]
+    first = comparable_from(years)
     names = dict(af["places"])
     regions = [k for k, _ in af["places"] if k not in ("ew", "england", "wales")]
     peak = max(years, key=lambda y: (_v(facts, f"afford.ratio.ew.{y}"), y))
@@ -85,7 +92,7 @@ def _afford_answer(facts, num, d):
     peak_txt = (f' The highest ratio was {num(f"afford.ratio.ew.{peak}", "times2")} in {peak}.' if peak != last else " That was the highest since the series began.")
     return (f'<div class="answer"><p>In {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
             f'and the middle full-time employee working there earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
-            f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}.{peak_txt} '
+            f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}, the first year measured the same way.{peak_txt} '
             f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.</p></div>')
 
 
@@ -109,6 +116,7 @@ def afford_page(facts, d, num, sources):
     body.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
                        [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
                        "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0,
+                       breaks=[(comparable_from(years), "Earnings counted as yearly pay from 1999")], split_breaks=True,
                        finding=F.pair("In England, house prices as a multiple of earnings", "in Wales they",
                                       together="House prices as a multiple of earnings {phrase} in both England and Wales")))
     body.append(FOLD)
@@ -116,10 +124,11 @@ def afford_page(facts, d, num, sources):
                               ["Year", "Median house price", "Median full-time earnings (a year)", "Ratio (times a year’s earnings)"],
                               [[str(y), num(f"afford.price.ew.{y}", "pounds"), num(f"afford.earn.ew.{y}", "pounds"), num(f"afford.ratio.ew.{y}", "dp2")] for y in years]))
     mid = 2008 if 2008 in years else years[len(years) // 2]
+    base = comparable_from(years)
     body.append("<h2 id='regions'>Each nation and region</h2>")
-    body.append(table(f"Median house price ÷ median full-time earnings (times a year’s earnings), {first}, {mid} and {last}",
-                      ["Place", str(first), str(mid), str(last)],
-                      [[esc(n), num(f"afford.ratio.{k}.{first}", "dp2"), num(f"afford.ratio.{k}.{mid}", "dp2"), num(f"afford.ratio.{k}.{last}", "dp2")]
+    body.append(table(f"Median house price ÷ median full-time earnings (times a year’s earnings), {base}, {mid} and {last}",
+                      ["Place", str(base), str(mid), str(last)],
+                      [[esc(n), num(f"afford.ratio.{k}.{base}", "dp2"), num(f"afford.ratio.{k}.{mid}", "dp2"), num(f"afford.ratio.{k}.{last}", "dp2")]
                        for k, n in af["places"]]))
     body.append("<h2 id='about'>About these figures</h2>")
     body.append(f'<div class="limit"><p>England and Wales only: Scotland and Northern Ireland publish their own house price figures, which are measured differently, so they are not shown here. '

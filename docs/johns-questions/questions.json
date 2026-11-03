@@ -111,15 +111,15 @@
             "D": "More than Japan only"
           },
           "answer": "A",
-          "why": "Borrowing page: in September 2026 the UK's 10-year yield was 5.24%, the highest of the G7 (United States 4.99%); its 2025 average, 4.58%, was also the highest.",
+          "why": "Borrowing page: in 2025, the latest full year, the UK's 10-year yield averaged 4.58%, the highest of the G7; in the latest month, September 2026, it was 5.24%, also the highest.",
           "evidence": [
             {
               "page": "borrowing.html",
-              "text": "In September 2026, the UK government paid 5.24% a year to borrow for 10 years, the highest of the G7."
+              "text": "In 2025, the latest full year, the UK government paid an average of 4.58% a year to borrow for 10 years, the highest of the G7."
             },
             {
               "page": "borrowing.html",
-              "text": "Over the whole of 2025, it averaged 4.58%, the highest of the G7."
+              "text": "The latest month, September 2026, was 5.24%, the highest of the G7."
             }
           ]
         },
@@ -155,11 +155,11 @@
           "evidence": [
             {
               "page": "borrowing.html",
-              "text": "Borrowing costs depend on central bank interest rates, expected inflation, how much a government borrows and how much risk investors see. They are not, on their own, a verdict on how well a country is run."
+              "text": "The UK Debt Management Office, which sells gilts for the government, names several things that move gilt prices, and so yields (quoted in full below):"
             },
             {
               "page": "borrowing.html",
-              "text": "Several things together, which is why a yield is not a simple score for a government"
+              "text": "Different yields can reflect different central bank rates and inflation, not only how investors judge each government."
             }
           ]
         }

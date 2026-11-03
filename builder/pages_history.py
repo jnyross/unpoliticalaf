@@ -44,7 +44,7 @@ LONG = [
     ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", earn_method, None),
     ("earn.spread", "earnings", "Full-time pay: top-tenth line ÷ bottom-tenth line", lambda y: f"spread.ratio.{y}", "times", "pct", lambda y: f"April {y}", earn_method, None),
-    ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), None, None),
+    ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), L.afford_basis, None),
     ("house.lfs.outright", "housing", "Households that own outright", lambda y: f"house.lfs.outright.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
     ("house.lfs.mortgage", "housing", "Households buying with a mortgage", lambda y: f"house.lfs.mortgage.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
     ("house.lfs.social", "housing", "Households renting from a council or housing association", lambda y: f"house.lfs.social.{y}", "pct", "pp", lambda y: f"{y}, Labour Force Survey", None, 2008),
@@ -252,7 +252,7 @@ def _topic_rows(facts, num, topic, y):
             later = "<span class='missing'>no later year measured the same way</span>"
             change = ""
         else:
-            later = f"{num(fid(o), kind)} ({esc(period(o))})"
+            later = f"{num(fid(o), kind)}<br><span class='small'>{esc(period(o))}</span>"
             change = L.change_cell(facts, num, fid(y), fid(o), style, kind)
         per = esc(period(y)) + (f" ({esc(group(y))})" if group else "")
         rows.append([esc(label), f"{num(fid(y), kind)}<br><span class='small'>{per}</span>", later, change])
@@ -308,7 +308,7 @@ def early_year_page(facts, d, num, sources, y):
             body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} before 2008</a></p>')
             continue
         body.append(early_spark(facts, num, key, y))
-        body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable year", "Change"], rows))
+        body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable", "Change"], rows))
         body.append(f'<div class="limit"><p>{esc(LIMITS[key])}</p></div>')
         body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in SOURCES[key] if s in sources], up=up))

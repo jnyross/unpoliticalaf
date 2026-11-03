@@ -11,6 +11,8 @@ missing year; stretches are the (start, end) runs that can be read together
 (split at definition breaks the chart splits at, and stopping before forecasts).
 """
 
+import re
+
 # A line counts as "little changed" when the change from first to last is no
 # more than this share of its whole range, or under 1% of its level.
 FLAT = 0.15
@@ -216,8 +218,12 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
             if n == len(lg) - 1:
                 parts.append(f"then {verb} to {show(e0)} in {labels[e0]}")
             else:
-                high = "high" if w > 0 else "low"
-                parts.append(f"{verb} to a {high} of {show(e0)} in {labels[e0]}")
+                # "a high" only when no later point in the stretch passes it, so an earlier, lower peak is not read as the high
+                later = [vals[i] for i in measured(vals, e0 + 1, b)]
+                if not any((v - vals[e0]) * w > 0 for v in later):
+                    parts.append(f"{verb} to a {'high' if w > 0 else 'low'} of {show(e0)} in {labels[e0]}")
+                else:
+                    parts.append(f"{verb} to {show(e0)} in {labels[e0]}")
                 said.add(e0)
         text = f"From {show(f)} in {labels[f]}, " + ", ".join(parts) + "."
         if len(lg) == 2:  # keep the familiar wording for a single turn
@@ -258,32 +264,46 @@ def overview(labels, series, a, b, show, group_breaks=None):
         return ""
     group_breaks = group_breaks or {}
     crossed = {si: max(i for i, _ in br if f < i <= l) for si, br in group_breaks.items() if any(f < i <= l for i, _ in br)}
-    moved = [(vals[l] - vals[f], si) for si, (_, vals) in enumerate(series)
+    def shown(si, i):
+        # The figure as the reader sees it, so a change that rounds away is not called a rise or fall.
+        text = re.sub(r"<[^>]+>", "", show(si, i)).replace(",", "").replace("£", "")
+        m = re.search(r"-?\d+(?:\.\d+)?", text)
+        return float(m.group(0)) if m else series[si][1][i]
+    moved = [(round(shown(si, l) - shown(si, f), 6), si) for si, (_, vals) in enumerate(series)
              if si not in crossed and vals[f] is not None and vals[l] is not None]
     if len(moved) < 2:
         return ""
     n = len(moved)
     up = [m for m in moved if m[0] > 0]
     down = [m for m in moved if m[0] < 0]
+    same = [m for m in moved if m[0] == 0]
 
     def tally(xs, word):
         if len(xs) == n:
             return f"all {n} shown were {word}"
         return f"{len(xs)} of the {n} shown {'was' if len(xs) == 1 else 'were'} {word}"
-    parts = [tally(xs, w) for xs, w in ((up, "higher"), (down, "lower")) if xs]
-    if not parts:
+    parts = [tally(xs, w) for xs, w in ((up, "higher"), (down, "lower"), (same, "the same when rounded")) if xs]
+    if not up and not down:
         return f"Comparing {labels[f]} with {labels[l]}, every group was the same."
-    text = f"Comparing {labels[f]} with {labels[l]}, " + " and ".join(parts) + "."
+    text = f"Comparing {labels[f]} with {labels[l]}, " + (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0]) + "."
 
-    def said(m):
-        si = m[1]
-        return f"{series[si][0]} ({show(si, f)} to {show(si, l)})"
+    def said(ms, word):
+        # Ties on the figures shown are named together, not as one "largest".
+        best = max(ms) if word == "rise" else min(ms)
+        tied = [m for m in ms if m[0] == best[0]]
+        names = [f"{series[si][0]} ({show(si, f)} to {show(si, l)})" for _, si in tied]
+        if len(names) == 1:
+            return f"the largest {word} was {names[0]}"
+        return f"the largest {word}s, equal on the figures shown, were " + ", ".join(names[:-1]) + " and " + names[-1]
     if up and down:
-        text += f" The largest rise was {said(max(up))}; the largest fall was {said(min(down))}."
+        rise, fall = said(up, "rise"), said(down, "fall")
+        text += f" {rise[:1].upper() + rise[1:]}; {fall}."
     elif up:
-        text += f" The largest rise was {said(max(up))}."
+        rise = said(up, "rise")
+        text += f" {rise[:1].upper() + rise[1:]}."
     else:
-        text += f" The largest fall was {said(min(down))}."
+        fall = said(down, "fall")
+        text += f" {fall[:1].upper() + fall[1:]}."
     for si, i in sorted(crossed.items()):
         reason = next(t for k, t in group_breaks[si] if k == i)
         vals = series[si][1]

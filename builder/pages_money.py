@@ -80,19 +80,22 @@ def spending_page(facts, d, num, sources):
     body = [f"<h1>Where does public money go?</h1>"]
     body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
                          (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
-                         (num(per["debt_interest"], "per100"), "of every £100 went on debt interest, part of general public services", False)]))
+                         (num(per[second[0]], "per100"), "of every £100 spent on services went on health, the next largest", False)]))
+    di_tme = derive(facts, f"spend.per100tme.debt_interest.{y}", 100 * facts[f"spend.cash.debt_interest.{y}"].value / facts[f"spend.cash.tme.{y}"].value,
+                    "£ per £100", y, "pesa4", [f"spend.cash.debt_interest.{y}", f"spend.cash.tme.{y}"],
+                    f"100 × spend.cash.debt_interest.{y} ÷ spend.cash.tme.{y}")
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total, {num(f"spend.gdp.tme.{y}", "pct")} of GDP.</p>
 <p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}.</p>
 <p>See it {view_link("as a share of GDP over time", "tme-views", 2)} or <a href="international.html">beside other countries</a>.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
-    body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100. The split is of the {num(f'spend.cash.services.{y}', 'bn')} spent on services; the other {num(adj, 'bn')} is accounting adjustments."))
+    body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100 spent on services. The split is of the {num(f'spend.cash.services.{y}', 'bn')} spent on services; the other {num(adj, 'bn')} is accounting adjustments."))
     # The chart comes first on a phone; scale and definitions follow it.
     body.append(before_toc(scale_box(num, pp, pop, f"spending in {y}", hid=ph, hh=hh, extra=" These are averages across everyone, including children, not the amount spent on any one person or household.")
                            + "<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>"))
     body.append(FOLD)
-    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. Pensions in old age cost {num(sp["oldage"], "bn")} in {y}, inside social protection. This is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension alone.</p>''')
+    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100 spent on services, or {num(di_tme, "per100dp1")} of every £100 of total spending) is part of “general public services”; this counts interest paid out, and the “net” figure the OBR and IFS often quote, which subtracts interest received, is lower. Transport ({num(per["transport"], "per100")}) is part of “economic affairs”. Pensions in old age cost {num(sp["oldage"], "bn")} in {y}, inside social protection. This is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension alone.</p>''')
     body.append(explain("debt-interest-2022", sources))
     rows = []
     for k, name in order:
