@@ -8,7 +8,8 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
-    from .pages_life import year_spark, FIRST
+    from .pages_life import year_spark, FIRST, earn_stretches, earn_before_after, _how_short
+    ea, eb, ech = earn_stretches(facts)[0]
     from .data import EARLY_YEARS
     E = EARLY_YEARS[0]
     per = d["spending"]["per100"]
@@ -66,7 +67,7 @@ def home_page(facts, d, num, sources):
 <p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3>{earn_before_after(num, ea, eb, ech)}<p>a week before tax for the middle full-time employee, UK, both in April {L} prices: <strong>{_how_short(ech).lower()}</strong>. In cash, {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")}. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{L}", "dp1")}</span><p>pupils in the average state primary school class in England, January {L}.</p>{sparks["schools"]}</a>

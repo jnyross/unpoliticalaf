@@ -858,16 +858,39 @@ def _how(ch):
 EARN_BREAKS = (2011, 2021)
 
 
+def _how_short(ch):
+    return "About the same" if abs(ch) < 2 else (f"{abs(ch):.0f}% more" if ch > 0 else f"{abs(ch):.0f}% less")
+
+
+def earn_stretches(facts):
+    """Each stretch of years the pay survey measured the same way, newest first,
+    as (first, last, % change after inflation). Never crosses a break."""
+    years = list(range(FIRST_YEAR["earnings"], LAST + 1))
+    runs = same_basis_runs(facts, lambda y: f"earn.real.ft.{y}", years, earn_basis)
+    return [(a, b, 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)) for a, b in reversed(runs)]
+
+
+def earn_before_after(num, a, b, ch, cls="ba"):
+    """Before and after pay, after inflation, as two big numbers (audit 10 gap 6)."""
+    return (f'<div class="{cls}"><p><span class="ba-y">April {a}</span><span class="ba-v">{num(f"earn.real.ft.{a}", "pounds")}</span></p>'
+            f'<span class="ba-to" aria-hidden="true">→</span>'
+            f'<p><span class="ba-y">April {b}</span><span class="ba-v">{num(f"earn.real.ft.{b}", "pounds")}</span></p></div>')
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
-    runs = same_basis_runs(facts, lambda y: f"earn.real.ft.{y}", YEARS, earn_basis)
-    (a, b), (pa, pb) = runs[-1], runs[-2]
-    ch = 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)
-    answer = (f'<div class="answer"><p>In April {b}, the middle full-time employee earned {num(f"earn.ft.{b}", "pounds")} a week before tax. '
-              f'After allowing for rising prices, that was {_how(ch)} in April {a} ({num(f"earn.real.ft.{a}", "pounds")} in April {LAST} prices), the first year the survey coded jobs the way it does now.</p>'
-              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. From April {pa} to April {pb}, the stretch before, '
-              f'full-time pay after inflation changed by {change_cell(facts, num, f"earn.real.ft.{pa}", f"earn.real.ft.{pb}", "pct", "pounds")}.</p></div>')
+    stretches = earn_stretches(facts)
+    a, b, ch = stretches[0]
+    earlier = "".join(f'<li>{num(f"earn.real.ft.{x}", "pounds")} in April {x} to {num(f"earn.real.ft.{z}", "pounds")} in April {z}: '
+                      f'{change_cell(facts, num, f"earn.real.ft.{x}", f"earn.real.ft.{z}", "pct", "pounds")}</li>' for x, z, _ in stretches[1:3])
+    answer = (f'<div class="answer"><h2 class="ba-h">Pay after inflation: before and after</h2>'
+              f'<p class="small">Middle full-time employee, £ a week before tax, UK, both years in April {LAST} prices</p>'
+              + earn_before_after(num, a, b, ch) +
+              f'<p><strong>{_how_short(ch)}</strong> ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}) after allowing for rising prices. '
+              f'In cash, at the time, pay went from {num(f"earn.ft.{a}", "pounds")} to {num(f"earn.ft.{b}", "pounds")} a week.</p>'
+              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>'
+              f'<ul class="ba-list">{earlier}</ul></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
                              "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
