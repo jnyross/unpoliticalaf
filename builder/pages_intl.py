@@ -1,5 +1,5 @@
 """How UK tax and government spending compare with other OECD countries, as a share of GDP."""
-from .html import FOLD, page, details_table, bars, line_chart, switch, source_line, esc, fmt
+from .html import FOLD, page, table, details_table, bars, line_chart, switch, source_line, esc, fmt
 from .pages_money import derive
 from . import findings as F
 
@@ -36,6 +36,43 @@ def _beside(facts, a, b):
     return "close to" if abs(gap) < 1 else ("above" if gap > 0 else "below")
 
 
+G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
+WORDS = ["", "", "second ", "third ", "fourth "]
+
+
+def place_word(p, n):
+    """'highest', 'third highest', 'second lowest' ... for place p (1 = highest) out of n."""
+    if p * 2 <= n + 1:
+        return WORDS[p] + "highest"
+    return WORDS[n - p + 1] + "lowest"
+
+
+def _g7(facts, num, it, ty, sy):
+    """The UK's place among the G7, the group of seven large economies, on tax and on spending."""
+    def order(prefix, year):
+        have = [a for a in G7 if facts.get(f"{prefix}.{a}.{year}") and facts[f"{prefix}.{a}.{year}"].value is not None]
+        return sorted(have, key=lambda a: -facts[f"{prefix}.{a}.{year}"].value)
+    t, s = order("intl.tax", ty), order("intl.spend", sy)
+    tp, sp = t.index(UK) + 1, s.index(UK) + 1
+    missing = [it["names"][a] for a in G7 if a not in t or a not in s]
+    rows = []
+    for a in sorted(G7, key=lambda a: t.index(a) if a in t else 99):
+        name = esc(it["names"][a])
+        name = f"<strong>{name}</strong>" if a == UK else name
+        rows.append([name, num(f"intl.tax.{a}.{ty}", "pct"), f"{t.index(a) + 1}" if a in t else "",
+                     num(f"intl.spend.{a}.{sy}", "pct"), f"{s.index(a) + 1}" if a in s else ""])
+    def among(n):
+        return "" if n == 7 else f" (of the {n} with a figure for that year)"
+    out = [f'<h3 id="g7">The UK beside the other G7 countries</h3>',
+           f"<p>Among the G7, the seven large economies of Canada, France, Germany, Italy, Japan, the UK and the US, the UK had the {place_word(tp, len(t))} tax as a share of GDP in {ty}{among(len(t))}, and the {place_word(sp, len(s))} government spending as a share of GDP in {sy}{among(len(s))}.</p>",
+           table(f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest of the seven.",
+                 ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
+    if missing:
+        out.append(f"<p class='small'>Not ranked: {esc(', '.join(missing))}, because the OECD had not published a figure.</p>")
+    out.append("<p class='small'>For government debt and borrowing costs in the G7, see <a href='borrowing.html'>how UK debt and borrowing costs compare</a>.</p>")
+    return "\n".join(out)
+
+
 def international_page(facts, d, num, sources):
     it = d["intl"]
     ty, sy, ky, fy = it["tax_year"], it["spend_year"], it["kind_year"], it["fn_year"]
@@ -56,6 +93,7 @@ def international_page(facts, d, num, sources):
         ("Taxes", f"Of the {tax_n} countries with a figure for {ty}, {tax_higher} collected a larger share of GDP in tax than the UK.", tax_bars + _missing(it, it["tax_missing"], ty, "when this data was downloaded")),
         ("Spending", f"Of the {sp_n} countries with a figure for {sy}, {sp_higher} spent a larger share of GDP than the UK.", sp_bars + _missing(it, it["spend_missing"], sy, "when this data was downloaded")),
     ]))
+    body.append(_g7(facts, num, it, ty, sy))
     body.append("<p>The OECD is a group of 38 mostly high-income countries. GDP is the value of everything produced in a country in a year; dividing by it lets countries of very different sizes be compared. It does not show how much tax any one person pays.</p>")
     body.append(FOLD)
     body.append(source_line(sources, ["oecd-rs-tax", "oecd-gov-pf"], "Total tax revenue and general government expenditure, as % of GDP. The “OECD average” is the OECD's simple average of its member countries, each counted equally."))

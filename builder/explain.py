@@ -40,6 +40,28 @@ EXPLANATIONS = {
         title="Public sector finances, UK: March 2023", date="25 April 2023",
         quote=["The interest payable on debt increased to £106.6 billion, £34.0 billion (46.9%) more compared with FYE 2022, as the rises in the Retail Prices Index have increased the interest payable on index-linked gilts."],
         gloss="Index-linked gilts are government bonds whose payments rise with the Retail Prices Index, a measure of inflation. ONS figures for debt interest are measured differently from the HM Treasury figures above, so the amounts differ."),
+    # ------------------------------------------------------------ borrowing costs
+    "gilt-prices": dict(
+        question="What moves the price of UK government bonds?",
+        source="explain-dmo-about-gilts", publisher="UK Debt Management Office",
+        title="About gilts", date="page undated, downloaded 3 November 2026",
+        quote=["Gilt prices change because market pricing changes as views about interest rate prospects and other factors relevant to the capital markets change.",
+               "That assessment will be affected by many factors, including the market’s collective view of what will happen to interest rates over future years; of both the level of and uncertainty about inflation in the future; and of other issues, such as the levels of outright supply and the strength and nature of demand from investors."],
+        gloss="The Debt Management Office sells gilts for the government. When a gilt's price falls, its yield rises: a buyer pays less for the same fixed payments. “Outright supply” means how many gilts the government sells."),
+    "debt-interest-drivers": dict(
+        question="How do interest rates and inflation feed into the UK's interest bill?",
+        source="explain-obr-debt-interest", publisher="Office for Budget Responsibility",
+        title="Debt interest (central government, net of APF)", date="last updated 26 March 2025",
+        quote=["a 1 percentage point increase in gilt rates in 2024-25 (which persists in each subsequent year of the forecast) increases debt interest payments by rising amounts over the forecast period, reaching £12.0 billion by the end of the forecast. This increases steadily over time as the rate increase only affects new gilt issuance;",
+               "a 1 percentage point increase in RPI inflation in 2024-25 increases debt interest payments by £5.9 billion in the same year and by rising amounts over the forecast period;"],
+        gloss="The OBR is the UK's official forecaster of the public finances. The first passage means a rise in yields raises the interest bill slowly, as old gilts are repaid and new ones sold. The second shows how inflation raises it at once, through index-linked gilts, whose payments rise with the Retail Prices Index (RPI)."),
+    "borrowing-costs-2025": dict(
+        question="Have borrowing costs risen only in the UK?",
+        source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
+        title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
+        quote=["There are signs that the scale of public borrowing in the UK and other large, advanced economies is putting global sovereign debt markets under pressure.",
+               "Government borrowing costs have risen across the world and long-term gilt yields are now higher in the UK than at any point since the start of the century."],
+        gloss="“Sovereign debt” means money borrowed by governments. The OECD figures above show yields in the other G7 countries too."),
     # ------------------------------------------------------------ taxes
     "borrowing-records": dict(
         question="How did borrowing in 2020-21 compare with 2009-10, after the 2008 recession?",
