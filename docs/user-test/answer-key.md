@@ -87,7 +87,7 @@ Year by year, Earnings: £767 a week in April 2025, about the same as April 2021
 
 Where the site says it:
 
-- `life/earnings.html`: "that was about the same as in April 2021"
+- `life/earnings.html`: "pay in April 2025 was about the same as in April 2021"
 
 ## 9. A: 27.1 pupils, England only
 

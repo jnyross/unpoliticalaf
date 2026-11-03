@@ -1,7 +1,7 @@
 """Pages answering the four public-money questions."""
 from .data import Fact
 from .explain import box as explain
-from .html import FOLD, before_toc, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, source_line, fmt, esc
+from .html import FOLD, before_toc, page, bars, change_bars, keyfigs, table, details_table, line_chart, small_multiples, switch, view_link, source_line, fmt, esc
 from . import findings as F
 
 # What each way of showing money means, in one sentence, shown with every cash / real / GDP switch.
@@ -14,10 +14,10 @@ VIEW_LABELS = {"cash": "Cash", "real": "After inflation", "gdp": "Share of GDP"}
 VIEW_LEGEND = "Show amounts as"
 
 
-def views(make, order=("cash", "real", "gdp"), default="real", notes=None):
+def views(make, order=("cash", "real", "gdp"), default="real", notes=None, anchor=None):
     """A cash / real terms / % of GDP switch. make(view) returns the chart for that view."""
     notes = notes or {}
-    return switch(VIEW_LEGEND, [(VIEW_LABELS[v], notes.get(v, VIEW_NOTES[v]), make(v)) for v in order], default=list(order).index(default))
+    return switch(VIEW_LEGEND, [(VIEW_LABELS[v], notes.get(v, VIEW_NOTES[v]), make(v)) for v in order], default=list(order).index(default), anchor=anchor)
 
 
 def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
@@ -84,9 +84,10 @@ def spending_page(facts, d, num, sources):
     di_tme = derive(facts, f"spend.per100tme.debt_interest.{y}", 100 * facts[f"spend.cash.debt_interest.{y}"].value / facts[f"spend.cash.tme.{y}"].value,
                     "£ per £100", y, "pesa4", [f"spend.cash.debt_interest.{y}", f"spend.cash.tme.{y}"],
                     f"100 × spend.cash.debt_interest.{y} ÷ spend.cash.tme.{y}")
-    body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
+    body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total, {num(f"spend.gdp.tme.{y}", "pct")} of GDP.</p>
 <p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
-<strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")} of every £100 spent on services ({num(di_tme, "per100dp1")} of every £100 of total spending), as part of general public services. This counts interest paid out; the “net” figure the OBR and IFS often quote, which subtracts interest received, is lower.</p></div>''')
+<strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")} of every £100 spent on services ({num(di_tme, "per100dp1")} of every £100 of total spending), as part of general public services. This counts interest paid out; the “net” figure the OBR and IFS often quote, which subtracts interest received, is lower.</p>
+<p>See it {view_link("as a share of GDP over time", "tme-views", 2)} or <a href="international.html">beside other countries</a>.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
     body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100 spent on services. The split is of the {num(f'spend.cash.services.{y}', 'bn')} spent on services; the other {num(adj, 'bn')} is accounting adjustments."))
@@ -134,7 +135,7 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
                                            "gdp": "As a share of GDP, total public spending"}[v]),
                           desc=f"From {fmt(vals[0], tme_kind[v])} in {first} to {fmt(vals[-1], tme_kind[v])} in {y}.",
                           kind=tme_kind[v], num=num, ids=[[f"spend.{v}.tme.{yy}" for yy in years]], ymin=0 if v != "gdp" else None)
-    body.append(views(tme_chart))
+    body.append(views(tme_chart, anchor="tme-views"))
     body.append(FOLD)
     body.append(explain("covid-spending", sources))
     body.append(explain("energy-2022", sources))
