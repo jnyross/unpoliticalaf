@@ -104,6 +104,11 @@ def latest_comparable(facts, m, y):
     return ys[-1] if ys else None
 
 
+def school_years(facts, first):
+    """Class-size years from first, plus a January census newer than the explorer's range."""
+    return [y for y in ALL if y >= first] + [y for y in (LAST + 1,) if _has(facts, f"school.primary.{y}") and _has(facts, f"school.secondary.{y}")]
+
+
 def chart(facts, num, topic):
     """The longer chart for one topic, from its first year to its last."""
     first = FIRST_YEAR[topic]
@@ -138,7 +143,7 @@ def chart(facts, num, topic):
                      "Visits abroad for any purpose, per 100 UK residents, January to December, International Passenger Survey", "int", ymin=0,
                      events=[(years.index(2020), "Covid")], finding=F.trend("Visits abroad per 100 residents", which="all"))
     if topic == "schools":
-        years = [y for y in ALL if y >= first]
+        years = school_years(facts, first)
         items = [("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b")]
         return _line(facts, num, "Average class size in England since 2006", years, items,
                      "Pupils per class, January school census, state-funded schools in England", "dp1", ymin=15, finding=L.CLASS_FINDING)
@@ -182,7 +187,7 @@ def table_for(facts, num, topic):
         return details_table("Show visits abroad for every year since 1980", "Visits abroad by UK residents, all purposes",
                              ["Year", "Visits abroad", "Per 100 residents"], rows)
     if topic == "schools":
-        rows = [[str(y), f"{y - 1}/{str(y)[2:]}", cell(f"school.primary.{y}", "dp1"), cell(f"school.secondary.{y}", "dp1")] for y in ALL if y >= first]
+        rows = [[str(y), f"{y - 1}/{str(y)[2:]}", cell(f"school.primary.{y}", "dp1"), cell(f"school.secondary.{y}", "dp1")] for y in school_years(facts, first)]
         return details_table("Show class sizes for every year since 2006", "Average class size, England, January census",
                              ["January census", "School year", "Primary", "Secondary"], rows)
     return ""
@@ -291,7 +296,8 @@ def early_year_page(facts, d, num, sources, y):
     names = _join([dict((k, t) for k, t, _ in L.TOPICS)[t].lower() for t in have]) if have else ""
     body.append(f'<div class="answer"><p>Fewer official figures reach back to {y}. '
                 + (f"This page shows those that do, for {esc(names)}, each beside the latest year measured the same way. " if have else "")
-                + f'Work, earnings, housing and class sizes have figures from 2008, and holidays from 2009: see <a href="2008.html">2008</a> or <a href="2009.html">2009</a>. Or <a href="compare/{y}-{LAST}.html">compare {y} with {LAST}</a>.</p></div>')
+                + f'Work, earnings, housing and class sizes have figures from 2008, and holidays from 2009: see <a href="2008.html">2008</a> or <a href="2009.html">2009</a>.</p></div>')
+    body.append(L.compare_with(y))
     for key, title, _scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         rows = _topic_rows(facts, num, key, y)

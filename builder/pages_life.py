@@ -236,6 +236,18 @@ def compare_form(up, a=None, b=None):
 <button type="submit">Compare</button></form>'''
 
 
+def compare_with(y, up=""):
+    """A short form to compare year y with any other year, plus a few direct links that work without JavaScript."""
+    others = [o for o in EARLY_YEARS + YEARS if o != y]
+    sel = LAST if y != LAST else LAST - 10
+    opts = "".join(f'<option value="{o}"{" selected" if o == sel else ""}>{o}</option>' for o in others)
+    quick = [o for o in dict.fromkeys((y - 1, y - 10, LAST)) if o in others]
+    links = " · ".join(f'<a href="{up}compare/{min(o, y)}-{max(o, y)}.html">{min(o, y)} and {max(o, y)}</a>' for o in quick)
+    return (f'<form class="pick" action="{up}compare/index.html#all" method="get" data-compare id="compare-top">'
+            f'<input type="hidden" name="from" value="{y}"><label>Compare {y} with <select name="to">{opts}</select></label>'
+            f'<button type="submit">Compare</button></form><p class="small">Or go straight to {links}.</p>')
+
+
 COMPARE_JS = """<script>
 document.querySelectorAll('form[data-compare]').forEach(function(f){f.addEventListener('submit',function(e){
 var a=+f.elements.from.value,b=+f.elements.to.value;e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'');
@@ -369,34 +381,36 @@ def headline(facts, num, topic, y, gb=True):
     return ""
 
 
-def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
+def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, years=None):
     """Where year y sits in the topic's key measure, as a small dot chart for every year.
 
     mkey picks another measure from MEAS; measure gives (label, fact-id function,
-    kind, group function) for one that is not in MEAS.
+    kind, group function) for one that is not in MEAS. years replaces the explorer's
+    years (for a figure newer than its range).
     """
+    years = years or YEARS
     if measure:
         label, fid, kind, group = measure
     else:
         mkey = mkey or KEY_MEASURES[topic][0]
         _, _, label, fid, kind, _, _, group = next(m for m in MEAS if m[0] == mkey)
-    pts = [(yr, facts[fid(yr)].value if fid(yr) in facts else None) for yr in YEARS]
+    pts = [(yr, facts[fid(yr)].value if fid(yr) in facts else None) for yr in years]
     have = [(yr, v) for yr, v in pts if v is not None]
     if len(have) < 2:
         return ""
     if y is None:
         y = have[-1][0]  # the latest year with a figure
-    breaks = bool(group) and len({group(yr) for yr in YEARS}) > 1
+    breaks = bool(group) and len({group(yr) for yr in years}) > 1
     yl = sy if topic == "housing" else str  # housing figures are for survey years, April to March
-    aria = f"Dot chart of {label.lower()} for each year from {yl(FIRST)} to {yl(LAST)}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(FIRST), yl(LAST)), kind=kind, point_label=yl)
+    aria = f"Dot chart of {label.lower()} for each year from {yl(years[0])} to {yl(years[-1])}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
+    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(years[0]), yl(years[-1])), kind=kind, point_label=yl)
     if not caption:
         return svg
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
     this = (f"The dark dot is {yl(y)}: {num(fid(y), kind)}{F.place(have, y, group if breaks else None)}." if fid(y) in facts and facts[fid(y)].value is not None
             else f"There is no figure for {yl(y)}.")
-    cap = (f"<strong>{esc(label)}</strong>, {yl(FIRST)} to {yl(LAST)}. {this} "
+    cap = (f"<strong>{esc(label)}</strong>, {yl(years[0])} to {yl(years[-1])}. {this} "
            f"The scale runs from {num(fid(lo[0]), kind)} ({yl(lo[0])}) to {num(fid(hi[0]), kind)} ({yl(hi[0])}) and does not start at zero.")
     if len(have) < len(pts):
         cap += " Years with no figure have no dot."
@@ -412,7 +426,8 @@ def year_page(facts, d, num, sources, y):
     next_l = f'<a href="{y + 1}.html">{y + 1} →</a>' if y < LAST else "<span></span>"
     body.append(f'<nav class="pager" aria-label="Previous and next year">{prev_l}{next_l}</nav>')
     body.append(f'<nav aria-label="Choose a year">{year_links(y, "", strip=True)}</nav>')
-    body.append(f'<p>Each topic is measured over its own period, shown beside every figure. To see how {y} differs from another year, <a href="#compare">compare two years</a>.</p>')
+    body.append('<p>Each topic is measured over its own period, shown beside every figure.</p>')
+    body.append(compare_with(y))
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
@@ -437,7 +452,7 @@ def year_page(facts, d, num, sources, y):
             links.append(f'<li><a href="compare/{a}-{b}.html">{o}</a></li>')
     body.append(f'<ul class="yearnav">{"".join(links)}</ul>')
     body.append(CAUSE)
-    return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body), f"Work, earnings, housing, holidays and class sizes in the UK in {y}, from official statistics.", toc_after_first=True)
+    return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body), f"Work, earnings, housing, holidays and class sizes in the UK in {y}, from official statistics.", scripts=COMPARE_JS, toc_after_first=True)
 
 
 def occupation_table(facts, num, d, y):
@@ -503,10 +518,48 @@ BREAK_REASONS = {
 }
 
 
+def _and(items):
+    items = [str(x) for x in items]
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def short_break(group, a, b):
+    """One short sentence on why years a and b are not compared, naming the change between them."""
+    if group is earn_basis:
+        method = [y for y in (2004, 2006) if a < y <= b]
+        coding = [y for y in (2011, 2021) if a < y <= b]
+        parts = ([f"its method in {_and(method)}"] if method else []) + ([f"how it codes jobs in {_and(coding)}"] if coding else [])
+        return f"The pay survey changed {' and '.join(parts)}, so pay in {a} and {b} was measured differently."
+    if group is occ_scheme:
+        return f"Job types were regrouped in 2021 (SOC2010 to SOC2020), so {a} and {b} use different groups."
+    if group is rooms_basis:
+        return f"Rooms were counted differently from 2011-12, so {a} and {b} do not count the same rooms."
+    if group is hol_basis:
+        if 2024 in (a, b):
+            return "2024 mixes the survey’s old and new methods, so it is not compared with any other year."
+        return f"The survey changed its method in 2024, so {a} and {b} were measured differently."
+    if group is gb_survey:
+        return f"The Great Britain Tourism Survey changed its method after 2019, so {a} and {b} were measured differently."
+    if group is scot_survey:
+        return "Scotland’s statisticians advise against comparing 2020 and 2021 with other years, because the pandemic disrupted the survey."
+    return "The definition changed between these years."
+
+
+def near_sentence(facts, num, m, near, topic, lead="Nearest years measured the same way", show_change=True):
+    """A link to the nearest comparable pair of years, with that pair's change for measure m."""
+    if not near:
+        return ""
+    x, z = near
+    ch = change_cell(facts, num, m[3](x), m[3](z), m[5], m[4]) if m[5] and show_change else ""
+    return f' {lead}: <a href="{x}-{z}.html#{topic}">{x} and {z}</a>' + (f" (change: {ch})." if ch else ".")
+
+
 def missing_reason(mkey, y):
     """Why a measure has no figure for year y, in plain words."""
     if mkey.startswith("work.occ.") and y < 2011:
         return "job-type figures in these tables start in 2011"
+    if mkey.startswith("school.wales.") and y < 2023:
+        return "the Welsh class-size tables used here start in January 2023"
     if mkey == "nat.house.private.ni":
         return "the Northern Ireland table used here starts in 2012-13" if y < 2012 else f"Northern Ireland’s figures for {sy(y)} are not yet published"
     if mkey.startswith("house.crowd.") and y > 2022:
@@ -598,14 +651,13 @@ def key_sentence(facts, num, topic, a, b):
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if abs(v) < 0.05 else 'to'} {num(fb, m[4])} ({esc(m[6](b))}).{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>"
                 + _pair_bars(facts, num, m, a, b) + U.check_sentence(facts, num, fa, fb, m[5], (str(a), str(b)))
                 + long_run(facts, num, m, b, f"../{topic}.html"))
-    near = _nearest_pair(facts, m, a, b)
-    link = f' The nearest pair of years with comparable figures is <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
+    link = near_sentence(facts, num, m, _nearest_pair(facts, m, a, b), topic)
     if st == "break":
-        return (f"<p>{esc(subject)}: {num(fa, m[4])} in {esc(m[6](a))} and {num(fb, m[4])} in {esc(m[6](b))}, "
-                f"but these are <strong>not compared</strong>. {esc(BREAK_REASONS[m[7]])}{link}</p>")
+        return (f"<p>{esc(subject.rstrip(','))}: {num(fa, m[4])} in {esc(m[6](a))} and {num(fb, m[4])} in {esc(m[6](b))}, "
+                f"<strong>not compared</strong>. {esc(short_break(m[7], a, b))}{link}</p>")
     missing = [y for y in (a, b) if _val(facts, m[3](y)) is None]
     y = missing[0]
-    return f"<p>{esc(subject)}: <strong>not compared</strong>, because {esc(missing_reason(mkey, y))}.{link}</p>"
+    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>, because {esc(missing_reason(mkey, y))}.{link}</p>"
 
 
 def _same_way(m):
@@ -706,11 +758,12 @@ def compare_page(facts, d, num, sources, a, b):
         if breaks:
             reasons = {}
             for m in breaks:
-                reasons.setdefault(BREAK_REASONS[m[7]], []).append(m)
+                reasons.setdefault(short_break(m[7], a, b), []).append(m)
             items = []
             for reason, group in reasons.items():
+                link = near_sentence(facts, num, group[0], _nearest_pair(facts, group[0], a, b), key, "Nearest comparable years", show_change=False)
                 vals = "".join(f"<li>{esc(m[2])}: {num(m[3](a), m[4])} in {a}, {num(m[3](b), m[4])} in {b}</li>" for m in group)
-                items.append(f"<li><p>{esc(reason)}</p><p class=\"small\">Shown side by side, not compared:</p><ul class=\"small cmp-vals\">{vals}</ul></li>")
+                items.append(f"<li><p>{esc(reason)}{link}</p><p class=\"small\">Shown side by side, not compared:</p><ul class=\"small cmp-vals\">{vals}</ul></li>")
             body.append(f'<h3>Not compared: the definition changed</h3><ul class="cmp-notes">{"".join(items)}</ul>')
         if missing:
             reasons = {}
@@ -721,8 +774,7 @@ def compare_page(facts, d, num, sources, a, b):
                         break
             items = []
             for (y, reason), group in reasons.items():
-                near = _nearest_pair(facts, group[0], a, b)
-                link = f' Nearest comparable pair: <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
+                link = near_sentence(facts, num, group[0], _nearest_pair(facts, group[0], a, b), key, "Nearest comparable years", show_change=False)
                 names = _join_labels([m[2] for m in group])
                 items.append(f"<li><p>No figure for {y}: {esc(reason)}.{link}</p><p class=\"small\">Not shown: {names}.</p></li>")
             body.append(f'<h3>Not compared: no figure for one of the years</h3><ul class="cmp-notes">{"".join(items)}</ul>')

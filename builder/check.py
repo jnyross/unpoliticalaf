@@ -500,6 +500,8 @@ def check_findings():
 
 # A rise or fall of at least this share of a line's range must be named in a trend heading.
 BIG_MOVE = 0.3
+# A smaller turn back at the very end of a line still has to be named (see turn_back_at_end).
+TAIL_MOVE = 0.15
 _NUMBER = re.compile(r"[-+]?\d[\d,]*(?:\.\d+)?")
 
 
@@ -546,6 +548,35 @@ def big_turns(vals):
     return out
 
 
+def turn_back_at_end(vals):
+    """A line that ends at least TAIL_MOVE of its range back from a peak or low after
+    its last big turn, however small that move is next to the line's big moves.
+    Returns (indices of the latest such peak or low, 'peak' or 'low') or None. A title that ends
+    "then rose" about a line whose latest figures fell would mislead, so the heading
+    must name that peak or low and the move after it."""
+    pts = [i for i, v in enumerate(vals) if v is not None]
+    if len(pts) < 3:
+        return None
+    span = max(vals[i] for i in pts) - min(vals[i] for i in pts)
+    if span <= 0 or span < 0.02 * max(abs(vals[i]) for i in pts):
+        return None
+    turns = big_turns(vals)
+    start = turns[-1][0][-1] if turns else pts[0]
+    tail = [i for i in pts if i >= start]
+    last = tail[-1]
+    way = 1 if vals[last] >= vals[start] else -1
+    # the latest point the line ends that far back from, with no later point past it
+    back = [k for k in tail[1:-1] if (vals[k] - vals[last]) * way >= TAIL_MOVE * span - 1e-9
+            and all((vals[k] - vals[j]) * way >= 0 for j in tail if j > k)]
+    if not back:
+        return None
+    n = tail.index(back[-1])
+    while n > 1 and (vals[tail[n - 1]] - vals[tail[n]]) * way >= 0:
+        n -= 1  # back up to the top (or bottom) of that peak (or low)
+    run = [i for i in tail[n:] if vals[i] == vals[tail[n]] and all(vals[j] == vals[i] for j in tail[n:] if j <= i)]
+    return run, "peak" if way > 0 else "low"
+
+
 def check_trend_titles():
     """A heading that says how a line moved names every big rise and fall: each peak or
     low that the line moves at least BIG_MOVE of its range into and back out of."""
@@ -574,6 +605,14 @@ def check_trend_titles():
                     named = any(re.search(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title) for i in run)
                     if not named or "rose" not in title or "fell" not in title:
                         fail(f"{rel}: heading “{title}” leaves out the {kind} in {labels[run[-1]]}, a move of at least {BIG_MOVE:.0%} of the line's range")
+                end = turn_back_at_end(vals)
+                if end:
+                    run, kind = end
+                    verb = "fell" if kind == "peak" else "rose"
+                    at = [m.end() for i in run for m in re.finditer(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title)]
+                    if not at or not any(re.search(r"\b" + verb + r"\b", title[k:].split(";")[0].split(", while ")[0]) for k in at):
+                        fail(f"{rel}: heading “{title}” does not say the line {verb} after its {kind} in {labels[run[0]]}: "
+                             f"its latest figure is at least {TAIL_MOVE:.0%} of the line's range back from it")
     return n
 
 
