@@ -32,7 +32,7 @@ CORRECTIONS = [
                "Scotland's private renting was not marked as including homes that come with a job or business.",
         "now": "The chart ends at 2024-25 and class sizes are compared with January 2006. The 2010 figure is no longer called the low. Retired households are defined as those where more than half the income comes from retired people. "
                "The taxes page names the Energy Profits Levy and Petroleum Revenue Tax and gives debt as a share of GDP on the OBR's measure. Scotland's figure says it includes homes tied to a job.",
-        "pr": 0,
+        "pr": 154,
     },
     {
         "date": "3 November 2026",
