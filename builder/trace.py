@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home")],
+        "was": "The spending page said “State pensions alone cost £155bn”. That figure is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension. The home page also said every everyday-life topic had figures from 2008, but holidays start in 2009.",
+        "now": "The £155bn is described as HM Treasury’s old age pensions line, which covers more than the State Pension alone. The home page, the life hub and the early-year pages say holidays start in 2009.",
+        "pr": 131,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980"), ("life/index.html", "Everyday life")],
         "was": "Holiday visits abroad in 2020 were given as 4.4 million, about 7 for every 100 residents, and drawn on the charts as the year’s low. ONS’s 2020 figures by purpose of visit come only from the passenger survey, which stopped on 16 March 2020, so they cover only January to mid-March, not the whole year.",
         "now": "2020 has no holiday figure on the charts, in comparisons or per 100 residents. The holidays page says the survey stopped on 16 March and gives the 4.4 million as January to mid-March only. Line charts whose scale starts above zero now say so under the chart, and a build check fails if one does not.",
