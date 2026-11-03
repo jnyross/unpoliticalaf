@@ -142,6 +142,8 @@ svg text.lbl.b{fill:#5d666e}
 .yearnav a,.yearnav span{display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:44px;padding:0 8px;border:1px solid var(--line);border-radius:8px;text-decoration:none;font-variant-numeric:tabular-nums}
 .yearnav a:hover{border-color:var(--ink2)}
 .yearnav span[aria-current]{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:650}
+.yeargrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-width:30rem;touch-action:manipulation}.yeargrid a,.yeargrid span{display:flex;min-width:0;width:100%;box-sizing:border-box;padding:0 2px}.yeargrid .c2{grid-column-start:2}.yeargrid .c3{grid-column-start:3}.yeargrid .c4{grid-column-start:4}.yeargrid .c5{grid-column-start:5}
+.pick-status{flex-basis:100%;margin:0;font-size:.9rem;font-weight:600;color:var(--ink2)}.pick-status:empty{display:none}
 .yearstrip{flex-wrap:nowrap;overflow-x:auto;margin:8px -16px 12px;padding:2px 16px 6px;scrollbar-width:thin}
 .yearstrip li{flex:none}
 .pager{display:flex;justify-content:space-between;gap:12px;margin:12px 0}
@@ -154,7 +156,7 @@ form.jumpyear{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 
 details.az{margin:0 0 10px}details.az>summary{font-weight:600}ul.az{columns:2;column-gap:16px;margin:8px 0 0;padding:0;list-style:none}ul.az li{break-inside:avoid;margin:0}nav.jump ul.az{display:block}nav.jump ul.az a{display:inline-flex;align-items:center;min-height:32px;padding:0;border:0;border-radius:0;background:none;text-decoration:underline;font-size:1rem}
 .totop{margin:4px 0 16px;font-size:.9rem}
 form.pick{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-end;background:var(--soft);border-radius:var(--r);padding:14px;margin:12px 0}
-form.pick label{display:flex;flex-direction:column;font-size:.9rem;font-weight:600;gap:4px}
+form.pick label{display:flex;flex-direction:column;font-size:.9rem;font-weight:600;gap:4px}form.pick{padding:12px 14px}
 select,button{font:inherit;min-height:44px;padding:6px 10px;border:1px solid #767676;border-radius:8px;background:#fff;color:var(--ink)}
 button{background:var(--ink);color:#fff;border-color:var(--ink);padding:6px 18px;font-weight:600;cursor:pointer}
 .missing{color:var(--muted);font-style:italic}
