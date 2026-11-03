@@ -353,6 +353,19 @@ class ComparisonPage(unittest.TestCase):
         self.assertIn('data-from="house.private.2010" data-to="house.private.2019"', out)
         self.assertNotIn('data-to="house.private.2025"', out)
 
+    def test_not_compared_is_explained_in_plain_words(self):
+        # Audit 12 gap 3: say that no change is worked out, and why that matters.
+        out = pages_life.key_sentence(self.facts, self.num, "housing", 2010, 2025)
+        self.assertIn("there is no figure for 2025", out)
+        self.assertIn("No change can be worked out", out)
+        pages_life.KEY_MEASURES["work"], saved = ("work.occ.prof", "Professional share"), pages_life.KEY_MEASURES["work"]
+        try:
+            out = pages_life.key_sentence(self.facts, self.num, "work", 2019, 2025)
+        finally:
+            pages_life.KEY_MEASURES["work"] = saved
+        self.assertIn("deliberately works out no change", out)
+        self.assertIn("new way of measuring", out)
+
     def test_break_reason_is_one_sentence_naming_the_change(self):
         self.assertEqual(pages_life.short_break(pages_life.earn_basis, 2015, 2025),
                          "The pay survey changed how it codes jobs in 2021, so pay in 2015 and 2025 was measured differently.")
