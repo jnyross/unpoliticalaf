@@ -1,0 +1,9 @@
+{"reader": "SR", "site_commit": "b08069b", "budget": 40, "actions_used": 15,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+  "Year by year page (life/index.html): the 'Go to a year' and compare 'First year'/'Second year' selects announce the same way, and after choosing a value the page re-announces in full with no sign the choice was accepted, so I could not tell it had worked until I pressed the button; the control numbers also shift between pages.",
+  "Year by year page (life/index.html): the compare form defaults to 2011 and 2019 and sits after a list of 18 year links and a collapsed 'Earlier years' group, so finding it by ear takes many controls.",
+  "Home page (index.html): the small charts on the topic cards (Work, Housing and so on) have no spoken description of their own, only the headline figure, so the 'chart of every year' is not available from the card.",
+  "Tax and income page (household-tax.html): the 'Taxes as a share of gross income, by household income' chart is read as a list of values with no heading for each fifth being obvious, so the lowest-fifth answer came from the sentence below it rather than the chart.",
+  "Question 12 (employment rate for women): no figure-specific statement was found for the women's rate; I answered from the general 'Change is not cause' note on the Year by year page."
+ ]}

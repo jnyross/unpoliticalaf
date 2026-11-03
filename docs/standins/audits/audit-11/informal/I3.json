@@ -1,0 +1,68 @@
+{
+ "reader": "I3",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 22,
+ "url": "spending.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 3360
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Housing 65% of households in England owned their home, 2024-25. 2008-09 2025-26",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [3] link: Spending",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/I3",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "GDP"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "as a share of GDP over time"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "beside other countries"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "interest on government debt"
+  }
+ ]
+}

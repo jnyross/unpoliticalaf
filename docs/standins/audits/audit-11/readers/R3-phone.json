@@ -1,0 +1,101 @@
+{
+ "reader": "R3-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 34,
+ "url": "life/2019.html",
+ "ops": [],
+ "scroll": 3360,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#top",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: ↑ Back to top",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: ↑ Back to top",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: ↑ Back to top",
+  "tap [7] link: Year by year",
+  "tap [12] link: Earnings",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [3] link: ↑ Back to top",
+  "choose [17] Go to a year = 2019",
+  "tap [18] button: Go",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/R3",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(5) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Class sizes sources"
+  },
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Back to top"
+  }
+ ]
+}

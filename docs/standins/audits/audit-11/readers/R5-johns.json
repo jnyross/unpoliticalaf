@@ -1,0 +1,61 @@
+{
+ "reader": "R5-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 15,
+ "url": "borrowing.html",
+ "ops": [],
+ "scroll": 3920,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "international.html",
+   "ops": [],
+   "scroll": 1680
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: How do UK taxes and spending compare with other countries?",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: how UK debt and borrowing costs compare",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/R5",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(6) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(1)",
+   "kind": "input",
+   "label": "% of GDP"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(6) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)",
+   "kind": "input",
+   "label": "% of revenue"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(6) > div:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Back to top"
+  }
+ ]
+}

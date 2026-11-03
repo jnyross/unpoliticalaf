@@ -1,0 +1,73 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 17,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "life/work.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Work 75.1% of people aged 16 to 64 were in work, April to June 2026, UK. 2008 20",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Housing",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/I1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Income Tax"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "VAT"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Taxes as a share of gross income, by household income table and sources"
+  },
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Back to top"
+  }
+ ]
+}

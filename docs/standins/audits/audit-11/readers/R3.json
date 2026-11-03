@@ -1,0 +1,18 @@
+{"reader": "R3", "profile": "P9", "site_commit": "b08069b", "budget": 40,
+ "actions_used": 34, "new_actions_used": 10,
+ "without_site": {"1":"B","2":"C","3":"D","4":"E","5":"E","6":"E","7":"E","8":"E","9":"E","10":"E","11":"E","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "new_without_site": {"1":"B","2":"E","3":"E","4":"A","5":"B","6":"E","7":"A","8":"C","9":"E","10":"B","11":"E","12":"E","13":"C","14":"E","15":"B","16":"E","17":"C","18":"A","19":"C","20":"A","21":"B","22":"A","23":"E","24":"C"},
+ "new_with_site": {"1":"B","2":"A","3":"C","4":"A","5":"B","6":"C","7":"A","8":"C","9":"C","10":"B","11":"A","12":"B","13":"C","14":"C","15":"B","16":"B","17":"C","18":"E","19":"C","20":"A","21":"B","22":"E","23":"E","24":"C"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"C","J1.3":"C","J1.4":"C","J1.5":"A","J1.6":"B","J1.7":"C"},
+ "confusions": [
+  "The Glossary is twenty screens long and I would never scroll through that to find one word.",
+  "Every page is a lot of words before the big numbers, so I kept scrolling past the bits I needed.",
+  "The Year by year page only shows one year at a time, so comparing 2015 with 2025 took extra goes and I was not sure how to do it.",
+  "The class size and holiday charts are tiny with no numbers on them, so I had to hunt in the small grey writing for the figure.",
+  "Top 1% paying 27.2% and the household 33.6% sit near each other and I nearly mixed them up.",
+  "I could not find anything on manufacturing jobs, the maximum infant class size or most visited country, so I gave up on those.",
+  "Several tap links near the top of a page are tiny words in a sentence, and the Back to top button covered some of the text.",
+  "The G7 comparison page was a table with ranks I had to read across, and one row was hidden behind the Back to top button."
+ ]}

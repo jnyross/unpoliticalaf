@@ -1,0 +1,19 @@
+{"reader": "R2", "profile": "P5", "site_commit": "b08069b", "budget": 40,
+ "actions_used": 40, "new_actions_used": 28,
+ "without_site": {"1":"B","2":"E","3":"D","4":"E","5":"E","6":"B","7":"E","8":"E","9":"E","10":"E","11":"B","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"E"},
+ "new_without_site": {"1":"B","2":"A","3":"E","4":"A","5":"B","6":"E","7":"A","8":"C","9":"E","10":"E","11":"A","12":"E","13":"C","14":"E","15":"B","16":"E","17":"C","18":"A","19":"E","20":"A","21":"E","22":"A","23":"E","24":"E"},
+ "new_with_site": {"1":"B","2":"A","3":"C","4":"A","5":"B","6":"C","7":"A","8":"C","9":"C","10":"B","11":"A","12":"B","13":"C","14":"C","15":"B","16":"B","17":"C","18":"A","19":"C","20":"A","21":"B","22":"A","23":"E","24":"C"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"C","J1.3":"E","J1.4":"C","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "confusions": [
+  "I tapped a dotted word by mistake and landed on the glossary, and lost three taps getting back.",
+  "The top menu is only at the top, so every time I wanted another page I had to scroll all the way up and waste taps.",
+  "Pages are very long and I did not know which part had the number I wanted.",
+  "Two different spending numbers, 1,360bn and 1,366bn, made me unsure which one is right.",
+  "The class size page gave 26.4 and 27.1 but I could not find the 2019 figure quickly or tell if it was England only.",
+  "I could not find the holiday comparison between 2015 and 2025; the dotted line and gaps in the chart were hard to understand.",
+  "I could not find the women's employment reason on the first visit and had no taps left.",
+  "I could not find anything about debt, borrowing cost or interest compared with other G7 countries.",
+  "The long list of OECD countries went on and on when I only wanted G7."
+ ]}

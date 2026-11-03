@@ -1,0 +1,138 @@
+{
+ "reader": "R4-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "life/compare/2015-2025.html",
+ "ops": [],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "household-tax.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#top",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019"
+    }
+   ],
+   "scroll": 0
+  },
+  {
+   "url": "life/2019.html",
+   "ops": [],
+   "scroll": 3766
+  },
+  {
+   "url": "life/compare/2013-2019.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/compare/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015"
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll up",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll up",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: ↑ Back to top",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: ↑ Back to top",
+  "choose [17] Go to a year = 2019",
+  "tap [18] button: Go",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [8] link: 2013",
+  "tap [12] link: Choose two other years",
+  "choose [11] First year = 2015",
+  "choose [12] Second year = 2025",
+  "tap [13] button: Compare",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/R4",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2015 and 2023"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(5) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Chart of every year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 7 sections"
+  },
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Back to top"
+  }
+ ]
+}

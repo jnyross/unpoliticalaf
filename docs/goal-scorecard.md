@@ -11,6 +11,103 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 11: 3 November 2026 (rubric v3, after the audit 10 fixes #133 to #139)
+
+- Commit audited: `b08069b` on `main` (site build). The "Live site matches
+  main" check for it is green
+  ([run 41663115893](https://github.com/jnyross/unpoliticalaf/actions/runs/41663115893)).
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure
+  [standins/README.md](standins/README.md). All evidence is in
+  [standins/audits/audit-11/](standins/audits/audit-11/).
+- Stand-ins run, each a fresh session that did not build the site: a question
+  writer (24 new questions, sealed in `0e112f3` before any phone reader started;
+  three were replaced before sealing because the site had no single clear
+  answer); 3 informal readers (profiles P9, P7, P8); 5 phone readers (P8, P5,
+  P9, P7, P2, drawn at random); a screen-reader reader; an adversarial
+  fact-checker; a left critic, a right critic and a judge. Readers ran on a
+  smaller model than the reviewers.
+- Automated checks: no keyboard traps on the 9 main pages; all 1,324 charts
+  have a text summary with figures; axe (`make a11y`) runs in CI on this PR.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 35 out of 55. Target not met (simulated).** Audit 10: 38. Audit 10's
+class-size title is fixed and the readers did better than ever (59 of 60, 112
+of 120 new questions), but two new material findings, both on the holidays
+page, cap three dimensions at 1, and one reader missed the critical question
+on change and cause.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 59/60; R1 12, R2 11, R3 12, R4 12, R5 12; R2 missed critical question 12 (could not find it) | 48/60 and each reader 9/12 with the critical questions | No (R2) |
+| New questions (24, sealed) | 112/120 with the site (93%), 60 without | 80% | Yes |
+| Prior-knowledge check | 10/60 without the site, 59 with it (+49) | +20 | Yes |
+| John's questions | J1.1 to J1.7 all answered on the site; 4 or 5 of 5 readers right on every probe | every probe answered, 4 of 5 right | Yes |
+| Informal check | 3 readers; all three marked "how has it changed since I was young" as partly blocking, because the charts they saw start in 2008 | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 15 actions; no blocking barrier | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 1 material, 5 minor ([claims.md](standins/audits/audit-11/fact-check/claims.md)) | no material errors | No |
+| Impartiality critics and judge | 0 critic examples upheld as material, 3 minor, 17 rejected; the judge found 1 material and 4 minor breaches the critics missed ([judgement.md](standins/audits/audit-11/impartiality/judgement.md)) | no upheld material finding | No |
+
+The fact-checker's 30 figures (`fact-check/sample.json`) are re-downloaded from
+the publishers by the "Accuracy check" workflow when this PR lands on `main`,
+which commits `fact-check/results.json`. Every value the fact-checker
+recalculated from the repository's copies of the source files matched.
+
+### Material findings (cap their dimensions at 1)
+
+1. **Holiday chart title compares across a break (judge, confirmed by the
+   auditor).** The holidays page's chart title says visits "rose back to about
+   the 2019 level". The 2025 figure (58.4 million, new method, Great Britain
+   residents) is set against 2019 (58.7 million, old method, UK residents),
+   across the break the chart's own text says is not compared. The 1980-onwards
+   chart uses the same words for 126 per 100 residents in 2023 against 140 in
+   2019. D5, D10.
+2. **Holiday page gives all-purpose visits as if they were holidays
+   (fact-checker, confirmed by the auditor).** In a lead paragraph about
+   holiday visits, "In 2025 Spain had 19.1 million visits, then France (9.1
+   million) and Italy (5.7 million)" are visits for any purpose; the holiday
+   figures in the same table are 15.6, 5.9 and 3.6 million. D7.
+
+### Scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | No material finding; the critics' points on who pays and debt interest were rejected or minor. Not 5: the phone test did not pass. |
+| D2 Life: breadth and depth | 4 | No finding against the evidence itself. Not 5: the phone test did not pass, and all three informal readers could not see change since they were young because the charts they reached start in 2008. |
+| D3 Life: choosing and comparing | 4 | Audit 10's "not compared" and single-year points are fixed. Readers still struggled to find a 2015 against 2025 comparison, and the compare grid moved under one reader's tap. Not 5: phone test. |
+| D4 Explanation and understanding | 4 | Only one critical miss, and that reader could not find the point rather than misread it; every reader answered the household-average and illustration questions right, though two noted they nearly mixed up the top 1%'s 27.2% with a tax rate or the 33.6% household figure. Not 5: phone test. |
+| D5 Visual design and charts | 1 | Capped by the holiday chart title. Otherwise 4: the judge found bars start at zero, above-zero axes are captioned and panels share a scale. |
+| D6 Phone experience | 4 | No sideways scrolling; back to top is on every page. Not 5: four readers said the floating "Back to top" button covered text or a table row, and the menu is still only at the top. |
+| D7 Accuracy and traceability | 1 | Capped by the holiday countries figure. The other 29 claims matched their records and source files. |
+| D8 Impartiality | 4 | The judge upheld none of the critics' 20 examples as material. Not 5: the judge's own material breach (the holiday title) leaves the stand-in failed, and its minor points are open. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocking barrier, no keyboard traps, every chart has a text summary; axe in CI. |
+| D10 Honesty about limits | 1 | Capped by the holiday title, which shows a change across a marked break. |
+| D11 Reader evidence | 3 | The simulated phone test is recorded and audit 10's reader problems are fixed. Not 5: the phone test did not pass. |
+| **Total** | **35 / 55** | |
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' confusion notes only.
+
+1. Fix the holidays page: describe each side of the 2024 method break separately in both chart titles (no "back to about the 2019 level"), give holiday visits (not all-purpose visits) for Spain, France and Italy in the holiday paragraph or label them clearly, and make the trend-title check fail any title that compares across a marked break.
+2. Put the "change is not cause" point next to the employment figures for women and men on the work page and the year pages, where a reader looking for why a rate changed will see it (one phone reader and the screen-reader reader could not find it).
+3. Show the longest history first on the topic pages and home cards, so a reader looking for change since the 1980s or 1990s sees it without hunting (all three informal readers stopped at charts that start in 2008).
+4. Stop the floating "Back to top" button covering text and table rows, and give a quick way to the menu without scrolling to the top (four readers).
+5. Make comparing two years easier: a clear route from a topic to a 2015 against 2025 style comparison, a compare grid that does not move under a tap, and compare selects that confirm the choice to a screen reader and come before the long list of year links.
+6. Make three things findable near the top of their pages, which several readers could not find: the legal limit for infant class sizes, how manufacturing's share of jobs has changed, and the most visited countries.
+7. Fix the smaller points: the top 1% "paid" versus "owed" Income Tax; "primary class sizes rose until 2016, then fell" when they were flat from 2016 to 2019; "paid an average of 4.58% to borrow" for a market yield; "retired households" for retired individuals; the pay-freeze quote on the 2008 to 2010 year pages; the who-pays chart showing tax shares without income shares; home-page debt interest on the gross basis only; work's 2025 headline against the home page's 2026 and the schools page's "no 2026 figures"; spending history's 1955-56 against 2021-22 across breaks and "a great deal"; the borrowing page's own-words cause for 2022 and its own-words explanation of yield gaps; and the home page's £1,228bn against £1,360bn and debt interest £11 against general public services £13.
+
+John's questions: none open, and every probe passed.
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are
+not five people; screenshots are not a phone in the hand; an accessibility
+tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 10: 3 November 2026 (rubric v3, after the audit 9 fixes #126 to #131)
 
 - Commit audited: `10255dc` on `main` (site build). The "Live site matches

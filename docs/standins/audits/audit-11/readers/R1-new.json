@@ -1,0 +1,93 @@
+{
+ "reader": "R1-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 37,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 2240,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "household-tax.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 611
+  },
+  {
+   "url": "life/work.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 2720
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 1680
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [2] link: as a share of GDP over time",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: ↑ Back to top",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: ↑ Back to top",
+  "tap [7] link: Year by year",
+  "tap [11] link: Work",
+  "tap [2] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: ↑ Back to top",
+  "tap [7] link: Year by year",
+  "tap [14] link: Holidays",
+  "tap [2] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/R1",
+ "items": [
+  {
+   "sel": "body > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "↑ Back to top"
+  }
+ ]
+}
