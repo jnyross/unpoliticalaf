@@ -1207,6 +1207,36 @@ def topic_nav(current):
     return f'<nav aria-label="Topics"><ul class="yearnav">{"".join(items)}</ul></nav>'
 
 
+def has_year_figure(facts, num, key, y):
+    """True when a year has a figure for this topic in the tables a year page uses."""
+    from . import pages_history as H
+    if y in YEARS:
+        return any(_val(facts, m[3](y)) is not None for m in MEAS if m[1] == key)
+    return bool(H._topic_rows(facts, num, key, y))
+
+
+def year_finder(facts, num, key):
+    """Find one year's figure from a topic page, without JavaScript (audit 13 gap 3).
+    Each year links to that year's page at this topic's section, where the figure is shown
+    with its source. A year with no figure for the topic is shown greyed, not linked, so a
+    gap is never filled in silently (see has_year_figure). Panels with the figures on this
+    page were tried first; they added about 180 KB to the work page, over the reading limit."""
+    title = dict((k, t) for k, t, _ in TOPICS)[key]
+
+    def item(y):
+        if has_year_figure(facts, num, key, y):
+            return f'<li><a href="{y}.html#{key}">{y}</a></li>'
+        return f'<li><span class="missing" aria-label="{y}: no figure">{y}</span></li>'
+    recent = "".join(item(y) for y in YEARS)
+    early = "".join(item(y) for y in EARLY_YEARS)
+    return (f'<details class="findyear"><summary>Find one year\'s figure</summary>'
+            f'<p class="small">Choose a year to open its page at {esc(title.lower())}, with the figure and its source. '
+            f'Years in grey have no figure for {esc(title.lower())} in the tables used here.</p>'
+            f'<ul class="yearnav">{recent}</ul>'
+            f'<details class="early"><summary>Earlier years, {EARLY_YEARS[0]} to {EARLY_YEARS[-1]} (fewer figures)</summary>'
+            f'<ul class="yearnav">{early}</ul></details></details>')
+
+
 def topic_page(facts, d, num, sources, key):
     """One topic over every year: the answer, its charts and tables, then how it is measured."""
     title = dict((k, t) for k, t, _ in TOPICS)[key]
@@ -1235,7 +1265,7 @@ def topic_page(facts, d, num, sources, key):
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Find or compare years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
@@ -1249,7 +1279,9 @@ def topic_page(facts, d, num, sources, key):
     body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
-    body.append(f"<h2 id='years'>Compare two years</h2>")
+    body.append(f"<h2 id='years'>Find or compare years</h2>")
+    # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
+    body.append(year_finder(facts, num, key))
     # The comparison opens at this topic's section; every other topic follows it.
     body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),

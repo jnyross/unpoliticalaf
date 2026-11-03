@@ -453,6 +453,10 @@ def hide_chart_marks(body):
                         else f'{m.group(1)}<g aria-hidden="true">{m.group(2)}</g>{m.group(3)}', body)
 
 
+# Only pages with the one-year finder carry its rule, so other pages stay the same size.
+YEARFIND_CSS = "details.findyear{margin:0;border:0;padding:0}details.findyear>summary{min-height:44px}"
+
+
 def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
     depth = path.count("/")
     up = "../" * depth
@@ -482,7 +486,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 <meta name="description" content="{esc(description or title)}">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="{up}icon.svg" type="image/svg+xml">
-<style>{CSS}</style>
+<style>{CSS}{YEARFIND_CSS if 'class="findyear"' in body else ""}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
