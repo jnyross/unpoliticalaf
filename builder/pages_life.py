@@ -303,6 +303,9 @@ def timing_note(sources, up, *periods):
 
 
 CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures show what changed between years. They do not show why. Many things happen at once, including changes in the economy, prices, population and government policy, and these statistics cannot separate them.</p>'
+# The same point, placed beside the employment rates for women and men, where a reader
+# looking for why a rate changed will see it.
+WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> The employment rates for women and men show what share of each was in work, not why that share changed. Many things happen at once, including changes in the economy, population and government policy, and these statistics cannot separate them.</p>'
 
 
 def topic_block_for_year(facts, num, sources, topic, y, up):
@@ -440,6 +443,8 @@ def year_page(facts, d, num, sources, y):
         body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
         body.append(year_spark(facts, num, key, y))
         body.append(topic_block_for_year(facts, num, sources, key, y, up))
+        if key == "work":
+            body.append(WORK_CAUSE)
         if any(U.has(m[3](y)) for m in MEAS if m[1] == key):
             body.append(f'<p class="small">± is the 95% margin of error, shown where the publisher gives one. {U.how_sure_link("../")}</p>')
         if key == "work" and 2011 <= y:
@@ -881,7 +886,7 @@ def _work(facts, d, num, sources):
     answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
-                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")))
+                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
     groups = d["work"]["occ_groups"]
@@ -1101,6 +1106,8 @@ def topic_page(facts, d, num, sources, key):
     # 1970s or 1980s sees it first (audit 11 gap 3). Its table, limits and sources fold away.
     from . import pages_history
     long_shown, long_folded = pages_history.block(facts, num, sources, key)
+    # On work, the "change is not cause" note sits under the long chart of women's and
+    # men's employment rates instead of with the topic links (audit 11 gap 2).
     # Then the years since 2008, with more measures. Work, pay, housing and class sizes
     # repeat the long chart's measure over fewer years, so on a phone that chart waits in
     # the fold; holidays shows holiday visits, which the longer series does not have.
@@ -1108,11 +1115,13 @@ def topic_page(facts, d, num, sources, key):
     if key == "holidays":
         recent = [FOLD, detail[first_chart]]
     else:
-        recent = [f"<p>From {since} the official tables cover more each year: {esc(TOPIC_PAGES[key][1])}.</p>", FOLD, detail[first_chart], "<!--keepfold-->"]
+        # The note already sits under the long chart, so it is not repeated here.
+        recent = [f"<p>From {since} the official tables cover more each year: {esc(TOPIC_PAGES[key][1])}.</p>", FOLD,
+                  detail[first_chart].replace(WORK_CAUSE, ""), "<!--keepfold-->"]
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + CAUSE)]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)

@@ -230,7 +230,7 @@ def block(facts, num, sources, topic):
     Returns (shown, folded): the chart, whose title states the long-run finding,
     stays in view; the long-run figures in words, the every-year table, its
     limits, earlier-year links and sources fold away."""
-    shown = [chart(facts, num, topic)]
+    shown = [chart(facts, num, topic) + (L.WORK_CAUSE if topic == "work" else "")]
     folded = [f'<div class="answer"><p>{answer(facts, num, topic)}</p></div>', table_for(facts, num, topic), f'<div class="limit"><p>{esc(LIMITS[topic])}</p></div>',
               f'<p class="small" id="early-{topic}">Pick an earlier year:</p><ul class="yearnav" aria-labelledby="early-{topic}">{early_links("", topic)}</ul>',
               source_line(sources, [s for s in SOURCES[topic] if s in sources], up="../")]
@@ -341,6 +341,8 @@ def early_year_page(facts, d, num, sources, y):
             continue
         body.append(early_spark(facts, num, key, y))
         body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable", "Change"], rows))
+        if key == "work":
+            body.append(L.WORK_CAUSE)
         body.append(f'<div class="limit"><p>{esc(LIMITS[key])}</p></div>')
         body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in SOURCES[key] if s in sources], up=up))
