@@ -306,7 +306,7 @@ def headline(facts, num, topic, y, gb=True):
         if has(f"work.occshare.{sc}.2000000.{y}"):
             shares = {c: facts[f"work.occshare.{sc}.{c}.{y}"].value for c in OCC_NAMES[sc] if c != "0" and has(f"work.occshare.{sc}.{c}.{y}")}
             top = max(shares, key=shares.get)
-            s.append(f"The largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{y}', 'pct')} of workers.")
+            s.append(f"Over all of {y}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{y}', 'pct')} of workers.")
         else:
             s.append(f"Job-type figures for {y} are not in the tables used here (they start in 2011).")
         return " ".join(s)
@@ -854,8 +854,8 @@ def _earnings(facts, d, num, sources):
               f'full-time pay after inflation changed by {change_cell(facts, num, f"earn.real.ft.{pa}", f"earn.real.ft.{pb}", "pct", "pounds")}.</p></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
-                             "£ a week before tax, April each year, in April 2025 prices (CPIH). The lines break where the survey's job coding changed (2011 and 2021)",
-                             breaks=[(YEARS.index(y), "Coding change") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
+                             "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
+                             breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
                              finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
@@ -1062,7 +1062,7 @@ def life_index(facts, d, num, sources):
     a, b = DEFAULT_PAIR
     body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared, '
                 'or <a href="compare/spans/index.html">compare two sets of years</a>.</p>')
-    body.append(f'<p class="small">Every topic can be compared from {FIRST}. Comparisons with earlier years, back to 1971, use only the figures measured then: '
+    body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS, contents=False)
 
@@ -1100,7 +1100,7 @@ def places_block(facts, num, topic):
         # Pay is compared only within one job-coding period (see earn_basis).
         runs = same_basis_runs(facts, lambda y: fid("uk", y), ys, earn_basis)
         (a, b), prev = runs[-1], runs[-2]
-        brk = dict(breaks=[(ys.index(y), "Coding change") for y in EARN_BREAKS if y in ys[1:]], split_breaks=True)
+        brk = dict(breaks=[(ys.index(y), "Jobs recoded") for y in EARN_BREAKS if y in ys[1:]], split_breaks=True)
     out = [f"<h3 id='{topic}-places'>{title}</h3>"]
     vals = {k: _val(facts, fid(k, b)) for k, _ in NATIONS[1:]}
     hi, lo = max(vals, key=vals.get), min(vals, key=vals.get)

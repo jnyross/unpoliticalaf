@@ -180,7 +180,7 @@ def net_section(facts, d, num, sources):
                              ["Year", "Everyone", "Non-retired", "Retired"], rows))
     out.append('''<div class="limit"><p><strong>Limits.</strong> This is one year at a time. It does not follow people through their lives, and the same person can be on either side at different times, for example while at school, working or retired.
 Households with children count the value of their state schooling as a benefit. Taxes paid by companies, such as Corporation Tax, and some other taxes are not counted against any household, while not every public service is counted as a benefit, so the two sides do not add up to the government's totals.
-From 2001/02 the ONS adjusts for top earners being under-recorded in the survey, which makes earlier and later years less directly comparable.</p></div>''')
+The ONS began adjusting for top earners being under-recorded in the survey in its 2018/19 tables, and applied the adjustment to this series back to 2001/02. So years before and after 2001/02 are less directly comparable.</p></div>''')
     out.append(source_line(sources, ["etb"], "Table 16. Benefits are cash benefits plus benefits in kind; taxes are direct plus indirect taxes (ONS note 16)."))
     return "\n".join(out)
 
@@ -314,7 +314,7 @@ For {ov}, the one year published both ways, the share for everyone was {num(oall
     out.append(f'''<div class="limit"><p><strong>Limits.</strong> These are survey estimates for private households in the UK, and a share of income, not anyone’s tax rate.</p>
 <ul>
 <li><strong>Two methods, not joined.</strong> To {ov}, households were ranked by their income adjusted for household size and split into fifths with equal numbers of households; “everyone” is the average household. From {ov}, people are ranked by their household’s adjusted income and split into fifths with equal numbers of people; “everyone” is the average across people.</li>
-<li><strong>Top incomes.</strong> From {adj}, the ONS adjusts for very high earners being missing or under-recorded in the survey (from {adj} tables onwards, applied back to 2001/02 in its own time series). The older tables used here were published before that change and do not include it.</li>
+<li><strong>Top incomes.</strong> The ONS began adjusting for very high earners being missing or under-recorded in the survey in its {adj} tables, and applied the adjustment back to 2001/02 in its own time series. The yearly tables used here include it from {adj}; the older ones were published before that change and do not.</li>
 <li><strong>Deferred tax payments.</strong> From {t["lump_sums_from"]}, direct taxes include lump-sum payments of tax put off from earlier years. The ONS warns this can make direct taxes look high for the lowest-income fifths.</li>
 <li><strong>Years and taxes change.</strong> Figures are for calendar years to 1993 and financial years (April to March) from 1994/95. Local taxes changed from domestic rates to the community charge to Council Tax, and in some years the older tables count water charges with local taxes.</li>
 <li><strong>Not counted.</strong> Taxes paid by companies, such as Corporation Tax, are not allocated to households. Some taxes paid by businesses are counted as indirect taxes passed on in prices.</li>

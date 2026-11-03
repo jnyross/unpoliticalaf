@@ -40,7 +40,7 @@ def home_page(facts, d, num, sources):
 <div class="cards">
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>
 <span class="big">{num(f"spend.cash.tme.{sp}", "bn")}</span>
-<p>spent by the public sector in {esc(sp)}. The largest area was social protection, including pensions: {num(d["spending"]["per100"]["social"], "per100")} of every £100 spent on services.</p>
+<p>spent by the public sector in {esc(sp)}. The largest area was social protection, including pensions: {num(per["social"], "per100")} of every £100 spent on services ({num(f"spend.cash.services.{sp}", "bn")}; the rest is accounting adjustments). Debt interest ({num(per["debt_interest"], "per100")}) is inside general public services.</p>
 {v_spend}
 <span class="more">Spending by area and over time</span></a>
 <a class="card" href="taxes.html"><h3>Which taxes raise the money?</h3>
@@ -62,7 +62,7 @@ def home_page(facts, d, num, sources):
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from {E} to {L}, or compare two. Every topic has figures from {FIRST}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
+<p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{L}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {L}, UK.</p>{sparks["work"]}</a>
 <a class="card" href="life/earnings.html"><h3>Earnings</h3><span class="big">{num(f"earn.ft.{L}", "pounds")}</span><p>a week before tax for the middle full-time employee, April {L}, UK. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
