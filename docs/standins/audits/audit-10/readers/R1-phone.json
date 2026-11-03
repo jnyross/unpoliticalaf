@@ -1,0 +1,107 @@
+{
+ "reader": "R1-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "life/2019.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 4344
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019"
+    }
+   ],
+   "scroll": 560
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [1] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "choose [1] Go to a year = 2019",
+  "tap [2] button: Go",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(3) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 6 sections"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Earnings sources"
+  }
+ ]
+}

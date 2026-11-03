@@ -1,0 +1,66 @@
+{
+ "reader": "R2-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 25,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 3360,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 2822
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 4979
+  },
+  {
+   "url": "life/index.html#schools",
+   "ops": [],
+   "scroll": 4033
+  }
+ ],
+ "log": [
+  "tap [8] link: Glossary",
+  "tap [13] link: People, households and income",
+  "back",
+  "tap [7] link: Year by year",
+  "tap [14] link: Holidays",
+  "tap [2] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Year by year",
+  "tap [15] link: Class sizes",
+  "scroll down",
+  "tap [2] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R2-new",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Infant and key stage 2 classes chart and table"
+  }
+ ]
+}

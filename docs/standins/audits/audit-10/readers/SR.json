@@ -1,0 +1,8 @@
+{"reader":"SR","site_commit":"10255dc","budget":40,"actions_used":22,
+"with_site":{"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+"confusions":[
+"Year-by-year page (life/index.html): the 'Go to a year' dropdown has 55 options read one by one, and the selected year only appears after pressing the separate Go button, which is tedious by screen reader.",
+"Class sizes page (life/schools.html): the 2019 primary class size is not in the announced text; the chart is described only by trend and values sit in a collapsed table, so I had to use the year picker to find it.",
+"Tap numbers shifted between pages and the back action sometimes returned to the home page rather than the previous page, wasting several actions (navigation, not content).",
+"Charts on household-tax and earnings pages are announced as images with a trend description; exact values need the collapsed table, but nothing blocked an answer."
+]}

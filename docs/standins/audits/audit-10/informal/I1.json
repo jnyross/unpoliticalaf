@@ -1,0 +1,73 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 27,
+ "url": "spending.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "life/work.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: How much household income goes on tax? 33.6% of gross household income, on avera",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "tap [4] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Housing",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: survey estimates",
+  "scroll up",
+  "back",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [3] link: Spending",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/I1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Interest on government debt"
+  }
+ ]
+}

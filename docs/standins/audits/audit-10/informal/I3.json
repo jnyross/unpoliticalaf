@@ -1,0 +1,81 @@
+{
+ "reader": "I3",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 35,
+ "url": "life/1995.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "1995"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Housing 65% of households in England owned their home, 2024-25. 2008-09 2025-26",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll up",
+  "choose [17] Go to a year = 1995",
+  "tap [18] button: Go",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/I3",
+ "items": []
+}

@@ -11,6 +11,96 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 10: 3 November 2026 (rubric v3, after the audit 9 fixes #126 to #131)
+
+- Commit audited: `10255dc` on `main` (site build). The "Live site matches
+  main" check for it is green
+  ([run 41630480388](https://github.com/jnyross/unpoliticalaf/actions/runs/41630480388)).
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure
+  [standins/README.md](standins/README.md). All evidence is in
+  [standins/audits/audit-10/](standins/audits/audit-10/).
+- Stand-ins run, each a fresh session that did not build the site: a question
+  writer (24 new questions, sealed in `f733501` before any reader started; three
+  were replaced before sealing because the site had no single clear answer); 3
+  informal readers (profiles P1, P7, P9); 5 phone readers (P2, P4, P5, P8, P7,
+  drawn at random); a screen-reader reader; an adversarial fact-checker; a left
+  critic, a right critic and a judge. Readers ran on a smaller model than the
+  reviewers.
+- Automated checks: no keyboard traps on the 9 main pages; all 1,321 charts
+  have a text summary with figures; axe (`make a11y`) runs in CI on this PR.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 38 out of 55. Target not met (simulated).** Audit 9: 24. All six of
+audit 9's material findings are fixed, the judge upheld no material finding,
+and the site now answers every one of John's questions. Two things hold it
+back: one misleading chart title on class sizes (the only material finding),
+and two readers who each missed one critical question.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 56/60; R1 11, R2 12, R3 10, R4 12, R5 11; R3 missed critical question 12 and R5 critical question 7 | 48/60 and each reader 9/12 with the critical questions | No (R3, R5) |
+| New questions (24, sealed) | 101/120 with the site (84%), 41 without | 80% | Yes |
+| Prior-knowledge check | 9/60 without the site, 56 with it (+47) | +20 | Yes |
+| John's questions | J1.1 to J1.7 all answered on the site; 4 or 5 of 5 readers right on every probe | every probe answered, 4 of 5 right | Yes |
+| Informal check | 3 readers; I3 marked finding a clear before-and-after pay figure as blocking | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 22 actions; no blocking barrier | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 1 material, 10 minor ([claims.md](standins/audits/audit-10/fact-check/claims.md)) | no material errors | No |
+| Impartiality critics and judge | 0 upheld material, 6 minor, 14 rejected, 5 minor breaches found by the judge ([judgement.md](standins/audits/audit-10/impartiality/judgement.md)) | no upheld material finding | Yes |
+
+The fact-checker's 30 figures (`fact-check/sample.json`) are re-downloaded from
+the publishers by the "Accuracy check" workflow when this PR lands on `main`,
+which commits `fact-check/results.json`. The fact-checker used the
+repository's copies of the source files.
+
+### Material finding (caps its dimensions at 1)
+
+1. **Primary classes of more than 30 (fact-checker, confirmed by the auditor).**
+   The schools page's chart title reads "rose until January 2020, fell in
+   January 2021, then rose". The figures on the same page show the primary
+   share peaked at 13.3% in January 2025 and fell to 12.6% in January 2026, so
+   the title and summary describe the latest move as a rise. D5, D7.
+
+### Scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | Audit 9's caps (changes across breaks in spending areas and tax history) are fixed; judge and fact-checker found only minor points. Not 5: the phone test did not pass. |
+| D2 Life: breadth and depth | 4 | No finding against it. Not 5: the phone test did not pass. |
+| D3 Life: choosing and comparing | 4 | Cap from audit 9 fixed: no change is worked out across a break. Readers still found "not compared" lines unclear and could not compare from a single-year page. Not 5: phone test. |
+| D4 Explanation and understanding | 3 | Two readers each missed a critical understanding question (the illustrated £30,000 employee, and change versus cause), and readers mixed up 27.2%, 33.6% and 30%. Torn between 3 and 4, so 3. |
+| D5 Visual design and charts | 1 | Capped by the class-size title. Otherwise 4: above-zero axes are now captioned and the judge found scales and ordering follow the rule. |
+| D6 Phone experience | 4 | No page scrolls sideways. Not 5: readers spent many actions scrolling long pages back to the menu, and the international page puts the G7 table after a 36-country list. |
+| D7 Accuracy and traceability | 1 | Capped by the class-size title. The other 29 claims matched their records and source files. |
+| D8 Impartiality | 5 | The red team and judge upheld no material finding; start years, scales and group order follow the written rule; the methods page explains how the site chooses what to show. Minor points listed below. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocking barrier, no keyboard traps, every chart has a text summary; axe in CI. |
+| D10 Honesty about limits | 4 | Audit 9's caps (partial 2020 holidays, changes across breaks) are fixed. Not 5: the accuracy stand-in did not pass. |
+| D11 Reader evidence | 3 | The simulated phone test is recorded and the problems audit 9's readers found are fixed. Not 5: the phone test did not pass. |
+| **Total** | **38 / 55** | |
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' confusion notes only.
+
+1. Fix the schools page's "classes of more than 30" chart title and summary so they name the January 2025 peak and the fall to January 2026, show 2026 as the latest year for class sizes and work where the downloaded files have it, and make the trend-title check catch a last-year turn like this.
+2. Make the illustrated £30,000 employee easy to find from the "Tax and income" link and page, and keep it visibly separate from the taxes page (three phone readers could not find it, one gave up).
+3. On the year-comparison pages, explain each "not compared" line in one short sentence with a link to the nearest comparable figures, and add a way to compare from a single-year page.
+4. Put the G7 table first on the international comparison page, before the full list of countries (four phone readers scrolled past it).
+5. Give long pages a quick way back to the menu or the page's sections, and bring the spending page's "Share of GDP" view up where readers look for it.
+6. Give the earnings page and the home card a clear before-and-after pay figure after inflation that a reader can find quickly (an informal reader marked this blocking).
+7. Fix the fact-checker's and judge's smaller points: "£11 of every £100" needs its base; tied and missing "largest" claims on spending areas and tax history; National Insurance's 2020-21 peak; "between 9% and 10%" for Income Tax; the household tax method-change year; "same method" for employment from 1971; debt interest on two bases between spending pages; Northern Ireland's "largest fall" at £716 both years; the borrowing page's one-month yield lead and unattributed explanation of yields; the house-price ratio from 1997 across its marked break; the 2011 vs 2019 suggested comparison; and the 1995 page's comparison table, whose Change column is off screen with no sign it scrolls.
+
+John's questions: none open, and every probe passed.
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are
+not five people; screenshots are not a phone in the hand; an accessibility
+tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 9: 3 November 2026 (first audit under rubric v3, with stand-ins)
 
 - Commit audited: `6b3257e` on `main` (site build). `main` then moved to

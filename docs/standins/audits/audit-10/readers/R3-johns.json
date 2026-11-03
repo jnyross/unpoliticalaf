@@ -1,0 +1,82 @@
+{
+ "reader": "R3-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 31,
+ "url": "glossary.html#debt-interest",
+ "ops": [],
+ "scroll": 2254,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "international.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)"
+    }
+   ],
+   "scroll": 5914
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [3] link: How this compares with other countries",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [2] input: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll up",
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [1] link: Interest on government debt",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/shots/R3-johns",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Find another word"
+  }
+ ]
+}
