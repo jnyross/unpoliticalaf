@@ -17,7 +17,7 @@ given, and you must not use the web or any other tool to look things up.
 this person would from what they already know. Most people would choose E for
 many of them; that is expected.
 
-QUESTION SHEET (12 questions) and NEW QUESTION SHEET (24 questions, answers removed)
+QUESTION SHEET (12 questions), NEW QUESTION SHEET (24 questions, answers removed) and JOHN'S QUESTION SHEET
 
 **Part 2, with the site.** You are on a phone. You can only see the screen, tap,
 scroll and pick from lists. Use these commands, one action at a time:
@@ -39,13 +39,18 @@ stop and answer the rest from what you saw, or E.
 Then start again with `--state STATE_DIR/RN-new.json` and answer the 24 new
 questions the same way, with another 40 actions.
 
+Then start again with `--state STATE_DIR/RN-johns.json` and answer John's
+question sheet the same way, with another 40 actions.
+
 **Your report.** Write a JSON file at STATE_DIR/RN.json in this shape, with one
-letter per question (A to D, or E for not sure):
+letter per question (A to D, or E for not sure), keyed by the question's
+number or id as printed on its sheet:
 
 ```json
 {"reader": "RN", "profile": "PX", "site_commit": "COMMIT", "budget": 40,
  "actions_used": 0, "new_actions_used": 0,
  "without_site": {}, "with_site": {}, "new_without_site": {}, "new_with_site": {},
+ "johns_without_site": {}, "johns_with_site": {},
  "confusions": []}
 ```
 

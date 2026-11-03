@@ -5,6 +5,7 @@ The questions and probes live in docs/johns-questions/questions.json.
     python scripts/johns_questions.py check   # every answered probe is still answered on the built site
     python scripts/johns_questions.py gaps    # one line per probe the site cannot answer yet
     python scripts/johns_questions.py pack    # answered probes as a reader question set (JSON)
+    python scripts/johns_questions.py sheet   # the same probes as a question sheet, without answers
 """
 import json
 import re
@@ -112,6 +113,18 @@ def pack(data=None):
                      for _, p in probes(data) if is_open(p)]}
 
 
+def sheet(data=None):
+    """Answered probes as a sheet for the simulated readers: no answers, no evidence."""
+    data = data or load()
+    out = ["# John's questions: question sheet\n\n",
+           f"Answer with one letter each. If you don't know, choose E ({data['not_sure']}).\n"]
+    for q in pack(data)["questions"]:
+        out.append(f"\n## {q['id']}. {q['question']}\n\n")
+        out += [f"- **{k}** {v}\n" for k, v in q["options"].items()]
+        out.append(f"- **E** {data['not_sure']}\n")
+    return "".join(out)
+
+
 def main(argv):
     cmd = argv[1] if len(argv) > 1 else "check"
     if cmd == "check":
@@ -129,6 +142,9 @@ def main(argv):
         return 0
     if cmd == "pack":
         print(json.dumps(pack(), indent=2, ensure_ascii=False))
+        return 0
+    if cmd == "sheet":
+        print(sheet(), end="")
         return 0
     print(__doc__)
     return 2

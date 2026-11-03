@@ -103,5 +103,31 @@ class Prompts(unittest.TestCase):
             self.assertTrue((ROOT / f"docs/standins/prompts/{name}.md").exists(), name)
 
 
+class Johns(unittest.TestCase):
+    DATA = {"not_sure": "n", "questions": [{"id": "J1", "asked": "a", "added": "d", "source": "s", "probes": [
+        {"id": "J1.1", "question": "q", "options": {"A": "a", "B": "b"}, "answer": "B", "why": "w",
+         "evidence": [{"page": "x.html", "text": "t"}]}]}]}
+
+    def readers(self, right):
+        return [{"reader": f"R{i}", "johns_with_site": {"J1.1": "B" if i <= right else "A"}} for i in range(1, 6)]
+
+    def test_passes_when_four_of_five_right(self):
+        res, _ = si.score_johns(self.readers(4), self.DATA)
+        self.assertTrue(res["johns_questions"], res)
+
+    def test_fails_and_writes_a_gap_when_three_of_five_right(self):
+        res, _ = si.score_johns(self.readers(3), self.DATA)
+        self.assertFalse(res["johns_questions"])
+        self.assertIn("J1.1", res["johns_gaps"][0])
+
+    def test_open_probe_is_a_gap(self):
+        import copy
+        data = copy.deepcopy(self.DATA)
+        data["questions"][0]["probes"].append({"id": "J1.2", "question": "q2", "evidence": [], "gap": "missing"})
+        res, _ = si.score_johns(self.readers(5), data)
+        self.assertFalse(res["johns_questions"])
+        self.assertEqual(res["johns_gaps"], ["J1.2: missing"])
+
+
 if __name__ == "__main__":
     unittest.main()
