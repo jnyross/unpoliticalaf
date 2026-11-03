@@ -581,6 +581,30 @@ class Glossary(unittest.TestCase):
             for a, name, text, words in terms:
                 self.assertTrue(words and text.strip(), a)
 
+    def test_glossary_lists_every_word_a_to_z(self):
+        from builder.glossary import GROUPS, glossary_page
+        html = glossary_page()
+        az = re.search(r'<ul class="az">(.*?)</ul>', html, re.S).group(1)
+        anchors = re.findall(r'href="#([^"]+)"', az)
+        self.assertEqual(sorted(anchors), sorted(a for _, _, terms in GROUPS for a, _, _, _ in terms))
+        for gid, _, _ in GROUPS:
+            self.assertIn(f'href="#{gid}"', html)
+
+
+class FindingThings(unittest.TestCase):
+    """Audit 9 gap 7: readers looked for household tax under Who pays, and could
+    not jump to a topic or year on the life hub."""
+
+    def test_life_hub_jumps_to_each_topic_and_a_year(self):
+        from builder.html import jump
+        nav = jump("Jump to", [(f"#{k}", t) for k, t, _ in pages_life.TOPICS], pages_life.year_jump(""))
+        for k, _, _ in pages_life.TOPICS:
+            self.assertIn(f'href="#{k}"', nav)
+        # Without JavaScript the year form lands on the list of years.
+        self.assertIn('action="index.html#years"', nav)
+        for y in pages_life.EARLY_YEARS + pages_life.YEARS:
+            self.assertIn(f'<option value="{y}"', nav)
+
 
 class Folding(unittest.TestCase):
     def test_answer_stays_in_view_and_detail_folds(self):

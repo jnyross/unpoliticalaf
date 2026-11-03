@@ -137,6 +137,13 @@ svg text.lbl.b{fill:#5d666e}
 .yearstrip li{flex:none}
 .pager{display:flex;justify-content:space-between;gap:12px;margin:12px 0}
 .pager a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:8px;text-decoration:none;font-weight:600}
+nav.jump{margin:8px 0 12px}nav.jump p{margin:0 0 4px;font-size:.9rem;font-weight:600;color:var(--ink2)}
+nav.jump ul{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}nav.jump li{margin:0}
+nav.jump a{display:inline-flex;align-items:center;min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;text-decoration:none;font-size:.95rem}
+nav.jump a:hover{border-color:var(--ink2)}
+form.jumpyear{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 0}form.jumpyear label{font-size:.9rem;font-weight:600;color:var(--ink2)}form.jumpyear select,form.jumpyear button{min-height:36px;padding-top:2px;padding-bottom:2px}
+details.az{margin:0 0 10px}details.az>summary{font-weight:600}ul.az{columns:2;column-gap:16px;margin:8px 0 0;padding:0;list-style:none}ul.az li{break-inside:avoid;margin:0}nav.jump ul.az{display:block}nav.jump ul.az a{display:inline-flex;align-items:center;min-height:32px;padding:0;border:0;border-radius:0;background:none;text-decoration:underline;font-size:1rem}
+.totop{margin:4px 0 16px;font-size:.9rem}
 form.pick{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-end;background:var(--soft);border-radius:var(--r);padding:14px;margin:12px 0}
 form.pick label{display:flex;flex-direction:column;font-size:.9rem;font-weight:600;gap:4px}
 select,button{font:inherit;min-height:44px;padding:6px 10px;border:1px solid #767676;border-radius:8px;background:#fff;color:var(--ink)}
@@ -203,7 +210,7 @@ header.site .wrap{flex-direction:row;align-items:center;gap:16px}.brand{margin-r
 .trace .trace-h{font-weight:650;margin:0 0 6px}.trace .trace-v{margin:0 0 6px;color:var(--muted)}.trace dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0 0 4px}.trace dt{color:var(--muted)}.trace dd{margin:0;overflow-wrap:anywhere}.trace p{margin:4px 0 8px}
 .trace-x{min-height:44px;min-width:88px;font:inherit;color:var(--ink);border:1px solid var(--line);background:var(--soft);border-radius:8px;cursor:pointer}
 section.fig,section.correction{border-top:1px solid var(--line);padding:8px 0;scroll-margin-top:12px}section.fig:target{background:var(--warn)}section.fig h3{font-size:1rem;margin:4px 0;overflow-wrap:anywhere}section.fig dl,section.correction dl,dl.srcmeta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}section.fig dt,section.correction dt,dl.srcmeta dt{color:var(--muted)}section.fig dd,section.correction dd,dl.srcmeta dd{margin:0;overflow-wrap:anywhere}
-@media print{nav.main,.skip,form.pick,.toc,.trace{display:none}details{display:block;border:0;padding:0}}
+@media print{nav.main,.skip,form.pick,.toc,.trace,nav.jump{display:none}details{display:block;border:0;padding:0}}
 """
 
 NAV = [
@@ -220,6 +227,14 @@ NAV = [
 
 def esc(s):
     return escape(str(s), quote=True)
+
+
+def jump(label, links, extra=""):
+    """A short row of links near the top of a long page, so a reader can go
+    straight to a topic, year or term instead of scrolling. Works without
+    JavaScript: every item is a plain link to a heading on the page."""
+    items = "".join(f'<li><a href="{esc(h)}">{esc(t)}</a></li>' for h, t in links)
+    return f'<nav class="jump" aria-label="{esc(label)}"><p>{esc(label)}:</p><ul>{items}</ul>{extra}</nav>'
 
 
 def toc(body, after_first=False):

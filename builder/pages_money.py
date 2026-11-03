@@ -336,7 +336,7 @@ def who_pays_page(facts, d, num, sources):
                          (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
                          (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
-<p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p>
+<p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
@@ -372,13 +372,13 @@ def who_pays_page(facts, d, num, sources):
         rows.append([label, num(f"etb.2a.gross.{q}", "pounds"), num(f"etb.2a.direct.{q}", "pounds"), num(f"etb.2a.indirect.{q}", "pounds"), num(f"etb.2a.alltax.{q}", "pounds")])
     body.append(bars([(lab, f"etb.2a.alltax.{q}", "alt" if q == "all" else "") for q, lab in QUINTS], "pounds", num,
                      caption="Average taxes paid by the households that people in each fifth live in, £ a year, financial year ending 2024 (April 2023 to March 2024)."))
+    body.append('<p>These are amounts in pounds. For the same taxes as a share of each fifth\'s income, see <a href="household-tax.html">how much of household income goes on tax</a>.</p>')
     body.append(FOLD)
     body.append("<p>How the fifths are made: everyone is ranked by their household's income, adjusted for household size, and split into five groups with the same number of people in each. "
                 "For each fifth, the ONS then estimates the average income and taxes of the households those people live in. Each fifth has the same number of people, but not the same number of households. "
                 "This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>")
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
     body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
-    body.append('<p>For how big these taxes are compared with each group\'s income, see <a href="household-tax.html">how much of household income goes on tax</a>.</p>')
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are modelled from what households report spending.</p></div>')
     body.append(source_line(sources, ["etb"], "Table 2a. Survey-based estimates for April 2023 to March 2024."))
     from .pages_money_extra import households_short, net_section, income_tax_age_section
