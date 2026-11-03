@@ -303,6 +303,9 @@ def timing_note(sources, up, *periods):
 
 
 CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures show what changed between years. They do not show why. Many things happen at once, including changes in the economy, prices, population and government policy, and these statistics cannot separate them.</p>'
+# The same point, placed beside the employment rates for women and men, where a reader
+# looking for why a rate changed will see it.
+WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> The employment rates for women and men show what share of each was in work, not why that share changed. Many things happen at once, including changes in the economy, population and government policy, and these statistics cannot separate them.</p>'
 
 
 def topic_block_for_year(facts, num, sources, topic, y, up):
@@ -439,6 +442,8 @@ def year_page(facts, d, num, sources, y):
         body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
         body.append(year_spark(facts, num, key, y))
         body.append(topic_block_for_year(facts, num, sources, key, y, up))
+        if key == "work":
+            body.append(WORK_CAUSE)
         if any(U.has(m[3](y)) for m in MEAS if m[1] == key):
             body.append(f'<p class="small">± is the 95% margin of error, shown where the publisher gives one. {U.how_sure_link("../")}</p>')
         if key == "work" and 2011 <= y:
@@ -880,7 +885,7 @@ def _work(facts, d, num, sources):
     answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
-                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")))
+                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
     groups = d["work"]["occ_groups"]
@@ -1107,10 +1112,11 @@ def topic_page(facts, d, num, sources, key):
     detail.insert(first_chart + 1, FOLD)
     # On a phone the first chart comes straight after the answer. How sure the
     # figures are, and any notes, follow it; the topic links and the
-    # "change is not cause" note sit after this first section.
+    # "change is not cause" note sit after this first section (on work, the note
+    # sits under the chart of women's and men's employment rates instead).
     detail = [detail[first_chart]] + detail[:first_chart] + detail[first_chart + 1:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>", before_toc(topic_nav(key) + CAUSE)]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
     body.extend(detail)
     body.append("<h2 id='about'>About these figures</h2>")
     # The first sentence of the limits stays in view; the rest folds away with the sources.

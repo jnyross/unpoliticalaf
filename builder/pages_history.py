@@ -309,6 +309,8 @@ def early_year_page(facts, d, num, sources, y):
             continue
         body.append(early_spark(facts, num, key, y))
         body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable", "Change"], rows))
+        if key == "work":
+            body.append(L.WORK_CAUSE)
         body.append(f'<div class="limit"><p>{esc(LIMITS[key])}</p></div>')
         body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in SOURCES[key] if s in sources], up=up))
