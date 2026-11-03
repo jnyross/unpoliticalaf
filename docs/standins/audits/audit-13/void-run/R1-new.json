@@ -1,0 +1,51 @@
+{
+ "reader": "R1-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 5,
+ "url": "who-pays.html",
+ "ops": [],
+ "scroll": 2240,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [4] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a13/shots/R1new",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "how much of household income goes on tax"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on All taxes, by household income table, limits and sources"
+  }
+ ]
+}

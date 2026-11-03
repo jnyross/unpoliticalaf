@@ -177,11 +177,15 @@ def _open(page, base, st):
     """Load the current page, replay this page's taps and choices, restore the scroll."""
     page.goto(base + st["url"], wait_until="load")
     for op in st["ops"]:
+        if "y" in op:  # some controls (the floating menu) only show once the page is scrolled
+            page.evaluate("y => window.scrollTo({top: y, behavior: 'instant'})", op["y"])
+            page.wait_for_timeout(50)
         loc = page.locator(op["sel"]).first
-        if op["op"] == "choose":
-            loc.select_option(label=op["value"])
-        else:
-            loc.click()
+        with contextlib.suppress(Exception):  # a replay that fails must not lock the session
+            if op["op"] == "choose":
+                loc.select_option(label=op["value"], timeout=3000)
+            else:
+                loc.click(timeout=3000)
     page.evaluate("y => window.scrollTo({top: y, behavior: 'instant'})", st["scroll"])
     page.wait_for_timeout(50)
 
@@ -280,10 +284,12 @@ def session(mode, args):
                 except Exception:
                     print(f"[{n}] has no choice called {value!r}. Nothing happened.")
                     return 1
-                st["ops"].append({"op": "choose", "sel": it["sel"], "value": value})
+                st["ops"].append({"op": "choose", "sel": it["sel"], "value": value,
+                                  "y": page.evaluate("window.scrollY")})
                 st["log"].append(f"choose [{n}] {it['label']} = {value}")
             else:
                 st["log"].append(f"tap [{n}] {it['kind']}: {it['label']}")
+                y_before = page.evaluate("window.scrollY")
                 try:
                     loc.click(timeout=3000)
                     clicked = True
@@ -295,7 +301,7 @@ def session(mode, args):
                 now = _rel(page.url, base)
                 if _same_page(now, before):
                     if now == before and clicked:
-                        st["ops"].append({"op": "tap", "sel": it["sel"]})
+                        st["ops"].append({"op": "tap", "sel": it["sel"], "y": y_before})
                     st["url"] = now
                 else:
                     st["history"].append({"url": before, "ops": st["ops"], "scroll": st["scroll"]})

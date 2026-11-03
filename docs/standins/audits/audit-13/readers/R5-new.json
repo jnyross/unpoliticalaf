@@ -1,0 +1,132 @@
+{
+ "reader": "R5-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 24,
+ "url": "life/holidays.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "glossary.html#taxes",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 3996
+    }
+   ],
+   "scroll": 3996
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 3483
+  },
+  {
+   "url": "life/schools.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 1120
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 2613
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "tap [8] link: Glossary",
+  "tap [12] link: Taxes and borrowing",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [12] link: Work",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [15] link: Holidays",
+  "tap [5] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a13/shots2/R5",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Visits abroad since 1980 table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Earnings"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Housing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Compare two years of holidays"
+  }
+ ]
+}

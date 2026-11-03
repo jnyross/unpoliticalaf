@@ -1,0 +1,61 @@
+{
+ "reader": "R1-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 8,
+ "url": "glossary.html#cash-terms",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "y": 0
+  }
+ ],
+ "scroll": 9178,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 560
+    }
+   ],
+   "scroll": 560
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [9] link: Glossary",
+  "tap [10] expand: Find a word: all 58 words, A to Z",
+  "scroll down",
+  "tap [7] link: Cash terms",
+  "scroll down"
+ ],
+ "shots": "/tmp/a13/shots2/R1",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > dl:nth-of-type(4) > dd:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "taxes page"
+  }
+ ]
+}

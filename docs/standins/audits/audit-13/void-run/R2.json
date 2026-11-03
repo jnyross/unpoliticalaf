@@ -1,0 +1,16 @@
+{"reader": "R2", "profile": "P4", "site_commit": "7ab0f27", "budget": 40,
+ "actions_used": 37, "new_actions_used": 6, "johns_actions_used": 19,
+ "without_site": {"1":"E","2":"C","3":"E","4":"E","5":"E","6":"E","7":"E","8":"E","9":"E","10":"E","11":"E","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"E","10":"E","11":"B","12":"E"},
+ "new_without_site": {"1":"B","2":"E","3":"E","4":"E","5":"A","6":"B","7":"E","8":"B","9":"E","10":"E","11":"E","12":"B","13":"E","14":"E","15":"E","16":"E","17":"B","18":"C","19":"A","20":"A","21":"E","22":"E","23":"E","24":"E"},
+ "new_with_site": {"1":"B","2":"B","3":"C","4":"C","5":"A","6":"B","7":"C","8":"B","9":"C","10":"A","11":"B","12":"B","13":"D","14":"B","15":"C","16":"B","17":"B","18":"C","19":"A","20":"E","21":"E","22":"C","23":"C","24":"B"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"C","J1.3":"C","J1.4":"C","J1.5":"A","J1.6":"B","J1.7":"C"},
+ "confusions": [
+  "I tapped Menu part way down a page and the phone then got stuck and would not do anything, so I had to start again from the front page and lost four taps.",
+  "Each scroll jumps so far that I missed a whole part of the Who pays page between two screens and had to go back up to look for it.",
+  "The pictures of the page sometimes did not match the screen I thought I was on, so I read the same screen twice.",
+  "I never found the class size for the year 2019 or the holiday comparison between 2015 and 2025 before my taps ran out, so I did not guess.",
+  "There are two different percentages for the top earners and the households (27.2% of the tax and 12.4% of the income), which I had to read twice to keep apart.",
+  "The Tax and income page has three similar looking percentages, which is why it says they are easy to mix up, and they did mix me up a little."
+ ]}

@@ -1,0 +1,11 @@
+{
+ "phone_test": true,
+ "prior_knowledge": true,
+ "new_questions": true,
+ "screen_reader": true,
+ "johns_questions": false,
+ "johns_gaps": [
+  "J1.2: readers could not answer \"In 2024, how did UK government spending, as a share of GDP, compare with the United States and France?\" from the site (2 of 5 right); see their confusion notes."
+ ],
+ "d11_ready_for_5": true
+}

@@ -11,6 +11,111 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 13: 3 November 2026 (rubric v3, after the audit 12 fixes #150 to #154)
+
+- Commit audited: `7ab0f27` on `main` (site build). The "Live site matches
+  main" check for it is green
+  ([run 41722006701](https://github.com/jnyross/unpoliticalaf/actions/runs/41722006701)).
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure
+  [standins/README.md](standins/README.md). All evidence is in
+  [standins/audits/audit-13/](standins/audits/audit-13/).
+- Stand-ins run, each a fresh session that did not build the site: a question
+  writer (24 new questions, sealed in `c6dd96b` before any phone reader
+  started; three were replaced before sealing because the site had no single
+  clear answer: the statutory VAT rate, the largest single benefit and the
+  services share of jobs); 3 informal readers (profiles P2, P6, P3); 5 phone
+  readers (P9, P4, P1, P8, P10, drawn at random); a screen-reader reader; an
+  adversarial fact-checker; a left critic, a right critic and a judge. Readers
+  ran on a smaller model than the reviewers.
+- **Phone test run twice.** In the first run every phone reader's session
+  froze after opening the Menu button: the phone tool replayed the menu tap
+  before restoring the scroll, when the floating menu added in #153 is hidden.
+  A real browser opens the menu and follows its links normally (checked by the
+  auditor), so this was a fault in the test tool, not the site. The tool now
+  replays each tap at the scroll position where it was made, and a failed
+  replay no longer locks the session (`scripts/standins.py`). The first run is
+  kept in [void-run/](standins/audits/audit-13/void-run/) and not scored; all
+  five readers were run again as fresh sessions with the same profiles.
+- Automated checks: no keyboard traps on the 9 main pages; all 1,326 charts
+  have a text summary with figures; axe (`make a11y`) runs in CI on this PR.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 45 out of 55. Target not met (simulated).** Audit 12: 46. For the
+first time the simulated phone test passes (58 of 60, every reader 11 or 12,
+every critical question right), and the four debt and borrowing-costs probes
+that failed last time now pass 5 of 5. Two things stop the target: one
+material accuracy finding on the tax and income page, which caps D7 at 1, and
+John's probe J1.2 (UK spending against the United States and France), which
+only 2 of 5 readers answered right.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 58/60; R1 11, R2 12, R3 11, R4 12, R5 12; every critical question right; actions 35 to 40 | 48/60 and each reader 9/12 with the critical questions | Yes |
+| New questions (24, sealed) | 119/120 with the site (99%), 48 without | 80% | Yes |
+| Prior-knowledge check | 5/60 without the site, 58 with it (+53) | +20 | Yes |
+| John's questions | J1.1 and J1.3 to J1.7 5 of 5; J1.2 2 of 5 (three readers said UK spending was lower than the United States and higher than France) | every probe answered, 4 of 5 right | No (J1.2) |
+| Informal check | 3 readers; all found an answer to all three questions, nothing blocking | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 11/12 in 13 actions, critical questions right; no blocking barrier (missed the 2015 against 2025 holiday question) | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 1 material, 6 minor ([claims.md](standins/audits/audit-13/fact-check/claims.md)) | no material errors | No |
+| Impartiality critics and judge | 0 material, 4 critic examples upheld as minor, 16 rejected; the judge found 4 more minor breaches ([judgement.md](standins/audits/audit-13/impartiality/judgement.md)) | no upheld material finding | Yes |
+
+Four of the five phone readers used only 1 to 8 actions on the 24 new
+questions and answered most of them from what they had already seen, so the
+99% says more about understanding than about finding. The fact-checker's 30
+figures (`fact-check/sample.json`) are re-downloaded from the publishers by the
+"Accuracy check" workflow when this PR lands on `main`.
+
+### Material findings (cap their dimensions at 1)
+
+1. **"Why did direct taxes rise in 2023/24?" (fact-checker, confirmed by the
+   auditor).** The tax and income page asks why direct taxes rose and answers
+   with the ONS's fiscal-drag quote ("pay greater proportion of their income
+   in taxes"). The page's own table shows direct taxes fell as a share of gross
+   income, from 23.2% in 2022/23 to 22.9% in 2023/24 (`etb.t8.gross.direct.all`);
+   the ONS bulletin says they rose only in cash and fell after inflation. A
+   reader comes away believing households paid a larger share of income in
+   direct tax. D7.
+
+### Scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | The phone test passed and the debt probes now pass. Not 5: three readers misread how UK spending compares with the United States and France (J1.2), and minor points remain (spending as a share of GDP said to have "fell" since 2020-21 when it bottomed in 2021-22 and rose; £30.5bn of VAT refunds inside "all other taxes" unexplained; the home "Who pays?" card gives only the top 1%'s share of Income Tax). |
+| D2 Life: breadth and depth | 5 | Phone test passed with every life question right but two, no informal reader was blocked, the longest history is shown first, and nations and phases are named. |
+| D3 Life: choosing and comparing | 4 | Not 5: four of the five phone readers and the screen-reader reader could not find a single year's class size (2019) on the schools page and guessed or went through the compare pages; "not compared" still puzzled three readers and the screen-reader reader missed the 2015 against 2025 holiday question. |
+| D4 Explanation and understanding | 4 | Every critical question right. Not 5: all three informal readers stumbled on the home cards (the £1,360bn against £1,228bn "accounting entries" sentence, 36.7% for the lowest fifth against 36.2% for the highest before the explanation, pay "about the same" beside a cash rise), and the ONS explanation of why the shares differ sits in a collapsed panel. |
+| D5 Visual design and charts | 4 | Bars start at zero, above-zero axes are captioned, panels share a scale. Not 5: the home and holidays headlines give 58.4 million visits in 2025 above a chart of visits per 100 residents that ends in 2023 (all three informal readers). |
+| D6 Phone experience | 4 | No sideways scrolling and the floating menu works. Not 5: readers used 35 to 40 of their 40 actions, overshot figures when scrolling long pages, and found the glossary (22 screens) and year-by-year page long. |
+| D7 Accuracy and traceability | 1 | Capped by the direct-taxes heading. The other 29 claims matched their records and source files. |
+| D8 Impartiality | 5 | The judge upheld no material finding; start years, scales and group order mostly follow the rule, and the methods page explains how the site chooses what to show. Minor points listed below. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 11/12 with no blocking barrier, no keyboard traps, every chart has a text summary; axe in CI. |
+| D10 Honesty about limits | 4 | No change is calculated across a marked break. Not 5: the holidays lead gives 2025 (Great Britain residents, new method) straight after 2019 (UK residents, old method) without saying the two are not comparable. |
+| D11 Reader evidence | 5 | On this commit the simulated phone test, the new-question test and the prior-knowledge check all passed (`standins.py score`). |
+| **Total** | **45 / 55** | |
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' confusion notes only.
+
+1. Fix the tax and income page's "Why did direct taxes rise in 2023/24?": the page's own figures show direct taxes fell as a share of gross income (23.2% to 22.9%) and the ONS says they rose only in cash, so say what rose and what fell before quoting the fiscal-drag explanation.
+2. Make the G7 spending comparison as easy to read as the tax one: three of five readers got UK government spending against the United States and France wrong (John's J1.2), and one could not tell how to switch from taxes to spending.
+3. Let readers find a single year's figure on a topic page without the compare pages: four phone readers and the screen-reader reader could not find the 2019 primary class size (and which nation it covers) on the schools page.
+4. On the holidays page and its home card, do not set 2025 (Great Britain, new method) straight after 2019 (UK, old method) without saying they are not comparable, explain "not compared" where the 2015 against 2025 comparison appears, and stop the 2025 headline sitting above a chart that ends in 2023.
+5. Make the home cards answer first in plain words: the £1,360bn against £1,228bn "accounting entries" sentence, 36.7% against 36.2% before its explanation, and pay "about the same" beside a cash rise confused all three informal readers.
+6. Fix the smaller points: spending as a share of GDP "fell" from 2020-21 when it bottomed in 2021-22 and rose; VAT refunds inside "all other taxes"; "higher than in 10 of the other 16 years" for home ownership with ties; the home page's 2026 work and class-size figures against the year-by-year page's 2025 without a note; retired households "over half" (ONS: at least half); 2025 pay not flagged provisional; a who-pays note setting 2023-24 Income Tax beside 2025-26 totals; the holidays source record's "UK residents"; the judge's minor points (the household-tax ONS explanation collapsed, housing pages comparing only private renting with 2008-09, the 53.3% net-recipients caveat collapsed, the who-pays tiles putting the highest-income fifth first, the schools lead starting at 2008 not 2006); and the 22-screen glossary.
+
+John's questions: J1.2 failed on reading the G7 spending chart; none is open.
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are
+not five people; screenshots are not a phone in the hand; an accessibility
+tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 12: 3 November 2026 (rubric v3, after the audit 11 fixes #141 to #148)
 
 - Commit audited: `1f64e04` on `main` (site build). The "Live site matches

@@ -1,0 +1,59 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 13,
+ "url": "life/housing.html",
+ "ops": [],
+ "scroll": 2800,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 3920
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: Housing 65% of households in England owned their home, 2024-25. 1981 2024-25",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/a13/shots/I1",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on What housing costs table"
+  }
+ ]
+}

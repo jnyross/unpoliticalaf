@@ -1,0 +1,110 @@
+{
+ "reader": "R3-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 8,
+ "url": "life/index.html#work",
+ "ops": [],
+ "scroll": 123,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html#tme-views",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2465
+    }
+   ],
+   "scroll": 2465
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [4] link: as a share of GDP over time",
+  "tap [7] expand: What the chart shows, in words",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [12] link: Work",
+  "scroll up"
+ ],
+ "shots": "/tmp/a13/shots2/R3new",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "More"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Top ten"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Earnings"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Housing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Holidays"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Compare years"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "Go to a year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+   "kind": "button",
+   "label": "Go"
+  }
+ ]
+}
