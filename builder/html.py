@@ -25,6 +25,7 @@ dl.glossary{margin:0 0 24px}dl.glossary dt{font-weight:650;margin-top:18px;scrol
 a:focus-visible,summary:focus-visible,select:focus-visible,button:focus-visible,.tablewrap:focus-visible,nav.main ul:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
 header.site{border-bottom:1px solid var(--line);background:#fff}
+.backtop{position:fixed;right:12px;bottom:12px;z-index:5;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.18)}.backtop:hover{border-color:var(--ink)}.js .backtop{visibility:hidden}.js .backtop.show{visibility:visible}
 header.site .wrap{display:flex;flex-direction:column;padding-top:0;padding-bottom:0}
 .brand{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-weight:750;letter-spacing:-.01em;color:var(--ink);text-decoration:none;font-size:1.1rem}
 .mark{display:inline-flex;align-items:flex-end;gap:2px;height:18px}.mark i{display:block;width:5px;background:var(--ink);border-radius:1px}.mark i:nth-child(1){height:10px}.mark i:nth-child(2){height:18px}.mark i:nth-child(3){height:14px;background:var(--bar2)}
@@ -211,7 +212,7 @@ header.site .wrap{flex-direction:row;align-items:center;gap:16px}.brand{margin-r
 .trace .trace-h{font-weight:650;margin:0 0 6px}.trace .trace-v{margin:0 0 6px;color:var(--muted)}.trace dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0 0 4px}.trace dt{color:var(--muted)}.trace dd{margin:0;overflow-wrap:anywhere}.trace p{margin:4px 0 8px}
 .trace-x{min-height:44px;min-width:88px;font:inherit;color:var(--ink);border:1px solid var(--line);background:var(--soft);border-radius:8px;cursor:pointer}
 section.fig,section.correction{border-top:1px solid var(--line);padding:8px 0;scroll-margin-top:12px}section.fig:target{background:var(--warn)}section.fig h3{font-size:1rem;margin:4px 0;overflow-wrap:anywhere}section.fig dl,section.correction dl,dl.srcmeta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}section.fig dt,section.correction dt,dl.srcmeta dt{color:var(--muted)}section.fig dd,section.correction dd,dl.srcmeta dd{margin:0;overflow-wrap:anywhere}
-@media print{nav.main,.skip,form.pick,.toc,.trace,nav.jump{display:none}details{display:block;border:0;padding:0}}
+@media print{nav.main,.skip,form.pick,.toc,.trace,nav.jump,.backtop{display:none}details{display:block;border:0;padding:0}}
 """
 
 NAV = [
@@ -452,6 +453,9 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     body = hide_chart_marks(body)
     if "data-chart=" in body:
         scripts = scripts + CHART_JS
+    if "data-view=" in body:
+        scripts = scripts + VIEW_LINK_JS
+    scripts = scripts + BACKTOP_JS
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -465,11 +469,12 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site"><div class="wrap"><a class="brand" href="{up}index.html"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>{SITE}</a>
+<header class="site" id="top"><div class="wrap"><a class="brand" href="{up}index.html"><span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>{SITE}</a>
 <nav class="main" aria-label="Main"><ul>{nav}</ul></nav></div></header>
 <main id="main" class="wrap">
 {body}
 </main>
+<a class="backtop" href="#top">↑ Back to top</a>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
 <p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap or click any figure to see where it comes from; with a keyboard, use the Sources line under each section. See also <a href="{up}methods.html">methods</a>, <a href="{up}corrections.html">corrections</a> and <a href="{up}uncertainty.html">how sure the survey figures are</a>. Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
@@ -802,7 +807,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
 _SW_COUNT = [0]
 
 
-def switch(legend, views, default=0):
+def switch(legend, views, default=0, anchor=None):
     """Show one of several views of the same figures, such as cash, real terms and % of GDP.
 
     views: list of (label, note, html). Works without JavaScript: radio buttons and
@@ -815,7 +820,8 @@ def switch(legend, views, default=0):
                    f'<label for="{name}-{k}">{esc(label)}</label>' for k, (label, _, _) in enumerate(views))
     panels = "".join(f'<div class="panel p{k}"><p class="vhead">{esc(label)}</p><p class="vnote">{note}</p>{html}</div>'
                      for k, (label, note, html) in enumerate(views))
-    return f'<div class="switch"><fieldset class="seg"><legend>{esc(legend)}</legend><div class="opts">{opts}</div></fieldset>{panels}</div>'
+    sid = f' id="{esc(anchor)}"' if anchor else ""
+    return f'<div class="switch"{sid}><fieldset class="seg"><legend>{esc(legend)}</legend><div class="opts">{opts}</div></fieldset>{panels}</div>'
 
 
 def _chart_attr(read):
@@ -1190,6 +1196,27 @@ def _short(label):
     if len(s) == 7 and s[4] == "-":  # 2025-26 -> 2025-26
         return s
     return s
+
+
+def view_link(text, anchor, view):
+    """A link to a cash / real / GDP switch that also picks one of its views.
+    Without JavaScript it still goes to the switch, where the reader taps the view."""
+    return f'<a href="#{esc(anchor)}" data-view="{view}">{text}</a>'
+
+
+VIEW_LINK_JS = """<script>
+document.querySelectorAll('a[data-view]').forEach(function(a){a.addEventListener('click',function(){
+var s=document.getElementById(a.getAttribute('href').slice(1)),i=s&&s.querySelectorAll('.seg input')[+a.getAttribute('data-view')];
+if(i){i.checked=true;}});});
+</script>"""
+
+# "Back to top" sits in the corner of every page, so a reader on a long page can get
+# back to the menu in one tap. Without JavaScript it is always shown; with it, it
+# appears once the reader has scrolled more than a screen down.
+BACKTOP_JS = """<script>
+(function(){var r=document.documentElement,b=document.querySelector('.backtop');if(!b)return;r.classList.add('js');
+function f(){b.classList.toggle('show',window.scrollY>window.innerHeight);}window.addEventListener('scroll',f,{passive:true});f();})();
+</script>"""
 
 
 # Added on top of the drawn charts: tap, hover or use the arrow keys to read one
