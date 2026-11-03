@@ -50,6 +50,13 @@ li{margin-bottom:4px}
 .eyebrow{display:block;font-size:.8rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 -8px}
 .answer{background:var(--soft);border-radius:var(--r);padding:16px 16px 4px;margin:14px 0 18px}
 .answer p{margin-bottom:12px}
+.answer h2.ba-h{font-size:1.15rem;margin:0 0 2px}
+.ba{display:flex;align-items:center;gap:14px;margin:6px 0 10px}
+.ba p{margin:0}.ba-y{display:block;font-size:.9rem;color:var(--muted)}
+.ba-v{display:block;font-size:2rem;line-height:1.05;font-weight:750;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.ba-to{font-size:1.5rem;color:var(--muted)}
+.ba-list{margin:0 0 12px;padding-left:1.2em}
+a.card .ba{margin:2px 0 6px}a.card .ba-v{font-size:1.6rem}
 .small,.src{font-size:.87rem;color:var(--muted);line-height:1.5}
 .src{margin:8px 0 0}
 details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0;margin:10px 0 0}details.src summary{font-weight:500;font-size:.87rem;min-height:44px;color:var(--link)}details.src ul{margin:0 0 8px;padding-left:1.1em}details.src li{margin-bottom:6px}details.src li a{display:inline-block;padding:4px 0}
