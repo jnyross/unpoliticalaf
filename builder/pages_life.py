@@ -217,11 +217,11 @@ def year_jump(up):
     opts = "".join(f'<option value="{y}"{" selected" if y == YEARS[-1] else ""}>{y}</option>' for y in EARLY_YEARS + YEARS)
     return (f'<form class="jumpyear" action="{up}index.html#years" method="get" data-year>'
             f'<label for="jump-year">Go to a year</label><select id="jump-year" name="year">{opts}</select>'
-            '<button type="submit">Go</button></form>')
+            '<button type="submit">Go</button><p class="pick-status" role="status" aria-live="polite"></p></form>')
 
 
 YEAR_JS = """<script>
-document.querySelectorAll('form[data-year]').forEach(function(f){f.addEventListener('submit',function(e){
+document.querySelectorAll('form[data-year]').forEach(function(f){var s=f.querySelector('[role=status]');f.elements.year.addEventListener('change',function(){if(s)s.textContent=f.elements.year.value+' chosen. Press Go to open it.';});f.addEventListener('submit',function(e){
 e.preventDefault();location.href=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'')+f.elements.year.value+'.html';});});
 (function(){var y=+new URLSearchParams(location.search).get('year');if(y&&/^\\d{4}$/.test(y)){location.replace(y+'.html');}})();
 </script>"""
@@ -233,13 +233,32 @@ DEFAULT_PAIR = [2010, LAST]
 SUGGESTED = []
 
 
-def compare_form(up, a=None, b=None):
+def year_grid(cells):
+    """Years as a fixed five-column grid. Each row starts at a year ending in 0 or 5,
+    so a year is always in the same column and nothing reflows when a cell is tapped.
+    cells: (year, html of the cell's content)."""
+    if not cells:
+        return ""
+    first = cells[0][0] % 5 + 1
+    lis = [f'<li class="c{first}">{cells[0][1]}</li>' if first > 1 else f"<li>{cells[0][1]}</li>"]
+    lis += [f"<li>{c}</li>" for _, c in cells[1:]]
+    return f'<ul class="yearnav yeargrid">{"".join(lis)}</ul>'
+
+
+PICK_STATUS = '<p class="pick-status" role="status" aria-live="polite"></p>'
+
+
+def compare_form(up, a=None, b=None, anchor=None):
+    """Two years to compare. anchor opens the comparison at one topic's section."""
+    a, b = a or DEFAULT_PAIR[0], b or DEFAULT_PAIR[1]
     def opts(sel):
         return "".join(f'<option value="{y}"{" selected" if y == sel else ""}>{y}</option>' for y in EARLY_YEARS + YEARS)
-    return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare>
-<label>First year <select name="from">{opts(a or DEFAULT_PAIR[0])}</select></label>
-<label>Second year <select name="to">{opts(b or DEFAULT_PAIR[1])}</select></label>
-<button type="submit">Compare</button></form>'''
+    data = f' data-anchor="{anchor}"' if anchor else ""
+    at = f'<input type="hidden" name="at" value="{anchor}">' if anchor else ""
+    return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare{data}>{at}
+<label>First year <select name="from">{opts(a)}</select></label>
+<label>Second year <select name="to">{opts(b)}</select></label>
+<button type="submit">Compare {min(a, b)} and {max(a, b)}</button>{PICK_STATUS}</form>'''
 
 
 def compare_with(y, up=""):
@@ -251,16 +270,21 @@ def compare_with(y, up=""):
     links = " · ".join(f'<a href="{up}compare/{min(o, y)}-{max(o, y)}.html">{min(o, y)} and {max(o, y)}</a>' for o in quick)
     return (f'<form class="pick" action="{up}compare/index.html#all" method="get" data-compare id="compare-top">'
             f'<input type="hidden" name="from" value="{y}"><label>Compare {y} with <select name="to">{opts}</select></label>'
-            f'<button type="submit">Compare</button></form><p class="small">Or go straight to {links}.</p>')
+            f'<button type="submit">Compare {min(y, sel)} and {max(y, sel)}</button>{PICK_STATUS}</form><p class="small">Or go straight to {links}.</p>')
 
 
 COMPARE_JS = """<script>
-document.querySelectorAll('form[data-compare]').forEach(function(f){f.addEventListener('submit',function(e){
+document.querySelectorAll('form[data-compare]').forEach(function(f){var s=f.querySelector('[role=status]'),btn=f.querySelector('button');
+function said(){var a=+f.elements.from.value,b=+f.elements.to.value,lo=Math.min(a,b),hi=Math.max(a,b);
+if(a===b){btn.textContent='Open '+a;return 'Both years are '+a+'. Press Open '+a+' to see that year, or choose a different year.';}
+btn.textContent='Compare '+lo+' and '+hi;return 'Chosen: '+lo+' and '+hi+'. Press Compare '+lo+' and '+hi+' to open the comparison.';}
+f.querySelectorAll('select').forEach(function(sel){sel.addEventListener('change',function(){var t=said();if(s)s.textContent=t;});});
+f.addEventListener('submit',function(e){
 var a=+f.elements.from.value,b=+f.elements.to.value;e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'');
 if(a===b){location.href=base+'../'+a+'.html';return;}
-var lo=Math.min(a,b),hi=Math.max(a,b);location.href=base+lo+'-'+hi+'.html';});});
+var lo=Math.min(a,b),hi=Math.max(a,b),h=f.getAttribute('data-anchor');location.href=base+lo+'-'+hi+'.html'+(h?'#'+h:'');});});
 (function(){var p=new URLSearchParams(location.search),a=+p.get('from'),b=+p.get('to');
-if(a&&b&&document.body.hasAttribute('data-compare-index')){if(a===b){location.replace('../'+a+'.html');}else{location.replace(Math.min(a,b)+'-'+Math.max(a,b)+'.html');}}})();
+if(a&&b&&document.body.hasAttribute('data-compare-index')){var h=/^[a-z]+$/.test(p.get('at')||'')?'#'+p.get('at'):'';if(a===b){location.replace('../'+a+'.html');}else{location.replace(Math.min(a,b)+'-'+Math.max(a,b)+'.html'+h);}}})();
 </script>"""
 
 # Years that official sources describe as unusual. A comparison that starts or
@@ -457,12 +481,8 @@ def year_page(facts, d, num, sources, y):
         body.append(f'<p class="small"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up=up))
     body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
-    links = []
-    for o in YEARS:
-        if o != y:
-            a, b = min(o, y), max(o, y)
-            links.append(f'<li><a href="compare/{a}-{b}.html">{o}</a></li>')
-    body.append(f'<ul class="yearnav">{"".join(links)}</ul>')
+    cells = [(o, f'<span aria-current="page">{o}</span>' if o == y else f'<a href="compare/{min(o, y)}-{max(o, y)}.html">{o}</a>') for o in YEARS]
+    body.append(f'<p class="small">Choose the other year. {y} is this page, shown filled in.</p>' + year_grid(cells))
     body.append(CAUSE)
     return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body), f"Work, earnings, housing, holidays and class sizes in the UK in {y}, from official statistics.", scripts=COMPARE_JS, toc_after_first=True)
 
@@ -839,13 +859,11 @@ def compare_index(sources):
     body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
     for a in YEARS[:-1]:
-        links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in YEARS if b > a)
-        body.append(f'<h3>{a} with…</h3><ul class="yearnav">{links}</ul>')
+        body.append(f'<h3>{a} with…</h3>' + year_grid([(b, f'<a href="{a}-{b}.html">{b}</a>') for b in YEARS if b > a]))
     # Earlier years have fewer figures, so their pairs fold away beneath.
     early = []
     for a in EARLY_YEARS:
-        links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in EARLY_YEARS + YEARS if b > a)
-        early.append(f'<h3>{a} with…</h3><ul class="yearnav">{links}</ul>')
+        early.append(f'<h3>{a} with…</h3>' + year_grid([(b, f'<a href="{a}-{b}.html">{b}</a>') for b in EARLY_YEARS + YEARS if b > a]))
     body.append(f'<h2 id="earlier">Comparisons with earlier years, {EARLY_YEARS[0]} to {EARLY_YEARS[-1]}</h2>'
                 '<p>Fewer official figures reach back before 2008: the employment rate from 1971, visits abroad from 1980, owning and renting in England '
                 'from 1981, pay from 2002 and class sizes from 2006. These pages compare only those figures, and only where both years were measured the same way.</p>'
@@ -1136,7 +1154,7 @@ def topic_page(facts, d, num, sources, key):
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
@@ -1150,10 +1168,11 @@ def topic_page(facts, d, num, sources, key):
     body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
-    body.append("<h2 id='years'>One year, or two side by side</h2>")
-    body.append(NOFOLD + f'<p>See <a href="index.html#years">everyday life in a single year</a>, or <a href="compare/index.html">compare two years</a> across every topic.</p>')
+    body.append(f"<h2 id='years'>Compare two years</h2>")
+    # The comparison opens at this topic's section; every other topic follows it.
+    body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
-                f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True)
+                f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
 
 def _hub_holidays(facts, d, num):
@@ -1197,7 +1216,6 @@ def life_index(facts, d, num, sources):
         if key == TOPICS[0][0]:
             body.append(before_toc(CAUSE))
         body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
-    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
     a, b = DEFAULT_PAIR
@@ -1206,6 +1224,7 @@ def life_index(facts, d, num, sources):
                 f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b, brief=True))}</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
+    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS + YEAR_JS, contents=False)
 
 
