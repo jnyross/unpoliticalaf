@@ -1027,7 +1027,7 @@ def _holidays(facts, d, num, sources):
     names = d["countries"]["names"]
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
-<p>Before the pandemic, in 2019, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad; in 2020 the survey that counts them stopped on 16 March, so there is no holiday figure for the whole year: from January to mid-March they made {num("hol.world.holiday.2020.part", "millions")}. In 2021, with travel still restricted, they made {num("hol.world.holiday.2021", "millions")}. {_top_holiday_countries(facts, d, num, spain_first)}</p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}. {_top_holiday_countries(facts, d, num, spain_first)}</p>
 </div>''')
     body.append(U.topic_line(num, "holidays", LAST))
     body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
