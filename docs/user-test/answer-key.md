@@ -47,11 +47,11 @@ Where the site says it:
 
 ## 4. C: About 27%
 
-Who pays page: the top 1% of Income Tax payers paid 27.2% of all Income Tax. 59.1% is the top 10%.
+Who pays page: the top 1% of Income Tax payers owed 27.2% of all Income Tax. 59.1% is the top 10%.
 
 Where the site says it:
 
-- `who-pays.html`: "the top 1% of Income Tax payers paid 27.2% of all Income Tax"
+- `who-pays.html`: "the top 1% of Income Tax payers owed 27.2% of all Income Tax"
 
 ## 5. A: It is an average across households, counting all taxes, and it is not the tax rate any one person pays
 

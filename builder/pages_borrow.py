@@ -65,7 +65,7 @@ def borrowing_page(facts, d, num, sources):
 
     body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
-<p>In {yy}, the latest full year, the UK government paid an average of {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year to borrow for 10 years, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
+<p>In {yy}, the latest full year, the market interest rate (yield) on 10-year UK government bonds averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. This is the rate for new 10-year borrowing, not the average rate on all the debt the government already owes. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
 </div>''')
 
     # ---------------------------------------------------------------- debt
@@ -139,7 +139,7 @@ def borrowing_page(facts, d, num, sources):
     g_ids = [[f"borrow.int.{a}.{y}" if f"borrow.int.{a}.{y}" in facts else None for a in g7 + [AVG]] for y in years]
     rows = [[y] + [num(i, "pct") if i else "not available" for i in row] for y, row in zip(years, g_ids)]
     body.append(details_table("Show interest every year", f"Net interest paid by general government, % of GDP, G7 and OECD average, {years[0]} to {ny}", ["Year"] + [esc(names[a]) for a in g7 + [AVG]], rows))
-    body.append("<p>The UK's interest bill rose sharply in 2022. Some UK government bonds are index-linked gilts, whose payments rise with the Retail Prices Index, a measure of inflation. The Office for National Statistics' explanation of the 2022-23 rise is quoted on the <a href='spending.html'>spending page</a>, and the Office for Budget Responsibility's in the next section.</p>")
+    body.append(f"<p>The UK's net interest bill was {num(f'borrow.int.{UK}.2021', 'pct')} of GDP in 2021 and {num(f'borrow.int.{UK}.2022', 'pct')} in 2022. The Office for National Statistics' explanation of the rise in 2022-23 is quoted on the <a href='spending.html'>spending page</a>, and the Office for Budget Responsibility's account of how inflation and interest rates feed into the bill is in the next section.</p>")
     body.append(source_line(sources, ["oecd-gov-pf-g7"], "Interest as a share of revenue calculated here from the OECD's interest and revenue figures, both as % of GDP."))
 
     # ---------------------------------------------------------------- what moves yields
@@ -155,7 +155,7 @@ def borrowing_page(facts, d, num, sources):
 
     body.append(f'''<div class="limit"><p><strong>Limits.</strong></p><ul>
 <li>These figures compare governments; they do not show which level of debt or interest is right, or what the borrowing paid for.</li>
-<li>Different yields can reflect different central bank rates and inflation, not only how investors judge each government. Countries that share the euro (France, Germany and Italy) have the same central bank, so differences between their yields say more about how investors see each government than differences between, say, the UK and Japan.</li>
+<li>Different yields can reflect different central bank rates and inflation, not only how investors judge each government. Each country's central bank sets its own interest rate, except that France, Germany and Italy share the euro and the European Central Bank's rate. These figures do not show which factor explains the gap between any two countries.</li>
 <li>GDP-based shares change when GDP changes, as well as when debt or interest changes.</li>
 <li>The OECD and IMF revise these figures as countries send newer data. Figures here are as downloaded on the date on each source page.</li>
 </ul></div>''')

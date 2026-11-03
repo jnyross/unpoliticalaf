@@ -338,16 +338,19 @@ def who_pays_page(facts, d, num, sources):
     w = d["who"]
     y = w["hmrc_latest_outturn"]
     body = ["<h1>Who pays?</h1>"]
-    body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax was paid by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
+    body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
                          (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
                          (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
-    body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
+    body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 <p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
-    items = [("Top 1% of taxpayers", f"hmrc.share.top1.{y}", ""), ("Top 10% of taxpayers", f"hmrc.share.top10.{y}", ""), ("Top 50% of taxpayers", f"hmrc.share.top50.{y}", ""), ("Bottom 50% of taxpayers", f"hmrc.share.bottom50.{y}", "alt")]
-    body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
+    # Show each group's share of income beside its share of tax, as HMRC does (audit 11 judge, R1).
+    items = []
+    for key, lab in (("top1", "Top 1%"), ("top10", "Top 10%"), ("top50", "Top 50%"), ("bottom50", "Bottom 50%")):
+        items += [(f"{lab}: share of Income Tax", f"hmrc.share.{key}.{y}", ""), (f"{lab}: share of income", f"hmrc.income.{key}.{y}", "alt")]
+    body.append(bars(items, "pct", num, maxval=100, caption=f"Share of all Income Tax owed, and share of all Income Tax payers' income, for each group of taxpayers, tax year {y}. The top groups overlap: the top 1% is part of the top 10%."))
     body.append(before_toc("<p>Two official sources answer who pays in different ways: HM Revenue and Customs (section 1) and the Office for National Statistics (section 2). Keep them separate: they count different people and different taxes.</p>"))
     body.append(FOLD)
     body.append('''<p>HM Revenue and Customs ranks everyone who owes Income Tax by income and adds up the tax each group owes. People who owe no Income Tax are not included.</p>''')
@@ -359,7 +362,7 @@ def who_pays_page(facts, d, num, sources):
     hy = w["hmrc_years"]
     vals = [facts[f"hmrc.share.top1.{h}"].value for h in hy]
     fc = next((i for i, h in enumerate(hy) if int(h[:4]) >= 2024), None)
-    body.append(line_chart("Share of Income Tax paid by the top 1% of taxpayers", [h[:4] + "-" + h[-2:] for h in hy],
+    body.append(line_chart("Share of Income Tax owed by the top 1% of taxpayers", [h[:4] + "-" + h[-2:] for h in hy],
                            [("Top 1% share of Income Tax", vals, "a"), ("Top 1% share of income", [facts[f"hmrc.income.top1.{h}"].value for h in hy], "b")],
                            "Per cent. Gap at 2008-09: HMRC has no figures for that year. Years from 2024-25 are HMRC projections.",
                            breaks=[(hy.index("2016 to 2017"), "Dividend rules changed")], forecast_from=fc, future="projection", ymin=0,

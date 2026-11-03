@@ -883,7 +883,15 @@ def _work(facts, d, num, sources):
     """(answer box, detail parts) for the work topic."""
     body = []
     y = LAST
-    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
+    # The survey can be a year newer than the explorer's range, as the home page shows (audit 11 judge)
+    nw = LAST + 1
+    newer = ""
+    if _val(facts, f"work.rate.{nw}") is not None:
+        mw = (f' ({num(f"work.men.{nw}", "pct")} of men and {num(f"work.women.{nw}", "pct")} of women)'
+              if all(_val(facts, f"work.{k}.{nw}") is not None for k in ("men", "women")) else "")
+        newer = (f' The April to June {nw} survey found {num(f"work.rate.{nw}", "pct")} in work{mw}. '
+                 f'It is not on the year pages, which stop at {LAST}, the latest year that most topics have.')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
                              finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
@@ -1066,7 +1074,7 @@ def _schools(facts, d, num, sources):
     newer = [y for y in (LAST + 1,) if _val(facts, f"school.primary.{y}") is not None and _val(facts, f"school.secondary.{y}") is not None]
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
-              f'{num(f"school.secondary.{newer[-1]}", "dp1")}; only this page shows it, as the other topics have no {newer[-1]} figures yet.') if newer else ""
+              f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
     answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p></div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
