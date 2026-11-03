@@ -103,11 +103,11 @@ EXPLANATIONS = {
         quote=["In 2023 to 2024, the average Income Tax rate was 4.8% for those with incomes from £15,000 to below £20,000, increasing to 9.0% for incomes from £20,000 to below £30,000 and 12.3% for incomes from £30,000 to below £50,000. For incomes within the higher rate tax band, the average Income Tax rate rose to 18.9% for individuals earning between £50,000 and £100,000 and then rose to 29.2% for individuals earning between £100,000 and £150,000."],
         gloss="These are averages for Income Tax payers in each income range, and cover Income Tax only, not National Insurance or taxes on spending."),
     "fiscal-drag": dict(
-        question="Why did direct taxes rise in 2023/24?",
+        question="Why did direct taxes rise in cash in 2023/24?",
         source="explain-ons-etb-latest", publisher="Office for National Statistics",
         title="Effects of taxes and benefits on UK household income: financial year ending 2024", date="25 September 2025",
-        quote=["Income tax thresholds in FYE 2024 remained at 2022 levels, creating fiscal drag and so increasing households tax liabilities.",
-               "Fiscal drag occurs when income tax thresholds are not adjusted in line with inflationary wage raises. As a result, taxpayers can be pushed into higher tax brackets, causing them to pay greater proportion of their income in taxes."]),
+        quote=["Income tax thresholds in FYE 2024 remained at 2022 levels, creating fiscal drag and so increasing households tax liabilities."],
+        gloss="“In cash” means the pounds paid rose. As a share of gross income, direct taxes did not rise: the table above (Table 8 of the same survey) shows 22.9% in 2023/24, down from 23.2% in 2022/23. After inflation, the same ONS bulletin says direct taxes fell for the average household."),
     "indirect-spending": dict(
         question="Why can indirect taxes be a large share of income for lower-income households?",
         source="explain-ons-etb-fye2016", publisher="Office for National Statistics",
