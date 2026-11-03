@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("household-tax.html", "How much of household income goes on tax?")],
+        "was": "A heading asked “Why did direct taxes rise in 2023/24?”, and the explanation under it said fiscal drag made people pay a greater proportion of their income in tax. The page's own figures showed direct taxes fell as a share of gross income, from 23.2% in 2022/23 to 22.9% in 2023/24.",
+        "now": "The heading asks why direct taxes rose in cash. A note beside it says their share of gross income fell, and that after inflation they fell for the average household.",
+        "pr": 156,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("life/index.html", "Everyday life, year by year"), ("life/work.html", "Work"), ("life/earnings.html", "Earnings"),
                   ("who-pays.html", "Who pays?"), ("who-pays-households.html", "Retired people and kinds of household"),
                   ("taxes.html", "Which taxes raise the money?"), ("life/housing-places.html", "Housing in each region and nation")],
