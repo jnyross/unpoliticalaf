@@ -170,6 +170,9 @@ class Findings(unittest.TestCase):
         st = [(0, 3)]
         self.assertEqual(F.gap("Men's rate", "women's")(self.L, series, st), "Men's rate was higher than women's in every year from 2008 to 2010")
         self.assertEqual(F.leader("{name} was highest {span}")(self.L, series, st), "Men was highest in every year from 2008 to 2010")
+        close = F.leader("{name} was highest {span}", close=1.5, close_template="{name} and {lsecond} were close {span}")
+        self.assertEqual(close(self.L, series, st), "Men and women were close in 2010")
+        self.assertEqual(close(self.L, [("Men", [5, 6, 9]), ("Women", [3, 4, 6])], st), "Men was highest in every year from 2008 to 2010")
 
     def test_overview_counts_groups(self):
         fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0]), ("East", [7.0, 8.0, 9.0])], "u", "dp1",

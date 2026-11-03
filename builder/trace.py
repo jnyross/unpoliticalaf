@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("household-tax.html", "How much household income goes on tax?"), ("index.html", "Home")],
+        "was": "The household tax page explained the lowest-income fifth’s indirect taxes in its own words (“because their households spend more of their income, some of it from savings or borrowing”), and a chart title said taxes took “the largest share of income” for the lowest-income fifth in 2023/24, when it was 36.7% against 36.2% for the highest-income fifth. The home page card showed the shares by fifth with no word on what they were made of.",
+        "now": "The explanation is now a quote from the ONS, with its source and date. The chart title says the two fifths had a similar share, less than one percentage point apart. The home page card says the lowest-income fifth’s share is mostly indirect tax such as VAT and the highest-income fifth’s mostly direct tax such as Income Tax.",
+        "pr": 129,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980"), ("life/index.html", "Everyday life")],
         "was": "Holiday visits abroad in 2020 were given as 4.4 million, about 7 for every 100 residents, and drawn on the charts as the year’s low. ONS’s 2020 figures by purpose of visit come only from the passenger survey, which stopped on 16 March 2020, so they cover only January to mid-March, not the whole year.",
         "now": "2020 has no holiday figure on the charts, in comparisons or per 100 residents. The holidays page says the survey stopped on 16 March and gives the 4.4 million as January to mid-March only. Line charts whose scale starts above zero now say so under the chart, and a build check fails if one does not.",

@@ -394,7 +394,7 @@ def household_tax_page(facts, d, num, sources, rates):
         items.append((lab, f"etb.t8.gross.all.{q}", "alt" if q == "all" else ""))
     body.append('<h2 id="by-income">Taxes as a share of gross income, by household income</h2>')
     body.append(bars(items, "pct", num, maxval=50, caption="All taxes as a percentage of gross household income, 2023/24. Each fifth holds the same number of people, ranked by their household's income."))
-    body.append(f'''<p>For people in the highest-income fifth most tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth most is indirect, such as VAT: {num("etb.t8.gross.indirect.q1", "pct")} of gross household income.</p>''')
+    body.append(f'''<p>For people in the highest-income fifth most tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth, most is indirect, such as VAT: {num("etb.t8.gross.indirect.q1", "pct")} of gross household income.</p>''')
     body.append(explain("indirect-spending", sources))
     body.append(FOLD)
     rows = [[lab, num(f"etb.t8.gross.direct.{q}", "pct"), num(f"etb.t8.gross.indirect.{q}", "pct"), num(f"etb.t8.gross.all.{q}", "pct")] for q, lab in QUINTS]
