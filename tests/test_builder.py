@@ -122,7 +122,9 @@ class Findings(unittest.TestCase):
         self.assertEqual(phrase(self.L, [1, 2, 3, 4, 5, 6]), "rose between 2008 and 2013")
         self.assertEqual(phrase(self.L, [6, 5, 4, 3, 2, 1]), "fell between 2008 and 2013")
         self.assertEqual(phrase(self.L, [5, 5.05, 4.97, 5, 5.04, 5.01]), "changed little between 2008 and 2013")
-        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.1]), "rose until 2010, then fell back to about the 2008 level")
+        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.02]), "rose until 2010, then fell back to about the 2008 level")
+        # "about" needs the last figure within 5% of that level too, not only near it on the chart's range
+        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.1]), "rose until 2010, then fell back part of the way")
         self.assertEqual(phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way")
         self.assertEqual(phrase(self.L, [4, 4, 4, 4, 4, 4]), "stayed the same from 2008 to 2013")
 
@@ -131,7 +133,7 @@ class Findings(unittest.TestCase):
         years = [str(y) for y in range(2009, 2024)]
         # Holiday visits abroad, millions: up to 2019, down in 2020, back up by 2023
         hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, 4.4, 8.9, 45.6, 55.5]
-        self.assertEqual(phrase(years, hol), "rose until 2019, fell in 2020, then rose back to about the 2019 level")
+        self.assertEqual(phrase(years, hol), "rose until 2019, fell in 2020, then rose back part of the way")
         self.assertEqual(sentence(years, hol, lambda i: str(hol[i])),
                          "From 41.2 in 2009, rose to a high of 58.7 in 2019, fell to a low of 4.4 in 2020, then rose to 55.5 in 2023.")
         # Spending as a share of GDP: a ten-year fall before the 2020-21 rise. The small
@@ -185,6 +187,27 @@ class Findings(unittest.TestCase):
         svg = line_chart("t", self.L, [("a", [9, 8, 1, 2, 3, 99], "a")], "u", kind="dp1", breaks=[(2, "New method")], split_breaks=True,
                          forecast_from=5, finding=F.trend("A"))
         self.assertIn(">A rose between 2010 and 2012<", svg)
+
+    def test_title_stops_at_a_break_without_comparing_across_it(self):
+        # Audit 11: "rose back to about the 2019 level" over a line that goes on past
+        # the 2024 method change led readers to compare 2025 with 2019.
+        from builder import findings as F
+        from builder.check import crosses_break
+        years = [str(y) for y in range(2009, 2026)]
+        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, None, 8.9, 45.6, 58.0, 56.0, 58.4]
+        brk = [(years.index("2024"), "New method"), (years.index("2025"), "Fully new method")]
+        svg = line_chart("t", years, [("a", hol, "a")], "u", kind="dp1", breaks=brk, split_breaks=True,
+                         finding=F.trend("Visits", which="first", after="; later years use a new method and are not compared"))
+        title = re.search(r'class="ctitle"[^>]*>([^<]*)<', svg).group(1)
+        self.assertEqual(title, "Visits rose until 2019, fell in 2021, then rose until 2023; later years use a new method and are not compared")
+        self.assertIn('data-breaks="15 16"', svg)
+        rows = [[y, "no figure" if v is None else f"{v} million"] for y, v in zip(years, hol)]
+        self.assertEqual(crosses_break(title, "0:0:15", rows, [15, 16]), [])
+        bad = crosses_break("Visits rose until 2019, fell in 2021, then rose back to about the 2019 level", "0:0:15", rows, [15, 16])
+        self.assertEqual(len(bad), 2)  # 2019 is set against figures past both breaks
+        self.assertTrue(crosses_break("Visits rose between 2022 and 2025", "0:13:17", rows, [15, 16]))
+        # A line that ends before the break may still compare with an earlier level
+        self.assertEqual(crosses_break("Visits rose back to about the 2019 level", "0:0:15", rows[:15], [15, 16]), [])
 
     def test_gap_and_leader(self):
         from builder import findings as F

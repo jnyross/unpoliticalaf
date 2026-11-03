@@ -999,22 +999,37 @@ def _hol_cell(facts, num, y):
     return num(f"hol.world.holiday.{y}", "millions")
 
 
+def _top_holiday_countries(facts, d, num, spain_first):
+    """The most visited countries in the latest year. Holiday-only figures by country
+    start in 2024; before that only visits for any purpose exist, and the text says so."""
+    names = d["countries"]["names"]
+    hl = top_countries(facts, d, LAST, 3, kind="holiday") if d["countries"].get("holiday", {}).get(LAST) else []
+    lead = ("Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country. "
+            if spain_first else "")
+    if len(hl) == 3:
+        return (f'{lead}Counting holidays alone, in {LAST} {esc(names[hl[0]])} had {num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} holiday visits, '
+                f'then {esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).')
+    tl = top_countries(facts, d, LAST, 3)
+    return (f'{lead}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose, then {esc(names[tl[1]])} '
+            f'({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}); there are no holiday-only figures by country for that year.')
+
+
 def _holidays(facts, d, num, sources):
     """(answer box, detail parts) for the holidays topic."""
     body = []
     y = LAST
     names = d["countries"]["names"]
-    tl = top_countries(facts, d, LAST, 3)
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
-<p>Before the pandemic, in 2019, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad; in 2020 the survey that counts them stopped on 16 March, so there is no holiday figure for the whole year: from January to mid-March they made {num("hol.world.holiday.2020.part", "millions")}. In 2021, with travel still restricted, they made {num("hol.world.holiday.2021", "millions")}. {"Spain has been the most visited country in every year with figures by country. " if spain_first else ""}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits, then {esc(names[tl[1]])} ({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}).</p>
+<p>Before the pandemic, in 2019, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad; in 2020 the survey that counts them stopped on 16 March, so there is no holiday figure for the whole year: from January to mid-March they made {num("hol.world.holiday.2020.part", "millions")}. In 2021, with travel still restricted, they made {num("hol.world.holiday.2021", "millions")}. {_top_holiday_countries(facts, d, num, spain_first)}</p>
 </div>''')
     body.append(U.topic_line(num, "holidays", LAST))
     body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
                 'Trips within Great Britain come from a separate survey, which changed method after 2019.</p>')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method). No figure for 2020: the survey stopped on 16 March, so there is no holiday count for the whole year", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
-                             finding=F.trend("Holiday visits abroad by UK residents", which="first")))
+                             finding=F.trend("Holiday visits abroad by UK residents", which="first",
+                                             after="; later years use a new method and are not compared")))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), _hol_cell(facts, num, y), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),

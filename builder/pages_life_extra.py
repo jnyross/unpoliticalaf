@@ -117,7 +117,7 @@ def afford_page(facts, d, num, sources):
                        [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
                        "Times a year’s earnings. House prices for the year ending September; earnings of full-time employees working in the area, April", "times2", ymin=0,
                        breaks=[(comparable_from(years), "Earnings counted as yearly pay from 1999")], split_breaks=True,
-                       finding=F.pair("In England, house prices as a multiple of earnings", "in Wales they",
+                       finding=F.pair("In England, house prices as a multiple of earnings", "in Wales they", which="last",
                                       together="House prices as a multiple of earnings {phrase} in both England and Wales")))
     body.append(FOLD)
     body.append(details_table("Show house prices and earnings for every year", "England and Wales: median house price, median full-time annual earnings and the ratio",

@@ -22,6 +22,8 @@ TURN = 0.3
 # line ends at least this share of its range away from its last peak or low, so a
 # title never says "then rose" about a line whose latest figures fell.
 TAIL = 0.15
+# "back to about the 2019 level" needs the last figure within this share of that level.
+NEAR = 0.05
 # "in most years" means at least this share of year-to-year moves went the same way.
 MOST = 0.75
 
@@ -150,17 +152,22 @@ def _back(vals, labels, lg, s):
     up = lg[-1][2] > 0
     span = vals[s["hi"]] - vals[s["lo"]]
     d = vals[lg[-1][1]] - vals[ref]
-    if abs(d) <= FLAT * span:
+    # "about" only when the gap is small both against the line's range and against the
+    # level itself, so 126 against 140 (10% lower) is not called "about the same level"
+    if abs(d) <= FLAT * span and abs(d) <= NEAR * abs(vals[ref]):
         return f" back to about the {labels[ref]} level"
     if (d > 0) == up:
         return f" {'above' if up else 'below'} the {labels[ref]} level"
     return " back part of the way"
 
 
-def phrase(labels, vals, a=0, b=None, short=False):
+def phrase(labels, vals, a=0, b=None, short=False, upto=False):
     """A few neutral words on how a line moved, for a title: 'rose between 2008 and 2025'.
     Every big rise and fall is named in order: 'rose until 2019, fell in 2020, then rose'.
-    short leaves out how far a line came back after its last turn."""
+    short leaves out how far a line came back after its last turn. upto names the year
+    the last move ends instead ('then rose until 2023') and never compares with an earlier
+    level: used when the chart goes on past a break, so the reader is not led to compare
+    figures either side of it."""
     s = shape(vals, a, b)
     if s is None:
         return ""
@@ -181,6 +188,8 @@ def phrase(labels, vals, a=0, b=None, short=False):
     if max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
         # a smaller turn back at the end (see TAIL): say when, not how far
         last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" between {labels[s0]} and {labels[e0]}"
+    elif upto:
+        last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" until {labels[e0]}"
     elif not short:
         last += _back(vals, labels, lg, s)
     return ", ".join(words + [last])
@@ -341,13 +350,18 @@ def _stretch(stretches, which):
     return stretches[0][0], stretches[-1][1]
 
 
-def trend(subject, si=0, which="last"):
+def trend(subject, si=0, which="last", after=""):
     """'{subject} rose between 2008 and 2025': the line's movement over one stretch.
-    which: 'last' (default, the latest comparable run), 'first' or 'all'."""
+    which: 'last' (default, the latest comparable run), 'first' or 'all'.
+    When the stretch ends at a break with figures after it, the title names the year it
+    ends and makes no "back to the 2019 level" comparison (see phrase(upto=)).
+    after: words added at the end, such as why later years are not compared."""
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
-        p = phrase(labels, series[si][1], a, b)
-        return f"{subject} {p}" if p else ""
+        vals = series[si][1]
+        upto = any(st[0] == b for st in stretches) and any(v is not None for v in vals[b:])
+        p = phrase(labels, vals, a, b, upto=upto)
+        return f"{subject} {p}{after}" if p else ""
     return describes(rule, lambda st: [(si, *_stretch(st, which))])
 
 

@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("life/holidays.html", "Holidays since 1980"), ("life/house-prices.html", "House prices and earnings")],
+        "was": "Both holiday chart titles said visits “rose back to about the 2019 level”. On the first chart, readers could set the 2025 figure (Great Britain residents, new method) against 2019 (UK residents, old method), across the method change the page says is not compared; on the second, 126 visits per 100 residents in 2023 was called about the same as 140 in 2019. The holidays summary gave visits for any purpose to Spain (19.1 million), France (9.1 million) and Italy (5.7 million) as if they were holidays. The house prices and earnings title described 1997 and 1998 together with later years, across the 1999 change in how earnings are counted.",
+        "now": "The first holiday title stops at 2023 and says later years use a new method and are not compared; the second says visits rose back part of the way and that the series ends in 2023. The summary gives holiday visits by country (Spain 15.6 million, France 5.9 million and Greece 4.3 million in 2025; Italy, third for all visits, had 3.6 million) and labels the all-purpose ranking as such. The house prices title starts at 1999. A build check now fails any chart title that describes years either side of a marked break, or compares with an earlier level when the line goes on past a break.",
+        "pr": 141,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("spending.html", "Where does public money go?"), ("tax-history.html", "Which taxes raised the money since 1948?"),
                   ("life/house-prices.html", "House prices and earnings"), ("borrowing.html", "Debt and borrowing costs"),
                   ("life/earnings.html", "Earnings"), ("spending-history.html", "Spending by purpose over 100 years")],
