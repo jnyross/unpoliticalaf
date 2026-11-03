@@ -390,12 +390,13 @@ def headline(facts, num, topic, y, gb=True):
     return ""
 
 
-def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, years=None):
+def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, years=None, point_label=None):
     """Where year y sits in the topic's key measure, as a small dot chart for every year.
 
     mkey picks another measure from MEAS; measure gives (label, fact-id function,
     kind, group function) for one that is not in MEAS. years replaces the explorer's
-    years (for a figure newer than its range).
+    years (for a figure newer than its range, or a longer series). point_label
+    names each year; housing defaults to survey years.
     """
     years = years or YEARS
     if measure:
@@ -410,7 +411,7 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, year
     if y is None:
         y = have[-1][0]  # the latest year with a figure
     breaks = bool(group) and len({group(yr) for yr in years}) > 1
-    yl = sy if topic == "housing" else str  # housing figures are for survey years, April to March
+    yl = point_label or (sy if topic == "housing" else str)  # housing figures are for survey years, April to March
     aria = f"Dot chart of {label.lower()} for each year from {yl(years[0])} to {yl(years[-1])}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
     svg = spark(pts, aria, highlight=y, group=group, axis=(yl(years[0]), yl(years[-1])), kind=kind, point_label=yl)
     if not caption:
@@ -1095,8 +1096,8 @@ TOPIC_PAGES = {
     "schools": ("How have class sizes changed?", "primary, secondary, infant and key stage 2 classes in England, how many pupils are in classes of more than 30, and figures for Wales and Scotland"),
 }
 TOPIC_BUILDERS = {"work": _work, "earnings": _earnings, "housing": _housing, "holidays": _holidays, "schools": _schools}
-TREND_HEADINGS = {"work": "Employment over time", "earnings": "Pay over time", "housing": "Who owns and who rents",
-                  "holidays": "Holidays over time", "schools": "Class sizes in England"}
+TREND_HEADINGS = {"work": "Employment", "earnings": "Pay after inflation", "housing": "Who owns and who rents",
+                  "holidays": "Visits abroad", "schools": "Class sizes in England"}
 _SUB_H3 = re.compile(r"<h3 id='([^']+)'>(.*?)</h3>")
 
 
@@ -1114,25 +1115,31 @@ def topic_page(facts, d, num, sources, key):
     answer, detail = TOPIC_BUILDERS[key](facts, d, num, sources)
     # Sub-sections become sections of their own, so each keeps its answer in view on a phone.
     detail = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in detail]
-    # The first chart stays in view; its tables fold away.
     first_chart = next(i for i, part in enumerate(detail) if "data-chart=" in part)
-    # The longer series before 2008 follows the first chart's table.
+    first = FIRST_YEAR[key]
+    # The longest series leads the page, so a reader looking for change since the
+    # 1970s or 1980s sees it first (audit 11 gap 3). Its table, limits and sources fold away.
     from . import pages_history
-    history = [_SUB_H3.sub(r"<h2 id='\1'>\2</h2>", part) for part in pages_history.block(facts, num, sources, key)]
-    if history:
-        # The long chart shows the same measure as the chart above, over more years, so on a
-        # phone it waits in the fold; the answer box above it gives the long-run change.
-        history.append("<!--keepfold-->")
-    detail[first_chart + 2:first_chart + 2] = history
-    detail.insert(first_chart + 1, FOLD)
-    # On a phone the first chart comes straight after the answer. How sure the
-    # figures are, and any notes, follow it; the topic links and the
-    # "change is not cause" note sit after this first section (on work, the note
-    # sits under the chart of women's and men's employment rates instead).
-    detail = [detail[first_chart]] + detail[:first_chart] + detail[first_chart + 1:]
+    long_shown, long_folded = pages_history.block(facts, num, sources, key)
+    # On work, the "change is not cause" note sits under the long chart of women's and
+    # men's employment rates instead of with the topic links (audit 11 gap 2).
+    # Then the years since 2008, with more measures. Work, pay, housing and class sizes
+    # repeat the long chart's measure over fewer years, so on a phone that chart waits in
+    # the fold; holidays shows holiday visits, which the longer series does not have.
+    since = FIRST + 1 if key == "holidays" else FIRST  # holiday-only figures start in 2009
+    if key == "holidays":
+        recent = [FOLD, detail[first_chart]]
+    else:
+        # The note already sits under the long chart, so it is not repeated here.
+        recent = [f"<p>From {since} the official tables cover more each year: {esc(TOPIC_PAGES[key][1])}.</p>", FOLD,
+                  detail[first_chart].replace(WORK_CAUSE, ""), "<!--keepfold-->"]
+    recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
+    rest = detail[first_chart + 2:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
-    body.extend(detail)
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
+    body.extend(long_shown + [FOLD] + long_folded)
+    body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
+    body.extend(recent + rest)
     body.append("<h2 id='about'>About these figures</h2>")
     # The first sentence of the limits stays in view; the rest folds away with the sources.
     lead, _, more = TOPIC_LIMITS[key].partition(". ")
@@ -1145,7 +1152,6 @@ def topic_page(facts, d, num, sources, key):
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
     body.append("<h2 id='years'>One year, or two side by side</h2>")
     body.append(NOFOLD + f'<p>See <a href="index.html#years">everyday life in a single year</a>, or <a href="compare/index.html">compare two years</a> across every topic.</p>')
-    first = FIRST_YEAR[key]
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True)
 
@@ -1186,7 +1192,8 @@ def life_index(facts, d, num, sources):
         answer = HUB_ANSWERS[key](facts, d, num) if key in HUB_ANSWERS else answer
         body.append(f"<h2 id='{key}'>{esc(title)}</h2>{NOFOLD}")
         body.append(answer)
-        body.append(year_spark(facts, num, key, None))
+        from .pages_history import long_spark
+        body.append(long_spark(facts, num, key))
         if key == TOPICS[0][0]:
             body.append(before_toc(CAUSE))
         body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')

@@ -8,7 +8,7 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
-    from .pages_life import year_spark, FIRST, earn_stretches, earn_before_after, _how_short
+    from .pages_life import FIRST, earn_stretches, earn_before_after, _how_short
     ea, eb, ech = earn_stretches(facts)[0]
     from .data import EARLY_YEARS
     E = EARLY_YEARS[0]
@@ -29,18 +29,18 @@ def home_page(facts, d, num, sources):
                        ("Their share of Income Tax", "hmrc.share.top1.2023 to 2024", "")], "pct", num, maxval=100))
     fifths = ["Lowest-income fifth", "Second fifth", "Middle fifth", "Fourth fifth", "Highest-income fifth"]
     v_hh = mini(bars([(f, f"etb.t8.gross.all.q{i + 1}", "") for i, f in enumerate(fifths)], "pct", num, maxval=100))
-    owners = ("Households in England that own their home", lambda yr: f"house.owners.{yr}", "pct0", None)
-    from .data import YEARS
+    from .pages_history import long_spark, FIRST_YEAR as FY
 
     def newest(fid):
         """The explorer's last year, or the year after when a newer figure is out (work and class sizes)."""
         return L + 1 if fid(L + 1) in facts and facts[fid(L + 1)].value is not None else L
     Lw, Ls = newest(lambda yr: f"work.rate.{yr}"), newest(lambda yr: f"school.primary.{yr}")
-    sparks = {"work": mini(year_spark(facts, num, "work", Lw, caption=False, years=YEARS + [Lw] if Lw > L else None)),
-              "earnings": mini(year_spark(facts, num, "earnings", L, caption=False)),
-              "housing": mini(year_spark(facts, num, "housing", 2024, caption=False, measure=owners)),
-              "holidays": mini(year_spark(facts, num, "holidays", L, caption=False, mkey="hol.visits")),
-              "schools": mini(year_spark(facts, num, "schools", Ls, caption=False, years=YEARS + [Ls] if Ls > L else None))}
+    # Each card's small chart shows the topic's longest series (audit 11 gap 3).
+    sparks = {"work": mini(long_spark(facts, num, "work", Lw, caption=False)),
+              "earnings": mini(long_spark(facts, num, "earnings", L, caption=False)),
+              "housing": mini(long_spark(facts, num, "housing", 2024, caption=False)),
+              "holidays": mini(long_spark(facts, num, "holidays", caption=False)),
+              "schools": mini(long_spark(facts, num, "schools", Ls, caption=False))}
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 <h2 id="money">Public money: four questions</h2>
@@ -70,12 +70,12 @@ def home_page(facts, d, num, sources):
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
+<p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3>{earn_before_after(num, ea, eb, ech)}<p>a week before tax for the middle full-time employee, UK, both in April {L} prices: <strong>{_how_short(ech).lower()}</strong>. In cash, {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")}. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FIRST} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3>{earn_before_after(num, ea, eb, ech)}<p>a week before tax for the middle full-time employee, UK, both in April {L} prices: <strong>{_how_short(ech).lower()}</strong>. In cash, {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")}. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
-<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}.</p>{sparks["holidays"]}</a>
+<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, when that series ends.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}.</p>{sparks["schools"]}</a>
 <a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
