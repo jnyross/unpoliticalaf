@@ -55,9 +55,19 @@ def gb_survey(y):
 
 # Each measure: key, topic, label, fact-id function, display kind, change style ('pp', 'pct' or None),
 # period function, comparability-group function (None = one consistent series)
-def spread_basis(y):
-    """ASHE method periods (ONS breaks in 2004 and 2006)."""
-    return "before 2004 method" if y < 2004 else ("2004 and 2005 method" if y < 2006 else "2006 method onwards")
+def earn_basis(y):
+    """ASHE periods measured the same way. ONS changed the survey's method in 2004 and
+    2006, and the coding of jobs in 2011 (SOC2010) and 2021 (SOC2020), so pay is only
+    compared within one of these periods."""
+    if y < 2004:
+        return "before 2004 method"
+    if y < 2006:
+        return "2004 and 2005 method"
+    if y < 2011:
+        return "2006 to 2010, SOC2000 job coding"
+    if y < 2021:
+        return "2011 to 2020, SOC2010 job coding"
+    return "2021 onwards, SOC2020 job coding"
 
 
 def measures(d):
@@ -85,15 +95,15 @@ def measures(d):
         m.append((f"work.occ.{k}", "work", f"Share of workers in: {occ_names[k]}", (lambda c: lambda y: f"work.occshare.{occ_scheme(y)}.{c}.{y}")(code), "pct", "pp",
                   lambda y: f"Jan–Dec {y}", occ_scheme))
     m += [
-        ("earn.ft", "earnings", "Median weekly pay, full-time employees (April 2025 prices)", lambda y: f"earn.real.ft.{y}", "pounds", "pct", lambda y: f"April {y}", None),
-        ("earn.ftcash", "earnings", "Median weekly pay, full-time employees (cash, at the time)", lambda y: f"earn.ft.{y}", "pounds", "pct", lambda y: f"April {y}", None),
-        ("earn.men", "earnings", "Full-time men (April 2025 prices)", lambda y: f"earn.real.ft_men.{y}", "pounds", "pct", lambda y: f"April {y}", None),
-        ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", None),
-        ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", None),
+        ("earn.ft", "earnings", "Median weekly pay, full-time employees (April 2025 prices)", lambda y: f"earn.real.ft.{y}", "pounds", "pct", lambda y: f"April {y}", earn_basis),
+        ("earn.ftcash", "earnings", "Median weekly pay, full-time employees (cash, at the time)", lambda y: f"earn.ft.{y}", "pounds", "pct", lambda y: f"April {y}", earn_basis),
+        ("earn.men", "earnings", "Full-time men (April 2025 prices)", lambda y: f"earn.real.ft_men.{y}", "pounds", "pct", lambda y: f"April {y}", earn_basis),
+        ("earn.women", "earnings", "Full-time women (April 2025 prices)", lambda y: f"earn.real.ft_women.{y}", "pounds", "pct", lambda y: f"April {y}", earn_basis),
+        ("earn.pt", "earnings", "Part-time employees (April 2025 prices)", lambda y: f"earn.real.pt.{y}", "pounds", "pct", lambda y: f"April {y}", earn_basis),
     ]
-    m.append(("earn.spread", "earnings", "Full-time pay: top-tenth line ÷ bottom-tenth line", lambda y: f"spread.ratio.{y}", "times", "pct", lambda y: f"April {y}", spread_basis))
+    m.append(("earn.spread", "earnings", "Full-time pay: top-tenth line ÷ bottom-tenth line", lambda y: f"spread.ratio.{y}", "times", "pct", lambda y: f"April {y}", earn_basis))
     for key, name in NATIONS[1:]:
-        m.append((f"earn.place.{key}", "earnings", f"Full-time, living in {name} (April 2025 prices)", (lambda k: lambda y: f"earn.place.real.{k}.{y}")(key), "pounds", "pct", lambda y: f"April {y}", None))
+        m.append((f"earn.place.{key}", "earnings", f"Full-time, living in {name} (April 2025 prices)", (lambda k: lambda y: f"earn.place.real.{k}.{y}")(key), "pounds", "pct", lambda y: f"April {y}", earn_basis))
     m += [
         ("house.outright", "housing", "Households that own outright", lambda y: f"house.outright.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
         ("house.mortgage", "housing", "Households buying with a mortgage", lambda y: f"house.mortgage.{y}", "pct", "pp", lambda y: f"{y}-{str(y + 1)[2:]}", None),
@@ -148,7 +158,7 @@ TOPIC_SOURCES = {
 
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
-    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has small breaks in 2011 and 2021, when the coding of jobs changed, and 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
+    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has breaks in 2011 and 2021, when the coding of jobs changed, so pay is not compared across them; 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. 2025 figures are provisional. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
     "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure in each region and nation, with what each one counts, are on their own page. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so there are no full-year holiday figures for 2020: ONS’s 2020 figures by purpose cover only January to mid-March, and there is no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years; ONS says annual 2024 mixes the old method (January to June) and the new one (July to December), so 2024 is not compared with 2025 either. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. No official statistic, published each year, gives the share of people who took a holiday. The nearest, the share of people whose household could not afford a week’s holiday away, is shown for the 2005 to 2018 surveys, the only years with UK figures. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. Averages for infant and key stage 2 classes, and counts of pupils in classes of more than 30 for each, start in January 2016 in the DfE data used here; shares of pupils in classes of more than 30 for primary and secondary schools start in January 2006. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
@@ -469,7 +479,7 @@ KEY_MEASURES = {
 # Plain-English reasons for each definition change that stops a comparison.
 BREAK_REASONS = {
     occ_scheme: "Job types were regrouped in 2021, when the classification changed from SOC2010 to SOC2020, so the groups before and after are not the same.",
-    spread_basis: "The pay survey changed its method in 2004 and again in 2006, so pay spread is not compared across those years.",
+    earn_basis: "The pay survey changed its method in 2004 and 2006, and changed how it codes jobs in 2011 and 2021, so pay is only compared between years inside one of those periods.",
     rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
     hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method. ONS says 2024 mixes the two methods (old for January to June, new for July to December), so 2024 is not compared with 2025 either.",
     gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
@@ -813,22 +823,45 @@ def _work(facts, d, num, sources):
     body.extend(places_block(facts, num, "work"))
     return answer, body
 
+
+def same_basis_runs(facts, fid, years, group):
+    """Each stretch of years measured the same way, as (first, last) years that have a figure.
+
+    Changes are worked out only inside one stretch, never across a break."""
+    runs = {}
+    for y in years:
+        if _val(facts, fid(y)) is not None:
+            runs.setdefault(group(y), []).append(y)
+    return [(ys[0], ys[-1]) for ys in runs.values() if len(ys) > 1]
+
+
+def _how(ch):
+    return "about the same as" if abs(ch) < 2 else (f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than")
+
+
+EARN_BREAKS = (2011, 2021)
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
-    y = LAST
-    ch = 100 * (_val(facts, f"earn.real.ft.{LAST}") / _val(facts, f"earn.real.ft.{FIRST}") - 1)
-    how = "about the same as" if abs(ch) < 2 else (f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than")
-    answer = (f'<div class="answer"><p>In April {LAST}, the middle full-time employee earned {num(f"earn.ft.{LAST}", "pounds")} a week before tax. After allowing for rising prices, that was {how} in April {FIRST}, which was {num(f"earn.real.ft.{FIRST}", "pounds")} in April {LAST} prices.</p></div>')
+    runs = same_basis_runs(facts, lambda y: f"earn.real.ft.{y}", YEARS, earn_basis)
+    (a, b), (pa, pb) = runs[-1], runs[-2]
+    ch = 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)
+    answer = (f'<div class="answer"><p>In April {b}, the middle full-time employee earned {num(f"earn.ft.{b}", "pounds")} a week before tax. '
+              f'After allowing for rising prices, that was {_how(ch)} in April {a} ({num(f"earn.real.ft.{a}", "pounds")} in April {LAST} prices), the first year the survey coded jobs the way it does now.</p>'
+              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. From April {pa} to April {pb}, the stretch before, '
+              f'full-time pay after inflation changed by {change_cell(facts, num, f"earn.real.ft.{pa}", f"earn.real.ft.{pb}", "pct", "pounds")}.</p></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
-                             "£ a week before tax, April each year, in April 2025 prices (CPIH)", breaks=[(YEARS.index(2011), "Coding change"), (YEARS.index(2021), "Coding change")], kind="pounds", num=num,
-                             finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week")))
+                             "£ a week before tax, April each year, in April 2025 prices (CPIH). The lines break where the survey's job coding changed (2011 and 2021)",
+                             breaks=[(YEARS.index(y), "Coding change") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
+                             finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
     body.append('<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>')
-    body.extend(spread_block(facts, num, d, FIRST))
+    body.extend(spread_block(facts, num, d, a))
     body.extend(places_block(facts, num, "earnings"))
     return answer, body
 
@@ -1062,6 +1095,12 @@ def places_block(facts, num, topic):
     subject = "The employment rate" if topic == "work" else "After inflation, median full-time pay"
     ys = [y for y in YEARS if _val(facts, fid("uk", y)) is not None]
     a, b = ys[0], ys[-1]
+    brk, prev = {}, None
+    if topic == "earnings":
+        # Pay is compared only within one job-coding period (see earn_basis).
+        runs = same_basis_runs(facts, lambda y: fid("uk", y), ys, earn_basis)
+        (a, b), prev = runs[-1], runs[-2]
+        brk = dict(breaks=[(ys.index(y), "Coding change") for y in EARN_BREAKS if y in ys[1:]], split_breaks=True)
     out = [f"<h3 id='{topic}-places'>{title}</h3>"]
     vals = {k: _val(facts, fid(k, b)) for k, _ in NATIONS[1:]}
     hi, lo = max(vals, key=vals.get), min(vals, key=vals.get)
@@ -1081,14 +1120,22 @@ def places_block(facts, num, topic):
     for k, n in places:
         mk = "pm_pp" if kind == "pct" else "pm_pounds"
         moe = num(U.MARGINS[fid(k, b)][0], mk) if U.has(fid(k, b)) else '<span class="missing">not published</span>'
-        rows.append([esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)])
+        row = [esc(n), num(fid(k, a), kind), num(fid(k, b), kind), moe, change_cell(facts, num, fid(k, a), fid(k, b), style, kind)]
+        if prev:
+            row.append(change_cell(facts, num, fid(k, prev[0]), fid(k, prev[1]), style, kind))
+        rows.append(row)
     out.append(groups_chart(facts, f"{what.split(',')[0]}: the four nations", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n in NATIONS[1:]],
                             what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year.",
-                            finding=F.count(subject, "nations")))
+                            finding=F.count(subject, "nations"), **brk))
     out.append(groups_chart(facts, f"{what.split(',')[0]}: regions of England", [(n, (lambda k: lambda y: fid(k, y))(k)) for k, n, _ in REGIONS],
                             what, years=ys, kind=kind, num=num, summary_note=f"One panel for each place, on the same scale. The table below gives every place's figures for {a} and {b}, with margins of error, and the full table gives every year.",
-                            finding=F.count(subject, "regions")))
-    out.append(table(f"{what}: {a} and {b}", ["Place", str(a), str(b), f"Margin of error, {b}", "Change"], rows))
+                            finding=F.count(subject, "regions"), **brk))
+    head = ["Place", str(a), str(b), f"Margin of error, {b}", f"Change, {a} to {b}" if prev else "Change"]
+    if prev:
+        head.append(f"Change, {prev[0]} to {prev[1]}")
+    out.append(table(f"{what}: {a} and {b}", head, rows))
+    if prev:
+        out.append(f'<p class="small">Pay is compared only between years when the survey coded jobs the same way: {a} to {b}, and separately {prev[0]} to {prev[1]}. It is not compared across the coding changes in 2011 and 2021.</p>')
     out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
     out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
                              [[str(y)] + [num(fid(k, y), kind) for k, _ in places] for y in ys]))

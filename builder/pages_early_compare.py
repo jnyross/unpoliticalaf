@@ -60,7 +60,7 @@ def status(facts, m, a, b):
 
 def break_reason(m, a, b):
     if m[7] is H.earn_method:
-        return (f"ONS changed the pay survey's methods in 2004 and 2006, so pay is only compared between years measured the same way "
+        return (f"ONS changed the pay survey's methods in 2004 and 2006, and the coding of jobs in 2011 and 2021, so pay is only compared between years measured the same way "
                 f"({a}: {m[7](a)}; {b}: {m[7](b)}).")
     return "The definition changed between these years."
 

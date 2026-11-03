@@ -64,12 +64,12 @@ Circle one letter for each question. If you don't know, circle E (Not sure). Lea
 - **D** A made-up example that shows how the tax rules work, not a measured figure
 - **E** Not sure
 
-## 8. After allowing for rising prices, how did the weekly pay of the middle full-time employee in April 2025 compare with April 2008?
+## 8. After allowing for rising prices, how did the weekly pay of the middle full-time employee in April 2025 compare with April 2021?
 
-- **A** About 60% higher
+- **A** About a quarter higher
 - **B** About the same
-- **C** About a third lower
-- **D** The site has no figure for 2008
+- **C** About a fifth lower
+- **D** The site has no figure for 2021
 - **E** Not sure
 
 ## 9. Choose the year 2019. What was the average class size in state primary schools, and which part of the UK does that figure cover?

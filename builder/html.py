@@ -861,7 +861,7 @@ def _lower_first(text):
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
-                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None):
+                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None, group_breaks=None):
     """One small line chart per group, so no group is hidden behind a key.
 
     Used instead of line_chart() when more than three groups matter. Every panel
@@ -877,8 +877,12 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     all groups and one tap/hover/arrow readout that marks the year in every panel.
     summary_note: where a table right beside the chart already gives each group's
     first and latest figures, say so in this sentence instead of repeating them; a
-    sentence comparing every group's first and latest figure is added after it.
+    sentence comparing every group's first and latest figure is added after it, and
+    it never compares across a break.
     finding: as in line_chart().
+    group_breaks: {series index: [(index, text)]} definition changes that affect only
+    some groups. Each is drawn in that group's panel only and its group's line breaks
+    there; the summary compares that group only from the break on.
     """
     raw = [(nm, vals, "a") for nm, vals in series]
     heading = _finding(finding, point_labels or labels, series, breaks, split_breaks, None)
@@ -904,11 +908,12 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
         return T + (H - T - B) * (1 - (v - lo2) / (hi2 - lo2))
 
     split_at = {i for i, _ in breaks} if split_breaks else set()
+    group_breaks = group_breaks or {}
 
-    def segments(vals):
+    def segments(vals, extra=()):
         segs, cur = [], []
         for i, v in enumerate(vals):
-            if (i in split_at and cur) or v is None:
+            if ((i in split_at or i in extra) and cur) or v is None:
                 if cur:
                     segs.append(cur)
                 cur = [] if v is None else [(i, v)]
@@ -938,10 +943,12 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     frame.append(f'<text x="{x(0):.1f}" y="{H - 4}" text-anchor="start">{esc(_short(labels[0]))}</text>')
     if n > 1:
         frame.append(f'<text x="{x(n - 1):.1f}" y="{H - 4}" text-anchor="end">{esc(_short(labels[-1]))}</text>')
-    for i, _ in breaks:
+    def bline(i):
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
-        frame.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
-    drawn = {si: " ".join(path(seg) for seg in segments(vals)) for si, vals in enumerate(scaled)}
+        return f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>'
+    for i, _ in breaks:
+        frame.append(bline(i))
+    drawn = {si: " ".join(path(seg) for seg in segments(vals, {i for i, _ in group_breaks.get(si, ())})) for si, vals in enumerate(scaled)}
     # Each panel draws every line in light grey, then its own group in black on top.
     defs = (f'<defs><g id="{pid}f">{"".join(frame)}</g>'
             + "".join(f'<path id="{pid}s{si}" d="{d}"/>' for si, d in drawn.items() if d)
@@ -950,6 +957,7 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     for si, (name, vals) in enumerate(series):
         parts = [defs] if si == 0 else []
         parts.append(f'<use href="#{pid}f"/><use href="#{pid}a" class="c"/>')
+        parts.extend(bline(i) for i, _ in group_breaks.get(si, ()))
         if drawn[si]:
             parts.append(f'<use href="#{pid}s{si}" class="o"/>')
             parts.extend(_end_value(vals, scaled[si], kind, None, x, y, T - 2))
@@ -970,9 +978,13 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
             f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
     key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
     if summary_note:
-        a, b = _stretches(n, breaks if split_breaks else (), None)[-1]
-        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i))
-        summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{over} {summary_note}</p></details>'
+        # Read from the last break on, whether or not the line is split there.
+        a, b = _stretches(n, breaks, None)[-1]
+        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i), group_breaks=group_breaks)
+        notes = [f"The amber dashed line in the {esc(series[si][0])} panel before {esc(plabels[i])} marks a change ({esc(_lower_first(t))})."
+                 for si, br in sorted(group_breaks.items()) for i, t in br]
+        note = f'<p class="small csum-note">{" ".join(notes)}</p>' if notes else ""
+        summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{over} {summary_note}</p></details>{note}'
     else:
         summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
     return f'<figure>{_titles(heading, title)}{key}{grid}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
