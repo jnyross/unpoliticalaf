@@ -12,20 +12,20 @@ def _v(facts, fid):
     return None if f is None else f.value
 
 
-def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str, finding=None):
+def _chart(facts, num, title, years, items, unit, kind, breaks=(), ymin=None, point_label=str, finding=None, split_breaks=False):
     """A line chart over a measure's own years. items: (name, fid(year), style)."""
     series = [(name, [_v(facts, fid(y)) for y in years], style) for name, fid, style in items]
     ids = [[fid(y) if _v(facts, fid(y)) is not None else None for y in years] for _, fid, _ in items]
     br = [(years.index(y), text) for y, text in breaks if y in years and y != years[0]]
     return line_chart(title, [str(y) for y in years], series, unit, breaks=br, ymin=ymin, kind=kind, ids=ids, num=num,
-                      point_labels=[point_label(y) for y in years], finding=finding)
+                      point_labels=[point_label(y) for y in years], finding=finding, split_breaks=split_breaks)
 
 
 # ---------------------------------------------------------------- earnings: how far apart is pay?
 
 def spread_ref_year(sp, first):
-    """Year to compare the latest with: the explorer's first year, but never before
-    ONS's 2006 method change, so the headline comparison does not cross it."""
+    """Year to compare the latest with: the first year of the latest stretch measured
+    the same way (passed in as first), so the headline comparison crosses no break."""
     return max(first, 2006, sp["years"][0])
 
 
@@ -49,9 +49,9 @@ def spread_block(facts, num, d, first):
     out.append(_chart(facts, num, "Weekly pay at three points of the pay ladder, after inflation", cyears,
                       [("Top-tenth line", lambda y: f"spread.real.p90.{y}", "a"), ("Median", lambda y: f"spread.real.p50.{y}", "b"),
                        ("Bottom-tenth line", lambda y: f"spread.real.p10.{y}", "c")],
-                      f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005", "pounds",
-                      breaks=sorted(sp["breaks"].items()), ymin=0,
-                      finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2)))
+                      f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005. The lines break where job coding changed (2011 and 2021)", "pounds",
+                      breaks=sorted(sp["breaks"].items()), ymin=0, split_breaks=True,
+                      finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2, which="last")))
     out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
                              ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line (times)",
                               f"Bottom line ({base} prices)", f"Top line ({base} prices)"],
@@ -60,7 +60,7 @@ def spread_block(facts, num, d, first):
     out.append(f'<p class="small">The 10th and 90th percentiles are the pay of the employee one tenth of the way up the ladder and nine tenths of the way up. '
                f'They are lines on the ladder, not averages of the groups. Only full-time employees are counted: part-time workers and the self-employed are not, and pay is for one job before tax, '
                f'not household income. The ratio does not depend on inflation, because both lines are in the same year’s prices. '
-               f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and marks 2011 and 2021. Small moves across these breaks may come from the change rather than from pay. {last} figures are provisional.</p>')
+               f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay. {last} figures are provisional.</p>')
     return out
 
 

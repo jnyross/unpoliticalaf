@@ -216,14 +216,21 @@ def _common(series, a, b, first):
     return max(set(ends), key=lambda i: (ends.count(i), -i if first else i))
 
 
-def overview(labels, series, a, b, show):
+def overview(labels, series, a, b, show, group_breaks=None):
     """One sentence comparing every group's first and last figure in one stretch:
     how many were higher and lower, and which moved most. For small multiples whose
-    full figures are in a table beside the chart. show(si, i) formats a figure."""
+    full figures are in a table beside the chart. show(si, i) formats a figure.
+
+    group_breaks: {series index: [(index, text), ...]} definition changes that affect
+    only some groups. Such a group is left out of the comparison if a break falls
+    inside the stretch, and its change is then given separately, from the break on."""
     f, l = _common(series, a, b, True), _common(series, a, b, False)
     if f is None or f == l:
         return ""
-    moved = [(vals[l] - vals[f], si) for si, (_, vals) in enumerate(series) if vals[f] is not None and vals[l] is not None]
+    group_breaks = group_breaks or {}
+    crossed = {si: max(i for i, _ in br if f < i <= l) for si, br in group_breaks.items() if any(f < i <= l for i, _ in br)}
+    moved = [(vals[l] - vals[f], si) for si, (_, vals) in enumerate(series)
+             if si not in crossed and vals[f] is not None and vals[l] is not None]
     if len(moved) < 2:
         return ""
     n = len(moved)
@@ -248,6 +255,12 @@ def overview(labels, series, a, b, show):
         text += f" The largest rise was {said(max(up))}."
     else:
         text += f" The largest fall was {said(min(down))}."
+    for si, i in sorted(crossed.items()):
+        reason = next(t for k, t in group_breaks[si] if k == i)
+        vals = series[si][1]
+        since = next((k for k in range(i, l + 1) if vals[k] is not None), None)
+        text += f" {series[si][0]} is left out, because {reason}; it is compared only from {labels[i]}"
+        text += f": {show(si, since)} to {show(si, l)}." if since is not None and since < l and vals[l] is not None else "."
     return text
 
 

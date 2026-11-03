@@ -155,6 +155,21 @@ class Findings(unittest.TestCase):
         self.assertEqual(F.gap("Men's rate", "women's")(self.L, series, st), "Men's rate was higher than women's in every year from 2008 to 2010")
         self.assertEqual(F.leader("{name} was highest {span}")(self.L, series, st), "Men was highest in every year from 2008 to 2010")
 
+    def test_overview_leaves_out_groups_with_their_own_break(self):
+        fig = small_multiples("t", ["1", "2", "3", "4"], [("North", [1.0, 2.0, 3.0, 4.0]), ("South", [4.0, 5.0, 3.0, 2.0]), ("East", [9.0, 9.0, 2.0, 3.0])],
+                              "u", "dp1", summary_note="The table gives every figure.", group_breaks={2: [(2, "it was counted differently from 3")]})
+        text = re.sub(r"<[^>]+>", "", fig)
+        self.assertIn("Comparing 1 with 4, 1 of the 2 shown was higher and 1 of the 2 shown was lower.", text)
+        self.assertIn("East is left out, because it was counted differently from 3; it is compared only from 3: 2.0 to 3.0.", text)
+        self.assertNotIn("9.0 to 3.0", text)
+        east = re.search(r'<path id="sm\d+s2" d="([^"]+)"', fig).group(1)
+        self.assertEqual(east.count("M"), 2)  # the line breaks at its own change
+
+    def test_overview_reads_from_the_last_break(self):
+        fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0])], "u", "dp1",
+                              summary_note="The table gives every figure.", breaks=[(1, "New method")])
+        self.assertIn("Comparing 2 with 3", re.sub(r"<[^>]+>", "", fig))
+
     def test_overview_counts_groups(self):
         fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0]), ("East", [7.0, 8.0, 9.0])], "u", "dp1",
                               summary_note="The table gives every figure.")
@@ -802,7 +817,27 @@ class BeforeTwoThousandEight(unittest.TestCase):
         m = next(m for m in H.LONG if m[0] == "earn.ft")
         self.assertEqual(H.latest_comparable(self.facts, m, 2002), 2003)
         self.assertEqual(H.latest_comparable(self.facts, m, 2004), 2005)
-        self.assertEqual(H.latest_comparable(self.facts, m, 2007), pages_life.LAST)
+        # Job coding changed in 2011 and 2021 (audit 9, gap 1)
+        self.assertEqual(H.latest_comparable(self.facts, m, 2007), 2010)
+        self.assertEqual(H.latest_comparable(self.facts, m, 2011), 2020)
+        self.assertEqual(H.latest_comparable(self.facts, m, 2021), pages_life.LAST)
+
+    def test_pay_is_not_compared_across_the_coding_changes(self):
+        for key in ("earn.ft", "earn.ftcash", "earn.men", "earn.women", "earn.pt", "earn.spread", "earn.place.scotland"):
+            m = next(m for m in pages_life.MEAS if m[0] == key)
+            self.assertEqual(pages_life._status(self.facts, m, 2009, 2023), "break", key)
+            self.assertEqual(pages_life._status(self.facts, m, 2010, 2011), "break", key)
+            self.assertEqual(pages_life._status(self.facts, m, 2011, 2019), "ok", key)
+        from builder.html import Num
+        from builder import uncertainty as U
+        if not U.MARGINS:
+            U.add_facts(self.facts, self.d)
+        answer, body = pages_life._earnings(self.facts, self.d, Num(self.facts), {})
+        self.assertNotIn(f"April {pages_life.FIRST}", answer)
+        self.assertIn("about the same as in April 2021", answer)
+        places = "".join(pages_life.places_block(self.facts, Num(self.facts), "earnings"))
+        self.assertIn("Change, 2021 to", places)
+        self.assertIn("Change, 2011 to 2020", places)
 
     def test_early_year_page_shows_gaps_and_links_to_comparisons(self):
         from builder import pages_history as H
@@ -845,8 +880,8 @@ class EarlyComparisons(unittest.TestCase):
         html = self.page(2002, 2025)
         self.assertIn('data-from="work.rate.2002" data-to="work.rate.2025"', html)
         self.assertNotIn('data-from="earn.real.ft.2002"', html)  # pay survey methods changed in 2004 and 2006
-        self.assertIn("not comparable: definition changed (before 2004 method → 2006 method onwards)", html)
-        self.assertIn('<a href="2006-2025.html">2006 and 2025</a>', html)  # nearest pair for pay
+        self.assertIn("not comparable: definition changed (before 2004 method → 2021 onwards, SOC2020 job coding)", html)
+        self.assertIn('<a href="2011-2020.html">2011 and 2020</a>', html)  # nearest pair for pay, inside one job-coding period
 
     def test_tenure_surveys_are_not_joined(self):
         html = self.page(1995, 2010)
@@ -877,6 +912,27 @@ class MoneyViews(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
+
+    def _text(self, html):
+        return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html))
+
+    def test_tax_history_works_out_changes_only_since_the_last_break(self):
+        from builder import pages_taxmixhist
+        from builder.html import Num
+        from builder.sources import SOURCES
+        html = pages_taxmixhist.tax_history_page(self.facts, self.d, Num(self.facts), SOURCES)
+        self.assertNotIn("thist.sharechange.income_tax.1948-49", html)
+        self.assertIn("thist.sharechange.income_tax.1999-00.2022-23", html)
+        self.assertIn("What changed between 1999-00 and 2022-23", self._text(html))
+
+    def test_spending_areas_do_not_compare_across_their_breaks(self):
+        from builder import pages_money
+        from builder.html import Num
+        from builder.sources import SOURCES
+        text = self._text(pages_money.spending_areas_page(self.facts, self.d, Num(self.facts), SOURCES))
+        self.assertIn("Education is left out, because student loans were removed from education from 2011-12", text)
+        self.assertIn("Economic affairs is left out", text)
+        self.assertNotIn("largest fall was Education", text)
 
     def test_switch_works_without_javascript(self):
         from builder.html import switch

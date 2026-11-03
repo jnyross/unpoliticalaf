@@ -83,11 +83,11 @@ Where the site says it:
 
 ## 8. B: About the same
 
-Year by year, Earnings: £767 a week in April 2025, about the same as April 2008 (£771 in April 2025 prices). Before allowing for prices it rose from £479, about 60%, which is why A is wrong.
+Year by year, Earnings: £767 a week in April 2025, about the same as April 2021 (£761 in April 2025 prices). Before allowing for prices it rose from £610, about a quarter, which is why A is wrong. Pay is compared from 2021 because the survey changed how it codes jobs in 2011 and 2021.
 
 Where the site says it:
 
-- `life/earnings.html`: "that was about the same as in April 2008"
+- `life/earnings.html`: "that was about the same as in April 2021"
 
 ## 9. A: 27.1 pupils, England only
 

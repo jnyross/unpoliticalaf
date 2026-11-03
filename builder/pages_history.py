@@ -18,9 +18,8 @@ ALL = EARLY_YEARS + YEARS
 FIRST_YEAR = L.FIRST_YEAR
 
 
-def earn_method(y):
-    """ONS: methods changed in 2004 and 2006, causing breaks in the series."""
-    return "before 2004 method" if y < 2004 else ("2004 and 2005 method" if y < 2006 else "2006 method onwards")
+# ONS: methods changed in 2004 and 2006, and job coding in 2011 and 2021 (see pages_life.earn_basis).
+earn_method = L.earn_basis
 
 
 # Each long-run measure: key, topic, label, fact-id function, display kind, change style,
@@ -72,7 +71,7 @@ LIMITS = {
              "Jobs by industry come from a different source, ONS workforce jobs, which counts jobs rather than people, every June from 1978."),
     "earnings": ("Pay comes from the Annual Survey of Hours and Earnings, which replaced the New Earnings Survey in 2004. ONS says changes to its methods "
                  "caused breaks in the series in 2004, 2006 and 2011, and job coding changed again in 2021. Changes are only worked out between years "
-                 "measured the same way, so on this page 2002 and 2003 are compared only with each other, and 2004 and 2005 likewise. The earlier "
+                 "measured the same way: 2002 and 2003, 2004 and 2005, 2006 to 2010, 2011 to 2020, and 2021 onwards. The earlier "
                  "New Earnings Survey is not used here. Prices are adjusted with CPIH, the same index used for later years."),
     "housing": ("Before the English Housing Survey began in 2008-09, tenure in England was measured by the Labour Force Survey: the Department of the "
                 "Environment's housing questions for 1981, 1984, 1988 and 1991, then the ONS Labour Force Survey every year from 1992 to 2008. Those are "
@@ -119,8 +118,8 @@ def chart(facts, num, topic):
         items = [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")]
         breaks = [(years.index(y), t) for y, t in ((2004, "Method change"), (2006, "Method change"), (2011, "Coding change"), (2021, "Coding change"))]
         return _line(facts, num, "Median full-time weekly pay since 2002, after inflation", years, items,
-                     "£ a week before tax, April each year, in April 2025 prices (CPIH), United Kingdom", "pounds", breaks=breaks,
-                     finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week"))
+                     "£ a week before tax, April each year, in April 2025 prices (CPIH), United Kingdom. The lines break at each method or coding change", "pounds", breaks=breaks,
+                     split=True, finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last"))
     if topic == "housing":
         years = list(range(first, 2025))
         def pick(key):
@@ -200,10 +199,12 @@ def answer(facts, num, topic):
                 f"In {LAST} the figures were {num(f'work.men.{LAST}', 'pct')} and {num(f'work.women.{LAST}', 'pct')}. "
                 f"The share for everyone aged 16 to 64 changed by {L.change_cell(facts, num, f'work.rate.{a}', f'work.rate.{LAST}', 'pp', 'pct')} over the whole period.")
     if topic == "earnings":
+        runs = L.same_basis_runs(facts, lambda y: f"earn.real.ft.{y}", [y for y in ALL if y >= 2006], earn_method)
+        parts = [f"from April {a} to April {b} by {L.change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')}" for a, b in runs]
         return (f"In April 2002 the middle full-time employee earned {num('earn.ft.2002', 'pounds')} a week, which is {num('earn.real.ft.2002', 'pounds')} in April 2025 prices. "
                 f"Because the survey's methods changed in 2004 and 2006, that figure is shown for the record but not compared with later years. "
-                f"From April 2006 to April {LAST}, full-time pay after inflation changed by {L.change_cell(facts, num, 'earn.real.ft.2006', f'earn.real.ft.{LAST}', 'pct', 'pounds')}; "
-                f"that stretch includes the smaller coding changes of 2011 and 2021, as the figures from 2008 do.")
+                f"The survey also changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. After inflation, full-time pay changed "
+                + _join(parts) + ".")
     if topic == "housing":
         return (f"In 1981, {num('house.lfs.owners.1981', 'pct0')} of households in England owned their home and {num('house.lfs.private.1981', 'pct0')} rented privately. "
                 f"By 2008, on the same survey, it was {num('house.lfs.owners.2008', 'pct0')} and {num('house.lfs.private.2008', 'pct0')}. "

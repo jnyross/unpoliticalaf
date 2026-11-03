@@ -159,6 +159,12 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
 
 AREAS_PAGE = "spending-areas.html"
 
+# (area, first year on the new basis, why), from HM Treasury's PESA table footnotes.
+AREA_BREAKS = [
+    ("education", "2011-12", "student loans were removed from education from 2011-12"),
+    ("economic", "2015-16", "Network Rail spending is counted here, under transport, only from 2015-16"),
+]
+
 
 def _areas(facts, sp):
     """Spending areas, largest share of spending on services first."""
@@ -180,12 +186,17 @@ def spending_areas_page(facts, d, num, sources):
     area_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     area_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices", "gdp": "Per cent of GDP"}
 
+    # HM Treasury's footnotes: these areas are not directly comparable across these years,
+    # so their lines break there and their changes are read only from the break on.
+    keys = [k for k, _ in order]
+    area_breaks = {keys.index(k): [(years.index(yy), why)] for k, yy, why in AREA_BREAKS if k in keys and yy in years[1:]}
+
     def area_chart(v):
         return small_multiples(f"Spending by area, {first} to {y}", [yy[:4] for yy in years], [(n.split(" (")[0], [facts[f"spend.{v}.{k}.{yy}"].value for yy in years]) for k, n in order],
                                area_unit[v] + ". Axis years are financial years starting in April of the year shown.", area_kind[v], point_labels=years, ids=[[f"spend.{v}.{k}.{yy}" for yy in years] for k, _ in order], num=num,
                                summary_note="The tables below give every area's figure for every year.", ymin=0 if v != "gdp" else None,
                                finding=F.leader("{name} was the largest area of spending {span}"),
-                               breaks=[(years.index("2011-12"), "Education: student loans removed")] if "2011-12" in years else ())
+                               group_breaks=area_breaks)
     body.append(views(area_chart))
     # full history tables per view
     for view, label, kind in (("real", "£ billion, 2025-26 prices", "bn1"), ("gdp", "% of GDP", "pct"), ("cash", "£ billion, cash (not adjusted for inflation)", "bn1")):
@@ -193,7 +204,7 @@ def spending_areas_page(facts, d, num, sources):
         rows = [[yy] + [num(f"spend.{view}.{k}.{yy}", kind) for k, _ in order] + [num(f"spend.{view}.tme.{yy}", kind)] for yy in years]
         body.append(details_table(f"Every year by area: {label}", f"Spending by area, {first} to {y}, {label}", head, rows))
     body.append('''<div class="limit"><p><strong>Breaks in the figures.</strong> From 2011-12 the cost of student loans was removed from education, so education before and after that year is not directly comparable.
-Network Rail is counted under transport only from 2015-16. Spending in 2020-21 and 2021-22 includes temporary Covid-19 measures. These notes come from HM Treasury's table footnotes.</p></div>''')
+Network Rail is counted under transport, part of economic affairs, only from 2015-16. Their lines break at those years, and their changes are worked out only from then on. Spending in 2020-21 and 2021-22 includes temporary Covid-19 measures. These notes come from HM Treasury's table footnotes.</p></div>''')
     body.append(source_line(sources, ["pesa4"], "Tables 4.2 (cash), 4.3 (real terms, GDP deflator from the ONS released 30 June 2026) and 4.4 (% of GDP)."))
     return page(AREAS_PAGE, "Spending on each area, every year", "\n".join(body),
                 "UK public spending on each area every year, in cash, after inflation and as a share of GDP.", contents=False, folded=False)

@@ -177,20 +177,20 @@
     {
       "id": 8,
       "topic": "Earnings after inflation",
-      "question": "After allowing for rising prices, how did the weekly pay of the middle full-time employee in April 2025 compare with April 2008?",
+      "question": "After allowing for rising prices, how did the weekly pay of the middle full-time employee in April 2025 compare with April 2021?",
       "options": {
-        "A": "About 60% higher",
+        "A": "About a quarter higher",
         "B": "About the same",
-        "C": "About a third lower",
-        "D": "The site has no figure for 2008"
+        "C": "About a fifth lower",
+        "D": "The site has no figure for 2021"
       },
       "answer": "B",
       "critical": false,
-      "why": "Year by year, Earnings: £767 a week in April 2025, about the same as April 2008 (£771 in April 2025 prices). Before allowing for prices it rose from £479, about 60%, which is why A is wrong.",
+      "why": "Year by year, Earnings: £767 a week in April 2025, about the same as April 2021 (£761 in April 2025 prices). Before allowing for prices it rose from £610, about a quarter, which is why A is wrong. Pay is compared from 2021 because the survey changed how it codes jobs in 2011 and 2021.",
       "evidence": [
         {
           "page": "life/earnings.html",
-          "text": "that was about the same as in April 2008"
+          "text": "that was about the same as in April 2021"
         }
       ]
     },
