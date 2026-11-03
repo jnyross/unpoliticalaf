@@ -263,6 +263,14 @@
   "sha256": "c3797e451ce06b9ba92c9821e997451f0ecf2498bb5052741b3972f39f38d397",
   "retrieved": "2026-11-02T10:18:12Z"
  },
+ "explain-ons-etb-fye2016": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2016",
+  "file": "explain/ons-etb-fye2016.html",
+  "bytes": 145614,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "9b152674c244b388e7497a3f0ca9e6ba04cf62203cad5369f7b2a60b31ee8ac4",
+  "retrieved": "2026-11-03T10:00:47Z"
+ },
  "explain-ons-etb-latest": {
   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
   "file": "explain/ons-etb-latest.html",
