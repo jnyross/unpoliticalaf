@@ -81,7 +81,7 @@ def _g7(facts, num, it, ty, sy):
                  ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
     if missing:
         out.append(f"<p class='small'>Not ranked: {esc(', '.join(missing))}, because the OECD had not published a figure.</p>")
-    out.append("<p class='small'>For government debt and borrowing costs in the G7, see <a href='borrowing.html'>how UK debt and borrowing costs compare</a>.</p>")
+    out.append("<p>Debt, borrowing costs and debt interest are on their own page: <a href='borrowing.html'>UK debt and borrowing costs beside the G7</a>.</p>")
     return "\n".join(out)
 
 

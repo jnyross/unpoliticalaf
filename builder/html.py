@@ -226,12 +226,15 @@ section.fig,section.correction{border-top:1px solid var(--line);padding:8px 0;sc
 @media print{nav.main,.skip,form.pick,.toc,.trace,nav.jump,.backtop{display:none}details{display:block;border:0;padding:0}}
 """
 
+# The header menu leaves out Home (the site name beside it already links
+# there) so that Debt fits in two rows of four on a phone. The footer keeps it.
 NAV = [
     ("index.html", "Home"),
     ("spending.html", "Spending"),
     ("taxes.html", "Taxes"),
     ("who-pays.html", "Who pays"),
     ("household-tax.html", "Tax and income"),
+    ("borrowing.html", "Debt"),
     ("life/index.html", "Year by year"),
     ("glossary.html", "Glossary"),
     ("sources.html", "Sources"),
@@ -452,7 +455,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     up = "../" * depth
     nav = "".join(
         f'<li><a href="{up}{href}"{" aria-current=page" if href == path or (href == "life/index.html" and path.startswith("life/")) or (href == "who-pays.html" and path.startswith("who-pays-")) else ""}>{esc(label)}</a></li>'
-        for href, label in NAV)
+        for href, label in NAV if href != "index.html")
     foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
     body = downloads.add_links(body, path) if not path.startswith("figures/") else downloads.strip(body)
