@@ -63,11 +63,10 @@ def borrowing_page(facts, d, num, sources):
     int_order, int_place = _rank(facts, "borrow.int", g7, ny)
     ir_order, ir_place = _rank(facts, "borrow.intrev", g7, ny)
 
-    body = ["<h1>How do UK government debt and borrowing costs compare with other major countries?</h1>"]
+    body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
-<p>In {b["yield_month_name"]}, the UK government paid {num(f"borrow.yieldm.{UK}.{ym}", "pct2")} a year to borrow for 10 years, the {_ordinal(ym_place)} of the G7. In {ny}, its interest bill, after interest it received, was {num(f"borrow.int.{UK}.{ny}", "pct")} of GDP, the {_ordinal(int_place)} of the G7.</p>
-<p>Borrowing costs depend on central bank interest rates, expected inflation, how much a government borrows and how much risk investors see. They are not, on their own, a verdict on how well a country is run.</p></div>''')
-    body.append("<p>The G7 is the group of seven large, high-income economies: Canada, France, Germany, Italy, Japan, the United Kingdom and the United States. Debt and interest are compared as a share of GDP, the value of everything a country produces in a year, so that countries of different sizes can be compared.</p>")
+<p>In {b["yield_month_name"]}, the UK government paid {num(f"borrow.yieldm.{UK}.{ym}", "pct2")} a year to borrow for 10 years, the {_ordinal(ym_place)} of the G7.</p>
+</div>''')
 
     # ---------------------------------------------------------------- debt
     body.append(f'<h2 id="debt">How much does each government owe?</h2>')
@@ -76,9 +75,10 @@ def borrowing_page(facts, d, num, sources):
     oecd_bars = bars(_bar_items(facts, "borrow.debt", oecd_order, dy, names, extra=[AVG]), "pct", num, maxval=260,
                      caption=f"General government gross debt, % of GDP, {dy}, with government bonds counted at their market price. OECD figures. The UK and the OECD average have darker bars.")
     body.append(switch("Measure", [
-        ("IMF", f"On the IMF's figures, {sum(1 for a in debt_order[:debt_place - 1])} of the other six G7 governments owed more than the UK, compared with the size of their economies.", imf_bars),
+        ("IMF", f"IMF figures, {iy}.", imf_bars),
         ("OECD", f"On the OECD's measure the UK was also the {_ordinal(oecd_place)} of the G7, at {num(f'borrow.debt.{UK}.{dy}', 'pct')} of GDP in {dy}. The OECD average was {num(f'borrow.debt.{AVG}.{dy}', 'pct')}.", oecd_bars),
     ]))
+    body.append("<p>The G7 is the group of seven large, high-income economies: Canada, France, Germany, Italy, Japan, the United Kingdom and the United States. Debt and interest are compared as a share of GDP, the value of everything a country produces in a year, so that countries of different sizes can be compared.</p>")
     body.append(f'''<p class="small">The two organisations measure debt differently. The OECD follows the international system of national accounts, which counts government bonds at their market price. When interest rates rise, the market price of existing bonds falls, and so does debt measured this way. This is one reason the OECD's figure for the UK fell from {num(f"borrow.debt.{UK}.2021", "pct")} of GDP in 2021 to {num(f"borrow.debt.{UK}.2022", "pct")} in 2022, while the IMF's fell from {num(f"borrow.imf.{UK}.2021", "pct")} to {num(f"borrow.imf.{UK}.2022", "pct")}.</p>''')
     body.append(FOLD)
     years = b["imf_years"]
@@ -94,6 +94,7 @@ def borrowing_page(facts, d, num, sources):
 
     # ---------------------------------------------------------------- yields
     body.append(f'<h2 id="yields">How much does each government pay to borrow?</h2>')
+    body.append("<p><strong>Borrowing costs depend on central bank interest rates, expected inflation, how much a government borrows and how much risk investors see. They are not, on their own, a verdict on how well a country is run.</strong> <a href='#why'>What affects borrowing costs</a>.</p>")
     body.append(f'''<div class="answer"><p>Governments borrow by selling bonds: promises to repay on a set date, with interest every year until then. UK government bonds are called gilts. The <strong>yield</strong> on a 10-year bond is the yearly interest, as a percentage of what is paid for the bond, that a buyer would earn by keeping it for 10 years. When yields are higher, new borrowing costs the government more.</p>
 <p>In {b["yield_month_name"]}, the UK's 10-year yield was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7: {_higher_lower(ym_order, names)}. Over the whole of {yy}, it averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")}, the {_ordinal(yy_place)} of the G7.</p></div>''')
     body.append(bars(_bar_items(facts, "borrow.yieldm", ym_order, ym, names), "pct2", num, maxval=6,
@@ -159,5 +160,5 @@ def borrowing_page(facts, d, num, sources):
     body.append(f'<p>See also: <a href="international.html">how UK taxes and spending compare with other countries</a>.</p>')
     body.append(source_line(sources, ["imf-weo-debt", "oecd-gov-pf-g7", "oecd-finmark-irlt"],
                             "OECD data is published under the Creative Commons Attribution 4.0 licence. IMF data is reproduced with attribution."))
-    return page("borrowing.html", "How do UK government debt and borrowing costs compare with other major countries?", "\n".join(body),
+    return page("borrowing.html", "How do UK debt and borrowing costs compare with other major countries?", "\n".join(body),
                 "UK government debt, 10-year borrowing costs and debt interest beside the other G7 countries, from the IMF and OECD, with what moves borrowing costs.")

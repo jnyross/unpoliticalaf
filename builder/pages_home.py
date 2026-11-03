@@ -60,7 +60,7 @@ def home_page(facts, d, num, sources):
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
-<p><a href="borrowing.html">How do UK government debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
+<p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
 <h2 id="life">Everyday life, year by year</h2>
 <p>Pick any year from {E} to {L}, or compare two. Every topic has figures from {FIRST}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of every year since {FIRST}: the dark dot is the latest year, a gap means no figure, and a dashed line means the definition changed. The small charts do not start at zero.</p>
 <div class="cards">
