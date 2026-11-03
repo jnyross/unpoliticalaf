@@ -1114,6 +1114,7 @@ def _holidays(facts, d, num, sources):
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
 <p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
 <p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
+<p class="small">2019 and {LAST} are not compared: 2019 is UK residents on the old survey method, and {LAST} is Great Britain residents on a new method. Each is shown on its own.</p>
 </div>''')
 
     body.append(U.topic_line(num, "holidays", LAST))
