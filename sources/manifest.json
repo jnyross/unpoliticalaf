@@ -565,6 +565,26 @@
    "id": "oecd-gov-cofog",
    "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
    "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-eo-g7",
+   "file": "oecd/economic-outlook-g7-annual.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.ECO.MAD,DSD_EO@DF_EO,/CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD.GGFLQ+GGFLMQ+GNINTQ+GGINTPQ+GGINTRQ+IRL+IRS+NLGQ+GDPV_ANNPCT+CPI_YTYPCT.A?startPeriod=1990&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-finmark-irlt",
+   "file": "oecd/finmark-long-term-rates-g7.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-pf-g7",
+   "file": "oecd/gov-at-a-glance-all-measures-g7.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A.CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD_REP.....?startPeriod=2007&format=csvfilewithlabels"
+  },
+  {
+   "id": "imf-weo-debt",
+   "file": "imf/weo-gg-debt-gdp.json",
+   "url": "https://www.imf.org/external/datamapper/api/v1/GG_DEBT_GDP/CAN/FRA/DEU/ITA/JPN/GBR/USA"
   }
  ]
 }
