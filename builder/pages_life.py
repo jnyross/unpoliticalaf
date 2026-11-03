@@ -453,6 +453,36 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, year
     return f'<figure class="yearspark">{svg}<figcaption>{cap}</figcaption></figure>'
 
 
+INFANT_LIMIT = "In England the law limits infant classes (reception to year 2) to 30 pupils, with some exceptions."
+
+
+def most_visited(facts, d, num, y):
+    """The most visited country in year y: holidays only where ONS publishes them by
+    country (from 2024), otherwise visits for any purpose, which the sentence says."""
+    names = d["countries"]["names"]
+    hol = top_countries(facts, d, y, 1, kind="holiday") if d["countries"].get("holiday", {}).get(y) else []
+    if hol:
+        return f"The most visited country for holidays was {esc(names[hol[0]])} ({num(f'hol.cty.{hol[0]}.holiday.{y}', 'millions')} visits)."
+    top = top_countries(facts, d, y, 1)
+    if not top:
+        return ""
+    return (f"Counting visits for any purpose (holidays, family visits and business), the most visited country was "
+            f"{esc(names[top[0]])} ({num(f'hol.cty.{top[0]}.all.{y}', 'millions')} visits).")
+
+
+def year_extra(facts, d, num, topic, y):
+    """What readers ask about each topic on a year page, inside its answer box (audit 12 gap 2):
+    the most visited country, the infant class limit, and that change is not cause."""
+    if topic == "holidays":
+        line = most_visited(facts, d, num, y)
+        return f'<p>{line} <a href="#holidays-countries-{y}">Top ten</a></p>' if line else ""
+    if topic == "schools" and _val(facts, f"school.primary.{y}") is not None:
+        large = f"school.large.infant.{y}"
+        extra = f" In January {y}, {num(large, 'pct')} of infant pupils were in classes of more than 30." if _val(facts, large) is not None else ""
+        return f"<p>{INFANT_LIMIT}{extra}</p>"
+    return ""
+
+
 def year_page(facts, d, num, sources, y):
     up = "../"
     body = [f"<h1>Everyday life in {y}</h1>"]
@@ -464,7 +494,7 @@ def year_page(facts, d, num, sources, y):
     body.append(compare_with(y))
     for key, title, scope in TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
-        body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p></div>')
+        body.append(f'<div class="answer"><p>{headline(facts, num, key, y)}</p>{year_extra(facts, d, num, key, y)}</div>')
         body.append(year_spark(facts, num, key, y))
         body.append(topic_block_for_year(facts, num, sources, key, y, up))
         if key == "work":
@@ -475,7 +505,7 @@ def year_page(facts, d, num, sources, y):
             body.append(occupation_table(facts, num, d, y))
         if key == "holidays":
             body.append(holiday_regions(facts, num, y))
-            body.append(country_table(facts, num, d, y, 10))
+            body.append(f'<div id="holidays-countries-{y}">{country_table(facts, num, d, y, 10)}</div>')
         body.append(explain.for_year(key, y, sources, up=up))
         body.append(f'<p class="small">{esc(scope)}</p>')
         body.append(f'<p class="small"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
@@ -1098,7 +1128,7 @@ def _holidays(facts, d, num, sources):
 def _infant_limit(facts, num, d):
     """The legal limit on infant classes, near the top of the class sizes page (audit 11 gap 6)."""
     iy = sorted(d["life_extra"]["classes"]["large"]["infant"])[-1]
-    return (f'<p>In England the law limits infant classes (reception to year 2) to 30 pupils, with some exceptions. '
+    return (f'<p>{INFANT_LIMIT} '
             f'In January {iy}, {num(f"school.large.infant.{iy}", "pct")} of infant pupils were in classes of more than 30. '
             f'<a href="#schools-large">Classes of more than 30</a></p>')
 
@@ -1226,16 +1256,40 @@ def _hub_earnings(facts, d, num):
 # Shorter answers for the hub, where every topic shares one page.
 def _hub_work(facts, d, num):
     """The work answer, shortened for the hub: manufacturing's share stays on the topic page."""
-    return f'<div class="answer"><p>{headline(facts, num, "work", LAST)}</p></div>'
+    # Kept to two short sentences, so the first chart stays within two phone screens
+    # under the questions at the top of the hub.
+    y = LAST
+    sc = occ_scheme(y)
+    shares = {c: facts[f"work.occshare.{sc}.{c}.{y}"].value for c in OCC_NAMES[sc]
+              if c != "0" and _val(facts, f"work.occshare.{sc}.{c}.{y}") is not None}
+    top = max(shares, key=shares.get)
+    return (f'<div class="answer"><p>In April to June {y}, {num(f"work.rate.{y}", "pct")} of people aged 16 to 64 were in work '
+            f'(men {num(f"work.men.{y}", "pct")}, women {num(f"work.women.{y}", "pct")}). '
+            f'The largest group of jobs in {y} was {esc(OCC_NAMES[sc][top].lower())} ({num(f"work.occshare.{sc}.{top}.{y}", "pct")}).</p></div>')
 
 
 HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings, "work": _hub_work}
 
 
+def hub_quick(facts, d, num):
+    """Short answers to what readers bring to the hub, at the top (audit 12 gap 2): readers
+    missed the infant class limit, the most visited country and the change-is-not-cause
+    note when each sat inside its own topic further down a long page."""
+    names = d["countries"]["names"]
+    firsts = {top_countries(facts, d, y, 1)[0] for y in d["countries"]["all"] if top_countries(facts, d, y, 1)}
+    items = ['<strong>Change is not cause:</strong> these figures show what changed, not why.',
+             f'<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More</a>']
+    if len(firsts) == 1:
+        c = esc(names[firsts.pop()])
+        items.append(f'<strong>Most visited country abroad:</strong> {c}, counting visits for any purpose, in every year with figures by country. <a href="holidays.html#holidays-countries">Top ten</a>')
+    lis = "".join(f"<li>{x}</li>" for x in items)
+    return f'<div class="answer"><ul class="quick" aria-label="Often asked">{lis}</ul></div>'
+
+
 def life_index(facts, d, num, sources):
     """A light hub: each topic's answer, a link to its own page, and the year and comparison choosers."""
     body = ["<h1>Everyday life, year by year</h1>"]
-    body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed over time? Each topic below links to its own page with every year’s figures.</p></div>''')
+    body.append(hub_quick(facts, d, num))
     body.append(jump("Jump to", [(f"#{k}", t) for k, t, _ in TOPICS] + [("#compare", "Compare years")], year_jump("")))
     # Each topic's answer and chart come first, so a chart shows within the
     # first two phone screens; the year and comparison choosers follow.
@@ -1246,8 +1300,6 @@ def life_index(facts, d, num, sources):
         body.append(answer)
         from .pages_history import long_spark
         body.append(long_spark(facts, num, key))
-        if key == TOPICS[0][0]:
-            body.append(before_toc(CAUSE))
         body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')

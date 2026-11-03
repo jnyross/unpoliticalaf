@@ -51,6 +51,8 @@ li{margin-bottom:4px}
 .eyebrow{display:block;font-size:.8rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:24px 0 -8px}
 .answer{background:var(--soft);border-radius:var(--r);padding:16px 16px 4px;margin:14px 0 18px}
 .answer p{margin-bottom:12px}
+.answer ul.quick{margin:0 0 12px;padding:0;list-style:none}
+.answer ul.quick li{margin-bottom:6px}
 .answer h2.ba-h{font-size:1.15rem;margin:0 0 2px}
 .ba{display:flex;align-items:center;gap:14px;margin:6px 0 10px}
 .ba p{margin:0}.ba-y{display:block;font-size:.9rem;color:var(--muted)}
