@@ -365,5 +365,5 @@ def holiday_spend_block(facts, num, d):
     out.append(f'<div class="limit"><p>Spending per visit and nights per visit are averages over every holiday visit, short city breaks and long trips alike, so they do not describe a typical holiday. '
                f'Spending is adjusted for inflation with UK consumer prices (CPIH); this does not allow for exchange rates or for prices in the countries visited. '
                f'2020 has no full-year figures because the survey was suspended, and 2021 holidays were few and unusual because of travel restrictions. '
-               f'From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years, and 2024 mixes the old and new methods.</p></div>')
+               f'From 2024 a new method counts Great Britain residents (2024 mixes both), so 2024 and 2025 are not compared with earlier years: a gap may be the method.</p></div>')
     return out

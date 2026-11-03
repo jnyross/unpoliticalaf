@@ -580,6 +580,26 @@ def short_break(group, a, b):
     return "The definition changed between these years."
 
 
+# What a reader would otherwise read a difference as, for each topic.
+REAL_CHANGE = {
+    "work": "who was in work",
+    "earnings": "pay",
+    "housing": "how people live",
+    "holidays": "how often people went abroad",
+    "schools": "class sizes",
+}
+
+
+def not_compared_means(topic, kind):
+    """What "not compared" means, in plain words, after the reason (audit 12 gap 3).
+
+    kind is "break" (measured differently) or "missing" (no figure for one year)."""
+    if kind == "break":
+        return (" The site shows both figures but deliberately works out no change between them: "
+                f"some or all of the gap could come from the new way of measuring, not from a real change in {REAL_CHANGE[topic]}.")
+    return " No change can be worked out without a figure for both."
+
+
 def near_sentence(facts, num, m, near, topic, lead="Nearest years measured the same way", show_change=True):
     """A link to the nearest comparable pair of years, with that pair's change for measure m."""
     if not near:
@@ -689,10 +709,11 @@ def key_sentence(facts, num, topic, a, b):
     link = near_sentence(facts, num, m, _nearest_pair(facts, m, a, b), topic)
     if st == "break":
         return (f"<p>{esc(subject.rstrip(','))}: {num(fa, m[4])} in {esc(m[6](a))} and {num(fb, m[4])} in {esc(m[6](b))}, "
-                f"<strong>not compared</strong>. {esc(short_break(m[7], a, b))}{link}</p>")
+                f"<strong>not compared</strong>. {esc(short_break(m[7], a, b))}{esc(not_compared_means(topic, 'break'))}{link}</p>")
     missing = [y for y in (a, b) if _val(facts, m[3](y)) is None]
     y = missing[0]
-    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>, because {esc(missing_reason(mkey, y))}.{link}</p>"
+    return (f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>, because there is no figure for {y}: {esc(missing_reason(mkey, y))}."
+            f"{esc(not_compared_means(topic, 'missing'))}{link}</p>")
 
 
 def _same_way(m):
@@ -803,7 +824,7 @@ def compare_page(facts, d, num, sources, a, b):
                 link = near_sentence(facts, num, group[0], _nearest_pair(facts, group[0], a, b), key, "Nearest comparable years", show_change=False)
                 vals = "".join(f"<li>{esc(m[2])}: {num(m[3](a), m[4])} in {a}, {num(m[3](b), m[4])} in {b}</li>" for m in group)
                 items.append(f"<li><p>{esc(reason)}{link}</p><p class=\"small\">Shown side by side, not compared:</p><ul class=\"small cmp-vals\">{vals}</ul></li>")
-            body.append(f'<h3>Not compared: the definition changed</h3><ul class="cmp-notes">{"".join(items)}</ul>')
+            body.append(f'<h3>Not compared: measured differently in {a} and {b}</h3><p class="small">{esc(not_compared_means(key, "break").strip())}</p><ul class="cmp-notes">{"".join(items)}</ul>')
         if missing:
             reasons = {}
             for m in missing:

@@ -99,7 +99,8 @@ def lead_sentence(facts, num, topic, a, b):
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if same else 'to'} {num(fb, m[4])} ({esc(m[6](b))})."
                 f"{'' if same else ' Change: ' + ch + '.'}</p>" + L._pair_bars(facts, num, _m8(m), a, b)
                 + L.long_run(facts, num, _m8(m), b, f"../{topic}.html"))
-    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>. {esc(not_compared(facts, m, a, b))}{_near_link(facts, num, m, a, b, topic)}</p>"
+    means = L.not_compared_means(topic, status(facts, m, a, b))
+    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>. {esc(not_compared(facts, m, a, b))}{esc(means)}{_near_link(facts, num, m, a, b, topic)}</p>"
 
 
 def _rows(facts, num, topic, a, b):

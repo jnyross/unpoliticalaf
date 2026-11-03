@@ -196,7 +196,8 @@ def key_sentence(facts, num, topic, a, b):
         return (f"<p>{esc(subject)} {verb} an average of {num(avg_id(m, a), m[4])} in {long(a)} {sep} {num(avg_id(m, b), m[4])} in {long(b)}."
                 f"{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>" + _bars(facts, num, m, a, b)
                 + L.long_run(facts, num, m, int(b[1]), f"../../{topic}.html"))
-    return f"<p>{esc(subject)}: <strong>not compared</strong>. {esc(_not_compared(facts, m, a, b))}</p>"
+    means = L.not_compared_means(topic, span_status(facts, m, a, b))
+    return f"<p>{esc(subject)}: <strong>not compared</strong>. {esc(_not_compared(facts, m, a, b))}{esc(means)}</p>"
 
 
 def largest_changes(facts, num, a, b, n=3):
