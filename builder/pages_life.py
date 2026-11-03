@@ -887,7 +887,7 @@ def _earnings(facts, d, num, sources):
     answer = (f'<div class="answer"><h2 class="ba-h">Pay after inflation: before and after</h2>'
               f'<p class="small">Middle full-time employee, £ a week before tax, UK, both years in April {LAST} prices</p>'
               + earn_before_after(num, a, b, ch) +
-              f'<p><strong>{_how_short(ch)}</strong> ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}) after allowing for rising prices. '
+              f'<p>After allowing for rising prices, pay in April {b} was {_how(ch)} in April {a} ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
               f'In cash, at the time, pay went from {num(f"earn.ft.{a}", "pounds")} to {num(f"earn.ft.{b}", "pounds")} a week.</p>'
               f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>'
               f'<ul class="ba-list">{earlier}</ul></div>')
@@ -1075,8 +1075,17 @@ def _hub_schools(facts, d, num):
             f'{num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
 
 
+def _hub_earnings(facts, d, num):
+    """Before and after pay, without the earlier stretches (those are on the earnings page)."""
+    a, b, ch = earn_stretches(facts)[0]
+    return (f'<div class="answer">{earn_before_after(num, a, b, ch)}'
+            f'<p>Pay of the middle full-time employee, £ a week before tax, UK, in April {LAST} prices: {_how_short(ch).lower()} '
+            f'({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
+            f'The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch.</p></div>')
+
+
 # Shorter answers for the hub, where every topic shares one page.
-HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools}
+HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings}
 
 
 def life_index(facts, d, num, sources):
