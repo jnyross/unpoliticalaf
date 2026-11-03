@@ -1014,6 +1014,19 @@ class EarlyComparisons(unittest.TestCase):
         self.assertIn('<option value="1971">', form)
         self.assertIn(f'<option value="{pages_life.LAST}"', form)
 
+    def test_topic_compare_form_opens_at_the_topic_and_confirms_the_choice(self):
+        form = pages_life.compare_form("", 2015, 2025, anchor="holidays")
+        self.assertIn('data-anchor="holidays"', form)
+        self.assertIn('<input type="hidden" name="at" value="holidays">', form)
+        self.assertIn('role="status"', form)
+        self.assertIn("Compare 2015 and 2025</button>", form)
+
+    def test_compare_grid_keeps_every_year_in_a_fixed_column(self):
+        grid = pages_life.year_grid([(y, f'<a href="x{y}">{y}</a>') for y in (2013, 2014, 2015)])
+        # 2013 starts in the fourth column, so 2015 always starts a row.
+        self.assertTrue(grid.startswith('<ul class="yearnav yeargrid"><li class="c4">'))
+        self.assertEqual(pages_life.year_grid([(2015, "a")]), '<ul class="yearnav yeargrid"><li>a</li></ul>')
+
 
 class MoneyViews(unittest.TestCase):
     """Cash, after inflation and share of GDP: the switch and the figures behind it."""

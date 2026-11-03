@@ -217,11 +217,11 @@ def year_jump(up):
     opts = "".join(f'<option value="{y}"{" selected" if y == YEARS[-1] else ""}>{y}</option>' for y in EARLY_YEARS + YEARS)
     return (f'<form class="jumpyear" action="{up}index.html#years" method="get" data-year>'
             f'<label for="jump-year">Go to a year</label><select id="jump-year" name="year">{opts}</select>'
-            '<button type="submit">Go</button></form>')
+            '<button type="submit">Go</button><p class="pick-status" role="status" aria-live="polite"></p></form>')
 
 
 YEAR_JS = """<script>
-document.querySelectorAll('form[data-year]').forEach(function(f){f.addEventListener('submit',function(e){
+document.querySelectorAll('form[data-year]').forEach(function(f){var s=f.querySelector('[role=status]');f.elements.year.addEventListener('change',function(){if(s)s.textContent=f.elements.year.value+' chosen. Press Go to open it.';});f.addEventListener('submit',function(e){
 e.preventDefault();location.href=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'')+f.elements.year.value+'.html';});});
 (function(){var y=+new URLSearchParams(location.search).get('year');if(y&&/^\\d{4}$/.test(y)){location.replace(y+'.html');}})();
 </script>"""
@@ -233,13 +233,32 @@ DEFAULT_PAIR = [2010, LAST]
 SUGGESTED = []
 
 
-def compare_form(up, a=None, b=None):
+def year_grid(cells):
+    """Years as a fixed five-column grid. Each row starts at a year ending in 0 or 5,
+    so a year is always in the same column and nothing reflows when a cell is tapped.
+    cells: (year, html of the cell's content)."""
+    if not cells:
+        return ""
+    first = cells[0][0] % 5 + 1
+    lis = [f'<li class="c{first}">{cells[0][1]}</li>' if first > 1 else f"<li>{cells[0][1]}</li>"]
+    lis += [f"<li>{c}</li>" for _, c in cells[1:]]
+    return f'<ul class="yearnav yeargrid">{"".join(lis)}</ul>'
+
+
+PICK_STATUS = '<p class="pick-status" role="status" aria-live="polite"></p>'
+
+
+def compare_form(up, a=None, b=None, anchor=None):
+    """Two years to compare. anchor opens the comparison at one topic's section."""
+    a, b = a or DEFAULT_PAIR[0], b or DEFAULT_PAIR[1]
     def opts(sel):
         return "".join(f'<option value="{y}"{" selected" if y == sel else ""}>{y}</option>' for y in EARLY_YEARS + YEARS)
-    return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare>
-<label>First year <select name="from">{opts(a or DEFAULT_PAIR[0])}</select></label>
-<label>Second year <select name="to">{opts(b or DEFAULT_PAIR[1])}</select></label>
-<button type="submit">Compare</button></form>'''
+    data = f' data-anchor="{anchor}"' if anchor else ""
+    at = f'<input type="hidden" name="at" value="{anchor}">' if anchor else ""
+    return f'''<form class="pick" action="{up}compare/index.html#all" method="get" data-compare{data}>{at}
+<label>First year <select name="from">{opts(a)}</select></label>
+<label>Second year <select name="to">{opts(b)}</select></label>
+<button type="submit">Compare {min(a, b)} and {max(a, b)}</button>{PICK_STATUS}</form>'''
 
 
 def compare_with(y, up=""):
@@ -251,16 +270,21 @@ def compare_with(y, up=""):
     links = " · ".join(f'<a href="{up}compare/{min(o, y)}-{max(o, y)}.html">{min(o, y)} and {max(o, y)}</a>' for o in quick)
     return (f'<form class="pick" action="{up}compare/index.html#all" method="get" data-compare id="compare-top">'
             f'<input type="hidden" name="from" value="{y}"><label>Compare {y} with <select name="to">{opts}</select></label>'
-            f'<button type="submit">Compare</button></form><p class="small">Or go straight to {links}.</p>')
+            f'<button type="submit">Compare {min(y, sel)} and {max(y, sel)}</button>{PICK_STATUS}</form><p class="small">Or go straight to {links}.</p>')
 
 
 COMPARE_JS = """<script>
-document.querySelectorAll('form[data-compare]').forEach(function(f){f.addEventListener('submit',function(e){
+document.querySelectorAll('form[data-compare]').forEach(function(f){var s=f.querySelector('[role=status]'),btn=f.querySelector('button');
+function said(){var a=+f.elements.from.value,b=+f.elements.to.value,lo=Math.min(a,b),hi=Math.max(a,b);
+if(a===b){btn.textContent='Open '+a;return 'Both years are '+a+'. Press Open '+a+' to see that year, or choose a different year.';}
+btn.textContent='Compare '+lo+' and '+hi;return 'Chosen: '+lo+' and '+hi+'. Press Compare '+lo+' and '+hi+' to open the comparison.';}
+f.querySelectorAll('select').forEach(function(sel){sel.addEventListener('change',function(){var t=said();if(s)s.textContent=t;});});
+f.addEventListener('submit',function(e){
 var a=+f.elements.from.value,b=+f.elements.to.value;e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'');
 if(a===b){location.href=base+'../'+a+'.html';return;}
-var lo=Math.min(a,b),hi=Math.max(a,b);location.href=base+lo+'-'+hi+'.html';});});
+var lo=Math.min(a,b),hi=Math.max(a,b),h=f.getAttribute('data-anchor');location.href=base+lo+'-'+hi+'.html'+(h?'#'+h:'');});});
 (function(){var p=new URLSearchParams(location.search),a=+p.get('from'),b=+p.get('to');
-if(a&&b&&document.body.hasAttribute('data-compare-index')){if(a===b){location.replace('../'+a+'.html');}else{location.replace(Math.min(a,b)+'-'+Math.max(a,b)+'.html');}}})();
+if(a&&b&&document.body.hasAttribute('data-compare-index')){var h=/^[a-z]+$/.test(p.get('at')||'')?'#'+p.get('at'):'';if(a===b){location.replace('../'+a+'.html');}else{location.replace(Math.min(a,b)+'-'+Math.max(a,b)+'.html'+h);}}})();
 </script>"""
 
 # Years that official sources describe as unusual. A comparison that starts or
@@ -457,12 +481,8 @@ def year_page(facts, d, num, sources, y):
         body.append(f'<p class="small"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up=up))
     body.append(f'<h2 id="compare">Compare {y} with another year</h2>')
-    links = []
-    for o in YEARS:
-        if o != y:
-            a, b = min(o, y), max(o, y)
-            links.append(f'<li><a href="compare/{a}-{b}.html">{o}</a></li>')
-    body.append(f'<ul class="yearnav">{"".join(links)}</ul>')
+    cells = [(o, f'<span aria-current="page">{o}</span>' if o == y else f'<a href="compare/{min(o, y)}-{max(o, y)}.html">{o}</a>') for o in YEARS]
+    body.append(f'<p class="small">Choose the other year. {y} is this page, shown filled in.</p>' + year_grid(cells))
     body.append(CAUSE)
     return page(f"life/{y}.html", f"Everyday life in {y}", "\n".join(body), f"Work, earnings, housing, holidays and class sizes in the UK in {y}, from official statistics.", scripts=COMPARE_JS, toc_after_first=True)
 
@@ -839,13 +859,11 @@ def compare_index(sources):
     body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
     for a in YEARS[:-1]:
-        links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in YEARS if b > a)
-        body.append(f'<h3>{a} with…</h3><ul class="yearnav">{links}</ul>')
+        body.append(f'<h3>{a} with…</h3>' + year_grid([(b, f'<a href="{a}-{b}.html">{b}</a>') for b in YEARS if b > a]))
     # Earlier years have fewer figures, so their pairs fold away beneath.
     early = []
     for a in EARLY_YEARS:
-        links = "".join(f'<li><a href="{a}-{b}.html">{b}</a></li>' for b in EARLY_YEARS + YEARS if b > a)
-        early.append(f'<h3>{a} with…</h3><ul class="yearnav">{links}</ul>')
+        early.append(f'<h3>{a} with…</h3>' + year_grid([(b, f'<a href="{a}-{b}.html">{b}</a>') for b in EARLY_YEARS + YEARS if b > a]))
     body.append(f'<h2 id="earlier">Comparisons with earlier years, {EARLY_YEARS[0]} to {EARLY_YEARS[-1]}</h2>'
                 '<p>Fewer official figures reach back before 2008: the employment rate from 1971, visits abroad from 1980, owning and renting in England '
                 'from 1981, pay from 2002 and class sizes from 2006. These pages compare only those figures, and only where both years were measured the same way.</p>'
@@ -891,7 +909,13 @@ def _work(facts, d, num, sources):
               if all(_val(facts, f"work.{k}.{nw}") is not None for k in ("men", "women")) else "")
         newer = (f' The April to June {nw} survey found {num(f"work.rate.{nw}", "pct")} in work{mw}. '
                  f'It is not on the year pages, which stop at {LAST}, the latest year that most topics have.')
-    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p></div>')
+    jb = d["life_extra"]["jobs"]
+    jf, jl = jb["years"][0], jb["years"][-1]
+    # Manufacturing's long fall is asked about often, so it sits in the answer box,
+    # not only in the jobs by industry section lower down (audit 11 gap 6).
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>'
+              f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
+              f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
                              finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
@@ -1013,18 +1037,16 @@ def _hol_cell(facts, num, y):
     return num(f"hol.world.holiday.{y}", "millions")
 
 
-def _top_holiday_countries(facts, d, num, spain_first):
+def _top_holiday_countries(facts, d, num):
     """The most visited countries in the latest year. Holiday-only figures by country
     start in 2024; before that only visits for any purpose exist, and the text says so."""
     names = d["countries"]["names"]
     hl = top_countries(facts, d, LAST, 3, kind="holiday") if d["countries"].get("holiday", {}).get(LAST) else []
-    lead = ("Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country. "
-            if spain_first else "")
     if len(hl) == 3:
-        return (f'{lead}Counting holidays alone, in {LAST} {esc(names[hl[0]])} had {num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} holiday visits, '
-                f'then {esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).')
+        return (f'In {LAST} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} visits), '
+                f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).')
     tl = top_countries(facts, d, LAST, 3)
-    return (f'{lead}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose, then {esc(names[tl[1]])} '
+    return (f'In {LAST} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
             f'({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}); there are no holiday-only figures by country for that year.')
 
 
@@ -1034,9 +1056,13 @@ def _holidays(facts, d, num, sources):
     y = LAST
     names = d["countries"]["names"]
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
+    # The most visited countries get their own short paragraph near the top, with a link
+    # to their section, as readers missed them inside a longer one (audit 11 gap 6).
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
-<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}. {_top_holiday_countries(facts, d, num, spain_first)}</p>
+<p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
 </div>''')
+
     body.append(U.topic_line(num, "holidays", LAST))
     body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
                 'Trips within Great Britain come from a separate survey, which changed method after 2019.</p>')
@@ -1057,6 +1083,9 @@ def _holidays(facts, d, num, sources):
     from .pages_life_extra import holiday_afford_block, holiday_spend_block
     body.extend(holiday_spend_block(facts, num, d))
     body.extend(holiday_afford_block(facts, num, d))
+    body.append("<h3 id='holidays-countries'>Most visited countries</h3>" + FOLD)
+    if spain_first:
+        body.append("<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country.</p>")
     body.append(country_table(facts, num, d, LAST, 10))
     cyears = [2009, 2019, LAST]
     top = top_countries(facts, d, LAST, 10)
@@ -1065,6 +1094,14 @@ def _holidays(facts, d, num, sources):
                               [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
     body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
     return answer, body
+
+def _infant_limit(facts, num, d):
+    """The legal limit on infant classes, near the top of the class sizes page (audit 11 gap 6)."""
+    iy = sorted(d["life_extra"]["classes"]["large"]["infant"])[-1]
+    return (f'<p>In England the law limits infant classes (reception to year 2) to 30 pupils, with some exceptions. '
+            f'In January {iy}, {num(f"school.large.infant.{iy}", "pct")} of infant pupils were in classes of more than 30. '
+            f'<a href="#schools-large">Classes of more than 30</a></p>')
+
 
 def _schools(facts, d, num, sources):
     """(answer box, detail parts) for the schools topic."""
@@ -1075,7 +1112,8 @@ def _schools(facts, d, num, sources):
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
               f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p></div>')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p>'
+              f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
                              [(n, [_val(facts, f(y)) for y in sy], st) for n, f, st in (("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b"))],
@@ -1144,7 +1182,7 @@ def topic_page(facts, d, num, sources, key):
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + ("" if key == "work" else CAUSE))]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
@@ -1158,10 +1196,11 @@ def topic_page(facts, d, num, sources, key):
     body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
-    body.append("<h2 id='years'>One year, or two side by side</h2>")
-    body.append(NOFOLD + f'<p>See <a href="index.html#years">everyday life in a single year</a>, or <a href="compare/index.html">compare two years</a> across every topic.</p>')
+    body.append(f"<h2 id='years'>Compare two years</h2>")
+    # The comparison opens at this topic's section; every other topic follows it.
+    body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
-                f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True)
+                f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
 
 def _hub_holidays(facts, d, num):
@@ -1185,7 +1224,12 @@ def _hub_earnings(facts, d, num):
 
 
 # Shorter answers for the hub, where every topic shares one page.
-HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings}
+def _hub_work(facts, d, num):
+    """The work answer, shortened for the hub: manufacturing's share stays on the topic page."""
+    return f'<div class="answer"><p>{headline(facts, num, "work", LAST)}</p></div>'
+
+
+HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings, "work": _hub_work}
 
 
 def life_index(facts, d, num, sources):
@@ -1205,7 +1249,6 @@ def life_index(facts, d, num, sources):
         if key == TOPICS[0][0]:
             body.append(before_toc(CAUSE))
         body.append(f'<p class="more-link"><a href="{key}.html">{esc(title)} in every year since {FIRST_YEAR[key]}</a></p>')
-    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
     a, b = DEFAULT_PAIR
@@ -1214,6 +1257,7 @@ def life_index(facts, d, num, sources):
                 f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b, brief=True))}</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
+    body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS + YEAR_JS, contents=False)
 
 
