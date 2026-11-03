@@ -448,6 +448,11 @@ def work(facts):
             facts.add(Fact(fid, v, unit, f"April to June {y}", sid, f"{meta.get('CDID')} row '{y} Q2'", "published",
                            note=meta.get("Title", "")))
             out[key][y] = fid
+        if key == "rate" and _q2(data, YEARS[-1] + 1) is not None:
+            # a newer quarter than the explorer's range, for the home page's latest figure
+            y = YEARS[-1] + 1
+            facts.add(Fact(f"work.rate.{y}", _q2(data, y), unit, f"April to June {y}", sid, f"{meta.get('CDID')} row '{y} Q2'", "published",
+                           note=meta.get("Title", "")))
     for y in YEARS:
         ft, pt = facts[f"work.ft.{y}"], facts[f"work.pt.{y}"]
         if ft.value is not None and pt.value is not None:
