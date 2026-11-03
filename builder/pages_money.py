@@ -86,7 +86,7 @@ def spending_page(facts, d, num, sources):
                     f"100 × spend.cash.debt_interest.{y} ÷ spend.cash.tme.{y}")
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total, {num(f"spend.gdp.tme.{y}", "pct")} of GDP.</p>
 <p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
-<strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")} of every £100 spent on services ({num(di_tme, "per100dp1")} of every £100 of total spending), as part of general public services. This counts interest paid out; the “net” figure the OBR and IFS often quote, which subtracts interest received, is lower.</p>
+<strong>Health</strong> was next with {num(per[second[0]], "per100")}.</p>
 <p>See it {view_link("as a share of GDP over time", "tme-views", 2)} or <a href="international.html">beside other countries</a>.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
@@ -95,7 +95,7 @@ def spending_page(facts, d, num, sources):
     body.append(before_toc(scale_box(num, pp, pop, f"spending in {y}", hid=ph, hh=hh, extra=" These are averages across everyone, including children, not the amount spent on any one person or household.")
                            + "<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>"))
     body.append(FOLD)
-    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100 spent on services) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. Pensions in old age cost {num(sp["oldage"], "bn")} in {y}, inside social protection. This is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension alone.</p>''')
+    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100 spent on services, or {num(di_tme, "per100dp1")} of every £100 of total spending) is part of “general public services”; this counts interest paid out, and the “net” figure the OBR and IFS often quote, which subtracts interest received, is lower. Transport ({num(per["transport"], "per100")}) is part of “economic affairs”. Pensions in old age cost {num(sp["oldage"], "bn")} in {y}, inside social protection. This is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension alone.</p>''')
     body.append(explain("debt-interest-2022", sources))
     rows = []
     for k, name in order:

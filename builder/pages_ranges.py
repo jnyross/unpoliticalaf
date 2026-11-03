@@ -133,7 +133,7 @@ def default_spans(facts):
     return min(pairs, key=lambda p: (p[0][0] - p[1][0], p[0][0]))
 
 
-def pair_context(a, b):
+def pair_context(a, b, brief=False):
     """Where a suggested pair sits in the economic cycle, so a reader knows what the
     two ends have in common. Said whatever the figures show."""
     notes = []
@@ -143,6 +143,8 @@ def pair_context(a, b):
         notes.append(f"{b} was the last year before the pandemic")
     if not notes:
         return ""
+    if brief:
+        return f" {a} came soon after a recession and {b} was the last year before the pandemic." if len(notes) == 2 else " " + notes[0][:1].upper() + notes[0][1:] + "."
     return (" " + "; ".join(notes)[:1].upper() + "; ".join(notes)[1:] + ". So this pair shows that stretch, not the whole period: "
             "each topic page has every year, and each comparison page gives the longer run.")
 

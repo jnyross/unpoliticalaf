@@ -1175,7 +1175,7 @@ def life_index(facts, d, num, sources):
     a, b = DEFAULT_PAIR
     from .pages_ranges import pair_context
     body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared, '
-                f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b))}</p>')
+                f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b, brief=True))}</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS + YEAR_JS, contents=False)
