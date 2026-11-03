@@ -11,6 +11,126 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 9: 3 November 2026 (first audit under rubric v3, with stand-ins)
+
+- Commit audited: `6b3257e` on `main` (site build). `main` then moved to
+  `9429ae6` (#124, a workflow change only); the "Live site matches main"
+  check for `9429ae6` is green
+  ([run 41607707059](https://github.com/jnyross/unpoliticalaf/actions/runs/41607707059)).
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure
+  [standins/README.md](standins/README.md). All evidence is in
+  [standins/audits/audit-9/](standins/audits/audit-9/).
+- Stand-ins run, each a fresh session that did not build the site:
+  a question writer (24 new questions, sealed in `5369747` before any reader
+  started); 3 informal readers (profiles P3, P7, P5); 5 phone readers (P1, P4,
+  P6, P8, P10, drawn at random); a screen-reader reader; an adversarial
+  fact-checker; a left critic, a right critic and a judge. Readers ran on a
+  smaller model than the reviewers.
+- Automated checks: no keyboard traps on the 9 main pages; all 1,511 charts
+  have a text summary with figures; axe (`make a11y`) runs in CI on this PR.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 24 out of 55. Target not met (simulated).** Audit 8 (rubric v2):
+40. The fall is not the site getting worse. v3's stand-ins are the first
+independent reviewers to look, and they upheld 7 material findings. The rubric
+caps every dimension with an open material finding at 1 until it is fixed.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 50/60; R1 9, R2 10, R3 7, R4 12, R5 12; all critical questions right except R3's | 48/60 and each reader 9/12 with the critical questions | No (R3) |
+| New questions (24, sealed) | 108/120 with the site (90%), 59 without | 80% | Yes |
+| Prior-knowledge check | 6/60 without the site, 50 with it (+44) | +20 | Yes |
+| John's questions | J1.1 and J1.2 5/5 readers right; J1.3 to J1.7 still open | every probe answered, 4 of 5 right | No (5 open) |
+| Informal check | 3 readers found all three answers; no blocking notes | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 15 actions; no blocking barrier | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 1 material, 8 minor ([claims.md](standins/audits/audit-9/fact-check/claims.md)) | no material errors | No |
+| Impartiality critics and judge | 6 upheld material, 3 minor, 14 rejected ([judgement.md](standins/audits/audit-9/impartiality/judgement.md)) | no upheld material finding | No |
+
+The fact-checker's 30 figures (`fact-check/sample.json`) are re-downloaded from
+the publishers by the "Accuracy check" workflow when this PR lands on `main`
+(the workflow cannot be started by hand from this session); it commits
+`fact-check/results.json`. The fact-checker could not reach the publishers'
+sites and used the repository's copies of the source files.
+
+R5's first phone session froze when the phone tool offered a tap on a control
+inside a closed fold, so R5 repeated the 12-question part in a fresh session
+with the fixed tool (both runs are kept). The scorer also counted the readers'
+session files as extra readers. Both tool faults are fixed in this PR, with a
+test. The screen-reader reader's note about "unlabelled links" came from the
+same fault (hidden controls have no text); the built pages have no control
+without a name.
+
+### Material findings (each caps its dimensions at 1)
+
+1. **Holiday visits in 2020 (fact-checker).** "In 2020 this fell to 4.4
+   million", the chart and the 7 per 100 residents sparkline show a partial
+   year (the survey stopped on 16 March 2020) as the full year. D7, D10.
+2. **Earnings changes across the 2011 and 2021 coding breaks (judge, L3).**
+   "About the same as 2008", 2006 to 2025 +1.5%, the 10th and 90th percentile
+   changes and the nation and region change table are worked out across
+   breaks the page itself marks; the 2009 vs 2023 comparison calls 2006 to
+   2025 "same method". D3, D10, D8.
+3. **Spending areas 2003-04 to 2025-26 across the education student-loan and
+   Network Rail breaks (judge, M2).** The summary names education's 4.8% to
+   4.1% as the largest fall, partly an accounting change. D1, D10.
+4. **Tax shares 1948-49 to 2022-23 across the marked breaks (judge, M3)** on
+   the tax history page, including the percentage-point bar chart. D1, D10.
+5. **A cause in the site's own words (judge, R4).** Household tax: the lowest
+   fifth's share is explained as "because their households spend more of
+   their income, some of it from savings or borrowing", not as an attributed
+   ONS explanation. D8.
+6. **Line charts that start above zero without saying so (judge, R8 and M1):**
+   spending as a share of GDP (35 to 55), earnings (from £600) and work (from
+   50, 60 or 65), including the nation and region panels. D5, D8.
+
+### Scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 1 | Capped by findings 3 and 4. Otherwise 4: every reader got the spending and tax questions right. |
+| D2 Life: breadth and depth | 4 | No finding against it. Not 5: the phone test failed. |
+| D3 Life: choosing and comparing | 1 | Capped by finding 2 (the comparison page calls a change across breaks "same method"). Readers also struggled to pick a year (R4, R5). |
+| D4 Explanation and understanding | 3 | All three informal readers nearly misread the lowest fifth paying 36.7% against the highest's 36.2% on the home card, and "Who pays" versus "Tax and income" sent four phone readers to the wrong page. Torn between 3 and 4, so 3. |
+| D5 Visual design and charts | 1 | Capped by finding 6. Readers also noted overlapping "Coding change" labels on earnings. |
+| D6 Phone experience | 4 | No page scrolls sideways, pages stay under 8.8 screens. Not 5: readers ran out of actions on the year-by-year hub and the 18-screen glossary. |
+| D7 Accuracy and traceability | 1 | Capped by finding 1. The other 29 claims matched their records and source files. |
+| D8 Impartiality | 1 | Capped by findings 2, 5 and 6. Group order, shared scales, zero-based bars and start years all follow the rule. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocking barrier, no keyboard traps, every chart has a text summary; axe in CI. |
+| D10 Honesty about limits | 1 | Capped by findings 1 to 4: changes shown across breaks and a partial year shown as a full one. |
+| D11 Reader evidence | 2 | Informal check and phone test recorded. Not 3 until the problems the readers found are fixed; not 5 until the phone test passes. |
+| **Total** | **24 / 55** | |
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' confusion notes only.
+
+1. Stop working out pay changes across the 2011 and 2021 coding breaks on the earnings page and the comparison pages (headline "about the same as 2008", 2006 to 2025, percentiles, nations and regions), or show each as two separate same-method changes.
+2. On the spending areas page, stop comparing 2003-04 with 2025-26 across the education student-loan and Network Rail breaks, or show those areas' changes only within same-basis years.
+3. On the tax history page, stop working out 1948-49 to 2022-23 changes in each tax's share across the breaks the page marks, including the percentage-point bar chart.
+4. Mark 2020 holiday visits as a partial year (survey stopped 16 March) wherever it appears (holidays headline, chart title and data, per 100 residents, life hub sparkline), not as the full-year low.
+5. Say in the caption of every line chart whose axis starts above zero that it does (spending share of GDP, earnings, work, and their nation and region panels), and add a check so new ones cannot miss it.
+6. Replace the household tax page's own explanation of why the lowest fifth pays a high share with an attributed ONS explanation, drop "the largest share" for a 0.5-point gap, and say on the home card in one plain line that the lowest fifth's share is mostly indirect tax such as VAT.
+7. Make the household tax answer easy to find from "Who pays" (four phone readers looked there first), and give the year-by-year hub and the glossary a way to jump straight to a topic, year or term.
+8. Fix the smaller points readers and the fact-checker raised: overlapping "Coding change" labels and unexplained "coding change" and "CPIH" on earnings; the home card's "£33 of every £100 spent on services" base and debt interest inside "general public services"; "Every topic has figures from 2008" (holidays start in 2009); "State pensions alone"; the two dates for the top-income adjustment; the mixed periods on the work page; and a "not anyone's bill" note on debt per household.
+
+John's questions (copied from the probes):
+
+- J1.3: The site has no international comparison of government debt, so it cannot say how UK debt as a share of GDP compares with the other G7 countries and the OECD average.
+- J1.4: The international page ranks the UK among all 38 OECD countries but never picks out the G7 (major economies), so a reader has to find six countries in two long bar lists to answer 'compared with other major nations'.
+- J1.5: The site does not show government borrowing costs (10-year government bond yields) for the UK beside the other G7 countries, or how they have changed over time.
+- J1.6: The site does not compare the UK's debt interest payments, as a share of GDP or of revenue, with other G7 countries.
+- J1.7: The site does not explain, in neutral terms with official sources, what moves government bond yields (central bank rates, expected inflation, the amount borrowed, investors' view of risk), so a reader could take a yield gap as a simple verdict on how a country is run.
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are
+not five people; screenshots are not a phone in the hand; an accessibility
+tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 8: 2 November 2026 (confirming re-score after PRs #118 and #119)
 
 - Commit audited: `fded452` on `main` (after #118 chart titles that name

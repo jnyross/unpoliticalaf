@@ -1,0 +1,15 @@
+{
+ "phone_test": false,
+ "prior_knowledge": true,
+ "new_questions": true,
+ "screen_reader": true,
+ "johns_questions": false,
+ "johns_gaps": [
+  "J1.3: The site has no international comparison of government debt, so it cannot say how UK debt as a share of GDP compares with the other G7 countries and the OECD average.",
+  "J1.4: The international page ranks the UK among all 38 OECD countries but never picks out the G7 (major economies), so a reader has to find six countries in two long bar lists to answer 'compared with other major nations'.",
+  "J1.5: The site does not show government borrowing costs (10-year government bond yields) for the UK beside the other G7 countries, or how they have changed over time.",
+  "J1.6: The site does not compare the UK's debt interest payments, as a share of GDP or of revenue, with other G7 countries.",
+  "J1.7: The site does not explain, in neutral terms with official sources, what moves government bond yields (central bank rates, expected inflation, the amount borrowed, investors' view of risk), so a reader could take a yield gap as a simple verdict on how a country is run."
+ ],
+ "d11_ready_for_5": false
+}

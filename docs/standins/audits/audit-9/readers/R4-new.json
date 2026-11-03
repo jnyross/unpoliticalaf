@@ -1,0 +1,140 @@
+{
+ "reader": "R4-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 24,
+ "url": "life/2019.html",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > summary:nth-of-type(1)"
+  }
+ ],
+ "scroll": 3360,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 3920
+  },
+  {
+   "url": "life/2025.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2024.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2023.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2022.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2021.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2020.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [14] link: 2025",
+  "tap [10] link: ← 2024",
+  "tap [10] link: ← 2023",
+  "tap [10] link: ← 2022",
+  "tap [10] link: ← 2021",
+  "tap [10] link: ← 2020",
+  "tap [10] link: ← 2019",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [17] expand: More on Holidays table and sources",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/R4",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Show visits by destination and purpose"
+  }
+ ]
+}

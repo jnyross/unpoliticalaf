@@ -1,0 +1,86 @@
+{
+ "reader": "R3-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "life/index.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 3920
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 4417
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 4344
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [9] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll down",
+  "tap [7] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [13] link: Year by year",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/R3",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}

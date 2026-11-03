@@ -1,0 +1,194 @@
+{
+ "reader": "R3-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 38,
+ "url": "life/work.html",
+ "ops": [],
+ "scroll": 4366,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 3360
+  },
+  {
+   "url": "life/schools.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [2] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [7] expand: On this page: 6 sections",
+  "tap [10] link: How much is spent on holidays abroad, and for how long?",
+  "back",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [2] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Work",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/R3",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(11) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(12) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(13) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > figure:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > figure:nth-of-type(2) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "everyday life in a single year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "compare two years"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Home"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "methods"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "corrections"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "how sure the survey figures are"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(4)",
+   "kind": "link",
+   "label": "Open Government Licence v3.0"
+  }
+ ]
+}
