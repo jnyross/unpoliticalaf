@@ -80,18 +80,18 @@ def spending_page(facts, d, num, sources):
     body = [f"<h1>Where does public money go?</h1>"]
     body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
                          (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
-                         (num(per["debt_interest"], "per100"), "of every £100 went on interest on government debt", False)]))
+                         (num(per["debt_interest"], "per100"), "of every £100 went on debt interest, part of general public services", False)]))
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
-<p>Of every £100 spent on public services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
-<strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}.</p></div>''')
+<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
+<strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}, which is part of general public services.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
-    body.append(bars(items, "per100", num, caption="Rounded to the nearest pound, so the amounts may not add up to exactly £100."))
+    body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100. The split is of the {num(f'spend.cash.services.{y}', 'bn')} spent on services; the other {num(adj, 'bn')} is accounting adjustments."))
     # The chart comes first on a phone; scale and definitions follow it.
     body.append(before_toc(scale_box(num, pp, pop, f"spending in {y}", hid=ph, hh=hh, extra=" These are averages across everyone, including children, not the amount spent on any one person or household.")
                            + "<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>"))
     body.append(FOLD)
-    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. State pensions alone cost {num(sp["oldage"], "bn")} in {y}, inside social protection.</p>''')
+    body.append(f'''<p class="small">Two items inside these areas are often asked about: interest on government debt ({num(per["debt_interest"], "per100")} of every £100) is part of “general public services”, and transport ({num(per["transport"], "per100")}) is part of “economic affairs”. Pensions in old age cost {num(sp["oldage"], "bn")} in {y}, inside social protection. This is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension alone.</p>''')
     body.append(explain("debt-interest-2022", sources))
     rows = []
     for k, name in order:
@@ -254,7 +254,7 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
             ["<strong>Total spending (OBR basis)</strong>", num(f"agg.tme.{y}", "bn1")]]
     body.append(details_table("Show these figures as a table", f"Public sector receipts and borrowing, {y}, £ billion", ["Item", "£bn"], rows))
     body.append(f'''<h2 id="debt">Borrowing is not the same as debt</h2>
-<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026 (public sector net debt), equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP, or about {num(dpp, "pounds")} per person ({num(dph, "pounds")} per household).</p>''')
+<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026 (public sector net debt), equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP, or about {num(dpp, "pounds")} per person ({num(dph, "pounds")} per household). That is the debt divided by everyone, an average, not anyone’s bill: it is owed by the public sector, not by people or households.</p>''')
     body.append(source_line(sources, ["obr"], f"Sheets “Receipts (£bn)” and “Aggregates (£bn)”. {y} is outturn and can still be revised; years from {rc['forecast_from']} are OBR forecasts."))
 
     # history as % of GDP

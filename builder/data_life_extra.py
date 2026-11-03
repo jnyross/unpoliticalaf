@@ -23,7 +23,7 @@ from .readers import ROOT, csv_rows, ons_series, ref, xlsx
 SPREAD_FILE = "data/fetched/nomis/ashe-resident-uk-weekly-percentiles.csv"
 SPREAD_ITEMS = {"6": "p10", "2": "p50", "15": "p90"}
 # ONS: ASHE has breaks in 2004, 2006 and 2011 (ASHE QMI) and 2021 (SOC2020 coding).
-SPREAD_BREAKS = {2004: "Method change", 2006: "Method change", 2011: "Coding change", 2021: "Coding change"}
+SPREAD_BREAKS = {2004: "Method change", 2006: "Method change", 2011: "Jobs recoded", 2021: "Jobs recoded"}
 
 
 def pay_spread(facts):

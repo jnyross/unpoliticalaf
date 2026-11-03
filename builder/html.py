@@ -716,17 +716,19 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     for i, text in breaks:
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
         parts.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
-        # Right-align the label when it would run past the chart's right edge
-        w = len(text) * 6.6
+        # Right-align the label when it would run past the chart's right edge.
+        # Width is estimated for the 15px chart font (about 8.4 units a character).
+        w = len(text) * 8.4
         right = bx > W * 0.65 or bx + 3 + w > W
         lo_, hi_ = (bx - 3 - w, bx - 3) if right else (bx + 3, bx + 3 + w)
         if any(lo_ < b + 4 and hi_ > a - 4 for a, b in taken):
-            continue  # breaks close together share one label; the summary names each
+            continue  # breaks close together share one label; the caption and summary name each
         taken.append((lo_, hi_))
+        ty = T + 12
         if right:
-            parts.append(f'<text x="{bx - 3:.1f}" y="{T + 12}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
         else:
-            parts.append(f'<text x="{bx + 3:.1f}" y="{T + 12}" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(f'<text x="{bx + 3:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
     for i, text in events:
         ex = x(i)
         parts.append(f'<line x1="{ex:.1f}" x2="{ex:.1f}" y1="{T}" y2="{H - B}" stroke="#8d969e" stroke-dasharray="1 3" stroke-width="1.5"/>')

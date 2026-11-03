@@ -1,6 +1,7 @@
 """Everyday life before 2008: the longer series, and one page for each earlier year.
 
-Every topic in the year-by-year explorer has figures from 2008. Some official series reach
+Every topic in the year-by-year explorer has figures from 2008, except holidays,
+which start in 2009. Some official series reach
 further back: the employment rate from 1971, tenure in England from 1981, visits
 abroad from 1980, pay from 2002 and class sizes from 2006. Each is shown with its
 own survey, and changes are only calculated within a stretch measured the same way.
@@ -116,9 +117,9 @@ def chart(facts, num, topic):
     if topic == "earnings":
         years = [y for y in ALL if y >= first]
         items = [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")]
-        breaks = [(years.index(y), t) for y, t in ((2004, "Method change"), (2006, "Method change"), (2011, "Coding change"), (2021, "Coding change"))]
+        breaks = [(years.index(y), t) for y, t in ((2004, "Method change"), (2006, "Method change"), (2011, "Jobs recoded"), (2021, "Jobs recoded"))]
         return _line(facts, num, "Median full-time weekly pay since 2002, after inflation", years, items,
-                     "£ a week before tax, April each year, in April 2025 prices (CPIH), United Kingdom. The lines break at each method or coding change", "pounds", breaks=breaks,
+                     "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs), United Kingdom. The lines break at each change to the survey's method (2004 and 2006) and each time it changed the codes it uses to sort jobs into types (2011 and 2021)", "pounds", breaks=breaks,
                      split=True, finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last"))
     if topic == "housing":
         years = list(range(first, 2025))
@@ -290,7 +291,7 @@ def early_year_page(facts, d, num, sources, y):
     names = _join([dict((k, t) for k, t, _ in L.TOPICS)[t].lower() for t in have]) if have else ""
     body.append(f'<div class="answer"><p>Fewer official figures reach back to {y}. '
                 + (f"This page shows those that do, for {esc(names)}, each beside the latest year measured the same way. " if have else "")
-                + f'Every topic has figures from 2008: see <a href="2008.html">2008</a>. Or <a href="compare/{y}-{LAST}.html">compare {y} with {LAST}</a>.</p></div>')
+                + f'Work, earnings, housing and class sizes have figures from 2008, and holidays from 2009: see <a href="2008.html">2008</a> or <a href="2009.html">2009</a>. Or <a href="compare/{y}-{LAST}.html">compare {y} with {LAST}</a>.</p></div>')
     for key, title, _scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
         rows = _topic_rows(facts, num, key, y)

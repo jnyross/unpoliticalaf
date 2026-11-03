@@ -23,6 +23,13 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home")],
+        "was": "The spending page said “State pensions alone cost £155bn”. That figure is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension. The home page also said every everyday-life topic had figures from 2008, but holidays start in 2009.",
+        "now": "The £155bn is described as HM Treasury’s old age pensions line, which covers more than the State Pension alone. The home page, the life hub and the early-year pages say holidays start in 2009.",
+        "pr": 131,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("household-tax.html", "How much household income goes on tax?"), ("index.html", "Home")],
         "was": "The household tax page explained the lowest-income fifth’s indirect taxes in its own words (“because their households spend more of their income, some of it from savings or borrowing”), and a chart title said taxes took “the largest share of income” for the lowest-income fifth in 2023/24, when it was 36.7% against 36.2% for the highest-income fifth. The home page card showed the shares by fifth with no word on what they were made of.",
         "now": "The explanation is now a quote from the ONS, with its source and date. The chart title says the two fifths had a similar share, less than one percentage point apart. The home page card says the lowest-income fifth’s share is mostly indirect tax such as VAT and the highest-income fifth’s mostly direct tax such as Income Tax.",

@@ -49,7 +49,7 @@ def spread_block(facts, num, d, first):
     out.append(_chart(facts, num, "Weekly pay at three points of the pay ladder, after inflation", cyears,
                       [("Top-tenth line", lambda y: f"spread.real.p90.{y}", "a"), ("Median", lambda y: f"spread.real.p50.{y}", "b"),
                        ("Bottom-tenth line", lambda y: f"spread.real.p10.{y}", "c")],
-                      f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (CPIH). From 2006, after the survey’s last method change; the table also gives 2002 to 2005. The lines break where job coding changed (2011 and 2021)", "pounds",
+                      f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (adjusted with CPIH, the official consumer prices index that includes housing costs). From 2006, after the survey’s last method change; the table also gives 2002 to 2005. The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”)", "pounds",
                       breaks=sorted(sp["breaks"].items()), ymin=0, split_breaks=True,
                       finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2, which="last")))
     out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
