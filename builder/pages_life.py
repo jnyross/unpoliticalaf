@@ -901,11 +901,19 @@ def _work(facts, d, num, sources):
     """(answer box, detail parts) for the work topic."""
     body = []
     y = LAST
+    # The survey can be a year newer than the explorer's range, as the home page shows (audit 11 judge)
+    nw = LAST + 1
+    newer = ""
+    if _val(facts, f"work.rate.{nw}") is not None:
+        mw = (f' ({num(f"work.men.{nw}", "pct")} of men and {num(f"work.women.{nw}", "pct")} of women)'
+              if all(_val(facts, f"work.{k}.{nw}") is not None for k in ("men", "women")) else "")
+        newer = (f' The April to June {nw} survey found {num(f"work.rate.{nw}", "pct")} in work{mw}. '
+                 f'It is not on the year pages, which stop at {LAST}, the latest year that most topics have.')
     jb = d["life_extra"]["jobs"]
     jf, jl = jb["years"][0], jb["years"][-1]
     # Manufacturing's long fall is asked about often, so it sits in the answer box,
     # not only in the jobs by industry section lower down (audit 11 gap 6).
-    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p>'
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>'
               f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
               f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>')
     body.append(U.topic_line(num, "work", LAST))
@@ -1103,7 +1111,7 @@ def _schools(facts, d, num, sources):
     newer = [y for y in (LAST + 1,) if _val(facts, f"school.primary.{y}") is not None and _val(facts, f"school.secondary.{y}") is not None]
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
-              f'{num(f"school.secondary.{newer[-1]}", "dp1")}; only this page shows it, as the other topics have no {newer[-1]} figures yet.') if newer else ""
+              f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
     answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p>'
               f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))

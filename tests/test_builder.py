@@ -139,7 +139,7 @@ class Findings(unittest.TestCase):
         # Spending as a share of GDP: a ten-year fall before the 2020-21 rise. The small
         # rise from 43.0 to 46.0 comes before the fall, so the fall is measured from 46.0.
         gdp = [43.0, 46.0, 45.5, 44.4, 43.8, 42.2, 41.6, 40.8, 40.0, 39.7, 39.1, 39.1, 52.3, 43.4, 44.1]
-        self.assertEqual(phrase(years, gdp), "fell until 2019, rose until 2021, then fell back part of the way")
+        self.assertEqual(phrase(years, gdp), "fell until 2019, held level until 2020, rose in 2021, then fell back part of the way")
 
     def test_check_finds_a_title_that_leaves_out_a_turn(self):
         from builder.check import big_turns
@@ -149,13 +149,22 @@ class Findings(unittest.TestCase):
         self.assertEqual(big_turns([5, 1, 1, 5]), [([1, 2], "low")])  # a low held two years is one turn
         self.assertEqual(big_turns([1, 2, 3, None, 5]), [])
 
+    def test_a_held_peak_is_not_called_a_fall(self):
+        from builder.findings import phrase, sentence
+        # English primary class sizes (audit 11): 27.1 in every year from 2016 to 2019.
+        years = [str(y) for y in range(2006, 2027)]
+        v = [26.3, 26.2, 26.2, 26.2, 26.4, 26.6, 26.8, 26.8, 26.9, 27.0, 27.1, 27.1, 27.1, 27.1, 27.0, 26.6, 26.6, 26.7, 26.6, 26.4, 26.1]
+        self.assertEqual(phrase(years, v), "rose until 2016, held level until 2019, then fell below the 2006 level")
+        self.assertEqual(sentence(years, v, lambda i: str(v[i])),
+                         "Rose from 26.3 in 2006 to a high of 27.1 in 2016, stayed at 27.1 until 2019, then fell to 26.1 in 2026.")
+
     def test_a_smaller_turn_back_at_the_end_is_named(self):
         from builder.findings import phrase, sentence
         # Primary pupils in classes of more than 30 (audit 10): highest since 2008 in
         # January 2025, then 0.7 points lower in January 2026. The title must not end "then rose".
         years = [f"January {y}" for y in range(2006, 2027)]
         v = [15.2, 14.4, 13.5, 12.3, 11.7, 11.4, 11.4, 11.7, 12.5, 12.6, 12.8, 12.7, 12.8, 13.0, 13.06, 11.55, 11.86, 12.63, 13.14, 13.31, 12.65]
-        self.assertEqual(phrase(years, v), "fell until January 2011, rose until January 2020, fell in January 2021, "
+        self.assertEqual(phrase(years, v), "fell until January 2011, held level until January 2012, rose until January 2020, fell in January 2021, "
                                            "rose until January 2025, then fell in January 2026")
         self.assertTrue(sentence(years, v, lambda i: str(v[i])).endswith("rose to a high of 13.31 in January 2025, then fell to 12.65 in January 2026."))
         # A line that rose overall but ends well below its peak

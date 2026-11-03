@@ -140,8 +140,9 @@ EXPLANATIONS = {
         gloss="The LFS is the Labour Force Survey, the source of the employment rates on this site."),
     # ------------------------------------------------------------ life: earnings
     "recession-pay": dict(
-        topic="earnings", years=range(2008, 2018),
-        question="Why did pay fall behind prices after 2008?",
+        # Only on the years the pay freeze and cap it names applied to (audit 11 judge, L5).
+        topic="earnings", years=range(2011, 2018),
+        question="What did the ONS say about pay in the decade after the 2008 recession?",
         source="explain-ons-2008-recession", publisher="Office for National Statistics",
         title="The 2008 recession 10 years on", date="30 April 2018",
         quote=["Earnings have lagged behind prices for most of the decade since the start of the recession. In the public sector, a pay freeze (from 2011) and pay cap (from 2013) kept wage rises below inflation, while in the private sector wage growth was also slow."]),

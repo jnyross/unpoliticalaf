@@ -47,7 +47,7 @@ def home_page(facts, d, num, sources):
 <div class="cards">
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>
 <span class="big">{num(f"spend.cash.tme.{sp}", "bn")}</span>
-<p>spent by the public sector in {esc(sp)}. The largest area was social protection, including pensions: {num(per["social"], "per100")} of every £100 spent on services ({num(f"spend.cash.services.{sp}", "bn")}; the rest is accounting adjustments). Debt interest ({num(per["debt_interest"], "per100")}) is inside general public services.</p>
+<p>spent by the public sector in {esc(sp)}. HM Treasury splits {num(f"spend.cash.services.{sp}", "bn")} of this by area, the spending on services; the rest is accounting entries it does not split. Of every £100 spent on services, the largest area was social protection, including pensions: {num(per["social"], "per100")}. General public services ({num(per["general"], "per100")}) includes debt interest ({num(per["debt_interest"], "per100")} of the {num(per["general"], "per100")}), counted as interest paid out; the “net” figure the OBR and IFS often quote, after interest received, is lower.</p>
 {v_spend}
 <span class="more">Spending by area and over time</span></a>
 <a class="card" href="taxes.html"><h3>Which taxes raise the money?</h3>
@@ -57,7 +57,7 @@ def home_page(facts, d, num, sources):
 <span class="more">Taxes, other receipts and borrowing</span></a>
 <a class="card" href="who-pays.html"><h3>Who pays?</h3>
 <span class="big">{num("hmrc.share.top1.2023 to 2024", "pct")}</span>
-<p>of all Income Tax was paid by the top 1% of Income Tax payers in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
+<p>of all Income Tax for the year was owed by the top 1% of Income Tax payers in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
 {v_who}
 <span class="more">Income Tax and all taxes, by group</span></a>
 <a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
@@ -102,7 +102,7 @@ def methods_page(facts, sources, used_counts):
             'Comparisons over time use fixed windows (ten years for spending by area, the first and latest year for each series) and the same lead figure on every comparison page, '
             'whichever way it moved, so years are not picked for the result. Bars always start at zero. Line charts show their scale on the axis and may not start at zero, so that change is visible.</li></ul>',
             '<h2 id="calculations">Calculations</h2><ul>'
-            '<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is shown as a share of total managed expenditure.</li>'
+            '<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is part of general public services and is shown on the same basis; the spending page also gives it per £100 of total managed expenditure.</li>'
             '<li><strong>Real terms (spending)</strong>: HM Treasury’s own 2025-26 prices (PESA Table 4.3).</li>'
             '<li><strong>Pay after inflation</strong>: cash pay × (CPIH in April 2025 ÷ CPIH in April of that year), using ONS series L522.</li>'
             '<li><strong>Changes in percentages</strong> are shown in percentage points; changes in money and counts as a percentage of the earlier figure.</li>'

@@ -58,7 +58,7 @@ def legs(vals, a=0, b=None):
     so the last move ends at the last measured point, unless the line ends at least
     TAIL of its range back from that move's peak or low: then that turn back is the
     last move, however small, dated from the latest peak or low it starts from. A peak or low held for several
-    years is dated by its first year.
+    years is dated by its first year (phrase() and sentence() then say how long it was held).
     Returns [] for a line with no move that large.
     """
     pts = measured(vals, a, b)
@@ -138,6 +138,19 @@ def shape(vals, a=0, b=None):
     return out
 
 
+def held(vals, e0, b=None):
+    """The last point of a peak or low held at the same value: the run of measured
+    points straight after e0 with exactly its value. e0 itself when it is not held.
+    So a line that was 27.1 from 2016 to 2019 is not said to have fallen after 2016."""
+    b = len(vals) if b is None else b
+    h = e0
+    for i in range(e0 + 1, b):
+        if vals[i] is None or abs(vals[i] - vals[e0]) > 1e-9:
+            break
+        h = i
+    return h
+
+
 def _until(vals, labels, s0, e0, up):
     """'rose until 2019', or 'fell in 2020' when the move took one step."""
     verb = "rose" if up else "fell"
@@ -182,8 +195,16 @@ def phrase(labels, vals, a=0, b=None, short=False, upto=False):
     if k == "flat":
         return f"changed little between {f} and {l}"
     lg = s["legs"]
-    words = [_until(vals, labels, s0, e0, w > 0) for s0, e0, w in lg[:-1]]
+    words = []
+    for n, (s0, e0, w) in enumerate(lg[:-1]):
+        # a leg starts where the one before it ended, or where that peak or low stopped being held
+        s0 = held(vals, s0, b) if n else s0
+        words.append(_until(vals, labels, s0, e0, w > 0))
+        h = held(vals, e0, b)
+        if h > e0:
+            words.append(f"held level until {labels[h]}")
     s0, e0, w = lg[-1]
+    s0 = held(vals, s0, b) if len(lg) > 1 else s0
     last = "then rose" if w > 0 else "then fell"
     if max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
         # a smaller turn back at the end (see TAIL): say when, not how far
@@ -234,12 +255,18 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
                 else:
                     parts.append(f"{verb} to {show(e0)} in {labels[e0]}")
                 said.add(e0)
+                h = held(vals, e0, b)
+                if h > e0:
+                    parts.append(f"stayed at {show(e0)} until {labels[h]}")
+                    said.add(h)
         text = f"From {show(f)} in {labels[f]}, " + ", ".join(parts) + "."
         if len(lg) == 2:  # keep the familiar wording for a single turn
             w0, e0 = lg[0][2], lg[0][1]
             high = "high" if w0 > 0 else "low"
+            h = held(vals, e0, b)
+            hold = f"stayed at {show(e0)} until {labels[h]}, " if h > e0 else ""
             text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to a {high} of {show(e0)} in {labels[e0]}, "
-                    f"then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
+                    f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
     if extremes and len(pts) >= 3:
         extra = []
         if hi not in said:

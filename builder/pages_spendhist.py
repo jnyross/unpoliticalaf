@@ -16,9 +16,17 @@ def spending_history_page(facts, d, num, sources):
         return num(f"hist.gdp.{k}.{y}", kind)
 
     body = ["<h1>Spending by purpose over 100 years</h1>"]
-    body.append(f'''<div class="answer"><p class="lede">The mix of public spending has changed a great deal over the last century.</p>
-<p>In {start}, defence cost {g("defence", start)} of GDP, more than health ({g("health", start)}), education ({g("education", start)}) or social security ({g("social", start)}).
-By {last}, social security was {g("social", last)} of GDP, health {g("health", last)}, education {g("education", last)} and defence {g("defence", last)}. Debt interest was {g("debt", last)} on this page's measure; HM Treasury's figure for interest paid out, on the <a href="spending.html">main spending page</a>, is larger ({num(f"spend.gdp.debt_interest.{last}", "pct")} of GDP in {last}).</p>
+    # Each source is described on its own, so no two years either side of a source change
+    # are set side by side (audit 11 judge).
+    pesa = H.SOURCE_CHANGES[-1][0]
+    ifs_last = years[years.index(pesa) - 1]
+    four = {"defence": "defence", "health": "health", "education": "education", "social": "social security"}
+    def largest(y):
+        return four[max(four, key=lambda k: facts[f"hist.gdp.{k}.{y}"].value)]
+    body.append(f'''<div class="answer"><p class="lede">The share of GDP spent on each purpose has shifted over the last century: of defence, health, education and social security, {largest(start)} was the largest in {start}, and {largest(ifs_last)} in {ifs_last}.</p>
+<p>In {start}, the first year of the Institute for Fiscal Studies figures, defence cost {g("defence", start)} of GDP, more than health ({g("health", start)}), education ({g("education", start)}) or social security ({g("social", start)}).
+By {ifs_last}, the last year of those figures, social security was {g("social", ifs_last)} of GDP, health {g("health", ifs_last)}, education {g("education", ifs_last)} and defence {g("defence", ifs_last)}.
+HM Treasury's figures, a different source, give {last} as social security {g("social", last)}, health {g("health", last)}, education {g("education", last)} and defence {g("defence", last)}. Debt interest was {g("debt", last)} on this page's measure; HM Treasury's figure for interest paid out, on the <a href="spending.html">main spending page</a>, is larger ({num(f"spend.gdp.debt_interest.{last}", "pct")} of GDP in {last}).</p>
 <p>These figures come from a different source from the <a href="spending.html">main spending page</a> and use different groups, so the two are shown separately and not joined.</p></div>''')
 
     marks_all = [(H.GEOGRAPHY_CHANGE[0], "Ireland leaves the UK")] + H.SOURCE_CHANGES

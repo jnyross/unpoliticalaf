@@ -88,11 +88,11 @@
       },
       "answer": "C",
       "critical": false,
-      "why": "Who pays page: the top 1% of Income Tax payers paid 27.2% of all Income Tax. 59.1% is the top 10%.",
+      "why": "Who pays page: the top 1% of Income Tax payers owed 27.2% of all Income Tax. 59.1% is the top 10%.",
       "evidence": [
         {
           "page": "who-pays.html",
-          "text": "the top 1% of Income Tax payers paid 27.2% of all Income Tax"
+          "text": "the top 1% of Income Tax payers owed 27.2% of all Income Tax"
         }
       ]
     },
