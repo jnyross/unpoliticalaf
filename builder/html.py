@@ -483,6 +483,8 @@ def fmt(value, kind):
         return f"£{value:,.1f}bn"
     if kind == "pct":
         return f"{value:.1f}%"
+    if kind == "pct2":
+        return f"{value:.2f}%"
     if kind == "pct0":
         return f"{value:.0f}%"
     if kind == "pounds":

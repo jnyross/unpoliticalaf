@@ -199,6 +199,14 @@
   "sha256": "46a9f034404234ee8295850e045edf74270f9ee61b1791b56505e329a05b3078",
   "retrieved": "2026-11-02T18:09:44Z"
  },
+ "explain-dmo-about-gilts": {
+  "url": "https://www.dmo.gov.uk/responsibilities/gilt-market/about-gilts/",
+  "file": "explain/dmo-about-gilts.html",
+  "bytes": 64165,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "1b3dd6ccc0195601a1a4411d6a956ef7cfc542bd9184acf7b32c6f5de0f7eb28",
+  "retrieved": "2026-11-03T09:37:31Z"
+ },
  "explain-ehs-2023-24-rented-report": {
   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
   "file": "explain/ehs-2023-24-rented-sectors.html",
@@ -246,6 +254,22 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
   "retrieved": "2026-11-02T15:15:37Z"
+ },
+ "explain-obr-debt-interest": {
+  "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
+  "file": "explain/obr-debt-interest.html",
+  "bytes": 132342,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "5c803fc4fcdc4eacabc4a7a77818d1879de7fbbe39c8e1f035e7381d37ec3e62",
+  "retrieved": "2026-11-03T09:37:34Z"
+ },
+ "explain-obr-frs-2025": {
+  "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
+  "file": "explain/obr-frs-2025.html",
+  "bytes": 601545,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "35971195412625caa19a76c28d6bbd86f0c99be55ad659c981604c0551eb4b52",
+  "retrieved": "2026-11-03T09:37:37Z"
  },
  "explain-ons-2008-recession": {
   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
@@ -390,6 +414,14 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "ad063b06b2bdeef8600dbbb09d48153337a4966f8c7eea50df7a2e0304ebd73e",
   "retrieved": "2026-11-02T15:15:29Z"
+ },
+ "imf-weo-debt": {
+  "url": "https://www.imf.org/external/datamapper/api/v1/GG_DEBT_GDP/CAN/FRA/DEU/ITA/JPN/GBR/USA",
+  "file": "imf/weo-gg-debt-gdp.json",
+  "bytes": 59451,
+  "content_type": "application/json",
+  "sha256": "4a67462421197fa592f01d338870070d98c1a69f6be7698dccab4b2251682d43",
+  "retrieved": "2026-11-03T09:32:45Z"
  },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
@@ -575,6 +607,14 @@
   "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
   "retrieved": "2026-11-02T16:30:02Z"
  },
+ "oecd-finmark-irlt": {
+  "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels",
+  "file": "oecd/finmark-long-term-rates-g7.csv",
+  "bytes": 906287,
+  "content_type": "application/vnd.sdmx.data+csv; version=2; labels=name; charset=utf-8",
+  "sha256": "217b979f2c59556091d0e30f3218a94499f093b4b36472e492b2c56a5d062466",
+  "retrieved": "2026-11-03T09:32:36Z"
+ },
  "oecd-gov-cofog": {
   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels",
   "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
@@ -590,6 +630,14 @@
   "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
   "sha256": "4bfd9cf579afe53ef77f7102a943686a2ebd563857fb7b6213d810a8c9596ecb",
   "retrieved": "2026-11-02T20:18:48Z"
+ },
+ "oecd-gov-pf-g7": {
+  "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A.CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD_REP.....?startPeriod=2007&format=csvfilewithlabels",
+  "file": "oecd/gov-at-a-glance-all-measures-g7.csv",
+  "bytes": 1065975,
+  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
+  "sha256": "4c6acf859de8d2d8ec5425dfdf3301c5a62c165f92d8c753fa6a76ff42f07717",
+  "retrieved": "2026-11-03T09:32:41Z"
  },
  "oecd-rs-tax": {
   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels",

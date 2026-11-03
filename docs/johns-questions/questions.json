@@ -68,47 +68,100 @@
         {
           "id": "J1.3",
           "question": "How does UK government debt, as a share of GDP, compare with the other G7 countries in the latest year shown?",
-          "options": null,
-          "answer": null,
-          "why": null,
-          "evidence": [],
-          "gap": "The site has no international comparison of government debt, so it cannot say how UK debt as a share of GDP compares with the other G7 countries and the OECD average."
+          "options": {
+            "A": "The highest of the G7",
+            "B": "Higher than most of the G7, lower only than Japan",
+            "C": "Lower than most of the G7, higher only than Germany",
+            "D": "The lowest of the G7"
+          },
+          "answer": "C",
+          "why": "Borrowing page, IMF figures for 2024: UK 101.3% of GDP, below Japan, Italy, the United States, France and Canada, above Germany (63.9%). The OECD's market-value measure gives the same order.",
+          "evidence": [
+            {
+              "page": "borrowing.html",
+              "text": "In 2024, UK government debt was 101.3% of GDP, the second lowest of the seven G7 countries: lower than Japan, Italy, the United States, France and Canada and higher than Germany."
+            }
+          ]
         },
         {
           "id": "J1.4",
           "question": "Where does the UK rank among the G7 countries on tax as a share of GDP, and on spending?",
-          "options": null,
-          "answer": null,
-          "why": null,
-          "evidence": [],
-          "gap": "The international page ranks the UK among all 38 OECD countries but never picks out the G7 (major economies), so a reader has to find six countries in two long bar lists to answer 'compared with other major nations'."
+          "options": {
+            "A": "Highest on both",
+            "B": "Lowest on both",
+            "C": "Second lowest on tax (of the six with a figure) and fourth highest of seven on spending",
+            "D": "Second highest on tax and lowest on spending"
+          },
+          "answer": "C",
+          "why": "International page, 2024: UK tax 34.4% of GDP, above only the United States among the six G7 countries with a figure (Japan not yet published); spending 46.2%, below France, Italy and Germany.",
+          "evidence": [
+            {
+              "page": "international.html",
+              "text": "the UK had the second lowest tax as a share of GDP in 2024 (of the 6 with a figure for that year), and the fourth highest government spending as a share of GDP in 2024."
+            }
+          ]
         },
         {
           "id": "J1.5",
           "question": "In the latest year shown, does the UK government pay more or less to borrow for 10 years than the other G7 governments?",
-          "options": null,
-          "answer": null,
-          "why": null,
-          "evidence": [],
-          "gap": "The site does not show government borrowing costs (10-year government bond yields) for the UK beside the other G7 countries, or how they have changed over time."
+          "options": {
+            "A": "More than every other G7 government",
+            "B": "Less than every other G7 government",
+            "C": "About the same as the G7 average",
+            "D": "More than Japan only"
+          },
+          "answer": "A",
+          "why": "Borrowing page: in September 2026 the UK's 10-year yield was 5.24%, the highest of the G7 (United States 4.99%); its 2025 average, 4.58%, was also the highest.",
+          "evidence": [
+            {
+              "page": "borrowing.html",
+              "text": "In September 2026, the UK government paid 5.24% a year to borrow for 10 years, the highest of the G7."
+            },
+            {
+              "page": "borrowing.html",
+              "text": "Over the whole of 2025, it averaged 4.58%, the highest of the G7."
+            }
+          ]
         },
         {
           "id": "J1.6",
           "question": "How does the interest the UK government pays on its debt, as a share of GDP, compare with the other G7 countries?",
-          "options": null,
-          "answer": null,
-          "why": null,
-          "evidence": [],
-          "gap": "The site does not compare the UK's debt interest payments, as a share of GDP or of revenue, with other G7 countries."
+          "options": {
+            "A": "The highest of the G7",
+            "B": "The third highest: below the United States and Italy",
+            "C": "The lowest of the G7",
+            "D": "About the same as Germany"
+          },
+          "answer": "B",
+          "why": "Borrowing page, OECD figures for 2024: UK net interest 2.2% of GDP, below the United States (4.2%) and Italy (3.6%), above France, Canada, Germany and Japan; 5.5% of revenue, also third highest.",
+          "evidence": [
+            {
+              "page": "borrowing.html",
+              "text": "In 2024, the UK government's interest payments, after subtracting interest it received, were 2.2% of GDP, the third highest of the G7: lower than the United States and Italy and higher than France, Canada, Germany and Japan."
+            }
+          ]
         },
         {
           "id": "J1.7",
           "question": "According to the site, which of these affect what a government pays to borrow?",
-          "options": null,
-          "answer": null,
-          "why": null,
-          "evidence": [],
-          "gap": "The site does not explain, in neutral terms with official sources, what moves government bond yields (central bank rates, expected inflation, the amount borrowed, investors' view of risk), so a reader could take a yield gap as a simple verdict on how a country is run."
+          "options": {
+            "A": "Only how well the government runs the economy",
+            "B": "Only the Bank of England's interest rate",
+            "C": "Several things together, including central bank interest rates, expected inflation, how much the government borrows and how much risk investors see",
+            "D": "Nothing: the government sets its own rate"
+          },
+          "answer": "C",
+          "why": "Borrowing page section 'What affects what a government pays to borrow?', with the Debt Management Office and OBR quoted word for word.",
+          "evidence": [
+            {
+              "page": "borrowing.html",
+              "text": "Borrowing costs depend on central bank interest rates, expected inflation, how much a government borrows and how much risk investors see. They are not, on their own, a verdict on how well a country is run."
+            },
+            {
+              "page": "borrowing.html",
+              "text": "Several things together, which is why a yield is not a simple score for a government"
+            }
+          ]
         }
       ],
       "also_asked": [

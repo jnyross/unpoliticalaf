@@ -12,6 +12,7 @@ from .readers import ROOT
 
 OGL = "Open Government Licence v3.0"
 OECD_TERMS = "Creative Commons Attribution 4.0 International (CC BY 4.0), OECD"
+IMF_TERMS = "IMF data, copyright International Monetary Fund; may be reproduced with attribution under the IMF terms of use"
 GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
 
 
@@ -222,6 +223,12 @@ FETCHED = {
     "oecd-rs-tax": ("OECD", "Revenue Statistics, comparative tables: total tax revenue and main kinds of tax as % of GDP, OECD member countries", "38 OECD member countries", "General government (all levels) tax revenue"),
     "oecd-gov-pf": ("OECD", "Government at a Glance, yearly updates: general government expenditure as % of GDP", "38 OECD member countries", "General government (central, state and local government and social security funds)"),
     "oecd-gov-cofog": ("OECD", "Government at a Glance, yearly updates: general government expenditure by function (COFOG) as % of GDP", "38 OECD member countries", "General government (central, state and local government and social security funds)"),
+    "oecd-gov-pf-g7": ("OECD", "Government at a Glance, yearly updates: general government gross debt, net interest spending and revenue as % of GDP, G7 countries and the OECD average", "G7 countries (Canada, France, Germany, Italy, Japan, the UK, the US) and the OECD average", "General government (central, state and local government and social security funds)"),
+    "oecd-finmark-irlt": ("OECD", "Financial market statistics: long-term interest rates (yields on 10-year government bonds), yearly and monthly averages, G7 countries", "G7 countries", "Government bonds with about 10 years to repay"),
+    "imf-weo-debt": ("International Monetary Fund", "IMF DataMapper: general government gross debt as % of GDP (indicator GG_DEBT_GDP), historical series", "G7 countries", "General government"),
+    "explain-dmo-about-gilts": ("UK Debt Management Office", "About gilts", "United Kingdom", "Not applicable (guidance)"),
+    "explain-obr-debt-interest": ("Office for Budget Responsibility", "Debt interest (central government, net of APF): explainer", "United Kingdom", "Not applicable (guidance)"),
+    "explain-obr-frs-2025": ("Office for Budget Responsibility", "Fiscal risks and sustainability, July 2025", "United Kingdom", "Not applicable (report)"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 
@@ -247,7 +254,7 @@ def all_sources():
                         file="data/fetched/" + r["file"], sha256=r["sha256"],
                         published="see publisher page", retrieved=r["retrieved"][:10],
                         geography=geography, population=population,
-                        licence=GBTS_TERMS if key.startswith("gbts-") else OECD_TERMS if key.startswith("oecd-") else OGL)
+                        licence=GBTS_TERMS if key.startswith("gbts-") else OECD_TERMS if key.startswith("oecd-") else IMF_TERMS if key.startswith("imf-") else OGL)
     for alias, (key, title, geography, population) in FETCHED_ALIASES.items():
         if key in out:
             out[alias] = dict(out[key], id=alias, title=title, geography=geography, population=population)
