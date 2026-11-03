@@ -316,8 +316,24 @@ class ComparisonPage(unittest.TestCase):
         out = pages_life.key_sentence(self.facts, self.num, "housing", 2010, 2025)
         self.assertIn("not compared", out)
         self.assertIn("not yet published", out)
-        self.assertIn('href="2010-2019.html"', out)
-        self.assertNotIn("data-change", out)
+        self.assertIn('href="2010-2019.html#housing"', out)
+        # The nearest pair's change is shown; nothing is worked out with the missing year.
+        self.assertIn('data-from="house.private.2010" data-to="house.private.2019"', out)
+        self.assertNotIn('data-to="house.private.2025"', out)
+
+    def test_break_reason_is_one_sentence_naming_the_change(self):
+        self.assertEqual(pages_life.short_break(pages_life.earn_basis, 2015, 2025),
+                         "The pay survey changed how it codes jobs in 2021, so pay in 2015 and 2025 was measured differently.")
+        self.assertEqual(pages_life.short_break(pages_life.earn_basis, 2003, 2012),
+                         "The pay survey changed its method in 2004 and 2006 and how it codes jobs in 2011, so pay in 2003 and 2012 was measured differently.")
+        self.assertIn("2024 mixes", pages_life.short_break(pages_life.hol_basis, 2024, 2025))
+
+    def test_single_year_page_can_compare(self):
+        form = pages_life.compare_with(2015)
+        self.assertIn('name="from" value="2015"', form)
+        self.assertNotIn('<option value="2015"', form)
+        self.assertIn(f'href="compare/2015-{pages_life.LAST}.html"', form)
+        self.assertIn('href="compare/2014-2015.html"', form)
 
     def test_definition_change_is_explained_and_not_calculated(self):
         pages_life.KEY_MEASURES["work"], saved = ("work.occ.prof", "Professional share"), pages_life.KEY_MEASURES["work"]
@@ -946,7 +962,7 @@ class EarlyComparisons(unittest.TestCase):
         self.assertIn('data-from="work.rate.2002" data-to="work.rate.2025"', html)
         self.assertNotIn('data-from="earn.real.ft.2002"', html)  # pay survey methods changed in 2004 and 2006
         self.assertIn("not comparable: definition changed (before 2004 method → 2021 onwards, SOC2020 job coding)", html)
-        self.assertIn('<a href="2011-2020.html">2011 and 2020</a>', html)  # nearest pair for pay, inside one job-coding period
+        self.assertIn('<a href="2011-2020.html#earnings">2011 and 2020</a>', html)  # nearest pair for pay, inside one job-coding period
 
     def test_tenure_surveys_are_not_joined(self):
         html = self.page(1995, 2010)
@@ -959,7 +975,7 @@ class EarlyComparisons(unittest.TestCase):
         self.assertIn("No figure for 1985: before 1992 tenure was measured only in 1981, 1984, 1988 and 1991", html)
         self.assertIn("No figure for 2025: this series of visits abroad stops at 2023", html)
         self.assertIn("Not available: no earnings figure for 1985, because these figures start in 2002", html)
-        self.assertIn('<a href="1985-2023.html">1985 and 2023</a>', html)
+        self.assertIn('<a href="1985-2023.html#holidays">1985 and 2023</a>', html)
 
     def test_compare_form_offers_every_year(self):
         form = pages_life.compare_form("")
