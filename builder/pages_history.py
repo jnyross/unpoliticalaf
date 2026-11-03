@@ -90,7 +90,7 @@ LIMITS = {
                 "(classes taught by one teacher in state-funded schools in England). Earlier years are not in the tables used here."),
 }
 
-ANCHOR = "history"
+ANCHOR = "trend"
 
 
 def _has(facts, fid):
@@ -225,15 +225,47 @@ def answer(facts, num, topic):
 
 
 def block(facts, num, sources, topic):
-    """The 'Before 2008' section of a topic page."""
+    """The longest series for a topic page, which leads the page (audit 11 gap 3).
+
+    Returns (shown, folded): the chart, whose title states the long-run finding,
+    stays in view; the long-run figures in words, the every-year table, its
+    limits, earlier-year links and sources fold away."""
+    shown = [chart(facts, num, topic)]
+    folded = [f'<div class="answer"><p>{answer(facts, num, topic)}</p></div>', table_for(facts, num, topic), f'<div class="limit"><p>{esc(LIMITS[topic])}</p></div>',
+              f'<p class="small" id="early-{topic}">Pick an earlier year:</p><ul class="yearnav" aria-labelledby="early-{topic}">{early_links("", topic)}</ul>',
+              source_line(sources, [s for s in SOURCES[topic] if s in sources], up="../")]
+    return shown, folded
+
+
+def _owners(y):
+    return f"house.lfs.owners.{y}" if y < 2008 else f"house.owners.{y}"
+
+
+def _survey(y):
+    return "Labour Force Survey" if y < 2008 else "English Housing Survey"
+
+
+def long_spark(facts, num, topic, last=LAST, caption=True):
+    """A small dot chart of the topic's longest series, for the home page and the hub.
+
+    last is the newest year to show (a newer figure than the explorer's range for
+    work and class sizes). Housing joins the two tenure surveys side by side, with
+    a dashed line where one ends and the other begins."""
     first = FIRST_YEAR[topic]
-    out = [f"<h3 id='{ANCHOR}'>Before 2008: since {first}</h3>",
-           f'<div class="answer"><p>{answer(facts, num, topic)}</p></div>',
-           chart(facts, num, topic), table_for(facts, num, topic)]
-    out.append(f'<div class="limit"><p>{esc(LIMITS[topic])}</p></div>')
-    out.append(f'<p class="small" id="early-{topic}">Pick an earlier year:</p><ul class="yearnav" aria-labelledby="early-{topic}">{early_links("", topic)}</ul>')
-    out.append(source_line(sources, [s for s in SOURCES[topic] if s in sources], up="../"))
-    return out
+    point_label = str
+    if topic == "work":
+        measure = ("Share of people aged 16 to 64 in work", lambda y: f"work.rate.{y}", "pct", None)
+    elif topic == "earnings":
+        measure = ("Median full-time weekly pay, after inflation", lambda y: f"earn.real.ft.{y}", "pounds", earn_method)
+    elif topic == "housing":
+        measure = ("Households in England that own their home", _owners, "pct0", _survey)
+        point_label = lambda y: str(y) if y < 2008 else L.sy(y)
+    elif topic == "holidays":
+        measure = ("Visits abroad for any purpose per 100 UK residents", lambda y: f"hol.ips.per100.{y}", "int", None)
+        last = 2023  # the International Passenger Survey series ends in 2023
+    else:
+        measure = ("Average primary school class size, England", lambda y: f"school.primary.{y}", "dp1", None)
+    return L.year_spark(facts, num, topic, None, caption=caption, measure=measure, years=list(range(first, last + 1)), point_label=point_label)
 
 
 def early_links(up, topic=None):
@@ -305,7 +337,7 @@ def early_year_page(facts, d, num, sources, y):
             first = FIRST_YEAR[key]
             why = (f"the {title.lower()} figures used here start in {first}" if y < first else f"there is no {title.lower()} figure for {y} in the tables used here")
             body.append(f'<p class="missing">Not available: {esc(why)}.</p>')
-            body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} before 2008</a></p>')
+            body.append(f'<p class="small"><a href="{key}.html#{ANCHOR}">{esc(title)} since {FIRST_YEAR[key]}</a></p>')
             continue
         body.append(early_spark(facts, num, key, y))
         body.append(table(f"{title}: {y} and the latest year measured the same way", ["Measure", str(y), "Latest comparable", "Change"], rows))
