@@ -28,7 +28,7 @@ CORRECTIONS = [
                   ("life/earnings.html", "Earnings"), ("spending-history.html", "Spending by purpose over 100 years")],
         "was": "The spending page said “£11 of every £100 went on debt interest” without saying the £100 was spending on services. Tax history said Income Tax was “between 9% and 10% of GDP” every year from 1999-00 (it was 8.6% to 8.8% from 2012-13 to 2019-20), called 17.1% in 2009-10 National Insurance’s high when it later reached 18.2%, and ranked the largest rise without saying “Everything else” rose more. House prices were compared with 1997, whose earnings ONS says are not directly comparable with later years. Some summaries named one “largest” change when two were equal, or called £716 to £716 a fall. The borrowing page led with a single month’s bond yield and listed causes of yields in its own words.",
         "now": "The £11 is “of every £100 spent on services” (£9.6 of every £100 of all spending). Income Tax is given as 8.6% to 10.0% of GDP; a turn is called “a high” only when no later year is higher; and the ranking says “Everything else” rose more. House prices are compared from 1999. Equal changes are named together and a change that rounds to nothing is not called a rise or fall. The borrowing page leads with the latest full year and attributes what moves yields to the Debt Management Office and the OBR.",
-        "pr": 0,
+        "pr": 139,
     },
     {
         "date": "3 November 2026",
