@@ -170,6 +170,9 @@ class Findings(unittest.TestCase):
         st = [(0, 3)]
         self.assertEqual(F.gap("Men's rate", "women's")(self.L, series, st), "Men's rate was higher than women's in every year from 2008 to 2010")
         self.assertEqual(F.leader("{name} was highest {span}")(self.L, series, st), "Men was highest in every year from 2008 to 2010")
+        close = F.leader("{name} was highest {span}", close=1.5, close_template="{name} and {lsecond} were close {span}")
+        self.assertEqual(close(self.L, series, st), "Men and women were close in 2010")
+        self.assertEqual(close(self.L, [("Men", [5, 6, 9]), ("Women", [3, 4, 6])], st), "Men was highest in every year from 2008 to 2010")
 
     def test_overview_leaves_out_groups_with_their_own_break(self):
         fig = small_multiples("t", ["1", "2", "3", "4"], [("North", [1.0, 2.0, 3.0, 4.0]), ("South", [4.0, 5.0, 3.0, 2.0]), ("East", [9.0, 9.0, 2.0, 3.0])],
@@ -580,6 +583,30 @@ class Glossary(unittest.TestCase):
         for _, _, terms in GROUPS:
             for a, name, text, words in terms:
                 self.assertTrue(words and text.strip(), a)
+
+    def test_glossary_lists_every_word_a_to_z(self):
+        from builder.glossary import GROUPS, glossary_page
+        html = glossary_page()
+        az = re.search(r'<ul class="az">(.*?)</ul>', html, re.S).group(1)
+        anchors = re.findall(r'href="#([^"]+)"', az)
+        self.assertEqual(sorted(anchors), sorted(a for _, _, terms in GROUPS for a, _, _, _ in terms))
+        for gid, _, _ in GROUPS:
+            self.assertIn(f'href="#{gid}"', html)
+
+
+class FindingThings(unittest.TestCase):
+    """Audit 9 gap 7: readers looked for household tax under Who pays, and could
+    not jump to a topic or year on the life hub."""
+
+    def test_life_hub_jumps_to_each_topic_and_a_year(self):
+        from builder.html import jump
+        nav = jump("Jump to", [(f"#{k}", t) for k, t, _ in pages_life.TOPICS], pages_life.year_jump(""))
+        for k, _, _ in pages_life.TOPICS:
+            self.assertIn(f'href="#{k}"', nav)
+        # Without JavaScript the year form lands on the list of years.
+        self.assertIn('action="index.html#years"', nav)
+        for y in pages_life.EARLY_YEARS + pages_life.YEARS:
+            self.assertIn(f'<option value="{y}"', nav)
 
 
 class Folding(unittest.TestCase):

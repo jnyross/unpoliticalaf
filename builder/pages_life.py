@@ -11,7 +11,7 @@ import re
 
 from .data import YEARS, EARLY_YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import FOLD, NOFOLD, before_toc, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
+from .html import FOLD, NOFOLD, before_toc, jump, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
 from . import uncertainty as U
 from . import findings as F
 from .pages_nations import housing_nations_block, schools_nations_block
@@ -203,6 +203,22 @@ def year_links(current, up, href=lambda y: f"{y}.html", strip=False):
     early = (f'<details class="early"{" open" if current in EARLY_YEARS else ""}><summary>Earlier years, {EARLY_YEARS[0]} to {EARLY_YEARS[-1]} (fewer figures)</summary>'
              f'<ul class="yearnav{" yearstrip" if strip else ""}">{items(EARLY_YEARS)}</ul></details>')
     return f'<ul class="yearnav{" yearstrip" if strip else ""}">{items(YEARS)}</ul>{early}'
+
+
+def year_jump(up):
+    """Pick one year and go straight to its page. With JavaScript the button
+    opens that year's page; without it, the form lands on the list of years."""
+    opts = "".join(f'<option value="{y}"{" selected" if y == YEARS[-1] else ""}>{y}</option>' for y in EARLY_YEARS + YEARS)
+    return (f'<form class="jumpyear" action="{up}index.html#years" method="get" data-year>'
+            f'<label for="jump-year">Go to a year</label><select id="jump-year" name="year">{opts}</select>'
+            '<button type="submit">Go</button></form>')
+
+
+YEAR_JS = """<script>
+document.querySelectorAll('form[data-year]').forEach(function(f){f.addEventListener('submit',function(e){
+e.preventDefault();location.href=f.getAttribute('action').replace(/index\\.html(#.*)?$/,'')+f.elements.year.value+'.html';});});
+(function(){var y=+new URLSearchParams(location.search).get('year');if(y&&/^\\d{4}$/.test(y)){location.replace(y+'.html');}})();
+</script>"""
 
 
 # The default and suggested pairs of years. build.py sets these from
@@ -1043,8 +1059,8 @@ HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools}
 def life_index(facts, d, num, sources):
     """A light hub: each topic's answer, a link to its own page, and the year and comparison choosers."""
     body = ["<h1>Everyday life, year by year</h1>"]
-    body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed over time?</p>
-<p>Each topic below links to its own page with every year’s figures. Or <a href="#years">pick a single year</a>, or <a href="#compare">compare two years</a>.</p></div>''')
+    body.append(f'''<div class="answer"><p class="lede">How have work, pay, housing, holidays and school class sizes changed over time? Each topic below links to its own page with every year’s figures.</p></div>''')
+    body.append(jump("Jump to", [(f"#{k}", t) for k, t, _ in TOPICS] + [("#compare", "Compare years")], year_jump("")))
     # Each topic's answer and chart come first, so a chart shows within the
     # first two phone screens; the year and comparison choosers follow.
     for key, title, _ in TOPICS:
@@ -1064,7 +1080,7 @@ def life_index(facts, d, num, sources):
                 'or <a href="compare/spans/index.html">compare two sets of years</a>.</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
-    return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS, contents=False)
+    return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS + YEAR_JS, contents=False)
 
 
 def work_ages_block(facts, num):

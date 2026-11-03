@@ -57,6 +57,7 @@ def home_page(facts, d, num, sources):
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
 <p>of gross household income, on average across everyone, in 2023/24. That is an average across households, not anyone's tax rate. By income fifth:</p>
 {v_hh}
+<p>For the lowest-income fifth, most of this is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of income); for the highest-income fifth, most is direct tax such as Income Tax.</p>
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
