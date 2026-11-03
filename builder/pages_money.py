@@ -79,14 +79,14 @@ def spending_page(facts, d, num, sources):
     ph = per_household(facts, f"spend.cash.tme.{y}", hh, "spend.perhousehold.tme", y, "pesa4")
     body = [f"<h1>Where does public money go?</h1>"]
     body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
-                         (num(per[top[0]], "per100"), f"of every £100 spent on services ({num(f'spend.cash.services.{y}', 'bn')} of the total) went on social protection, the largest area", False),
-                         (num(per["debt_interest"], "per100"), "of every £100 spent on services went on interest on government debt, counted inside general public services", False)]))
+                         (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
+                         (num(per["debt_interest"], "per100"), "of every £100 went on debt interest, part of general public services", False)]))
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total.</p>
-<p>Of that, {num(f"spend.cash.services.{y}", "bn")} was spent on services and split between areas; the rest is accounting adjustments. Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
+<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}. Interest on government debt took {num(per["debt_interest"], "per100")}, which is part of general public services.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
     items = [(esc(name), per[k], "") for k, name in order]
-    body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100."))
+    body.append(bars(items, "per100", num, caption=f"Rounded to the nearest pound, so the amounts may not add up to exactly £100. General public services includes interest on government debt, {num(per['debt_interest'], 'per100')} of every £100. The split is of the {num(f'spend.cash.services.{y}', 'bn')} spent on services; the other {num(adj, 'bn')} is accounting adjustments."))
     # The chart comes first on a phone; scale and definitions follow it.
     body.append(before_toc(scale_box(num, pp, pop, f"spending in {y}", hid=ph, hh=hh, extra=" These are averages across everyone, including children, not the amount spent on any one person or household.")
                            + "<p>“Public sector” means central government, devolved governments, local councils and public corporations together. The financial year runs from April to March.</p>"))
