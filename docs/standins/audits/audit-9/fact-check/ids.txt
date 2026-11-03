@@ -1,0 +1,30 @@
+spend.cash.tme.2025-26
+spend.per100.social.2025-26
+spend.per100.debt_interest.2025-26
+spend.oldage.2025-26
+spend.perhousehold.tme.2025-26
+spend.realchange.tme.2003-04.2025-26
+spend.realchange.housing.2015-16.2025-26
+rec.taxes.2025-26
+rec.big3share.2025-26
+agg.psnb.2025-26
+rec.perhousehold.taxes.2025-26
+gdp.psnd.2025-26
+rec.gdp.taxes.2025-26
+rec.sharechange.nics.1999-00.2025-26
+rec.sharechange.fuel.1999-00.2025-26
+hmrc.share.top1.2023 to 2024
+hmrc.income.top1.2023 to 2024
+etb.2a.alltax.q5
+etb.t8.gross.all.all
+etb.t8.gross.all.q1
+etb.t16.all.2023/24
+spi.age.sharetax.30_64
+work.rate.2025
+work.occshare.SOC2020.2000000.2025
+earn.real.ft.2008
+jobs.share.Q.2026
+house.owners.2024
+afford.ratio.ew.2025
+hol.abroad.per100.2025
+hol.world.holiday.2020
