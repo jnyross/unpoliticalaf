@@ -144,7 +144,8 @@ def pair_context(a, b, brief=False):
     if not notes:
         return ""
     if brief:
-        return f" {a} came soon after a recession and {b} was the last year before the pandemic." if len(notes) == 2 else " " + notes[0][:1].upper() + notes[0][1:] + "."
+        return (f" Both years fall between the 2008-09 recession and the pandemic, so this pair shows that stretch only." if len(notes) == 2
+                else " " + notes[0][:1].upper() + notes[0][1:] + ".")
     return (" " + "; ".join(notes)[:1].upper() + "; ".join(notes)[1:] + ". So this pair shows that stretch, not the whole period: "
             "each topic page has every year, and each comparison page gives the longer run.")
 

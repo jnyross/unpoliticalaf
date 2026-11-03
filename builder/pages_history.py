@@ -265,7 +265,11 @@ def long_spark(facts, num, topic, last=LAST, caption=True):
         last = 2023  # the International Passenger Survey series ends in 2023
     else:
         measure = ("Average primary school class size, England", lambda y: f"school.primary.{y}", "dp1", None)
-    return L.year_spark(facts, num, topic, None, caption=caption, measure=measure, years=list(range(first, last + 1)), point_label=point_label)
+    years = list(range(first, last + 1))
+    fid = measure[1]
+    while len(years) > 2 and (fid(years[-1]) not in facts or facts[fid(years[-1])].value is None):
+        years.pop()  # end the axis at the latest figure, so it never names a year with no data (audit 12)
+    return L.year_spark(facts, num, topic, None, caption=caption, measure=measure, years=years, point_label=point_label)
 
 
 def early_links(up, topic=None):

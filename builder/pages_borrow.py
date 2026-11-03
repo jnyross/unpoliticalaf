@@ -74,10 +74,14 @@ def borrowing_page(facts, d, num, sources):
                     caption=f"General government gross debt, % of GDP, {iy}. IMF figures. The UK has a darker bar.")
     oecd_bars = bars(_bar_items(facts, "borrow.debt", oecd_order, dy, names, extra=[AVG]), "pct", num, maxval=260,
                      caption=f"General government gross debt, % of GDP, {dy}, with government bonds counted at their market price. OECD figures. The UK and the OECD average have darker bars.")
+    # Beside the G7 ranking, the wider OECD average (audit 12 judge, L4); kept under the
+    # chart so the first chart stays within two phone screens.
+    above = "above" if facts[f"borrow.debt.{UK}.{dy}"].value > facts[f"borrow.debt.{AVG}.{dy}"].value else "below"
     body.append(switch("Measure", [
         ("IMF", f"IMF figures, {iy}.", imf_bars),
         ("OECD", f"On the OECD's measure the UK was also the {_ordinal(oecd_place)} of the G7, at {num(f'borrow.debt.{UK}.{dy}', 'pct')} of GDP in {dy}. The OECD average was {num(f'borrow.debt.{AVG}.{dy}', 'pct')}.", oecd_bars),
     ]))
+    body.append(f'<p>Among all OECD countries, UK debt was {above} the OECD average: {num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP against {num(f"borrow.debt.{AVG}.{dy}", "pct")} in {dy}, on the OECD\'s measure.</p>')
     body.append("<p>The G7 is the group of seven large, high-income economies: Canada, France, Germany, Italy, Japan, the United Kingdom and the United States. Debt and interest are compared as a share of GDP, the value of everything a country produces in a year, so that countries of different sizes can be compared.</p>")
     body.append(f'''<p class="small">The two organisations measure debt differently. The OECD follows the international system of national accounts, which counts government bonds at their market price. When interest rates rise, the market price of existing bonds falls, and so does debt measured this way. This is one reason the OECD's figure for the UK fell from {num(f"borrow.debt.{UK}.2021", "pct")} of GDP in 2021 to {num(f"borrow.debt.{UK}.2022", "pct")} in 2022, while the IMF's fell from {num(f"borrow.imf.{UK}.2021", "pct")} to {num(f"borrow.imf.{UK}.2022", "pct")}.</p>''')
     body.append(FOLD)

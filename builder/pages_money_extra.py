@@ -94,18 +94,18 @@ def retired_section(facts, d, num, sources):
     out = []
     retired_def = f'''<p>Who counts as retired: people who live in a household where more than half of the income comes from people who say they are retired and are over 50, or who are not working because of sickness or injury and are over State Pension age. Everyone else counts as “non-retired”. In 2023/24, {num("etb.ret.people.all", "millions_people")} people lived in retired households and {num("etb.nonret.people.all", "millions_people")} in non-retired households.</p>'''
     out.append(f'''<h2 id="retired">Retired and non-retired people</h2>
-<p>From the same survey: the households that retired people live in paid less tax on average, but they are smaller and have lower incomes. Compared with each group's income, the difference is much smaller: taxes took {num("etb.nonret.taxshare.all", "pct")} of gross household income for non-retired people and {num("etb.ret.taxshare.all", "pct")} for retired people.</p>''')
-    groups = [("nonret", "Non-retired people"), ("ret", "Retired people")]
+<p>From the same survey: retired households (where more than half the income comes from retired people) paid less tax on average, but they are smaller and have lower incomes. Compared with each group's income, the difference is much smaller: taxes took {num("etb.nonret.taxshare.all", "pct")} of gross household income for non-retired households and {num("etb.ret.taxshare.all", "pct")} for retired households.</p>''')
+    groups = [("nonret", "Non-retired households"), ("ret", "Retired households")]
     out.append(bars([(lab, f"etb.{g}.alltax.all", "") for g, lab in groups], "pounds", num,
-                     caption="Average taxes paid by the households that retired and non-retired people live in, £ a year, 2023/24."))
+                     caption="Average taxes paid by retired and non-retired households, £ a year, 2023/24. Retired people who live in a non-retired household are counted as non-retired."))
     out.append(FOLD)
     out.append(retired_def)
-    out.append(f'<p>Averaged over people, the households of non-retired people paid about {num("etb.nonret.alltax.all", "pounds")} a year in all taxes, and the households of retired people about {num("etb.ret.alltax.all", "pounds")}. '
+    out.append(f'<p>Averaged over people, non-retired households paid about {num("etb.nonret.alltax.all", "pounds")} a year in all taxes, and retired households about {num("etb.ret.alltax.all", "pounds")}. '
                 f'Retired households had {num("etb.ret.hhsize.all", "dp1")} people on average, against {num("etb.nonret.hhsize.all", "dp1")}.</p>')
     rows = [[lab, num(f"etb.{g}.people.all", "millions_people"), num(f"etb.{g}.hhsize.all", "dp1"), num(f"etb.{g}.gross.all", "pounds"),
              num(f"etb.{g}.direct.all", "pounds"), num(f"etb.{g}.indirect.all", "pounds"), num(f"etb.{g}.alltax.all", "pounds"), num(f"etb.{g}.taxshare.all", "pct")]
             for g, lab in groups]
-    out.append(table("Average household income and taxes, retired and non-retired people, 2023/24",
+    out.append(table("Average household income and taxes, retired and non-retired households, 2023/24",
                       ["Group", "People", "People per household", "Gross income, £ a year", "Direct taxes, £ a year", "Indirect taxes, £ a year", "All taxes, £ a year", "All taxes as % of gross income"], rows))
     fifths = [("q1", "Lowest-income fifth"), ("q2", "Second fifth"), ("q3", "Middle fifth"), ("q4", "Fourth fifth"), ("q5", "Highest-income fifth")]
     rows = [[lab, num(f"etb.nonret.alltax.{q}", "pounds"), num(f"etb.nonret.taxshare.{q}", "pct"), num(f"etb.ret.alltax.{q}", "pounds"), num(f"etb.ret.taxshare.{q}", "pct")]
@@ -127,7 +127,7 @@ def household_types_section(facts, d, num, sources):
     lone, couple2, ret1 = "nc1", "nc22", "r1"
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
-    out.append(f'''<div class="answer"><p class="lede">After adjusting for household size, taxes took between {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) and {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income, depending on the kind of household.</p>
+    out.append(f'''<div class="answer"><p class="lede">After adjusting for household size, taxes took between {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) and {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income, depending on the kind of household (the {len(types)} kinds shown here). The ONS also splits one-adult households by sex, and some of those narrower groups fall a little outside this range.</p>
 <p>The amounts differ more, because incomes differ (see the bars below).</p></div>''')
     amounts = (f'<p>Adjusted for size, people in households of two working-age adults with two children paid about {num(f"etb.t12.{couple2}.alltax", "pounds")} a year in all taxes, people in one-adult households with children about {num(f"etb.t12.{lone}.alltax", "pounds")}, '
                f'and single retired people about {num(f"etb.t12.{ret1}.alltax", "pounds")}.</p>')
@@ -165,13 +165,13 @@ def net_section(facts, d, num, sources):
     out.append(line_chart(f"People in households receiving more in benefits than they pay in taxes, {first} to {last}", ys,
                           [("Retired", [facts[f"etb.t16.ret.{y}"].value for y in ys], "b"),
                            ("Non-retired", [facts[f"etb.t16.nonret.{y}"].value for y in ys], "a")],
-                          "Per cent of people. Calendar years to 1993, then financial years (April to March) from 1994/95.",
-                          breaks=[(fy, "Financial years")], ymin=0, ymax=100,
+                          "Per cent of people. Calendar years to 1993, then financial years (April to March) from 1994/95. Second dashed line: top incomes adjusted from 2001/02.",
+                          breaks=[(fy, "Financial years")] + ([(ys.index("2001/02"), "Top incomes adjusted from here")] if "2001/02" in ys else []), ymin=0, ymax=100,
                           finding=F.gap("The share for people in retired households", "for people in non-retired households"),
                           desc=f"Retired: {facts[f'etb.t16.ret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.ret.{last}'].value:.1f}% in {last}. "
-                               f"Non-retired: {facts[f'etb.t16.nonret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.nonret.{last}'].value:.1f}% in {last}. The figures for everyone are in the table."))
+                               f"Non-retired: {facts[f'etb.t16.nonret.{first}'].value:.1f}% in {first}, {facts[f'etb.t16.nonret.{last}'].value:.1f}% in {last}. The figures for everyone are in the table. Years before 2001/02 are less directly comparable with later years."))
     out.append(FOLD)
-    out.append(f'<p>The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series.</p>')
+    out.append(f'<p>The share for everyone was {num(f"etb.t16.all.{first}", "pct")} in {first}, the first year of the series, before the 2001/02 change (see Limits).</p>')
     out.append('<p>What is counted: the ONS estimates, one year at a time, how many people live in households that receive more in benefits than they pay in taxes. '
                'Benefits are cash benefits such as the State Pension and Universal Credit plus the estimated value of public services used. '
                '“Taxes” are the direct and indirect taxes in sections 2 and 3.</p>')
@@ -340,8 +340,8 @@ def households_short(facts, d, num):
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
     return f'''<h2 id="household-type">3. Retired people and other kinds of household</h2>
-<div class="answer"><p class="lede">The households that retired people live in paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired people), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
-<p>Across kinds of household, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income.</p></div>
+<div class="answer"><p class="lede">Retired households (where retired people bring in over half the income) paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired households), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
+<p>Across the {len(types)} kinds of household shown, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income.</p></div>
 {NOFOLD}<p class="more-link"><a href="{HOUSEHOLDS_PAGE}">Retired people and kinds of household</a>: the taxes each group pays, who counts as retired, families with and without children, and the full tables.</p>'''
 
 

@@ -253,14 +253,14 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
 <h3>3. Borrowing: {num(f"agg.psnb.{y}", "bn")}</h3>
 <p>Borrowing is not income from tax. It is the gap between spending ({num(f"agg.tme.{y}", "bn")} on this basis) and receipts ({num(f"rec.total.{y}", "bn")}), and it adds to the national debt.</p>''')
     body.append(FOLD)
-    body.append('<p class="small">“All other taxes” includes business rates, vehicle and air passenger duties, insurance premium tax, environmental levies and others. Income Tax combines PAYE, self assessment and other Income Tax; Corporation Tax includes North Sea profits.</p>')
+    body.append('<p class="small">“All other taxes” includes business rates, vehicle and air passenger duties, insurance premium tax, environmental levies and others. Income Tax combines PAYE, self assessment and other Income Tax; Corporation Tax includes Corporation Tax on North Sea profits; the other North Sea taxes (the Energy Profits Levy and Petroleum Revenue Tax) are in “All other taxes”.</p>')
     rows = [[esc(n), num(f"rec.{k}.{y}", "bn1")] for k, n in groups] + [["All other taxes", num(f"rec.othertax.{y}", "bn1")],
             ["<strong>All taxes</strong>", num(f"rec.taxes.{y}", "bn1")], ["Other receipts (not taxes)", num(f"rec.nontax.{y}", "bn1")],
             ["<strong>All receipts</strong>", num(f"rec.total.{y}", "bn1")], ["Borrowing (public sector net borrowing)", num(f"agg.psnb.{y}", "bn1")],
             ["<strong>Total spending (OBR basis)</strong>", num(f"agg.tme.{y}", "bn1")]]
     body.append(details_table("Show these figures as a table", f"Public sector receipts and borrowing, {y}, £ billion", ["Item", "£bn"], rows))
     body.append(f'''<h2 id="debt">Borrowing is not the same as debt</h2>
-<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026 (public sector net debt), equal to {num(f"gdp.psnd.{y}", "pct")} of a year's GDP, or about {num(dpp, "pounds")} per person ({num(dph, "pounds")} per household). That is the debt divided by everyone, an average, not anyone’s bill: it is owed by the public sector, not by people or households. <a href="borrowing.html">Compare UK debt with the G7</a>.</p>''')
+<p><strong>Borrowing</strong> is what the government adds in one year: {num(f"agg.psnb.{y}", "bn")} in {y}. <strong>Debt</strong> is the total still owed from all past years: {num(f"agg.psnd.{y}", "bn")} at the end of March 2026 (public sector net debt), equal to {num(f"gdp.psnd.{y}", "pct")} of GDP (the OBR's measure, which uses GDP for the year centred on the end of March), or about {num(dpp, "pounds")} per person ({num(dph, "pounds")} per household). That is the debt divided by everyone, an average, not anyone’s bill: it is owed by the public sector, not by people or households. <a href="borrowing.html">Compare UK debt with the G7</a>.</p>''')
     body.append(source_line(sources, ["obr"], f"Sheets “Receipts (£bn)” and “Aggregates (£bn)”. {y} is outturn and can still be revised; years from {rc['forecast_from']} are OBR forecasts."))
 
     # history as % of GDP
@@ -278,9 +278,12 @@ Spending was higher than receipts, so the government borrowed {num(f"agg.psnb.{y
 
     def rec_chart(v):
         a, b = rec_ids[v]
-        ids = [[f"{a}.{g}" if f"{a}.{g}" in facts else None for g in gy], [f"{b}.{g}" if f"{b}.{g}" in facts else None for g in gy]]
+        # Start the axis at the first year with figures, so the after-inflation view is not labelled from a year it has no data for.
+        k = next(i for i, g in enumerate(gy) if f"{a}.{g}" in facts or f"{b}.{g}" in facts)
+        ys = gy[k:]
+        ids = [[f"{a}.{g}" if f"{a}.{g}" in facts else None for g in ys], [f"{b}.{g}" if f"{b}.{g}" in facts else None for g in ys]]
         vals = [[facts[i].value if i else None for i in row] for row in ids]
-        return line_chart(rec_title[v], gy, [("Receipts", vals[0], "a"), ("Spending", vals[1], "b")], rec_unit[v], forecast_from=fc, ymin=0,
+        return line_chart(rec_title[v], ys, [("Receipts", vals[0], "a"), ("Spending", vals[1], "b")], rec_unit[v], forecast_from=None if fc is None else fc - k, ymin=0,
                           finding=F.gap("Spending", "receipts", si=1, sj=0),
                           kind="pct" if v == "gdp" else "bn", num=num, ids=ids)
     first_real = rc["real_years"][0]
@@ -339,8 +342,8 @@ def who_pays_page(facts, d, num, sources):
     y = w["hmrc_latest_outturn"]
     body = ["<h1>Who pays?</h1>"]
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
-                         (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
-                         (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
+                         (num("etb.2a.alltax.q5", "pounds"), f'a year in all taxes, on average, by the households of the highest-income fifth of people ({num("etb.t8.gross.all.q5", "pct")} of their gross income), 2023/24', False),
+                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, by the households of the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")} of their gross income), 2023/24', False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 <p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')

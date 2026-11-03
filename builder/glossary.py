@@ -76,7 +76,7 @@ GROUPS = [
          "Value Added Tax: a tax added to the price of most goods and services. The shop or business collects it, but the cost is mostly passed on in prices.",
          ["VAT"]),
         ("corporation-tax", "Corporation Tax",
-         "A tax on company profits. It is paid by companies, so the household figures on this site do not include it.",
+         "A tax on company profits, paid by companies. Its cost is ultimately borne by people, through some mix of lower wages, higher prices and lower returns to shareholders, and economists disagree about the split. The ONS household figures on this site do not allocate it to households, so they do not include it.",
          ["Corporation Tax"]),
         ("council-tax", "Council Tax",
          "A tax on homes in England, Scotland and Wales, set by local councils and based on the value band of the home. Northern Ireland has domestic rates instead.",

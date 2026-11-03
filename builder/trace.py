@@ -23,6 +23,19 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("life/index.html", "Everyday life, year by year"), ("life/work.html", "Work"), ("life/earnings.html", "Earnings"),
+                  ("who-pays.html", "Who pays?"), ("who-pays-households.html", "Retired people and kinds of household"),
+                  ("taxes.html", "Which taxes raise the money?"), ("life/housing-places.html", "Housing in each region and nation")],
+        "was": "The life page's home-ownership chart was labelled to 2025-26, though the latest figure is 2024-25, and its class sizes compared January 2025 with 2008 although the series starts in 2006. "
+               "Men's employment was said to fall “to a low of 75.4% in 2010”, though 1993 was lower (75.1%). Who pays described the ONS's retired households as “the households that retired people live in”. "
+               "The taxes page said Corporation Tax includes North Sea profits without saying the other North Sea taxes are in “all other taxes”, and called debt “93.3% of a year's GDP”. "
+               "Scotland's private renting was not marked as including homes that come with a job or business.",
+        "now": "The chart ends at 2024-25 and class sizes are compared with January 2006. The 2010 figure is no longer called the low. Retired households are defined as those where more than half the income comes from retired people. "
+               "The taxes page names the Energy Profits Levy and Petroleum Revenue Tax and gives debt as a share of GDP on the OBR's measure. Scotland's figure says it includes homes tied to a job.",
+        "pr": 154,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("index.html", "Home"), ("who-pays.html", "Who pays?"), ("who-pays-households.html", "Retired people and kinds of household"),
                   ("borrowing.html", "Debt and borrowing costs"), ("life/schools.html", "Class sizes")],
         "was": "The home page and the who-pays headline said 27.2% of Income Tax “was paid by” the top 1%; HMRC's figure is Income Tax owed for the year. The borrowing page said the government “paid an average of 4.58% a year to borrow for 10 years”, which is the market yield on 10-year gilts, not the rate paid on its debt. Retired people's tax figures were described as “retired households”, though they are averages over people. The class size title said primary classes “rose until 2016, then fell”, though they were 27.1 in every year from 2016 to 2019.",

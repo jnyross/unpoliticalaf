@@ -18,6 +18,7 @@ from .pages_nations import housing_nations_block, schools_nations_block
 from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page
 
 FIRST, LAST = YEARS[0], YEARS[-1]
+RECENT = 2022  # the first year after the pandemic years (2020 and 2021), for a recent comparison beside the default pair
 # The first year each topic's longest series reaches (see pages_history.LONG).
 FIRST_YEAR = {"work": 1971, "earnings": 2002, "housing": 1981, "holidays": 1980, "schools": 2006}
 
@@ -906,6 +907,7 @@ def compare_index(sources):
         links = "".join(f'<li><a href="{x}-{y}.html">{x} compared with {y}</a></li>' for x, y in SUGGESTED)
         body.append(f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
                     f'<p class="small">{esc(DEFAULT_RULE)}{esc(pair_context(a, b))} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
+                    f'For the years since the pandemic, see <a href="{RECENT}-{LAST}.html">{RECENT} compared with {LAST}</a>, where some topics cannot be compared. '
                     'Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods), and housing figures for 2025 are not yet published.</p></div>')
     body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
@@ -1261,8 +1263,9 @@ def _hub_holidays(facts, d, num):
 
 def _hub_schools(facts, d, num):
     """The class sizes answer, shortened for the hub: the newer January census stays on the topic page."""
-    return (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were '
-            f'{num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.</p></div>')
+    y0 = FIRST_YEAR["schools"]  # the first year of the series, not the explorer's first year (audit 12)
+    return (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {y0}, the first year of this series, the figures were '
+            f'{num(f"school.primary.{y0}", "dp1")} and {num(f"school.secondary.{y0}", "dp1")}.</p></div>')
 
 
 def _hub_earnings(facts, d, num):
@@ -1327,7 +1330,8 @@ def life_index(facts, d, num, sources):
     a, b = DEFAULT_PAIR
     from .pages_ranges import pair_context
     body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared, '
-                f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b, brief=True))}</p>')
+                f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b, brief=True))} '
+                f'For the years since the pandemic, see <a href="compare/{RECENT}-{LAST}.html">{RECENT} compared with {LAST}</a>, where some topics cannot be compared because surveys changed.</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
     body.append(f"<h2 id='years'>Choose a year</h2>{year_links(None, '')}")
@@ -1425,7 +1429,7 @@ def _places_answer(facts, num, d):
     nb = min(ys[-1], n["wales"][-1], n["scotland"][-1])
     return (f'<div class="answer"><p>At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately: '
             f'from {num(f"house.reg.private.{low}.{b}", "pct0")} ({names[low]}) to {num(f"house.reg.private.{top}.{b}", "pct0")} ({names[top]}). '
-            f'In {nb} it was {num(f"house.nat.private.wales.{nb}", "pct0")} in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland. '
+            f'In {nb} it was {num(f"house.nat.private.wales.{nb}", "pct0")} in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland, where homes that come with a job or business are counted with private renting. '
             f'Each nation measures housing its own way, so small gaps between nations should not be read as real differences.</p></div>')
 
 
