@@ -232,7 +232,7 @@ def holiday_afford_block(facts, num, d):
         word = "rose" if vb > va else ("fell" if vb < va else "was unchanged")
         moves.append(f"from {a} to {b} it {word} from {num(f'holafford.all.{a}', 'pct')} to {num(f'holafford.all.{b}', 'pct')}")
     run_text = ", ".join(f"{r[0]} to {r[-1]}" if len(r) > 1 else str(r[0]) for r in runs)
-    out.append(f'<div class="answer"><p>No yearly official statistic gives the share of people who took a holiday: the surveys above count trips, not travellers. '
+    out.append(f'<div class="answer"><p>No yearly official statistic gives the share of people who took a holiday. '
                f'The nearest asks a different question: could the household afford a week’s holiday away from home? '
                f'In the {last} survey, {num(f"holafford.all.{last}", "pct")} of people in the UK lived in a household that could not: '
                f'{num(f"holafford.low.{last}", "pct")} of people in low-income households and {num(f"holafford.notlow.{last}", "pct")} of people in other households.</p>'
