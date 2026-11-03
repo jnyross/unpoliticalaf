@@ -25,7 +25,7 @@ dl.glossary{margin:0 0 24px}dl.glossary dt{font-weight:650;margin-top:18px;scrol
 a:focus-visible,summary:focus-visible,select:focus-visible,button:focus-visible,.tablewrap:focus-visible,nav.main ul:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
 header.site{border-bottom:1px solid var(--line);background:#fff}
-.backtop{position:fixed;right:12px;bottom:12px;z-index:5;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none;box-shadow:0 1px 4px rgba(0,0,0,.18)}.backtop:hover{border-color:var(--ink)}.js .backtop{visibility:hidden}.js .backtop.show{visibility:visible}
+.backtop{display:flex;align-items:center;width:max-content;min-height:44px;margin:0 16px 12px auto;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none}.backtop:hover{border-color:var(--ink)}.js .backtop{position:fixed;right:12px;bottom:12px;z-index:5;margin:0;box-shadow:0 1px 4px rgba(0,0,0,.18);visibility:hidden}.js .backtop.show{visibility:visible}
 header.site .wrap{display:flex;flex-direction:column;padding-top:0;padding-bottom:0}
 .brand{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-weight:750;letter-spacing:-.01em;color:var(--ink);text-decoration:none;font-size:1.1rem}
 .mark{display:inline-flex;align-items:flex-end;gap:2px;height:18px}.mark i{display:block;width:5px;background:var(--ink);border-radius:1px}.mark i:nth-child(1){height:10px}.mark i:nth-child(2){height:18px}.mark i:nth-child(3){height:14px;background:var(--bar2)}
@@ -481,7 +481,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 <main id="main" class="wrap">
 {body}
 </main>
-<a class="backtop" href="#top">↑ Back to top</a>
+<a class="backtop" href="#top">↑ Top and menu</a>
 <footer><div class="wrap">
 <nav aria-label="Footer"><ul>{foot}</ul></nav>
 <p>{SITE} is an independent guide built only from official UK statistics. It does not support or oppose any party or policy. Tap or click any figure to see where it comes from; with a keyboard, use the Sources line under each section. See also <a href="{up}methods.html">methods</a>, <a href="{up}corrections.html">corrections</a> and <a href="{up}uncertainty.html">how sure the survey figures are</a>. Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
@@ -1223,12 +1223,18 @@ var s=document.getElementById(a.getAttribute('href').slice(1)),i=s&&s.querySelec
 if(i){i.checked=true;}});});
 </script>"""
 
-# "Back to top" sits in the corner of every page, so a reader on a long page can get
-# back to the menu in one tap. Without JavaScript it is always shown; with it, it
-# appears once the reader has scrolled more than a screen down.
+# "Top and menu" takes a reader on a long page back to the menu in one tap. Without
+# JavaScript it is an ordinary link at the end of the page, so it never covers text.
+# With it, it floats in the corner only while the reader scrolls back up (a sign they
+# want to move on), more than a screen down. It hides again as soon as they scroll
+# down to read, and while the footer, which repeats the menu, is on screen.
 BACKTOP_JS = """<script>
 (function(){var r=document.documentElement,b=document.querySelector('.backtop');if(!b)return;r.classList.add('js');
-function f(){b.classList.toggle('show',window.scrollY>window.innerHeight);}window.addEventListener('scroll',f,{passive:true});f();})();
+var last=window.scrollY,up=0,foot=false,ft=document.querySelector('footer');
+function set(){b.classList.toggle('show',up>40&&!foot&&window.scrollY>window.innerHeight);}
+window.addEventListener('scroll',function(){var y=window.scrollY,d=y-last;last=y;if(d>0)up=0;else up-=d;set();},{passive:true});
+if(ft&&'IntersectionObserver' in window)new IntersectionObserver(function(e){foot=e[0].isIntersecting;set();}).observe(ft);
+b.addEventListener('click',function(){up=0;set();});})();
 </script>"""
 
 
