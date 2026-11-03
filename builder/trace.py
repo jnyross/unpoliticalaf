@@ -27,7 +27,7 @@ CORRECTIONS = [
                   ("borrowing.html", "Debt and borrowing costs"), ("life/schools.html", "Class sizes")],
         "was": "The home page and the who-pays headline said 27.2% of Income Tax “was paid by” the top 1%; HMRC's figure is Income Tax owed for the year. The borrowing page said the government “paid an average of 4.58% a year to borrow for 10 years”, which is the market yield on 10-year gilts, not the rate paid on its debt. Retired people's tax figures were described as “retired households”, though they are averages over people. The class size title said primary classes “rose until 2016, then fell”, though they were 27.1 in every year from 2016 to 2019.",
         "now": "The top 1% “owed” 27.2% of Income Tax, and the who-pays chart shows each group's share of income beside its share of tax. The borrowing page calls 4.58% the market interest rate on 10-year bonds and says it is not the average rate on existing debt. Retired people's figures are for the households they live in. Chart titles and summaries now say when a peak or low was held: primary class sizes “rose until 2016, held level until 2019, then fell”.",
-        "pr": 0,
+        "pr": 148,
     },
     {
         "date": "3 November 2026",
