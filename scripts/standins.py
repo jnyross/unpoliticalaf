@@ -56,6 +56,7 @@ SECONDS_PER_ACTION = 12
 STEP = HEIGHT - 80  # one scroll keeps a little of the last screen in view
 
 NEW_PASS = 0.80          # new-question test: share right with the site
+JOHNS_PASS = 0.80        # John's questions: share of readers right on each probe
 UPLIFT_MIN = 20          # prior-knowledge check: extra right answers out of 60
 SR_MIN_CORRECT = 9       # screen-reader reader: same bar as one phone tester
 
@@ -485,10 +486,43 @@ def score(audit_dir, pack=None, new_pack=None):
         res["screen_reader"] = False
         lines.append("Screen-reader reader: FAIL (no readers/SR.json)")
 
+    # 5. John's questions (docs/johns-questions/): every probe must be answered on the site,
+    # and on each one at least 80% of the readers must be right with the site.
+    jres, jlines = score_johns(readers)
+    res.update(jres)
+    lines += jlines
+
     d11 = 5 if res["phone_test"] and res["prior_knowledge"] and res["new_questions"] else None
     res["d11_ready_for_5"] = d11 == 5
     lines.append("Reader stand-ins for D11 level 5: " + ("all PASS, recorded as met (simulated)" if d11 else "not all passed"))
     return res, lines
+
+
+def score_johns(readers, data=None):
+    """Score readers on John's questions. Returns (results, lines); every failure is a gap."""
+    import johns_questions as jq
+    data = data or jq.load()
+    pk = jq.pack(data)
+    lines, gaps = ["John's questions:"], []
+    for o in pk["open"]:
+        gaps.append(f"{o['id']}: {o['gap']}")
+    for q in pk["questions"]:
+        right = sum(1 for r in readers
+                    if str(r.get("johns_with_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
+        before = sum(1 for r in readers
+                     if str(r.get("johns_without_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
+        ok = bool(readers) and right / len(readers) >= JOHNS_PASS
+        lines.append(f"  {q['id']}: {right}/{len(readers)} right with the site, {before} without: "
+                     + ("PASS" if ok else "FAIL"))
+        if not ok:
+            gaps.append(f"{q['id']}: readers could not answer \"{q['question']}\" from the site "
+                        f"({right} of {len(readers)} right); see their confusion notes.")
+    lines += [f"  open, not on the site yet: {o['id']}" for o in pk["open"]]
+    passed = not gaps
+    lines.append("  " + ("PASS: the site answers every one of John's questions" if passed
+                         else f"FAIL: {len(gaps)} gaps"))
+    lines += ["  gap: " + g for g in gaps]
+    return {"johns_questions": passed, "johns_gaps": gaps}, lines
 
 
 # ------------------------------------------------------------------ main
@@ -513,7 +547,7 @@ def main(argv):
         res, lines = score(argv[2])
         print("\n".join(lines))
         Path(argv[2], "reader-scores.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
-        return 0 if res["d11_ready_for_5"] and res["screen_reader"] else 1
+        return 0 if res["d11_ready_for_5"] and res["screen_reader"] and res["johns_questions"] else 1
     print(__doc__)
     return 2
 

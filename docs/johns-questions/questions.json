@@ -1,0 +1,123 @@
+{
+  "about": "Questions John has said the site must answer. Each one is tested by probes: multiple-choice questions a newcomer should be able to answer from the site. A probe with evidence is answered on the built site, and CI checks that it stays answered. A probe with no evidence yet is a gap the next goal audit turns into a ticket. See README.md.",
+  "not_sure": "Not sure / the site doesn't say",
+  "questions": [
+    {
+      "id": "J1",
+      "asked": "how does the UK tax, debt and spending compare to other major nations",
+      "added": "2026-11-03",
+      "source": "John, project chat, 2026-11-03",
+      "reading": "Major nations is read as the G7 (Canada, France, Germany, Italy, Japan, the UK and the US), with the wider OECD as context. Tax and spending are compared as a share of GDP; debt as general government gross debt as a share of GDP. Bond markets are read as government borrowing costs (10-year government bond yields) and debt interest paid as a share of GDP, compared with the G7. Yields reflect several things (central bank rates, expected inflation, how much is being borrowed and investors' view of risk), so the site should show them and explain what moves them without presenting them as a verdict on any government.",
+      "probes": [
+        {
+          "id": "J1.1",
+          "question": "In 2024, how did total UK tax, as a share of the economy (GDP), compare with France, Germany and Italy?",
+          "options": {
+            "A": "Lower than all three",
+            "B": "Higher than all three",
+            "C": "Higher than Germany but lower than France and Italy",
+            "D": "About the same as all three"
+          },
+          "answer": "A",
+          "why": "International page, 2024: UK 34.4% of GDP, against France 43.5%, Italy 42.8% and Germany 38.0%.",
+          "evidence": [
+            {
+              "page": "international.html",
+              "text": "France 43.5%"
+            },
+            {
+              "page": "international.html",
+              "text": "Italy 42.8%"
+            },
+            {
+              "page": "international.html",
+              "text": "Germany 38.0%"
+            },
+            {
+              "page": "international.html",
+              "text": "United Kingdom 34.4%"
+            }
+          ]
+        },
+        {
+          "id": "J1.2",
+          "question": "In 2024, how did UK government spending, as a share of GDP, compare with the United States and France?",
+          "options": {
+            "A": "Higher than both",
+            "B": "Lower than both",
+            "C": "Higher than the United States, lower than France",
+            "D": "Lower than the United States, higher than France"
+          },
+          "answer": "C",
+          "why": "International page, 2024: UK 46.2% of GDP, United States 39.6%, France 57.3%.",
+          "evidence": [
+            {
+              "page": "international.html",
+              "text": "United Kingdom 46.2%"
+            },
+            {
+              "page": "international.html",
+              "text": "United States 39.6%"
+            },
+            {
+              "page": "international.html",
+              "text": "France 57.3%"
+            }
+          ]
+        },
+        {
+          "id": "J1.3",
+          "question": "How does UK government debt, as a share of GDP, compare with the other G7 countries in the latest year shown?",
+          "options": null,
+          "answer": null,
+          "why": null,
+          "evidence": [],
+          "gap": "The site has no international comparison of government debt, so it cannot say how UK debt as a share of GDP compares with the other G7 countries and the OECD average."
+        },
+        {
+          "id": "J1.4",
+          "question": "Where does the UK rank among the G7 countries on tax as a share of GDP, and on spending?",
+          "options": null,
+          "answer": null,
+          "why": null,
+          "evidence": [],
+          "gap": "The international page ranks the UK among all 38 OECD countries but never picks out the G7 (major economies), so a reader has to find six countries in two long bar lists to answer 'compared with other major nations'."
+        },
+        {
+          "id": "J1.5",
+          "question": "In the latest year shown, does the UK government pay more or less to borrow for 10 years than the other G7 governments?",
+          "options": null,
+          "answer": null,
+          "why": null,
+          "evidence": [],
+          "gap": "The site does not show government borrowing costs (10-year government bond yields) for the UK beside the other G7 countries, or how they have changed over time."
+        },
+        {
+          "id": "J1.6",
+          "question": "How does the interest the UK government pays on its debt, as a share of GDP, compare with the other G7 countries?",
+          "options": null,
+          "answer": null,
+          "why": null,
+          "evidence": [],
+          "gap": "The site does not compare the UK's debt interest payments, as a share of GDP or of revenue, with other G7 countries."
+        },
+        {
+          "id": "J1.7",
+          "question": "According to the site, which of these affect what a government pays to borrow?",
+          "options": null,
+          "answer": null,
+          "why": null,
+          "evidence": [],
+          "gap": "The site does not explain, in neutral terms with official sources, what moves government bond yields (central bank rates, expected inflation, the amount borrowed, investors' view of risk), so a reader could take a yield gap as a simple verdict on how a country is run."
+        }
+      ],
+      "also_asked": [
+        {
+          "added": "2026-11-03",
+          "source": "John, project chat, 2026-11-03",
+          "asked": "as part fo that question we should clearly answer \"what do the bond markets thing of the uk vs other countries e.g. how eassy is it to raise more moeny and how much interest do we pay? becuase it's a sign of how confident the markets are in how our economy is being run\""
+        }
+      ]
+    }
+  ]
+}

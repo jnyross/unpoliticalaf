@@ -59,6 +59,7 @@ behave more like a hurried newcomer than an expert.
 | Informal phone check | 3 simulated newcomers browse the site at 360 × 640 and write down what confused them. | Notes recorded; anything that blocks an answer is fixed. | D11 level 2 |
 | Five-person phone test | 5 simulated readers, each with a different newcomer profile, answer the 12 questions in [user-test/](user-test/). They see only screenshots of the audited build in a 360 × 640 phone browser, can only tap, scroll and pick from lists, and get 40 actions (about 8 minutes). | The goal's own bar: at least 48 of 60, each at least 9 of 12 within the 40 actions, all three critical questions right. | D11 level 5, D1 to D6 level 5 |
 | Same test, new questions | A separate session writes 24 new questions from the goal text alone, without seeing the site. Their hash is committed (sealed) before the readers start. The same 5 readers answer them. | At least 80% right. Stops the site being tuned to the 12 known questions. | D11 level 5, D1 to D6 level 5 |
+| John's questions | John's own questions the site must answer, in [johns-questions/](johns-questions/). Each is tested by multiple-choice probes. The same 5 readers answer the probes the site already covers, with a fresh 40 actions, and first without the site. | Every probe has its answer on the site, and on each probe at least 4 of the 5 readers are right with the site. | Target (below); a failed probe is a gap |
 | Prior-knowledge check | The same readers answer every question first without the site. | The group scores at least 20 of 60 higher on the 12 questions with the site than without it. Questions they get right without the site are not evidence. | D11 level 5, D1 to D6 level 5 |
 | VoiceOver and TalkBack test | A reader gets only what a screen reader would announce (the accessibility tree in reading order) and answers the 12 questions. Automated checks: axe-core on every page at 360 px and 1100 px (`make a11y`), keyboard-trap check, chart text summaries. | 9 of 12 and all critical questions right within 40 actions, zero axe failures, no keyboard traps, every chart has a text summary. | D9 level 5 |
 | Outside accuracy review | An adversarial fact-checker picks 30 headline claims from the rendered pages and traces each to the publisher's own file through the "Accuracy check" workflow. | No material errors. | D7 level 5, D10 level 5 (with the impartiality stand-in) |
@@ -204,6 +205,8 @@ commit:
 
 - Every dimension scores at least 4, and the total is at least 49 out of 55.
 - D11 scores 5.
+- Every one of John's questions passes ([johns-questions/](johns-questions/)):
+  no probe is still open, and the readers answer each probe as above.
 - No stand-in has an open material finding (accuracy, impartiality,
   accessibility or reader confusion that blocks an answer), and the build is
   reproducible (`make verify` passes and the "Live site matches main" check is
@@ -238,3 +241,11 @@ After scoring, list the gaps that would raise the lowest scores most, each in
 one sentence, most valuable first. Each gap should be a piece of work one
 worker can finish. A gap from a reader stand-in is written from the readers'
 confusion notes only, never from their answers or the new questions.
+
+John's questions are the exception, because John has asked for the site to
+be tested against them openly. Every open probe and every probe the readers
+failed is a gap, listed by `python scripts/standins.py score AUDIT_DIR` (or
+`python scripts/johns_questions.py gaps` for the open ones). Copy each
+probe's gap sentence as written. A worker who closes one takes the answer
+from the official source, adds it to the probe in
+`docs/johns-questions/questions.json`, and the next audit tests it.

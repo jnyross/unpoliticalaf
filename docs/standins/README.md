@@ -57,7 +57,10 @@ check's run for the audited commit.
    1. answers the 12 questions and the 24 new questions **without the site**;
    2. answers the 12 questions using only the phone tool, within 40 actions;
    3. starts a fresh phone session (`--state R1-new.json`) and answers the 24
-      new questions within 40 actions.
+      new questions within 40 actions;
+   4. starts another fresh session (`--state R1-johns.json`) and answers
+      John's questions (`python scripts/johns_questions.py sheet`) within 40
+      actions. Their "without the site" answers are given in step 1.
 
    Give the questions without their answers: the question sheet
    `docs/user-test/question-sheet.md`, and the new questions with the
@@ -123,11 +126,13 @@ check's run for the audited commit.
   "with_site": {"1": "A", "2": "C"},
   "new_without_site": {"1": "E"},
   "new_with_site": {"1": "B"},
+  "johns_without_site": {"J1.1": "E"},
+  "johns_with_site": {"J1.1": "A"},
   "confusions": ["On the taxes page I could not tell whether £1,105bn was all money raised or only taxes."]
 }
 ```
 
-Keys are question numbers; values are letters, with `E` for "Not sure".
+Keys are question numbers (probe ids such as `J1.1` for John's questions); values are letters, with `E` for "Not sure".
 `actions_used` comes from the state file. A reader over budget fails.
 
 ## The phone tool
