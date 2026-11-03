@@ -49,6 +49,17 @@ class Score(unittest.TestCase):
         self.assertTrue(res["screen_reader"])
         self.assertTrue(res["d11_ready_for_5"])
 
+    def test_phone_state_files_beside_the_answers_are_not_scored_as_readers(self):
+        with tempfile.TemporaryDirectory() as d:
+            (Path(d) / "readers").mkdir()
+            for i in range(1, 6):
+                (Path(d) / "readers" / f"R{i}.json").write_text(json.dumps(reader(i)))
+                for kind in ("phone", "new", "johns"):
+                    (Path(d) / "readers" / f"R{i}-{kind}.json").write_text(json.dumps({"actions": 12}))
+            res = si.score(d, PACK, new_pack())[0]
+        self.assertTrue(res["phone_test"])
+        self.assertTrue(res["prior_knowledge"])
+
     def test_a_missed_critical_question_fails_the_phone_test(self):
         miss = dict(KEY, **{"5": "A" if KEY["5"] != "A" else "B"})
         res = self.run_score([reader(1, with_site=miss)] + [reader(i) for i in range(2, 6)])

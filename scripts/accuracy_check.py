@@ -367,7 +367,7 @@ if __name__ == "__main__":
     out = ROOT / opt("--dir") if opt("--dir") else None
     if cmd == "sample":
         ids_file = opt("--ids")
-        ids = [x.strip() for x in ids_file.read_text().split() if x.strip()] if ids_file else None
+        ids = [x.strip() for x in ids_file.read_text().splitlines() if x.strip()] if ids_file else None
         sample(ids, out)
     else:
         check(local="--local" in args, out=out)

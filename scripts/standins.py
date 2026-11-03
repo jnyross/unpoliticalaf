@@ -84,6 +84,7 @@ TAPPABLE_JS = """
     const r = el.getBoundingClientRect();
     const st = getComputedStyle(el);
     if (r.width === 0 || r.height === 0 || st.visibility === 'hidden' || st.display === 'none') continue;
+    if (el.checkVisibility && !el.checkVisibility()) continue;  // inside a closed <details>
     if (onlyVisible && (r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth)) continue;
     if (r.right <= 0 || r.bottom <= -50) continue;  // moved off screen until focused, like a skip link
     let own = '';
@@ -283,13 +284,17 @@ def session(mode, args):
                 st["log"].append(f"choose [{n}] {it['label']} = {value}")
             else:
                 st["log"].append(f"tap [{n}] {it['kind']}: {it['label']}")
+                try:
+                    loc.click(timeout=3000)
+                    clicked = True
+                except Exception:
+                    clicked = False  # not replayed later, so the session cannot get stuck on it
                 with contextlib.suppress(Exception):
-                    with page.expect_navigation(timeout=1500):
-                        loc.click()
+                    page.wait_for_load_state("load", timeout=1500)
                 page.wait_for_load_state("load")
                 now = _rel(page.url, base)
                 if _same_page(now, before):
-                    if now == before:
+                    if now == before and clicked:
                         st["ops"].append({"op": "tap", "sel": it["sel"]})
                     st["url"] = now
                 else:
@@ -424,7 +429,7 @@ def score(audit_dir, pack=None, new_pack=None):
     audit = Path(audit_dir)
     pack = pack or json.loads(PACK.read_text(encoding="utf-8"))
     qs = pack["questions"]
-    readers = sorted((audit / "readers").glob("R*.json"))
+    readers = sorted(p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem))
     readers = [json.loads(p.read_text(encoding="utf-8")) for p in readers]
     lines, res = [], {}
 

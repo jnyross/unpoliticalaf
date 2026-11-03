@@ -1,0 +1,74 @@
+{
+ "reader": "R2-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 38,
+ "url": "glossary.html",
+ "ops": [],
+ "scroll": 8400,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 3360
+  },
+  {
+   "url": "life/2019.html",
+   "ops": [],
+   "scroll": 4173
+  }
+ ],
+ "log": [
+  "tap [7] link: Year by year",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [14] link: 2019",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll down",
+  "tap [22] link: Glossary",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/R2",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > dl:nth-of-type(4) > dd:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "how sure the figures are"
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "reader": "R4-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 26,
+ "url": "international.html",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)"
+  }
+ ],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 2091
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "tap [11] link: How this compares with other countries",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "tap [6] input: Spending",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/R4",
+ "items": []
+}

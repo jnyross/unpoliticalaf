@@ -1,0 +1,642 @@
+{
+ "reader": "SR-session",
+ "mode": "sr",
+ "budget": 40,
+ "actions": 6,
+ "url": "life/holidays.html",
+ "ops": [],
+ "scroll": 0,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/2019.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [7] link: Year by year",
+  "tap [34] link: 2019",
+  "tap [22] link: 2018",
+  "back",
+  "tap [7] link: Year by year",
+  "tap [20] link: Holidays in every year since 1980"
+ ],
+ "shots": "/tmp/standin-shots",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Home"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Everyday life, year by year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "margin of error"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "How sure are these figures?"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Holidays over time table"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Earnings"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Housing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 6 sections"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Before 2008: since 1980 chart, table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(11) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(12) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(13) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(14) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(15) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(16) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(17) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(18) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(19) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(20) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(21) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(22) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(23) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(24) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(25) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(26) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(27) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(28) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > p:nth-of-type(2) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > details:nth-of-type(2) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "after inflation"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on How much is spent on holidays abroad, and for how long? chart, table and"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > figure:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > figure:nth-of-type(2) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(2) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on How many people take a holiday? table and limits"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > details:nth-of-type(2) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on About these figures limits, official words and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(2) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(2) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(3) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(1) > aside:nth-of-type(3) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(11) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > details:nth-of-type(2) > ul:nth-of-type(1) > li:nth-of-type(12) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "everyday life in a single year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "compare two years"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Home"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "methods"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "corrections"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "how sure the survey figures are"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(4)",
+   "kind": "link",
+   "label": "Open Government Licence v3.0"
+  }
+ ]
+}

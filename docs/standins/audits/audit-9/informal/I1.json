@@ -1,0 +1,59 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 23,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Earnings £767 a week before tax for the middle full-time employee, April 2025, U",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [3] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/aud/shots/I1",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": ""
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": ""
+  }
+ ]
+}
