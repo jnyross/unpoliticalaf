@@ -47,6 +47,10 @@ def place_word(p, n):
     return WORDS[n - p + 1] + "lowest"
 
 
+def nth(n):
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
 def _g7(facts, num, it, ty, sy):
     """The UK's place among the G7, the group of seven large economies, on tax and on spending."""
     def order(prefix, year):
@@ -63,9 +67,17 @@ def _g7(facts, num, it, ty, sy):
                      num(f"intl.spend.{a}.{sy}", "pct"), f"{s.index(a) + 1}" if a in s else ""])
     def among(n):
         return "" if n == 7 else f" (of the {n} with a figure for that year)"
-    out = [f'<h3 id="g7">The UK beside the other G7 countries</h3>',
-           f"<p>Among the G7, the seven large economies of Canada, France, Germany, Italy, Japan, the UK and the US, the UK had the {place_word(tp, len(t))} tax as a share of GDP in {ty}{among(len(t))}, and the {place_word(sp, len(s))} government spending as a share of GDP in {sy}{among(len(s))}.</p>",
-           table(f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest of the seven.",
+    def g7_bars(order_, prefix, year, what):
+        items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]), f"{prefix}.{a}.{year}", "" if a == UK else "alt")
+                 for a in order_]
+        return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar.")
+    out = [f'<h2 id="g7">The UK beside the other G7 countries</h2>',
+           f"<p>The G7 is a group of seven large economies. Among them, the UK had the {place_word(tp, len(t))} tax as a share of GDP in {ty}{among(len(t))}, and the {place_word(sp, len(s))} government spending as a share of GDP in {sy}{among(len(s))}.</p>",
+           switch("Show the G7", [
+               ("Taxes", f"The UK ranked {nth(tp)} of {len(t)} on tax in {ty}, where 1st is the highest.", g7_bars(t, "intl.tax", ty, "All taxes, including social security contributions,")),
+               ("Spending", f"The UK ranked {nth(sp)} of {len(s)} on government spending in {sy}, where 1st is the highest.", g7_bars(s, "intl.spend", sy, "General government spending")),
+           ]),
+           table(f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest.",
                  ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
     if missing:
         out.append(f"<p class='small'>Not ranked: {esc(', '.join(missing))}, because the OECD had not published a figure.</p>")
@@ -84,6 +96,7 @@ def international_page(facts, d, num, sources):
     body = ["<h1>How do UK taxes and spending compare with other countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {ty}, UK taxes were {num(t_uk, "pct")} of GDP, {_beside(facts, t_uk, t_avg)} the OECD average of {num(t_avg, "pct")}. Government spending{"" if sy == ty else " in " + str(sy)} was {num(s_uk, "pct")} of GDP, {_beside(facts, s_uk, s_avg)} the average of {num(s_avg, "pct")}.</p></div>''')
     year_word = str(ty) if ty == sy else f"{ty} and {sy}"
+    body.append(_g7(facts, num, it, ty, sy))
     body.append(f'<h2 id="countries">The UK beside each OECD country, {year_word}</h2>')
     tax_bars = bars(tax_items, "pct", num, maxval=60,
                     caption=f"All taxes, including social security contributions such as National Insurance, as a % of GDP, {ty}. The UK and the OECD average have darker bars.")
@@ -93,7 +106,6 @@ def international_page(facts, d, num, sources):
         ("Taxes", f"Of the {tax_n} countries with a figure for {ty}, {tax_higher} collected a larger share of GDP in tax than the UK.", tax_bars + _missing(it, it["tax_missing"], ty, "when this data was downloaded")),
         ("Spending", f"Of the {sp_n} countries with a figure for {sy}, {sp_higher} spent a larger share of GDP than the UK.", sp_bars + _missing(it, it["spend_missing"], sy, "when this data was downloaded")),
     ]))
-    body.append(_g7(facts, num, it, ty, sy))
     body.append("<p>The OECD is a group of 38 mostly high-income countries. GDP is the value of everything produced in a country in a year; dividing by it lets countries of very different sizes be compared. It does not show how much tax any one person pays.</p>")
     body.append(FOLD)
     body.append(source_line(sources, ["oecd-rs-tax", "oecd-gov-pf"], "Total tax revenue and general government expenditure, as % of GDP. The “OECD average” is the OECD's simple average of its member countries, each counted equally."))
