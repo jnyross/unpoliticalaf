@@ -199,6 +199,14 @@
   "sha256": "46a9f034404234ee8295850e045edf74270f9ee61b1791b56505e329a05b3078",
   "retrieved": "2026-11-02T18:09:44Z"
  },
+ "explain-dmo-about-gilts": {
+  "url": "https://www.dmo.gov.uk/responsibilities/gilt-market/about-gilts/",
+  "file": "explain/dmo-about-gilts.html",
+  "bytes": 64165,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "1b3dd6ccc0195601a1a4411d6a956ef7cfc542bd9184acf7b32c6f5de0f7eb28",
+  "retrieved": "2026-11-03T09:37:31Z"
+ },
  "explain-ehs-2023-24-rented-report": {
   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
   "file": "explain/ehs-2023-24-rented-sectors.html",
@@ -246,6 +254,22 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
   "retrieved": "2026-11-02T15:15:37Z"
+ },
+ "explain-obr-debt-interest": {
+  "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
+  "file": "explain/obr-debt-interest.html",
+  "bytes": 132342,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "5c803fc4fcdc4eacabc4a7a77818d1879de7fbbe39c8e1f035e7381d37ec3e62",
+  "retrieved": "2026-11-03T09:37:34Z"
+ },
+ "explain-obr-frs-2025": {
+  "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
+  "file": "explain/obr-frs-2025.html",
+  "bytes": 601545,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "35971195412625caa19a76c28d6bbd86f0c99be55ad659c981604c0551eb4b52",
+  "retrieved": "2026-11-03T09:37:37Z"
  },
  "explain-ons-2008-recession": {
   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
