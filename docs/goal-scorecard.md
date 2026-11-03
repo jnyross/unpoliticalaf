@@ -7,7 +7,9 @@ sections stay as they were.
 From Audit 2 onwards, audits use [goal-rubric.md](goal-rubric.md): eleven
 dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too
-generous.
+generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
+the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
+recorded as "met (simulated)".
 
 ## Audit 8: 2 November 2026 (confirming re-score after PRs #118 and #119)
 

@@ -1,10 +1,20 @@
 name: Accuracy check (random sample)
 # Downloads each sampled figure's source again from the publisher and compares
-# it with the page. Runs when the sample or the checker changes, or by hand.
+# it with the page. Runs when the sample or the checker changes, when a goal
+# audit's fact-checker adds its chosen figures, or by hand.
 on:
   push:
-    paths: ["docs/accuracy-check/sample.json", "scripts/accuracy_check.py", ".github/workflows/accuracy-check.yml"]
+    paths:
+      - "docs/accuracy-check/sample.json"
+      - "docs/standins/audits/*/fact-check/sample.json"
+      - "scripts/accuracy_check.py"
+      - ".github/workflows/accuracy-check.yml"
   workflow_dispatch:
+    inputs:
+      dir:
+        description: "Folder holding sample.json (default docs/accuracy-check)"
+        required: false
+        default: ""
 permissions:
   contents: write
 jobs:
@@ -16,11 +26,24 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -q -r requirements.txt
-      - run: python3 scripts/accuracy_check.py check
+      - name: Check each sample
+        env:
+          DIR: ${{ github.event.inputs.dir }}
+        run: |
+          dirs="$DIR"
+          if [ -z "$dirs" ]; then
+            # An audit's fact-check folder that has a sample but no results yet
+            for d in docs/standins/audits/*/fact-check; do
+              [ -f "$d/sample.json" ] && [ ! -f "$d/results.json" ] && dirs="$dirs $d"
+            done
+          fi
+          [ -z "$dirs" ] && dirs="docs/accuracy-check"
+          echo "$dirs" > /tmp/dirs
+          for d in $dirs; do python3 scripts/accuracy_check.py check --dir "$d"; done
       - name: Commit results
         run: |
           git config user.name "unpolitical-fetch"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/accuracy-check/results.json
+          for d in $(cat /tmp/dirs); do git add "$d/results.json"; done
           git diff --cached --quiet || git commit -m "Accuracy check: results from the publishers' files ($(date -u +%F))"
           git push

@@ -17,6 +17,11 @@ Two steps:
       compares the result with the text on the page. Writes
       docs/accuracy-check/results.json.
 
+Both steps take --dir FOLDER to use another folder than docs/accuracy-check,
+and sample takes --ids FILE (figure ids, one per line) to check chosen figures
+instead of a random draw. The rubric v3 fact-checker uses these
+(docs/standins/README.md).
+
 This file deliberately imports nothing from builder/, so a mistake in the
 builder cannot hide itself.
 """
@@ -73,7 +78,10 @@ def leaves(facts, fid, out=None):
     return out
 
 
-def sample():
+def sample(ids=None, out=None):
+    """ids: figure ids chosen by hand (the v3 fact-checker's headline claims)
+    instead of the random draw. out: folder for sample.json, default OUT."""
+    out = out or OUT
     data = json.loads((SITE / "data/facts.json").read_text())
     facts = {f["id"]: f for f in data["facts"]}
     sources = data["sources"]
@@ -81,10 +89,17 @@ def sample():
     shown = shown_figures()
     population = sorted(fid for fid in shown if fid in facts and facts[fid]["status"] != "missing")
     rng = random.Random(SEED)
-    picked = rng.sample(population, N_RANDOM)
-    headline = sorted({fid for fid, uses in shown.items() if fid in population and fid not in picked
-                       and any(p in HEADLINE_PAGES for p, _, _ in uses)})
-    picked_h = rng.sample(headline, N_HEADLINE)
+    headline = []
+    if ids:
+        unknown = [i for i in ids if i not in population]
+        if unknown:
+            sys.exit(f"not figures shown on the site: {', '.join(unknown)}")
+        picked, picked_h = list(dict.fromkeys(ids)), []
+    else:
+        picked = rng.sample(population, N_RANDOM)
+        headline = sorted({fid for fid, uses in shown.items() if fid in population and fid not in picked
+                           and any(p in HEADLINE_PAGES for p, _, _ in uses)})
+        picked_h = rng.sample(headline, N_HEADLINE)
     items = []
     for n, fid in enumerate(picked + picked_h, 1):
         f = facts[fid]
@@ -105,14 +120,15 @@ def sample():
             c["sha256"] = s.get("sha256") or (rec or {}).get("sha256")
             c["publisher"] = s["publisher"]
             c["title"] = s["title"]
-        items.append({"n": n, "group": "random" if n <= N_RANDOM else "headline", "id": fid, "page": page,
+        items.append({"n": n, "group": "chosen" if ids else ("random" if n <= N_RANDOM else "headline"), "id": fid, "page": page,
                       "pages": len(uses), "kind": kind, "text": text, "value": f["value"], "unit": f["unit"],
                       "period": f["period"], "status": f["status"], "formula": f["formula"], "calc": calc, "cells": cells})
-    OUT.mkdir(parents=True, exist_ok=True)
-    meta = {"seed": SEED, "population": len(population), "headline_population": len(headline),
+    out.mkdir(parents=True, exist_ok=True)
+    meta = {"seed": None if ids else SEED, "population": len(population), "headline_population": len(headline),
             "commit": json.loads((SITE / "build.json").read_text()).get("commit") if (SITE / "build.json").exists() else None}
-    (OUT / "sample.json").write_text(json.dumps({"meta": meta, "items": items}, indent=1, ensure_ascii=False) + "\n")
-    print(f"sampled {len(items)} of {len(population)} figures shown ({len(headline)} on headline pages)")
+    (out / "sample.json").write_text(json.dumps({"meta": meta, "items": items}, indent=1, ensure_ascii=False) + "\n")
+    print(f"chose {len(items)} of {len(population)} figures shown" if ids else
+          f"sampled {len(items)} of {len(population)} figures shown ({len(headline)} on headline pages)")
 
 
 # ---------------------------------------------------------------- page check
@@ -270,10 +286,11 @@ def evaluate(formula, values, inputs=()):
     return eval(expr, {"__builtins__": {}})  # only digits and arithmetic remain
 
 
-def check(local=False):
+def check(local=False, out=None):
     """local=True reads the repository's copies instead of downloading: a dry
     run of the readers, not the check itself."""
-    plan = json.loads((OUT / "sample.json").read_text())
+    out = out or OUT
+    plan = json.loads((out / "sample.json").read_text())
     downloads = {}
     for item in plan["items"]:
         for c in item["cells"]:
@@ -324,7 +341,7 @@ def check(local=False):
                         "page_matches_fresh_source": fresh_ok, "note": page_note, "cells": cells})
     meta = {"checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "seed": plan["meta"]["seed"],
             "downloads": {u: {"sha256": d["sha256"], "error": d["error"]} for u, d in downloads.items()}}
-    (OUT / "results.json").write_text(json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False) + "\n")
+    (out / "results.json").write_text(json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False) + "\n")
     good = sum(1 for r in results if r["page_matches_fresh_source"])
     where = "the repository's copies" if local else "the publishers' files downloaded today"
     print(f"{good} of {len(results)} figures match {where}")
@@ -344,8 +361,13 @@ def recompute(fid, calc, leaf_values):
 
 
 if __name__ == "__main__":
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "sample"
+    args = sys.argv[1:]
+    cmd = args[0] if args else "sample"
+    opt = lambda name: Path(args[args.index(name) + 1]) if name in args else None
+    out = ROOT / opt("--dir") if opt("--dir") else None
     if cmd == "sample":
-        sample()
+        ids_file = opt("--ids")
+        ids = [x.strip() for x in ids_file.read_text().split() if x.strip()] if ids_file else None
+        sample(ids, out)
     else:
-        check(local="--local" in sys.argv)
+        check(local="--local" in args, out=out)

@@ -1,13 +1,20 @@
-# Goal rubric
+# Goal rubric (v3)
 
 This is the rubric every goal audit uses. Results go in
-[goal-scorecard.md](goal-scorecard.md).
+[goal-scorecard.md](goal-scorecard.md). John approved v3 on 3 November 2026
+([proposal](https://claude.ai/artifact/JMSoMh3zknfmPNcA7nVcbT)).
 
-It replaces the checklist used in Audit 1. That checklist asked whether each
-feature existed. Almost everything existed, so almost everything scored "met",
-even though the site is still a plain set of text pages and tables. This rubric
-asks how good each part is compared with the best public explainers, and
-whether readers actually understand it.
+**What changed from v2.** The eleven dimensions and the 0 to 5 scale are the
+same. v2 locked 15 of the 55 points behind four steps only people could do (an
+informal phone check, the five-person phone test, a VoiceOver and TalkBack
+test, and an outside review). v3 gives each of those steps an automated
+stand-in, run by fresh Claude sessions, so audits can reach the target without
+waiting for people. How to run the stand-ins is in
+[standins/README.md](standins/README.md).
+
+A result reached with the stand-ins is recorded as **"met (simulated)"**. That
+is not the goal's own definition of success, which asks for five consenting UK
+adults and outside checks, and it must never be presented publicly as that.
 
 ## How to score
 
@@ -22,19 +29,52 @@ two levels, pick the lower one.
 | 2 | Works and is correct, but basic: a reader has to work hard, and a good public explainer would do clearly better. |
 | 3 | Good. A newcomer can get the answer on a phone without help. Clearly behind the best benchmark in depth, design or clarity. |
 | 4 | Very good. Comparable with the benchmarks below in depth and craft, with independent evidence for the claims it makes. |
-| 5 | Best in class. Better than the benchmarks for a newcomer on a phone, and real readers have shown they understand it. |
+| 5 | Best in class. Better than the benchmarks for a newcomer on a phone, and readers have shown they understand it. |
 
-Caps that apply whatever the page looks like:
+Evidence each level needs, whatever the page looks like:
 
-- No dimension scores above 3 on the auditor's own judgement alone. Level 4 needs
-  a recorded independent review of that dimension or a recorded side-by-side
-  comparison with a named benchmark page.
-  Side-by-side benchmark comparisons are recorded in
-  [benchmark-comparison.md](benchmark-comparison.md).
-- Level 5 needs evidence from real readers (the five-person phone test, or a
-  recorded smaller test with real people).
-- Any material factual error, misleading chart or partisan framing found
-  anywhere caps that dimension at 1 until it is fixed.
+- **Level 4** needs a recorded review of that dimension by a fresh Claude
+  session that did not build the site, or a recorded side-by-side comparison
+  with a named benchmark page ([benchmark-comparison.md](benchmark-comparison.md)).
+  The auditor's own judgement alone stops at 3.
+- **Level 5** needs that dimension's stand-in (table below) to have passed on
+  the audited commit, with its evidence saved in the repository under
+  `docs/standins/audits/`. Dimensions without their own stand-in (D1 to D6)
+  need the reader stand-ins (the simulated phone test, the new-question test
+  and the prior-knowledge check) to have passed, plus no reader confusion note
+  about that dimension left unfixed.
+- **Caps stay.** Any material factual error, misleading chart or partisan
+  framing found anywhere, by the auditor or any stand-in, caps that dimension
+  at 1 until it is fixed.
+
+### Stand-ins
+
+Each stand-in is a fresh Claude session that did not build the site and never
+sees the code, the answer key or the other stand-ins' results. Where possible
+the readers run on a smaller, less capable model than the reviewers, so they
+behave more like a hurried newcomer than an expert.
+
+| Human step in v2 | Stand-in | Pass bar | Counts for |
+|---|---|---|---|
+| Informal phone check | 3 simulated newcomers browse the site at 360 × 640 and write down what confused them. | Notes recorded; anything that blocks an answer is fixed. | D11 level 2 |
+| Five-person phone test | 5 simulated readers, each with a different newcomer profile, answer the 12 questions in [user-test/](user-test/). They see only screenshots of the audited build in a 360 × 640 phone browser, can only tap, scroll and pick from lists, and get 40 actions (about 8 minutes). | The goal's own bar: at least 48 of 60, each at least 9 of 12 within the 40 actions, all three critical questions right. | D11 level 5, D1 to D6 level 5 |
+| Same test, new questions | A separate session writes 24 new questions from the goal text alone, without seeing the site. Their hash is committed (sealed) before the readers start. The same 5 readers answer them. | At least 80% right. Stops the site being tuned to the 12 known questions. | D11 level 5, D1 to D6 level 5 |
+| Prior-knowledge check | The same readers answer every question first without the site. | The group scores at least 20 of 60 higher on the 12 questions with the site than without it. Questions they get right without the site are not evidence. | D11 level 5, D1 to D6 level 5 |
+| VoiceOver and TalkBack test | A reader gets only what a screen reader would announce (the accessibility tree in reading order) and answers the 12 questions. Automated checks: axe-core on every page at 360 px and 1100 px (`make a11y`), keyboard-trap check, chart text summaries. | 9 of 12 and all critical questions right within 40 actions, zero axe failures, no keyboard traps, every chart has a text summary. | D9 level 5 |
+| Outside accuracy review | An adversarial fact-checker picks 30 headline claims from the rendered pages and traces each to the publisher's own file through the "Accuracy check" workflow. | No material errors. | D7 level 5, D10 level 5 (with the impartiality stand-in) |
+| Outside impartiality review | Two red-team critics, one arguing the site leans left and one right, each list their strongest examples. A third neutral judge rules on each. Start years, chart scales and ordering are checked against the written rule in [standins/impartiality-rule.md](standins/impartiality-rule.md). | No upheld material finding left open. | D8 level 5, D10 level 5 (with the accuracy stand-in) |
+
+**People tests are optional and override.** If the real five-person phone test
+([user-test/](user-test/)) is ever run, or a person outside the project reviews
+accuracy, impartiality or accessibility, that result replaces the stand-in for
+the dimensions it covers, in either direction. A failed human test drops those
+dimensions back and reopens the goal.
+
+**Guarding against gaming.** Workers fixing the site may not see the readers'
+answers, the new question set or the answer key's reasoning beyond what is
+already public in `docs/user-test/`. They get only the readers' confusion notes
+and the reviewers' findings. The new questions are written again for every
+audit, and the reader profiles are drawn again too.
 
 ### Benchmarks
 
@@ -112,15 +152,17 @@ judged against those two.
 
 - **3:** Every figure is traced to an official file and cell, and an automated
   check re-reads them on every build.
-- **5:** As 3, and an independent review has checked a sample of figures and
-  every headline claim against the original publications, each figure can be
+- **5:** As 3, and an independent review (in v3, the fact-checker stand-in)
+  has checked a sample of figures and every headline claim against the
+  original publications, each figure can be
   traced from the page in one or two taps, and corrections are logged publicly.
 
 ### D8. Impartiality
 
 - **3:** Neutral wording, no party or policy judgement, and fixed or explained
   choices of years and measures.
-- **5:** As 3, and an independent review has checked headline choices, framing,
+- **5:** As 3, and an independent review (in v3, the red-team critics and
+  judge) has checked headline choices, framing,
   chart scales and ordering for bias, and the site explains how it chooses what
   to show.
 
@@ -128,8 +170,9 @@ judged against those two.
 
 - **3:** Zero automated WCAG 2.2 AA failures at 360px and 1100px with sections
   expanded, and the core answers and comparisons work without JavaScript.
-- **5:** As 3, and a manual keyboard and screen-reader test (VoiceOver on iOS
-  and TalkBack on Android) has found no blockers, and every chart has a useful
+- **5:** As 3, and a keyboard and screen-reader test (in v3, the
+  screen-reader stand-in and keyboard-trap check; VoiceOver and TalkBack by a
+  person override it) has found no blockers, and every chart has a useful
   text summary, not only a table.
 
 ### D10. Honesty about limits and continuity
@@ -143,23 +186,55 @@ judged against those two.
 ### D11. Reader evidence
 
 - **0:** No reader testing.
-- **2:** Informal tests with a few people, recorded.
-- **3:** A recorded test with real people using the goal's 12-question task set,
-  with problems fixed.
-- **5:** The goal's five-person phone test passed: at least 48/60, each person
-  at least 9/12 within eight minutes, and all three critical questions right.
+- **2:** The informal stand-in (3 simulated newcomers) has run and its notes are
+  recorded, or informal tests with a few people are recorded.
+- **3:** A recorded run of the simulated phone test with the 12 questions, with
+  the problems it found fixed.
+- **5:** On the audited commit, the simulated phone test passed on the goal's
+  bar (at least 48 of 60, each reader at least 9 of 12 within 40 actions, all
+  three critical questions right), the new-question test passed (at least 80%)
+  and the prior-knowledge check passed (at least 20 of 60 higher with the
+  site). `python scripts/standins.py score AUDIT_DIR` applies these bars. A
+  real five-person phone test, if run, replaces this in either direction.
 
 ## Target
 
-The goal is met when all of these are true on the same live commit:
+The goal is **met (simulated)** when all of these are true on the same live
+commit:
 
 - Every dimension scores at least 4, and the total is at least 49 out of 55.
-- D11 scores 5 (the five-person phone test has passed).
-- Independent accuracy, impartiality, accessibility and reproducibility reviews
-  have no unresolved material findings.
+- D11 scores 5.
+- No stand-in has an open material finding (accuracy, impartiality,
+  accessibility or reader confusion that blocks an answer), and the build is
+  reproducible (`make verify` passes and the "Live site matches main" check is
+  green for that commit).
+
+It becomes **met** in the goal's own sense only when the real five-person phone
+test has passed and people outside the project have reviewed accuracy,
+impartiality and accessibility with no unresolved material findings.
+
+## What the stand-ins cannot prove
+
+A pass under v3 means the site is clear and correct to a careful AI reader. It
+does not prove that real newcomers understand it. Record these limits with
+every "met (simulated)" result:
+
+- **Claude is not a newcomer.** It reads every word, never gets bored, and
+  already knows a lot about UK tax and spending. The prior-knowledge check
+  removes some of this, not all.
+- **Five profiles are not five people.** Simulated readers from the same model
+  make the same mistakes together.
+- **Screenshots are not a phone in the hand.** They miss small text, thumb
+  reach, slow mobile data and real browser quirks.
+- **An accessibility tree is not VoiceOver or TalkBack.** Real screen readers
+  announce things differently and use gestures.
+- **AI reviewers are not independent people.** The fact-checker and critics
+  come from the same family of model that built the site and can share its
+  blind spots.
 
 ## Writing gaps
 
 After scoring, list the gaps that would raise the lowest scores most, each in
 one sentence, most valuable first. Each gap should be a piece of work one
-worker can finish.
+worker can finish. A gap from a reader stand-in is written from the readers'
+confusion notes only, never from their answers or the new questions.
