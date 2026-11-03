@@ -23,14 +23,14 @@ def housing_nations_block(facts, num, d):
     ni = n["ni"][-1]
     out = ["<h3 id='housing-nations'>Wales, Scotland and Northern Ireland</h3>"]
     out.append(f'<div class="answer"><p>Each nation runs and measures housing its own way, so these figures sit side by side but small gaps between them should not be read as real differences. '
-               f'At 31 March {b}, an estimated {num(f"house.nat.private.wales.{b}", "pct0")} of homes in Wales and {num(f"house.nat.private.scotland.{b}", "pct0")} in Scotland were rented privately, '
+               f'At 31 March {b}, an estimated {num(f"house.nat.private.wales.{b}", "pct0")} of homes in Wales and {num(f"house.nat.private.scotland.{b}", "pct0")} in Scotland were rented privately (Scotland’s figure also counts homes that come with a job or business), '
                f'compared with {num(f"house.reg.private.england.{b}", "pct0")} in England. '
                f'Northern Ireland publishes a survey of households instead: in {_sy(ni)}, {num(f"house.nat.private.ni.{ni}", "pct0")} of households there rented privately '
                f'and {num(f"house.nat.owner.ni.{ni}", "pct0")} owned their home.</p></div>')
     rows = [
         ["England", "Homes, including empty ones", f"31 March {b}", num(f"house.reg.owner.england.{b}", "pct"), num(f"house.reg.private.england.{b}", "pct"), num(f"house.reg.social.england.{b}", "pct"), "None: empty homes are counted in their tenure"],
         ["Wales", "Homes, including empty ones", f"31 March {b}", num(f"house.nat.owner.wales.{b}", "pct"), num(f"house.nat.private.wales.{b}", "pct"), num(f"house.nat.social.wales.{b}", "pct"), "None: empty homes are counted in their tenure"],
-        ["Scotland", "Homes, with empty private homes and second homes counted separately", f"31 March {b}", num(f"house.nat.owner.scotland.{b}", "pct"), num(f"house.nat.private.scotland.{b}", "pct"),
+        ["Scotland", "Homes, with empty private homes and second homes counted separately; private rent includes homes that come with a job or business", f"31 March {b}", num(f"house.nat.owner.scotland.{b}", "pct"), num(f"house.nat.private.scotland.{b}", "pct"),
          num(f"house.nat.social.scotland.{b}", "pct"), f"Empty private homes and second homes: {num(f'house.nat.vacant.scotland.{b}', 'pct')}"],
         ["Northern Ireland", "Households (a survey of about 1,700 households a year)", _sy(ni), num(f"house.nat.owner.ni.{ni}", "pct0"), num(f"house.nat.private.ni.{ni}", "pct0"), num(f"house.nat.social.ni.{ni}", "pct0"),
          "Rounded to whole numbers, so may not add to 100"],
@@ -49,7 +49,7 @@ def housing_nations_block(facts, num, d):
                              ["Year", "Wales (homes)", "Scotland (homes)", "Northern Ireland survey year", "Northern Ireland (households)"], rows))
     out.append('<p class="small">England’s figure for every year is in the regional table above. England, Wales and Scotland count homes (dwellings) at 31 March and split private homes between owners and renters using their own surveys. '
                'Wales counts shared ownership and other part-buy schemes as owner occupied; Wales’s figures for owners and private renters in 2024 and 2025 are provisional. '
-               'Scotland counts empty private homes and second homes on their own, so its owner and private-rent shares are slightly lower than they would be on England’s basis. '
+               'Scotland’s private-rent figure is homes “rented privately or with a job or business”, so it includes homes tied to a job. Scotland counts empty private homes and second homes on their own, so its owner and private-rent shares are slightly lower than they would be on England’s basis. '
                'Scotland’s publisher advises against comparing its 2020 and 2021 owner and private-rent figures with other years, because the pandemic disrupted the survey behind them. '
                'Northern Ireland’s figures come from the Family Resources Survey, which interviews about 1,700 to 2,100 households a year (fewer in 2020-21), so year-to-year moves of a point or two may be sampling noise; '
                'its table starts in 2012-13. Social rent adds homes or households renting from councils and from housing associations (our calculation for England and Scotland). '

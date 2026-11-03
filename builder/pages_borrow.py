@@ -64,7 +64,7 @@ def borrowing_page(facts, d, num, sources):
     ir_order, ir_place = _rank(facts, "borrow.intrev", g7, ny)
 
     body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
-    body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
+    body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}. Across all OECD countries, the UK's debt ({num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP in {dy}, on the OECD's measure) was {"above" if facts[f"borrow.debt.{UK}.{dy}"].value > facts[f"borrow.debt.{AVG}.{dy}"].value else "below"} the OECD average ({num(f"borrow.debt.{AVG}.{dy}", "pct")}).</p>
 <p>In {yy}, the latest full year, the market rate (yield) for new 10-year UK government borrowing averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
 </div>''')
 

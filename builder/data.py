@@ -202,7 +202,7 @@ def receipts(facts):
                            "calculated" if len(ids) > 1 else status(y), formula=" + ".join(ids) if len(ids) > 1 else "", inputs=ids if len(ids) > 1 else []))
             listed += v
         facts.add(Fact(f"rec.othertax.{y}", tx.value - listed, "£bn", y, "obr", tx.locator, "calculated",
-                       formula=f"{tx.id} − sum of the named taxes", inputs=[tx.id] + [f"rec.{k}.{y}" for k, _, _ in TAX_GROUPS]))
+                       formula=f"{tx.id} − (" + " + ".join(f"rec.{k}.{y}" for k, _, _ in TAX_GROUPS) + ")", inputs=[tx.id] + [f"rec.{k}.{y}" for k, _, _ in TAX_GROUPS]))
     out["groups"] = [(k, n) for k, n, _ in TAX_GROUPS]
     # Aggregates: borrowing, spending, debt (OBR basis)
     rows = [[c.value for c in r] for r in wb["Aggregates (£bn)"].iter_rows()]

@@ -262,10 +262,14 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
         text = f"From {show(f)} in {labels[f]}, " + ", ".join(parts) + "."
         if len(lg) == 2:  # keep the familiar wording for a single turn
             w0, e0 = lg[0][2], lg[0][1]
+            # "a low of" only when it is the lowest point of the stretch (or "a high of" the highest),
+            # so a dip that an earlier year went below is not called the low.
             high = "high" if w0 > 0 else "low"
+            top = vals[hi] if w0 > 0 else vals[lo]
+            mark = f"a {high} of " if vals[e0] == top else ""
             h = held(vals, e0, b)
             hold = f"stayed at {show(e0)} until {labels[h]}, " if h > e0 else ""
-            text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to a {high} of {show(e0)} in {labels[e0]}, "
+            text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
                     f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
     if extremes and len(pts) >= 3:
         extra = []
@@ -327,10 +331,17 @@ def overview(labels, series, a, b, show, group_breaks=None):
         # Ties on the figures shown are named together, not as one "largest".
         best = max(ms) if word == "rise" else min(ms)
         tied = [m for m in ms if m[0] == best[0]]
+        # Within a tie on the rounded figures, the unrounded data still have an order: put it first and say so.
+        raw = {si: series[si][1][l] - series[si][1][f] for _, si in tied}
+        tied.sort(key=lambda m: -abs(raw[m[1]]))
         names = [f"{series[si][0]} ({show(si, f)} to {show(si, l)})" for _, si in tied]
         if len(names) == 1:
             return f"the largest {word} was {names[0]}"
-        return f"the largest {word}s, equal on the figures shown, were " + ", ".join(names[:-1]) + " and " + names[-1]
+        text = f"the largest {word}s, equal on the figures shown, were " + ", ".join(names[:-1]) + " and " + names[-1]
+        lead = [abs(raw[si]) for _, si in tied]
+        if lead[0] > lead[1] + 1e-9:
+            text += f", and before rounding {series[tied[0][1]][0]}'s {word} was the larger"
+        return text
     if up and down:
         rise, fall = said(up, "rise"), said(down, "fall")
         text += f" {rise[:1].upper() + rise[1:]}; {fall}."
