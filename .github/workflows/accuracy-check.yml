@@ -3,7 +3,11 @@ name: Accuracy check (random sample)
 # it with the page. Runs when the sample or the checker changes, when a goal
 # audit's fact-checker adds its chosen figures, or by hand.
 on:
+  # Main only. This job commits results back to the branch with the default
+  # token, and that commit does not start CI, so on a PR branch the head would
+  # never get a check run and the PR could never auto-merge.
   push:
+    branches: [main]
     paths:
       - "docs/accuracy-check/sample.json"
       - "docs/standins/audits/*/fact-check/sample.json"
