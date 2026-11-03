@@ -573,6 +573,33 @@ def check_trend_titles():
     return n
 
 
+def check_axis_notes():
+    """Every line chart whose scale starts above zero says so under the chart."""
+    sys.path.insert(0, str(ROOT))
+    from builder.html import ZERO_NOTE
+    n = 0
+    for path in SITE.rglob("*.html"):
+        if path.parts[len(SITE.parts)] == "figures":
+            continue
+        html = path.read_text(encoding="utf-8")
+        for fig in re.finditer(r"<figure>(.*?)</figure>", html, re.S):
+            body = fig.group(1)
+            # the lowest y-axis tick is the first right-aligned label drawn in the chart
+            t = re.search(r'<text x="[\d.]+" y="[\d.]+" text-anchor="end">(-?[\d,.]+)</text>', body)
+            if not t:
+                continue
+            lo = float(t.group(1).replace(",", ""))
+            if lo <= 0:
+                continue
+            n += 1
+            cap = re.search(r"<figcaption>(.*?)</figcaption>", body, re.S)
+            want = ZERO_NOTE.format(t.group(1))
+            if not cap or want not in html_unescape(cap.group(1)):
+                title = re.search(r'<p class="ctitle"[^>]*>(.*?)</p>', body)
+                fail(f"{path.relative_to(SITE)}: chart “{html_unescape(title.group(1)) if title else '?'}” starts its scale at {t.group(1)} but its caption does not say “{want}”")
+    return n
+
+
 def check_explanations():
     sys.path.insert(0, str(ROOT))
     from builder.explain import EXPLANATIONS, missing_quotes, norm
@@ -595,6 +622,7 @@ def main():
     n_csv = check_downloads()
     n_findings = check_findings()
     n_trends = check_trend_titles()
+    n_axes = check_axis_notes()
     if "--axe" in sys.argv:
         dc = default_compare()
         if dc is None:
@@ -608,6 +636,7 @@ def main():
     print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
     print(f"Checked that {n_findings} chart headings state their finding in neutral words.")
     print(f"Checked that {n_trends} trend headings name every big rise and fall of their line.")
+    print(f"Checked that {n_axes} line charts whose scale starts above zero say so.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
     if problems:
         print(f"\n{len(problems)} problems:")

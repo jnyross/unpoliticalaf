@@ -42,6 +42,22 @@ class Charts(unittest.TestCase):
         self.assertIn("2.5", labels)
         self.assertIn("7.5", labels)
 
+    def test_caption_says_when_scale_starts_above_zero(self):
+        raised = line_chart("t", ["2018", "2019", "2020"], [("a", [61, 64, 66], "a")], "Per cent")
+        self.assertIn("Per cent. The scale starts at 60, not at zero.", raised)
+        self.assertNotIn("not at zero", line_chart("t", ["2018", "2019"], [("a", [61, 66], "a")], "Per cent", ymin=0))
+        panels = small_multiples("t", ["2018", "2019"], [("x", [600, 700]), ("y", [650, 720])], "£ a week", "pounds")
+        self.assertIn("The scale starts at 600, not at zero.", panels)
+
+    def test_2020_holidays_are_part_year_not_the_year_figure(self):
+        from builder import data
+        facts = Facts()
+        data.holidays(facts)
+        self.assertIsNone(facts["hol.world.holiday.2020"].value)
+        self.assertEqual(facts["hol.world.holiday.2020.part"].period, "January to mid-March 2020")
+        self.assertIsNotNone(facts["hol.world.all.2020"].value)  # the all-visits total covers the whole year
+        self.assertNotIn("hol.holshare.2020", facts)
+
     def test_room_counts_not_compared_across_definition_change(self):
         self.assertNotEqual(pages_life.rooms_basis(2010), pages_life.rooms_basis(2011))
         self.assertEqual(pages_life.rooms_basis(2011), pages_life.rooms_basis(2024))

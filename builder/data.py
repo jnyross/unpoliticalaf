@@ -871,6 +871,16 @@ def holidays(facts):
                 if key is None:
                     facts.add(Fact(fid, None, "thousand visits", str(y), "ott-2019to2023" if y <= 2023 else "ott-2024", "not published", "missing",
                                    note="No estimate in the retained source for this year."))
+                elif y in PART_YEAR_PURPOSES and pk != "all":
+                    # ONS's 2020 purpose rows come only from the passenger survey, which stopped on
+                    # 16 March 2020; the "All visits" total also uses other data for the rest of the year.
+                    # So the purpose figures cover only part of 2020 and are not shown as the year's figure.
+                    v, loc, sid, scale = cells[key]
+                    facts.add(Fact(fid, None, "thousand visits", str(y), sid, loc, "missing",
+                                   note=PART_YEAR_PURPOSES[y]))
+                    facts.add(Fact(f"{fid}.part", v, "thousand visits", PART_YEAR_PERIOD[y], sid, loc, "published",
+                                   note=f"{basis}; {key[0]}, {key[1]}; covers only {PART_YEAR_PERIOD[y]}: {PART_YEAR_PURPOSES[y]}"
+                                   + ("; source counts visits, shown here in thousands" if scale != 1 else ""), scale=scale))
                 else:
                     v, loc, sid, scale = cells[key]
                     facts.add(Fact(fid, v, "thousand visits", str(y), sid, loc, "published",
@@ -886,6 +896,12 @@ def holidays(facts):
                 facts.add(Fact(f"hol.europeshare.{y}", 100 * e.value / h.value, "% of holiday visits", str(y), e.source, e.locator, "calculated",
                                formula=f"100 × {e.id} ÷ {h.id}", inputs=[e.id, h.id]))
     return out
+
+
+# ONS's 2020 figures by purpose of visit come only from the International Passenger Survey,
+# which was suspended on 16 March 2020, so they cover only the weeks before that date.
+PART_YEAR_PURPOSES = {2020: "the survey stopped on 16 March 2020, so ONS's figures by purpose of visit cover only the weeks before that date, not the whole year"}
+PART_YEAR_PERIOD = {2020: "January to mid-March 2020"}
 
 
 # Countries: only single countries are ranked, never regions, groups or "other" rows

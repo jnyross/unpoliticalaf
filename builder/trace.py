@@ -22,6 +22,13 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "3 November 2026",
+        "pages": [("life/holidays.html", "Holidays since 1980"), ("life/index.html", "Everyday life")],
+        "was": "Holiday visits abroad in 2020 were given as 4.4 million, about 7 for every 100 residents, and drawn on the charts as the year’s low. ONS’s 2020 figures by purpose of visit come only from the passenger survey, which stopped on 16 March 2020, so they cover only January to mid-March, not the whole year.",
+        "now": "2020 has no holiday figure on the charts, in comparisons or per 100 residents. The holidays page says the survey stopped on 16 March and gives the 4.4 million as January to mid-March only. Line charts whose scale starts above zero now say so under the chart, and a build check fails if one does not.",
+        "pr": 126,
+    },
+    {
         "date": "2 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980"), ("spending.html", "Where does public money go?")],
         "was": "Two chart titles named only one turn in a line that turned more than once: “Holiday visits abroad by UK residents fell until 2020, then rose above the 2009 level” (they rose from 41.2 million in 2009 to 58.7 million in 2019 first), and “As a share of GDP, total public spending rose until 2020-21, then fell back part of the way” (it fell from 46.0% in 2009-10 to 39.1% in 2018-19 first).",
