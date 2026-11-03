@@ -1,0 +1,92 @@
+name: Auto-merge green PRs
+
+# John wants every green pull request merged without waiting for him.
+# This merges any open, non-draft PR from a claude/ branch once every check on
+# its latest commit has passed. It runs as soon as "Build and check" finishes,
+# and every 5 minutes as a backstop (GitHub may delay scheduled runs).
+#
+# It skips a PR that is a draft, has a "hold" or "do-not-merge" label, or whose
+# title starts with WIP. Add the "hold" label to stop a PR being merged.
+on:
+  workflow_run:
+    workflows: ["Build and check"]
+    types: [completed]
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+  statuses: read
+  actions: write
+
+concurrency:
+  group: auto-merge
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const OK = new Set(["success", "skipped", "neutral"]);
+            const HOLD = new Set(["hold", "do-not-merge"]);
+            let merged = 0;
+
+            const prs = await github.paginate(github.rest.pulls.list,
+              {owner, repo, state: "open", base: "main", per_page: 100});
+
+            for (const listed of prs) {
+              const n = listed.number;
+              const why = (msg) => core.info(`#${n}: ${msg}`);
+              if (!listed.head.ref.startsWith("claude/")) { why("not a claude/ branch, skipped"); continue; }
+              if (listed.head.repo?.full_name !== `${owner}/${repo}`) { why("from a fork, skipped"); continue; }
+              if (listed.draft) { why("draft, skipped"); continue; }
+              if (listed.labels.some(l => HOLD.has(l.name.toLowerCase()))) { why("on hold, skipped"); continue; }
+              if (/^\s*\[?wip\b/i.test(listed.title)) { why("WIP title, skipped"); continue; }
+
+              // mergeable is computed lazily; ask twice if GitHub hasn't worked it out yet.
+              let pr = (await github.rest.pulls.get({owner, repo, pull_number: n})).data;
+              if (pr.mergeable === null) {
+                await new Promise(r => setTimeout(r, 5000));
+                pr = (await github.rest.pulls.get({owner, repo, pull_number: n})).data;
+              }
+              if (pr.mergeable !== true) { why(`not mergeable (${pr.mergeable_state}), skipped`); continue; }
+              if (["dirty", "blocked", "behind", "draft"].includes(pr.mergeable_state)) {
+                why(`state ${pr.mergeable_state}, skipped`); continue;
+              }
+
+              const sha = pr.head.sha;
+              const runs = (await github.paginate(github.rest.checks.listForRef,
+                {owner, repo, ref: sha, per_page: 100}));
+              const status = (await github.rest.repos.getCombinedStatusForRef({owner, repo, ref: sha})).data;
+
+              if (!runs.some(r => r.name === "check")) { why("no 'check' run on the latest commit yet, skipped"); continue; }
+              const pending = runs.filter(r => r.status !== "completed");
+              if (pending.length) { why(`waiting for ${pending.map(r => r.name).join(", ")}`); continue; }
+              const failed = runs.filter(r => !OK.has(r.conclusion));
+              if (failed.length) { why(`failing: ${failed.map(r => `${r.name}=${r.conclusion}`).join(", ")}`); continue; }
+              if (status.statuses.length && status.state !== "success") { why(`commit status ${status.state}, skipped`); continue; }
+
+              try {
+                await github.rest.pulls.merge({owner, repo, pull_number: n, sha, merge_method: "squash",
+                  commit_title: `${pr.title} (#${n})`});
+                merged++;
+                core.notice(`Merged #${n}: ${pr.title}`);
+              } catch (e) {
+                why(`merge refused: ${e.message}`);
+              }
+            }
+
+            // Merges made with this workflow's token don't start push workflows,
+            // so start the live-site check by hand.
+            if (merged) {
+              await github.rest.actions.createWorkflowDispatch({owner, repo, workflow_id: "live.yml", ref: "main"});
+              core.info("Started 'Live site matches main'.");
+            }

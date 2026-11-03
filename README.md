@@ -53,6 +53,11 @@ locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 
+The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
+`claude/` branch once every check on its latest commit has passed. It runs when
+`Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
+title starting with WIP keeps a PR open.
+
 ## How it is built
 
 | Path | What it does |
