@@ -45,8 +45,7 @@ def missing_reason(facts, m, y):
         return f"these figures start in {first}"
     if end is not None and y > end:
         if key.startswith("house.lfs."):
-            return ("the Labour Force Survey tenure figures end in 2008; later years come from the English Housing Survey, "
-                    "which uses a different sample and survey years, so the two are not compared")
+            return "the Labour Force Survey tenure figures end in 2008, and later years come from a different survey (the English Housing Survey)"
         if key.startswith("hol.ips."):
             return "this series of visits abroad stops at 2023, because a new method started in 2024"
     if key.startswith("house.lfs.") and y < 1992:
@@ -59,10 +58,7 @@ def status(facts, m, a, b):
 
 
 def break_reason(m, a, b):
-    if m[7] is H.earn_method:
-        return (f"ONS changed the pay survey's methods in 2004 and 2006, and the coding of jobs in 2011 and 2021, so pay is only compared between years measured the same way "
-                f"({a}: {m[7](a)}; {b}: {m[7](b)}).")
-    return "The definition changed between these years."
+    return L.short_break(m[7], a, b)
 
 
 def not_compared(facts, m, a, b):
@@ -87,9 +83,8 @@ def nearest(facts, m, a, b):
     return None if best is None else best[1:]
 
 
-def _near_link(facts, m, a, b):
-    near = nearest(facts, m, a, b)
-    return f' Nearest comparable pair: <a href="{near[0]}-{near[1]}.html">{near[0]} and {near[1]}</a>.' if near else ""
+def _near_link(facts, num, m, a, b, topic):
+    return L.near_sentence(facts, num, _m8(m), nearest(facts, m, a, b), topic)
 
 
 def lead_sentence(facts, num, topic, a, b):
@@ -104,7 +99,7 @@ def lead_sentence(facts, num, topic, a, b):
         return (f"<p>{esc(subject)} {verb} {num(fa, m[4])} ({esc(m[6](a))}) {'and' if same else 'to'} {num(fb, m[4])} ({esc(m[6](b))})."
                 f"{'' if same else ' Change: ' + ch + '.'}</p>" + L._pair_bars(facts, num, _m8(m), a, b)
                 + L.long_run(facts, num, _m8(m), b, f"../{topic}.html"))
-    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>. {esc(not_compared(facts, m, a, b))}{_near_link(facts, m, a, b)}</p>"
+    return f"<p>{esc(subject.rstrip(','))}: <strong>not compared</strong>. {esc(not_compared(facts, m, a, b))}{_near_link(facts, num, m, a, b, topic)}</p>"
 
 
 def _rows(facts, num, topic, a, b):
@@ -150,7 +145,7 @@ def compare_page(facts, d, num, sources, a, b):
             # One of the years has no figure at all for this topic: say why once, not row by row.
             m = next(m for m in ms if m[0] == LEAD[key][0][0])
             body.append(f'<p class="missing">Not available: no {esc(title.lower())} figure for {gap}, because {esc(missing_reason(facts, m, gap))}.</p>')
-            link = _near_link(facts, m, a, b)
+            link = _near_link(facts, num, m, a, b, key)
             if link:
                 body.append(f'<p class="small">{link.strip()}</p>')
         else:
