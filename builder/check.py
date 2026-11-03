@@ -577,6 +577,31 @@ def turn_back_at_end(vals):
     return run, "peak" if way > 0 else "low"
 
 
+def crosses_break(title, lines, rows, breaks):
+    """Problems with a trend heading that reads across a marked definition break: it
+    describes years on both sides of one, or compares a figure with "the 2019 level"
+    when the line goes on past a break after 2019, so the reader is led to set figures
+    either side of the break against each other."""
+    out = []
+    labels = [str(r[0]).replace(" (calendar year)", "") for r in rows]
+    for part in lines.split():
+        si, a, b = (int(x) for x in part.split(":"))
+        vals = [_value(r[si + 1]) for r in rows]
+        for k in breaks:
+            if a < k < b and any(v is not None for v in vals[a:k]) and any(v is not None for v in vals[k:b]):
+                out.append(f"describes years either side of the break at {labels[k]}, so it compares figures that are not comparable")
+        last = max((i for i, v in enumerate(vals) if v is not None), default=-1)
+        for m in re.finditer(r"the (\S+) level", title):
+            if m.group(1) not in labels:
+                continue
+            ref = labels.index(m.group(1))
+            for k in breaks:
+                if ref < k <= last:
+                    out.append(f"compares with the {m.group(1)} level, but the line goes on past the break at {labels[k]}, "
+                               "so readers will set later figures against it; name the year the comparable run ends instead")
+    return sorted(set(out))
+
+
 def check_trend_titles():
     """A heading that says how a line moved names every big rise and fall: each peak or
     low that the line moves at least BIG_MOVE of its range into and back out of."""
@@ -597,6 +622,10 @@ def check_trend_titles():
                 fail(f"{rel}: trend heading “{title}” has no chart figures to check it against")
                 continue
             rows = json.loads(html_unescape(d.group(1)))["rows"]
+            br = re.search(r'data-breaks="([^"]*)"', t.group(0))
+            breaks = [int(x) for x in br.group(1).split()] if br else []
+            for msg in crosses_break(title, t.group(1), rows, breaks):
+                fail(f"{rel}: heading “{title}” {msg}")
             for part in t.group(1).split():
                 si, a, b = (int(x) for x in part.split(":"))
                 vals = [_value(r[si + 1]) for r in rows[a:b]]

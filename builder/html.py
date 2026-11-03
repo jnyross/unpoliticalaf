@@ -810,7 +810,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if forecast_from is not None:
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure>{_titles(heading, title, described)}{key}{svg}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
+    return f'<figure>{_titles(heading, title, described, breaks)}{key}{svg}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
 
 
 _SW_COUNT = [0]
@@ -1076,14 +1076,18 @@ def _described(rule, n, breaks, split_breaks, forecast_from):
     return F.lines_of(rule, stretches) if stretches else []
 
 
-def _titles(heading, title, described=()):
+def _titles(heading, title, described=(), breaks=()):
     """The finding as the chart's heading, with what the chart measures beneath it.
     described: (series, a, b) runs the heading describes, written as data-lines so the
-    build check can confirm the heading names every big rise and fall in them."""
+    build check can confirm the heading names every big rise and fall in them.
+    breaks: the chart's marked definition breaks, written as data-breaks so the check
+    can confirm the heading never compares figures either side of one."""
     if not heading:
         return f'<p class="ctitle" aria-hidden="true">{esc(title)}</p>'
     lines = " ".join(f"{si}:{a}:{b}" for si, a, b in described)
     attr = f' data-lines="{lines}"' if lines else ""
+    if lines and breaks:
+        attr += f' data-breaks="{" ".join(str(i) for i, _ in sorted(breaks))}"'
     return f'<p class="ctitle" aria-hidden="true"{attr}>{esc(heading)}</p><p class="csub" aria-hidden="true">{esc(title)}</p>'
 
 
