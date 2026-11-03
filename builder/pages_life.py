@@ -1113,14 +1113,13 @@ def _holidays(facts, d, num, sources):
     # to their section, as readers missed them inside a longer one (audit 11 gap 6).
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
 <p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
-<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad (not compared with {LAST}: different residents and survey method). There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
 </div>''')
 
     body.append(U.topic_line(num, "holidays", LAST))
-    body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
-                'Trips within Great Britain come from a separate survey, which changed method after 2019.</p>')
+    body.append('<p>These count trips, not people, so “per 100 residents” is an average, not a typical experience.</p>')
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
-                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents (new method). No figure for 2020: the survey stopped on 16 March, so there is no holiday count for the whole year", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
+                             "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents, new method. No 2020 figure: the survey stopped on 16 March", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
                              finding=F.trend("Holiday visits abroad by UK residents", which="first",
                                              after="; later years use a new method and are not compared")))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
@@ -1132,7 +1131,7 @@ def _holidays(facts, d, num, sources):
                               ["Year", "Survey", "Holiday trips", "Per 100 residents"],
                               [[str(y), gb_survey(y), num(f"hol.gb.holiday.{y}", "millions"), num(f"hol.gb.per100.{y}", "int")] if y in gb_years
                                else [str(y), "", '<span class="missing">not available</span>', ""] for y in YEARS if y >= 2019]))
-    body.append('<p class="small">2020 and 2021 have no full-year figures because of the pandemic. The survey changed method after 2019, so 2019 is not compared with later years. Earlier years used yet other methods and are not shown.</p>')
+    body.append('<p class="small">2020 and 2021 have no full-year figures (pandemic). The survey changed method after 2019, so 2019 is not compared with later years. Earlier years used other methods and are not shown.</p>')
     from .pages_life_extra import holiday_afford_block, holiday_spend_block
     body.extend(holiday_spend_block(facts, num, d))
     body.extend(holiday_afford_block(facts, num, d))
@@ -1143,9 +1142,8 @@ def _holidays(facts, d, num, sources):
     cyears = [2009, 2019, LAST]
     top = top_countries(facts, d, LAST, 10)
     body.append(details_table("Show the same countries in 2009 and 2019", "Visits abroad by main country visited (all purposes), millions",
-                              ["Country"] + [str(y) for y in cyears],
+                              ["Country"] + [f"{y} (new method)" if y == LAST and LAST >= 2024 else str(y) for y in cyears],
                               [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
-    body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
     return answer, body
 
 def _infant_limit(facts, num, d):
