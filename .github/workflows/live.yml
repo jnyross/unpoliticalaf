@@ -1,7 +1,8 @@
 name: Live site matches main
 
 # After every push to main, wait for Vercel to deploy it, then check that every
-# live file is exactly the build of that commit. Also runs daily, so a failed
+# live file is exactly the build of that commit. Auto-merge starts it by hand
+# after a merge, because its merges don't fire push workflows. Also runs daily, so a failed
 # or skipped production deploy shows up even when nothing new is pushed.
 on:
   push:
@@ -30,4 +31,4 @@ jobs:
       - run: make setup
       - run: make build
       - name: Compare the live site with this build
-        run: python3 scripts/check_live.py --wait ${{ github.event_name == 'push' && 1500 || 60 }}
+        run: python3 scripts/check_live.py --wait ${{ github.event_name == 'schedule' && 60 || 1500 }}
