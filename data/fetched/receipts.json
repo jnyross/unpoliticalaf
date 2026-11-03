@@ -583,14 +583,6 @@
   "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
   "retrieved": "2026-11-02T16:30:02Z"
  },
- "oecd-eo-g7": {
-  "url": "https://sdmx.oecd.org/public/rest/data/OECD.ECO.MAD,DSD_EO@DF_EO,/CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD.GGFLQ+GGFLMQ+GNINTQ+GGINTPQ+GGINTRQ+IRL+IRS+NLGQ+GDPV_ANNPCT+CPI_YTYPCT.A?startPeriod=1990&format=csvfilewithlabels",
-  "file": "oecd/economic-outlook-g7-annual.csv",
-  "bytes": 429042,
-  "content_type": "application/vnd.sdmx.data+csv; charset=utf-8; version=2; labels=name",
-  "sha256": "68224075455531c74d75ddfc7067cd93103b2f1e652c9ae09419c80ad46f667e",
-  "retrieved": "2026-11-03T09:32:32Z"
- },
  "oecd-finmark-irlt": {
   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels",
   "file": "oecd/finmark-long-term-rates-g7.csv",
