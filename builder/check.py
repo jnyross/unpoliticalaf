@@ -380,7 +380,8 @@ PHONE_SCREEN, CHART_SHOWN = 640, 200
 # in phone screens of 640px (goal audits 6 and 7: about 8 screens, Sources split).
 # DEFAULT_COMPARE stands for the comparison the life hub starts with, which moves with the data.
 DEFAULT_COMPARE = "default comparison"
-MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.5,
+# The life hub gets 8.8 like the topic pages: its "Jump to" bar (audit 9 gap 7) costs about a quarter of a screen.
+MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.8,
                "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
                "life/holidays.html": 8.8, "life/schools.html": 8.8, DEFAULT_COMPARE: 8.8,
                "methods.html": 9.5, "sources.html": 4}

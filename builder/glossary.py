@@ -7,7 +7,7 @@ figures, tables, charts and summaries are never changed.
 """
 import re
 
-from .html import page, esc
+from .html import page, esc, jump
 
 # (group id, group heading, terms). Each term: (anchor, name, explanation html, words that link to it).
 # Explanations describe how the word is used on this site and by the official sources it uses.
@@ -210,13 +210,24 @@ def glossary_page():
     body = ["<h1>What do these words mean?</h1>",
             '<div class="answer"><p class="lede">Plain-English explanations of the words used on this site.</p>'
             "<p>Words in the text of other pages that are explained here are underlined with dots. Tap one to jump to its explanation, then use your browser's back button to return.</p></div>"]
+    # A long page on a phone: let readers go straight to a group or a word.
+    every = sorted(((a, n) for _, _, terms in GROUPS for a, n, _, _ in terms), key=lambda t: _sort_key(t[1]))
+    az = ('<details class="az" id="a-to-z"><summary>Find a word: all ' + str(len(every)) + ' words, A to Z</summary><ul class="az">'
+          + "".join(f'<li><a href="#{a}">{esc(n)}</a></li>' for a, n in every) + "</ul></details>")
+    body.append(jump("Jump to", [(f"#{gid}", heading) for gid, heading, _ in GROUPS]).replace('<p>Jump to:</p>', az + '<p>Or jump to a group:</p>', 1))
     for gid, heading, terms in GROUPS:
         body.append(f'<h2 id="{gid}">{esc(heading)}</h2>\n<dl class="glossary">')
         for anchor, name, text, _ in terms:
             body.append(f'<dt id="{anchor}">{esc(name)}</dt>\n<dd>{text}</dd>')
         body.append("</dl>")
+        body.append('<p class="totop"><a href="#a-to-z">Find another word</a></p>')
     return page("glossary.html", "What do these words mean?", "\n".join(body),
-                "Plain-English explanations of the words used on Unpolitical: tax, spending, households, inflation and more.")
+                "Plain-English explanations of the words used on Unpolitical: tax, spending, households, inflation and more.", contents=False)
+
+
+def _sort_key(name):
+    """Alphabetical, ignoring quotation marks and case."""
+    return re.sub(r"^[^\w]+", "", name).lower()
 
 
 # ------------------------------------------------------------------ linking
