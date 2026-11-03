@@ -23,6 +23,14 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "3 November 2026",
+        "pages": [("life/schools.html", "Class sizes since 2006"), ("life/house-prices.html", "House prices and earnings"),
+                  ("household-tax.html", "How much household income goes on tax?"), ("index.html", "Home")],
+        "was": "The chart title for primary pupils in classes of more than 30 ended “then rose”, and its summary called January 2020 the high. The share was highest in January 2025 (13.3%) and fell to 12.6% in January 2026. Titles on house prices and on household taxes since 2018/19 also left out a fall in their latest years. The home page called January 2025 and April to June 2025 the latest figures for class sizes and work, when January 2026 and April to June 2026 were already published.",
+        "now": "The titles and summaries name the latest peak or low and the move after it, such as “rose until January 2025, then fell in January 2026”, and a build check fails if a title hides a turn like this. The home page shows the January 2026 class size and the April to June 2026 employment rate.",
+        "pr": 0,
+    },
+    {
+        "date": "3 November 2026",
         "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home")],
         "was": "The spending page said “State pensions alone cost £155bn”. That figure is HM Treasury’s “old age: of which pensions” line, which covers more than the State Pension. The home page also said every everyday-life topic had figures from 2008, but holidays start in 2009.",
         "now": "The £155bn is described as HM Treasury’s old age pensions line, which covers more than the State Pension alone. The home page, the life hub and the early-year pages say holidays start in 2009.",

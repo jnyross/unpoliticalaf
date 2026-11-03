@@ -16,6 +16,10 @@ missing year; stretches are the (start, end) runs that can be read together
 FLAT = 0.15
 # A peak or low counts when the line moves this share of its range beyond both ends.
 TURN = 0.3
+# A smaller move back at the end of a line still counts as its own last move when the
+# line ends at least this share of its range away from its last peak or low, so a
+# title never says "then rose" about a line whose latest figures fell.
+TAIL = 0.15
 # "in most years" means at least this share of year-to-year moves went the same way.
 MOST = 0.75
 
@@ -25,13 +29,31 @@ def measured(vals, a=0, b=None):
     return [i for i in range(a, b) if vals[i] is not None]
 
 
+def turn_back(vals, pts, way, size):
+    """The start of a move back at the end of a line: the latest peak (way 1) or low
+    (way -1) in pts that the line's last point is at least size back from, with no
+    later point beyond it. None when the line does not end that far back."""
+    last = pts[-1]
+    best = None
+    for n, k in enumerate(pts[:-1]):
+        if (vals[k] - vals[last]) * way >= size - 1e-9 and all((vals[k] - vals[j]) * way >= 0 for j in pts[n + 1:]):
+            best = n
+    if best is None:
+        return None
+    while best > 0 and (vals[pts[best - 1]] - vals[pts[best]]) * way >= 0:
+        best -= 1  # back up to the top (or bottom) of that peak (or low)
+    return pts[best]
+
+
 def legs(vals, a=0, b=None):
     """The big rises and falls of a line between a and b, in order, as (start, end, +1 or -1).
 
     A move counts when the line goes at least TURN of its whole range one way
     before turning back by at least as much. Smaller wiggles are folded into the
     move around them, and a small change after the last big move is folded into it,
-    so the last move ends at the last measured point. A peak or low held for several
+    so the last move ends at the last measured point, unless the line ends at least
+    TAIL of its range back from that move's peak or low: then that turn back is the
+    last move, however small, dated from the latest peak or low it starts from. A peak or low held for several
     years is dated by its first year.
     Returns [] for a line with no move that large.
     """
@@ -61,6 +83,9 @@ def legs(vals, a=0, b=None):
             way, ext = -way, i
     if way == 0:
         return []
+    back = turn_back(vals, [i for i in pts if i >= ext], way, TAIL * span)
+    if back is not None:
+        turns.append(back)
     turns.append(pts[-1])
     return [(s0, e0, 1 if vals[e0] > vals[s0] else -1) for s0, e0 in zip(turns, turns[1:])]
 
@@ -149,8 +174,12 @@ def phrase(labels, vals, a=0, b=None, short=False):
         return f"changed little between {f} and {l}"
     lg = s["legs"]
     words = [_until(vals, labels, s0, e0, w > 0) for s0, e0, w in lg[:-1]]
-    last = "then rose" if lg[-1][2] > 0 else "then fell"
-    if not short:
+    s0, e0, w = lg[-1]
+    last = "then rose" if w > 0 else "then fell"
+    if max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
+        # a smaller turn back at the end (see TAIL): say when, not how far
+        last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" between {labels[s0]} and {labels[e0]}"
+    elif not short:
         last += _back(vals, labels, lg, s)
     return ", ".join(words + [last])
 

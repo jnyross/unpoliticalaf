@@ -369,34 +369,36 @@ def headline(facts, num, topic, y, gb=True):
     return ""
 
 
-def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None):
+def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, years=None):
     """Where year y sits in the topic's key measure, as a small dot chart for every year.
 
     mkey picks another measure from MEAS; measure gives (label, fact-id function,
-    kind, group function) for one that is not in MEAS.
+    kind, group function) for one that is not in MEAS. years replaces the explorer's
+    years (for a figure newer than its range).
     """
+    years = years or YEARS
     if measure:
         label, fid, kind, group = measure
     else:
         mkey = mkey or KEY_MEASURES[topic][0]
         _, _, label, fid, kind, _, _, group = next(m for m in MEAS if m[0] == mkey)
-    pts = [(yr, facts[fid(yr)].value if fid(yr) in facts else None) for yr in YEARS]
+    pts = [(yr, facts[fid(yr)].value if fid(yr) in facts else None) for yr in years]
     have = [(yr, v) for yr, v in pts if v is not None]
     if len(have) < 2:
         return ""
     if y is None:
         y = have[-1][0]  # the latest year with a figure
-    breaks = bool(group) and len({group(yr) for yr in YEARS}) > 1
+    breaks = bool(group) and len({group(yr) for yr in years}) > 1
     yl = sy if topic == "housing" else str  # housing figures are for survey years, April to March
-    aria = f"Dot chart of {label.lower()} for each year from {yl(FIRST)} to {yl(LAST)}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
-    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(FIRST), yl(LAST)), kind=kind, point_label=yl)
+    aria = f"Dot chart of {label.lower()} for each year from {yl(years[0])} to {yl(years[-1])}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
+    svg = spark(pts, aria, highlight=y, group=group, axis=(yl(years[0]), yl(years[-1])), kind=kind, point_label=yl)
     if not caption:
         return svg
     lo = min(have, key=lambda t: t[1])
     hi = max(have, key=lambda t: t[1])
     this = (f"The dark dot is {yl(y)}: {num(fid(y), kind)}{F.place(have, y, group if breaks else None)}." if fid(y) in facts and facts[fid(y)].value is not None
             else f"There is no figure for {yl(y)}.")
-    cap = (f"<strong>{esc(label)}</strong>, {yl(FIRST)} to {yl(LAST)}. {this} "
+    cap = (f"<strong>{esc(label)}</strong>, {yl(years[0])} to {yl(years[-1])}. {this} "
            f"The scale runs from {num(fid(lo[0]), kind)} ({yl(lo[0])}) to {num(fid(hi[0]), kind)} ({yl(hi[0])}) and does not start at zero.")
     if len(have) < len(pts):
         cap += " Years with no figure have no dot."

@@ -65,8 +65,8 @@ class Charts(unittest.TestCase):
     def test_summary_reads_first_latest_high_low_and_gaps(self):
         svg = line_chart("t", ["2018", "2019", "2020", "2021", "2022"], [("a", [5.0, 9.0, None, 2.0, 4.0], "a")], "u", kind="pct")
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("Rose from 5.0% in 2018 to a high of 9.0% in 2019, then fell to 4.0% in 2022", text)
-        self.assertIn("lowest 2.0% (2021)", text)
+        # 2021 to 2022 is a turn back up at the end, so it is named rather than folded into the fall
+        self.assertIn("From 5.0% in 2018, rose to a high of 9.0% in 2019, fell to a low of 2.0% in 2021, then rose to 4.0% in 2022", text)
         self.assertIn("No figure for 2020", text)
 
     def test_summary_does_not_compare_across_a_definition_break(self):
@@ -146,6 +146,28 @@ class Findings(unittest.TestCase):
         self.assertEqual(big_turns([39.1, 39.1, 38.9, 39.0]), [])  # within 2%: changed little
         self.assertEqual(big_turns([5, 1, 1, 5]), [([1, 2], "low")])  # a low held two years is one turn
         self.assertEqual(big_turns([1, 2, 3, None, 5]), [])
+
+    def test_a_smaller_turn_back_at_the_end_is_named(self):
+        from builder.findings import phrase, sentence
+        # Primary pupils in classes of more than 30 (audit 10): highest since 2008 in
+        # January 2025, then 0.7 points lower in January 2026. The title must not end "then rose".
+        years = [f"January {y}" for y in range(2006, 2027)]
+        v = [15.2, 14.4, 13.5, 12.3, 11.7, 11.4, 11.4, 11.7, 12.5, 12.6, 12.8, 12.7, 12.8, 13.0, 13.06, 11.55, 11.86, 12.63, 13.14, 13.31, 12.65]
+        self.assertEqual(phrase(years, v), "fell until January 2011, rose until January 2020, fell in January 2021, "
+                                           "rose until January 2025, then fell in January 2026")
+        self.assertTrue(sentence(years, v, lambda i: str(v[i])).endswith("rose to a high of 13.31 in January 2025, then fell to 12.65 in January 2026."))
+        # A line that rose overall but ends well below its peak
+        self.assertEqual(phrase(self.L, [1, 2, 3, 6, 5.5, 5]), "rose until 2011, then fell between 2011 and 2013")
+        # A small dip at the end (under 15% of the range) is still folded into the rise
+        self.assertEqual(phrase(self.L, [1, 2, 3, 4, 6, 5.5]), "rose between 2008 and 2013")
+
+    def test_check_finds_a_title_that_hides_a_turn_at_the_end(self):
+        from builder.check import turn_back_at_end
+        v = [15.2, 14.4, 13.5, 12.3, 11.7, 11.4, 11.4, 11.7, 12.5, 12.6, 12.8, 12.7, 12.8, 13.0, 13.1, 11.5, 11.9, 12.6, 13.1, 13.3, 12.6]
+        self.assertEqual(turn_back_at_end(v), ([19], "peak"))
+        self.assertIsNone(turn_back_at_end(v[:-1]))  # ends at its high
+        self.assertIsNone(turn_back_at_end([1, 2, 3, 4, 6, 5.5]))  # too small to name
+        self.assertEqual(turn_back_at_end([5, 1, 1, 5, 5, 4]), ([3, 4], "peak"))  # a high held two years
 
     def test_missing_years_are_skipped_not_zero(self):
         from builder.findings import phrase
