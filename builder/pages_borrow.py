@@ -65,7 +65,7 @@ def borrowing_page(facts, d, num, sources):
 
     body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
-<p>In {yy}, the latest full year, the market interest rate (yield) on 10-year UK government bonds averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. This is the rate for new 10-year borrowing, not the average rate on all the debt the government already owes. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
+<p>In {yy}, the latest full year, the market rate (yield) for new 10-year UK government borrowing averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
 </div>''')
 
     # ---------------------------------------------------------------- debt
@@ -154,6 +154,7 @@ def borrowing_page(facts, d, num, sources):
     body.append(explain("borrowing-costs-2025", sources, heading="h3"))
 
     body.append(f'''<div class="limit"><p><strong>Limits.</strong></p><ul>
+<li>Yields are market rates for new borrowing, not the average rate on all the debt a government already owes.</li>
 <li>These figures compare governments; they do not show which level of debt or interest is right, or what the borrowing paid for.</li>
 <li>Different yields can reflect different central bank rates and inflation, not only how investors judge each government. Each country's central bank sets its own interest rate, except that France, Germany and Italy share the euro and the European Central Bank's rate. These figures do not show which factor explains the gap between any two countries.</li>
 <li>GDP-based shares change when GDP changes, as well as when debt or interest changes.</li>
