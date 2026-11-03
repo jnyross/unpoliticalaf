@@ -9,6 +9,10 @@ definition of success:
 > eight minutes, including all three critical questions about tax interpretation,
 > illustrative households and causation.
 
+Under rubric v3 this test is optional: simulated readers run the same 12
+questions ([../standins/README.md](../standins/README.md)). If people do take
+it, their result overrides the simulated one in either direction.
+
 | File | Who uses it |
 |---|---|
 | [consent.md](consent.md) | Each participant, before they start |
