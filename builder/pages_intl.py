@@ -7,20 +7,47 @@ UK, AVG = "GBR", "OECD_REP"
 
 
 def _ranked(facts, num, it, prefix, year, kind_word):
-    """Every OECD member with a figure, highest first, with the UK and the average marked."""
+    """Every OECD member with a figure, highest first, with the UK and the average marked.
+
+    Each country carries its rank (1 = highest). Returns the full list, a short list
+    (the three highest, the UK with the two countries either side, the average and
+    the three lowest, with a line saying how many are left out between), the count
+    of countries and how many are above the UK.
+    """
     areas = [a for a in it["members"] + [AVG] if facts.get(f"{prefix}.{a}.{year}") and facts[f"{prefix}.{a}.{year}"].value is not None]
     areas.sort(key=lambda a: -facts[f"{prefix}.{a}.{year}"].value)
+    countries = [a for a in areas if a != AVG]
     items = []
     for a in areas:
         name = esc(it["names"][a])
         if a == UK:
-            name = f"<strong>{name}</strong>"
+            name = f"<strong>{countries.index(a) + 1}. {name}</strong>"
         elif a == AVG:
             name = f"<strong>{name}</strong> (not a country)"
+        else:
+            name = f"{countries.index(a) + 1}. {name}"
         items.append((name, f"{prefix}.{a}.{year}", "" if a in (UK, AVG) else "alt"))
-    countries = [a for a in areas if a != AVG]
     higher = sum(1 for a in countries if facts[f"{prefix}.{a}.{year}"].value > facts[f"{prefix}.{UK}.{year}"].value)
-    return items, len(countries), higher
+    return items, _short(areas, countries, items), len(countries), higher
+
+
+def _short(areas, countries, items):
+    """The ranking cut to the rows a reader needs, with each gap counted, not hidden."""
+    n, u = len(countries), countries.index(UK)
+    keep = set(range(3)) | set(range(n - 3, n)) | set(range(u - 2, u + 3))
+    keep = {k for k in keep if 0 <= k < n}
+    out, skipped = [], 0
+    for item, a in zip(items, areas):
+        if a == AVG or countries.index(a) in keep:
+            if skipped:
+                out.append((f"{skipped} {'country' if skipped == 1 else 'countries'} not shown here", None, "gap"))
+                skipped = 0
+            out.append(item)
+        else:
+            skipped += 1
+    if skipped:
+        out.append((f"{skipped} {'country' if skipped == 1 else 'countries'} not shown here", None, "gap"))
+    return out
 
 
 def _missing(it, codes, year, why):
@@ -77,8 +104,8 @@ def _g7(facts, num, it, ty, sy):
                ("Taxes", f"The UK ranked {nth(tp)} of {len(t)} on tax in {ty}, where 1st is the highest.", g7_bars(t, "intl.tax", ty, "All taxes, including social security contributions,")),
                ("Spending", f"The UK ranked {nth(sp)} of {len(s)} on government spending in {sy}, where 1st is the highest.", g7_bars(s, "intl.spend", sy, "General government spending")),
            ]),
-           table(f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest.",
-                 ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
+           details_table("Show the G7 as a table", f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest.",
+                         ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
     if missing:
         out.append(f"<p class='small'>Not ranked: {esc(', '.join(missing))}, because the OECD had not published a figure.</p>")
     out.append("<p>Debt, borrowing costs and debt interest are on their own page: <a href='borrowing.html'>UK debt and borrowing costs beside the G7</a>.</p>")
@@ -88,8 +115,8 @@ def _g7(facts, num, it, ty, sy):
 def international_page(facts, d, num, sources):
     it = d["intl"]
     ty, sy, ky, fy = it["tax_year"], it["spend_year"], it["kind_year"], it["fn_year"]
-    tax_items, tax_n, tax_higher = _ranked(facts, num, it, "intl.tax", ty, "tax")
-    sp_items, sp_n, sp_higher = _ranked(facts, num, it, "intl.spend", sy, "spending")
+    tax_items, tax_short, tax_n, tax_higher = _ranked(facts, num, it, "intl.tax", ty, "tax")
+    sp_items, sp_short, sp_n, sp_higher = _ranked(facts, num, it, "intl.spend", sy, "spending")
     t_uk, t_avg = f"intl.tax.{UK}.{ty}", f"intl.tax.{AVG}.{ty}"
     s_uk, s_avg = f"intl.spend.{UK}.{sy}", f"intl.spend.{AVG}.{sy}"
 
@@ -98,10 +125,14 @@ def international_page(facts, d, num, sources):
     year_word = str(ty) if ty == sy else f"{ty} and {sy}"
     body.append(_g7(facts, num, it, ty, sy))
     body.append(f'<h2 id="countries">The UK beside each OECD country, {year_word}</h2>')
-    tax_bars = bars(tax_items, "pct", num, maxval=60,
-                    caption=f"All taxes, including social security contributions such as National Insurance, as a % of GDP, {ty}. The UK and the OECD average have darker bars.")
-    sp_bars = bars(sp_items, "pct", num, maxval=60,
-                   caption=f"Spending by general government (central, regional and local government and social security funds) as a % of GDP, {sy}. The UK and the OECD average have darker bars.")
+    short_note = "Shown: the three highest, the UK with the two countries either side of it, the OECD average and the three lowest. Rank 1 is the highest."
+    def ranking(short, full, n, caption):
+        return (bars(short, "pct", num, maxval=60, caption=f"{caption} {short_note}")
+                + f"<details><summary>Show all {n} countries</summary>{bars(full, 'pct', num, maxval=60)}</details>")
+    tax_bars = ranking(tax_short, tax_items, tax_n,
+                       f"All taxes, including social security contributions such as National Insurance, as a % of GDP, {ty}. The UK and the OECD average have darker bars.")
+    sp_bars = ranking(sp_short, sp_items, sp_n,
+                      f"Spending by general government (central, regional and local government and social security funds) as a % of GDP, {sy}. The UK and the OECD average have darker bars.")
     body.append(switch("Show", [
         ("Taxes", f"Of the {tax_n} countries with a figure for {ty}, {tax_higher} collected a larger share of GDP in tax than the UK.", tax_bars + _missing(it, it["tax_missing"], ty, "when this data was downloaded")),
         ("Spending", f"Of the {sp_n} countries with a figure for {sy}, {sp_higher} spent a larger share of GDP than the UK.", sp_bars + _missing(it, it["spend_missing"], sy, "when this data was downloaded")),

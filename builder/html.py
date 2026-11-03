@@ -25,8 +25,11 @@ dl.glossary{margin:0 0 24px}dl.glossary dt{font-weight:650;margin-top:18px;scrol
 a:focus-visible,summary:focus-visible,select:focus-visible,button:focus-visible,.tablewrap:focus-visible,nav.main ul:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
 header.site{border-bottom:1px solid var(--line);background:#fff}
-.backtop{display:flex;align-items:center;width:max-content;min-height:44px;margin:0 16px 12px auto;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none}.backtop:hover{border-color:var(--ink)}.js .backtop{position:fixed;right:12px;bottom:12px;z-index:5;margin:0;box-shadow:0 1px 4px rgba(0,0,0,.18);visibility:hidden}.js .backtop.show{visibility:visible}
+.backtop{display:flex;align-items:center;width:max-content;min-height:44px;margin:0 16px 12px auto;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none}.backtop:hover{border-color:var(--ink)}
 header.site .wrap{display:flex;flex-direction:column;padding-top:0;padding-bottom:0}
+.js .backtop{display:none}.quickbar{position:fixed;top:0;left:0;right:0;z-index:6;background:#fff;border-bottom:1px solid var(--line);visibility:hidden}.quickbar.show{visibility:visible}html.js{scroll-padding-top:60px}.js dl.glossary dt{scroll-margin-top:0}
+.quickbar>.wrap{display:flex;align-items:center;justify-content:space-between;padding-top:0;padding-bottom:0}.qmenu,.qmenu[open]{margin:0;border:0;padding:0}.qmenu>summary{min-height:44px;margin:2px 0;padding:0 16px;border:1px solid var(--ink2);color:var(--ink);border-radius:22px}.qmenu[open]>summary{background:var(--ink);color:#fff}
+.qmenu nav{position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);max-height:calc(100vh - 56px);overflow:auto}.qmenu ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.qmenu a{display:flex;align-items:center;min-height:44px;color:var(--ink);border-bottom:1px solid var(--line)}
 .brand{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-weight:750;letter-spacing:-.01em;color:var(--ink);text-decoration:none;font-size:1.1rem}
 .mark{display:inline-flex;align-items:flex-end;gap:2px;height:18px}.mark i{display:block;width:5px;background:var(--ink);border-radius:1px}.mark i:nth-child(1){height:10px}.mark i:nth-child(2){height:18px}.mark i:nth-child(3){height:14px;background:var(--bar2)}
 nav.main{margin:0 -16px;position:relative}
@@ -84,7 +87,7 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .toc a{display:flex;align-items:center;min-height:34px;text-decoration:none;line-height:1.25;padding:3px 0}
 .toc a::before{content:"↓";color:var(--muted);margin-right:10px;font-size:.85em}
 .bars{margin:14px 0 6px;padding:0;list-style:none}
-.bars li{margin:0 0 8px}
+.bars li{margin:0 0 8px}.bars li.gap{margin:2px 0 10px;padding:2px 0 2px 10px;border-left:3px dotted var(--line);color:var(--muted);font-size:.86rem}
 .bars .lab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.95rem;line-height:1.35}
 .bars .lab span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700}
 .bars .track{height:12px;background:var(--soft);margin-top:3px;border-radius:3px;overflow:hidden}
@@ -223,7 +226,7 @@ header.site .wrap{flex-direction:row;align-items:center;gap:16px}.brand{margin-r
 .trace .trace-h{font-weight:650;margin:0 0 6px}.trace .trace-v{margin:0 0 6px;color:var(--muted)}.trace dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0 0 4px}.trace dt{color:var(--muted)}.trace dd{margin:0;overflow-wrap:anywhere}.trace p{margin:4px 0 8px}
 .trace-x{min-height:44px;min-width:88px;font:inherit;color:var(--ink);border:1px solid var(--line);background:var(--soft);border-radius:8px;cursor:pointer}
 section.fig,section.correction{border-top:1px solid var(--line);padding:8px 0;scroll-margin-top:12px}section.fig:target{background:var(--warn)}section.fig h3{font-size:1rem;margin:4px 0;overflow-wrap:anywhere}section.fig dl,section.correction dl,dl.srcmeta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0}section.fig dt,section.correction dt,dl.srcmeta dt{color:var(--muted)}section.fig dd,section.correction dd,dl.srcmeta dd{margin:0;overflow-wrap:anywhere}
-@media print{nav.main,.skip,form.pick,.toc,.trace,nav.jump,.backtop{display:none}details{display:block;border:0;padding:0}}
+@media print{nav.main,.quickbar,.skip,form.pick,.toc,.trace,nav.jump,.backtop{display:none}details{display:block;border:0;padding:0}}
 """
 
 # The header menu leaves out Home (the site name beside it already links
@@ -603,11 +606,18 @@ def source_line(sources, ids, extra="", up=""):
 # ------------------------------------------------------------------ charts
 
 def bars(items, kind, num, maxval=None, caption=""):
-    """Horizontal bar list. items: (label, fact_id, style) ; style '' | 'alt' | 'fc'."""
-    vals = [num.facts[f].value for _, f, _ in items if num.facts[f].value is not None]
+    """Horizontal bar list. items: (label, fact_id, style) ; style '' | 'alt' | 'fc'.
+
+    An item with no fact id, (text, None, "gap"), is a plain line such as
+    "8 countries in between", for a shortened ranking.
+    """
+    vals = [num.facts[f].value for _, f, _ in items if f and num.facts[f].value is not None]
     top = maxval or max(vals)
     lis = []
     for label, fid, style in items:
+        if fid is None:
+            lis.append(f'<li class="gap">{label}</li>')
+            continue
         v = num.facts[fid].value
         w = 0 if v is None else max(0.0, 100 * v / top)
         lis.append(f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)}</span></div>'
@@ -1230,18 +1240,22 @@ var s=document.getElementById(a.getAttribute('href').slice(1)),i=s&&s.querySelec
 if(i){i.checked=true;}});});
 </script>"""
 
-# "Top and menu" takes a reader on a long page back to the menu in one tap. Without
-# JavaScript it is an ordinary link at the end of the page, so it never covers text.
-# With it, it floats in the corner only while the reader scrolls back up (a sign they
-# want to move on), more than a screen down. It hides again as soon as they scroll
-# down to read, and while the footer, which repeats the menu, is on screen.
+# Once the header and its menu have scrolled out of view, a slim bar stays at the top
+# of the screen with a "Menu" button that opens the menu in place, so a reader can move
+# on from anywhere without losing their place (goal audit 12). It is added only with
+# JavaScript; without it the menu is at the top and the foot of every page, and
+# "Top and menu" is an ordinary link before the footer.
 BACKTOP_JS = """<script>
-(function(){var r=document.documentElement,b=document.querySelector('.backtop');if(!b)return;r.classList.add('js');
-var last=window.scrollY,up=0,foot=false,ft=document.querySelector('footer');
-function set(){b.classList.toggle('show',up>40&&!foot&&window.scrollY>window.innerHeight);}
-window.addEventListener('scroll',function(){var y=window.scrollY,d=y-last;last=y;if(d>0)up=0;else up-=d;set();},{passive:true});
-if(ft&&'IntersectionObserver' in window)new IntersectionObserver(function(e){foot=e[0].isIntersecting;set();}).observe(ft);
-b.addEventListener('click',function(){up=0;set();});})();
+(function(){var r=document.documentElement,h=document.querySelector('header.site'),u=h&&h.querySelector('nav.main ul');if(!u)return;r.classList.add('js');
+var q=document.createElement('div');q.className='quickbar';q.innerHTML='<div class="wrap"><a class="brand" tabindex="-1"></a><details class="qmenu"><summary>Menu</summary><nav aria-label="Menu"><div class="wrap"><a class="qtop" href="#top">↑ Back to top</a></div></nav></details></div>';
+var b=h.querySelector('.brand'),a=q.querySelector('.brand');a.href=b.href;a.textContent=b.textContent;
+var w=q.querySelector('nav .wrap');w.insertBefore(u.cloneNode(true),w.firstChild);h.parentNode.insertBefore(q,h.nextSibling);
+var m=q.querySelector('details');
+function set(){var on=window.scrollY>h.offsetHeight;q.classList.toggle('show',on);if(!on&&m.open)m.open=false;}
+window.addEventListener('scroll',set,{passive:true});set();
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.open){m.open=false;m.querySelector('summary').focus();}});
+document.addEventListener('click',function(e){if(m.open&&!m.contains(e.target))m.open=false;});
+q.querySelector('a.qtop').addEventListener('click',function(){m.open=false;});})();
 </script>"""
 
 
