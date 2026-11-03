@@ -901,7 +901,13 @@ def _work(facts, d, num, sources):
     """(answer box, detail parts) for the work topic."""
     body = []
     y = LAST
-    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p></div>')
+    jb = d["life_extra"]["jobs"]
+    jf, jl = jb["years"][0], jb["years"][-1]
+    # Manufacturing's long fall is asked about often, so it sits in the answer box,
+    # not only in the jobs by industry section lower down (audit 11 gap 6).
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}</p>'
+              f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
+              f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
                              finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
@@ -1023,18 +1029,16 @@ def _hol_cell(facts, num, y):
     return num(f"hol.world.holiday.{y}", "millions")
 
 
-def _top_holiday_countries(facts, d, num, spain_first):
+def _top_holiday_countries(facts, d, num):
     """The most visited countries in the latest year. Holiday-only figures by country
     start in 2024; before that only visits for any purpose exist, and the text says so."""
     names = d["countries"]["names"]
     hl = top_countries(facts, d, LAST, 3, kind="holiday") if d["countries"].get("holiday", {}).get(LAST) else []
-    lead = ("Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country. "
-            if spain_first else "")
     if len(hl) == 3:
-        return (f'{lead}Counting holidays alone, in {LAST} {esc(names[hl[0]])} had {num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} holiday visits, '
-                f'then {esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).')
+        return (f'In {LAST} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} visits), '
+                f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).')
     tl = top_countries(facts, d, LAST, 3)
-    return (f'{lead}In {LAST} {esc(names[tl[0]])} had {num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose, then {esc(names[tl[1]])} '
+    return (f'In {LAST} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
             f'({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}); there are no holiday-only figures by country for that year.')
 
 
@@ -1044,9 +1048,13 @@ def _holidays(facts, d, num, sources):
     y = LAST
     names = d["countries"]["names"]
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
+    # The most visited countries get their own short paragraph near the top, with a link
+    # to their section, as readers missed them inside a longer one (audit 11 gap 6).
     answer = (f'''<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
-<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}. {_top_holiday_countries(facts, d, num, spain_first)}</p>
+<p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad. There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
 </div>''')
+
     body.append(U.topic_line(num, "holidays", LAST))
     body.append('<p>These count trips, not people: some take several holidays a year and many take none, so “per 100 residents” is an average, not a typical experience. '
                 'Trips within Great Britain come from a separate survey, which changed method after 2019.</p>')
@@ -1067,6 +1075,9 @@ def _holidays(facts, d, num, sources):
     from .pages_life_extra import holiday_afford_block, holiday_spend_block
     body.extend(holiday_spend_block(facts, num, d))
     body.extend(holiday_afford_block(facts, num, d))
+    body.append("<h3 id='holidays-countries'>Most visited countries</h3>" + FOLD)
+    if spain_first:
+        body.append("<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country.</p>")
     body.append(country_table(facts, num, d, LAST, 10))
     cyears = [2009, 2019, LAST]
     top = top_countries(facts, d, LAST, 10)
@@ -1075,6 +1086,14 @@ def _holidays(facts, d, num, sources):
                               [[esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears] for s in top]))
     body.append('<p class="small">2009 and 2019 are UK residents; 2025 is Great Britain residents measured with a new method, so the columns are shown side by side but not compared.</p>' if LAST >= 2024 else "")
     return answer, body
+
+def _infant_limit(facts, num, d):
+    """The legal limit on infant classes, near the top of the class sizes page (audit 11 gap 6)."""
+    iy = sorted(d["life_extra"]["classes"]["large"]["infant"])[-1]
+    return (f'<p>In England the law limits infant classes (reception to year 2) to 30 pupils, with some exceptions. '
+            f'In January {iy}, {num(f"school.large.infant.{iy}", "pct")} of infant pupils were in classes of more than 30. '
+            f'<a href="#schools-large">Classes of more than 30</a></p>')
+
 
 def _schools(facts, d, num, sources):
     """(answer box, detail parts) for the schools topic."""
@@ -1085,7 +1104,8 @@ def _schools(facts, d, num, sources):
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
               f'{num(f"school.secondary.{newer[-1]}", "dp1")}; only this page shows it, as the other topics have no {newer[-1]} figures yet.') if newer else ""
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p></div>')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p>'
+              f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
                              [(n, [_val(facts, f(y)) for y in sy], st) for n, f, st in (("Primary", lambda y: f"school.primary.{y}", "a"), ("Secondary", lambda y: f"school.secondary.{y}", "b"))],
@@ -1196,7 +1216,12 @@ def _hub_earnings(facts, d, num):
 
 
 # Shorter answers for the hub, where every topic shares one page.
-HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings}
+def _hub_work(facts, d, num):
+    """The work answer, shortened for the hub: manufacturing's share stays on the topic page."""
+    return f'<div class="answer"><p>{headline(facts, num, "work", LAST)}</p></div>'
+
+
+HUB_ANSWERS = {"holidays": _hub_holidays, "schools": _hub_schools, "earnings": _hub_earnings, "work": _hub_work}
 
 
 def life_index(facts, d, num, sources):
