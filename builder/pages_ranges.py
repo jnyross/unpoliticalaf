@@ -133,6 +133,20 @@ def default_spans(facts):
     return min(pairs, key=lambda p: (p[0][0] - p[1][0], p[0][0]))
 
 
+def pair_context(a, b):
+    """Where a suggested pair sits in the economic cycle, so a reader knows what the
+    two ends have in common. Said whatever the figures show."""
+    notes = []
+    if 2009 <= a <= 2012:
+        notes.append(f"{a} came soon after the 2008-09 recession, when the employment rate was near its lowest for these years")
+    if b == 2019:
+        notes.append(f"{b} was the last year before the pandemic")
+    if not notes:
+        return ""
+    return (" " + "; ".join(notes)[:1].upper() + "; ".join(notes)[1:] + ". So this pair shows that stretch, not the whole period: "
+            "each topic page has every year, and each comparison page gives the longer run.")
+
+
 DEFAULT_RULE = ("Suggested comparisons are chosen by a fixed rule, not by what the figures show: the earliest and latest years "
                 "in which all five topics have a comparable lead figure, leaving out 2020 and 2021, when the pandemic disrupted travel and several surveys.")
 

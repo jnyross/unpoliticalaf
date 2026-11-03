@@ -65,7 +65,7 @@ def borrowing_page(facts, d, num, sources):
 
     body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
-<p>In {b["yield_month_name"]}, the UK government paid {num(f"borrow.yieldm.{UK}.{ym}", "pct2")} a year to borrow for 10 years, the {_ordinal(ym_place)} of the G7.</p>
+<p>In {yy}, the latest full year, the UK government paid an average of {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year to borrow for 10 years, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
 </div>''')
 
     # ---------------------------------------------------------------- debt
@@ -94,12 +94,16 @@ def borrowing_page(facts, d, num, sources):
 
     # ---------------------------------------------------------------- yields
     body.append(f'<h2 id="yields">How much does each government pay to borrow?</h2>')
-    body.append("<p><strong>Borrowing costs depend on central bank interest rates, expected inflation, how much a government borrows and how much risk investors see. They are not, on their own, a verdict on how well a country is run.</strong> <a href='#why'>What affects borrowing costs</a>.</p>")
+    body.append("<p>The UK Debt Management Office and the Office for Budget Responsibility explain what moves borrowing costs: <a href='#why'>their words are quoted further down</a>.</p>")
     body.append(f'''<div class="answer"><p>Governments borrow by selling bonds: promises to repay on a set date, with interest every year until then. UK government bonds are called gilts. The <strong>yield</strong> on a 10-year bond is the yearly interest, as a percentage of what is paid for the bond, that a buyer would earn by keeping it for 10 years. When yields are higher, new borrowing costs the government more.</p>
-<p>In {b["yield_month_name"]}, the UK's 10-year yield was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7: {_higher_lower(ym_order, names)}. Over the whole of {yy}, it averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")}, the {_ordinal(yy_place)} of the G7.</p></div>''')
-    body.append(bars(_bar_items(facts, "borrow.yieldm", ym_order, ym, names), "pct2", num, maxval=6,
-                     caption=f"Yield on 10-year government bonds, average for {b['yield_month_name']}, per cent a year. The UK has a darker bar."))
-    body.append("<p>There is no single official measure of how easy it is for a government to borrow more. The yield investors ask for is the closest one: it is the price of borrowing, and it changes every day as bonds are bought and sold.</p>")
+<p>Over the whole of {yy}, the latest full year, the UK's 10-year yield averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")}, the {_ordinal(yy_place)} of the G7: {_higher_lower(yy_order, names)}. In the latest month, {b["yield_month_name"]}, it was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p></div>''')
+    body.append(switch("Period", [
+        (f"{yy} average", f"Yearly average for {yy}.", bars(_bar_items(facts, "borrow.yield", yy_order, yy, names), "pct2", num, maxval=6,
+                                                             caption=f"Yield on 10-year government bonds, average for {yy}, per cent a year. The UK has a darker bar.")),
+        (b["yield_month_name"], f"Average for {b['yield_month_name']}, the latest month.", bars(_bar_items(facts, "borrow.yieldm", ym_order, ym, names), "pct2", num, maxval=6,
+                                                             caption=f"Yield on 10-year government bonds, average for {b['yield_month_name']}, per cent a year. The UK has a darker bar.")),
+    ]))
+    body.append("<p>The yield is the price the government pays for new 10-year borrowing. It changes every day as bonds are bought and sold.</p>")
     body.append(FOLD)
     years = b["yield_years"]
     series = [(names[a], [facts[f"borrow.yield.{a}.{y}"].value if f"borrow.yield.{a}.{y}" in facts else None for y in years]) for a in g7]
@@ -140,12 +144,11 @@ def borrowing_page(facts, d, num, sources):
 
     # ---------------------------------------------------------------- what moves yields
     body.append('<h2 id="why">What affects what a government pays to borrow?</h2>')
-    body.append('''<div class="answer"><p>Several things together, which is why a yield is not a simple score for a government:</p><ul>
-<li>the central bank's interest rate (in the UK, the Bank of England's Bank Rate), and where investors expect it to go;</li>
-<li>expected inflation, and how uncertain it is, because inflation reduces what the repayments are worth;</li>
-<li>how much the government plans to borrow, and how much investors, such as pension funds, want to buy;</li>
-<li>how much risk investors see in lending for many years, including in the government's plans and the economy;</li>
-<li>interest rates around the world, because investors can lend to other governments instead.</li></ul></div>''')
+    body.append('''<div class="answer"><p>The UK Debt Management Office, which sells gilts for the government, names several things that move gilt prices, and so yields (quoted in full below):</p><ul>
+<li>what investors expect interest rates to be over future years;</li>
+<li>the level of inflation they expect, and how uncertain it is;</li>
+<li>how many gilts the government sells, and how strong investors' demand for them is.</li></ul>
+<p>The Office for Budget Responsibility, also quoted below, adds that borrowing costs have risen across the world, and points to public borrowing in the UK and other large, advanced economies.</p></div>''')
     body.append(explain("gilt-prices", sources, heading="h3"))
     body.append(explain("debt-interest-drivers", sources, heading="h3"))
     body.append(explain("borrowing-costs-2025", sources, heading="h3"))

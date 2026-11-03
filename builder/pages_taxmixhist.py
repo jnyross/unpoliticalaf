@@ -54,7 +54,8 @@ def tax_history_page(facts, d, num, sources):
                                # The share view reads every group's trend; the GDP view sums it up, to keep the page within its size limit
                                summary_note="" if v == "share" else "The second table below gives every group's share of GDP in every year.",
                                finding=F.within("Income Tax raised between {lo} and {hi} of " + {"share": "all receipts", "gdp": "GDP"}[v] + " in every year from {first} to {last}",
-                                                lambda x: f"{x:.0f}%", si=keys.index("income_tax"), which="last"))
+                                                # one decimal for GDP, where whole numbers would hide years below 9%
+                                                (lambda x: f"{x:.0f}%") if v == "share" else (lambda x: f"{x:.1f}%"), si=keys.index("income_tax"), which="last"))
 
     body.append(switch("Show each group as", [
         ("Share of all receipts", "Each group's share of everything the public sector received that year. A smaller share does not have to mean less money: other receipts may have grown faster.", chart("share")),
@@ -63,9 +64,16 @@ def tax_history_page(facts, d, num, sources):
     body.append("<p class='small'>Seven groups, one panel each, on the same scale. Amber dashed lines mark where a tax was replaced or the way receipts are counted changed, and the lines break there, so values either side are not compared:</p>")
     body.append("<ul class='small'>" + "".join(f"<li><strong>{y}:</strong> {esc(text)}</li>" for y, _, text in h["breaks"]) + "</ul>")
     body.append(f"<h2 id='mix'>What changed between {since} and {last}</h2>")
+    # "Everything else" mixes taxes and other receipts, so it is not ranked with the named
+    # taxes, but say so when it moved more than the largest named rise or fall.
+    other = facts[f"thist.sharechange.other.{since}.{last}"].value
+    other_note = ""
+    if other > facts[f"thist.sharechange.{rose[0]}.{since}.{last}"].value or other < facts[f"thist.sharechange.{fell[0]}.{since}.{last}"].value:
+        other_note = (f" These rankings cover the six named taxes. “Everything else”, which mixes smaller taxes with receipts that are not taxes, "
+                      f"{'rose' if other > 0 else 'fell'} more: {s('other', since)} to {s('other', last)}.")
     body.append(f'''<p>Income Tax raised {s("income_tax", since)} of all receipts in {since} and {s("income_tax", last)} in {last}. Over those years its share was lowest in {lo} ({s("income_tax", lo)}) and highest in {hi} ({s("income_tax", hi)}).
 The largest fall was in <strong>{esc(short(fell))}</strong>{ABOUT.get(fell[0], "")}: {s(fell[0], since)} of all receipts in {since}, {s(fell[0], last)} in {last}.
-The largest rise was in <strong>{esc(short(rose))}</strong>{ABOUT.get(rose[0], "")}: {s(rose[0], since)} to {s(rose[0], last)}.
+The largest rise was in <strong>{esc(short(rose))}</strong>{ABOUT.get(rose[0], "")}: {s(rose[0], since)} to {s(rose[0], last)}.{other_note}
 All public sector receipts were {num(f"thist.gdp.total.{since}", "pct")} of GDP in {since} and {num(f"thist.gdp.total.{last}", "pct")} in {last}.</p>''')
     body.append(f'''<p>Changes are not worked out back to {first}. Every group crosses the change in how receipts were counted in {since}, and some cross a tax being replaced, so a change over the whole period would partly come from those changes, not from what each tax raised. The chart and the tables give every year, and each stretch between breaks can be read on its own.</p>''')
     body.append('<p>These figures come from the OBR\'s historical database, which is older than the figures on the <a href="taxes.html">main taxes page</a> (from 1999-00) and groups some taxes differently, so the two are shown separately and not joined.</p>')

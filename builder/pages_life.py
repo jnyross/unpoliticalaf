@@ -55,6 +55,12 @@ def gb_survey(y):
 
 # Each measure: key, topic, label, fact-id function, display kind, change style ('pp', 'pct' or None),
 # period function, comparability-group function (None = one consistent series)
+def afford_basis(y):
+    """ONS: earnings for 1997 and 1998 in the house-price ratio are weekly pay scaled
+    up to a year, not directly comparable with later years."""
+    return "weekly pay scaled up" if y <= 1998 else "annual pay"
+
+
 def earn_basis(y):
     """ASHE periods measured the same way. ONS changed the survey's method in 2004 and
     2006, and the coding of jobs in 2011 (SOC2010) and 2021 (SOC2020), so pay is only
@@ -116,7 +122,7 @@ def measures(d):
         ("house.rent.privatecash", "housing", "Average private rent a week (cash, at the time)", lambda y: f"house.rent.private.{y}", "pounds", "pct", sy, None),
         ("house.rent.socialcash", "housing", "Average social rent a week (cash, at the time)", lambda y: f"house.rent.social.{y}", "pounds", "pct", sy, None),
         ("house.mortpaycash", "housing", "Average mortgage payment a week (cash, at the time)", lambda y: f"house.mortpay.{y}", "pounds", "pct", sy, None),
-        ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), None),
+        ("house.afford", "housing", "Median house price ÷ median full-time earnings, England and Wales", lambda y: f"afford.ratio.ew.{y}", "times2", "pct", lambda y: str(y), afford_basis),
         ("house.crowd.all", "housing", "Overcrowded households, all tenures", lambda y: f"house.crowd.all.{y}", "pct", "pp", crowd_period, None),
         ("house.crowd.owners", "housing", "Overcrowded: owner occupiers", lambda y: f"house.crowd.owners.{y}", "pct", "pp", crowd_period, None),
         ("house.crowd.social", "housing", "Overcrowded: social renters", lambda y: f"house.crowd.social.{y}", "pct", "pp", crowd_period, None),
@@ -514,6 +520,7 @@ BREAK_REASONS = {
     rooms_basis: "Rooms were counted differently from 2011-12, when utility rooms stopped being counted.",
     hol_basis: "Up to 2023 the survey counted UK residents; from 2024 it counts Great Britain residents with a new method. ONS says 2024 mixes the two methods (old for January to June, new for July to December), so 2024 is not compared with 2025 either.",
     gb_survey: "The Great Britain Tourism Survey changed its method after 2019, so 2019 is not compared with later years.",
+    afford_basis: "ONS says the earnings behind the 1997 and 1998 ratios are weekly pay scaled up to a year, which is not directly comparable with later years.",
     scot_survey: "Scotland’s statisticians advise against comparing its 2020 and 2021 private-renting figures with other years, because the pandemic disrupted the survey behind them.",
 }
 
@@ -540,6 +547,8 @@ def short_break(group, a, b):
         return f"The survey changed its method in 2024, so {a} and {b} were measured differently."
     if group is gb_survey:
         return f"The Great Britain Tourism Survey changed its method after 2019, so {a} and {b} were measured differently."
+    if group is afford_basis:
+        return f"The earnings behind the ratio for 1997 and 1998 are weekly pay scaled up to a year, so {a} and {b} were measured differently."
     if group is scot_survey:
         return "Scotland’s statisticians advise against comparing 2020 and 2021 with other years, because the pandemic disrupted the survey."
     return "The definition changed between these years."
@@ -698,7 +707,11 @@ def long_run(facts, num, m, b, href):
 
     gaps = (last - first + 1) - len(years)
     gap_text = f" {gaps} of these years have no figure." if gaps else ""
-    return (f'<p class="small cmp-long">Longer run, {esc(period(first))} to {esc(period(last))}, same method: '
+    how = "same method"
+    if m[1] == "work" and first < 1992:
+        # ONS joins these years into one series, but the survey itself changed (see LIMITS in pages_history).
+        how = "one ONS series (the Labour Force Survey began in 1973 and has run every quarter since 1992, so read the early years as the long-run pattern)"
+    return (f'<p class="small cmp-long">Longer run, {esc(period(first))} to {esc(period(last))}, {how}: '
             f'{change_cell(facts, num, fid(first), fid(last), style, kind)}. Lowest {at(min(vals.values()))}, '
             f'highest {at(max(vals.values()))}.{gap_text} <a href="{href}">Chart of every year</a></p>')
 
@@ -809,13 +822,13 @@ def compare_page(facts, d, num, sources, a, b):
 
 
 def compare_index(sources):
-    from .pages_ranges import DEFAULT_RULE
+    from .pages_ranges import DEFAULT_RULE, pair_context
     body = ["<h1>Compare two years</h1>", "<p>Pick two years to see work, pay, housing, holidays and class sizes side by side.</p>", compare_form("../")]
     if SUGGESTED:
         a, b = SUGGESTED[0]
         links = "".join(f'<li><a href="{x}-{y}.html">{x} compared with {y}</a></li>' for x, y in SUGGESTED)
         body.append(f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
-                    f'<p class="small">{esc(DEFAULT_RULE)} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
+                    f'<p class="small">{esc(DEFAULT_RULE)}{esc(pair_context(a, b))} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
                     'Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods), and housing figures for 2025 are not yet published.</p></div>')
     body.append('<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>')
     body.append("<h2 id='all'>All comparisons</h2><p>Every pair of years has its own page.</p>")
@@ -1128,8 +1141,9 @@ def life_index(facts, d, num, sources):
     body.append("<h2 id='compare'>Compare two years</h2>" + compare_form(""))
     body.append('<p class="small">Without JavaScript the button opens a list of every pair of years.</p>')
     a, b = DEFAULT_PAIR
+    from .pages_ranges import pair_context
     body.append(f'<p>Start with <a href="compare/{a}-{b}.html">{a} compared with {b}</a>, the earliest and latest years in which all five topics can be compared, '
-                'or <a href="compare/spans/index.html">compare two sets of years</a>.</p>')
+                f'or <a href="compare/spans/index.html">compare two sets of years</a>.{esc(pair_context(a, b))}</p>')
     body.append(f'<p class="small">All topics but holidays can be compared from {FIRST}. Earlier years, back to 1971, use only the figures measured then: '
                 'the employment rate from 1971, visits abroad from 1980, owning and renting in England from 1981, pay from 2002 and class sizes from 2006.</p>')
     return page("life/index.html", "Everyday life, year by year", "\n".join(body), f"How work, earnings, housing, holidays and class sizes have changed in the UK, year by year from {EARLY_YEARS[0]} to {LAST}.", scripts=COMPARE_JS + YEAR_JS, contents=False)

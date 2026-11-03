@@ -18,7 +18,7 @@ def spending_history_page(facts, d, num, sources):
     body = ["<h1>Spending by purpose over 100 years</h1>"]
     body.append(f'''<div class="answer"><p class="lede">The mix of public spending has changed a great deal over the last century.</p>
 <p>In {start}, defence cost {g("defence", start)} of GDP, more than health ({g("health", start)}), education ({g("education", start)}) or social security ({g("social", start)}).
-By {last}, social security was {g("social", last)} of GDP, health {g("health", last)}, education {g("education", last)} and defence {g("defence", last)}. Debt interest was {g("debt", last)}.</p>
+By {last}, social security was {g("social", last)} of GDP, health {g("health", last)}, education {g("education", last)} and defence {g("defence", last)}. Debt interest was {g("debt", last)} on this page's measure; HM Treasury's figure for interest paid out, on the <a href="spending.html">main spending page</a>, is larger ({num(f"spend.gdp.debt_interest.{last}", "pct")} of GDP in {last}).</p>
 <p>These figures come from a different source from the <a href="spending.html">main spending page</a> and use different groups, so the two are shown separately and not joined.</p></div>''')
 
     marks_all = [(H.GEOGRAPHY_CHANGE[0], "Ireland leaves the UK")] + H.SOURCE_CHANGES
@@ -58,6 +58,7 @@ By {last}, social security was {g("social", last)} of GDP, health {g("health", l
 <li>There are no figures for health and education before 1920-21 or from 1939-40 to 1947-48, and none for social security before 1955-56.</li>
 <li>The series stop at {last}. For 2022-23 the OBR estimated health, education, defence and social security by growing the previous year's figures, so that year is not shown.</li>
 <li>The database was last updated in July 2023, so later revisions are not included. Figures for 2020-21 and 2021-22 can differ from the current PESA figures on the main spending page.</li>
+<li>Debt interest is the OBR database's own “debt interest” series. It is a different and smaller measure than the interest paid out that HM Treasury reports on the main spending page ({num(f"spend.cash.debt_interest.{last}", "bn")}, {num(f"spend.gdp.debt_interest.{last}", "pct")} of GDP, in {last}, against {num(f"hist.cash.debt.{last}", "bn")} here). Compare debt interest within one page, not across the two.</li>
 <li>Amounts after inflation use the GDP deflator from the OBR's October 2026 databank (2025-26 = 100), which is a later release than the cash figures.</li>
 </ul></div>''')
     body.append(source_line(sources, ["obrhist", "obrhist-amounts", "obr-prices"], "Sheets “Spending (per cent of GDP)” and “Spending (£m)”, and the GDP deflator from sheet “Aggregates (£bn)” of the databank."))
