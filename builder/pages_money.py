@@ -336,8 +336,7 @@ def who_pays_page(facts, d, num, sources):
                          (num("etb.2a.alltax.q5", "pounds"), "a year in all taxes, on average, by the households of the highest-income fifth of people, 2023/24", False),
                          (num("etb.2a.alltax.q1", "pounds"), "a year in all taxes, on average, by the households of the lowest-income fifth of people, 2023/24", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers paid {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
-<p>Counting all taxes, including VAT and other taxes on spending, people in the highest-income fifth lived in households that paid about {num("etb.2a.alltax.q5", "pounds")} a year on average, and people in the lowest-income fifth in households that paid about {num("etb.2a.alltax.q1", "pounds")}.</p>
-<p><strong>Looking for how much of their income households pay in tax?</strong> The share of income, and how much of it is VAT and other taxes on spending, is on <a href="household-tax.html">Tax and income: how much of household income goes on tax</a>.</p>
+<p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
