@@ -1,0 +1,92 @@
+{
+ "reader": "R3-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 10,
+ "url": "life/1979.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "glossary.html#top",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "1979"
+    }
+   ],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [3] link: Spending",
+  "tap [8] link: Glossary",
+  "tap [12] link: Taxes and borrowing",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: ↑ Back to top",
+  "tap [7] link: Year by year",
+  "choose [17] Go to a year = 1979",
+  "tap [18] button: Go",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/R3",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "2008"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "2009"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+   "kind": "select",
+   "label": "Compare 1979 with"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > button:nth-of-type(1)",
+   "kind": "button",
+   "label": "Compare"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "1978 and 1979"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "1979 and 2025"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}

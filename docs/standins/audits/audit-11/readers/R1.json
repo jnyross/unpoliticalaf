@@ -1,0 +1,18 @@
+{"reader": "R1", "profile": "P8", "site_commit": "b08069b", "budget": 40,
+ "actions_used": 31, "new_actions_used": 37,
+ "without_site": {"1":"B","2":"C","3":"E","4":"E","5":"E","6":"E","7":"E","8":"C","9":"E","10":"E","11":"E","12":"E"},
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "new_without_site": {"1":"B","2":"E","3":"E","4":"A","5":"B","6":"E","7":"A","8":"C","9":"E","10":"E","11":"E","12":"E","13":"C","14":"E","15":"B","16":"E","17":"C","18":"A","19":"E","20":"A","21":"B","22":"A","23":"E","24":"E"},
+ "new_with_site": {"1":"B","2":"A","3":"C","4":"A","5":"B","6":"C","7":"A","8":"C","9":"C","10":"B","11":"A","12":"B","13":"C","14":"C","15":"B","16":"B","17":"C","18":"A","19":"C","20":"A","21":"B","22":"A","23":"C","24":"C"},
+ "johns_without_site": {"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+ "johns_with_site": {"J1.1":"A","J1.2":"D","J1.3":"C","J1.4":"C","J1.5":"A","J1.6":"B","J1.7":"C"},
+ "confusions": [
+  "The Spending page and the Taxes page both open with big numbers, but I had to keep scrolling to find which was the biggest and which was the answer.",
+  "To get back to the menu I had to press Back to top, otherwise there was no way to change page without scrolling all the way up.",
+  "The year-by-year page has lots of little buttons and years, and I could not tell where the 2015 against 2025 holiday comparison was, so I went by the note about the changed way of counting.",
+  "Household tax shares were shown as a percentage of gross income, but the question asked about disposable income, so I was not sure the answer matched.",
+  "Several pages say 'not the tax rate any one person pays' and 'made-up example' in small print, easy to skim past.",
+  "I never found the page that says which official source measures taxes and benefits, so I picked by the name that sounded right.",
+  "Charts that break at a changed definition, with dotted lines and no dot for 2020, made me stop and think what was missing.",
+  "The class size page had a lot of different figures (England, Scotland, primary, secondary) before the one I wanted."
+ ]}

@@ -1,0 +1,60 @@
+{
+ "reader": "I2",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 14,
+ "url": "life/housing.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 2720
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 1680
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "tap [3] link: How much household income goes on tax? 33.6% of gross household income, on avera",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "tap [14] link: Holidays",
+  "tap [2] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Housing",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/a11/shots/I2",
+ "items": [
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}
