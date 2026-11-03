@@ -197,6 +197,7 @@ FETCHED = {
     "explain-hmrc-spi-2324-commentary": ("HM Revenue and Customs", "Personal Incomes Statistics 2023 to 2024: commentary", "United Kingdom", "Individuals with some Income Tax liability"),
     "explain-hmrc-spi-quality": ("HM Revenue and Customs", "Background quality report: Personal Income Statistics release", "United Kingdom", "Not applicable (guidance)"),
     "explain-ons-etb-latest": ("Office for National Statistics", "Effects of taxes and benefits on UK household income: financial year ending 2024 (statistical bulletin)", "United Kingdom", "People in private households"),
+    "explain-ons-etb-fye2016": ("Office for National Statistics", "Effects of taxes and benefits on UK household income: financial year ending 2016 (statistical bulletin)", "United Kingdom", "Private households"),
     "explain-ons-2008-recession": ("Office for National Statistics", "The 2008 recession 10 years on (article)", "United Kingdom", "Whole economy"),
     "explain-ons-lmo-latest": ("Office for National Statistics", "Labour market overview, UK: October 2026 (statistical bulletin)", "United Kingdom", "People aged 16 and over"),
     "explain-ons-lfs-qmi": ("Office for National Statistics", "Labour Force Survey (LFS) quality and methodology information", "United Kingdom", "Not applicable (guidance)"),

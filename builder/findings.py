@@ -320,10 +320,13 @@ def gap(first_name, second_name, si=0, sj=1, which="all"):
     return rule
 
 
-def leader(template, which="all", skip=()):
+def leader(template, which="all", skip=(), close=None, close_template=None):
     """Names the highest line. template takes {name} and {span}: 'in every year from
     A to B' when the same line is highest throughout, or 'in B' (the latest year
-    with every group) when it changes. skip: group names left out, such as 'Everything else'."""
+    with every group) when it changes. skip: group names left out, such as 'Everything else'.
+    close: when the top line leads the next by less than this in the latest year, use
+    close_template instead (it also takes {second} and {lsecond}) and name both, so a
+    gap within survey noise is not called "the largest"."""
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         shown = [(si, v) for si, (nm, v) in enumerate(series) if nm not in skip]
@@ -338,6 +341,12 @@ def leader(template, which="all", skip=()):
         same = len(tops) > 1 and all(t == last_top for _, t in tops)
         span = f"in every year from {labels[tops[0][0]]} to {labels[last_i]}" if same else f"in {labels[last_i]}"
         name = series[last_top][0]
+        if close is not None:
+            ranked = sorted(((series[si][1][last_i], si) for si, _ in shown), reverse=True)
+            if ranked[0][0] - ranked[1][0] < close:
+                second = series[ranked[1][1]][0]
+                return close_template.format(name=name, lname=lower_first(name), second=second,
+                                             lsecond=lower_first(second), span=f"in {labels[last_i]}")
         return template.format(name=name, lname=lower_first(name), span=span)
     return rule
 

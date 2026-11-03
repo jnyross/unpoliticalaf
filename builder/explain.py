@@ -108,6 +108,15 @@ EXPLANATIONS = {
         title="Effects of taxes and benefits on UK household income: financial year ending 2024", date="25 September 2025",
         quote=["Income tax thresholds in FYE 2024 remained at 2022 levels, creating fiscal drag and so increasing households tax liabilities.",
                "Fiscal drag occurs when income tax thresholds are not adjusted in line with inflationary wage raises. As a result, taxpayers can be pushed into higher tax brackets, causing them to pay greater proportion of their income in taxes."]),
+    "indirect-spending": dict(
+        question="Why can indirect taxes be a large share of income for lower-income households?",
+        source="explain-ons-etb-fye2016", publisher="Office for National Statistics",
+        title="Effects of taxes and benefits on UK household income: financial year ending 2016", date="25 April 2017",
+        quote=["The amount of indirect tax (such as Value Added Tax (VAT) and duties on alcohol and fuel) each household pays is determined by their expenditure rather than their income.",
+               "Some households, particularly those at the lower end of the income distribution, may have annual expenditure that exceeds their annual income.",
+               "For these households, their expenditure is not being funded entirely from income.",
+               "During periods of low income, these households may maintain their standard of living by funding their expenditure from savings or borrowing, thereby adjusting their lifetime consumption."],
+        gloss="This is from the ONS bulletin for April 2015 to March 2016. The figures on this page are for 2023/24, and the latest ONS bulletin does not repeat this explanation."),
     "redistribution": dict(
         question="What do taxes and benefits do to the gap between richer and poorer households?",
         source="explain-ons-etb-latest", publisher="Office for National Statistics",

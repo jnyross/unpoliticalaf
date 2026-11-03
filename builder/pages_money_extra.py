@@ -292,7 +292,8 @@ For {ov}, the one year published both ways, the share for everyone was {num(oall
                                [(lab, vals(series_ids(q))) for q, lab in FIFTHS],
                                "Per cent of gross household income. Fifths of households to 2017/18; fifths of people from 2018/19.", "pct",
                                ids=[series_ids(q) for q, _ in FIFTHS], num=num, breaks=[(cut, "Method changed")], split_breaks=True,
-                               finding=F.leader("Taxes took the largest share of income for the {lname} {span}", which="last"),
+                               finding=F.leader("Taxes took the largest share of income for the {lname} {span}", which="last", close=1.0,
+                                                close_template="Taxes took a similar share of income for the {lname} and the {lsecond} {span}, less than one percentage point apart"),
                                ymin=0, point_labels=pl))
     # every year, both methods, including the overlap year on the people method
     rows = []
