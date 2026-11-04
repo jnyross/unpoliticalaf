@@ -23,6 +23,14 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "4 November 2026",
+        "pages": [("methods.html", "Methods"), ("spending.html", "Where does public money go?"), ("spending-areas.html", "Spending on each area, every year"),
+                  ("international.html", "How do UK taxes and spending compare with other countries?")],
+        "was": "The methods page said poverty and hardship “are not measured here”, though official low-income and inequality series exist. The spending page gave total spending growth without a per-person figure, so it overstated growth as the population rose. The spending-by-area summary named the largest rise by pounds, which always favours the biggest area. The first G7 chart showed four of the seven countries, with no stated rule for choosing them.",
+        "now": "The methods page says those series exist and that the site does not show them yet. The spending page gives per-person spending after inflation beside the total, and its year-by-year table has a per-person column. The spending-by-area summary ranks rises in per cent. The first G7 chart shows every G7 country that has a figure for the year.",
+        "pr": 176,
+    },
+    {
+        "date": "4 November 2026",
         "pages": [("index.html", "Home"), ("life/earnings.html", "Earnings after inflation"), ("life/holidays.html", "Holidays since 1980"),
                   ("who-pays.html", "Who pays?")],
         "was": "The earnings pages called April 2025 pay provisional, although ONS's 2026 release kept it unchanged and published April 2026 pay, which the site did not mention. The home tile and the holidays chart said the visits series ends in 2023 with no reason given, and the holiday chart title said visits rose until 2019 without naming the dips before it. The 2025 holiday source record said United Kingdom residents, although the figures used from it are for Great Britain residents. The direct-taxes note left out student loan repayments.",
