@@ -78,12 +78,17 @@ def borrowing_page(facts, d, num, sources):
     # chart so the first chart stays within two phone screens.
     above = "above" if facts[f"borrow.debt.{UK}.{dy}"].value > facts[f"borrow.debt.{AVG}.{dy}"].value else "below"
     body.append(switch("Measure", [
-        ("IMF", f"IMF figures, {iy}.", imf_bars),
+        ("IMF", f"IMF figures, {iy}. The IMF counts government bonds at face value: the amount the government has borrowed and must repay.", imf_bars),
         ("OECD", f"On the OECD's measure the UK was also the {_ordinal(oecd_place)} of the G7, at {num(f'borrow.debt.{UK}.{dy}', 'pct')} of GDP in {dy}. The OECD average was {num(f'borrow.debt.{AVG}.{dy}', 'pct')}.", oecd_bars),
     ]))
     body.append(f'<p>Among all OECD countries, UK debt was {above} the OECD average: {num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP against {num(f"borrow.debt.{AVG}.{dy}", "pct")} in {dy}, on the OECD\'s measure.</p>')
     body.append("<p>The G7 is the group of seven large, high-income economies: Canada, France, Germany, Italy, Japan, the United Kingdom and the United States. Debt and interest are compared as a share of GDP, the value of everything a country produces in a year, so that countries of different sizes can be compared.</p>")
-    body.append(f'''<p class="small">The two organisations measure debt differently. The OECD follows the international system of national accounts, which counts government bonds at their market price. When interest rates rise, the market price of existing bonds falls, and so does debt measured this way. This is one reason the OECD's figure for the UK fell from {num(f"borrow.debt.{UK}.2021", "pct")} of GDP in 2021 to {num(f"borrow.debt.{UK}.2022", "pct")} in 2022, while the IMF's fell from {num(f"borrow.imf.{UK}.2021", "pct")} to {num(f"borrow.imf.{UK}.2022", "pct")}.</p>''')
+    body.append(f'''<p><strong>Which debt measure to read.</strong> Both measures are published by international organisations, and both are shown here, so you can see the difference. Neither is the only correct figure: they value the same debt in different ways.</p>
+<ul>
+<li><strong>IMF (face value):</strong> the amount governments owe and must repay. Read this to see how much debt each government has borrowed.</li>
+<li><strong>OECD (market value):</strong> the OECD follows the international system of national accounts, which counts government bonds at their market price. Read this to see debt as those accounts value it, at the prices bonds trade at.</li>
+</ul>
+<p class="small">The market price of existing bonds falls when interest rates rise, so OECD debt can fall without any debt being repaid. This is one reason the OECD's figure for the UK went from {num(f"borrow.debt.{UK}.2021", "pct")} of GDP in 2021 to {num(f"borrow.debt.{UK}.2022", "pct")} in 2022, while the IMF's went from {num(f"borrow.imf.{UK}.2021", "pct")} to {num(f"borrow.imf.{UK}.2022", "pct")}.</p>''')
     body.append(FOLD)
     years = b["imf_years"]
     series = [(names[a], [facts[f"borrow.imf.{a}.{y}"].value if f"borrow.imf.{a}.{y}" in facts else None for y in years]) for a in g7]
