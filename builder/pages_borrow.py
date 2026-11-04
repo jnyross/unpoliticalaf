@@ -78,7 +78,7 @@ def borrowing_page(facts, d, num, sources):
     # chart so the first chart stays within two phone screens.
     above = "above" if facts[f"borrow.debt.{UK}.{dy}"].value > facts[f"borrow.debt.{AVG}.{dy}"].value else "below"
     body.append(switch("Measure", [
-        ("IMF", f"IMF figures, {iy}. The IMF counts government bonds at face value: the amount the government has borrowed and must repay.", imf_bars),
+        ("IMF", f"IMF figures, {iy}.", imf_bars),
         ("OECD", f"On the OECD's measure the UK was also the {_ordinal(oecd_place)} of the G7, at {num(f'borrow.debt.{UK}.{dy}', 'pct')} of GDP in {dy}. The OECD average was {num(f'borrow.debt.{AVG}.{dy}', 'pct')}.", oecd_bars),
     ]))
     body.append(f'<p>Among all OECD countries, UK debt was {above} the OECD average: {num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP against {num(f"borrow.debt.{AVG}.{dy}", "pct")} in {dy}, on the OECD\'s measure.</p>')
