@@ -122,6 +122,11 @@
    "file": "gov/national-insurance-rates.html"
   },
   {
+   "id": "gov-self-employed-ni",
+   "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+   "file": "gov/self-employed-national-insurance-rates.html"
+  },
+  {
    "id": "dfe-spc-2015-page",
    "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
    "file": "dfe/spc-2015-page.html"

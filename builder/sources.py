@@ -196,6 +196,7 @@ FETCHED = {
     "hmrc-spi-2324-tables": ("HM Revenue and Customs", "Personal Incomes Statistics, tax year 2023 to 2024: collated tables 3.1 to 3.11 (Survey of Personal Incomes)", "United Kingdom", "Individuals with some Income Tax liability (taxpayers only)"),
     "gov-income-tax-rates": ("HM Revenue and Customs (GOV.UK)", "Income Tax rates and Personal Allowances", "England, Wales and Northern Ireland", "Individuals"),
     "gov-ni-rates": ("HM Revenue and Customs (GOV.UK)", "National Insurance rates and categories", "United Kingdom", "Employees"),
+    "gov-self-employed-ni": ("HM Revenue and Customs (GOV.UK)", "Self-employed National Insurance rates (Class 2 and Class 4)", "United Kingdom", "Self-employed people with profits from self-employment"),
     # Explanatory publications quoted word for word on the pages (see builder/explain.py).
     "explain-ons-psf-2021-03": ("Office for National Statistics", "Public sector finances, UK: March 2021 (statistical bulletin)", "United Kingdom", "Whole public sector"),
     "explain-ons-psf-2023-03": ("Office for National Statistics", "Public sector finances, UK: March 2023 (statistical bulletin)", "United Kingdom", "Whole public sector"),
