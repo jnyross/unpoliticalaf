@@ -42,6 +42,7 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make benchmark # time a fresh build, save JSON and enforce the 90-second budget
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -49,6 +50,39 @@ Vercel: install `make setup`, build `make build`, output directory `site`, all s
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+### Build performance
+
+Every pull request and push to `main` times `make build` separately from setup,
+source checks and tests. `make benchmark` writes `.cache/build-performance.json`
+with wall-clock seconds, the result, Python/platform and CI commit/run identity.
+CI adds the result to the run summary and retains the JSON as a
+`build-performance-<run>-<attempt>` artifact for 30 days, even on build failure.
+Compare artifacts from the same runner/Python version to track changes over time.
+
+The initial 90-second budget is roughly twice the 44-second build observed in
+[CI run 41928181052](https://github.com/jnyross/unpoliticalaf/actions/runs/41928181052)
+on 4 November 2026. A slower build fails the check, as does any failed build.
+For a different local machine, run
+`.venv/bin/python scripts/build_performance.py --max-seconds 120`.
+Investigate regressions with
+`.venv/bin/python -m cProfile -o .cache/build.prof -m builder.build` and
+`.venv/bin/python -m pstats .cache/build.prof` before changing the CI budget;
+record the measurement and reason in the pull request.
+
+Both CI jobs cache pip downloads keyed by their requirement files. They still
+install the pinned dependencies and rebuild from retained sources on every run.
+Glossary linking also reuses regex matches for repeated prose in a bounded
+4,096-entry, in-process cache. It retains only immutable text spans, not each
+page's link limits, already-linked terms or relative paths.
+An initial before/after run on the same 2-vCPU Boat sandbox (Python 3.12, warm
+filesystem, fresh Python processes) reduced build time from 36.58s to 24.69s
+(32.5%). All 7,509 hashed output files were identical. This is a single-run
+comparison, not a guarantee for other runners.
+Generated pages and parsed source data are deliberately not cached, so stale
+financial figures cannot bypass source validation. The measured CI build is
+followed by the same independent checks and tests as `make verify`, without a
+second build. Timings stay outside `site/` to preserve deterministic output.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds

@@ -6,6 +6,7 @@ a newcomer can look a word up where they meet it. Headings, existing links,
 figures, tables, charts and summaries are never changed.
 """
 import re
+from functools import lru_cache
 
 from .html import page, esc, jump
 
@@ -315,15 +316,31 @@ def link_terms(html, path, limit=12):
     return head + "".join(out) + tail
 
 
+@lru_cache(maxsize=4096)
+def _term_matches(text):
+    """Reuse regex scans of repeated prose, never page-specific link state.
+
+    This cache lasts only for the current Python process and holds immutable
+    spans. Keep it bounded so a build with mostly unique text cannot grow it
+    without limit.
+    """
+    matches = []
+    for anchor, pat in PATTERNS:
+        spans = tuple(m.span() for m in pat.finditer(text))
+        if spans:
+            matches.append((anchor, spans))
+    return tuple(matches)
+
+
 def _link_text(text, done, up, limit):
     taken = []  # (start, end, anchor) already linked in this piece of text
-    for anchor, pat in PATTERNS:
+    for anchor, spans in _term_matches(text):
         if anchor in done or len(done) >= limit:
             continue
-        for m in pat.finditer(text):
-            if any(m.start() < e and s < m.end() for s, e, _ in taken):
+        for start, end in spans:
+            if any(start < e and s < end for s, e, _ in taken):
                 continue
-            taken.append((m.start(), m.end(), anchor))
+            taken.append((start, end, anchor))
             done.add(anchor)
             break
     if not taken:
