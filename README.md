@@ -37,11 +37,13 @@ so the core answers and comparisons work without JavaScript.
 Python 3.10 or later.
 
 ```
-make setup     # create .venv and install openpyxl
+make setup     # create .venv and install build dependencies
+make setup-test # add the pinned coverage tool, without browser dependencies
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make verify-coverage # the same checks, measured with the CI coverage gate
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -49,6 +51,21 @@ Vercel: install `make setup`, build `make build`, output directory `site`, all s
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+### Coverage gate
+
+After `make setup-test`, run `make verify-coverage` (or `make coverage`) to
+reproduce CI's coverage check. It measures the build, independent source/page
+checks and all unit tests together, then fails if coverage.py's combined
+statement-and-branch coverage is below **80%**. `.coveragerc` includes all Python
+files in `builder/` and `scripts/`, including files that never run; tests,
+dependencies and generated site files do not inflate the result.
+
+Every run starts with fresh coverage data. The terminal report lists uncovered
+lines and branches so contributors can add meaningful tests rather than lower
+the threshold. `make test` and `make verify` remain available without coverage
+tooling; pull requests and pushes to `main` must pass `make verify-coverage`.
+Production `make setup` does not install test or browser tools.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds

@@ -16,8 +16,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: make setup
-      - run: make verify
+      - run: make setup-test
+      - name: Build, check, and enforce test coverage
+        run: make verify-coverage
 
   accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
