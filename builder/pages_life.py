@@ -1033,6 +1033,13 @@ def earn_before_after(num, a, b, ch, cls="ba"):
             f'<p><span class="ba-y">April {b}</span><span class="ba-v">{num(f"earn.real.ft.{b}", "pounds")}</span></p></div>')
 
 
+def _change_words(facts, num, a, b):
+    """Plain words and the tagged change for real pay between two years inside one stretch."""
+    ch = 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)
+    word = "was about the same" if abs(ch) < 2 else ("rose" if ch > 0 else "fell")
+    return f"{word} ({change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')})"
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
@@ -1052,6 +1059,10 @@ def _earnings(facts, d, num, sources):
                              "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
                              breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
                              finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
+    body.append(f'<p>The chart breaks in 2011, so the years either side are not joined into one change. '
+                f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}. '
+                f'From April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
+                f'This page therefore gives no single change from 2008 to 2014.</p>')
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
