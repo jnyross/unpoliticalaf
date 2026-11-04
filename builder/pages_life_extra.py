@@ -91,7 +91,7 @@ def _afford_answer(facts, num, d):
     lo = min(regions, key=lambda k: _v(facts, f"afford.ratio.{k}.{last}"))
     peak_txt = (f' The highest ratio was {num(f"afford.ratio.ew.{peak}", "times2")} in {peak}.' if peak != last else " That was the highest since the series began.")
     return (f'<div class="answer"><p>In the year to September {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
-            f'and the middle full-time employee working there earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax (earnings for April {last}). '
+            f'and the middle full-time employee working there earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
             f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}, the first year measured the same way.{peak_txt} '
             f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.</p></div>')
 

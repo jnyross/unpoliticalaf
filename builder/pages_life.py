@@ -1522,11 +1522,9 @@ def housing_costs_block(facts, num, d):
     ys = [y for y in YEARS if f"house.rent.private.{y}" in facts]
     out = ["<h3 id='housing-costs'>What housing costs</h3>"]
     out.append(f'<div class="answer"><p>In {b}, households renting privately in England paid {num(f"house.rent.private.{base}", "pounds")} a week on average, '
-               f'social renters {num(f"house.rent.social.{base}", "pounds")} and households with a mortgage {num(f"house.mortpay.{base}", "pounds")}. '
+               f'social renters {num(f"house.rent.social.{base}", "pounds")} and households with a mortgage {num(f"house.mortpay.{base}", "pounds")} '
                f'After inflation, in {b} prices, the {sy(FIRST)} figures were {num(f"house.real.rent.private.{FIRST}", "pounds")}, '
-               f'{num(f"house.real.rent.social.{FIRST}", "pounds")} and {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p>'
-               '<p class="small">The mortgage payment is ONS’s mean for all mortgage types, the row that both the older and newer ONS tables share, '
-               'so the series is kept on one basis. ONS’s separate row for all mortgagors gives a slightly lower mean.</p></div>')
+               f'{num(f"house.real.rent.social.{FIRST}", "pounds")} and {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p></div>')
     out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
                             [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
