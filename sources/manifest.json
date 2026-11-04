@@ -750,6 +750,11 @@
     "id": "ons-single-year-life-tables-uk",
     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
     "file": "ons/single-year-life-tables-uk.xlsx"
+  },
+  {
+   "id": "oecd-pit-top-rates",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_PIT@DF_PIT_TOP_EARN_THRESH,/all?startPeriod=2000&format=csvfilewithlabels",
+   "file": "oecd/pit-top-rates.csv"
   }
  ]
 }

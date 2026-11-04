@@ -823,6 +823,14 @@
     "sha256": "4c6acf859de8d2d8ec5425dfdf3301c5a62c165f92d8c753fa6a76ff42f07717",
     "retrieved": "2026-11-03T09:32:41Z"
   },
+  "oecd-pit-top-rates": {
+    "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_PIT@DF_PIT_TOP_EARN_THRESH,/all?startPeriod=2000&format=csvfilewithlabels",
+    "file": "oecd/pit-top-rates.csv",
+    "bytes": 2635634,
+    "content_type": "application/vnd.sdmx.data+csv; labels=name; version=2; charset=utf-8",
+    "sha256": "1dae4004065576957b709d46c0f988762f4d6e0c303fe394540bf8151bad2cca",
+    "retrieved": "2026-11-04T14:22:32Z"
+  },
   "oecd-rs-tax": {
     "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels",
     "file": "oecd/revenue-statistics-tax-gdp.csv",
