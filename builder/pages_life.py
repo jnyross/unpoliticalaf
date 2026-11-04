@@ -1162,7 +1162,7 @@ def _holidays(facts, d, num, sources):
     body.extend(holiday_afford_block(facts, num, d))
     body.append("<h3 id='holidays-countries'>Most visited countries</h3>" + FOLD)
     if spain_first:
-        body.append("<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year with figures by country.</p>")
+        body.append(f"<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year from {min(d['countries']['all'])} to {max(d['countries']['all'])} with figures by country on this site.</p>")
     body.append(country_table(facts, num, d, LAST, 10))
     cyears = [2009, 2019, LAST]
     top = top_countries(facts, d, LAST, 10)
@@ -1292,6 +1292,15 @@ def topic_page(facts, d, num, sources, key):
             WORK_CAUSE if key == "work" else "",
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Pick a year, or compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
+    # Find or compare years sits straight after the long chart, not at the foot of the page
+    # (audit 16 gaps 3 and 4: readers ran out of their 40 actions before the renting, holiday
+    # and class-size pickers). It moves here, so the page's length does not change. The comparison
+    # comes before the year finder, so the numbers a screen-reader or voice-control reader already
+    # knows (audit 14 gap 8) stay the same when the finder's links appear.
+    body.append(f"<h2 id='years'>Find or compare years</h2>")
+    body.append(NOFOLD + compare_form("", anchor=key))
+    # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
+    body.append(year_finder(facts, num, key))
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
     body.append("<h2 id='about'>About these figures</h2>")
@@ -1304,13 +1313,6 @@ def topic_page(facts, d, num, sources, key):
     body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
-    body.append(f"<h2 id='years'>Find or compare years</h2>")
-    # The comparison opens at this topic's section. It comes before the year finder, so when the
-    # finder's links appear, the numbers a screen-reader or voice-control reader already knows
-    # (audit 14 gap 8) stay the same: only the links that follow move on.
-    body.append(NOFOLD + compare_form("", anchor=key))
-    # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
-    body.append(year_finder(facts, num, key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
@@ -1364,7 +1366,8 @@ def hub_quick(facts, d, num):
              f'<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More</a>']
     if len(firsts) == 1:
         c = esc(names[firsts.pop()])
-        items.append(f'<strong>Most visited country abroad:</strong> {c}, counting visits for any purpose, in every year with figures by country. <a href="holidays.html#holidays-countries">Top ten</a>')
+        ys = d["countries"]["all"]
+        items.append(f'<strong>Most visited country abroad:</strong> {c}, counting visits for any purpose, in every year from {min(ys)} to {max(ys)} with figures by country. <a href="holidays.html#holidays-countries">Top ten</a>')
     lis = "".join(f"<li>{x}</li>" for x in items)
     return f'<div class="answer"><ul class="quick" aria-label="Often asked">{lis}</ul></div>'
 
@@ -1443,8 +1446,16 @@ def places_block(facts, num, topic):
                    f'Every nation had a higher rate than in {a}.</p></div>' if all(_val(facts, fid(k, b)) > _val(facts, fid(k, a)) for k in vals) else
                    f'<div class="answer"><p>In {b}, the employment rate was highest in {names[hi]} ({num(fid(hi, b), kind)}) and lowest in {names[lo]} ({num(fid(lo, b), kind)}).</p></div>')
     else:
+        # If the top two nations' margins of error overlap, their order could be sampling noise: say so.
+        ranked = sorted(vals, key=vals.get, reverse=True)
+        noise = ""
+        if len(ranked) > 1 and all(U.has(fid(k, b)) for k in ranked[:2]):
+            (h1, h2) = ranked[0], ranked[1]
+            m1, m2 = (_val(facts, U.MARGINS[fid(k, b)][0]) for k in (h1, h2))
+            if vals[h1] - m1 < vals[h2] + m2:
+                noise = f" The ranges for {names[h1]} and {names[h2]} overlap, so which of the two is higher could be sampling noise."
         out.append(f'<div class="answer"><p>In April {b}, full-time employees living in {names[hi]} had the highest median pay of the four nations ({num(fid(hi, b), kind)} a week) '
-                   f'and those in {names[lo]} the lowest ({num(fid(lo, b), kind)}). Within England, pay was highest for people living in {rnames[rtop]} ({num(fid(rtop, b), kind)}) and lowest in {rnames[rlo]} ({num(fid(rlo, b), kind)}). '
+                   f'and those in {names[lo]} the lowest ({num(fid(lo, b), kind)}).{noise} Within England, pay was highest for people living in {rnames[rtop]} ({num(fid(rtop, b), kind)}) and lowest in {rnames[rlo]} ({num(fid(rlo, b), kind)}). '
                    f'Pay does not show what money buys: prices, especially housing costs, differ between places.</p></div>')
     rows = []
     for k, n in places:

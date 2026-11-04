@@ -250,6 +250,13 @@ def read_cell(body, file, locator, retained=None):
         m = re.fullmatch(r"results\[(\d+)\] values\.(\w+)", locator)
         if m:
             return data["results"][int(m.group(1))]["values"][m.group(2)]
+        # IMF DataMapper: values.<indicator>.<country>.<year>, e.g. values.GG_DEBT_GDP.GBR.2024
+        m = re.fullmatch(r"values\.(\w+)\.(\w+)\.(\d{4})", locator)
+        if m:
+            series = data["values"][m.group(1)][m.group(2)]
+            if m.group(3) not in series:
+                raise ValueError(f"no {m.group(1)} value for {m.group(2)} in {m.group(3)}")
+            return series[m.group(3)]
     if ext == "pdf":
         from pypdf import PdfReader
         m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)

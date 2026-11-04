@@ -131,13 +131,9 @@ Interest on government debt here is the interest paid out (HM Treasury: “gross
            [f"spend.realpp.tme.{y}", f"spend.realpp.tme.{first}"], f"100 × (spend.realpp.tme.{y} ÷ spend.realpp.tme.{first} − 1)")
     derive(facts, f"pop.uk.change.{first}.{y}", 100 * (facts[f"pop.uk.{y[:4]}"].value / facts[f"pop.uk.{first[:4]}"].value - 1), "%", f"{first} to {y}", "ons-ukpop",
            [f"pop.uk.{y[:4]}", f"pop.uk.{first[:4]}"], f"100 × (pop.uk.{y[:4]} ÷ pop.uk.{first[:4]} − 1)")
-    derive(facts, f"spend.realchange.tme.2010-11.2019-20", 100 * (tme_real[years.index("2019-20")] / tme_real[years.index("2010-11")] - 1), "%", "2010-11 to 2019-20", "pesa4",
-           ["spend.real.tme.2019-20", "spend.real.tme.2010-11"], "100 × (spend.real.tme.2019-20 ÷ spend.real.tme.2010-11 − 1)")
-    derive(facts, f"spend.realppchange.tme.2010-11.2019-20", 100 * (pp_real["2019-20"] / pp_real["2010-11"] - 1), "%", "2010-11 to 2019-20", "pesa4",
-           ["spend.realpp.tme.2019-20", "spend.realpp.tme.2010-11"], "100 × (spend.realpp.tme.2019-20 ÷ spend.realpp.tme.2010-11 − 1)")
     body.append(f'''<div class="answer"><p>After adjusting for rising prices, total spending in {y} was {num(f"spend.realchange.tme.{first}.{y}", "pct0")} higher than in {first}.
 As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}", "pct")} to {num(f"spend.gdp.tme.{y}", "pct")}. <a href="international.html">How this compares with other countries</a>.</p>
-<p>Per person, after inflation, it was {num(f"spend.realppchange.tme.{first}.{y}", "pct0")} higher than in {first}. The population grew {num(f"pop.uk.change.{first}.{y}", "pct0")} over the same years, so the total overstates how much spending per person has grown. From 2010-11 to 2019-20 total spending after inflation changed by {num("spend.realchange.tme.2010-11.2019-20", "pct")}, but spending per person changed by {num("spend.realppchange.tme.2010-11.2019-20", "pct")}.</p></div>''')
+<p>Per person, after inflation, it was {num(f"spend.realppchange.tme.{first}.{y}", "pct0")} higher than in {first}. The population grew {num(f"pop.uk.change.{first}.{y}", "pct0")} over the same years, so the total overstates how much spending per person has grown.</p></div>''')
     covid = [(years.index("2020-21"), "Covid")]
     tme_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     tme_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices (adjusted with the GDP deflator)", "gdp": "Per cent of GDP"}
@@ -393,8 +389,8 @@ def who_pays_page(facts, d, num, sources):
     body = ["<h1>Who pays?</h1>"]
     cav = fifth_indirect_caveat(facts, num)
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
-                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, by the households of the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")} of their gross income), 2023/24', False),
-                         (num("etb.2a.taxshare.q5", "pct"), "of all taxes paid by UK households in 2023/24 were paid by the richest fifth", False)]))
+                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, for the lowest-income fifth of people: {num("etb.t8.gross.all.q1", "pct")} of their gross income (share of income), 2023/24', False),
+                         (num("etb.2a.taxshare.q5", "pct"), "share of all taxes paid by UK households (a share of the total, not of income), 2023/24: the richest fifth paid it", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
