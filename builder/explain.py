@@ -63,6 +63,37 @@ EXPLANATIONS = {
                "Government borrowing costs have risen across the world and long-term gilt yields are now higher in the UK than at any point since the start of the century."],
         gloss="“Sovereign debt” means money borrowed by governments. The OECD figures above show yields in the other G7 countries too."),
     # ------------------------------------------------------------ taxes
+    # ------------------------------------------------------------ why debt is high
+    "debt-2008": dict(
+        question="What happened to the economy in 2008?",
+        source="explain-ons-2008-recession", publisher="Office for National Statistics",
+        title="The 2008 recession 10 years on", date="30 April 2018",
+        quote=["Having shrunk by more than 6% between the first quarter of 2008 and the second quarter of 2009, the UK economy took five years to get back to the size it was before the recession."],
+        gloss="GDP is the value of everything the UK produces in a year. The recession is the run of falling GDP that began in 2008."),
+    "covid-borrowing-2021": dict(
+        question="How much did the government borrow in 2020-21?",
+        source="explain-ons-psf-2021-03", publisher="Office for National Statistics",
+        title="Public sector finances, UK: March 2021", date="23 April 2021",
+        quote=["Borrowing in the financial year ending March 2021 expressed as a percentage of GDP has reached a level last seen at the end of World War Two"],
+        gloss="“Financial year ending March 2021” means April 2020 to March 2021, which this site calls 2020-21."),
+    "debt-pandemic-2025": dict(
+        question="What does the OBR say pushed up borrowing and debt in 2020-21?",
+        source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
+        title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
+        quote=["The impact of these shocks on the economy, combined with the Government’s policy response to them, pushed up borrowing to 15 per cent of GDP and raised public sector net debt to 97 per cent of GDP during the pandemic in 2020-21."],
+        gloss="The “shocks” are the pandemic and the energy shock that followed it, which the OBR describes in the sentence before this passage. “Policy response” means the government's measures in reply to them."),
+    "debt-rules-2025": dict(
+        question="Did changes to the fiscal rules play a part?",
+        source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
+        title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
+        quote=["The more persistent fiscal deficits and ratcheting up of debt that resulted have been accommodated by successive loosening of the fiscal rules."],
+        gloss="The fiscal rules are the targets the government sets itself for borrowing and debt. The OBR's wording is quoted as published."),
+    "debt-ageing-2025": dict(
+        question="What does the OBR project for the long term?",
+        source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
+        title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
+        quote=["Over the long term, the demographic pressures of an ageing population and rising costs of healthcare and other age-related expenditures are still, on current policy settings, projected to push borrowing above 20 per cent and debt above 270 per cent of GDP by the early 2070s."],
+        gloss="“On current policy settings” means the projection assumes that current policies continue. It is not a forecast of what will happen."),
     "borrowing-records": dict(
         question="How did borrowing in 2020-21 compare with 2009-10, after the 2008 recession?",
         source="explain-ons-psf-2021-03", publisher="Office for National Statistics",
