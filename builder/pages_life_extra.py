@@ -79,7 +79,8 @@ def comparable_from(years):
     return next(y for y in years if y >= 1999)
 
 
-def _afford_answer(facts, num, d):
+def _afford_answer(facts, num, d, short=False):
+    """The house price answer. The housing page leaves out the regional sentence: its link says 'with each region'."""
     af = d["life_extra"]["afford"]
     years = af["years"]
     last = years[-1]
@@ -93,13 +94,13 @@ def _afford_answer(facts, num, d):
     return (f'<div class="answer"><p>In the year to September {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
             f'and the middle full-time employee earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
             f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}, the first year measured the same way.{peak_txt} '
-            f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.</p></div>')
+            + ("" if short else f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.') + '</p></div>')
 
 
 def afford_block(facts, num, d):
     """The short version on the housing page: the answer and a link to the full page."""
     first = d["life_extra"]["afford"]["years"][0]
-    return ["<h3 id='housing-afford'>House prices compared with earnings</h3>", NOFOLD, _afford_answer(facts, num, d),
+    return ["<h3 id='housing-afford'>House prices compared with earnings</h3>", NOFOLD, _afford_answer(facts, num, d, short=True),
             f'<p class="more-link"><a href="house-prices.html">House prices and earnings since {first}</a>, with each region.</p>']
 
 
@@ -170,16 +171,20 @@ SHOWN_INDUSTRIES = ["C", "G", "Q", "M", "P", "F"]
 INDUSTRY_PAGE = "life/jobs-by-industry.html"
 
 
-def _industry_answer(facts, num, d):
+def _industry_answer(facts, num, d, short=False):
+    """The industry answer; the work page shows only its first paragraph, as the manufacturing figures are already in its answer box."""
     jb = d["life_extra"]["jobs"]
     years, names, prov = jb["years"], jb["names"], jb["provisional"]
     first, last = years[0], years[-1]
     lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
     shares = {s: _v(facts, f"jobs.share.{s}.{last}") for s in jb["sections"]}
     top = sorted(shares, key=shares.get, reverse=True)[:3]
-    return (f'<div class="answer"><p>There were {num(f"jobs.total.{last}", "millions")} jobs in the UK in {lab(last)}. The industries with the most were '
+    first_para = (f'<p>There were {num(f"jobs.total.{last}", "millions")} jobs in the UK in {lab(last)}. The industries with the most were '
             f'{esc(names[top[0]].lower())} ({num(f"jobs.share.{top[0]}.{last}", "pct")} of all jobs), {esc(names[top[1]].lower())} ({num(f"jobs.share.{top[1]}.{last}", "pct")}) '
-            f'and {esc(names[top[2]].lower())} ({num(f"jobs.share.{top[2]}.{last}", "pct")}).</p>'
+            f'and {esc(names[top[2]].lower())} ({num(f"jobs.share.{top[2]}.{last}", "pct")}).</p>')
+    if short:
+        return f'<div class="answer">{first_para}</div>'
+    return (f'<div class="answer">{first_para}'
             f'<p>In June {first}, manufacturing had {num(f"jobs.share.C.{first}", "pct")} of all jobs ({num(f"jobs.ind.C.{first}", "millions")}); in {lab(last)} it had {num(f"jobs.share.C.{last}", "pct")} ({num(f"jobs.ind.C.{last}", "millions")}). '
             f'Health and social work went from {num(f"jobs.share.Q.{first}", "pct")} to {num(f"jobs.share.Q.{last}", "pct")}.</p></div>')
 
@@ -193,13 +198,11 @@ def jobs_people_block(facts, num, d):
     gaps = {y: _v(facts, f"jobs.gap.{y}") for y in years}
     gaps = {y: g for y, g in gaps.items() if g is not None}
     lo, hi = min(gaps, key=gaps.get), max(gaps, key=gaps.get)
+    # Kept short on the work page (phone length); the sources and the gap by year sit on the jobs by industry page.
     return ["<h3 id='jobs-and-people'>Why can there be more jobs than people in work?</h3>",
-            f'<div class="answer"><p>Some people have more than one job, and jobs are counted one by one, so someone with two jobs is counted twice. '
-            f'In {lab(last)} there were {num(f"jobs.total.{last}", "millions")} jobs and {num(f"jobs.people.{last}", "millions_people")} people in employment, a difference of {num(f"jobs.gap.{last}", "millions")}.</p></div>',
-            f'<p>The counts also come from different sources: jobs from employer surveys, self-employment, the armed forces and trainees; people from the Labour Force Survey. '
-            f'Jobs were higher in every June from {first} to {last}, by between {num(f"jobs.gap.{lo}", "millions")} ({lo}) and {num(f"jobs.gap.{hi}", "millions")} ({hi}). '
-            f'The figures do not show how much of the gap each reason explains.</p>',
-            f'<p class="more-link"><a href="jobs-by-industry.html#jobs-people">Jobs and people in employment, June figures</a>: the two counts side by side, and the difference, for selected years.</p>']
+            f'<p>Some people have more than one job, and jobs are counted one by one. In {lab(last)} there were {num(f"jobs.total.{last}", "millions")} jobs '
+            f'and {num(f"jobs.people.{last}", "millions_people")} people in employment. '
+            f'<a href="jobs-by-industry.html#jobs-people">How the two counts differ</a>, for selected years.</p>']
 
 
 def jobs_people_table(facts, num, d):
@@ -210,9 +213,14 @@ def jobs_people_table(facts, num, d):
     lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
     shown = [y for y in dict.fromkeys([first, 2000, 2010, 2020, last]) if _v(facts, f"jobs.gap.{y}") is not None]
     rows = [[lab(y), num(f"jobs.total.{y}", "int"), num(f"jobs.people.{y}", "int"), num(f"jobs.gap.{y}", "int")] for y in shown]
+    gaps = {y: g for y in years if (g := _v(facts, f"jobs.gap.{y}")) is not None}
+    lo, hi = min(gaps, key=gaps.get), max(gaps, key=gaps.get)
     return ["<h2 id='jobs-people'>Jobs and people in employment</h2>",
             table("Jobs and people in employment, United Kingdom, June, selected years (thousands)",
                   ["Year", "Jobs", "People in employment", "Jobs minus people"], rows),
+            f'<p>The counts also come from different sources: jobs from employer surveys, self-employment, the armed forces and trainees; people from the Labour Force Survey. '
+            f'Jobs were higher in every June from {first} to {last}, by between {num(f"jobs.gap.{lo}", "millions")} ({lo}) and {num(f"jobs.gap.{hi}", "millions")} ({hi}). '
+            f'The figures do not show how much of the gap each reason explains.</p>',
             '<p class="small">Jobs are workforce jobs (ONS JOBS02); people in employment are from the Labour Force Survey (ONS MGRZ). Both are seasonally adjusted. '
             'The difference is our calculation. The gap is not a count of people with two jobs, because the two counts also differ in source and coverage.</p>']
 
@@ -220,7 +228,7 @@ def jobs_people_table(facts, num, d):
 def industry_block(facts, num, d):
     """The short version on the work page: the answer and a link to the full page."""
     first = d["life_extra"]["jobs"]["years"][0]
-    return ["<h3 id='work-industry'>Jobs by industry</h3>", NOFOLD, _industry_answer(facts, num, d),
+    return ["<h3 id='work-industry'>Jobs by industry</h3>", NOFOLD, _industry_answer(facts, num, d, short=True),
             f'<p class="more-link"><a href="jobs-by-industry.html">Jobs by industry, every year since {first}</a>: a chart of six large industries and tables for all twenty.</p>']
 
 
