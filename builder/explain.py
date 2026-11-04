@@ -62,7 +62,14 @@ EXPLANATIONS = {
         title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
         quote=["In October 2024, the newly elected Government adopted a new fiscal rule targeting public sector net financial liabilities (PSNFL).",
                "the fiscal rule is for PSNFL to be falling as a share of GDP in a particular year of the forecast (currently 2029-30)"],
-        gloss="PSNFL is the balance-sheet measure the rule uses. The Budget and Spring Forecast since then may have changed the rule, which this site has not yet checked."),
+        gloss="PSNFL is the balance-sheet measure the rule uses. The October 2026 forecast sets out the targets that apply now, quoted in the next box."),
+    "defence-fiscal-margin-2026": dict(
+        question="How much room do the fiscal rules leave in the central forecast?",
+        source="explain-obr-efo-oct-2026", publisher="Office for Budget Responsibility",
+        title="Economic and fiscal outlook – October 2026", date="28 October 2026",
+        quote=["In the central forecast, the fiscal mandate for the current budget to be in surplus in 2029-30 is met by a margin of £15 billion.",
+               "The supplementary target for public sector net financial liabilities (PSNFL) to be falling as a share of GDP in 2029-30 is met by a margin of £24 billion."],
+        gloss="The OBR calls the amount by which a target is met its “margin”. This is the room that the whole budget has in 2029-30 for extra spending or lower taxes, added together. It is not money set aside for defence."),
     "borrowing-costs-2025": dict(
         question="Have borrowing costs risen only in the UK?",
         source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",

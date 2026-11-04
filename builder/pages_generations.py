@@ -31,8 +31,7 @@ def _answer(facts, num):
             f'({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}). '
             f'Since {AFFORD_FIRST}, the first year measured the same way, the middle-priced home in England and Wales has gone from '
             f'{num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
-            f'Tuition fees and the State Pension age are now compared, but this site cannot yet compare home ownership, pay, tax or life expectancy for people of the same age, '
-            f'so it does not give an overall answer.</p></div>')
+            f'Home ownership, pay, tax and life expectancy at a given age are not yet compared, so there is no overall answer.</p></div>')
 
 
 def _same_age_rows(facts, num):
@@ -50,10 +49,11 @@ def page_body(facts, d, num, sources):
     body = ['<p class="small"><a href="index.html">Everyday life, year by year</a></p>',
             '<h1 id="key-answer">Did parents have it easier than this generation?</h1>',
             _answer(facts, num),
-            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for the people of one age group in one year. '
-            'It shows what was true for that age group at the time. It does not follow one person through their life.</p>',
+            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for one age group in one year. '
+            'It does not follow one person through their life.</p>',
             "<h2 id='what-easier-means'>What “easier” could mean</h2>",
             "<p>People mean different things by “easier”. This page separates them, so each can be read on its own:</p>",
+            FOLD,
             "<ul><li>Getting work, and the kind of work available at a given age.</li>"
             "<li>Pay after inflation, at a given age.</li>"
             "<li>Buying a home, and the cost of a home compared with earnings.</li>"
@@ -73,6 +73,7 @@ def page_body(facts, d, num, sources):
             "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
             "<p>These figures are for everyone, not for people of one age, so they show the position of the whole market rather than of people at 30.</p>",
             _afford_chart(facts, num),
+            FOLD,
             table(f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {LAST}",
                   ["Measure", str(AFFORD_FIRST), str(LAST)],
                   [["Times a year’s earnings", num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2"), num(f"afford.ratio.ew.{LAST}", "times2")]]),
@@ -121,6 +122,7 @@ def page_body(facts, d, num, sources):
             "</ul>",
             CAUSE,
             "<h2 id='about'>About these figures</h2>",
+            FOLD,
             '<div class="limit"><p>Employment rates are for the UK, from the quarterly Labour Force Survey, April to June, seasonally adjusted. '
             'House prices and earnings are for England and Wales. Class sizes are for state-funded primary schools in England. '
             'Home ownership is from the English Housing Survey, which covers England only. '

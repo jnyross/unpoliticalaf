@@ -1,0 +1,14 @@
+{
+  "about": "UK core defence expenditure as a share of GDP, from NATO's table 3 (share of real GDP, %), read from page 7 of the PDF in data/fetched/nato/def-exp-2026.pdf.",
+  "why_transcribed": "The PDF has no text layer, so its figures cannot be read by a script. The values were read from the rendered page (checked by eye against the page image) and by OCR, and agree.",
+  "pdf": "data/fetched/nato/def-exp-2026.pdf",
+  "pdf_page": 7,
+  "row": "United Kingdom",
+  "column_titles": "Share of real GDP (%), core defence expenditure, 2021 prices",
+  "values": {
+    "2024": 2.28,
+    "2025": 2.32,
+    "2026": 2.56
+  },
+  "estimates": ["2025", "2026"]
+}
