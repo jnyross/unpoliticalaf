@@ -23,6 +23,22 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "4 November 2026",
+        "pages": [("methods.html", "Methods"), ("spending.html", "Where does public money go?"), ("spending-areas.html", "Spending on each area, every year"),
+                  ("international.html", "How do UK taxes and spending compare with other countries?")],
+        "was": "The methods page said poverty and hardship “are not measured here”, though official low-income and inequality series exist. The spending page gave total spending growth without a per-person figure, so it overstated growth as the population rose. The spending-by-area summary named the largest rise by pounds, which always favours the biggest area. The first G7 chart showed four of the seven countries, with no stated rule for choosing them.",
+        "now": "The methods page says those series exist and that the site does not show them yet. The spending page gives per-person spending after inflation beside the total, and its year-by-year table has a per-person column. The spending-by-area summary ranks rises in per cent. The first G7 chart shows every G7 country that has a figure for the year.",
+        "pr": 176,
+    },
+    {
+        "date": "4 November 2026",
+        "pages": [("index.html", "Home"), ("life/earnings.html", "Earnings after inflation"), ("life/holidays.html", "Holidays since 1980"),
+                  ("who-pays.html", "Who pays?")],
+        "was": "The earnings pages called April 2025 pay provisional, although ONS's 2026 release kept it unchanged and published April 2026 pay, which the site did not mention. The home tile and the holidays chart said the visits series ends in 2023 with no reason given, and the holiday chart title said visits rose until 2019 without naming the dips before it. The 2025 holiday source record said United Kingdom residents, although the figures used from it are for Great Britain residents. The direct-taxes note left out student loan repayments.",
+        "now": "The 2025 earnings figure is no longer labelled provisional. The earnings pages say ONS published April 2026 pay in October 2026 and that this series does not yet include it. The holiday tile and chart say the comparable series ends in 2023 because ONS changed method from 2024. The holiday and class-size chart titles name the smaller moves. The source record names Great Britain residents. The direct-taxes note lists student loan repayments.",
+        "pr": 177,
+    },
+    {
+        "date": "4 November 2026",
         "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home"), ("life/house-prices.html", "House prices"),
                   ("life/2025.html", "Everyday life in 2025")],
         "was": "Exact halves were rounded to the even digit, so £132.5bn showed as £132bn and 31,150 thousand visits as 31.1 million. The words under the share-of-GDP chart skipped the 2021-22 low of 43.4%. The home page called ONS’s 33.6% an average across households, though it covers all people. The house-price lead said “In 2025” for the year to September 2025. A small chart of private renting on year pages ran to 2025-26, though its last figure is 2024-25.",

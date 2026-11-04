@@ -1,0 +1,16 @@
+.venv/bin/python -m builder.check --axe
+/home/claude/unpoliticalaf/.venv/lib/python3.13/site-packages/openpyxl/worksheet/header_footer.py:48: UserWarning: Cannot parse header or footer so it will be ignored
+  warn("""Cannot parse header or footer so it will be ignored""")
+/home/claude/unpoliticalaf/.venv/lib/python3.13/site-packages/openpyxl/worksheet/_reader.py:329: UserWarning: Data Validation extension is not supported and will be removed
+  warn(msg)
+Re-read 19,719 figures from source files; recalculated 6,286 derived figures.
+Checked 173,196 numbers on 1770 pages (55 year pages, 1485 comparison pages).
+Checked 5,658 CSV downloads beside the charts and tables.
+Checked that 53 chart headings state their finding in neutral words.
+Checked that 12 trend headings name every big rise and fall of their line.
+Checked that 12 line charts whose scale starts above zero say so.
+Matched 28 quoted explanations word for word against their sources.
+
+1 problems:
+ - life/housing.html: 8.8 phone screens long, over the 8.8 limit
+make: *** [Makefile:32: a11y] Error 1

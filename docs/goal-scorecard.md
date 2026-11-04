@@ -11,6 +11,83 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 16: 4 November 2026 (rubric v3, after the audit 15 fixes #172 to #180)
+
+- Commit audited: `d72127d` on `main` (T107, #180). The site was built from that commit and served locally, because the audit container cannot reach the live site (`https://unpoliticalaf.vercel.app/` returns no response from here). The "Live site matches main" check is not re-run for this audit: the site has not changed since `d72127d`, and `main` has only moved for the accuracy workflow results (`2873935`, #181 follow-up). Confirm on the audit PR's CI run.
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure [standins/README.md](standins/README.md). Evidence in [standins/audits/audit-16/](standins/audits/audit-16/).
+- Question writer: 24 new questions written from the goal text alone, sealed in commit `8186cb1` before any reader started (`new-questions.sha256`). A site check of the sealed set found 20 answers clearly supported, 4 weak (3, 8, 19, 20) and one premise that used a figure the site does not show (35% against 33.6%). Those five were rewritten by the same writer, still without seeing the site, and re-sealed before any reader started.
+- Readers: 3 informal readers (P3, P5, P10); 5 phone readers (P4, P6, P7, P9, P2, drawn at random); 1 screen-reader reader. Phone readers each ran three phases in fresh sessions. One procedure failure: reader R2 answered John's questions from pages it had already seen in its new-question phase and used no actions in its own John's session. Those answers were voided ([R2-voided-johns.json](standins/audits/audit-16/readers/R2-voided-johns.json)), and a fresh reader re-ran that phase ([R2-johnsfix.answers.json](standins/audits/audit-16/readers/R2-johnsfix.answers.json)). The scores use the re-run. A second, mechanical fix: R1 to R5 keyed their new-question answers as `N1` to `N24`, the sheet's labels; the keys were renamed to `1` to `24` without changing any letter.
+- Fact-checker: 30 headline claims from the built site, with 0 material and 3 minor items ([claims.md](standins/audits/audit-16/fact-check/claims.md)). Accuracy workflow sample for this audit: [sample.json](standins/audits/audit-16/fact-check/sample.json), to run once it reaches `main`.
+- Impartiality: a left and a right critic (10 points each), and a judge who ruled on all 20: 1 material upheld, 2 minor upheld, 17 rejected ([judgement.md](standins/audits/audit-16/impartiality/judgement.md)).
+- Automated checks: keyboard check finds no traps; `summaries` gives every chart a text summary (1,326 charts). `make a11y` locally reports `life/housing.html` at 8.8 phone screens against an 8.8 limit, which is the local offset noted in audits 14 and 15; CI is the authority for this ([accessibility.txt](standins/audits/audit-16/accessibility.txt)).
+
+**Total: 43 out of 55. Target not met (simulated).** Audit 15: 44. Every stand-in that measures readers passed. The impartiality stand-in did not: the judge upheld one material finding, which caps D8 at 1 under the rubric until it is fixed.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 53/60: R1 11, R2 11, R3 10, R4 10, R5 11; every reader got all three critical questions right | 48/60, each reader 9/12, all critical right | Yes |
+| New questions (24, sealed) | 114/120 with the site (95%), 54 without | 80% | Yes |
+| Prior-knowledge check | 7/60 without the site, 53 with it (+46) | +20 | Yes |
+| John's questions (J1.1 to J1.7) | 5/5 on every probe with the site, 0 without; R2's answers from the fresh re-run | every probe answered, 4 of 5 right | Yes |
+| Informal check (3 readers) | All three found answers to the three questions. I1 could not find tax for a self-employed plumber (a gap, not blocking its answer); I3 found no plain explanation of the Budget or the OBR | notes recorded, nothing blocking | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 28 actions, critical right, no blocking barrier. Home-page cards read as one long link; the year dropdown has 55 options | 9/12, critical right | Yes |
+| Fact-checker (30 claims) | 0 material, 3 minor | no material errors | Yes |
+| Impartiality critics and judge | 1 material upheld (spending by area: 2010-11 to 2019-20 is not one of the two windows the rule allows); 2 minor upheld | no upheld material finding | No |
+
+Coordinator note, now on `main` (#181 follow-up, `2873935`): the accuracy workflow has committed results for audits 9 to 15. For audit 15, 29 of 30 figures match their publisher's file. Figure 30 (the IMF general government debt series for the UK, 2024) is unchecked, because the checker has no reader for that file type (a JSON API response). This is a gap below. The result for this audit's sample will be recorded in the next audit.
+
+### Material findings
+
+1. **Spending lead paragraph picks a sub-period.** The judge (rule R1) upheld that `spending.html` gives a per-person fall for 2010-11 to 2019-20. That is neither of the two fixed windows the impartiality rule allows (first to latest year, or ten years by area), and it lines up with one period of government, so it leads a newcomer toward a "cuts" reading. Caps D8 at 1 until fixed.
+
+### Minor findings (kept, not capped)
+
+- Fact-checker minor 1: the top-1% share (27.2%) and income share (12.4%) for 2023-24 do not carry HMRC's caveat about that year. The numbers match HMRC exactly.
+- Fact-checker minor 2: "Scotland had the highest median pay of the four nations" is within the margin of error; the point estimates are right.
+- Fact-checker minor 3: "Spain in every year" sits beside a range that starts in 1971, so a reader could read "every year" as every year since 1971.
+- Judge (minor, two upheld): the homepage gives foreign holidays a headline card while the hardship series are left out, although methods.html says they exist; the ONS quote on the 2011 to 2017 year pages names the public-sector pay freeze and cap, and it is repeated on seven consecutive pages of one era.
+- Reader confusions, not blocking: the menu collapses into a Menu button after the first screen and its numbers change; several readers ran out of their 40 actions before the renting figure; the who-pays page does not make clear which percentage is the top 1% and which the richest fifth; "not compared" on holidays with two surveys needed rereading; the debt page offers IMF and OECD debt measures behind a toggle without saying which to read.
+
+### Gaps, most valuable first
+
+1. Remove or reframe the 2010-11 to 2019-20 per-person spending fall in the spending lead paragraph, so only the two rule-allowed windows are used (judge material finding R1).
+2. Keep the page menu and the quick links in reach while scrolling, so phone readers stop losing actions to the Menu button: R1, R3, R4 and R5 all lost actions this way.
+3. Put the renting share and the year-by-year housing and holiday comparisons where a phone reader will reach them within 40 actions, since R1, R4 and R5 ran out before finding renting.
+4. Make the single-year class-size picker visible from the class sizes page, not hidden at the bottom: R3 and R5 both ran out before using it.
+5. Label the who-pays percentages so 36.7% of income, 46.0% of all tax, the top 1%'s 27.2% of tax and the richest fifth's share cannot be confused: R1 and R3 both nearly mixed them.
+6. Explain in plain words why the number of jobs can be higher than the number of people in work, which R1 and R5 could not find.
+7. Add the fact-checker's three minor items: the HMRC 2023-24 caveat, the margin of error on Scotland's pay, and the "every year" wording on Spain.
+8. Add a file reader to the accuracy check for JSON API responses, so figure 30 (IMF debt, UK 2024) can be checked against its source; without it the workflow leaves that figure unchecked.
+9. Say which debt measure to read on the borrowing page, given the IMF and OECD toggle (R4).
+10. Add a plain explanation of the Budget and the OBR, and a self-employed tax example, for the informal readers' open questions (I1 and I3).
+
+Gaps 1 and 2 block a "met (simulated)" result for D8 and for the navigation dimensions; gap 1 is the only material one.
+
+### Dimension scores
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | All seven John's questions and the public-money questions passed; the who-pays confusion (gap 5) and debt-measure toggle (gap 9) remain, so not 5. |
+| D2 Life: breadth and depth | 4 | All five topics are on the site; R1, R4 and R5 ran out of actions before the renting figure (gap 3). |
+| D3 Life: choosing and comparing | 4 | The class-size single-year picker is hidden (gap 4), and the year page is a very long scroll. |
+| D4 Explanation and understanding | 4 | The jobs-against-people question went unanswered on the site (gap 6); R3 nearly mixed two shares of tax; the 33.6% and 36.7% averages read as personal rates until the small print. |
+| D5 Visual design and charts | 4 | Charts start at zero and are captioned; the class-size text and the pay "about the same" wording left confusion notes. |
+| D6 Phone experience and navigation | 4 | The menu collapses and its numbers shift, and readers lost actions to it (gap 2). |
+| D7 Accuracy and traceability | 4 | 0 material findings from the 30-claim check; 3 minor; the audit 15 workflow check is 29 of 30, with figure 30 unchecked (gap 8). |
+| D8 Impartiality | 1 | The judge upheld one material finding (gap 1), which caps the dimension at 1 until fixed. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocking barrier; keyboard check passes; every chart has a text summary; axe checks in CI, and the local `make a11y` offset is the one noted in audits 14 and 15. |
+| D10 Honesty about limits and continuity | 4 | Breaks are marked; the HMRC caveat and the "every year" wording are minor gaps; the impartiality stand-in did not pass, so not 5. |
+| D11 Reader evidence | 5 | All reader stand-ins passed on the audited build: phone test, new questions, prior knowledge, John's questions and the screen-reader reader, with the R2 John's phase re-run in a fresh session. |
+| **Total** | **43 / 55** | |
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are not five people; screenshots are not a phone in the hand; an accessibility tree is not VoiceOver or TalkBack; and AI reviewers are not independent people. The phone and reader stand-ins ran on Sonnet, and the critics, judge and fact-checker on Opus.
+
+---
+
 ## Audit 15: 4 November 2026 (rubric v3, after the audit 14 fixes #163 to #170)
 
 - Commit audited: `4cb1bcc` on `main` (T94, #170). The "Live site matches main" check for it is green ([run 41767745611](https://github.com/jnyross/unpoliticalaf/actions/runs/41767745611)). The live site cannot be fetched from the audit container (proxy returns 403), so that check rests on CI.

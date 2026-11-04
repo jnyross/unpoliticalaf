@@ -97,7 +97,11 @@
           "evidence": [
             {
               "page": "international.html",
-              "text": "the UK had the second lowest tax as a share of GDP in 2024 (of the 6 with a figure for that year), and the fourth highest government spending as a share of GDP in 2024."
+              "text": "UK taxes were the second lowest as a share of GDP among the G7 (of the 6 with a figure for that year)"
+            },
+            {
+              "page": "international.html",
+              "text": "UK government spending was the fourth highest in 2024"
             }
           ]
         },
@@ -169,6 +173,486 @@
           "added": "2026-11-03",
           "source": "John, project chat, 2026-11-03",
           "asked": "as part fo that question we should clearly answer \"what do the bond markets thing of the uk vs other countries e.g. how eassy is it to raise more moeny and how much interest do we pay? becuase it's a sign of how confident the markets are in how our economy is being run\""
+        }
+      ]
+    },
+    {
+      "id": "J4",
+      "asked": "Are rish people really not paying enough tax?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 4 of his list of ten)",
+      "reading": "\"Enough\" is a value judgment, so the site gives the measured facts and does not say what is enough. The facts are: the share of Income Tax and of all taxes paid by top income groups, the share of income that each fifth of people pays in tax (including National Insurance, VAT and other taxes on spending), how the top rates compare with other countries, and what the main proposals (for example, a wealth tax or aligning Capital Gains Tax with Income Tax) are estimated to raise. Each is shown with its year, population and source.",
+      "probes": [
+        {
+          "id": "J4.1",
+          "question": "In tax year 2023 to 2024, what share of all Income Tax did the top 1% of Income Tax payers owe?",
+          "options": {
+            "A": "12.4%",
+            "B": "27.2%",
+            "C": "34.0%",
+            "D": "59.1%"
+          },
+          "answer": "B",
+          "why": "Who pays page: the top 1% of Income Tax payers owed 27.2% of all Income Tax in 2023 to 2024, and had 12.4% of Income Tax payers' income. The 59.1% is the top 10%'s share of Income Tax.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "the top 1% of Income Tax payers owed 27.2% of all Income Tax, and had 12.4% of all Income Tax payers' income"
+            }
+          ]
+        },
+        {
+          "id": "J4.2",
+          "question": "Across 1999-00 to 2023-24, how did the top 1%'s share of Income Tax compare with their share of income?",
+          "options": {
+            "A": "Lower than their share of income in every year",
+            "B": "Equal to their share of income",
+            "C": "Higher than their share of income in every year",
+            "D": "Higher in some years and lower in others"
+          },
+          "answer": "C",
+          "why": "Who pays page, Income Tax by person: the top 1%'s share of Income Tax was higher than their share of income in every year from 1999-00 to 2023-24.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "The top 1%'s share of Income Tax was higher than their share of income in every year from 1999-00 to 2023-24"
+            }
+          ]
+        },
+        {
+          "id": "J4.3",
+          "question": "What does the 46.0% figure for the richest fifth of people in 2023/24 measure?",
+          "options": {
+            "A": "The share of their income that they paid in tax",
+            "B": "The share of all taxes paid by UK households that the richest fifth paid",
+            "C": "The tax rate on the top income band",
+            "D": "The share of all government revenue, including borrowing"
+          },
+          "answer": "B",
+          "why": "Who pays page: the richest fifth paid 46.0% of all taxes paid by UK households. The page says this is a share of the total, not the share of income that goes on tax (36.2%), and covers household taxes, not all government revenue.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "In 2023/24 the richest fifth of people paid 46.0% of all taxes paid by UK households."
+            },
+            {
+              "page": "who-pays.html",
+              "text": "A share of the total, not the share of income that goes on tax"
+            }
+          ]
+        },
+        {
+          "id": "J4.4",
+          "question": "In 2023/24, how did the share of gross household income that went on all taxes compare between the highest-income fifth and the lowest-income fifth?",
+          "options": {
+            "A": "The highest-income fifth paid a much larger share",
+            "B": "The two shares were less than one percentage point apart",
+            "C": "The lowest-income fifth paid a much larger share",
+            "D": "Both paid about a quarter of their income in tax"
+          },
+          "answer": "B",
+          "why": "Tax and income page (household-tax.html): taxes took a similar share of income for the lowest-income fifth (36.7%) and the highest-income fifth (36.2%) in 2023/24, less than one percentage point apart.",
+          "evidence": [
+            {
+              "page": "household-tax.html",
+              "text": "Taxes took a similar share of income for the lowest-income fifth and the highest-income fifth in 2023/24, less than one percentage point apart"
+            }
+          ]
+        },
+        {
+          "id": "J4.5",
+          "question": "In 2023/24, how much of the highest-income fifth's gross household income went on Income Tax alone?",
+          "options": {
+            "A": "22.3%",
+            "B": "36.2%",
+            "C": "21.0%",
+            "D": "33.6%"
+          },
+          "answer": "A",
+          "why": "Tax and income page: for people in the highest-income fifth most tax is direct, and Income Tax alone was 22.3% of gross household income. The 36.2% is all taxes for that fifth.",
+          "evidence": [
+            {
+              "page": "household-tax.html",
+              "text": "Income Tax alone was 22.3% of gross household income"
+            }
+          ]
+        },
+        {
+          "id": "J4.6",
+          "question": "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?",
+          "gap": "The site does not yet show what Capital Gains Tax and Inheritance Tax raise, or estimate what wealth tax or Capital Gains Tax changes would raise."
+        },
+        {
+          "id": "J4.7",
+          "question": "According to the site, how do the UK's rates on top incomes compare with other large countries?",
+          "gap": "The international page compares total tax as a share of GDP, but does not compare top income tax rates or the tax paid by top earners with other countries."
+        },
+        {
+          "id": "J4.8",
+          "question": "According to the site, what share of all taxes, including VAT and National Insurance, do the top 1% of people pay?",
+          "gap": "The site shows the top 1%'s share of Income Tax only, not their share of all taxes, so the top 1%'s total tax share is not shown."
+        }
+      ]
+    },
+    {
+      "id": "J2",
+      "asked": "Is immigration a good thing or a bad thing?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "The site does not say whether immigration is good or bad. That is a judgment that depends on values. It answers what official evidence says about the parts that can be measured: the public-money effects of migrants by type, use of public services, the NHS and care workforce, and population and growth. It says which parts are evidence and which depend on values, and shows the range of credible estimates. Immigration is read as people moving to live in the UK (net migration, all routes), with EU and non-EU migrants shown separately where official figures split them. The answer should be easy to find from the home page in a few taps on a phone.",
+      "probes": [
+        {
+          "id": "J2.1",
+          "question": "Does the site say whether immigration is a good thing or a bad thing?",
+          "options": {
+            "A": "Yes: it is a good thing",
+            "B": "Yes: it is a bad thing",
+            "C": "No: it says the answer depends on what you value, and shows what the evidence says about the measurable parts",
+            "D": "No: it does not discuss the question at all"
+          },
+          "answer": "C",
+          "why": "The immigration page opens by saying the site does not answer the question, because the answer depends on what people value, and then sets out the measurable parts.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "The site does not answer that question, because the answer depends on what you value."
+            }
+          ]
+        },
+        {
+          "id": "J2.2",
+          "question": "According to official estimates, does a migrant’s effect on public finances depend on their age, visa route or employment?",
+          "options": {
+            "A": "No: every migrant has the same effect",
+            "B": "Yes: it depends on things such as visa route, age and employment",
+            "C": "Only on nationality",
+            "D": "It cannot be estimated at all"
+          },
+          "answer": "B",
+          "why": "The MAC estimates the Partner route as a lifetime deficit, and says that partner and Skilled Worker dependants contribute less through taxation than UK residents but are still more fiscally positive. Higher spending as people age and a lower employment rate also change the result.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "the partners of British citizens and settled residents, will incur a net lifetime fiscal deficit of -£5.6bn in present value terms"
+            },
+            {
+              "page": "immigration.html",
+              "text": "Partner applicants and SW adult dependants can contribute considerably less through taxation than UK residents and still be more fiscally positive."
+            },
+            {
+              "page": "immigration.html",
+              "text": "This, combined with a decline in their employment rate and higher public spending as they age, causes the cohort to incur an annual net fiscal deficit as they remain in the UK."
+            }
+          ]
+        },
+        {
+          "id": "J2.3",
+          "question": "Do official estimates of migrants’ effect on public finances differ between the short run and the long run?",
+          "options": {
+            "A": "No: the effect is the same in the short and long run",
+            "B": "Yes: a positive annual contribution in the first two decades, then an annual deficit as they stay in the UK",
+            "C": "Yes: a deficit in the first two decades only",
+            "D": "Neither: no official estimates exist"
+          },
+          "answer": "B",
+          "why": "The MAC finds a positive annual contribution in a cohort’s first two decades, then a deficit as they stay. The OBR says the fiscal impact is likely to become less beneficial over time.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "During their first two decades in the UK, the cohort make an annual positive net fiscal contribution."
+            },
+            {
+              "page": "immigration.html",
+              "text": "The fiscal impacts of migration are likely to become less beneficial over time"
+            }
+          ]
+        },
+        {
+          "id": "J2.4",
+          "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
+          "gap": "The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services."
+        },
+        {
+          "id": "J2.5",
+          "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
+          "gap": "NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed."
+        },
+        {
+          "id": "J2.6",
+          "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
+          "gap": "The site has ONS net migration but not births and deaths, which are needed to say what drove recent population growth."
+        },
+        {
+          "id": "J2.7",
+          "question": "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?",
+          "options": {
+            "A": "Yes, it raises GDP per person by as much as total GDP",
+            "B": "It raises total GDP, but its effect on GDP per person is much more uncertain, and may be slightly positive or slightly negative",
+            "C": "It lowers total GDP",
+            "D": "It has no effect on GDP"
+          },
+          "answer": "B",
+          "why": "The OBR says net migration has been a significant driver of GDP growth, but its effect on GDP per person is much more uncertain, and was either slightly positive or slightly negative in its scenarios.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "Net inward migration has been a significant driver of GDP growth, but its impact on GDP per person is much more uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "the impact on real GDP per person was either slightly positive or slightly negative"
+            }
+          ]
+        },
+        {
+          "id": "J2.8",
+          "question": "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?",
+          "options": {
+            "A": "No: the site gives one figure for each estimate",
+            "B": "Yes: it shows the range of official estimates and says how uncertain they are",
+            "C": "No: it shows no estimates at all",
+            "D": "Only the government’s own figures are shown"
+          },
+          "answer": "B",
+          "why": "The page shows the OBR’s higher and lower migration scenarios, and says they are simplified and highly uncertain, rather than picking one figure.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "in which net migration is 200,000 a year higher or lower than in our central forecast."
+            },
+            {
+              "page": "immigration.html",
+              "text": "These scenarios are a simplification and are highly uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "Where official estimates differ, the range is shown."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J8",
+      "asked": "What are the empirical best ways to get the UK economy into a better position, a ranked list of ten things",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 8 of 10)",
+      "reading": "Ten options, ranked only by a stated, published, empirical measure, never by the site's opinion. The measure is the size of a published estimate of the effect on the level of GDP (potential GDP) over a stated horizon, shown with its range, cost and uncertainty. Estimates from different sources or models are not like-for-like, so they must not be ranked against each other as if they were; where only one source covers a set of options, the ranking stays inside that set. 'Better position' depends on goals (growth, fairness, the deficit), so the site should say that a second ranking, by cost to the public finances, may differ.",
+      "probes": [
+        {
+          "id": "J8.1",
+          "question": "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?",
+          "options": {
+            "A": "Trade barriers and research and development support",
+            "B": "Getting people on long-term sick leave back into work",
+            "C": "Planning reform, full expensing and access to finance",
+            "D": "Keeping the state pension triple lock"
+          },
+          "answer": "C",
+          "why": "The OECD estimates planning reform, full expensing and access to finance at +2.1% of potential GDP after 10 years, the largest of its packages (long-term sick +1.4%, trade and R&D +0.5%).",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "Capital deepening: planning reform, extension of full expensing, access to finance"
+            }
+          ]
+        },
+        {
+          "id": "J8.2",
+          "question": "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?",
+          "options": {
+            "A": "+1.0% after 10 years and +2.0% after 25 years",
+            "B": "+4.0% after 10 years and +7.7% after 25 years",
+            "C": "+0.5% after 10 years and +1.7% after 25 years",
+            "D": "No estimate is given"
+          },
+          "answer": "B",
+          "why": "The OECD's combined package is +4.0% of potential GDP after 10 years and +7.7% after 25 years.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "gives +4.0% of potential GDP after 10 years and +7.7% after 25 years"
+            }
+          ]
+        },
+        {
+          "id": "J8.3",
+          "question": "What measure do the OECD's reform estimates use for the size of each effect?",
+          "options": {
+            "A": "Pounds of extra tax revenue",
+            "B": "A percentage of baseline potential GDP",
+            "C": "Change in employment numbers",
+            "D": "Change in the deficit alone"
+          },
+          "answer": "B",
+          "why": "The OECD measures each effect as a percentage of baseline potential GDP.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "a percentage of baseline potential GDP"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J5",
+      "asked": "Why can't we afford to spend more money on defence",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "Defence spending is read as the government's official defence spending (PESA, the COFOG defence function), compared with other G7 countries on the same function in OECD figures. \"Can't afford\" is read as: what would extra spending cost, how could it be paid for, and what would have to give. The premise is contested, so the site sets out the choices and the figures rather than deciding whether the UK can afford more.",
+      "probes": [
+        {
+          "id": "J5.1",
+          "question": "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?",
+          "options": {
+            "A": "About £30 billion, about 1% of GDP",
+            "B": "About £65 billion, about 2.1% of GDP",
+            "C": "About £130 billion, about 4.2% of GDP",
+            "D": "About £200 billion, about 6.5% of GDP"
+          },
+          "answer": "B",
+          "why": "PESA 2026 outturn for 2025-26: £65.4 billion, 2.1% of GDP.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "In 2025-26 the UK spent £65.4bn on defence, 2.1% of GDP."
+            }
+          ]
+        },
+        {
+          "id": "J5.2",
+          "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
+          "options": {
+            "A": "Higher after inflation, lower as a share of GDP",
+            "B": "Lower after inflation, higher as a share of GDP",
+            "C": "Higher after inflation and higher as a share of GDP",
+            "D": "Lower after inflation and lower as a share of GDP"
+          },
+          "answer": "A",
+          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
+            },
+            {
+              "page": "defence.html",
+              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
+            }
+          ]
+        },
+        {
+          "id": "J5.3",
+          "question": "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?",
+          "options": {
+            "A": "The highest of them all",
+            "B": "The second highest, behind the United States",
+            "C": "The lowest of them all",
+            "D": "About the same as France"
+          },
+          "answer": "B",
+          "why": "OECD Government at a Glance, 2024: UK 2.3% of GDP, behind the United States (3.1%) and ahead of France (1.9%), Germany, Japan and Italy. Canada has no figure in the table.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "the second highest of the 6 G7 countries with a figure."
+            },
+            {
+              "page": "defence.html",
+              "text": "The highest was the United States, at 3.1%."
+            }
+          ]
+        },
+        {
+          "id": "J5.4",
+          "question": "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?",
+          "options": {
+            "A": "£1",
+            "B": "£5",
+            "C": "£13",
+            "D": "£33"
+          },
+          "answer": "B",
+          "why": "PESA 2026: defence was £5.3 of every £100 spent on services in 2025-26; social protection was £33.2 and health £21.0.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "defence took £5.3."
+            },
+            {
+              "page": "defence.html",
+              "text": "Social protection took £33.2 and health £21.0."
+            }
+          ]
+        },
+        {
+          "id": "J5.5",
+          "question": "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?",
+          "options": {
+            "A": "About £3 billion",
+            "B": "About £31 billion",
+            "C": "About £130 billion",
+            "D": "About £300 billion"
+          },
+          "answer": "B",
+          "why": "1% of 2025-26 nominal GDP (£3,070 billion, OBR) is £30.7 billion.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Each extra 1% of GDP in defence spending would cost about £30.7bn a year at 2025-26 levels."
+            }
+          ]
+        },
+        {
+          "id": "J5.6",
+          "question": "Which of these does the site set out as ways to pay for extra defence spending?",
+          "options": {
+            "A": "Only higher taxes",
+            "B": "Only borrowing",
+            "C": "Borrowing, higher taxes, or spending less on other things",
+            "D": "None of these"
+          },
+          "answer": "C",
+          "why": "The defence page lists three broad ways: borrowing, tax, and less spending elsewhere, and says most plans combine them.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "There are three broad ways, and most plans combine them."
+            },
+            {
+              "page": "defence.html",
+              "text": "Less spending elsewhere."
+            }
+          ]
+        },
+        {
+          "id": "J5.7",
+          "question": "Does the site say whether the UK can afford more defence spending?",
+          "options": {
+            "A": "Yes, it can afford more",
+            "B": "No, it cannot afford more",
+            "C": "It sets out the choices and does not decide",
+            "D": "It says the answer is borrowing"
+          },
+          "answer": "C",
+          "why": "The defence page says whether the UK can afford more depends on which costs people accept, and that the page does not decide that.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Whether the UK can afford more depends on which costs people accept, and this page does not decide that for you."
+            }
+          ]
+        },
+        {
+          "id": "J5.8",
+          "question": "How much room do the government's fiscal rules leave for extra defence spending?",
+          "gap": "The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending."
+        },
+        {
+          "id": "J5.9",
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP?",
+          "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
         }
       ]
     }

@@ -51,6 +51,16 @@ GROUPS = [
          "An estimate of a future or not-yet-measured year, such as the Office for Budget Responsibility's forecasts of tax receipts or HM Revenue and Customs' projections. "
          "Forecasts are labelled on this site and are not measurements.",
          ["forecast", "forecasts", "projection", "projections"]),
+        ("budget", "The Budget",
+         "The Chancellor of the Exchequer's statement to Parliament on taxes and spending plans, usually in late November. "
+         "The government holds one major fiscal event a year, at the Budget. A Spring Forecast in March is an interim update, without a new assessment of the government's fiscal rules. "
+         "Source: <a href=\"https://www.gov.uk/government/news/chancellor-announces-date-of-spring-forecast\">HM Treasury, “Chancellor announces date of Spring Forecast” (22 December 2025)</a>.",
+         ["the Budget", "The Budget", "Spring Forecast"]),
+        ("obr", "Office for Budget Responsibility (OBR)",
+         "The UK's independent fiscal watchdog, created in 2010. It makes the official forecasts for the economy, taxes, spending and borrowing that accompany each Budget and Spring Forecast, "
+         "and checks the government's costings of tax and welfare changes. Its public finances databank is the source of most of the taxes and spending figures on this site, including the forecast years. "
+         "Source: <a href=\"https://obr.uk/about-the-obr/what-we-do/\">Office for Budget Responsibility, “What we do” (checked 4 November 2026)</a>.",
+         ["Office for Budget Responsibility", "OBR"]),
     ]),
     ("taxes", "Taxes and borrowing", [
         ("receipts", "Receipts",
@@ -82,7 +92,7 @@ GROUPS = [
          "A tax on homes in England, Scotland and Wales, set by local councils and based on the value band of the home. Northern Ireland has domestic rates instead.",
          ["Council Tax"]),
         ("direct-tax", "Direct taxes",
-         "Taxes taken from income or charged on a household directly. In the household figures this means Income Tax, employee National Insurance and Council Tax.",
+         "Taxes taken from income or charged on a household directly. In the household figures this means Income Tax, employee National Insurance, student loan repayments and Council Tax.",
          ["direct taxes", "direct tax"]),
         ("indirect-tax", "Indirect taxes",
          "Taxes included in the prices of things people buy, such as VAT, fuel duty and alcohol and tobacco duties, plus some business taxes passed on in prices.",

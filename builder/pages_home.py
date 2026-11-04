@@ -8,6 +8,8 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
+    from .pages_money import fifth_indirect_caveat
+    cav = fifth_indirect_caveat(facts, num)
     from .pages_life import FIRST, earn_stretches, earn_before_after
     ea, eb, ech = earn_stretches(facts)[0]
     from .data import EARLY_YEARS
@@ -78,18 +80,21 @@ def home_page(facts, d, num, sources):
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
 <p>Taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income on average in 2023/24. That is an average across all people, not anyone's tax rate.</p>
 <p>The lowest-income fifth paid {num("etb.t8.gross.all.q1", "pct")} of its gross income in tax, and the highest-income fifth paid {num("etb.t8.gross.all.q5", "pct")}. For the lowest, most of it is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of their gross income). For the highest, most is direct tax such as Income Tax.</p>
+<p>Indirect taxes are charged on spending: the lowest-income fifth paid {cav[0]} of its spending in indirect taxes, and the other fifths between {cav[1]} and {cav[2]}. ONS warns that lump sums of tax put off from earlier years can make the lowest fifths' direct taxes look high.</p>
 {v_hh}
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
+<p><a href="defence.html">Why can't we afford to spend more on defence?</a> UK defence spending in cash, after inflation and as a share of GDP, beside the G7, and what extra spending would cost.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
+<p><a href="immigration.html">Is immigration a good or a bad thing?</a> What official evidence says about public money, public services and the economy, and where it cannot decide.</p>
 <h2 id="life">Everyday life, year by year</h2>
 <p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages stop at {L}.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>The {L} figure is provisional. Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. ONS has since published April 2026 pay, which this series does not yet include. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
-<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, when that series ends.</p>{sparks["holidays"]}</a>
+<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, the last years of the comparable series.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages stop at {L}.</p>{sparks["schools"]}</a>
 <a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
@@ -111,7 +116,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
             '<li><strong>No invented households presented as fact.</strong> Where a made-up person helps explain a rule, it is labelled “Illustration, not a statistic” and kept apart from the official figures.</li>'
             '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why in its own words. Where an official body such as the Office for National Statistics or HM Revenue and Customs has published its own explanation, we quote it word for word, name who said it, and link to it. The check confirms that every quote still matches the publication.</li>'
-            '<li id="topics"><strong>How we choose the everyday topics.</strong> Each is an everyday subject that official statistics measure across several years. A subject with no such series is left out, not estimated. Poverty and hardship are not measured here.</li>'
+            '<li id="topics"><strong>How we choose the everyday topics.</strong> Each is an everyday subject that official statistics measure across several years. A subject with no such series is left out, not estimated. Poverty and hardship have official series that the site does not show yet.</li>'
             '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li>'
             '<li><strong>How we choose what to show.</strong> Headline figures use the publisher’s own main measure for the latest year it has measured. '
             'Comparisons over time use fixed windows (ten years for spending by area, the first and latest year for each series) and the same lead figure on every comparison page, '

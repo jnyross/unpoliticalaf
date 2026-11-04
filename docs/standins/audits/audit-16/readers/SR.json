@@ -1,0 +1,7 @@
+{"reader": "SR", "site_commit": "d72127d", "budget": 40, "actions_used": 28,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+ "Home page: each of the four money cards and the life cards is one very long link whose accessible name is the whole paragraph, so moving through links by name is tedious and the link purpose is buried (not blocking).",
+ "Year by year page: the 'Go to a year' dropdown has 55 unlabelled-by-position options and a separate Go button, so reaching 2019 takes several actions (not blocking).",
+ "Home page: Q12 (why women's employment rose) and Q6 were answered from card text and the 'Change is not cause' list item rather than the topic page; I could not confirm the women's employment wording on its own page (not blocking)."
+ ]}

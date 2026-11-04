@@ -104,6 +104,7 @@ def affordability(facts):
 
 JOBS_FILE = "data/fetched/ons/jobs02.xls"
 JOBS_SHEET = "WFJ SA"
+PEOPLE_FILE = "data/fetched/ons/mgrz.csv"
 # Section letter -> short plain-English name
 INDUSTRY_NAMES = {
     "A": "Farming, forestry and fishing", "B": "Mining and quarrying", "C": "Manufacturing", "D": "Electricity and gas supply",
@@ -140,6 +141,18 @@ def jobs_by_industry(facts):
             facts.add(Fact(f"jobs.share.{s}.{y}", None if part.value is None or not total.value else 100 * part.value / total.value,
                            "% of all workforce jobs", f"June {y}", "ons-jobs02", part.locator, "calculated",
                            formula=f"100 × {part.id} ÷ {total.id}", inputs=[part.id, total.id]))
+    # People in employment in the same month (Labour Force Survey, seasonally adjusted), so the
+    # jobs count can be set beside a count of people. Jobs count jobs; this counts people.
+    pmeta, people = ons_series(PEOPLE_FILE)
+    for y in out["years"]:
+        jt = facts[f"jobs.total.{y}"]
+        p = people.get(f"{y} JUN")
+        pf = facts.add(Fact(f"jobs.people.{y}", p, "thousand people", f"June {y}", "ons-mgrz", f"{pmeta.get('CDID')} row '{y} JUN'", "published",
+                            note="People in employment aged 16 and over, seasonally adjusted, United Kingdom"))
+        facts.add(Fact(f"jobs.gap.{y}", None if p is None or jt.value is None else jt.value - p, "thousand", f"June {y}", "ons-jobs02",
+                       f"{jt.locator} minus {pf.locator}", "calculated",
+                       formula=f"{jt.id} − {pf.id}", inputs=[jt.id, pf.id],
+                       note="Workforce jobs minus people in employment. Not a count of people with two jobs: the two counts also differ in source and coverage."))
     return out
 
 

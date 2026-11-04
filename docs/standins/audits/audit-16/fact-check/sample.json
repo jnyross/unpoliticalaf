@@ -1,0 +1,1789 @@
+{
+ "meta": {
+  "seed": null,
+  "population": 10840,
+  "headline_population": 0,
+  "commit": "d72127db94223ac4f6853a699caf6027172d815e"
+ },
+ "items": [
+  {
+   "n": 1,
+   "group": "chosen",
+   "id": "spend.cash.tme.2025-26",
+   "page": "index.html",
+   "pages": 8,
+   "kind": "bn",
+   "text": "£1,360bn",
+   "value": 1360.1,
+   "unit": "£bn",
+   "period": "2025-26",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.cash.tme.2025-26",
+     "value": 1360.1,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 2,
+   "group": "chosen",
+   "id": "spend.per100.social.2025-26",
+   "page": "index.html",
+   "pages": 6,
+   "kind": "per100",
+   "text": "£33",
+   "value": 33.17855979146302,
+   "unit": "£ per £100",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "100 × spend.cash.social.2025-26 ÷ spend.cash.services.2025-26",
+   "calc": {
+    "spend.per100.social.2025-26": {
+     "formula": "100 × spend.cash.social.2025-26 ÷ spend.cash.services.2025-26",
+     "inputs": [
+      "spend.cash.social.2025-26",
+      "spend.cash.services.2025-26"
+     ],
+     "value": 33.17855979146302
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.cash.social.2025-26",
+     "value": 407.3,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X23",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "spend.cash.services.2025-26",
+     "value": 1227.6,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X25",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 3,
+   "group": "chosen",
+   "id": "spend.per100.debt_interest.2025-26",
+   "page": "index.html",
+   "pages": 3,
+   "kind": "per100",
+   "text": "£11",
+   "value": 10.614206581948519,
+   "unit": "£ per £100",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "100 × spend.cash.debt_interest.2025-26 ÷ spend.cash.services.2025-26",
+   "calc": {
+    "spend.per100.debt_interest.2025-26": {
+     "formula": "100 × spend.cash.debt_interest.2025-26 ÷ spend.cash.services.2025-26",
+     "inputs": [
+      "spend.cash.debt_interest.2025-26",
+      "spend.cash.services.2025-26"
+     ],
+     "value": 10.614206581948519
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.cash.debt_interest.2025-26",
+     "value": 130.3,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "spend.cash.services.2025-26",
+     "value": 1227.6,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X25",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 4,
+   "group": "chosen",
+   "id": "spend.perhousehold.tme.2025-26",
+   "page": "spending.html",
+   "pages": 2,
+   "kind": "pounds",
+   "text": "£46,895",
+   "value": 46895.14877771265,
+   "unit": "£ per household",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "spend.cash.tme.2025-26 × 1000000000 ÷ hh.uk.2025",
+   "calc": {
+    "spend.perhousehold.tme.2025-26": {
+     "formula": "spend.cash.tme.2025-26 × 1000000000 ÷ hh.uk.2025",
+     "inputs": [
+      "spend.cash.tme.2025-26",
+      "hh.uk.2025"
+     ],
+     "value": 46895.14877771265
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.cash.tme.2025-26",
+     "value": 1360.1,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_2!X27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "hh.uk.2025",
+     "value": 29003000.0,
+     "unit": "households",
+     "period": "April to June 2025",
+     "source": "ons-families-households",
+     "locator": "5!B21",
+     "scale": 1000,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
+     "file": "data/fetched/ons/families-households.xlsx",
+     "sha256": "a89eaa3d7f519bfa949c7cfa12f531b8c7a86c704adcb70e81f49567ae724a91",
+     "publisher": "Office for National Statistics",
+     "title": "Families and households in the UK, 1996 to 2025 (published 17 April 2026): Table 5, households by size"
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "group": "chosen",
+   "id": "spend.realchange.tme.2003-04.2025-26",
+   "page": "spending.html",
+   "pages": 1,
+   "kind": "pct0",
+   "text": "54%",
+   "value": 54.20634920634919,
+   "unit": "%",
+   "period": "2003-04 to 2025-26",
+   "status": "calculated",
+   "formula": "100 × (spend.real.tme.2025-26 ÷ spend.real.tme.2003-04 − 1)",
+   "calc": {
+    "spend.realchange.tme.2003-04.2025-26": {
+     "formula": "100 × (spend.real.tme.2025-26 ÷ spend.real.tme.2003-04 − 1)",
+     "inputs": [
+      "spend.real.tme.2025-26",
+      "spend.real.tme.2003-04"
+     ],
+     "value": 54.20634920634919
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.real.tme.2025-26",
+     "value": 1360.1,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_3!X27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "spend.real.tme.2003-04",
+     "value": 882.0,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2003-04",
+     "source": "pesa4",
+     "locator": "4_3!B27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "group": "chosen",
+   "id": "spend.gdp.tme.2025-26",
+   "page": "spending.html",
+   "pages": 5,
+   "kind": "pct",
+   "text": "44.3%",
+   "value": 44.3,
+   "unit": "% of GDP",
+   "period": "2025-26",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "spend.gdp.tme.2025-26",
+     "value": 44.3,
+     "unit": "% of GDP",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_4!X27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 7,
+   "group": "chosen",
+   "id": "spend.realchange.health.2015-16.2025-26",
+   "page": "spending.html",
+   "pages": 2,
+   "kind": "pct0",
+   "text": "34%",
+   "value": 34.0447683498178,
+   "unit": "%",
+   "period": "2015-16 to 2025-26",
+   "status": "calculated",
+   "formula": "100 × (spend.real.health.2025-26 ÷ spend.real.health.2015-16 − 1)",
+   "calc": {
+    "spend.realchange.health.2015-16.2025-26": {
+     "formula": "100 × (spend.real.health.2025-26 ÷ spend.real.health.2015-16 − 1)",
+     "inputs": [
+      "spend.real.health.2025-26",
+      "spend.real.health.2015-16"
+     ],
+     "value": 34.0447683498178
+    }
+   },
+   "cells": [
+    {
+     "id": "spend.real.health.2025-26",
+     "value": 257.5,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2025-26",
+     "source": "pesa4",
+     "locator": "4_3!X20",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    },
+    {
+     "id": "spend.real.health.2015-16",
+     "value": 192.1,
+     "unit": "£bn (2025-26 prices)",
+     "period": "2015-16",
+     "source": "pesa4",
+     "locator": "4_3!N20",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a5772e09e63154454413700/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "file": "data/raw/PESA_2026_CP_Chapter_4_tables.xlsx",
+     "sha256": "50ae80d95c4e542c34a17dfa8bc302858ca6508b6753e27bb31920cec9bb75c4",
+     "publisher": "HM Treasury",
+     "title": "Public Expenditure Statistical Analyses (PESA) 2026, Chapter 4 tables"
+    }
+   ]
+  },
+  {
+   "n": 8,
+   "group": "chosen",
+   "id": "rec.taxes.2025-26",
+   "page": "index.html",
+   "pages": 7,
+   "kind": "bn",
+   "text": "£1,105bn",
+   "value": 1104.686,
+   "unit": "£bn",
+   "period": "2025-26",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "rec.taxes.2025-26",
+     "value": 1104.686,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 9,
+   "group": "chosen",
+   "id": "rec.big3share.2025-26",
+   "page": "index.html",
+   "pages": 3,
+   "kind": "pct0",
+   "text": "65%",
+   "value": 64.64216981114997,
+   "unit": "% of all taxes",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "100 × (rec.income_tax + rec.nics + rec.vat) ÷ rec.taxes, 2025-26",
+   "calc": {
+    "rec.big3share.2025-26": {
+     "formula": "100 × (rec.income_tax + rec.nics + rec.vat) ÷ rec.taxes, 2025-26",
+     "inputs": [
+      "rec.income_tax.2025-26",
+      "rec.nics.2025-26",
+      "rec.vat.2025-26",
+      "rec.taxes.2025-26"
+     ],
+     "value": 64.64216981114997
+    },
+    "rec.income_tax.2025-26": {
+     "formula": "rec.part.income_tax.0.2025-26 + rec.part.income_tax.1.2025-26 + rec.part.income_tax.2.2025-26",
+     "inputs": [
+      "rec.part.income_tax.0.2025-26",
+      "rec.part.income_tax.1.2025-26",
+      "rec.part.income_tax.2.2025-26"
+     ],
+     "value": 329.33799999999997
+    }
+   },
+   "cells": [
+    {
+     "id": "rec.part.income_tax.0.2025-26",
+     "value": 280.513,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!Q33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.part.income_tax.1.2025-26",
+     "value": 54.071,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!R33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.part.income_tax.2.2025-26",
+     "value": -5.246,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!S33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.nics.2025-26",
+     "value": 204.429,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AB33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.vat.2025-26",
+     "value": 180.326,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!C33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.taxes.2025-26",
+     "value": 1104.686,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 10,
+   "group": "chosen",
+   "id": "agg.psnb.2025-26",
+   "page": "index.html",
+   "pages": 6,
+   "kind": "bn",
+   "text": "£134bn",
+   "value": 134.286,
+   "unit": "£bn",
+   "period": "2025-26",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "agg.psnb.2025-26",
+     "value": 134.286,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Aggregates (£bn)!O87",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 11,
+   "group": "chosen",
+   "id": "gdp.psnd.2025-26",
+   "page": "taxes.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "93.3%",
+   "value": 93.3,
+   "unit": "% of GDP",
+   "period": "2025-26",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "gdp.psnd.2025-26",
+     "value": 93.3,
+     "unit": "% of GDP",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Aggregates (per cent of GDP)!X82",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 12,
+   "group": "chosen",
+   "id": "rec.perhousehold.taxes.2025-26",
+   "page": "taxes.html",
+   "pages": 1,
+   "kind": "pounds",
+   "text": "£38,089",
+   "value": 38088.68048132952,
+   "unit": "£ per household",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "rec.taxes.2025-26 × 1000000000 ÷ hh.uk.2025",
+   "calc": {
+    "rec.perhousehold.taxes.2025-26": {
+     "formula": "rec.taxes.2025-26 × 1000000000 ÷ hh.uk.2025",
+     "inputs": [
+      "rec.taxes.2025-26",
+      "hh.uk.2025"
+     ],
+     "value": 38088.68048132952
+    }
+   },
+   "cells": [
+    {
+     "id": "rec.taxes.2025-26",
+     "value": 1104.686,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "hh.uk.2025",
+     "value": 29003000.0,
+     "unit": "households",
+     "period": "April to June 2025",
+     "source": "ons-families-households",
+     "locator": "5!B21",
+     "scale": 1000,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
+     "file": "data/fetched/ons/families-households.xlsx",
+     "sha256": "a89eaa3d7f519bfa949c7cfa12f531b8c7a86c704adcb70e81f49567ae724a91",
+     "publisher": "Office for National Statistics",
+     "title": "Families and households in the UK, 1996 to 2025 (published 17 April 2026): Table 5, households by size"
+    }
+   ]
+  },
+  {
+   "n": 13,
+   "group": "chosen",
+   "id": "rec.share.income_tax.2025-26",
+   "page": "index.html",
+   "pages": 4,
+   "kind": "pct0",
+   "text": "30%",
+   "value": 29.812815587415788,
+   "unit": "% of all taxes",
+   "period": "2025-26",
+   "status": "calculated",
+   "formula": "100 × rec.income_tax.2025-26 ÷ rec.taxes.2025-26",
+   "calc": {
+    "rec.share.income_tax.2025-26": {
+     "formula": "100 × rec.income_tax.2025-26 ÷ rec.taxes.2025-26",
+     "inputs": [
+      "rec.income_tax.2025-26",
+      "rec.taxes.2025-26"
+     ],
+     "value": 29.812815587415788
+    },
+    "rec.income_tax.2025-26": {
+     "formula": "rec.part.income_tax.0.2025-26 + rec.part.income_tax.1.2025-26 + rec.part.income_tax.2.2025-26",
+     "inputs": [
+      "rec.part.income_tax.0.2025-26",
+      "rec.part.income_tax.1.2025-26",
+      "rec.part.income_tax.2.2025-26"
+     ],
+     "value": 329.33799999999997
+    }
+   },
+   "cells": [
+    {
+     "id": "rec.part.income_tax.0.2025-26",
+     "value": 280.513,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!Q33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.part.income_tax.1.2025-26",
+     "value": 54.071,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!R33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.part.income_tax.2.2025-26",
+     "value": -5.246,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!S33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.taxes.2025-26",
+     "value": 1104.686,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 14,
+   "group": "chosen",
+   "id": "rec.sharechange.nics.1999-00.2025-26",
+   "page": "taxes.html",
+   "pages": 1,
+   "kind": "pts",
+   "text": "+2.0 points",
+   "value": 1.9702744296377759,
+   "unit": "percentage points",
+   "period": "1999-00 to 2025-26",
+   "status": "calculated",
+   "formula": "rec.share.nics.2025-26 − rec.share.nics.1999-00",
+   "calc": {
+    "rec.sharechange.nics.1999-00.2025-26": {
+     "formula": "rec.share.nics.2025-26 − rec.share.nics.1999-00",
+     "inputs": [
+      "rec.share.nics.2025-26",
+      "rec.share.nics.1999-00"
+     ],
+     "value": 1.9702744296377759
+    },
+    "rec.share.nics.1999-00": {
+     "formula": "100 × rec.nics.1999-00 ÷ rec.taxes.1999-00",
+     "inputs": [
+      "rec.nics.1999-00",
+      "rec.taxes.1999-00"
+     ],
+     "value": 16.53534617205357
+    },
+    "rec.share.nics.2025-26": {
+     "formula": "100 × rec.nics.2025-26 ÷ rec.taxes.2025-26",
+     "inputs": [
+      "rec.nics.2025-26",
+      "rec.taxes.2025-26"
+     ],
+     "value": 18.505620601691344
+    }
+   },
+   "cells": [
+    {
+     "id": "rec.nics.2025-26",
+     "value": 204.429,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AB33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.taxes.2025-26",
+     "value": 1104.686,
+     "unit": "£bn",
+     "period": "2025-26",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH33",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.nics.1999-00",
+     "value": 56.935,
+     "unit": "£bn",
+     "period": "1999-00",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AB7",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    },
+    {
+     "id": "rec.taxes.1999-00",
+     "value": 344.323,
+     "unit": "£bn",
+     "period": "1999-00",
+     "source": "obr",
+     "locator": "Receipts (£bn)!AH7",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://obr.uk/download/public-finances-databank-october-2026-efo/",
+     "file": "data/raw/OBR_Public_finances_databank_October_2026.xlsx",
+     "sha256": "16a4bf46d8692e18790e87add342c6c44aa909cebb19f68ae857126a36d36459",
+     "publisher": "Office for Budget Responsibility",
+     "title": "Public finances databank, October 2026"
+    }
+   ]
+  },
+  {
+   "n": 15,
+   "group": "chosen",
+   "id": "hmrc.share.top1.2023 to 2024",
+   "page": "index.html",
+   "pages": 9,
+   "kind": "pct",
+   "text": "27.2%",
+   "value": 27.2,
+   "unit": "% of all Income Tax",
+   "period": "2023 to 2024",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hmrc.share.top1.2023 to 2024",
+     "value": 27.2,
+     "unit": "% of all Income Tax",
+     "period": "2023 to 2024",
+     "source": "hmrc24",
+     "locator": "2_4_Taxpayer_share_tax!K27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "file": "data/payers/raw/hmrc-table24-july2026.ods",
+     "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+     "publisher": "HM Revenue and Customs",
+     "title": "Income Tax statistics, Table 2.4: shares of total income and Income Tax for percentile groups"
+    }
+   ]
+  },
+  {
+   "n": 16,
+   "group": "chosen",
+   "id": "hmrc.income.top1.2023 to 2024",
+   "page": "index.html",
+   "pages": 6,
+   "kind": "pct",
+   "text": "12.4%",
+   "value": 12.4,
+   "unit": "% of all taxpayers' income",
+   "period": "2023 to 2024",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hmrc.income.top1.2023 to 2024",
+     "value": 12.4,
+     "unit": "% of all taxpayers' income",
+     "period": "2023 to 2024",
+     "source": "hmrc24",
+     "locator": "2_4_Taxpayer_share_inc_pretax!K27",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://assets.publishing.service.gov.uk/media/6a54e2b72467584757371e1a/Table_2.4_Shares_of_total_Income_Tax_liability.ods",
+     "file": "data/payers/raw/hmrc-table24-july2026.ods",
+     "sha256": "8eb6281c40d716367cd063c5cfd124ba49fb7ab223c8ebacfb6680db1113c6b7",
+     "publisher": "HM Revenue and Customs",
+     "title": "Income Tax statistics, Table 2.4: shares of total income and Income Tax for percentile groups"
+    }
+   ]
+  },
+  {
+   "n": 17,
+   "group": "chosen",
+   "id": "etb.2a.taxshare.q5",
+   "page": "who-pays.html",
+   "pages": 4,
+   "kind": "pct",
+   "text": "46.0%",
+   "value": 45.97917523502931,
+   "unit": "% of all household taxes",
+   "period": "2023/24",
+   "status": "calculated",
+   "formula": "100 × etb.2a.hhtax.q5 ÷ etb.2a.hhtax.total",
+   "calc": {
+    "etb.2a.taxshare.q5": {
+     "formula": "100 × etb.2a.hhtax.q5 ÷ etb.2a.hhtax.total",
+     "inputs": [
+      "etb.2a.hhtax.q5",
+      "etb.2a.hhtax.total"
+     ],
+     "value": 45.97917523502931
+    },
+    "etb.2a.hhtax.total": {
+     "formula": "etb.2a.hhtax.q1 + etb.2a.hhtax.q2 + etb.2a.hhtax.q3 + etb.2a.hhtax.q4 + etb.2a.hhtax.q5",
+     "inputs": [
+      "etb.2a.hhtax.q1",
+      "etb.2a.hhtax.q2",
+      "etb.2a.hhtax.q3",
+      "etb.2a.hhtax.q4",
+      "etb.2a.hhtax.q5"
+     ],
+     "value": 655.402835
+    },
+    "etb.2a.hhtax.q5": {
+     "formula": "etb.2a.alltax.q5 × etb.2a.households.q5 ÷ 1000000",
+     "inputs": [
+      "etb.2a.alltax.q5",
+      "etb.2a.households.q5"
+     ],
+     "value": 301.348818
+    },
+    "etb.2a.alltax.q5": {
+     "formula": "etb.2a.direct.q5 + etb.2a.indirect.q5",
+     "inputs": [
+      "etb.2a.direct.q5",
+      "etb.2a.indirect.q5"
+     ],
+     "value": 51903.0
+    },
+    "etb.2a.hhtax.q4": {
+     "formula": "etb.2a.alltax.q4 × etb.2a.households.q4 ÷ 1000000",
+     "inputs": [
+      "etb.2a.alltax.q4",
+      "etb.2a.households.q4"
+     ],
+     "value": 133.93344
+    },
+    "etb.2a.alltax.q4": {
+     "formula": "etb.2a.direct.q4 + etb.2a.indirect.q4",
+     "inputs": [
+      "etb.2a.direct.q4",
+      "etb.2a.indirect.q4"
+     ],
+     "value": 25280.0
+    },
+    "etb.2a.hhtax.q3": {
+     "formula": "etb.2a.alltax.q3 × etb.2a.households.q3 ÷ 1000000",
+     "inputs": [
+      "etb.2a.alltax.q3",
+      "etb.2a.households.q3"
+     ],
+     "value": 96.381942
+    },
+    "etb.2a.alltax.q3": {
+     "formula": "etb.2a.direct.q3 + etb.2a.indirect.q3",
+     "inputs": [
+      "etb.2a.direct.q3",
+      "etb.2a.indirect.q3"
+     ],
+     "value": 17338.0
+    },
+    "etb.2a.hhtax.q2": {
+     "formula": "etb.2a.alltax.q2 × etb.2a.households.q2 ÷ 1000000",
+     "inputs": [
+      "etb.2a.alltax.q2",
+      "etb.2a.households.q2"
+     ],
+     "value": 73.06676
+    },
+    "etb.2a.alltax.q2": {
+     "formula": "etb.2a.direct.q2 + etb.2a.indirect.q2",
+     "inputs": [
+      "etb.2a.direct.q2",
+      "etb.2a.indirect.q2"
+     ],
+     "value": 12380.0
+    },
+    "etb.2a.hhtax.q1": {
+     "formula": "etb.2a.alltax.q1 × etb.2a.households.q1 ÷ 1000000",
+     "inputs": [
+      "etb.2a.alltax.q1",
+      "etb.2a.households.q1"
+     ],
+     "value": 50.671875
+    },
+    "etb.2a.alltax.q1": {
+     "formula": "etb.2a.direct.q1 + etb.2a.indirect.q1",
+     "inputs": [
+      "etb.2a.direct.q1",
+      "etb.2a.indirect.q1"
+     ],
+     "value": 8625.0
+    }
+   },
+   "cells": [
+    {
+     "id": "etb.2a.direct.q5",
+     "value": 41215.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!G48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q5",
+     "value": 10688.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!G70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.households.q5",
+     "value": 5806.0,
+     "unit": "thousands of households",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!G9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.direct.q1",
+     "value": 3696.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!C48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q1",
+     "value": 4929.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!C70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.households.q1",
+     "value": 5875.0,
+     "unit": "thousands of households",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!C9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.direct.q2",
+     "value": 6308.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!D48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q2",
+     "value": 6072.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!D70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.households.q2",
+     "value": 5902.0,
+     "unit": "thousands of households",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!D9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.direct.q3",
+     "value": 10482.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!E48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q3",
+     "value": 6856.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!E70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.households.q3",
+     "value": 5559.0,
+     "unit": "thousands of households",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!E9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.direct.q4",
+     "value": 17012.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!F48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q4",
+     "value": 8268.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!F70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.households.q4",
+     "value": 5298.0,
+     "unit": "thousands of households",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!F9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 18,
+   "group": "chosen",
+   "id": "etb.2a.alltax.q1",
+   "page": "who-pays.html",
+   "pages": 2,
+   "kind": "pounds",
+   "text": "£8,625",
+   "value": 8625.0,
+   "unit": "£ a year per household",
+   "period": "2023/24",
+   "status": "calculated",
+   "formula": "etb.2a.direct.q1 + etb.2a.indirect.q1",
+   "calc": {
+    "etb.2a.alltax.q1": {
+     "formula": "etb.2a.direct.q1 + etb.2a.indirect.q1",
+     "inputs": [
+      "etb.2a.direct.q1",
+      "etb.2a.indirect.q1"
+     ],
+     "value": 8625.0
+    }
+   },
+   "cells": [
+    {
+     "id": "etb.2a.direct.q1",
+     "value": 3696.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!C48",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    },
+    {
+     "id": "etb.2a.indirect.q1",
+     "value": 4929.0,
+     "unit": "£ a year per household",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 2a!C70",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 19,
+   "group": "chosen",
+   "id": "etb.t8.gross.all.all",
+   "page": "household-tax.html",
+   "pages": 7,
+   "kind": "pct",
+   "text": "33.6%",
+   "value": 33.6,
+   "unit": "%",
+   "period": "2023/24",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "etb.t8.gross.all.all",
+     "value": 33.6,
+     "unit": "%",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 8!I15",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 20,
+   "group": "chosen",
+   "id": "etb.t8.gross.indirect.q1",
+   "page": "household-tax.html",
+   "pages": 5,
+   "kind": "pct",
+   "text": "21.0%",
+   "value": 21.0,
+   "unit": "%",
+   "period": "2023/24",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "etb.t8.gross.indirect.q1",
+     "value": 21.0,
+     "unit": "%",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 8!D9",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 21,
+   "group": "chosen",
+   "id": "etb.t16.all.2023/24",
+   "page": "who-pays.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "53.3%",
+   "value": 53.3,
+   "unit": "% of people",
+   "period": "2023/24",
+   "status": "outturn",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "etb.t16.all.2023/24",
+     "value": 53.3,
+     "unit": "% of people",
+     "period": "2023/24",
+     "source": "etb",
+     "locator": "Table 16!B51",
+     "scale": 1,
+     "status": "outturn",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2024/etbreferencetablesfye202324final.xlsx",
+     "file": "data/payers/raw/ons-etb-fye2024.xlsx",
+     "sha256": "2e38c1694d922427509879b9553a4c3473b8ba1174898c2dd414668ecbb2bf73",
+     "publisher": "Office for National Statistics",
+     "title": "The effects of taxes and benefits on household income, financial year ending 2024: reference tables"
+    }
+   ]
+  },
+  {
+   "n": 22,
+   "group": "chosen",
+   "id": "work.rate.2026",
+   "page": "index.html",
+   "pages": 2,
+   "kind": "pct",
+   "text": "75.1%",
+   "value": 75.1,
+   "unit": "%",
+   "period": "April to June 2026",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "work.rate.2026",
+     "value": 75.1,
+     "unit": "%",
+     "period": "April to June 2026",
+     "source": "ons-lf24",
+     "locator": "LF24 row '2026 Q2'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf24/lms",
+     "file": "data/fetched/ons/lf24.csv",
+     "sha256": "77a8b0e67df50f5ebf8bc9a978fea688c7dba11f0e464803577e4387809de956",
+     "publisher": "Office for National Statistics",
+     "title": "Labour market statistics: employment rate, aged 16 to 64 (LF24)"
+    }
+   ]
+  },
+  {
+   "n": 23,
+   "group": "chosen",
+   "id": "earn.real.ft.2021",
+   "page": "index.html",
+   "pages": 69,
+   "kind": "pounds",
+   "text": "£761",
+   "value": 760.5929347826086,
+   "unit": "£ a week, April 2025 prices",
+   "period": "April 2021",
+   "status": "calculated",
+   "formula": "earn.ft.2021 × cpih.apr.2025 ÷ cpih.apr.2021",
+   "calc": {
+    "earn.real.ft.2021": {
+     "formula": "earn.ft.2021 × cpih.apr.2025 ÷ cpih.apr.2021",
+     "inputs": [
+      "earn.ft.2021",
+      "cpih.apr.2025",
+      "cpih.apr.2021"
+     ],
+     "value": 760.5929347826086
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.ft.2021",
+     "value": 609.8,
+     "unit": "£ a week",
+     "period": "April 2021",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 180",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    },
+    {
+     "id": "cpih.apr.2021",
+     "value": 110.4,
+     "unit": "index (2015=100)",
+     "period": "April 2021",
+     "source": "ons-l522",
+     "locator": "L522 row '2021 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 24,
+   "group": "chosen",
+   "id": "earn.ft.2025",
+   "page": "index.html",
+   "pages": 43,
+   "kind": "pounds",
+   "text": "£767",
+   "value": 766.6,
+   "unit": "£ a week",
+   "period": "April 2025",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "earn.ft.2025",
+     "value": 766.6,
+     "unit": "£ a week",
+     "period": "April 2025",
+     "source": "nomis-ashe-resident",
+     "locator": "ashe-resident-uk-median-weekly.csv line 216",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-uk-median-weekly.csv",
+     "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay"
+    }
+   ]
+  },
+  {
+   "n": 25,
+   "group": "chosen",
+   "id": "earn.place.real.scotland.2025",
+   "page": "life/2025.html",
+   "pages": 38,
+   "kind": "pounds",
+   "text": "£776",
+   "value": 775.6,
+   "unit": "£ a week, April 2025 prices",
+   "period": "April 2025",
+   "status": "calculated",
+   "formula": "earn.place.scotland.2025 × cpih.apr.2025 ÷ cpih.apr.2025",
+   "calc": {
+    "earn.place.real.scotland.2025": {
+     "formula": "earn.place.scotland.2025 × cpih.apr.2025 ÷ cpih.apr.2025",
+     "inputs": [
+      "earn.place.scotland.2025",
+      "cpih.apr.2025",
+      "cpih.apr.2025"
+     ],
+     "value": 775.6
+    }
+   },
+   "cells": [
+    {
+     "id": "earn.place.scotland.2025",
+     "value": 775.6,
+     "unit": "£ a week",
+     "period": "April 2025",
+     "source": "nomis-ashe-places",
+     "locator": "ashe-resident-nations-regions-ft-median-weekly.csv line 932",
+     "scale": 1,
+     "status": "provisional",
+     "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+     "file": "data/fetched/nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
+     "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+     "publisher": "Office for National Statistics (via Nomis)",
+     "title": "Annual Survey of Hours and Earnings (ASHE), resident analysis: median gross weekly pay of full-time employees, by nation and English region"
+    },
+    {
+     "id": "cpih.apr.2025",
+     "value": 137.7,
+     "unit": "index (2015=100)",
+     "period": "April 2025",
+     "source": "ons-l522",
+     "locator": "L522 row '2025 APR'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+     "file": "data/fetched/ons/l522.csv",
+     "sha256": "b5c1c0ab1e818531a93a14b7e7d5920b0b7b57a86f82c65019bdad32e1a5c45f",
+     "publisher": "Office for National Statistics",
+     "title": "Consumer prices: CPIH index, all items, 2015=100 (L522)"
+    }
+   ]
+  },
+  {
+   "n": 26,
+   "group": "chosen",
+   "id": "house.owners.2024",
+   "page": "index.html",
+   "pages": 5,
+   "kind": "pct0",
+   "text": "65%",
+   "value": 64.82857579167622,
+   "unit": "% of households",
+   "period": "2024-25 survey year",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "house.owners.2024",
+     "value": 64.82857579167622,
+     "unit": "% of households",
+     "period": "2024-25 survey year",
+     "source": "ehs-ft1101",
+     "locator": "FT1101!D103",
+     "scale": 1,
+     "status": "published",
+     "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
+     "file": "data/fetched/ehs/FT1101_Trends_in_tenure.ods",
+     "sha256": "acc7b55efb97606d882323f717f12ac8258123b5287fee5fc451e54806730103",
+     "publisher": "Ministry of Housing, Communities and Local Government",
+     "title": "English Housing Survey live table FT1101: trends in tenure"
+    }
+   ]
+  },
+  {
+   "n": 27,
+   "group": "chosen",
+   "id": "hol.world.holiday.2025",
+   "page": "index.html",
+   "pages": 41,
+   "kind": "millions",
+   "text": "58.4 million",
+   "value": 58396.0,
+   "unit": "thousand visits",
+   "period": "2025",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "hol.world.holiday.2025",
+     "value": 58396.0,
+     "unit": "thousand visits",
+     "period": "2025",
+     "source": "ott-2025",
+     "locator": "2!C48",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
+     "file": "data/fetched/ott/ukresidents2025annual.xlsx",
+     "sha256": "978dabb5e0abe36274f8f3d19af3fe3004b3049a158515a83c9dc158180f5d4d",
+     "publisher": "Office for National Statistics",
+     "title": "Travel trends: UK residents' visits abroad, 2025 annual tables"
+    }
+   ]
+  },
+  {
+   "n": 28,
+   "group": "chosen",
+   "id": "hol.abroad.per100.2025",
+   "page": "life/2025.html",
+   "pages": 53,
+   "kind": "int",
+   "text": "86",
+   "value": 86.4415184551961,
+   "unit": "holiday visits abroad per 100 residents",
+   "period": "2025",
+   "status": "calculated",
+   "formula": "100 × 1000 × hol.world.holiday.2025 ÷ pop.gb.2025",
+   "calc": {
+    "hol.abroad.per100.2025": {
+     "formula": "100 × 1000 × hol.world.holiday.2025 ÷ pop.gb.2025",
+     "inputs": [
+      "hol.world.holiday.2025",
+      "pop.gb.2025"
+     ],
+     "value": 86.4415184551961
+    }
+   },
+   "cells": [
+    {
+     "id": "hol.world.holiday.2025",
+     "value": 58396.0,
+     "unit": "thousand visits",
+     "period": "2025",
+     "source": "ott-2025",
+     "locator": "2!C48",
+     "scale": 0.001,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
+     "file": "data/fetched/ott/ukresidents2025annual.xlsx",
+     "sha256": "978dabb5e0abe36274f8f3d19af3fe3004b3049a158515a83c9dc158180f5d4d",
+     "publisher": "Office for National Statistics",
+     "title": "Travel trends: UK residents' visits abroad, 2025 annual tables"
+    },
+    {
+     "id": "pop.gb.2025",
+     "value": 67555500.0,
+     "unit": "people",
+     "period": "mid-2025",
+     "source": "ons-gbpop",
+     "locator": "GBPOP row '2025'",
+     "scale": 1,
+     "status": "published",
+     "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
+     "file": "data/fetched/ons/gbpop.csv",
+     "sha256": "a912da34f98c17bcc2ca6ffe125b79c05c4491923f9cc9678b866c83e8062a6f",
+     "publisher": "Office for National Statistics",
+     "title": "Population estimates: Great Britain mid-year population (GBPOP)"
+    }
+   ]
+  },
+  {
+   "n": 29,
+   "group": "chosen",
+   "id": "school.primary.2026",
+   "page": "index.html",
+   "pages": 6,
+   "kind": "dp1",
+   "text": "26.1",
+   "value": 26.1,
+   "unit": "pupils per class",
+   "period": "January 2026 census (2025/26 school year)",
+   "status": "published",
+   "formula": "",
+   "calc": {},
+   "cells": [
+    {
+     "id": "school.primary.2026",
+     "value": 26.1,
+     "unit": "pupils per class",
+     "period": "January 2026 census (2025/26 school year)",
+     "source": "dfe_api",
+     "locator": "results[11] values.Wc9V2",
+     "scale": 1,
+     "status": "published",
+     "url": "https://api.education.gov.uk/statistics/v1/data-sets/019e7401-70d1-73ca-9855-bd7258e5a1ca/query?dataSetVersion=1.0&geographicLevels.eq=NAT&pageSize=1000",
+     "file": "data/life/sources/schools/dfe-national-class-sizes-1.0.json",
+     "sha256": "b87e9c64b823ca25134fe6d6fd1ae1cc7b8fbabfe4da5f0a12af0dc8fa56ec04",
+     "publisher": "Department for Education",
+     "title": "Schools, pupils and their characteristics: class sizes, national (API data set, version 1.0)"
+    }
+   ]
+  },
+  {
+   "n": 30,
+   "group": "chosen",
+   "id": "jobs.share.C.2026",
+   "page": "life/jobs-by-industry.html",
+   "pages": 6,
+   "kind": "pct",
+   "text": "6.7%",
+   "value": 6.696793161648609,
+   "unit": "% of all workforce jobs",
+   "period": "June 2026",
+   "status": "calculated",
+   "formula": "100 × jobs.ind.C.2026 ÷ jobs.total.2026",
+   "calc": {
+    "jobs.share.C.2026": {
+     "formula": "100 × jobs.ind.C.2026 ÷ jobs.total.2026",
+     "inputs": [
+      "jobs.ind.C.2026",
+      "jobs.total.2026"
+     ],
+     "value": 6.696793161648609
+    }
+   },
+   "cells": [
+    {
+     "id": "jobs.ind.C.2026",
+     "value": 2460.0,
+     "unit": "thousand jobs",
+     "period": "June 2026",
+     "source": "ons-jobs02",
+     "locator": "WFJ SA!E198",
+     "scale": 1,
+     "status": "provisional",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "file": "data/fetched/ons/jobs02.xls",
+     "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+     "publisher": "Office for National Statistics",
+     "title": "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted"
+    },
+    {
+     "id": "jobs.total.2026",
+     "value": 36734.0,
+     "unit": "thousand jobs",
+     "period": "June 2026",
+     "source": "ons-jobs02",
+     "locator": "WFJ SA!X198",
+     "scale": 1,
+     "status": "provisional",
+     "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
+     "file": "data/fetched/ons/jobs02.xls",
+     "sha256": "dff121c784203fbd2de2dda8a0298b4bc47da72f883ff2ade9a8cfffae04ec70",
+     "publisher": "Office for National Statistics",
+     "title": "JOBS02: Workforce jobs by industry (SIC 2007), seasonally adjusted"
+    }
+   ]
+  }
+ ]
+}

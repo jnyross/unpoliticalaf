@@ -316,7 +316,8 @@ def who_pays(facts):
                        ("original", "Total original income"), ("benefits_cash", "Total cash benefits"), ("households", "Number of households in the population (thousands)")):
         i = etb_row(label)
         for q, j in qcols.items():
-            facts.add(Fact(f"etb.2a.{key}.{q}", num(rows[i][j]), "£ a year per household", "2023/24", "etb", f"Table 2a!{ref(i, j)}", "outturn"))
+            unit = "thousands of households" if key == "households" else "£ a year per household"
+            facts.add(Fact(f"etb.2a.{key}.{q}", num(rows[i][j]), unit, "2023/24", "etb", f"Table 2a!{ref(i, j)}", "outturn"))
     for q in qcols:
         d, ind = facts[f"etb.2a.direct.{q}"], facts[f"etb.2a.indirect.{q}"]
         facts.add(Fact(f"etb.2a.alltax.{q}", d.value + ind.value, "£ a year per household", "2023/24", "etb", f"{d.locator} + {ind.locator}",
@@ -507,7 +508,7 @@ def earnings(facts):
         if y not in YEARS and y not in EARLY_YEARS:
             continue
         fid = f"earn.{g}.{y}"
-        st = "provisional" if y == base_year else "published"
+        st = "published"  # ASHE 2025 is no longer provisional: ONS's October 2026 release kept it unchanged
         facts.add(Fact(fid, num(r["OBS_VALUE"]), "£ a week", f"April {y}", "nomis-ashe-resident", f"ashe-resident-uk-median-weekly.csv line {line}", st,
                        note=r["SEX_NAME"] + ", median gross weekly pay"))
         out["series"][g][y] = fid

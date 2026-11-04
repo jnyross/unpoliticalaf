@@ -177,7 +177,7 @@ FETCHED = {
     "ott-2019to2023": ("Office for National Statistics", "Travel trends, Section 3: UK residents' visits abroad, 2019 to 2023", "United Kingdom residents", "Visits abroad by UK residents"),
     "ott-2009to2019": ("Office for National Statistics", "Travel trends, Section 3: UK residents' visits abroad, 2009 to 2019", "United Kingdom residents", "Visits abroad by UK residents"),
     "ott-2024": ("Office for National Statistics", "Travel trends: UK residents' visits abroad, 2024 annual tables", "United Kingdom residents", "Visits abroad by UK residents"),
-    "ott-2025": ("Office for National Statistics", "Travel trends: UK residents' visits abroad, 2025 annual tables", "United Kingdom residents", "Visits abroad by UK residents"),
+    "ott-2025": ("Office for National Statistics", "Travel trends: UK residents' visits abroad, 2025 annual tables", "Great Britain residents for the holiday figures used here (the file also gives UK residents' totals)", "Visits abroad by UK residents"),
     "gbts-2019-gb-summary": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: GB all trips by purpose, summary tables 2019 (earlier survey method)", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
     "gbts-2022to2023-tables": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: domestic overnight trips, 2022 to 2023, tables", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
     "gbts-2024-q4-annual-tables": ("VisitEngland, VisitScotland and Visit Wales", "Great Britain Tourism Survey: domestic overnight trips, Q4 and annual 2024, tables", "Great Britain", "Overnight trips in Great Britain by GB residents, adults and accompanying children"),
@@ -230,6 +230,10 @@ FETCHED = {
     "explain-dmo-about-gilts": ("UK Debt Management Office", "About gilts", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-debt-interest": ("Office for Budget Responsibility", "Debt interest (central government, net of APF): explainer", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-frs-2025": ("Office for Budget Responsibility", "Fiscal risks and sustainability, July 2025", "United Kingdom", "Not applicable (report)"),
+    "explain-mac-annual-2025": ("Migration Advisory Committee", "Migration Advisory Committee annual report 2025 (accessible HTML version), including its fiscal analysis of the Family visa", "United Kingdom", "Migrants on the Family and Skilled Worker visa routes, and the population of the UK"),
+    "explain-obr-migration-fiscal": ("Office for Budget Responsibility", "The impact of migration on the fiscal forecast (box from the March 2024 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
+    "explain-obr-migration-gdp": ("Office for Budget Responsibility", "Net migration and GDP per person (box from the March 2026 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
+    "explain-ons-ltim-dec2025": ("Office for National Statistics", "Long-term international migration, provisional: year ending December 2025 (released 21 May 2026)", "United Kingdom", "All long-term international migrants to and from the UK, by nationality group"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
 }
 

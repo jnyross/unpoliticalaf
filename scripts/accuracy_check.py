@@ -250,6 +250,13 @@ def read_cell(body, file, locator, retained=None):
         m = re.fullmatch(r"results\[(\d+)\] values\.(\w+)", locator)
         if m:
             return data["results"][int(m.group(1))]["values"][m.group(2)]
+        # IMF DataMapper: values.<indicator>.<country>.<year>, e.g. values.GG_DEBT_GDP.GBR.2024
+        m = re.fullmatch(r"values\.(\w+)\.(\w+)\.(\d{4})", locator)
+        if m:
+            series = data["values"][m.group(1)][m.group(2)]
+            if m.group(3) not in series:
+                raise ValueError(f"no {m.group(1)} value for {m.group(2)} in {m.group(3)}")
+            return series[m.group(3)]
     if ext == "pdf":
         from pypdf import PdfReader
         m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)
@@ -275,7 +282,15 @@ def as_float(v):
 def evaluate(formula, values, inputs=()):
     """Redo a calculation written as text, e.g. '100 × a ÷ b'."""
     expr = formula
-    m = re.fullmatch(r"(\S+) − sum of the \w+ named groups", formula)
+    # Some formulas end with their period, e.g. '100 × a ÷ b, 2025-26', and name
+    # their inputs without it, so 'a' stands for the input 'a.2025-26'.
+    label = re.search(r",\s*(\d{4}-\d{2})$", expr)
+    if label:
+        period = label.group(1)
+        expr = expr[:label.start()]
+        values = {**values, **{fid[:-len(period) - 1]: v for fid, v in values.items()
+                               if fid.endswith("." + period)}}
+    m = re.fullmatch(r"(\S+) − sum of the (?:\w+ )?named \w+", formula)
     if m:  # 'total − sum of the named groups': the first input less all the others
         expr = " − ".join([m.group(1)] + [i for i in inputs if i != m.group(1)])
     for fid in sorted(values, key=len, reverse=True):

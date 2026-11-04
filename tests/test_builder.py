@@ -144,6 +144,16 @@ class Findings(unittest.TestCase):
         self.assertEqual(phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way")
         self.assertEqual(phrase(self.L, [4, 4, 4, 4, 4, 4]), "stayed the same from 2008 to 2013")
 
+    def test_smaller_moves_are_named_at_printed_precision(self):
+        from builder.findings import smaller_moves_text
+        years = [str(y) for y in range(2000, 2008)]
+        # A rise with two small falls: named, because the printed figures show them
+        self.assertEqual(smaller_moves_text(years, [10, 12, 11, 13, 14, 13, 15, 16], unit=1), "; smaller moves: fell in 2002 and 2005")
+        # A move too small to show when printed (54.4 to 53.6 both print as 54) is not named
+        self.assertEqual(smaller_moves_text(years, [54.4, 53.6, 55.2, 56.0, 57.1, 58.0, 58.4, 59.0], unit=1), "")
+        # A straight rise has nothing to name
+        self.assertEqual(smaller_moves_text(years, [5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4], unit=1), "")
+
     def test_every_big_rise_and_fall_is_named(self):
         from builder.findings import phrase, sentence
         years = [str(y) for y in range(2009, 2024)]
