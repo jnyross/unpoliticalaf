@@ -239,10 +239,13 @@ NAV = [
     ("who-pays.html", "Who pays"),
     ("household-tax.html", "Tax and income"),
     ("borrowing.html", "Debt"),
+    ("questions.html", "Questions"),
     ("life/index.html", "Year by year"),
-    ("glossary.html", "Glossary"),
     ("sources.html", "Sources"),
 ]
+# The header has eight items (a 9th adds a row on a phone). The footer lists the glossary as well,
+# because the header no longer does; glossary terms are also linked from the text of every page.
+FOOT_NAV = NAV[:-1] + [("glossary.html", "Glossary")] + NAV[-1:]
 
 
 def esc(s):
@@ -464,7 +467,7 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     nav = "".join(
         f'<li><a href="{up}{href}"{" aria-current=page" if href == path or (href == "life/index.html" and path.startswith("life/")) or (href == "who-pays.html" and path.startswith("who-pays-")) else ""}>{esc(label)}</a></li>'
         for href, label in NAV if href != "index.html")
-    foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in NAV)
+    foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in FOOT_NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
     body = downloads.add_links(body, path) if not path.startswith("figures/") else downloads.strip(body)
     if folded:
