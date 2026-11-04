@@ -942,6 +942,195 @@
           ]
         }
       ]
+    },
+    {
+      "id": "J7",
+      "asked": "Have labour kept their electiion manifesto?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 7 of his list of ten)",
+      "reading": "Read as whether Labour has kept the pledges in its 2024 manifesto that concern public money and everyday costs: tax, the fiscal rules, defence, housing, the NHS and home energy. Where the wording allows more than one reading (for example \"taxes on working people\", \"basic, higher or additional rates\" and the debt measure in the fiscal rules), the site shows each reading and its result, and does not pick one.",
+      "probes": [
+        {
+          "id": "J7.1",
+          "question": "What did Labour’s 2024 manifesto say it would not increase?",
+          "options": {
+            "A": "National Insurance, the basic, higher and additional rates of Income Tax, and VAT",
+            "B": "Council tax, business rates and stamp duty",
+            "C": "Only the basic rate of Income Tax",
+            "D": "Nothing: the manifesto made no tax promises"
+          },
+          "answer": "A",
+          "why": "Manifesto, page 21: it will not increase National Insurance, the basic, higher or additional rates of Income Tax, or VAT. The pledge is about tax on working people.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "which is why we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT."
+            }
+          ]
+        },
+        {
+          "id": "J7.2",
+          "question": "Has the government changed the standard VAT rate of 20% since Labour took office?",
+          "options": {
+            "A": "Yes, raised to 22%",
+            "B": "Yes, cut to 15%",
+            "C": "No, the standard rate is still 20%",
+            "D": "Yes, split into two rates"
+          },
+          "answer": "C",
+          "why": "The standard rate has stayed at 20%. Budgets changed some reliefs and private school fees, not the standard rate (Full Fact, 28 November 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The standard rate of VAT is still 20%."
+            }
+          ]
+        },
+        {
+          "id": "J7.3",
+          "question": "Have the basic, higher and additional income tax rates on earnings changed since Labour took office?",
+          "options": {
+            "A": "Yes, all three rose",
+            "B": "Yes, only the additional rate rose",
+            "C": "No, they are still 20%, 40% and 45%",
+            "D": "Yes, all three were cut"
+          },
+          "answer": "C",
+          "why": "The earnings rates are 20%, 40% and 45%, unchanged. The rates on dividends, savings and property income did change (HMRC, Budget 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The basic, higher and additional rates on earnings are still 20%, 40% and 45%"
+            }
+          ]
+        },
+        {
+          "id": "J7.4",
+          "question": "What did Budget 2025 do to income tax on dividends, savings and property income?",
+          "options": {
+            "A": "Cut the rates",
+            "B": "Left the rates unchanged",
+            "C": "Raised the rates: dividends from April 2026, savings and property from April 2027",
+            "D": "Abolished the taxes"
+          },
+          "answer": "C",
+          "why": "HMRC: dividend ordinary and upper rates rise from 6 April 2026; savings and property rates rise from April 2027 (Budget 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "Dividend rates rose from April 2026, and savings and property rates rise from April 2027."
+            }
+          ]
+        },
+        {
+          "id": "J7.5",
+          "question": "Why do readers disagree on whether the National Insurance pledge was kept?",
+          "options": {
+            "A": "The manifesto does not say whether it covers employer as well as employee contributions",
+            "B": "Labour never mentioned National Insurance in its manifesto",
+            "C": "The rate was cut, which the manifesto ruled out",
+            "D": "The pledge only covered the first year"
+          },
+          "answer": "A",
+          "why": "The manifesto mentions National Insurance once. It does not say whether the pledge covers employer contributions, so the government and critics read it differently (Full Fact, 14 October 2024).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "It does not say whether the pledge covers employer contributions as well as employee ones"
+            }
+          ]
+        },
+        {
+          "id": "J7.6",
+          "question": "Did Budget 2025 extend the freeze on income tax and National Insurance thresholds?",
+          "options": {
+            "A": "No, it ended in April 2028 as planned",
+            "B": "Yes, to April 2031",
+            "C": "Yes, to April 2035",
+            "D": "Only for employers"
+          },
+          "answer": "B",
+          "why": "Budget 2025 extended the freeze by three years, from April 2028 to April 2031 (Budget 2025 speech; Full Fact, 26 November 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "extended the freeze on income tax and National Insurance thresholds for three more years, to April 2031."
+            }
+          ]
+        },
+        {
+          "id": "J7.7",
+          "question": "Did Labour’s private school VAT measure take effect, and when?",
+          "options": {
+            "A": "Yes, from 1 January 2025",
+            "B": "No, it was dropped",
+            "C": "Only in Scotland",
+            "D": "Only for day pupils"
+          },
+          "answer": "A",
+          "why": "VAT at the standard rate applied to private school fees from 1 January 2025 (Full Fact, 28 May 2026).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "VAT at the standard rate of 20% has applied to private school fees since 1 January 2025."
+            }
+          ]
+        },
+        {
+          "id": "J7.8",
+          "question": "What did Labour’s manifesto promise on defence spending?",
+          "options": {
+            "A": "To set out the path to spending 2.5% of GDP on defence",
+            "B": "To cut defence spending to 2% of GDP",
+            "C": "To spend 3% of GDP by 2027",
+            "D": "No promise on defence"
+          },
+          "answer": "A",
+          "why": "Manifesto, Strong foundations (pages 14 to 22): it will set out the path to spending 2.5% of GDP on defence. The government set 2.5% from April 2027 in February 2025.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "we will set out the path to spending 2.5 per cent of GDP on defence."
+            }
+          ]
+        },
+        {
+          "id": "J7.9",
+          "question": "How many net additional homes does the government estimate were added in England from 9 July 2024 to 20 September 2026, against the 1.5 million target?",
+          "options": {
+            "A": "About 437,900, or 29% of the target",
+            "B": "About 1.5 million, so the target is met",
+            "C": "About 208,600",
+            "D": "About 1.1 million, all in 2024-25"
+          },
+          "answer": "A",
+          "why": "GOV.UK housing supply indicators, April to June 2026: 437,900 estimated net additional homes, 29% of 1.5 million. The 208,600 figure is the official count for 2024-25 only.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The government estimates 437,900 net additional homes in England between 9 July 2024 and 20 September 2026: 29% of the 1.5 million target."
+            }
+          ]
+        },
+        {
+          "id": "J7.10",
+          "question": "In August 2026, what share of waiting pathways for consultant-led NHS treatment had waited up to 18 weeks?",
+          "options": {
+            "A": "92%",
+            "B": "65.2%",
+            "C": "50%",
+            "D": "About 80%"
+          },
+          "answer": "B",
+          "why": "NHS England, RTT statistics for August 2026, published 8 October 2026: 65.2% within 18 weeks, against the 92% standard.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "In August 2026, 65.2% of the 7.4 million waiting pathways for consultant-led treatment had waited up to 18 weeks."
+            }
+          ]
+        }
+      ]
     }
   ]
 }
