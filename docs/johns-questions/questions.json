@@ -655,6 +655,293 @@
           "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
         }
       ]
+    },
+    {
+      "id": "J12",
+      "asked": "did our parents have it easier than this generation?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where the site has no figures for a measure at the same age, the probe stays open until the figure is added from an official source.",
+      "probes": [
+        {
+          "id": "J12.1",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 25 to 34 year olds in work change?",
+          "options": {
+            "A": "It fell by about ten points",
+            "B": "It rose by about ten points",
+            "C": "It stayed about the same",
+            "D": "It rose by about two points"
+          },
+          "answer": "B",
+          "why": "Labour Force Survey, UK: 73.6% of 25 to 34 year olds were in work in April to June 1992 and 84.3% in April to June 2025, a rise of about 11 points.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Aged 25 to 34 73.6% 84.3%"
+            }
+          ]
+        },
+        {
+          "id": "J12.2",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 18 to 24 year olds in work change?",
+          "options": {
+            "A": "It rose by about five points",
+            "B": "It fell by about five points",
+            "C": "It stayed about the same",
+            "D": "It fell by about twenty points"
+          },
+          "answer": "B",
+          "why": "Labour Force Survey, UK: 65.4% of 18 to 24 year olds were in work in 1992 and 60.7% in 2025. Many in this age group are students.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Aged 18 to 24 65.4% 60.7%"
+            }
+          ]
+        },
+        {
+          "id": "J12.3",
+          "question": "How many times a year’s earnings did the middle-priced home in England and Wales cost in 1999, and in 2025?",
+          "options": {
+            "A": "2.5 times in 1999 and 4.5 times in 2025",
+            "B": "3.89 times in 1999 and 7.55 times in 2025",
+            "C": "7.55 times in 1999 and 3.89 times in 2025",
+            "D": "About 3 times in both years"
+          },
+          "answer": "B",
+          "why": "Ratio of median house price to median full-time earnings, England and Wales: 3.89 in 1999 and 7.55 in 2025. 1999 is the first year measured the same way.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "has gone from 3.89 times a year’s earnings to 7.55 times in 2025"
+            }
+          ]
+        },
+        {
+          "id": "J12.4",
+          "question": "Between 2008-09 and 2024-25, how did the share of households in England who own their home change? This is all households, not one age group.",
+          "options": {
+            "A": "It rose by about three points",
+            "B": "It fell by about three points",
+            "C": "It stayed exactly the same",
+            "D": "It fell by about ten points"
+          },
+          "answer": "B",
+          "why": "English Housing Survey: 67.9% of households owned their home in 2008-09 and 64.8% in 2024-25, a fall of about three points. The figure covers all ages.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Households in England who own their home, all ages 67.9% 64.8%"
+            }
+          ]
+        },
+        {
+          "id": "J12.5",
+          "question": "What was the average primary class size in England in January 2006 and in January 2025?",
+          "options": {
+            "A": "About 26 pupils in both years",
+            "B": "About 20 in 2006 and about 26 in 2025",
+            "C": "About 30 in 2006 and about 20 in 2025",
+            "D": "About 26 in 2006 and about 30 in 2025"
+          },
+          "answer": "A",
+          "why": "Average primary class size, England: 26.3 pupils in January 2006 and 26.4 in January 2025, about the same.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Pupils per class 26.3 26.4"
+            }
+          ]
+        },
+        {
+          "id": "J12.6",
+          "question": "Were people aged 30 more or less likely to own their home in the 1990s than people aged 30 now?",
+          "gap": "The site has no home ownership figures by age, so it cannot compare people at 30 with earlier years. Needs English Housing Survey or Labour Force Survey tenure tables by age, from the 1990s."
+        },
+        {
+          "id": "J12.7",
+          "question": "How did pay after inflation for people aged 30 change between 2002 and 2025?",
+          "gap": "The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked."
+        },
+        {
+          "id": "J12.8",
+          "question": "How much did a university degree cost a student in tuition fees and loans in 1998, compared with 2025?",
+          "gap": "The site has no tuition fee or student loan figures. Needs the fee caps and loan terms by year, from government sources."
+        },
+        {
+          "id": "J12.9",
+          "question": "How has the state pension age changed for people born in 1960 compared with people born in 1990?",
+          "gap": "The site has no state pension age or pension coverage figures. Needs the state pension age timetable and pension coverage by year, from DWP and ONS."
+        },
+        {
+          "id": "J12.10",
+          "question": "How long can a 30 year old now expect to live, compared with 30 years ago?",
+          "gap": "The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure."
+        },
+        {
+          "id": "J12.11",
+          "question": "Did a person on the same real income pay more or less tax in 2025 than in 1992?",
+          "gap": "The site has tax figures by age group for 2023-24 only, and by income band for recent years. Needs income tax and National Insurance on one income level, in each year, from an official source."
+        },
+        {
+          "id": "J12.12",
+          "question": "Has job security changed for people aged 25 to 34 since 1992?",
+          "gap": "The site has no figures on contract types, temporary work or how long people stay in a job. Needs ONS labour market tables on contracts and job changes by age, from 1992."
+        }
+      ]
+    },
+    {
+      "id": "J13",
+      "asked": "Why do we have such high debt in this country?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 1 of 10 in one message)",
+      "reading": "Why is UK government debt high? Read as public sector net debt (the OBR's measure, net of financial assets, as a share of GDP), its history since 1900, what raised it (borrowing in each year, in particular the 2008 recession, the Covid pandemic and the 2022-23 energy support), and what official bodies say about the causes. The question is about the UK on its own; comparison with other countries is on the borrowing page (J1). Official bodies give more than one view of the causes, so the site shows the figures and the quoted explanations without choosing between them.",
+      "probes": [
+        {
+          "id": "J13.1",
+          "question": "Since 1900, in which year was UK public sector net debt highest as a share of GDP, according to the site?",
+          "options": {
+            "A": "1918-19, at the end of the First World War",
+            "B": "1946-47, just after the Second World War",
+            "C": "2022-23, the latest year shown",
+            "D": "2010-11, after the 2008 recession"
+          },
+          "answer": "B",
+          "why": "Why-debt page, OBR figures: debt was highest in 1946-47, at 249.1% of GDP.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Debt was highest in 1946-47, at 249.1% of GDP."
+            }
+          ]
+        },
+        {
+          "id": "J13.2",
+          "question": "Between 2007-08 and 2009-10, how did UK public sector net debt change, as a share of GDP?",
+          "options": {
+            "A": "It fell from about 36% to about 22%",
+            "B": "It stayed at about 36%",
+            "C": "It rose from about 36% to about 65% of GDP",
+            "D": "It rose from about 65% to about 100% of GDP"
+          },
+          "answer": "C",
+          "why": "Why-debt page, OBR figures: 35.6% of GDP in 2007-08 and 64.5% in 2009-10.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Debt rose from 35.6% of GDP to 64.5% over the same period."
+            }
+          ]
+        },
+        {
+          "id": "J13.3",
+          "question": "How much did UK public sector borrowing reach as a share of GDP in 2020-21, the first year of the Covid pandemic?",
+          "options": {
+            "A": "About 2%",
+            "B": "About 5%",
+            "C": "About 15%",
+            "D": "About 25%"
+          },
+          "answer": "C",
+          "why": "Why-debt page, OBR figures: borrowing was 15.0% of GDP in 2020-21.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Borrowing reached 15.0% of GDP in 2020-21"
+            }
+          ]
+        },
+        {
+          "id": "J13.4",
+          "question": "According to the ONS, how much did the furlough schemes alone add to borrowing in the year to March 2021?",
+          "options": {
+            "A": "£7.8 billion",
+            "B": "£78.2 billion",
+            "C": "£782 million",
+            "D": "£203.2 billion"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the ONS (April 2021): the furlough schemes alone added £78.2 billion to borrowing.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "with the furlough schemes alone adding £78.2 billion to borrowing in the FYE March 2021."
+            }
+          ]
+        },
+        {
+          "id": "J13.5",
+          "question": "What does the OBR say pushed up borrowing and debt in 2020-21?",
+          "options": {
+            "A": "Only the government's own spending decisions",
+            "B": "The impact of the shocks on the economy, combined with the government's response to them",
+            "C": "Nothing: borrowing was unchanged",
+            "D": "Only higher interest rates"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the OBR (July 2025): the impact of the shocks, combined with the government's policy response, pushed up borrowing and debt in 2020-21.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "The impact of these shocks on the economy, combined with the Government’s policy response to them, pushed up borrowing to 15 per cent of GDP"
+            }
+          ]
+        },
+        {
+          "id": "J13.6",
+          "question": "What is the difference between debt and borrowing, as the site uses the words?",
+          "options": {
+            "A": "They are the same thing",
+            "B": "Debt is what the public sector owes at the end of each year, less its financial assets; borrowing is the amount added during the year",
+            "C": "Borrowing is the total owed; debt is the amount borrowed in one year",
+            "D": "Debt is only the money lent by the Bank of England"
+          },
+          "answer": "B",
+          "why": "Why-debt page, opening section: debt is the amount owed at year end, less financial assets; borrowing is the amount borrowed during the year, which adds to debt.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Borrowing is the amount it borrowed during the year, which adds to debt."
+            }
+          ]
+        },
+        {
+          "id": "J13.7",
+          "question": "According to the ONS, what raised interest payable on government debt by £34.0 billion in 2022-23?",
+          "options": {
+            "A": "Lower inflation",
+            "B": "Rises in the Retail Prices Index, which raised the payments on index-linked gilts",
+            "C": "Only the Bank of England's interest rate",
+            "D": "A fall in tax receipts"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the ONS (April 2023): rises in the Retail Prices Index increased the interest payable on index-linked gilts.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "as the rises in the Retail Prices Index have increased the interest payable on index-linked gilts."
+            }
+          ]
+        },
+        {
+          "id": "J13.8",
+          "question": "What does the OBR project for the long term, if current policy settings continue?",
+          "options": {
+            "A": "Borrowing below 5% and debt below 100% of GDP",
+            "B": "Borrowing above 20% and debt above 270% of GDP by the early 2070s",
+            "C": "Debt falling to zero by 2050",
+            "D": "No change from today's levels"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the OBR (July 2025): on current policy settings, borrowing above 20% and debt above 270% of GDP by the early 2070s, driven partly by an ageing population.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "projected to push borrowing above 20 per cent and debt above 270 per cent of GDP by the early 2070s."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

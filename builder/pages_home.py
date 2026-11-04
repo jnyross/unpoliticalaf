@@ -54,7 +54,8 @@ def home_page(facts, d, num, sources):
     # employment reaches it in one tap from the home page (audit 15 gap 3: it was last in the list).
     QUICK = jump("Quick answers", [("life/work.html#key-answer", "Women's employment"), ("life/earnings.html#key-answer", "Pay after inflation"),
                                    ("life/schools.html#key-answer", "Class sizes"), ("life/holidays.html#key-answer", "Holidays"),
-                                   ("life/housing.html#key-answer", "Renting")])
+                                   ("life/housing.html#key-answer", "Renting"),
+                                   ("life/generations.html#key-answer", "Did parents have it easier?")])
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 {QUICK}
@@ -87,6 +88,7 @@ def home_page(facts, d, num, sources):
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
 <p><a href="defence.html">Why can't we afford to spend more on defence?</a> UK defence spending in cash, after inflation and as a share of GDP, beside the G7, and what extra spending would cost.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
+<p><a href="why-debt.html">Why is UK government debt high?</a> Debt and borrowing since 1900, the periods that raised them, and what the Office for Budget Responsibility and the ONS say.</p>
 <p><a href="leaving-uk.html">Are people leaving the UK?</a> Official figures on emigration, British and non-British nationals, and non-domiciled taxpayers, and what they cannot show about why people leave.</p>
 <p><a href="immigration.html">Is immigration a good or a bad thing?</a> What official evidence says about public money, public services and the economy, and where it cannot decide.</p>
 <h2 id="life">Everyday life, year by year</h2>
