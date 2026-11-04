@@ -330,7 +330,7 @@ def timing_note(sources, up, *periods):
 CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures show what changed between years. They do not show why. Many things happen at once, including changes in the economy, prices, population and government policy, and these statistics cannot separate them.</p>'
 # The same point, placed beside the employment rates for women and men, where a reader
 # looking for why a rate changed will see it.
-WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> These rates show what share of women and men were in work, not why that share changed. Many things happen at once, such as the economy and government policy, and these statistics cannot separate them.</p>'
+WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> These rates show who was in work, not why that changed. Many things happen at once, and these statistics cannot separate them.</p>'
 
 
 def topic_block_for_year(facts, num, sources, topic, y, up):
@@ -1499,8 +1499,8 @@ def _places_answer(facts, num, d):
     nb = min(ys[-1], n["wales"][-1], n["scotland"][-1])
     return (f'<div class="answer"><p>At 31 March {b}, {num(f"house.reg.private.england.{b}", "pct0")} of homes in England were rented privately: '
             f'from {num(f"house.reg.private.{low}.{b}", "pct0")} ({names[low]}) to {num(f"house.reg.private.{top}.{b}", "pct0")} ({names[top]}). '
-            f'In {nb} it was {num(f"house.nat.private.wales.{nb}", "pct0")} in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland, where homes that come with a job or business are counted with private renting. '
-            f'Each nation measures housing its own way, so small gaps between nations should not be read as real differences.</p></div>')
+            f'In {nb} it was {num(f"house.nat.private.wales.{nb}", "pct0")} in Wales and {num(f"house.nat.private.scotland.{nb}", "pct0")} in Scotland. '
+            f'Each nation measures housing its own way, so small gaps are not necessarily real.</p></div>')
 
 
 def housing_places_block(facts, num, d):
