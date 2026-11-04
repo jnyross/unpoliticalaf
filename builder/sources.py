@@ -129,6 +129,7 @@ SOURCES = {
 # GDP deflator and after-inflation figures have their own record page.
 SOURCES["obr-prices"] = dict(SOURCES["obr"], title="Public finances databank, October 2026: receipts and spending over time, GDP, the GDP deflator, and figures after inflation or as a share of GDP")
 SOURCES["obrhist-receipts"] = dict(SOURCES["obrhist"], title="Historical public finances database: receipts by type of tax as a share of GDP")
+SOURCES["obrhist-aggregates"] = dict(SOURCES["obrhist"], title="Historical public finances database: public sector net borrowing and net debt as a share of GDP, 1900-01 to 2022-23")
 SOURCES["obrhist-receipts-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: receipts by type of tax in £")
 SOURCES["obrhist-receipts-shares"] = dict(SOURCES["obrhist"], title="Historical public finances database: each type of tax's share of all receipts (calculated from the £ figures)")
 SOURCES["obrhist-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: spending by purpose in £ and after inflation")
