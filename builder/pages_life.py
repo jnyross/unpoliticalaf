@@ -1268,7 +1268,7 @@ def topic_page(facts, d, num, sources, key):
     rest = detail[first_chart + 2:]
     # On work the note sits straight under the answer, before the long chart, so a phone
     # reader sees it on the first screen (audit 14 gap 1).
-    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
+    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
             WORK_CAUSE if key == "work" else "",
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Find or compare years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
@@ -1285,10 +1285,12 @@ def topic_page(facts, d, num, sources, key):
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
     body.append(f"<h2 id='years'>Find or compare years</h2>")
+    # The comparison opens at this topic's section. It comes before the year finder, so when the
+    # finder's links appear, the numbers a screen-reader or voice-control reader already knows
+    # (audit 14 gap 8) stay the same: only the links that follow move on.
+    body.append(NOFOLD + compare_form("", anchor=key))
     # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
     body.append(year_finder(facts, num, key))
-    # The comparison opens at this topic's section; every other topic follows it.
-    body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
