@@ -1,5 +1,5 @@
 {
- "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern.",
+ "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. The two ASHE nomis extracts were re-fetched on 2026-11-04 to add April 2026 pay (T108). 'find' entries download the first link on the page matching the pattern.",
  "sources": [
   {
    "id": "ons-mgrz",
