@@ -15,6 +15,14 @@
   "sha256": "b5848e0ecfeecc88237730a42242781e04a4e19d834526e5bd3f2849cd3465d9",
   "retrieved": "2026-11-02T08:58:35Z"
  },
+ "boe-mortgage-rates": {
+  "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/mortgage-rates-new-lending.csv",
+  "bytes": 4873,
+  "content_type": "application/csv",
+  "sha256": "20b1a82eeb111d81d722a112b6f270753d5658301704673ef952822bb83cea2b",
+  "retrieved": "2026-11-04T13:30:12Z"
+ },
  "dfe-spc-2015-page": {
   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
   "file": "dfe/spc-2015-page.html",
@@ -47,6 +55,30 @@
   "sha256": "2fb92e0ad64000e96279cd7afbae29bdc686b0779ae3aaa834789deb1b25f8a9",
   "retrieved": "2026-11-02T10:28:45Z"
  },
+ "ehs-annex-ch1": {
+  "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch1-profile.ods",
+  "bytes": 216223,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "c7a80822b18159461aaf9413294df5dcb082d75b2b1da7bb1351e3c6d2240221",
+  "retrieved": "2026-11-04T13:29:48Z"
+ },
+ "ehs-annex-ch2": {
+  "url": "https://assets.publishing.service.gov.uk/media/693026b2502f392086ee8b0b/2024-25_EHS_Headline_Report_Chapter_2_Housing_Costs_and_Affordability_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch2-costs.ods",
+  "bytes": 100556,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "5075faa4f3c9d37361e6829d54c51abe7404372ada551efe9847f05878854d5b",
+  "retrieved": "2026-11-04T13:29:52Z"
+ },
+ "ehs-annex-ch3": {
+  "url": "https://assets.publishing.service.gov.uk/media/693026cb502f392086ee8b0c/2024-25_EHS_Headline_Report_Chapter_3_Housing_History_and_future_housing_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch3-history.ods",
+  "bytes": 47275,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "2533721df91a7f2750dfca8bedf694e5d8629e595bc00e2f4ec5ee1c8936bea1",
+  "retrieved": "2026-11-04T13:29:56Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
@@ -62,6 +94,22 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "c704cfa68d6d53e0fc533d47f7898fb5528b842f6735cb17a36ae39a9a8651fe",
   "retrieved": "2026-11-02T09:51:10Z"
+ },
+ "ehs-fa2222": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4da2d6ed5ddb5c8626f49e/FA2222_type_of_purchase_by_age_of_HRP_and_household_type.ods",
+  "file": "ehs/FA2222_type_of_purchase_by_age_of_hrp.ods",
+  "bytes": 15437,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "a4f4cc2636650c0b68532e7bcab496df1804e2085eba4965a79db7e67faf9776",
+  "retrieved": "2026-11-04T13:30:07Z"
+ },
+ "ehs-fa2301": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af37fbfe36e0000d6fa888/FA2301_age_of_hrp_by_type_of_ownership.ods",
+  "file": "ehs/FA2301_age_of_hrp_by_type_of_ownership.ods",
+  "bytes": 38743,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "4cc473993062413179f0ce430e0fc56db302eb66cea4f024fe26aca16bbc2363",
+  "retrieved": "2026-11-04T13:30:03Z"
  },
  "ehs-fa2501": {
   "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
@@ -86,6 +134,14 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "f15a9066129dd7d38406b5000391e8b1d15d2ebaaaa33707beda0734c906eb35",
   "retrieved": "2026-11-02T09:50:52Z"
+ },
+ "ehs-fc2101": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af396cc033c100108061f6/FC2101_Percentage_of_each_age_group_that_are_owner-occupiers.ods",
+  "file": "ehs/FC2101_owner_occupiers_by_age.ods",
+  "bytes": 70515,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "daf34fa5968eb4518fed625cc8ae73046872ee02d0c1b5ffaff1e9f1add6b125",
+  "retrieved": "2026-11-04T13:30:00Z"
  },
  "ehs-ft1101": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
