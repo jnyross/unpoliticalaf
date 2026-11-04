@@ -47,6 +47,14 @@
   "sha256": "2fb92e0ad64000e96279cd7afbae29bdc686b0779ae3aaa834789deb1b25f8a9",
   "retrieved": "2026-11-02T10:28:45Z"
  },
+ "dwp-spa-timetable": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+  "file": "dwp/spa-timetable.pdf",
+  "bytes": 49037,
+  "content_type": "application/pdf",
+  "sha256": "493afc7aa63961f0f0dba2bccf53bf1bd9aec20b1a29ee89f3b169d740a40385",
+  "retrieved": "2026-11-04T13:32:50Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
