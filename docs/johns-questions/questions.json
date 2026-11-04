@@ -523,24 +523,7 @@
         {
           "id": "J5.2",
           "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
-          "options": {
-            "A": "Higher after inflation, lower as a share of GDP",
-            "B": "Lower after inflation, higher as a share of GDP",
-            "C": "Higher after inflation and higher as a share of GDP",
-            "D": "Lower after inflation and lower as a share of GDP"
-          },
-          "answer": "A",
-          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
-          "evidence": [
-            {
-              "page": "defence.html",
-              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
-            },
-            {
-              "page": "defence.html",
-              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
-            }
-          ]
+          "gap": "The defence comparison now uses the ten-year window the impartiality rule allows (2015-16 to 2025-26), so the page no longer compares with 2010-11, the year this question names. Whether John wants 2010-11 shown as well is a decision for him."
         },
         {
           "id": "J5.3",
@@ -1288,11 +1271,11 @@
           "evidence": [
             {
               "page": "productivity.html",
-              "text": "UK output per hour rose by 3.9% between 2008 and 2021"
+              "text": "Over 2008 to 2021, UK output per hour rose by 3.9%"
             },
             {
               "page": "productivity.html",
-              "text": "rose by 10.3% on average over the same years"
+              "text": "the other five G7 countries on this page rose by 10.3% on average"
             }
           ]
         },

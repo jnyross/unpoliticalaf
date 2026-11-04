@@ -1,0 +1,284 @@
+{
+ "reader": "SR-session",
+ "mode": "sr",
+ "budget": 40,
+ "actions": 13,
+ "url": "taxes.html",
+ "ops": [],
+ "scroll": 0,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [12] link: Class sizes",
+  "tap [1] link: Unpolitical",
+  "back",
+  "tap [12] expand: What the chart shows, in words",
+  "tap [22] expand: Find one year's figure",
+  "tap [16] link: 2009",
+  "back",
+  "back",
+  "tap [13] link: Holidays",
+  "back",
+  "tap [14] link: Renting",
+  "back",
+  "tap [3] link: Taxes"
+ ],
+ "shots": "/tmp/standin-shots",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "public sector"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Income Tax"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "National Insurance"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "VAT"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(4)",
+   "kind": "link",
+   "label": "receipts"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Borrowing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "national debt"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Where the 2025-26 money came from table"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "who pays"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "worked example of a made-up employee on £30,000"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "illustration, not a statistic"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 4 sections"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "GDP"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(7) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "OBR"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(7) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "Compare UK debt with the G7"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Office for Budget Responsibility: Public finances databank, October 2026"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(8) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "forecasts"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "“tax burden”"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(9) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "tax and income"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(9) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "How the UK compares with other countries"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(1)",
+   "kind": "input",
+   "label": "Share of GDP"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)",
+   "kind": "input",
+   "label": "After inflation"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Receipts and spending since 1948-49 chart, table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(10) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "which taxes raised the money since 1948"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(3) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on How the mix of taxes has changed since 1999-00 chart, table, limits and "
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Home"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(9) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "methods"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "corrections"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(3)",
+   "kind": "link",
+   "label": "how sure the survey figures are"
+  },
+  {
+   "sel": "body > footer:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(4)",
+   "kind": "link",
+   "label": "Open Government Licence v3.0"
+  }
+ ]
+}
