@@ -1,0 +1,95 @@
+{
+ "reader": "R3-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 22,
+ "url": "international.html",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "y": 560
+  }
+ ],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "borrowing.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 4480
+    }
+   ],
+   "scroll": 4480
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  }
+ ],
+ "log": [
+  "tap [6] link: Debt",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [3] link: Spending",
+  "scroll down",
+  "tap [5] link: beside other countries",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "tap [4] expand: More on The UK beside the other G7 countries chart and table",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R3",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on The UK beside the other G7 countries chart and table"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "G7"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > div:nth-of-type(1) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(1)",
+   "kind": "input",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > div:nth-of-type(1) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)",
+   "kind": "input",
+   "label": "Spending"
+  }
+ ]
+}

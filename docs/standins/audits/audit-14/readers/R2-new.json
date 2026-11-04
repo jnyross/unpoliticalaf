@@ -1,0 +1,97 @@
+{
+ "reader": "R2-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 35,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2240
+    }
+   ],
+   "scroll": 2800
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 2923
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "tap [4] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [4] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "scroll down",
+  "tap [8] link: Year by year",
+  "tap [12] link: Work",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [4] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "tap [9] link: Class sizes",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R2",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Classes of more than 30"
+  }
+ ]
+}

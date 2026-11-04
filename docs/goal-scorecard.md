@@ -11,6 +11,81 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 14: 4 November 2026 (rubric v3, after the audit 13 fixes #156 to #161)
+
+- Commit audited: `c2c044e` on `main` (T88, #161). The "Live site matches main" check for it is green
+  ([run 41751432312](https://github.com/jnyross/unpoliticalaf/actions/runs/41751432312)). CI on #161 passed before it merged, which includes the phone-length and axe checks.
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure [standins/README.md](standins/README.md). All evidence is in [standins/audits/audit-14/](standins/audits/audit-14/).
+- Stand-ins run, each a fresh session that did not build the site: a question writer (24 new questions, sealed before any phone reader started, `new-questions.sha256`; Q18 and Q19 were replaced after a site check found no single clear answer); 3 informal readers (P3, P9, P8); 5 phone readers (P2, P7, P10, P5, P1, drawn at random); a screen-reader reader; an adversarial fact-checker; a left critic, a right critic and a judge. Readers ran on a smaller model than the reviewers.
+- Automated checks: keyboard check finds no traps on the main pages ([keyboard.txt](standins/audits/audit-14/keyboard.txt)); all 1,327 charts have a text summary with figures ([summaries.txt](standins/audits/audit-14/summaries.txt)). A local `make a11y` stopped on two phone-length warnings, who-pays (8.6 screens against 8.5) and holidays (9.1 against 8.8). Local reads run 0.2 to 0.3 screens longer than CI, as noted before, and CI passed on #161 ([accessibility.txt](standins/audits/audit-14/accessibility.txt)). Keep those two pages under their limits.
+- Who scored it: a Claude session that did not build the site.
+
+**Total: 44 out of 55. Target not met (simulated).** Audit 13: 45. The simulated phone test did not pass: 53 of 60 overall, but one reader (R2, profile P7) got only 6 of 12 and missed critical question 12 (change against cause, near women's employment). That run used all 40 actions before reaching pay, class size, holidays, renting and women's employment. Every John's question now passes 5 of 5, and the new-question, prior-knowledge and screen-reader stand-ins pass. No material accuracy or impartiality finding is open.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 53/60: R1 12, R2 6, R3 12, R4 11, R5 12; R2 missed critical Q12 and used 40 of 40 actions | 48/60, each reader 9/12, all critical right | No |
+| New questions (24, sealed) | 108/120 with the site (90%), 32 without | 80% | Yes |
+| Prior-knowledge check | 3/60 without the site, 53 with it (+50) | +20 | Yes |
+| John's questions | J1.1 to J1.7 all 5 of 5 with the site, 0 without (J1.2 now passes after #159) | every probe answered, 4 of 5 right | Yes |
+| Informal check | 3 readers (P3, P9, P8); all found an answer to all three questions; nothing blocking | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 14 actions, critical right; no blocking barrier, but the "Find one year's figure" expander renumbers its links and cost about 3 actions | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 0 material, 6 minor ([claims.md](standins/audits/audit-14/fact-check/claims.md)); the "Accuracy check" workflow re-reads the publishers' files once this PR is on `main` | no material errors | Yes (minor items below) |
+| Impartiality critics and judge | 0 material open; 5 minor upheld, 15 critic examples rejected ([judgement.md](standins/audits/audit-14/impartiality/judgement.md)) | no upheld material finding | Yes |
+
+Three new questions were answered "not sure" by several readers: Q15 (why the poorest fifth's indirect taxes look high against their income) and Q17 (cash pay up 50% against prices up 40%) were not found on the site by three readers; Q18 (real pay 2008 to 2014) was read from chart lines that break at 2011 by two readers.
+
+### Material findings
+
+None. The fact-checker and the judge both upheld no material finding.
+
+### Minor findings (kept, not capped)
+
+- Fact-checker: the site rounds exact halves down (£132.5bn shows as £132bn; 31,150 thousand visits shows as 31.1 million); the words under the share-of-GDP spending chart skip the 2021-22 low of 43.4%; the home page calls ONS Table 8's 33.6% an average across households, but it covers individuals; the £242 a week mortgage payment uses the "all mortgage types" row rather than all mortgagors (£236); house prices say "In 2025" for the year to September 2025; the private-renting chart on year pages runs to 2025-26 though its last figure is 2024-25; the housing-places page implies only Scotland counts tied homes as private renting; the Tax and income page says the older-method share "fell until 2017/18" (its lowest point was 2009/10).
+- Judge: "rising in most years" for spending passes over the flat run from £1,116bn (2010-11) to £1,132bn (2019-20); the retired-households explanation ("smaller and have lower incomes") is one-sided; the 2016 ONS quote the latest bulletin dropped is still used; no rule is stated for choosing the everyday-life topics, and none measures hardship; the first G7 chart on international.html compares the UK with France and the US but leaves out Japan, the lowest.
+
+### Gaps, most valuable first
+
+Written from the findings and the readers' notes only.
+
+1. Make the Work page's women's employment figures and its change-is-not-cause note easy to find: R2 missed the critical question 12, and R3 answered from the generic box without seeing the women's figures.
+2. Shorten the routes to the figures for a phone reader: R2 spent all 40 actions without reaching pay, class size, holidays, renting or women's employment, because figures sit in "More on" boxes, the year dropdown needs Go, and menu numbers shift after scrolling.
+3. Say in words on the earnings page that real pay fell between 2008 and 2014 (median full-time pay, after inflation, £771 in 2008 and £717 in 2014 in 2025 prices), so the chart's break at 2011 does not hide it.
+4. Explain on the household-tax page why the poorest fifth's indirect taxes look high against their income, and give the cash-against-prices arithmetic once with a worked example, since three readers found neither (new Q15 and Q17).
+5. Make the holidays headline (58.4 million visits) and its chart agree on the years they cover: informal readers I1 and I2 saw a 2025 headline above a chart that ends in 2023.
+6. Fix the fact-checker's minor items: half-way rounding, the spending-share wording that skips the 2021-22 low, "average across households" for ONS individuals, the mortgage payment row, the house-price year, the private-renting chart's last year, the tied-homes sentence and the "fell until 2017/18" wording.
+7. Fix the judge's minor items: "rising in most years" for spending, the one-sided retired-households explanation, the dropped 2016 ONS quote, the stated rule for choosing topics, and the missing Japan bar on the first G7 chart (or a sentence saying why it is left out).
+8. Keep the "Find one year's figure" links numbered the same when the expander opens (screen-reader reader lost about 3 actions), and keep the who-pays and holidays pages under their phone-length limits.
+
+Gap 1 and gap 2 block a level-5 phone result for D1 to D6. Gaps 3 and 4 are the new-question misses. The accuracy workflow result (`fact-check/results.json`) arrives on `main` after this PR merges and is not yet in the scores.
+
+### Dimension scores
+
+Rubric v3 caps D1 to D6 at 4 when the simulated phone test has not passed, because level 5 needs it.
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | All four public-money questions answered by every reader who reached them; not 5 because the phone test did not pass and minor wording remains (spending share, the judge's G7 point). |
+| D2 Life: breadth and depth | 4 | All five topics are on the site, but R2 could not reach pay, class size, holidays, renting or women's employment in its budget; not 5 without a passed phone test. |
+| D3 Life: choosing and comparing | 4 | Compare and year-finder work without JavaScript; the dropdown needs Go, the finder's links renumber, and the 2008 to 2014 pay change is read from breaks. |
+| D4 Explanation and understanding | 4 | Critical questions right; informal readers still stumble on OBR and IFS terms, "before interest received", and the lowest fifth paying a higher tax share than the highest before the explanation. |
+| D5 Visual design and charts | 4 | Charts start at zero and are captioned; the holidays headline still sits above a chart that ends in 2023 (gap 5). |
+| D6 Phone experience and navigation | 4 | No sideways scrolling; readers used 36 to 40 of 40 actions and overshot sections; the menu numbers shift. |
+| D7 Accuracy and traceability | 4 | 0 material findings from the 30-claim check; 6 minor items; the accuracy workflow result is still to come. |
+| D8 Impartiality | 5 | The judge upheld no material finding and checked the rule; 5 minor points upheld. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocker, no keyboard traps, every chart has a text summary, axe checks in CI. |
+| D10 Honesty about limits and continuity | 4 | Breaks are marked and no change is taken across a marked break; not 5 because the 2021-22 spending low is misdescribed and uncertainty for headline survey figures is not shown. |
+| D11 Reader evidence | 2 | Informal, phone, new-question, prior-knowledge and screen-reader runs are recorded. The phone test did not pass and its problems are open, so by the rule that a level-3 run needs its problems fixed, and that a torn score takes the lower level, D11 is 2. |
+| **Total** | **44 / 55** | |
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are not five people; screenshots are not a phone in the hand; an accessibility tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 13: 3 November 2026 (rubric v3, after the audit 12 fixes #150 to #154)
 
 - Commit audited: `7ab0f27` on `main` (site build). The "Live site matches

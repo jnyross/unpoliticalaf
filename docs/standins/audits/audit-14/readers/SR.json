@@ -1,0 +1,7 @@
+{"reader": "SR", "site_commit": "c2c044e", "budget": 40, "actions_used": 14,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+  "On the class sizes page (life/schools.html) the year selects and 'Find one year's figure' expander shift all link numbers once opened, so I tapped the wrong item twice and wasted about 3 actions.",
+  "On the home page the 'Earnings after inflation' card read 'about the same' but a 'Both figures are...' note and cash figures (£610 to £767) sit beside it, which was slightly hard to follow aloud.",
+  "I did not open the work page for question 12 and answered from the site's repeated 'Change is not cause' statement; the page announced no barrier I could confirm."
+ ]}

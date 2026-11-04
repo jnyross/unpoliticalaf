@@ -1,0 +1,166 @@
+{
+ "reader": "R5-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 36,
+ "url": "household-tax.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 3920
+    }
+   ],
+   "scroll": 3920
+  },
+  {
+   "url": "life/index.html",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > form:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2019",
+     "y": 560
+    }
+   ],
+   "scroll": 3360
+  },
+  {
+   "url": "life/schools.html#years",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > details:nth-of-type(7) > summary:nth-of-type(1)",
+     "y": 4667
+    }
+   ],
+   "scroll": 4667
+  },
+  {
+   "url": "life/2019.html#schools",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 4009
+    }
+   ],
+   "scroll": 4009
+  },
+  {
+   "url": "life/index.html#compare",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015",
+     "y": 3954
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025",
+     "y": 3954
+    }
+   ],
+   "scroll": 3954
+  },
+  {
+   "url": "life/compare/2015-2025.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1680
+    }
+   ],
+   "scroll": 1680
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "scroll down",
+  "choose [9] Go to a year = 2019",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll down",
+  "tap [10] link: Find or compare years of class sizes",
+  "tap [4] expand: Find one year's figure",
+  "tap [16] link: 2019",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [17] link: Compare years",
+  "choose [4] First year = 2015",
+  "choose [5] Second year = 2025",
+  "tap [6] button: Compare 2015 and 2025",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [5] link: Who pays",
+  "tap [5] link: Tax and income",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R5",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "private households"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "gross household income"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "fifth of people"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "worked example of a made-up employee on £30,000"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 4 sections"
+  }
+ ]
+}

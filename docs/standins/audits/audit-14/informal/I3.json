@@ -1,0 +1,40 @@
+{
+ "reader": "I3",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 9,
+ "url": "life/earnings.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 3920
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: Earnings after inflation After inflation, pay in April 2025 was about the same a",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-I3",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  }
+ ]
+}
