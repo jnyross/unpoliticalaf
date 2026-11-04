@@ -669,12 +669,46 @@
         {
           "id": "J5.8",
           "question": "How much room do the government's fiscal rules leave for extra defence spending?",
-          "gap": "The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending."
+          "options": {
+            "A": "None: the rules are already broken",
+            "B": "About £3 billion a year",
+            "C": "About £15 billion in 2029-30, shared by all spending and tax decisions",
+            "D": "About £31 billion, the cost of one per cent of GDP"
+          },
+          "answer": "C",
+          "why": "The OBR's October 2026 central forecast puts the margin against the fiscal mandate at £15 billion in 2029-30, and at £24 billion against the supplementary PSNFL target. That is the room for all extra spending or lower taxes together, not for defence alone.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "In the central forecast, the fiscal mandate for the current budget to be in surplus in 2029-30 is met by a margin of £15 billion."
+            },
+            {
+              "page": "defence.html",
+              "text": "That is the whole budget's room, shared by every decision on spending and tax, not a sum for defence."
+            }
+          ]
         },
         {
           "id": "J5.9",
-          "question": "What does NATO's own figure show for UK defence spending as a share of GDP?",
-          "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP in 2025?",
+          "options": {
+            "A": "About 2.1%",
+            "B": "About 2.3%",
+            "C": "About 2.6%",
+            "D": "About 3.2%"
+          },
+          "answer": "B",
+          "why": "NATO's table 3 gives UK core defence spending as 2.32% of real GDP in 2025, a NATO estimate. NATO counts pensions paid to retired military personnel, so its figure is higher than the PESA figure of 2.1% for 2025-26.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "In NATO's table, UK core defence spending was 2.28% of GDP in 2024, 2.32% in 2025 and 2.56% in 2026."
+            },
+            {
+              "page": "defence.html",
+              "text": "NATO counts defence on its own definition, which includes pensions paid to retired military personnel."
+            }
+          ]
         }
       ]
     },
@@ -1542,8 +1576,39 @@
         },
         {
           "id": "J10.6",
-          "question": "How much of welfare spending over the last 50 years went on the State Pension, and how much on Universal Credit, tax credits, disability benefits, housing benefit and Child Benefit?",
-          "gap": "The site does not yet split welfare spending into the State Pension, working-age, disability, housing, tax credit and Universal Credit, and Child Benefit parts over these years; it needs the Department for Work and Pensions benefit expenditure tables (https://www.gov.uk/government/publications/benefit-expenditure-and-caseload-tables-2026)."
+          "question": "In 2021-22, how much of DWP benefit spending went on the State Pension?",
+          "options": {
+            "A": "About a fifth (20%)",
+            "B": "About a third (33%)",
+            "C": "About 44%",
+            "D": "About three-quarters (75%)"
+          },
+          "answer": "C",
+          "why": "DWP benefit expenditure tables, Spring Forecast 2026: in 2021-22 the State Pension was £104.7bn of £239.4bn, or 43.7%. The DWP tables cannot be joined into one split across 50 years, so the split is shown for 2021-22 only, with 1955-56 for the State Pension's share.",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "In 2021-22 the State Pension was 43.7% of DWP benefit spending: £104.7bn out of £239.4bn."
+            }
+          ]
+        },
+        {
+          "id": "J10.7",
+          "question": "In 2021-22, which of these took the largest share of DWP benefit spending after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?",
+          "options": {
+            "A": "Housing benefit",
+            "B": "Tax credits",
+            "C": "Universal Credit",
+            "D": "Child Benefit"
+          },
+          "answer": "C",
+          "why": "Universal Credit was 17.0% of DWP benefit spending in 2021-22, ahead of disability and carers' benefits (12.2%), housing benefit (6.7%), Child Benefit (4.6%) and tax credits (4.3%).",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "Universal Credit was 17.0%, housing benefit (not Universal Credit) 6.7%, disability and carers' benefits 12.2%, tax credits 4.3% and Child Benefit 4.6%."
+            }
+          ]
         }
       ]
     },

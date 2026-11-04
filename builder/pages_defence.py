@@ -130,9 +130,12 @@ def defence_page(facts, d, num, sources):
     missing = [names[a] for a in G7 if a not in have]
     if missing:
         body.append(f"<p>{esc(', '.join(missing))}: the OECD table has no defence figure for {'this country' if len(missing) == 1 else 'these countries'}, so {'it is' if len(missing) == 1 else 'they are'} not shown. A missing figure is not the same as zero.</p>")
-    body.append(f"<p>France's and Germany's figures are provisional. The OECD measure is the COFOG defence function, so it is close to the PESA figure above but not the same year or the same source. NATO publishes its own defence figures on a wider definition, and the site does not show them yet.</p>")
+    body.append(f"<p>France's and Germany's figures are provisional. The OECD measure is the COFOG defence function, so it is close to the PESA figure above but not the same year or the same source. NATO publishes its own figures on a wider definition, which are set out in <a href=\"#nato\">the NATO section</a>.</p>")
     body.append(FOLD)
     body.append(source_line(sources, ["oecd-gov-cofog"], "The OECD average is an unweighted average of its member countries, not a country."))
+    body.append('<h2 id="nato">What does NATO\'s own figure show for the UK?</h2>')
+    body.append(f"<p>NATO counts defence on its own definition, which includes pensions paid to retired military personnel. So its figure is higher than the PESA figure above. In NATO's table, UK core defence spending was {num('nato.uk.core.2024', 'pct2')} of GDP in 2024, {num('nato.uk.core.2025', 'pct2')} in 2025 and {num('nato.uk.core.2026', 'pct2')} in 2026. The 2025 and 2026 figures are NATO estimates, not outturn.</p>")
+    body.append(source_line(sources, ["nato-uk-table3"], "Table 3 (core defence expenditure as a share of real GDP) of NATO's report, data as at 3 July 2026. Figures are rounded to one decimal place."))
 
     # ------------------------------------------------------------- competes with
     pairs = [(k, f"spend.per100.{k}.{latest}") for k in ("social", "health", "general", "education", "economic", "order", "housing", "recreation", "environment", "defence")]
@@ -169,9 +172,10 @@ def defence_page(facts, d, num, sources):
     body.append('<h2 id="rules">What are the government\'s fiscal rules?</h2>')
     body.append("<p>A fiscal rule is a target that the government sets for its public finances. The Office for Budget Responsibility (OBR) describes the rule that applied in 2025 like this:</p>")
     body.append(explain("defence-fiscal-rule-2025", sources))
+    body.append(explain("defence-fiscal-margin-2026", sources))
+    body.append(f"<p>So the room for extra spending is {num('obr.margin.mandate.2029-30', 'bn1')} on the fiscal mandate, in 2029-30. That is the whole budget's room, shared by every decision on spending and tax, not a sum for defence.</p>")
     body.append('<h2 id="limits">What the figures do not show</h2>')
-    body.append("<ul><li>How much room the fiscal rule leaves for extra spending (its headroom) is not on the site yet, so it cannot say how much there is.</li>"
-                "<li>NATO's own defence figures, which use a wider definition than the OECD and PESA, are not on this site yet.</li>"
+    body.append("<ul><li>The room is a central forecast for one year, 2029-30. The OBR also gives the chance of meeting the mandate, because the outcome is uncertain.</li>"
                 "<li>Canada has no defence figure in the OECD table used above.</li></ul>")
     body.append('<p>Whether the UK can afford more is a judgement about priorities. People who say it cannot afford more often point to high debt and the interest bill. Others say defence should come first in spending decisions, or that faster growth would make more room over time. The figures on this page are the same whichever view you hold.</p>')
 

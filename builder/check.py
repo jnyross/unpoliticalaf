@@ -102,6 +102,9 @@ def cell_value(src_file, locator):
             return None
     if src_file.endswith(".json"):
         data = json.loads((ROOT / src_file).read_text())
+        m = re.fullmatch(r"year (\d{4})", locator)
+        if m:  # a transcribed figure kept by year (see builder/data_nato.py)
+            return data["values"].get(m.group(1))
         m = re.fullmatch(r"value\[(\d+)\]", locator)
         if m:  # JSON-stat (Eurostat): flat value list keyed by position
             return data["value"].get(m.group(1))
