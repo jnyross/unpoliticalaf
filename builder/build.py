@@ -14,7 +14,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, version
+from . import pages_money_extra, pages_generations, version
 from . import downloads, pages_money, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
@@ -61,6 +61,7 @@ def render():
     pages["life/jobs-by-industry.html"] = pages_life.industry_page(facts, d, num, sources)
     pages["life/house-prices.html"] = pages_life.afford_page(facts, d, num, sources)
     pages["life/housing-places.html"] = pages_life.places_page(facts, d, num, sources)
+    pages[pages_generations.PAGE] = pages_generations.generations_page(facts, d, num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for y in EARLY_YEARS:
