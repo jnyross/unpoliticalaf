@@ -172,6 +172,7 @@ FETCHED = {
     "ni-de-enrolments-2025-26": ("Department of Education (Northern Ireland)", "School enrolments 2025/26 statistical bulletins (release page)", "Northern Ireland", "Pupils in grant-aided schools"),
     "wg-schools-census-2025": ("Welsh Government", "Schools' census results: January 2025, tables 16 and 17 (infant and junior class sizes)", "Wales", "Infant and junior classes in maintained schools"),
     "ashe-2025-fig1": ("Office for National Statistics", "Employee earnings in the UK: 2025, Figure 1 data", "United Kingdom", "Employee jobs"),
+    "dwp-spa-timetable": ("Department for Work and Pensions (GOV.UK)", "State Pension age timetables (DWP PDF, tables 1 to 5)", "United Kingdom", "Men and women, by date of birth"),
     "ehs-ft1101": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FT1101: trends in tenure", "England", "All households"),
     "ehs-ft1241": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FT1241: trends in tenure, households with dependent children", "England", "Couples and lone parents with dependent children"),
     "ehs-fa3201": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FA3201: rent before housing support", "England", "Social and private renting households paying rent"),

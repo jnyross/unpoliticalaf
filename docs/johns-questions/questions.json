@@ -771,7 +771,24 @@
         {
           "id": "J12.9",
           "question": "How has the state pension age changed for people born in 1960 compared with people born in 1990?",
-          "gap": "The site has no state pension age or pension coverage figures. Needs the state pension age timetable and pension coverage by year, from DWP and ONS."
+          "options": {
+            "A": "It stayed at 66 for people born in 1960 and 1990",
+            "B": "People born in 1960 reach it at 66 and 0 to 9 months; under current law people born in 1990 reach it at 68",
+            "C": "It fell from 68 to 66",
+            "D": "It rose from 60 to 65 in both years"
+          },
+          "answer": "B",
+          "why": "DWP State Pension age timetable: people born in 1960 reach State Pension age at 66 plus 0 to 9 months depending on birth month. For people born from 6 April 1978 it is 68 under current law (Pensions Act 2007, rise from 67 to 68 for 2044 to 2046). A review could change it.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "People born in 1960 reach State Pension age at 66 years and 0 to 9 months"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "For people born from 6 April 1978 it is 68 under current law"
+            }
+          ]
         },
         {
           "id": "J12.10",

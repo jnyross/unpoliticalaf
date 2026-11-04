@@ -31,7 +31,7 @@ def _answer(facts, num):
             f'({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}). '
             f'Since {AFFORD_FIRST}, the first year measured the same way, the middle-priced home in England and Wales has gone from '
             f'{num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
-            f'This site cannot yet compare home ownership, pay, university costs, pensions, tax or life expectancy for people of the same age, '
+            f'This site cannot yet compare home ownership, pay, university costs, tax or life expectancy for people of the same age, '
             f'so it does not give an overall answer.</p></div>')
 
 
@@ -90,13 +90,21 @@ def page_body(facts, d, num, sources):
                   [["Pupils per class", num(f"school.primary.{SCHOOL_FIRST}", "dp1"), num(f"school.primary.{LAST}", "dp1")]]),
             f'<p>These figures describe the classes in each year, not the classes the parents attended. The site holds no class size figures from before 2006. '
             f'<a href="schools.html">Class sizes, every year</a>.</p>',
+            "<h2 id='pension-age'>State Pension age</h2>",
+            "<p>The State Pension age is the earliest age a person can start to claim the State Pension. The law has changed it several times.</p>",
+            table("State Pension age under current law, by year of birth", ["Born in", "1960", "1990"],
+                  [["State Pension age", f"66, plus {spa_range(facts)} months (depending on birth month)", f"{num('spa.years.1990', 'int')} years"]]),
+            "<p>People born in 1960 reach State Pension age at 66 years and 0 to 9 months, depending on the month of birth. "
+            "For people born from 6 April 1978 it is 68 under current law: the Pensions Act 2007 sets the rise from 67 to 68 for 2044 to 2046. "
+            "The government has launched a third review of State Pension age, and a review could change the timetable for 68.</p>",
+            source_line(sources, ["dwp-spa-timetable"]),
             "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
             "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
             "<ul>"
             "<li><strong>Home ownership at a given age</strong>: owning or renting by the age of the household’s main person, across the 1990s to now (English Housing Survey and Labour Force Survey tables by age).</li>"
             "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
             "<li><strong>University costs</strong>: tuition fees and student loans, as the amount a student pays and borrows, in each year since the 1990s.</li>"
-            "<li><strong>Pensions</strong>: the state pension age and the share of people with a workplace or private pension, by year.</li>"
+            "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
             "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
             "<li><strong>Life expectancy at 30</strong>: national life tables, by year.</li>"
             "<li><strong>Job security</strong>: how long people stay in a job, and the share on temporary or insecure contracts, by age.</li>"
@@ -110,6 +118,10 @@ def page_body(facts, d, num, sources):
             source_line(sources, ["ons-ybud", "ons-ybug", "ons-ybuj", "ons-affordability", "ehs-ft1101", "dfe-spc-2015-tables", "dfe_api"], up="../"),
             ]
     return "\n".join(body)
+
+
+def spa_range(facts):
+    return f"0 to {int(facts['spa.months.1960.max'].value)}"
 
 
 def _same_age_chart(facts, num):

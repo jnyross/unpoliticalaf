@@ -658,8 +658,13 @@
   },
   {
    "id": "parl-cbp-tuition-fees",
-   "url": "https://researchbriefings.files.parliament.uk/documents/CBP-10155/CBP-10155.pdf",
+   "url": "https://dera.ioe.ac.uk/id/eprint/40996/1/CBP-10155.pdf",
    "file": "parl/CBP-10155.pdf"
+  },
+  {
+   "id": "parl-hansard-1998-tuition-fees",
+   "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
+   "file": "parl/hansard-1998-12-07-tuition-fees.html"
   }
  ]
 }
