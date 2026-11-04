@@ -37,7 +37,10 @@ jobs:
             const {owner, repo} = context.repo;
             const OK = new Set(["success", "skipped", "neutral"]);
             const HOLD = new Set(["hold", "do-not-merge"]);
+            // Files whose change should re-run the accuracy check (accuracy-check.yml).
+            const ACCURACY = /^(docs\/accuracy-check\/sample\.json|docs\/standins\/audits\/[^/]+\/fact-check\/sample\.json|scripts\/accuracy_check\.py|\.github\/workflows\/accuracy-check\.yml)$/;
             let merged = 0;
+            let accuracyTouched = false;
 
             const prs = await github.paginate(github.rest.pulls.list,
               {owner, repo, state: "open", base: "main", per_page: 100});
@@ -79,14 +82,21 @@ jobs:
                   commit_title: `${pr.title} (#${n})`});
                 merged++;
                 core.notice(`Merged #${n}: ${pr.title}`);
+                const files = await github.paginate(github.rest.pulls.listFiles,
+                  {owner, repo, pull_number: n, per_page: 100});
+                if (files.some(f => ACCURACY.test(f.filename))) accuracyTouched = true;
               } catch (e) {
                 why(`merge refused: ${e.message}`);
               }
             }
 
             // Merges made with this workflow's token don't start push workflows,
-            // so start the live-site check by hand.
+            // so start the live-site check and the accuracy check by hand.
             if (merged) {
               await github.rest.actions.createWorkflowDispatch({owner, repo, workflow_id: "live.yml", ref: "main"});
               core.info("Started 'Live site matches main'.");
+            }
+            if (accuracyTouched) {
+              await github.rest.actions.createWorkflowDispatch({owner, repo, workflow_id: "accuracy-check.yml", ref: "main"});
+              core.info("Started 'Accuracy check (random sample)'.");
             }
