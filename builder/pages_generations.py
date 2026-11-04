@@ -27,15 +27,13 @@ LAST = YEARS[-1]
 def _answer(facts, num):
     w_first, w_last = WORK_FIRST, LAST
     return (f'<div class="answer"><p>There is no single answer, because “easier” depends on what is measured. '
-            f'On the measures this site can compare for people of the same age, a larger share of people aged 25 to 34 were in work in {w_last} '
-            f'({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}). '
-            f'Since {AFFORD_FIRST}, the first year measured the same way, the middle-priced home in England and Wales has gone from '
-            f'{num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
-            f'Aged 18 to 24, {num(f"work.age.18_24.{w_first}", "pct")} were in work in {w_first} and {num(f"work.age.18_24.{w_last}", "pct")} in {w_last}. '
-            f'Households in England who own their home were {num(f"house.owners.{OWN_FIRST}", "pct")} in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]} and {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
-            f'University fees were up to £1,000 in 1998, paid up front; £9,535 is the 2025-26 cap for England. '
-            f'People born in 1960 reach State Pension age at 66; people born from 6 April 1978 reach 68 under current law. '
-            f'Home ownership, pay, tax and life expectancy at a given age are not yet compared, so there is no overall answer.</p></div>')
+            f'Aged 25 to 34, a larger share were in work in {w_last} ({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}); '
+            f'aged 18 to 24, {num(f"work.age.18_24.{w_last}", "pct")} against {num(f"work.age.18_24.{w_first}", "pct")}. '
+            f'The middle-priced home cost {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings in {AFFORD_FIRST} and {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
+            f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
+            f'University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. '
+            f'State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. '
+            f'Pay, tax and life expectancy are not yet compared.</p></div>')
 
 
 def _same_age_rows(facts, num):
