@@ -161,6 +161,30 @@ def _industry_answer(facts, num, d):
             f'Health and social work went from {num(f"jobs.share.Q.{first}", "pct")} to {num(f"jobs.share.Q.{last}", "pct")}.</p></div>')
 
 
+def jobs_people_block(facts, num, d):
+    """Why there can be more jobs than people in work: the answer first, then a short table."""
+    jb = d["life_extra"]["jobs"]
+    years, prov = jb["years"], jb["provisional"]
+    first, last = years[0], years[-1]
+    lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
+    gaps = {y: _v(facts, f"jobs.gap.{y}") for y in years}
+    gaps = {y: g for y, g in gaps.items() if g is not None}
+    lo, hi = min(gaps, key=gaps.get), max(gaps, key=gaps.get)
+    shown = [y for y in dict.fromkeys([first, 2000, 2010, 2020, last]) if y in gaps]
+    rows = [[lab(y), num(f"jobs.total.{y}", "int"), num(f"jobs.people.{y}", "int"), num(f"jobs.gap.{y}", "int")] for y in shown]
+    return ["<h3 id='jobs-and-people'>Why can there be more jobs than people in work?</h3>",
+            f'<div class="answer"><p>One reason is that some people have more than one job. A jobs count adds up every job, so someone with two jobs is counted twice. '
+            f'In {lab(last)} there were {num(f"jobs.total.{last}", "millions")} jobs in the UK, and {num(f"jobs.people.{last}", "millions_people")} people in employment in the same month. '
+            f'The difference was {num(f"jobs.gap.{last}", "millions")}.</p></div>',
+            f'<p>The two figures also come from different sources and count different things. Jobs come from surveys of employers, plus self-employment, the armed forces '
+            f'and government-supported trainees. People in employment come from the Labour Force Survey, a household survey, and count people who did paid work or '
+            f'were temporarily away from a job. Jobs were higher than people in employment in every June from {first} to {last}, by between '
+            f'{num(f"jobs.gap.{lo}", "millions")} ({lo}) and {num(f"jobs.gap.{hi}", "millions")} ({hi}). The figures here do not show how much of the gap each reason explains.</p>',
+            table(f"Jobs and people in employment, United Kingdom, June, selected years (thousands)",
+                  ["Year", "Jobs", "People in employment", "Jobs minus people"], rows),
+            '<p class="small">The difference is our calculation: workforce jobs minus people in employment, both seasonally adjusted, June of each year.</p>']
+
+
 def industry_block(facts, num, d):
     """The short version on the work page: the answer and a link to the full page."""
     first = d["life_extra"]["jobs"]["years"][0]
