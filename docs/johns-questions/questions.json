@@ -344,6 +344,69 @@
       ]
     },
     {
+      "id": "J8",
+      "asked": "What are the empirical best ways to get the UK economy into a better position, a ranked list of ten things",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 8 of 10)",
+      "reading": "Ten options, ranked only by a stated, published, empirical measure, never by the site's opinion. The measure is the size of a published estimate of the effect on the level of GDP (potential GDP) over a stated horizon, shown with its range, cost and uncertainty. Estimates from different sources or models are not like-for-like, so they must not be ranked against each other as if they were; where only one source covers a set of options, the ranking stays inside that set. 'Better position' depends on goals (growth, fairness, the deficit), so the site should say that a second ranking, by cost to the public finances, may differ.",
+      "probes": [
+        {
+          "id": "J8.1",
+          "question": "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?",
+          "options": {
+            "A": "Trade barriers and research and development support",
+            "B": "Getting people on long-term sick leave back into work",
+            "C": "Planning reform, full expensing and access to finance",
+            "D": "Keeping the state pension triple lock"
+          },
+          "answer": "C",
+          "why": "The OECD estimates planning reform, full expensing and access to finance at +2.1% of potential GDP after 10 years, the largest of its packages (long-term sick +1.4%, trade and R&D +0.5%).",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "Capital deepening: planning reform, extension of full expensing, access to finance"
+            }
+          ]
+        },
+        {
+          "id": "J8.2",
+          "question": "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?",
+          "options": {
+            "A": "+1.0% after 10 years and +2.0% after 25 years",
+            "B": "+4.0% after 10 years and +7.7% after 25 years",
+            "C": "+0.5% after 10 years and +1.7% after 25 years",
+            "D": "No estimate is given"
+          },
+          "answer": "B",
+          "why": "The OECD's combined package is +4.0% of potential GDP after 10 years and +7.7% after 25 years.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "gives +4.0% of potential GDP after 10 years and +7.7% after 25 years"
+            }
+          ]
+        },
+        {
+          "id": "J8.3",
+          "question": "What measure do the OECD's reform estimates use for the size of each effect?",
+          "options": {
+            "A": "Pounds of extra tax revenue",
+            "B": "A percentage of baseline potential GDP",
+            "C": "Change in employment numbers",
+            "D": "Change in the deficit alone"
+          },
+          "answer": "B",
+          "why": "The OECD measures each effect as a percentage of baseline potential GDP.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "a percentage of baseline potential GDP"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "J7",
       "asked": "Have labour kept their electiion manifesto?",
       "added": "2026-11-04",
