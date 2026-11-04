@@ -161,6 +161,39 @@ def _industry_answer(facts, num, d):
             f'Health and social work went from {num(f"jobs.share.Q.{first}", "pct")} to {num(f"jobs.share.Q.{last}", "pct")}.</p></div>')
 
 
+def jobs_people_block(facts, num, d):
+    """Why there can be more jobs than people in work: the answer first, then a short table."""
+    jb = d["life_extra"]["jobs"]
+    years, prov = jb["years"], jb["provisional"]
+    first, last = years[0], years[-1]
+    lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
+    gaps = {y: _v(facts, f"jobs.gap.{y}") for y in years}
+    gaps = {y: g for y, g in gaps.items() if g is not None}
+    lo, hi = min(gaps, key=gaps.get), max(gaps, key=gaps.get)
+    return ["<h3 id='jobs-and-people'>Why can there be more jobs than people in work?</h3>",
+            f'<div class="answer"><p>Some people have more than one job, and jobs are counted one by one, so someone with two jobs is counted twice. '
+            f'In {lab(last)} there were {num(f"jobs.total.{last}", "millions")} jobs and {num(f"jobs.people.{last}", "millions_people")} people in employment, a difference of {num(f"jobs.gap.{last}", "millions")}.</p></div>',
+            f'<p>The counts also come from different sources: jobs from employer surveys, self-employment, the armed forces and trainees; people from the Labour Force Survey. '
+            f'Jobs were higher in every June from {first} to {last}, by between {num(f"jobs.gap.{lo}", "millions")} ({lo}) and {num(f"jobs.gap.{hi}", "millions")} ({hi}). '
+            f'The figures do not show how much of the gap each reason explains.</p>',
+            f'<p class="more-link"><a href="jobs-by-industry.html#jobs-people">Jobs and people in employment, June figures</a>: the two counts side by side, and the difference, for selected years.</p>']
+
+
+def jobs_people_table(facts, num, d):
+    """The June jobs and people counts side by side, for selected years (on the jobs by industry page)."""
+    jb = d["life_extra"]["jobs"]
+    years, prov = jb["years"], jb["provisional"]
+    first, last = years[0], years[-1]
+    lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
+    shown = [y for y in dict.fromkeys([first, 2000, 2010, 2020, last]) if _v(facts, f"jobs.gap.{y}") is not None]
+    rows = [[lab(y), num(f"jobs.total.{y}", "int"), num(f"jobs.people.{y}", "int"), num(f"jobs.gap.{y}", "int")] for y in shown]
+    return ["<h2 id='jobs-people'>Jobs and people in employment</h2>",
+            table("Jobs and people in employment, United Kingdom, June, selected years (thousands)",
+                  ["Year", "Jobs", "People in employment", "Jobs minus people"], rows),
+            '<p class="small">Jobs are workforce jobs (ONS JOBS02); people in employment are from the Labour Force Survey (ONS MGRZ). Both are seasonally adjusted. '
+            'The difference is our calculation. The gap is not a count of people with two jobs, because the two counts also differ in source and coverage.</p>']
+
+
 def industry_block(facts, num, d):
     """The short version on the work page: the answer and a link to the full page."""
     first = d["life_extra"]["jobs"]["years"][0]
@@ -194,6 +227,7 @@ def industry_page(facts, d, num, sources):
                       ["Industry"] + [f"Share {c}" for c in cols] + [f"Jobs {c} (thousands)" for c in cols],
                       [[esc(names[s])] + [num(f"jobs.share.{s}.{c}", "pct") for c in cols] + [num(f"jobs.ind.{s}.{c}", "int") for c in cols] for s in jb["sections"]]
                       + [["All industries"] + [""] * len(cols) + [num(f"jobs.total.{c}", "int") for c in cols]]))
+    body.extend(jobs_people_table(facts, num, d))
     body.append("<h2 id='about'>About these figures</h2>")
     body.append(f'<div class="limit"><p>These count jobs, not people: someone with two jobs counts twice. They include employee jobs (from surveys of employers), '
                 f'self-employment (from the Labour Force Survey), the armed forces and government-supported trainees, and are seasonally adjusted. Industries follow the 2007 Standard Industrial Classification '
