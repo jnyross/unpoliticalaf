@@ -464,7 +464,7 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(f'''<div class="answer"><p class="lede">Across everyone in UK private households, taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24.</p>
 <p>The share was similar for the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")}) and the highest-income fifth ({num("etb.t8.gross.all.q5", "pct")}), but it was made up of different taxes.</p></div>''')
     # Readers looking for "what one person pays" could not find the worked example (audit 10 gap 2).
-    body.append(f'<p>Looking for what one person pays? See the <a href="#worked-example">worked example of a made-up employee on £{rates["illustration"]["salary"]:,}</a>. It is an illustration of the tax rules, not a measured statistic.</p>')
+    body.append(f'<p>Looking for what one person pays? See the <a href="#worked-example">made-up employee on £{rates["illustration"]["salary"]:,}</a> or the <a href="self-employed-tax.html">made-up self-employed person</a>. Both are illustrations, not statistics.</p>')
     items = []
     for q, lab in QUINTS:
         items.append((lab, f"etb.t8.gross.all.{q}", "alt" if q == "all" else ""))
@@ -512,3 +512,28 @@ def household_tax_page(facts, d, num, sources, rates):
     from .pages_money_extra import tax_history_section
     body.append(tax_history_section(facts, d, num, sources))
     return page("household-tax.html", "How much of household income goes on tax?", "\n".join(body), "Taxes as a share of UK household income, and how this differs from tax rates and shares of revenue.")
+
+
+def self_employed_tax_page(facts, d, num, sources, rates):
+    """A labelled made-up self-employed example (T138), kept off the household tax page to stay within its length."""
+    se = rates["self_employed"]
+    ill = rates["illustration"]
+    body = ["<h1>What does a self-employed person pay in tax?</h1>"]
+    body.append('<div class="answer"><p class="lede">A self-employed person pays Income Tax on their profit, and Class 4 National Insurance on the same profit. Class 4 is worked out differently from the employee National Insurance that an employer deducts from pay.</p></div>')
+    body.append(f'''<aside class="illustration" aria-labelledby="worked-example-self-employed">
+<span class="tag">Illustration, not a statistic</span>
+<h2 id="worked-example-self-employed">Worked example: one made-up self-employed person with £{se["profit"]:,} profit</h2>
+<p>This person is invented to show how the rules work. They are not a typical or average person, and this is not a measured figure.</p>
+<p>Assumptions: tax year {esc(rates["year"])}; profit is income from self-employment after allowable expenses; lives in England, Wales or Northern Ireland; no employees, no other income and no pension contributions.</p>
+<ul>
+<li>Income Tax: {se["basic_rate"]*100:.0f}% of the £{se["profit"] - se["allowance"]:,} above the £{se["allowance"]:,} Personal Allowance = <strong>£{se["income_tax"]:,.0f}</strong></li>
+<li>Class 4 National Insurance: {se["class4_rate"]*100:.0f}% of profits between £{se["class4_lower"]} and £{se["class4_upper"]} = <strong>£{se["class4"]:,.0f}</strong>. No Class 2 contributions are due at these profits.</li>
+<li>Together: £{se["total"]:,.0f}, which is {se["average_rate"]:.0f}% of their profit. This is their <em>average</em> rate.</li>
+<li>On each extra pound of profit, they would pay {se["basic_rate"]*100:.0f}p Income Tax and {se["class4_rate"]*100:.0f}p Class 4 National Insurance: a <em>marginal</em> rate of {se["marginal"]:.0f}%.</li>
+<li>The employee on £{ill["salary"]:,} above pays the same Income Tax, £{ill["income_tax"]:,.0f}, and £{ill["ni"]:,.0f} of employee National Insurance. Employer National Insurance is not counted for either person.</li>
+</ul>
+</aside>''')
+    body.append(f'<p class="small">The self-employed example uses rates from GOV.UK: <a href="sources.html#src-gov-self-employed-ni">Self-employed National Insurance rates</a>, retrieved {esc(se["retrieved"])}, and the <a href="sources.html#src-gov-income-tax-rates">Income Tax rates</a> retrieved {esc(rates["retrieved"])}.</p>')
+    body.append('<div class="limit"><p><strong>Limits.</strong> This is one invented person, to show the rules. It leaves out pension contributions, student loans, capital allowances, tax on dividends, VAT, Scottish Income Tax and any Corporation Tax on a company. Profit is income from self-employment after allowable expenses. Employer National Insurance is not counted for the employee comparison.</p></div>')
+    body.append('<p><a href="household-tax.html">Back to how much of household income goes on tax</a></p>')
+    return page("self-employed-tax.html", "What does a self-employed person pay in tax?", "\n".join(body), "A labelled, made-up self-employed example: Income Tax and Class 4 National Insurance on a £30,000 profit, with the official rates it uses.")
