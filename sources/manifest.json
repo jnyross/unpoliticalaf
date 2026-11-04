@@ -710,6 +710,21 @@
    "id": "boe-mortgage-rates",
    "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
    "file": "boe/mortgage-rates-new-lending.csv"
+  },
+  {
+   "id": "dwp-spa-timetable",
+   "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+   "file": "dwp/spa-timetable.pdf"
+  },
+  {
+   "id": "parl-cbp-tuition-fees",
+   "url": "https://dera.ioe.ac.uk/id/eprint/40996/1/CBP-10155.pdf",
+   "file": "parl/CBP-10155.pdf"
+  },
+  {
+   "id": "parl-hansard-1998-tuition-fees",
+   "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
+   "file": "parl/hansard-1998-12-07-tuition-fees.html"
   }
-]
+ ]
 }

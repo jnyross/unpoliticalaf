@@ -113,6 +113,23 @@ def cell_value(src_file, locator):
     if src_file.endswith(".pdf"):
         # Read the page text afresh and find the anchor, the line and the nth number on it
         from pypdf import PdfReader
+        # A stated sentence: "page N 'text'" gives the last £ amount in the quoted text, after checking the text is there.
+        m = re.fullmatch(r"page (\d+) '(.+)'", locator)
+        if m:
+            text = re.sub(r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text())
+            if m.group(2) not in text:
+                raise ValueError(f"{src_file} page {m.group(1)} no longer says '{m.group(2)}'")
+            return re.findall(r"£([\d,]+)", m.group(2))[-1].replace(",", "")
+        # A stated age: "page N row 'birth dates' 'age'" gives the age in months, after checking the row is there.
+        m = re.fullmatch(r"page (\d+) row '(.+?)' '(.+)'", locator)
+        if m:
+            text = re.sub(r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text())
+            if f"{m.group(2)} {m.group(3)}" not in text:
+                raise ValueError(f"{src_file} page {m.group(1)} no longer has the row '{m.group(2)}' '{m.group(3)}'")
+            age = re.fullmatch(r"(\d+)th birthday|(\d+) years and (\d+) months(?: \(\d\))?", m.group(3))
+            if age.group(1):
+                return str(int(age.group(1)) * 12)
+            return str(int(age.group(2)) * 12 + int(age.group(3)))
         m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)
         text = PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text()
         after = text[text.index(m.group(2)) + len(m.group(2)):]
