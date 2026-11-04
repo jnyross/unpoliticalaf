@@ -224,6 +224,57 @@ EXPLANATIONS = {
         quote=["Large Classes - An infant class is described as ‘large’ when it exceeds the statutory limit of 30 pupils. There are no formal policy restrictions on any other class sizes.",
                "This means that a class of, for example, 32 pupils is lawful if two or more of those pupils have been admitted under lawful exceptions."],
         gloss="This is the rule in England. Infant classes are reception, year 1 and year 2. The primary and secondary averages say nothing about the limit on their own; the infant figures on the class sizes page show how many pupils are in classes of more than 30, some of which are lawful exceptions."),
+    # ------------------------------------------------------------ immigration
+    "imm-net-migration": dict(
+        question="How many people moved to the UK, net, in the latest year?",
+        source="explain-ons-ltim-dec2025", publisher="Office for National Statistics",
+        title="Long-term international migration, provisional: year ending December 2025", date="released 21 May 2026",
+        quote=["Long-term immigration is where an individual moves to the UK for 12 months or more, long-term emigration is where an individual leaves the UK for 12 months or more.",
+               "Long-term net migration is immigration minus emigration.",
+               "At 171,000, long-term international net migration for year ending (YE) December 2025 has nearly halved from YE December 2024 (updated to 331,000)",
+               "Provisional net migration was 350,000 for non-EU+ nationals in YE December 2025, down from 511,000 a year earlier.",
+               "The provisional net migration of British nationals remained broadly stable, estimated at negative 136,000."],
+        note="These are provisional figures. The ONS revises earlier years, as the figure for YE December 2024 shows."),
+    "imm-mac-partner": dict(
+        question="Does one visa route pay for itself over a lifetime?",
+        source="explain-mac-annual-2025", publisher="Migration Advisory Committee",
+        title="Migration Advisory Committee annual report 2025, chapter 1: fiscal analysis of the Family visa", date="annual report 2025, accessible version",
+        quote=["the partners of British citizens and settled residents, will incur a net lifetime fiscal deficit of -£5.6bn in present value terms",
+               "Partner applicants and SW adult dependants can contribute considerably less through taxation than UK residents and still be more fiscally positive.",
+               "During their first two decades in the UK, the cohort make an annual positive net fiscal contribution.",
+               "This, combined with a decline in their employment rate and higher public spending as they age, causes the cohort to incur an annual net fiscal deficit as they remain in the UK."],
+        gloss="The MAC models the 2022/23 cohort of Partner route applicants. The Partner route is one part of the Family visa, so this does not describe every migrant. “SW” means the Skilled Worker route. “Present value” means future sums are discounted to today’s value."),
+    "imm-obr-time": dict(
+        question="Does the answer change over time?",
+        source="explain-obr-migration-fiscal", publisher="Office for Budget Responsibility",
+        title="The impact of migration on the fiscal forecast", date="box first published March 2024",
+        quote=["The fiscal impacts of migration are likely to become less beneficial over time, reflecting that after a minimum of 5-years, migrants can apply for indefinite leave to remain and therefore become eligible for welfare benefits.",
+               "The overall long-term impact of migration on the public finances is more uncertain."],
+        gloss="Indefinite leave to remain is the UK’s permanent settled status. This box uses data from March 2024, and its forecast covers five years."),
+    "imm-obr-services": dict(
+        question="How do migrants’ use of public services show up in the public finances?",
+        source="explain-obr-migration-fiscal", publisher="Office for Budget Responsibility",
+        title="The impact of migration on the fiscal forecast", date="box first published March 2024",
+        quote=["While migrants will consume public services such as education, healthcare, and transport, there is no direct link between the size of the population and the money allocated for departmental spending on public services.",
+               "reduce DEL spending per person by £40 in 2028-29 and increase the pressure on those services"],
+        gloss="DEL means departmental expenditure limits: the amounts government sets for each department’s spending. The £40 figure comes from the OBR’s central forecast with about 350,000 more net migration by 2028-29."),
+    "imm-obr-scenarios": dict(
+        question="How much could the answer change if migration were higher or lower?",
+        source="explain-obr-migration-fiscal", publisher="Office for Budget Responsibility",
+        title="The impact of migration on the fiscal forecast", date="box first published March 2024",
+        quote=["in which net migration is 200,000 a year higher or lower than in our central forecast.",
+               "In the higher migration scenario, receipts are £18.0 billion higher by the forecast horizon with contributions from both migration specific fees (£0.5 billion) and general taxation (£17.5 billion).",
+               "so that while migration still improves the public finances it does so by less than in the unadjusted DEL scenario, with borrowing £13.1 billion lower and debt 2.5 per cent of GDP lower by 2028-29.",
+               "These scenarios are a simplification and are highly uncertain."],
+        gloss="The two versions differ in whether the government spends more on public services for the extra people. The OBR says the scenarios are simplified, so they show the size of the uncertainty, not a forecast."),
+    "imm-obr-gdp": dict(
+        question="How does migration affect GDP per person, not only total GDP?",
+        source="explain-obr-migration-gdp", publisher="Office for Budget Responsibility",
+        title="Net migration and GDP per person (box, Economic and fiscal outlook, March 2026)", date="March 2026",
+        quote=["Net inward migration has been a significant driver of GDP growth, but its impact on GDP per person is much more uncertain.",
+               "higher net inward migration raised the aggregate level of real GDP by around 1 to 2 per cent after five years.",
+               "However, the impact on real GDP per person was either slightly positive or slightly negative, depending on the assumptions made about the labour supply and average productivity of new migrants and the effect on economy-wide productivity and participation."],
+        gloss="GDP is the total output of the economy. GDP per person divides it by the population, which is one common measure of living standards."),
 }
 
 _text_cache = {}

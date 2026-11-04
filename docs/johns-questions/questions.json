@@ -304,42 +304,194 @@
         {
           "id": "J2.1",
           "question": "Does the site say whether immigration is a good thing or a bad thing?",
-          "gap": "There is no immigration page yet. It must say plainly that good or bad depends on values, that it does not decide that, and which parts the evidence does settle, reachable in a few taps from the home page."
+          "options": {
+            "A": "Yes: it is a good thing",
+            "B": "Yes: it is a bad thing",
+            "C": "No: it says the answer depends on what you value, and shows what the evidence says about the measurable parts",
+            "D": "No: it does not discuss the question at all"
+          },
+          "answer": "C",
+          "why": "The immigration page opens by saying the site does not answer the question, because the answer depends on what people value, and then sets out the measurable parts.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "The site does not answer that question, because the answer depends on what you value."
+            }
+          ]
         },
         {
           "id": "J2.2",
-          "question": "According to official estimates, does a migrant's effect on public finances depend on their age, visa route or employment?",
-          "gap": "No page shows fiscal effects of migrants yet. It must show the OBR and Migration Advisory Committee estimates by migrant type (age, visa route, employment), with the period, population and units."
+          "question": "According to official estimates, does a migrant’s effect on public finances depend on their age, visa route or employment?",
+          "options": {
+            "A": "No: every migrant has the same effect",
+            "B": "Yes: it depends on things such as visa route, age and employment",
+            "C": "Only on nationality",
+            "D": "It cannot be estimated at all"
+          },
+          "answer": "B",
+          "why": "The MAC estimates the Partner route as a lifetime deficit, and says that partner and Skilled Worker dependants contribute less through taxation than UK residents but are still more fiscally positive. Higher spending as people age and a lower employment rate also change the result.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "the partners of British citizens and settled residents, will incur a net lifetime fiscal deficit of -£5.6bn in present value terms"
+            },
+            {
+              "page": "immigration.html",
+              "text": "Partner applicants and SW adult dependants can contribute considerably less through taxation than UK residents and still be more fiscally positive."
+            },
+            {
+              "page": "immigration.html",
+              "text": "This, combined with a decline in their employment rate and higher public spending as they age, causes the cohort to incur an annual net fiscal deficit as they remain in the UK."
+            }
+          ]
         },
         {
           "id": "J2.3",
-          "question": "Do official estimates of migrants' effect on public finances differ between the short run and the long run?",
-          "gap": "The site must show whether the official estimates give different results over short and long periods, with the period and main assumptions for each."
+          "question": "Do official estimates of migrants’ effect on public finances differ between the short run and the long run?",
+          "options": {
+            "A": "No: the effect is the same in the short and long run",
+            "B": "Yes: a positive annual contribution in the first two decades, then an annual deficit as they stay in the UK",
+            "C": "Yes: a deficit in the first two decades only",
+            "D": "Neither: no official estimates exist"
+          },
+          "answer": "B",
+          "why": "The MAC finds a positive annual contribution in a cohort’s first two decades, then a deficit as they stay. The OBR says the fiscal impact is likely to become less beneficial over time.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "During their first two decades in the UK, the cohort make an annual positive net fiscal contribution."
+            },
+            {
+              "page": "immigration.html",
+              "text": "The fiscal impacts of migration are likely to become less beneficial over time"
+            }
+          ]
         },
         {
           "id": "J2.4",
           "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
-          "gap": "No public-services use page yet. It must show what official sources measure about migrants' use of public services and say where they cannot separate migrants from other people."
+          "gap": "The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services."
         },
         {
           "id": "J2.5",
           "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
-          "gap": "No workforce page yet. It must show the latest NHS England and Skills for Care figures on non-UK nationals in the NHS and adult social care, with the date and definition used."
+          "gap": "NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed."
         },
         {
           "id": "J2.6",
           "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
-          "gap": "The population page shows total population only. It must show ONS net migration and natural change for the latest year, with the year and the source."
+          "gap": "The site has ONS net migration but not births and deaths, which are needed to say what drove recent population growth."
         },
         {
           "id": "J2.7",
           "question": "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?",
-          "gap": "No economic-effects page yet. It must show what the OBR and other official estimates say about migration's effect on total GDP and on GDP per person, and explain the difference."
+          "options": {
+            "A": "Yes, it raises GDP per person by as much as total GDP",
+            "B": "It raises total GDP, but its effect on GDP per person is much more uncertain, and may be slightly positive or slightly negative",
+            "C": "It lowers total GDP",
+            "D": "It has no effect on GDP"
+          },
+          "answer": "B",
+          "why": "The OBR says net migration has been a significant driver of GDP growth, but its effect on GDP per person is much more uncertain, and was either slightly positive or slightly negative in its scenarios.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "Net inward migration has been a significant driver of GDP growth, but its impact on GDP per person is much more uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "the impact on real GDP per person was either slightly positive or slightly negative"
+            }
+          ]
         },
         {
           "id": "J2.8",
           "question": "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?",
-          "gap": "Each immigration estimate must show the range from the official sources, with no single figure picked to favour a view. Nothing on the site does this for immigration yet."
+          "options": {
+            "A": "No: the site gives one figure for each estimate",
+            "B": "Yes: it shows the range of official estimates and says how uncertain they are",
+            "C": "No: it shows no estimates at all",
+            "D": "Only the government’s own figures are shown"
+          },
+          "answer": "B",
+          "why": "The page shows the OBR’s higher and lower migration scenarios, and says they are simplified and highly uncertain, rather than picking one figure.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "in which net migration is 200,000 a year higher or lower than in our central forecast."
+            },
+            {
+              "page": "immigration.html",
+              "text": "These scenarios are a simplification and are highly uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "Where official estimates differ, the range is shown."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J8",
+      "asked": "What are the empirical best ways to get the UK economy into a better position, a ranked list of ten things",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 8 of 10)",
+      "reading": "Ten options, ranked only by a stated, published, empirical measure, never by the site's opinion. The measure is the size of a published estimate of the effect on the level of GDP (potential GDP) over a stated horizon, shown with its range, cost and uncertainty. Estimates from different sources or models are not like-for-like, so they must not be ranked against each other as if they were; where only one source covers a set of options, the ranking stays inside that set. 'Better position' depends on goals (growth, fairness, the deficit), so the site should say that a second ranking, by cost to the public finances, may differ.",
+      "probes": [
+        {
+          "id": "J8.1",
+          "question": "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?",
+          "options": {
+            "A": "Trade barriers and research and development support",
+            "B": "Getting people on long-term sick leave back into work",
+            "C": "Planning reform, full expensing and access to finance",
+            "D": "Keeping the state pension triple lock"
+          },
+          "answer": "C",
+          "why": "The OECD estimates planning reform, full expensing and access to finance at +2.1% of potential GDP after 10 years, the largest of its packages (long-term sick +1.4%, trade and R&D +0.5%).",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "Capital deepening: planning reform, extension of full expensing, access to finance"
+            }
+          ]
+        },
+        {
+          "id": "J8.2",
+          "question": "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?",
+          "options": {
+            "A": "+1.0% after 10 years and +2.0% after 25 years",
+            "B": "+4.0% after 10 years and +7.7% after 25 years",
+            "C": "+0.5% after 10 years and +1.7% after 25 years",
+            "D": "No estimate is given"
+          },
+          "answer": "B",
+          "why": "The OECD's combined package is +4.0% of potential GDP after 10 years and +7.7% after 25 years.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "gives +4.0% of potential GDP after 10 years and +7.7% after 25 years"
+            }
+          ]
+        },
+        {
+          "id": "J8.3",
+          "question": "What measure do the OECD's reform estimates use for the size of each effect?",
+          "options": {
+            "A": "Pounds of extra tax revenue",
+            "B": "A percentage of baseline potential GDP",
+            "C": "Change in employment numbers",
+            "D": "Change in the deficit alone"
+          },
+          "answer": "B",
+          "why": "The OECD measures each effect as a percentage of baseline potential GDP.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "a percentage of baseline potential GDP"
+            }
+          ]
         }
       ]
     },
