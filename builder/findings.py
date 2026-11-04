@@ -477,18 +477,79 @@ def _stretch(stretches, which):
     return stretches[0][0], stretches[-1][1]
 
 
-def trend(subject, si=0, which="last", after=""):
+MIN_DIP = 0.005
+
+
+def smaller_moves(labels, vals, a=0, b=None, unit=None):
+    """The year-on-year moves that run against the big moves a title names: small falls
+    inside a rise, small rises inside a fall. Read from the same legs as phrase(), so a
+    title that says 'rose until 2019' can also say which years dipped, rather than
+    hiding them. Returns (label, 'fell' or 'rose') pairs in order."""
+    s = shape(vals, a, b)
+    if s is None or s["kind"] in ("same", "flat"):
+        return []
+    if s["kind"] in ("up", "down"):
+        legs_ = [(s["f"], s["l"], 1 if s["kind"] == "up" else -1)]
+    else:
+        legs_ = s["legs"]
+    out = []
+    pts_all = measured(vals, a, b)
+    span = max(vals[i] for i in pts_all) - min(vals[i] for i in pts_all) if pts_all else 0
+    for s0, e0, w in legs_:
+        pts = measured(vals, s0, e0 + 1)
+        for i, j in zip(pts, pts[1:]):
+            if unit:
+                # a move counts only if the figures as printed (rounded to unit) differ
+                moved = (round(vals[j] / unit) - round(vals[i] / unit)) * w
+                if moved < 0:
+                    out.append((labels[j], "fell" if vals[j] < vals[i] else "rose"))
+                continue
+            d = (vals[j] - vals[i]) * w
+            # without a printed unit, a move under 0.5% of the line's range is not named
+            if d < -MIN_DIP * span:
+                out.append((labels[j], "fell" if vals[j] < vals[i] else "rose"))
+    return out
+
+
+def _listed(words):
+    return words[0] if len(words) == 1 else ", ".join(words[:-1]) + " and " + words[-1]
+
+
+def smaller_moves_text(labels, vals, a=0, b=None, subject="", unit=None):
+    """'; smaller moves in primary class sizes: fell in 2007, rose in 2023', or '' when
+    the line has none. Used with trend(dips=True) and pair(dips=True)."""
+    found = smaller_moves(labels, vals, a, b, unit)
+    if not found:
+        return ""
+    parts = []
+    for verb in ("fell", "rose"):
+        years = [y for y, k in found if k == verb]
+        if years:
+            parts.append(f"{verb} in {_listed(years)}")
+    head = f"smaller moves in {subject}: " if subject else "smaller moves: "
+    return "; " + head + ", ".join(parts)
+
+
+def _unit(dips):
+    """dips: True for a rule that needs no printed unit, or the unit the figures are printed in (1 for whole numbers, 0.1 for one decimal place)."""
+    return None if dips is True or dips is False else dips
+
+
+def trend(subject, si=0, which="last", after="", dips=False):
     """'{subject} rose between 2008 and 2025': the line's movement over one stretch.
     which: 'last' (default, the latest comparable run), 'first' or 'all'.
     When the stretch ends at a break with figures after it, the title names the year it
     ends and makes no "back to the 2019 level" comparison (see phrase(upto=)).
-    after: words added at the end, such as why later years are not compared."""
+    after: words added at the end, such as why later years are not compared.
+    dips: also name the smaller moves against the big ones (see smaller_moves_text). Give
+    the printed unit (1, or 0.1) so only moves that show in the table are named."""
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         vals = series[si][1]
         upto = any(st[0] == b for st in stretches) and any(v is not None for v in vals[b:])
         p = phrase(labels, vals, a, b, upto=upto)
-        return f"{subject} {p}{after}" if p else ""
+        extra = smaller_moves_text(labels, vals, a, b, unit=_unit(dips)) if dips else ""
+        return f"{subject} {p}{extra}{after}" if p else ""
     return describes(rule, lambda st: [(si, *_stretch(st, which))])
 
 
@@ -610,11 +671,20 @@ def narrowing(what, unit_fmt, si=0, sj=1, which="all"):
     return rule
 
 
-def pair(subject_a, subject_b, si=0, sj=1, which="all", together=None):
+def pair(subject_a, subject_b, si=0, sj=1, which="all", together=None, dips=False):
     """'Primary classes rose between 2008 and 2025, while secondary classes fell': two
     lines' movements over the same years, with the years named once. together: a
-    template with {phrase}, used when both lines moved the same way over the same years."""
+    template with {phrase}, used when both lines moved the same way over the same years.
+    dips: also name line si's smaller moves against its big ones, after the sentence."""
     def rule(labels, series, stretches):
+        a, b = _stretch(stretches, which)
+        if dips:
+            text = rule_base(labels, series, stretches)
+            extra = smaller_moves_text(labels, series[si][1], a, b, subject=subject_a.lower(), unit=_unit(dips))
+            return f"{text}{extra}" if text and extra else text
+        return rule_base(labels, series, stretches)
+
+    def rule_base(labels, series, stretches):
         a, b = _stretch(stretches, which)
         pa = phrase(labels, series[si][1], a, b, short=True)
         pb = phrase(labels, series[sj][1], a, b, short=True)

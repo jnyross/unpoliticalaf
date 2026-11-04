@@ -82,7 +82,7 @@ GROUPS = [
          "A tax on homes in England, Scotland and Wales, set by local councils and based on the value band of the home. Northern Ireland has domestic rates instead.",
          ["Council Tax"]),
         ("direct-tax", "Direct taxes",
-         "Taxes taken from income or charged on a household directly. In the household figures this means Income Tax, employee National Insurance and Council Tax.",
+         "Taxes taken from income or charged on a household directly. In the household figures this means Income Tax, employee National Insurance, student loan repayments and Council Tax.",
          ["direct taxes", "direct tax"]),
         ("indirect-tax", "Indirect taxes",
          "Taxes included in the prices of things people buy, such as VAT, fuel duty and alcohol and tobacco duties, plus some business taxes passed on in prices.",

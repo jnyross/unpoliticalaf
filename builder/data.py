@@ -507,7 +507,7 @@ def earnings(facts):
         if y not in YEARS and y not in EARLY_YEARS:
             continue
         fid = f"earn.{g}.{y}"
-        st = "provisional" if y == base_year else "published"
+        st = "published"  # ASHE 2025 is no longer provisional: ONS's October 2026 release kept it unchanged
         facts.add(Fact(fid, num(r["OBS_VALUE"]), "£ a week", f"April {y}", "nomis-ashe-resident", f"ashe-resident-uk-median-weekly.csv line {line}", st,
                        note=r["SEX_NAME"] + ", median gross weekly pay"))
         out["series"][g][y] = fid
