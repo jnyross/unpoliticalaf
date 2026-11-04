@@ -1,0 +1,148 @@
+{
+ "reader": "R1-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 39,
+ "url": "life/work.html#key-answer",
+ "ops": [],
+ "scroll": 130,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 1120
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/schools.html#years",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1810
+    }
+   ],
+   "scroll": 4667
+  },
+  {
+   "url": "life/compare/2011-2019.html#schools",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > summary:nth-of-type(1)",
+     "y": 4135
+    }
+   ],
+   "scroll": 4135
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [4] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [1] link: Unpolitical",
+  "tap [10] link: Pay after inflation",
+  "back",
+  "tap [11] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "scroll up",
+  "tap [19] link: Find or compare years of class sizes",
+  "tap [6] button: Compare 2011 and 2019",
+  "scroll up",
+  "scroll down",
+  "tap [4] expand: More on Class sizes chart, table, limits and sources",
+  "tap [1] link: Unpolitical",
+  "tap [14] link: Women's employment"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/e77b64dd-93fa-5faf-8ab7-7370842eeda9/scratchpad/audit-15/shots/R1",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Everyday life, year by year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Jobs by industry"
+  }
+ ]
+}

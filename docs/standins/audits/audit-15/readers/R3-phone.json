@@ -1,0 +1,126 @@
+{
+ "reader": "R3-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 38,
+ "url": "life/work.html#key-answer",
+ "ops": [],
+ "scroll": 690,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 1120
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/schools.html#years",
+   "ops": [],
+   "scroll": 4667
+  },
+  {
+   "url": "life/compare/2011-2019.html#schools",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > details:nth-of-type(4) > summary:nth-of-type(1)",
+     "y": 3575
+    }
+   ],
+   "scroll": 4135
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [4] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: Unpolitical",
+  "tap [10] link: Pay after inflation",
+  "back",
+  "tap [11] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [10] link: Find or compare years of class sizes",
+  "tap [6] button: Compare 2011 and 2019",
+  "scroll up",
+  "tap [6] expand: More on Holidays chart, table, limits and sources",
+  "scroll down",
+  "tap [1] link: Unpolitical",
+  "tap [13] link: Renting",
+  "scroll down",
+  "back",
+  "tap [14] link: Women's employment",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/e77b64dd-93fa-5faf-8ab7-7370842eeda9/scratchpad/audit-15/shots/R3",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Jobs by industry"
+  }
+ ]
+}

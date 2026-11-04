@@ -1,0 +1,8 @@
+{"reader": "SR", "site_commit": "4cb1bcc", "budget": 40, "actions_used": 17,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+  "Class sizes page (life/schools.html): choosing a single year such as 2019 is hidden in a collapsed 'Find one year's figure' group, while the visible controls are two year selectors with a 'Compare' button that start on 2011 and 2019, so it took extra actions to find how to pick one year.",
+  "Home page (index.html): the long link text for each card reads as one very long announcement, with the figure and then a paragraph, so the headline number is easy to lose.",
+  "Home page (index.html): the quick-answer card for earnings gives 'about the same' in words but the Q8 wording ('a quarter higher') needs the reader to notice cash versus after-inflation figures, which are close together in the same announcement.",
+  "Year 2019 page (life/2019.html): the class-size figure says 'English state primary school' only in the sentence, and the chart caption does not name the nation, so the nation is only clear from reading the paragraph."
+ ]}

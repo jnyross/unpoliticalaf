@@ -1,0 +1,12 @@
+{
+ "phone_test": false,
+ "prior_knowledge": true,
+ "new_questions": true,
+ "screen_reader": true,
+ "johns_questions": false,
+ "johns_gaps": [
+  "J1.1: readers could not answer \"In 2024, how did total UK tax, as a share of the economy (GDP), compare with France, Germany and Italy?\" from the site (3 of 5 right); see their confusion notes.",
+  "J1.4: readers could not answer \"Where does the UK rank among the G7 countries on tax as a share of GDP, and on spending?\" from the site (3 of 5 right); see their confusion notes."
+ ],
+ "d11_ready_for_5": false
+}

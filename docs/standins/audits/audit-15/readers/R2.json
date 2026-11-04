@@ -1,0 +1,17 @@
+{"reader":"R2","profile":"P6","site_commit":"4cb1bcc","budget":40,
+"actions_used":39,"new_actions_used":7,
+"without_site":{"1":"B","2":"C","3":"D","4":"E","5":"E","6":"E","7":"E","8":"E","9":"E","10":"E","11":"E","12":"E"},
+"with_site":{"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+"new_without_site":{"1":"B","2":"A","3":"E","4":"B","5":"C","6":"E","7":"B","8":"E","9":"C","10":"E","11":"E","12":"E","13":"E","14":"D","15":"E","16":"C","17":"B","18":"A","19":"A","20":"E","21":"C","22":"B","23":"E","24":"E"},
+"new_with_site":{"1":"B","2":"A","3":"C","4":"B","5":"C","6":"A","7":"B","8":"D","9":"C","10":"A","11":"C","12":"B","13":"B","14":"D","15":"A","16":"C","17":"B","18":"A","19":"A","20":"B","21":"C","22":"B","23":"C","24":"A"},
+"johns_without_site":{"J1.1":"E","J1.2":"E","J1.3":"E","J1.4":"E","J1.5":"E","J1.6":"E","J1.7":"E"},
+"johns_with_site":{"J1.1":"E","J1.2":"C","J1.3":"C","J1.4":"E","J1.5":"A","J1.6":"B","J1.7":"C"},
+"confusions":[
+"The menu turns into a Menu button once I scroll, so I had to scroll all the way back up or tap it just to go to another page.",
+"I scrolled past the 33.6% and lowest-fifth bits on the Who pays page before realising they were on the Tax and income page instead.",
+"For the 2019 class size I could not find the number quickly; the compare page only showed it low down and the top of the page said England only without a figure.",
+"The two year dropdowns on the class sizes page were already set to 2011 and 2019, which made me unsure whether I had chosen anything.",
+"Finding how the UK compares on tax with France, Germany and Italy was hard: the G7 section only showed spending and I could not see a tax chart for the G7.",
+"Lots of boxes labelled 'More on...' were closed and I was not sure if I needed to open them to find the answer.",
+"Holiday figures say not compared because the method changed, which made it hard to tell if 2015 against 2025 was possible."
+]}

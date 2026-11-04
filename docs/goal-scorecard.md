@@ -11,6 +11,80 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 15: 4 November 2026 (rubric v3, after the audit 14 fixes #163 to #170)
+
+- Commit audited: `4cb1bcc` on `main` (T94, #170). The "Live site matches main" check for it is green ([run 41767745611](https://github.com/jnyross/unpoliticalaf/actions/runs/41767745611)). The live site cannot be fetched from the audit container (proxy returns 403), so that check rests on CI.
+- Rubric: [goal-rubric.md](goal-rubric.md) v3, procedure [standins/README.md](standins/README.md). All evidence is in [standins/audits/audit-15/](standins/audits/audit-15/).
+- Stand-ins, each a fresh session that did not build the site: a question writer (24 new questions, sealed before any phone reader started, `new-questions.sha256`); a site check of the sealed questions, where every question has one supported answer that matches the writer's key (Q4, Q12, Q15 and Q16 rest on a glossary definition or on derived wording); 3 informal readers (P5, P1, P8); 5 phone readers (P2, P6, P3, P10, P9, drawn at random); a screen-reader reader; an adversarial fact-checker (30 claims); a left and a right critic; a judge.
+- Procedure notes. R4 and R5 first answered the 24 new questions from pages they had already seen, which the procedure does not allow, so those answers were voided. Each re-ran that phase in a fresh session ([R4-newfix.json](standins/audits/audit-15/readers/R4-newfix.json), [R5-newfix.json](standins/audits/audit-15/readers/R5-newfix.json)), and the scores use the re-runs. I2 could not start the first time because playwright was missing from its shell; it was re-run with the project's virtualenv. The first attempt is not counted.
+- Automated checks: keyboard check finds no traps; all 1,327 charts have a text summary with figures; `make a11y` locally reports who-pays at 8.6 phone screens against an 8.5 limit, the local offset noted in audit 14, and CI passed on the same commit ([accessibility.txt](standins/audits/audit-15/accessibility.txt)).
+
+**Total: 44 out of 55. Target not met (simulated).** Audit 14: 44. The simulated phone test did not pass: 57 of 60 overall, but R4 (11 of 12) and R5 (10 of 12) both missed critical question 12 (what the richest fifth's share of all tax paid measures). John's questions J1.1 and J1.4 each passed 3 of 5, below the bar of 4. Every new question passed, and the prior-knowledge, screen-reader and fact-check stand-ins pass with no material finding.
+
+### Stand-in results
+
+| Stand-in | Result | Bar | Pass |
+|---|---|---|---|
+| Simulated phone test (12 questions) | 57/60: R1 12, R2 12, R3 12, R4 11, R5 10; R4 and R5 missed critical Q12 | 48/60, each reader 9/12, all critical right | No |
+| New questions (24, sealed) | 117/120 with the site (98%), 50 without | 80% | Yes |
+| Prior-knowledge check | 5/60 without the site, 57 with it (+52) | +20 | Yes |
+| John's questions | J1.1 3/5 and J1.4 3/5; J1.2, J1.3, J1.5, J1.6 and J1.7 5/5 (J1.2 4/5); 0 without the site | every probe answered, 4 of 5 right | No |
+| Informal check | P5, P1 and P8 all found answers to the three questions; one blocking note, that the pay chart starts in 2002 and so cannot answer "how has it changed since I was young" | notes recorded | Yes (D11 level 2) |
+| Screen-reader reader | 12/12 in 17 actions, critical right; the single-year picker for class sizes is hidden in a collapsed group; home cards read as one long link | 9/12, critical right | Yes |
+| Fact-checker (30 headline claims) | 0 material, 5 minor ([claims.md](standins/audits/audit-15/fact-check/claims.md)); one spending quote could not be checked word for word | no material errors | Yes |
+| Impartiality critics and judge | 0 material open; 4 critic points and 1 judge point upheld as minor, 15 rejected ([judgement.md](standins/audits/audit-15/impartiality/judgement.md)) | no upheld material finding | Yes |
+
+The accuracy workflow has not yet run for this audit's sample. It runs when the sample reaches `main`, so its result is not in these scores.
+
+### Material findings
+
+None. The fact-checker and the judge upheld no material finding.
+
+### Minor findings (kept, not capped)
+
+- Fact-checker: F1, the earnings pages still call 2025 provisional, although ONS published 2026 earnings (April 2026 at £811.20) on about 22 October 2026, and the 2026 figure is not used for the pay-after-inflation headline; F2, "series ends in 2023" for holidays, when ONS still publishes UK-resident totals under the new method; F3, a source record names the wrong population for the holiday figures (Great Britain residents, not UK); F4, the direct-taxes description leaves out student loan repayments; F5, "rose until 2019" on the holidays page hides falls before 2019, and the class-size wording smooths over a small rise in 2022-23.
+- Judge: the 36.7% against 36.2% pair appears on the home page and who-pays without the lowest-fifth caveats that sit on the household-tax page; the poverty and hardship exclusion is worded as "not measured here", although the site's own rule would admit the official low-income series; spending growth is shown in total rather than per person, which overstates growth as population rose; the "largest rise" in spending by area ranks by pounds rather than per cent; the first G7 section on international.html shows four of seven countries with no selection rule.
+
+### Gaps, most valuable first
+
+Written from the readers' notes, the critical misses and the findings.
+
+1. Make the richest fifth's share of all tax paid findable and explain it in plain words beside the chart: R4 and R5 both missed critical question 12, and the site check could find only a glossary definition of that share, not the chart the question describes.
+2. Bring the G7 tax comparison into view: J1.1 and J1.4 each passed 3 of 5, because readers found the tax chart inside a closed "More on" box and the visible G7 section shows only four countries with no rule for choosing them.
+3. Shorten the routes for a phone reader: R4 and R5 ran out of 40 actions before women's employment; the menu becomes a Menu button after scrolling and its numbers shift between pages; and the single-year picker for class sizes is hidden in "Find one year's figure".
+4. Say what the earnings chart cannot show before 2002, in the place a reader looks for "how has it changed since I was young", since informal reader I3 found no answer.
+5. Fix the fact-checker's minor items F1 to F5, starting with the provisional 2025 earnings label and the missing 2026 figure.
+6. Fix the judge's minor points: the lowest-fifth caveat beside the 36.7% and 36.2% pair, the wording of the poverty exclusion, per-person spending growth, the largest-rise ranking by pounds, and the rule for the G7 selection.
+7. Check the one spending quote word for word against ONS (the fact-checker could not reach the bulletin).
+8. Confirm the accuracy workflow commits `fact-check/results.json` once this audit's sample is on `main`, and record it in the next audit.
+
+Gaps 1 and 2 block a level-5 result for D1 to D6. Gap 3 is what cost R4 and R5 their critical question 12 by running out of actions.
+
+### Dimension scores
+
+Rubric v3 caps D1 to D6 at 4 when the simulated phone test has not passed, because level 5 needs it.
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | Every public-money question was answered by readers who reached it; J1.1 and J1.4 (G7 tax comparison) failed; the phone test did not pass. |
+| D2 Life: breadth and depth | 4 | All five topics are on the site; R4 and R5 ran out of actions before women's employment. |
+| D3 Life: choosing and comparing | 4 | The class-size single-year picker is hidden; the year finder and compare work but need Go or extra taps. |
+| D4 Explanation and understanding | 4 | Critical question 12 was missed twice; a reader confused gross and disposable income on the tax share. |
+| D5 Visual design and charts | 4 | Charts start at zero and are captioned; the G7 chart is hidden in a closed box and shows only four of seven countries. |
+| D6 Phone experience and navigation | 4 | No sideways scrolling; the menu changes after scrolling and its numbers shift; readers used 33 to 40 of 40 actions. |
+| D7 Accuracy and traceability | 4 | 0 material findings from the 30-claim check; 5 minor items; the accuracy workflow result is still to come. |
+| D8 Impartiality | 5 | The judge upheld no material finding and checked the rule; 5 minor points upheld. |
+| D9 Accessibility and no JavaScript | 5 | Screen-reader reader 12/12 with no blocker, no keyboard traps, every chart has a text summary, axe checks in CI. |
+| D10 Honesty about limits and continuity | 4 | Breaks are marked; the 2002 start of pay and the "rose until 2019" wording are not yet fully explained. |
+| D11 Reader evidence | 2 | Informal, phone, new-question, prior-knowledge and screen-reader runs are recorded. The phone test did not pass and its problems are open, so D11 is 2, as in audit 14. |
+| **Total** | **44 / 55** | |
+
+### What these results cannot prove
+
+As the rubric says: Claude is not a newcomer; five profiles from one model are not five people; screenshots are not a phone in the hand; an accessibility tree is not VoiceOver or TalkBack; and AI reviewers are not independent people.
+
+---
+
 ## Audit 14: 4 November 2026 (rubric v3, after the audit 13 fixes #156 to #161)
 
 - Commit audited: `c2c044e` on `main` (T88, #161). The "Live site matches main" check for it is green
