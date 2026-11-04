@@ -189,6 +189,7 @@ def receipts(facts):
     for y in year_rows:
         cellfact(f"rec.total.{y}", "Public sector current receipts", y)
         cellfact(f"rec.taxes.{y}", "National accounts taxes", y)
+        cellfact(f"rec.vatrefunds.{y}", "VAT refunds", y)
         t, tx = facts[f"rec.total.{y}"], facts[f"rec.taxes.{y}"]
         facts.add(Fact(f"rec.nontax.{y}", t.value - tx.value, "£bn", y, "obr", t.locator, "calculated",
                        formula=f"{t.id} − {tx.id}", inputs=[t.id, tx.id]))

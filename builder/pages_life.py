@@ -375,7 +375,7 @@ def headline(facts, num, topic, y, gb=True):
     if topic == "earnings":
         if not has(f"earn.real.ft.{y}"):
             return f"No earnings figure for {y}."
-        return (f"In April {y}, the middle full-time employee earned {num(f'earn.ft.{y}', 'pounds')} a week before tax. "
+        return (f"In April {y}{' (provisional)' if y == LAST else ''}, the middle full-time employee earned {num(f'earn.ft.{y}', 'pounds')} a week before tax. "
                 f"In April 2025 prices that is {num(f'earn.real.ft.{y}', 'pounds')}.")
     if topic == "housing":
         if not has(f"house.private.{y}"):
@@ -1163,7 +1163,7 @@ def _schools(facts, d, num, sources):
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
               f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST} the figures were {num(f"school.primary.{FIRST}", "dp1")} and {num(f"school.secondary.{FIRST}", "dp1")}.{latest}</p>'
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST_YEAR["schools"]} the figures were {num(f"school.primary.{FIRST_YEAR['schools']}", "dp1")} and {num(f"school.secondary.{FIRST_YEAR['schools']}", "dp1")}.{latest}</p>'
               f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
@@ -1302,7 +1302,7 @@ def _hub_earnings(facts, d, num):
     """Before and after pay, without the earlier stretches (those are on the earnings page)."""
     a, b, ch = earn_stretches(facts)[0]
     return (f'<div class="answer">{earn_before_after(num, a, b, ch)}'
-            f'<p>Pay of the middle full-time employee, £ a week before tax, UK, in April {LAST} prices: {_how_short(ch).lower()} '
+            f'<p>Pay of the middle full-time employee, £ a week before tax, UK, in April {LAST} prices (provisional): {_how_short(ch).lower()} '
             f'({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
             f'The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch.</p></div>')
 

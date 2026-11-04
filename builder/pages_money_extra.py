@@ -160,7 +160,7 @@ def net_section(facts, d, num, sources):
     out.append(f'''<h2 id="net">4. Who receives more in benefits than they pay in taxes?</h2>
 <p>Here “benefits” include cash benefits such as the State Pension, <strong>and</strong> the estimated value of public services used, such as state schools and the NHS.</p>
 <div class="answer"><p class="lede">In {last}, {num(f"etb.t16.all.{last}", "pct")} of people lived in households that received more in benefits and services than they paid in taxes.</p>
-<p>That was {num(f"etb.t16.ret.{last}", "pct")} of people in retired households and {num(f"etb.t16.nonret.{last}", "pct")} in non-retired households.</p></div>''')
+<p>That was {num(f"etb.t16.ret.{last}", "pct")} of people in retired households and {num(f"etb.t16.nonret.{last}", "pct")} in non-retired households. One year at a time.</p></div>''')
     fy = next(i for i, y in enumerate(ys) if "/" in y)
     out.append(line_chart(f"People in households receiving more in benefits than they pay in taxes, {first} to {last}", ys,
                           [("Retired", [facts[f"etb.t16.ret.{y}"].value for y in ys], "b"),
@@ -340,7 +340,7 @@ def households_short(facts, d, num):
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
     return f'''<h2 id="household-type">3. Retired people and other kinds of household</h2>
-<div class="answer"><p class="lede">Retired households (where retired people bring in over half the income) paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired households), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
+<div class="answer"><p class="lede">Retired households (where retired people bring in at least half the income) paid less tax ({num("etb.ret.alltax.all", "pounds")} a year on average, against {num("etb.nonret.alltax.all", "pounds")} for non-retired households), but they are smaller and have lower incomes: taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
 <p>Across the {len(types)} kinds of household shown, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income.</p></div>
 {NOFOLD}<p class="more-link"><a href="{HOUSEHOLDS_PAGE}">Retired people and kinds of household</a>: the taxes each group pays, who counts as retired, families with and without children, and the full tables.</p>'''
 
