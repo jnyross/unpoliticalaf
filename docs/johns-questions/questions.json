@@ -1131,6 +1131,115 @@
           ]
         }
       ]
+    },
+    {
+      "id": "J11",
+      "asked": "how much harder is it to buy a house now than it was in the past",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (ticket T128)",
+      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, and average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25). Not yet measured on the site: the age at which people buy their first home, home ownership by age, mortgage interest rates, and mortgage payments as a share of take-home pay. Those are open probes until the sources are added.",
+      "probes": [
+        {
+          "id": "J11.1",
+          "question": "Measured as years of pay before tax, how did the middle-priced home in England and Wales change between 1999 and the year to September 2025?",
+          "options": {
+            "A": "It roughly halved",
+            "B": "It stayed about the same",
+            "C": "It rose by about a quarter",
+            "D": "It nearly doubled"
+          },
+          "answer": "D",
+          "why": "Housing: house prices page. The middle-priced home cost 3.89 times median full-time earnings in 1999 and 7.55 times in the year to September 2025, so it nearly doubled.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "cost 7.55 times"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "against 3.89 times in 1999"
+            }
+          ]
+        },
+        {
+          "id": "J11.2",
+          "question": "In the year to September 2025, how many years of median full-time pay before tax would a 10% deposit on the middle-priced home come to?",
+          "options": {
+            "A": "About 0.1 years",
+            "B": "About 0.8 years",
+            "C": "About 2 years",
+            "D": "About 7.5 years"
+          },
+          "answer": "B",
+          "why": "House prices page: a 10% deposit on the middle-priced home was £29,500 in the year to September 2025, which is 0.76 years of median full-time pay before tax (£7,000 and 0.39 years in 1999).",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "a 10% deposit on the middle-priced home was £29,500, which is 0.76 years"
+            }
+          ]
+        },
+        {
+          "id": "J11.3",
+          "question": "After inflation, how did the average mortgage payment for owners with a mortgage in England change between 2008-09 and 2024-25?",
+          "options": {
+            "A": "It fell by about a fifth",
+            "B": "It stayed about the same",
+            "C": "It rose by about 8%",
+            "D": "It rose by more than half"
+          },
+          "answer": "C",
+          "why": "House prices page: after inflation, in 2024-25 prices, the average mortgage payment rose from £224 a week in 2008-09 to £242 a week in 2024-25, an increase of 8%.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "rose from £224 a week in 2008-09 to £242 a week in 2024-25"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "an increase of 8%"
+            }
+          ]
+        },
+        {
+          "id": "J11.4",
+          "question": "Do the mortgage payment figures show what someone buying a home today would pay each week?",
+          "options": {
+            "A": "Yes, exactly",
+            "B": "No: they are for loans already taken out, at different times and rates",
+            "C": "Yes, for first-time buyers only",
+            "D": "Yes, but only in London"
+          },
+          "answer": "B",
+          "why": "House prices page: mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer pays.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "so they do not show what a new buyer pays"
+            }
+          ]
+        },
+        {
+          "id": "J11.5",
+          "question": "At what age do people today buy their first home, compared with earlier years?",
+          "gap": "The site has no official series for the age of first-time buyers yet, so it cannot answer this."
+        },
+        {
+          "id": "J11.6",
+          "question": "How has home ownership changed for people of each age since the 1990s?",
+          "gap": "The site has no home ownership figures by age yet; the English Housing Survey table by age of household reference person is not fetched."
+        },
+        {
+          "id": "J11.7",
+          "question": "What share of take-home pay goes on a mortgage payment for households with a mortgage, now and in 2008-09?",
+          "gap": "The site does not yet have take-home pay for households with a mortgage, so it cannot compare mortgage payments with take-home pay."
+        },
+        {
+          "id": "J11.8",
+          "question": "How have mortgage interest rates changed since 2008?",
+          "gap": "The site has no mortgage interest rate series yet, so it cannot show how borrowing costs have moved."
+        }
+      ]
     }
   ]
 }
