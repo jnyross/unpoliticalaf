@@ -944,6 +944,379 @@
       ]
     },
     {
+      "id": "J7",
+      "asked": "Have labour kept their electiion manifesto?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 7 of his list of ten)",
+      "reading": "Read as whether Labour has kept the pledges in its 2024 manifesto that concern public money and everyday costs: tax, the fiscal rules, defence, housing, the NHS and home energy. Where the wording allows more than one reading (for example \"taxes on working people\", \"basic, higher or additional rates\" and the debt measure in the fiscal rules), the site shows each reading and its result, and does not pick one.",
+      "probes": [
+        {
+          "id": "J7.1",
+          "question": "What did Labour’s 2024 manifesto say it would not increase?",
+          "options": {
+            "A": "National Insurance, the basic, higher and additional rates of Income Tax, and VAT",
+            "B": "Council tax, business rates and stamp duty",
+            "C": "Only the basic rate of Income Tax",
+            "D": "Nothing: the manifesto made no tax promises"
+          },
+          "answer": "A",
+          "why": "Manifesto, page 21: it will not increase National Insurance, the basic, higher or additional rates of Income Tax, or VAT. The pledge is about tax on working people.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "which is why we will not increase National Insurance, the basic, higher, or additional rates of Income Tax, or VAT."
+            }
+          ]
+        },
+        {
+          "id": "J7.2",
+          "question": "Has the government changed the standard VAT rate of 20% since Labour took office?",
+          "options": {
+            "A": "Yes, raised to 22%",
+            "B": "Yes, cut to 15%",
+            "C": "No, the standard rate is still 20%",
+            "D": "Yes, split into two rates"
+          },
+          "answer": "C",
+          "why": "The standard rate has stayed at 20%. Budgets changed some reliefs and private school fees, not the standard rate (Full Fact, 28 November 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The standard rate of VAT is still 20%."
+            }
+          ]
+        },
+        {
+          "id": "J7.3",
+          "question": "Have the basic, higher and additional income tax rates on earnings changed since Labour took office?",
+          "options": {
+            "A": "Yes, all three rose",
+            "B": "Yes, only the additional rate rose",
+            "C": "No, they are still 20%, 40% and 45%",
+            "D": "Yes, all three were cut"
+          },
+          "answer": "C",
+          "why": "The earnings rates are 20%, 40% and 45%, unchanged. The rates on dividends, savings and property income did change (HMRC, Budget 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The basic, higher and additional rates on earnings are still 20%, 40% and 45%"
+            }
+          ]
+        },
+        {
+          "id": "J7.4",
+          "question": "What did Budget 2025 do to income tax on dividends, savings and property income?",
+          "options": {
+            "A": "Cut the rates",
+            "B": "Left the rates unchanged",
+            "C": "Raised the rates: dividends from April 2026, savings and property from April 2027",
+            "D": "Abolished the taxes"
+          },
+          "answer": "C",
+          "why": "HMRC: dividend ordinary and upper rates rise from 6 April 2026; savings and property rates rise from April 2027 (Budget 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "Dividend rates rose from April 2026, and savings and property rates rise from April 2027."
+            }
+          ]
+        },
+        {
+          "id": "J7.5",
+          "question": "Why do readers disagree on whether the National Insurance pledge was kept?",
+          "options": {
+            "A": "The manifesto does not say whether it covers employer as well as employee contributions",
+            "B": "Labour never mentioned National Insurance in its manifesto",
+            "C": "The rate was cut, which the manifesto ruled out",
+            "D": "The pledge only covered the first year"
+          },
+          "answer": "A",
+          "why": "The manifesto mentions National Insurance once. It does not say whether the pledge covers employer contributions, so the government and critics read it differently (Full Fact, 14 October 2024).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "It does not say whether the pledge covers employer contributions as well as employee ones"
+            }
+          ]
+        },
+        {
+          "id": "J7.6",
+          "question": "Did Budget 2025 extend the freeze on income tax and National Insurance thresholds?",
+          "options": {
+            "A": "No, it ended in April 2028 as planned",
+            "B": "Yes, to April 2031",
+            "C": "Yes, to April 2035",
+            "D": "Only for employers"
+          },
+          "answer": "B",
+          "why": "Budget 2025 extended the freeze by three years, from April 2028 to April 2031 (Budget 2025 speech; Full Fact, 26 November 2025).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "extended the freeze on income tax and National Insurance thresholds for three more years, to April 2031."
+            }
+          ]
+        },
+        {
+          "id": "J7.7",
+          "question": "Did Labour’s private school VAT measure take effect, and when?",
+          "options": {
+            "A": "Yes, from 1 January 2025",
+            "B": "No, it was dropped",
+            "C": "Only in Scotland",
+            "D": "Only for day pupils"
+          },
+          "answer": "A",
+          "why": "VAT at the standard rate applied to private school fees from 1 January 2025 (Full Fact, 28 May 2026).",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "VAT at the standard rate of 20% has applied to private school fees since 1 January 2025."
+            }
+          ]
+        },
+        {
+          "id": "J7.8",
+          "question": "What did Labour’s manifesto promise on defence spending?",
+          "options": {
+            "A": "To set out the path to spending 2.5% of GDP on defence",
+            "B": "To cut defence spending to 2% of GDP",
+            "C": "To spend 3% of GDP by 2027",
+            "D": "No promise on defence"
+          },
+          "answer": "A",
+          "why": "Manifesto, Strong foundations (pages 14 to 22): it will set out the path to spending 2.5% of GDP on defence. The government set 2.5% from April 2027 in February 2025.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "we will set out the path to spending 2.5 per cent of GDP on defence."
+            }
+          ]
+        },
+        {
+          "id": "J7.9",
+          "question": "How many net additional homes does the government estimate were added in England from 9 July 2024 to 20 September 2026, against the 1.5 million target?",
+          "options": {
+            "A": "About 437,900, or 29% of the target",
+            "B": "About 1.5 million, so the target is met",
+            "C": "About 208,600",
+            "D": "About 1.1 million, all in 2024-25"
+          },
+          "answer": "A",
+          "why": "GOV.UK housing supply indicators, April to June 2026: 437,900 estimated net additional homes, 29% of 1.5 million. The 208,600 figure is the official count for 2024-25 only.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "The government estimates 437,900 net additional homes in England between 9 July 2024 and 20 September 2026: 29% of the 1.5 million target."
+            }
+          ]
+        },
+        {
+          "id": "J7.10",
+          "question": "In August 2026, what share of waiting pathways for consultant-led NHS treatment had waited up to 18 weeks?",
+          "options": {
+            "A": "92%",
+            "B": "65.2%",
+            "C": "50%",
+            "D": "About 80%"
+          },
+          "answer": "B",
+          "why": "NHS England, RTT statistics for August 2026, published 8 October 2026: 65.2% within 18 weeks, against the 92% standard.",
+          "evidence": [
+            {
+              "page": "manifesto.html",
+              "text": "In August 2026, 65.2% of the 7.4 million waiting pathways for consultant-led treatment had waited up to 18 weeks."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "J11",
+      "asked": "how much harder is it to buy a house now than it was in the past",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (ticket T128)",
+      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, and average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25). Not yet measured on the site: the age at which people buy their first home, home ownership by age, mortgage interest rates, and mortgage payments as a share of take-home pay. Those are open probes until the sources are added.",
+      "probes": [
+        {
+          "id": "J11.1",
+          "question": "Measured as years of pay before tax, how did the middle-priced home in England and Wales change between 1999 and the year to September 2025?",
+          "options": {
+            "A": "It roughly halved",
+            "B": "It stayed about the same",
+            "C": "It rose by about a quarter",
+            "D": "It nearly doubled"
+          },
+          "answer": "D",
+          "why": "Housing: house prices page. The middle-priced home cost 3.89 times median full-time earnings in 1999 and 7.55 times in the year to September 2025, so it nearly doubled.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "cost 7.55 times"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "against 3.89 times in 1999"
+            }
+          ]
+        },
+        {
+          "id": "J11.2",
+          "question": "In the year to September 2025, how many years of median full-time pay before tax would a 10% deposit on the middle-priced home come to?",
+          "options": {
+            "A": "About 0.1 years",
+            "B": "About 0.8 years",
+            "C": "About 2 years",
+            "D": "About 7.5 years"
+          },
+          "answer": "B",
+          "why": "House prices page: a 10% deposit on the middle-priced home was £29,500 in the year to September 2025, which is 0.76 years of median full-time pay before tax (£7,000 and 0.39 years in 1999).",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "a 10% deposit on the middle-priced home was £29,500, which is 0.76 years"
+            }
+          ]
+        },
+        {
+          "id": "J11.3",
+          "question": "After inflation, how did the average mortgage payment for owners with a mortgage in England change between 2008-09 and 2024-25?",
+          "options": {
+            "A": "It fell by about a fifth",
+            "B": "It stayed about the same",
+            "C": "It rose by about 8%",
+            "D": "It rose by more than half"
+          },
+          "answer": "C",
+          "why": "House prices page: after inflation, in 2024-25 prices, the average mortgage payment rose from £224 a week in 2008-09 to £242 a week in 2024-25, an increase of 8%.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "rose from £224 a week in 2008-09 to £242 a week in 2024-25"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "an increase of 8%"
+            }
+          ]
+        },
+        {
+          "id": "J11.4",
+          "question": "Do the mortgage payment figures show what someone buying a home today would pay each week?",
+          "options": {
+            "A": "Yes, exactly",
+            "B": "No: they are for loans already taken out, at different times and rates",
+            "C": "Yes, for first-time buyers only",
+            "D": "Yes, but only in London"
+          },
+          "answer": "B",
+          "why": "House prices page: mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer pays.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "so they do not show what a new buyer pays"
+            }
+          ]
+        },
+        {
+          "id": "J11.5",
+          "question": "At what age do people today buy their first home, compared with earlier years?",
+          "gap": "The site has no official series for the age of first-time buyers yet, so it cannot answer this."
+        },
+        {
+          "id": "J11.6",
+          "question": "How has home ownership changed for people of each age since the 1990s?",
+          "gap": "The site has no home ownership figures by age yet; the English Housing Survey table by age of household reference person is not fetched."
+        },
+        {
+          "id": "J11.7",
+          "question": "What share of take-home pay goes on a mortgage payment for households with a mortgage, now and in 2008-09?",
+          "gap": "The site does not yet have take-home pay for households with a mortgage, so it cannot compare mortgage payments with take-home pay."
+        },
+        {
+          "id": "J11.8",
+          "question": "How have mortgage interest rates changed since 2008?",
+          "gap": "The site has no mortgage interest rate series yet, so it cannot show how borrowing costs have moved."
+        }
+      ]
+    },
+    {
+      "id": "J9",
+      "asked": "How does UK productivity compare to other countries",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 9 of a list of ten)",
+      "reading": "Productivity is read as output per hour worked (GDP divided by hours worked), the standard international measure, with output per worker as a second measure. Other countries are read as the G7 (Canada, France, Germany, Italy, Japan, the UK and the United States), because the ONS comparison covers them. Levels are in pounds converted with purchasing power parities; trends are after inflation and start in 2008. The series ends in 2021, when the ONS stopped publishing it, so the site says so rather than using later figures from another source.",
+      "probes": [
+        {
+          "id": "J9.1",
+          "question": "In 2021, how did UK output per hour worked compare with France and the United States?",
+          "options": {
+            "A": "Higher than both",
+            "B": "Lower than both",
+            "C": "Higher than France but lower than the United States",
+            "D": "About the same as both"
+          },
+          "answer": "B",
+          "why": "Productivity page, 2021: UK £46.92 an hour, against £55.50 in France and £58.88 in the United States (in pounds at current prices, converted with purchasing power parities).",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "UK output per hour worked was £46.92"
+            },
+            {
+              "page": "productivity.html",
+              "text": "£58.88 in the United States"
+            },
+            {
+              "page": "productivity.html",
+              "text": "£55.50 in France"
+            }
+          ]
+        },
+        {
+          "id": "J9.2",
+          "question": "From 2008 to 2021, after inflation, did UK output per hour worked rise more or less than the average of the other five G7 countries on the page?",
+          "options": {
+            "A": "More",
+            "B": "Less",
+            "C": "The same",
+            "D": "It fell"
+          },
+          "answer": "B",
+          "why": "Productivity page: UK output per hour rose by 3.9% between 2008 and 2021, while the other five G7 countries rose by 10.3% on average.",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "UK output per hour rose by 3.9% between 2008 and 2021"
+            },
+            {
+              "page": "productivity.html",
+              "text": "rose by 10.3% on average over the same years"
+            }
+          ]
+        },
+        {
+          "id": "J9.3",
+          "question": "What is the latest year of figures for this comparison, and why does the page stop there?",
+          "options": {
+            "A": "2024; the ONS stopped in 2025",
+            "B": "2023; the figures are still being collected",
+            "C": "2021; the ONS stopped publishing the series in 2024",
+            "D": "2019; the figures before the pandemic are the only reliable ones"
+          },
+          "answer": "C",
+          "why": "Productivity page limits: the series ends in 2021, and the ONS stopped publishing it in 2024.",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "The series ends in 2021. The ONS stopped publishing it in 2024."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "J10",
       "asked": "How has welfare spending changed in the last 50 years",
       "added": "2026-11-04",

@@ -235,6 +235,54 @@ every "met (simulated)" result:
   come from the same family of model that built the site and can share its
   blind spots.
 
+## UX heuristic checks
+
+Added by T128 on 4 November 2026, at John's request. They test the five product
+principles John set for the interface: clarity and simplicity, consistency,
+feedback and responsiveness, accessibility and inclusivity, and user control
+and error prevention. They are **checks, not dimensions**. They do not change
+the eleven dimensions, the 55-point total or the target. Each audit runs them
+with `python scripts/ux_heuristics.py` (`--all` checks every page; the default
+is a fixed sample of about 115 pages) and records the result in its scorecard
+section. Items marked *judged* need a reviewer's reading and cannot be measured.
+
+A check passes when no sampled page fails it. The standards and thresholds are
+the ones in `scripts/ux_heuristics.py`, measured at 360 × 640 unless noted.
+Changing a threshold is a rubric change and needs John's approval.
+
+| Check | Standard |
+|---|---|
+| **1. Clarity and simplicity** | |
+| C1 | One h1, within 200px of the top. |
+| C2 | Heading levels never skip. |
+| C3 | The first answer starts within two phone screens (1,280px). |
+| C4 | No link reads only "here", "more" or similar. |
+| C5 *judged* | Each page's visual hierarchy makes the answer the first thing read, with no decoration that does not help a newcomer. |
+| **2. Consistency** | |
+| K1 | Every page has the same main navigation (compared without relative paths). |
+| K2 | Every page has a footer and a link home. |
+| K3 *judged* | The same thing has the same name everywhere (navigation, page titles and charts). |
+| **3. Feedback and responsiveness** | |
+| F1 | Every closed section has a specific label and a visible marker. |
+| F2 | A tap on the first visible chart with a readout updates the readout. Pages whose charts are all in closed sections are not tested. |
+| F3 *judged* | Each action gives a visible result. The site loads no data after the page opens, so it needs no loading states. |
+| **4. Accessibility and inclusivity** | |
+| A1 | Every select and input has a label. |
+| A2 | No sideways scrolling at 360px. |
+| A3 | Paragraphs and list items are at least 16px. |
+| A3b | Table cells, labels, captions and source lines are at least 13px. |
+| A4 | Chart labels are at least 12px as drawn at 360px, after the SVG scale. |
+| A5 | Contrast, focus style, Tab order and tap targets: `make a11y` passes (axe-core, the Tab walk and 24px targets). |
+| **5. User control and error prevention** | |
+| U1 | Pages taller than two screens have a back-to-top link. |
+| U2 | Every form has a labelled control and a submit button, and uses GET, so the year picks work without JavaScript. |
+| U3 | The h1 and the first answer show with JavaScript turned off. |
+| U4 *judged* | Nothing on the site deletes or changes data, so no confirmation step is needed. Any future action that does must have a confirmation and an undo. |
+
+A failed check is a gap, written in one sentence like any other gap, and it
+is fixed in the same way: a worker changes the site, and the next audit runs the
+checks again on the new build.
+
 ## Writing gaps
 
 After scoring, list the gaps that would raise the lowest scores most, each in
