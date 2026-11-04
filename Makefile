@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-dev build site benchmark check test verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -17,6 +17,10 @@ build: site
 
 site:
 	$(RUN_PYTHON) -m builder.build
+
+# Always run the real build in a fresh process; retain timings outside site/.
+benchmark:
+	$(RUN_PYTHON) scripts/build_performance.py
 
 # Re-reads every figure from its source file and checks every page.
 check:
