@@ -279,6 +279,16 @@ Changing a threshold is a rubric change and needs John's approval.
 | U3 | The h1 and the first answer show with JavaScript turned off. |
 | U4 *judged* | Nothing on the site deletes or changes data, so no confirmation step is needed. Any future action that does must have a confirmation and an undo. |
 
+**Type-scale trade-off (T128, 4 November 2026).** A3 is the check most pages
+fail. Much secondary text (notes, limits, scale notes, principles, figure titles)
+is 14 to 15px, and the 16px standard would make those boxes taller on the pages
+that carry them. Phone length limits in `builder/check.py` are enforced by CI,
+and raising the text size pushed `life/work.html` over its 8.8-screen limit. The
+decision, agreed by the coordinator on 4 November, is to keep the length limits
+and the current secondary text size. Card text and the contents list are at 16px
+where they add no height. A3 stays a recorded gap for future audits, to be fixed
+by a shorter page or a larger limit, which needs John's approval.
+
 A failed check is a gap, written in one sentence like any other gap, and it
 is fixed in the same way: a worker changes the site, and the next audit runs the
 checks again on the new build.
