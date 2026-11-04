@@ -1,0 +1,13 @@
+{"reader": "R9", "profile": "P9", "site_commit": "working-tree", "budget": 40,
+ "welfare_actions": 40,
+ "welfare_without_site": {"J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E", "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E", "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"},
+ "welfare_with_site": {"J12.1": "B", "J12.2": "B", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "E", "J12.9": "B", "J11.1": "D", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "B", "J11.9": "B", "J11.10": "B", "J11.11": "B", "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "C", "J10.7": "C"},
+ "confusions": [
+  "The welfare chart breaks at 2020-21 and says values either side are not compared, but the headline compares 1955-56 with 2021-22, so I did not know which to trust.",
+  "The menu bar at the top covers the top of each screen, so sentences fell between screens and I had to scroll back up to find them, which slowed me down a lot.",
+  "I could not find any mortgage payment figure from 2008-09 or any weekly figure for someone buying today, so I could not answer those two questions.",
+  "The university fees sentence was cut off between screens, so I could not read the full 1998 and 2025-26 comparison.",
+  "I first read the 18 to 24 figures the wrong way round (65.4% and 60.7%), which nearly gave me the wrong answer.",
+  "The long answer blocks are hard for me to read with dyslexia, so I relied on the charts for the numbers.",
+  "The first-time buyer chart says the survey changed in 2008, so I was not sure the 2003 figure could be compared with 2024."
+ ]}

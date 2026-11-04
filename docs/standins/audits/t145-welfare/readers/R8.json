@@ -1,0 +1,11 @@
+{"reader": "R8", "profile": "P8", "site_commit": "working-tree", "budget": 40,
+ "welfare_actions": 40,
+ "welfare_without_site": {"J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E", "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E", "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"},
+ "welfare_with_site": {"J12.1": "B", "J12.2": "B", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "B", "J12.9": "B", "J11.1": "D", "J11.2": "B", "J11.3": "C", "J11.4": "B", "J11.5": "B", "J11.9": "E", "J11.10": "B", "J11.11": "E", "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "E", "J10.7": "E"},
+ "confusions": [
+  "The Questions list is very long and the Welfare, housing and generations group sits about four screens down with no way to jump to it, so I had to scroll a lot to find it.",
+  "Scrolling the Did parents have it easier page skipped a few lines between screens, so I missed part of the university fees and pension text.",
+  "Tapping the State Pension age section sent me to a page that said Error response, error code 404, File not found, and I had to go back.",
+  "The houses page is very long and I ran out of actions before reaching the home ownership by age and mortgage rate figures.",
+  "The welfare page has the DWP benefit breakdown far down the page and I could not reach it before the actions ran out."
+ ]}
