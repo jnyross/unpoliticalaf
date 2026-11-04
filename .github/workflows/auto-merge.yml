@@ -96,7 +96,19 @@ jobs:
               await github.rest.actions.createWorkflowDispatch({owner, repo, workflow_id: "live.yml", ref: "main"});
               core.info("Started 'Live site matches main'.");
             }
-            if (accuracyTouched) {
+            // A sample that is on main with no results.json yet is still waiting for its
+            // check. Scheduled runs are sparse on this repo, so this run (which follows
+            // every finished build) also starts the check for any such folder.
+            let waitingAudit = false;
+            try {
+              const tree = (await github.rest.git.getTree({owner, repo, tree_sha: "main", recursive: "1"})).data.tree
+                .map(t => t.path);
+              waitingAudit = tree.some(p => /^docs\/standins\/audits\/[^/]+\/fact-check\/sample\.json$/.test(p)
+                && !tree.includes(p.replace(/sample\.json$/, "results.json")));
+            } catch (e) {
+              core.warning(`Could not list main to look for waiting audits: ${e.message}`);
+            }
+            if (accuracyTouched || waitingAudit) {
               await github.rest.actions.createWorkflowDispatch({owner, repo, workflow_id: "accuracy-check.yml", ref: "main"});
               core.info("Started 'Accuracy check (random sample)'.");
             }
