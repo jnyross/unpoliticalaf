@@ -85,7 +85,7 @@ def spending_page(facts, d, num, sources):
                     "£ per £100", y, "pesa4", [f"spend.cash.debt_interest.{y}", f"spend.cash.tme.{y}"],
                     f"100 × spend.cash.debt_interest.{y} ÷ spend.cash.tme.{y}")
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total, {num(f"spend.gdp.tme.{y}", "pct")} of GDP.</p>
-<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
+<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care. For welfare (social security) over 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}.</p>
 <p>See it {view_link("as a share of GDP over time", "tme-views", 2)} or <a href="international.html">beside other countries</a>.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
@@ -197,7 +197,7 @@ def spending_areas_page(facts, d, num, sources):
     body = ['<p class="small"><a href="spending.html">Where does public money go?</a></p>',
             f"<h1>Spending on each area, every year from {first} to {y}</h1>"]
     body.append(f'<p>One small chart for each area of <a href="spending.html">public spending</a>, so you can see when each one rose or fell. Switch between cash, after inflation and share of GDP. '
-                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>.</p>')
+                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>. For welfare (social security) over the last 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.</p>')
     area_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     area_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices", "gdp": "Per cent of GDP"}
 

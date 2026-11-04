@@ -132,6 +132,10 @@ SOURCES["obrhist-receipts"] = dict(SOURCES["obrhist"], title="Historical public 
 SOURCES["obrhist-receipts-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: receipts by type of tax in £")
 SOURCES["obrhist-receipts-shares"] = dict(SOURCES["obrhist"], title="Historical public finances database: each type of tax's share of all receipts (calculated from the £ figures)")
 SOURCES["obrhist-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: spending by purpose in £ and after inflation")
+# The welfare page has its own record pages, so its figures do not add to the spending-by-purpose ones.
+SOURCES["obrhist-welfare-gdp"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security, pensioner and non-pensioner spending as a share of GDP")
+SOURCES["obrhist-welfare-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security, pensioner and non-pensioner spending in £")
+SOURCES["obrhist-welfare-calc"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security after inflation, per person and as a share of all spending (calculated)")
 
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
