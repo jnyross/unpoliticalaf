@@ -17,3 +17,16 @@ Re-run on the merged build after T142 (PR #224): each question on the Questions 
 
 - The stand-in measures reading within 40 actions. Most failing probes were not reached.
 - Five readers, one run, simulated phone.
+
+## Trace of failed probes (T144)
+
+Checked against the phone state files (`scratchpad`, not committed) and the built pages.
+
+- **J5.1 (defence, answer at the top of defence.html):** no reader opened defence.html. Each reader spent its budget on the earlier probes in sheet order (J1, J4, J2), and the sheet puts J5 at position 24 of 82. Readers opened 4 to 9 pages before running out.
+- **J7.1 (manifesto):** no reader opened manifesto.html. It sits at position 47 on the sheet.
+- **J13.1 (why-debt):** no reader opened why-debt.html. It sits at position 39.
+- **Pages that were reached:** P3 reached immigration.html#answer on its last action and answered J2.1 correctly (C). P9 reached high-earners.html#answer on its last action and answered J6.1 and J6.2 correctly (B). The answers at the top of these pages work when readers reach them, so the failures are about reaching them within the budget.
+
+Reader actions across the five: 21 to 28 scrolls and 10 to 16 taps each. A scroll costs one action, so long pages cost a lot of the budget.
+
+The sheet has 82 probes across 14 evidence pages. Opening those 14 pages takes at least about 25 actions (two per page for the pages that are not in the menu: the Questions item, then the page), before any scrolling. The 40-action budget therefore cannot cover the sheet by construction, even if every answer sat at the top of its page.
