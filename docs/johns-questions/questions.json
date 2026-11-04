@@ -812,7 +812,7 @@
         {
           "id": "J12.6",
           "question": "Were people aged 30 more or less likely to own their home in the 1990s than people aged 30 now?",
-          "gap": "The site has no home ownership figures by age, so it cannot compare people at 30 with earlier years. Needs English Housing Survey or Labour Force Survey tenure tables by age, from the 1990s."
+          "gap": "The site holds owner occupation by age from 2008-09 (English Housing Survey table FC2101). The 1981 and 1991 rows in the same file have no source written on the sheet, so they are not used. Needs a documented official source for owning or renting by age in the 1990s."
         },
         {
           "id": "J12.7",
@@ -871,12 +871,12 @@
         {
           "id": "J12.11",
           "question": "Did a person on the same real income pay more or less tax in 2025 than in 1992?",
-          "gap": "The site has tax figures by age group for 2023-24 only, and by income band for recent years. Needs income tax and National Insurance on one income level, in each year, from an official source."
+          "gap": "Needs income tax and employee National Insurance on one income level, in 1992-93 and 2025-26, from official rate tables. The site holds the 2025-26 rates, but not the 1992-93 rates, and the calculation needs a clearly labelled single-person illustration."
         },
         {
           "id": "J12.12",
           "question": "Has job security changed for people aged 25 to 34 since 1992?",
-          "gap": "The site has no figures on contract types, temporary work or how long people stay in a job. Needs ONS labour market tables on contracts and job changes by age, from 1992."
+          "gap": "Needs ONS labour market tables of temporary employees and job changes by age, from 1992. The site holds only the overall employment figures, not the age split of temporary work or job changes."
         }
       ]
     },

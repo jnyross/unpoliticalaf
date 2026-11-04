@@ -730,6 +730,21 @@
    "id": "parl-hansard-1998-tuition-fees",
    "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
    "file": "parl/hansard-1998-12-07-tuition-fees.html"
+  },
+  {
+   "id": "data-gov-life-tables-historic",
+   "url": "https://www.data.gov.uk/dataset/historic_and_projected_data_from_the_period_and_cohort_life_tables",
+   "file": "ons/life-tables-historic-dataset-page.html"
+  },
+  {
+   "id": "ons-life-tables-2024-related",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/bulletins/pastandprojecteddatafromtheperiodandcohortlifetables/2024baseduk1981to2074/relateddata",
+   "file": "ons/life-tables-2024-related-data.html"
+  },
+  {
+   "id": "ons-ashe-age-single-year-adhoc",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/adhocs/3671annualsurveyofhoursandearningsasheestimatesofmedianhourlypayexcludingovertimeforemployeejobsbysingleyearofemployeeageofthoseaged16to251997to2025",
+   "file": "ons/ashe-adhoc-3671-page.html"
   }
  ]
 }

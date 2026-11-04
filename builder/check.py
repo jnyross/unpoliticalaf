@@ -417,7 +417,7 @@ DEFAULT_COMPARE = "default comparison"
 # The life hub gets 8.8 like the topic pages: its "Jump to" bar (audit 9 gap 7) costs about a quarter of a screen.
 MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.8,
                "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
-               "life/holidays.html": 8.8, "life/schools.html": 8.8, DEFAULT_COMPARE: 8.8,
+               "life/holidays.html": 8.8, "life/schools.html": 8.8, "life/generations.html": 8.8, DEFAULT_COMPARE: 8.8,
                "methods.html": 9.5, "sources.html": 4, "self-employed-tax.html": 8.5}
 
 
