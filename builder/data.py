@@ -1251,6 +1251,11 @@ def build_all():
     population(facts)
     from . import data_welfare
     d["welfare"] = data_welfare.build(facts)
+    from . import data_welfare_dwp, data_nato
+    d["welfare_dwp"] = data_welfare_dwp.build(facts)
+    d["nato"] = data_nato.build(facts)
+    from . import data_fiscal_margin
+    data_fiscal_margin.build(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)
     return facts, d
