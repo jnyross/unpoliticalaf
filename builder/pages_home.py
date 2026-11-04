@@ -89,6 +89,7 @@ def home_page(facts, d, num, sources):
 <p><a href="productivity.html">How does UK productivity compare with other countries?</a> Output per hour worked and per worker beside the other G7 countries.</p>
 <p><a href="defence.html">Why can't we afford to spend more on defence?</a> UK defence spending in cash, after inflation and as a share of GDP, beside the G7, and what extra spending would cost.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
+<p><a href="high-earners.html">What if high earners left the UK?</a> How much Income Tax the highest earners pay, what leavers would take with them, and what the OBR has said about behaviour.</p>
 <p><a href="why-debt.html">Why is UK government debt high?</a> Debt and borrowing since 1900, the periods that raised them, and what the Office for Budget Responsibility and the ONS say.</p>
 <p><a href="leaving-uk.html">Are people leaving the UK?</a> Official figures on emigration, British and non-British nationals, and non-domiciled taxpayers, and what they cannot show about why people leave.</p>
 <p><a href="manifesto.html">Did Labour keep its 2024 manifesto?</a> Ten pledges on tax, public spending and everyday costs, each quoted, with what has happened and every reading the wording allows.</p>

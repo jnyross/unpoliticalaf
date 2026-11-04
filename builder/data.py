@@ -1244,6 +1244,8 @@ def build_all():
     d["debt_history"] = data_debthist.build(facts)
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
+    from . import data_top_earners
+    d["top_earners"] = data_top_earners.build(facts)
     population(facts)
     from . import data_welfare
     d["welfare"] = data_welfare.build(facts)
