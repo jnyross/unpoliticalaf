@@ -1315,6 +1315,110 @@
           ]
         }
       ]
+    },
+    {
+      "id": "J10",
+      "asked": "How has welfare spending changed in the last 50 years",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "Welfare is read as social security: benefits and the State Pension, as the OBR measures it, from 1955-56 (the first year of the series) to 2021-22 (the last year the OBR measured). It is shown after inflation (2025-26 prices), per person, as a share of GDP and as a share of all public spending, and with and without pensions (from 1978-79, when the OBR first splits it). Splitting it into the State Pension, working-age benefits, disability benefits, housing benefit, tax credits and Universal Credit, and Child Benefit over the same years is a separate probe.",
+      "probes": [
+        {
+          "id": "J10.1",
+          "question": "Between 1955-56 and 2021-22, how did welfare spending (social security) change as a share of GDP?",
+          "options": {
+            "A": "It fell, from about 10% of GDP to about 5%",
+            "B": "It more than doubled, from about 5% of GDP to about 11%",
+            "C": "It stayed at about 5% of GDP throughout",
+            "D": "It was about 20% of GDP in both years"
+          },
+          "answer": "B",
+          "why": "Welfare page: 5.0% of GDP in 1955-56, a peak of 12.4% in 2012-13, and 10.8% in 2021-22.",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "As a share of GDP it was 5.0% in 1955-56, peaked at 12.4% in 2012-13, and was 10.8% in 2021-22."
+            }
+          ]
+        },
+        {
+          "id": "J10.2",
+          "question": "After inflation, how did total welfare spending in 2021-22 compare with 1955-56?",
+          "options": {
+            "A": "About the same",
+            "B": "About twice as much",
+            "C": "About ten times as much",
+            "D": "About a third less"
+          },
+          "answer": "C",
+          "why": "Welfare page: £31.7bn in 1955-56 and £307bn in 2021-22, both in 2025-26 prices (about 9.7 times as much).",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "was £31.7bn in 1955-56 and £307bn in 2021-22, both after inflation."
+            }
+          ]
+        },
+        {
+          "id": "J10.3",
+          "question": "In 2021-22, what share of social security spending went to pensioners?",
+          "options": {
+            "A": "About a fifth",
+            "B": "About a third",
+            "C": "About half (54%)",
+            "D": "About four-fifths"
+          },
+          "answer": "C",
+          "why": "Welfare page, with and without pensions: pensioners received 54% of social security in 2021-22, against 59% in 1978-79.",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "Pensioners received 54% of social security in 2021-22, against 59% in 1978-79."
+            }
+          ]
+        },
+        {
+          "id": "J10.4",
+          "question": "After inflation, how much welfare spending was there per person in 2021-22?",
+          "options": {
+            "A": "About £1,900",
+            "B": "About £4,600",
+            "C": "About £9,000",
+            "D": "About £500"
+          },
+          "answer": "B",
+          "why": "Welfare page: £4,583 per person in 2021-22, in 2025-26 prices, averaged over everyone in the population.",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "Per person, after inflation, it was £1,862 in 1978-79 and £4,583 in 2021-22."
+            }
+          ]
+        },
+        {
+          "id": "J10.5",
+          "question": "On the site, what does the 'without pensions' measure of welfare leave out?",
+          "options": {
+            "A": "The benefits paid to pensioners, such as the State Pension",
+            "B": "Child Benefit",
+            "C": "Disability benefits",
+            "D": "Housing benefit"
+          },
+          "answer": "A",
+          "why": "Welfare page, 'What counts as welfare here': without pensions is the non-pensioner figure, which leaves out benefits paid to pensioners.",
+          "evidence": [
+            {
+              "page": "welfare.html",
+              "text": "Without pensions means the non-pensioner figure: benefits paid to people who are not pensioners, such as those for children, people of working age and disabled people."
+            }
+          ]
+        },
+        {
+          "id": "J10.6",
+          "question": "How much of welfare spending over the last 50 years went on the State Pension, and how much on Universal Credit, tax credits, disability benefits, housing benefit and Child Benefit?",
+          "gap": "The site does not yet split welfare spending into the State Pension, working-age, disability, housing, tax credit and Universal Credit, and Child Benefit parts over these years; it needs the Department for Work and Pensions benefit expenditure tables (https://www.gov.uk/government/publications/benefit-expenditure-and-caseload-tables-2026)."
+        }
+      ]
     }
   ]
 }

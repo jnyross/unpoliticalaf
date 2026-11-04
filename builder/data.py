@@ -1245,6 +1245,8 @@ def build_all():
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
     population(facts)
+    from . import data_welfare
+    d["welfare"] = data_welfare.build(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)
     return facts, d
