@@ -711,6 +711,14 @@
   "sha256": "a912da34f98c17bcc2ca6ffe125b79c05c4491923f9cc9678b866c83e8062a6f",
   "retrieved": "2026-11-02T09:55:39Z"
  },
+ "ons-icp": {
+  "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
+  "file": "ons/icproductivityupdated.xlsx",
+  "bytes": 143195,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "582786f0f305294504d29f103a947f1d2102cf9a55255e376c58cce239a8b4a6",
+  "retrieved": "2026-11-04T08:50:25Z"
+ },
  "ons-jobs02": {
   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02/current/jobs02sep2026.xls",
   "file": "ons/jobs02.xls",
