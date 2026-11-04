@@ -600,6 +600,11 @@
    "id": "explain-obr-frs-2025",
    "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
    "file": "explain/obr-frs-2025.html"
+  },
+  {
+   "id": "ons-icp",
+   "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
+   "file": "ons/icproductivityupdated.xlsx"
   }
  ]
 }
