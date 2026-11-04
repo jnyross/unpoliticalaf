@@ -1,0 +1,44 @@
+{
+  "reader": "P9",
+  "profile": "P9",
+  "site_commit": "9317c4b",
+  "budget": 40,
+  "actions_used": 39,
+  "johns_without_site": {
+    "J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E",
+    "J4.1": "E", "J4.2": "E", "J4.3": "E", "J4.4": "E", "J4.5": "E", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "johns_with_site": {
+    "J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "B", "J1.7": "C",
+    "J4.1": "B", "J4.2": "E", "J4.3": "B", "J4.4": "B", "J4.5": "A", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "B", "J5.3": "E", "J5.4": "E", "J5.5": "B", "J5.6": "C", "J5.7": "C",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "B", "J6.2": "B", "J6.3": "B", "J6.4": "C", "J6.5": "B", "J6.6": "B", "J6.7": "B", "J6.8": "B"
+  },
+  "confusions": [
+    "The menu across the top is small and wraps onto two rows, so I kept tapping the wrong word until I found Questions and Who pays.",
+    "The Questions page is a long list of titles and I could not tell which one would hold the answer I needed, so I had to go in and out of pages to find each one.",
+    "The answers at the top of the pages were easy to read, but the charts below them were slow to scroll through on the phone and the bars had tiny labels.",
+    "The defence page did not show me what share of the services budget goes on defence, and I ran out of taps before I found the chart that might have it.",
+    "I could not find the page that shows the top 1% share of Income Tax over the years, so I left that question blank.",
+    "The high earners page had a lot of small print and quotes from the OBR, which I skimmed because it was too much to read on a phone.",
+    "The debt page said the detail on what moves borrowing costs was quoted further down, which took me a while to find."
+  ]
+}

@@ -28,8 +28,8 @@
   "file": "ons/life-tables-historic-dataset-page.html",
   "bytes": 19279,
   "content_type": "text/html; charset=utf-8",
-  "sha256": "ae599cd7d6fd256c6202df8c8ea847ab3e48f775be9eb89f2aade0e2879946c9",
-  "retrieved": "2026-11-04T15:28:23Z"
+  "sha256": "37302bc0ad3fd01e76ffc0ec7bf618d97d0e1da8334dd4235aea46bb69a3f871",
+  "retrieved": "2026-11-04T15:48:39Z"
  },
  "dfe-spc-2015-page": {
   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
@@ -868,8 +868,8 @@
   "file": "ons/ashe-adhoc-3671-page.html",
   "bytes": 36536,
   "content_type": "text/html;charset=utf-8",
-  "sha256": "1ddc26367dc447a793b2f4c8c7c04a50433381453a109dffecd1f2f43310cd58",
-  "retrieved": "2026-11-04T15:28:31Z"
+  "sha256": "0bfe660fc39383f80cddca2c073cfe294c49d4f5ce8e6330292668621c19e819",
+  "retrieved": "2026-11-04T15:48:46Z"
  },
  "ons-ashe-qmi": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
@@ -988,8 +988,8 @@
   "file": "ons/life-tables-2024-related-data.html",
   "bytes": 67153,
   "content_type": "text/html; charset=UTF-8",
-  "sha256": "129f7d3dfb00b42c1aaf6f7806903dee1664bda0ec33160651385bd82c2c7e29",
-  "retrieved": "2026-11-04T15:28:27Z"
+  "sha256": "0789dfac12fba75c6864e41b28bb5a19c371323287cb50fcc54e8ab9b2168907",
+  "retrieved": "2026-11-04T15:48:43Z"
  },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",

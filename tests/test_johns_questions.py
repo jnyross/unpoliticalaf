@@ -41,6 +41,18 @@ class File(unittest.TestCase):
         answered["answer"] = "Z"
         self.assertTrue(any("is not one of the options" in x for x in jq.validate(data)))
 
+    def test_every_question_is_in_exactly_one_topic_group(self):
+        ids = [q["id"] for q in self.data["questions"]]
+        grouped = [i for members in jq.TOPIC_GROUPS.values() for i in members]
+        self.assertEqual(sorted(grouped), sorted(ids))
+        self.assertEqual(len(grouped), len(set(grouped)))
+
+    def test_group_sheets_hold_only_their_questions(self):
+        for name, members in jq.TOPIC_GROUPS.items():
+            text = jq.sheet(self.data, name)
+            heads = [line.split(".")[0][3:] for line in text.splitlines() if line.startswith("## ")]
+            self.assertEqual(sorted(set(heads)), sorted(members), name)
+
     def test_pack_holds_only_answered_probes(self):
         out = jq.pack(self.data)
         answered = {p["id"] for _, p in jq.probes(self.data) if not jq.is_open(p)}

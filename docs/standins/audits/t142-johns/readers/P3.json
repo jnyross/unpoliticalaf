@@ -1,0 +1,44 @@
+{
+  "reader": "P3",
+  "profile": "P3",
+  "site_commit": "9317c4b",
+  "budget": 40,
+  "actions_used": 39,
+  "johns_without_site": {
+    "J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E",
+    "J4.1": "E", "J4.2": "E", "J4.3": "E", "J4.4": "E", "J4.5": "E", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "A", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "johns_with_site": {
+    "J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "B", "J1.7": "C",
+    "J4.1": "B", "J4.2": "E", "J4.3": "B", "J4.4": "B", "J4.5": "A", "J4.6": "E", "J4.8": "E",
+    "J2.1": "C", "J2.2": "B", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "B", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "A", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "A", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "confusions": [
+    "The Questions list runs to five screens of links and I could not find the housing, pension, class size or defence questions without scrolling a long way, so I ran out of taps before reaching most of the sheet.",
+    "Tapping the 'debt interest' question link took me to a glossary entry rather than the answer, and I had to tap again to reach the chart.",
+    "The debt answer packs five countries into one sentence ('lower than Japan, Italy, the United States, France and Canada and higher than Germany'), which made me reread it to be sure which way round it went.",
+    "On the Who pays page the 46.0% figure is 'a share of the total, not the share of income that goes on tax' and sits right beside a 36.2% figure, so I could not tell which number was which without going to another page.",
+    "The site says HM Revenue and Customs and the ONS 'count different people and taxes, so keep them apart', which left me unsure which of the two figures I was meant to trust.",
+    "The manifesto ratings such as 'Partly kept; readings differ' and 'Not yet testable' meant I had to open each pledge to find out why, and I did not have the budget to do that for all of them.",
+    "The page on the 2024 manifesto says VAT is 'kept so far', which does not tell me whether the 20% rate is unchanged, so I did not want to guess."
+  ]
+}
