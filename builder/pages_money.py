@@ -464,7 +464,7 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(f'''<div class="answer"><p class="lede">Across everyone in UK private households, taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income in 2023/24.</p>
 <p>The share was similar for the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")}) and the highest-income fifth ({num("etb.t8.gross.all.q5", "pct")}), but it was made up of different taxes.</p></div>''')
     # Readers looking for "what one person pays" could not find the worked example (audit 10 gap 2).
-    body.append(f'<p>Looking for what one person pays? See the <a href="#worked-example">worked example of a made-up employee on £{rates["illustration"]["salary"]:,}</a>. It is an illustration of the tax rules, not a measured statistic.</p>')
+    body.append(f'<p>Looking for what one person pays? See the <a href="#worked-example">worked example of a made-up employee on £{rates["illustration"]["salary"]:,}</a> and the <a href="#worked-example-self-employed">worked example of a made-up self-employed person with £{rates["self_employed"]["profit"]:,} profit</a>. They are illustrations of the tax rules, not measured statistics.</p>')
     items = []
     for q, lab in QUINTS:
         items.append((lab, f"etb.t8.gross.all.{q}", "alt" if q == "all" else ""))
@@ -504,6 +504,22 @@ def household_tax_page(facts, d, num, sources, rates):
 <li>On each extra pound they earn, they would pay {ill["basic_rate"]*100:.0f}p Income Tax and {ill["ni_rate"]*100:.0f}p National Insurance: a <em>marginal</em> rate of {ill["marginal"]:.0f}%.</li>
 </ul>
 </aside>''')
+    # Self-employed illustration (T138): same Income Tax, Class 4 instead of employee National Insurance.
+    se = rates["self_employed"]
+    body.append(f'''<aside class="illustration" aria-labelledby="worked-example-self-employed">
+<span class="tag">Illustration, not a statistic</span>
+<h2 id="worked-example-self-employed">Worked example: one made-up self-employed person with £{se["profit"]:,} profit</h2>
+<p>This person is invented to show how the rules work. They are not a typical or average person, and this is not a measured figure.</p>
+<p>Assumptions: tax year {esc(rates["year"])}; profit is income from self-employment after allowable expenses; lives in England, Wales or Northern Ireland; no employees, no other income and no pension contributions.</p>
+<ul>
+<li>Income Tax: {se["basic_rate"]*100:.0f}% of the £{se["profit"] - se["allowance"]:,} above the £{se["allowance"]:,} Personal Allowance = <strong>£{se["income_tax"]:,.0f}</strong></li>
+<li>Class 4 National Insurance: {se["class4_rate"]*100:.0f}% of profits between £{se["class4_lower"]} and £{se["class4_upper"]} = <strong>£{se["class4"]:,.0f}</strong>. No Class 2 contributions are due at these profits.</li>
+<li>Together: £{se["total"]:,.0f}, which is {se["average_rate"]:.0f}% of their profit. This is their <em>average</em> rate.</li>
+<li>On each extra pound of profit, they would pay {se["basic_rate"]*100:.0f}p Income Tax and {se["class4_rate"]*100:.0f}p Class 4 National Insurance: a <em>marginal</em> rate of {se["marginal"]:.0f}%.</li>
+<li>The employee on £{ill["salary"]:,} above pays the same Income Tax, £{ill["income_tax"]:,.0f}, and £{ill["ni"]:,.0f} of employee National Insurance. Employer National Insurance is not counted for either person.</li>
+</ul>
+</aside>''')
+    body.append(f'<p class="small">The self-employed example uses rates from GOV.UK: <a href="sources.html#src-gov-self-employed-ni">Self-employed National Insurance rates</a>, retrieved {esc(se["retrieved"])}, and the Income Tax rates above.</p>')
     body.append(FOLD)
     body.append(f'<p class="small">The worked example uses rates from GOV.UK: <a href="sources.html#src-gov-income-tax-rates">Income Tax rates</a> and <a href="sources.html#src-gov-ni-rates">National Insurance rates</a>, retrieved {esc(rates["retrieved"])}. VAT, employer National Insurance and Council Tax depend on circumstances, so they are left out.</p>')
     body.append(explain("average-rates", sources))
