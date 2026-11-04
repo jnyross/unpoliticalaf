@@ -78,7 +78,7 @@ def nth(n):
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
-COMPARE_WITH = ["USA", "FRA"]
+COMPARE_WITH = ["USA", "FRA", "JPN"]
 
 
 def _uk_us_fr(facts, num, it, sy):
@@ -94,10 +94,11 @@ def _uk_us_fr(facts, num, it, sy):
     def rel(gap):
         return "close to" if abs(gap) < 1 else ("higher than" if gap > 0 else "lower than")
 
-    uk, us, fr = (facts[ids[a]].value for a in [UK] + COMPARE_WITH)
-    lede = (f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: "
-            f"{rel(uk - us)} the United States ({num(ids['USA'], 'pct')}) "
-            f"and {rel(uk - fr)} France ({num(ids['FRA'], 'pct')}).")
+    uk = facts[ids[UK]].value
+    def the(a):
+        return "the United States" if a == "USA" else it["names"][a]
+    parts = [f"{rel(uk - facts[ids[a]].value)} {the(a)} ({num(ids[a], 'pct')})" for a in COMPARE_WITH]
+    lede = f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: {', '.join(parts[:-1])} and {parts[-1]}."
     order = sorted([UK] + COMPARE_WITH, key=lambda a: -facts[ids[a]].value)
     items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]),
               ids[a], "" if a == UK else "alt") for a in order]
