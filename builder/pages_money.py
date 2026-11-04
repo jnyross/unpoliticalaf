@@ -423,8 +423,7 @@ def household_tax_page(facts, d, num, sources, rates):
     body.append(f'''<p>For people in the highest-income fifth most tax is direct: Income Tax alone was {num("etb.t8.gross.income_tax.q5", "pct")} of gross household income. For people in the lowest-income fifth, most is indirect, such as VAT: {num("etb.t8.gross.indirect.q1", "pct")} of gross household income.</p>''')
     # The same tax measured against different totals: the short explanation stays open beside the headline shares.
     body.append('<h3 id="denominators">Why the same tax can look bigger or smaller</h3>'
-                f'<p>The percentage depends on what you divide by. For the lowest-income fifth, indirect taxes were {num("etb.t8.gross.indirect.q1", "pct")} of gross income, '
-                f'{num("etb.t8.disposable.indirect.q1", "pct")} of disposable income and {num("etb.t8.spend.indirect.q1", "pct")} of spending.</p>')
+                f'<p>Indirect taxes are charged on spending. The lowest fifth paid {num("etb.t8.gross.indirect.q1", "pct")} of gross income but {num("etb.t8.spend.indirect.q1", "pct")} of spending, because spending was above income. <strong>Cash and prices:</strong> pay up 50%, prices up 40%, buys about 7% more (1.50 ÷ 1.40 ≈ 1.07), not 10%. Made-up numbers.</p>')
     body.append(FOLD)
     body.append(explain("indirect-spending", sources))
     rows = [[lab, num(f"etb.t8.gross.direct.{q}", "pct"), num(f"etb.t8.gross.indirect.{q}", "pct"), num(f"etb.t8.gross.all.{q}", "pct")] for q, lab in QUINTS]
