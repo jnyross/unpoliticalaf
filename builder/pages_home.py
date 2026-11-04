@@ -48,9 +48,11 @@ def home_page(facts, d, num, sources):
         return f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than"
     # Five figures a reader most often comes for, one tap each (audit 14 gap 2): each link opens
     # the topic page at its answer, so the figure is not hidden in a fold further down.
-    QUICK = jump("Quick answers", [("life/earnings.html#key-answer", "Pay after inflation"), ("life/schools.html#key-answer", "Class sizes"),
-                                   ("life/holidays.html#key-answer", "Holidays"), ("life/housing.html#key-answer", "Renting"),
-                                   ("life/work.html#key-answer", "Women's employment")])
+    # Work comes first, as in the product's order of topics, so a reader asking about women's
+    # employment reaches it in one tap from the home page (audit 15 gap 3: it was last in the list).
+    QUICK = jump("Quick answers", [("life/work.html#key-answer", "Women's employment"), ("life/earnings.html#key-answer", "Pay after inflation"),
+                                   ("life/schools.html#key-answer", "Class sizes"), ("life/holidays.html#key-answer", "Holidays"),
+                                   ("life/housing.html#key-answer", "Renting")])
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 {QUICK}
@@ -85,9 +87,9 @@ def home_page(facts, d, num, sources):
 <p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages stop at {L}.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>The {L} figure is provisional. Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. ONS has since published April 2026 pay, which this series does not yet include. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
-<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, when that series ends.</p>{sparks["holidays"]}</a>
+<a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, the last years of the comparable series.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages stop at {L}.</p>{sparks["schools"]}</a>
 <a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
