@@ -81,7 +81,7 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .keyfigs .big{display:block;font-size:1.6rem;line-height:1.1;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:4px}
 .keyfigs .what{display:block;font-size:.86rem;line-height:1.35;color:var(--ink2)}
 .keyfigs li.wide{grid-column:1/-1}
-.toc{margin:20px 0 8px;font-size:.95rem}.toc details{margin:0}
+.toc{margin:20px 0 8px;font-size:1rem}.toc details{margin:0}
 .toc ol{margin:0;padding:0;list-style:none}
 .toc li{margin:0;border-top:1px solid var(--line2)}
 .toc li:first-child{border-top:0}
@@ -171,7 +171,7 @@ a.card:hover{border-color:var(--ink2)}
 a.card:hover h2,a.card:hover h3,a.card:focus h2,a.card:focus h3{text-decoration:underline}
 a.card h2,a.card h3{color:var(--link);margin:0 0 8px;padding:0;border:0;font-size:1.12rem;line-height:1.3}
 a.card .big{display:block;font-size:2rem;line-height:1.05;font-weight:750;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin:2px 0 6px}
-a.card p{margin:0 0 6px;font-size:.95rem;color:var(--ink2)}
+a.card p{margin:0 0 6px;font-size:1rem;color:var(--ink2)}
 a.card .more{display:block;margin-top:8px;font-size:.9rem;font-weight:600;color:var(--link)}
 a.card .mini{margin:10px 0 2px}
 a.card .mini .track{height:10px;background:var(--soft);border-radius:3px;overflow:hidden}

@@ -350,6 +350,9 @@ def households_page(facts, d, num, sources):
     from .html import page
     body = ['<p class="small"><a href="who-pays.html">Who pays?</a></p>', "<h1>How much tax do retired people and different kinds of household pay?</h1>",
             '<p>From the Office for National Statistics survey used in section 2 of <a href="who-pays.html#households">who pays</a>: the taxes paid by the households people live in, including VAT and other taxes on spending.</p>',
+            (f'<div class="answer"><p class="lede">In 2023/24, retired households paid about {num("etb.ret.alltax.all", "pounds")} a year in all taxes on average, '
+             f'and non-retired households about {num("etb.nonret.alltax.all", "pounds")}. Measured against their own gross income, taxes took {num("etb.ret.taxshare.all", "pct")} '
+             f'for retired households and {num("etb.nonret.taxshare.all", "pct")} for non-retired households. Retired households also had less income, so both measures matter.</p></div>'),
             retired_section(facts, d, num, sources), household_types_section(facts, d, num, sources)]
     return page(HOUSEHOLDS_PAGE, "Taxes by kind of household", "\n".join(body),
                 "All taxes paid by retired and non-retired households and by type of household in the UK, from the ONS effects of taxes and benefits survey.")
