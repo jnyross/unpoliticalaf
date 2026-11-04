@@ -23,6 +23,14 @@
   "sha256": "20b1a82eeb111d81d722a112b6f270753d5658301704673ef952822bb83cea2b",
   "retrieved": "2026-11-04T13:30:12Z"
  },
+ "data-gov-life-tables-historic": {
+  "url": "https://www.data.gov.uk/dataset/historic_and_projected_data_from_the_period_and_cohort_life_tables",
+  "file": "ons/life-tables-historic-dataset-page.html",
+  "bytes": 19279,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "ae599cd7d6fd256c6202df8c8ea847ab3e48f775be9eb89f2aade0e2879946c9",
+  "retrieved": "2026-11-04T15:28:23Z"
+ },
  "dfe-spc-2015-page": {
   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
   "file": "dfe/spc-2015-page.html",
@@ -855,6 +863,14 @@
   "sha256": "a0127c61683ad15550260ac3d05565866b951e220b7ebcc86b0b69bcee2c0702",
   "retrieved": "2026-11-02T16:28:49Z"
  },
+ "ons-ashe-age-single-year-adhoc": {
+  "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/adhocs/3671annualsurveyofhoursandearningsasheestimatesofmedianhourlypayexcludingovertimeforemployeejobsbysingleyearofemployeeageofthoseaged16to251997to2025",
+  "file": "ons/ashe-adhoc-3671-page.html",
+  "bytes": 36536,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "1ddc26367dc447a793b2f4c8c7c04a50433381453a109dffecd1f2f43310cd58",
+  "retrieved": "2026-11-04T15:28:31Z"
+ },
  "ons-ashe-qmi": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
   "file": "ons/ashe-qmi.pdf",
@@ -966,6 +982,14 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "498868a2a2209acbc64c4f8cf59f72af6364f65f69f724be01a5e969978bb2fb",
   "retrieved": "2026-11-02T11:12:32Z"
+ },
+ "ons-life-tables-2024-related": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/bulletins/pastandprojecteddatafromtheperiodandcohortlifetables/2024baseduk1981to2074/relateddata",
+  "file": "ons/life-tables-2024-related-data.html",
+  "bytes": 67153,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "129f7d3dfb00b42c1aaf6f7806903dee1664bda0ec33160651385bd82c2c7e29",
+  "retrieved": "2026-11-04T15:28:27Z"
  },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
