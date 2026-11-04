@@ -14,7 +14,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, version
+from . import pages_money_extra, pages_manifesto, version
 from . import downloads, pages_money, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
@@ -50,6 +50,7 @@ def render():
     pages["tax-history.html"] = pages_taxmixhist.tax_history_page(facts, d, num, sources)
     pages["international.html"] = pages_intl.international_page(facts, d, num, sources)
     pages["borrowing.html"] = pages_borrow.borrowing_page(facts, d, num, sources)
+    pages["manifesto.html"] = pages_manifesto.manifesto_page()
     pages["who-pays.html"] = pages_money.who_pays_page(facts, d, num, sources)
     pages["who-pays-age.html"] = pages_money_extra.income_tax_age_page(facts, d, num, sources)
     pages["who-pays-households.html"] = pages_money_extra.households_page(facts, d, num, sources)
