@@ -11,13 +11,30 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: make setup
-      - run: make verify
+      - run: make build check
+      - name: Detect flaky tests (three full-suite runs)
+        run: make test-stability
+      - name: Publish test stability summary
+        if: always()
+        run: |
+          if [ -f artifacts/test-stability/summary.md ]; then
+            cat artifacts/test-stability/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Retain test stability evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-stability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/test-stability/
+          retention-days: 30
+          if-no-files-found: warn
 
   accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
