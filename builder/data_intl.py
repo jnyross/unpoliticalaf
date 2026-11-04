@@ -24,7 +24,9 @@ from .readers import ROOT
 TAX_FILE = "data/fetched/oecd/revenue-statistics-tax-gdp.csv"
 SPEND_FILE = "data/fetched/oecd/gov-at-a-glance-expenditure-revenue-gdp.csv"
 COFOG_FILE = "data/fetched/oecd/gov-at-a-glance-expenditure-by-function-gdp.csv"
+PIT_FILE = "data/fetched/oecd/pit-top-rates.csv"
 TAX_SRC, SPEND_SRC, COFOG_SRC = "oecd-rs-tax", "oecd-gov-pf", "oecd-gov-cofog"
+PIT_SRC = "oecd-pit-top-rates"
 
 UK, AVG = "GBR", "OECD_REP"  # OECD_REP: the OECD's "OECD average country" (unweighted)
 G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
@@ -61,6 +63,13 @@ def _rows(path):
 def _add(facts, fid, row, line, src, what):
     v = num(row["OBS_VALUE"])
     facts.add(Fact(fid, v, "% of GDP", row["TIME_PERIOD"], src, f"{row['REF_AREA']} {what} line {line}",
+                   note=row.get("Reference area", "")))
+    return v
+
+
+def _add_rate(facts, fid, row, line):
+    v = num(row["OBS_VALUE"])
+    facts.add(Fact(fid, v, "% statutory rate", row["TIME_PERIOD"], PIT_SRC, f"{row['REF_AREA']} top statutory personal income tax rate line {line}",
                    note=row.get("Reference area", "")))
     return v
 
@@ -116,4 +125,17 @@ def build(facts):
     # Defence for the G7 countries that have a figure (Canada has none in this table).
     out["defence_years"] = {a: sorted(y for (b, g, y) in fn if b == a and g == DEFENCE) for a in G7 + [AVG]}
     out["functions"], out["tax_kinds"] = FUNCTIONS, TAX_KINDS
+
+    # Top statutory personal income tax rate on earnings, G7 countries (the rate on the highest band).
+    # Only the latest year with every G7 country is kept as a fact: older years are not shown.
+    pit, rows = {}, {}
+    for line, r in _rows(PIT_FILE):
+        a, y = r["REF_AREA"], r["TIME_PERIOD"]
+        if r["MEASURE"] == "TS_PIT" and a in G7 and num(r["OBS_VALUE"]) is not None:
+            pit[(a, y)] = num(r["OBS_VALUE"])
+            rows[(a, y)] = (r, line)
+    out["pit_year"] = py = _latest(pit, *G7)
+    for a in G7:
+        r, line = rows[(a, py)]
+        _add_rate(facts, f"intl.pit.{a}.{py}", r, line)
     return out
