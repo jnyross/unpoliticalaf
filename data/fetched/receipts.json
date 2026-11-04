@@ -1007,6 +1007,14 @@
   "sha256": "7d1fc100fb19972c60448bf79bb2c41b130671f529e2511e02426427eabde096",
   "retrieved": "2026-11-02T16:23:45Z"
  },
+ "ons-single-year-life-tables-uk": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+  "file": "ons/single-year-life-tables-uk.xlsx",
+  "bytes": 623585,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "34d2b0ee90ed78994e87d83a558caba977f0087a3ac306175c6a5cd24031730a",
+  "retrieved": "2026-11-04T15:31:01Z"
+ },
  "ons-ukpop": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
   "file": "ons/ukpop.csv",
