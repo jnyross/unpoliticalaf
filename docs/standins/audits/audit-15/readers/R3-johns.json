@@ -1,0 +1,85 @@
+{
+ "reader": "R3-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 23,
+ "url": "international.html",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "y": 729
+  }
+ ],
+ "scroll": 1289,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "borrowing.html",
+   "ops": [],
+   "scroll": 5516
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  }
+ ],
+ "log": [
+  "tap [6] link: Debt",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Spending",
+  "scroll down",
+  "tap [5] link: beside other countries",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [5] input: Taxes",
+  "tap [4] expand: More on The UK beside the other G7 countries chart and table",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/e77b64dd-93fa-5faf-8ab7-7370842eeda9/scratchpad/audit-15/shots/R3",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > div:nth-of-type(1) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(1)",
+   "kind": "input",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > div:nth-of-type(1) > fieldset:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(2)",
+   "kind": "input",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}

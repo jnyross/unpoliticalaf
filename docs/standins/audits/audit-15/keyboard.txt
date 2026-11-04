@@ -1,0 +1,10 @@
+index.html: Tab reached 48 elements, then left the page
+spending.html: Tab reached 43 elements, then left the page
+taxes.html: Tab reached 51 elements, then left the page
+who-pays.html: Tab reached 41 elements, then left the page
+household-tax.html: Tab reached 40 elements, then left the page
+life/index.html: Tab reached 70 elements, then left the page
+glossary.html: Tab reached 41 elements, then left the page
+methods.html: Tab reached 38 elements, then left the page
+sources.html: Tab reached 40 elements, then left the page
+No keyboard traps.

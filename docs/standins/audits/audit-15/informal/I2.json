@@ -1,0 +1,55 @@
+{
+ "reader": "I2",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 14,
+ "url": "life/holidays.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/housing.html#key-answer",
+   "ops": [],
+   "scroll": 1250
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "back",
+  "back",
+  "tap [13] link: Renting",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Holidays",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/e77b64dd-93fa-5faf-8ab7-7370842eeda9/scratchpad/audit-15/shots/I2",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Top ten"
+  }
+ ]
+}
