@@ -740,6 +740,12 @@
    "id": "ons-ashe-age-single-year-adhoc",
    "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/adhocs/3671annualsurveyofhoursandearningsasheestimatesofmedianhourlypayexcludingovertimeforemployeejobsbysingleyearofemployeeageofthoseaged16to251997to2025",
    "file": "ons/ashe-adhoc-3671-page.html"
+  },
+  {
+    "id": "ons-expectation-of-life-uk",
+    "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeunitedkingdom",
+    "find": "/file\\?uri=[^\\\"']*\\.xlsx?",
+    "file": "ons/expectation-of-life-uk"
   }
  ]
 }
