@@ -15,7 +15,7 @@ from .html import FOLD, NOFOLD, before_toc, jump, page, table, details_table, li
 from . import uncertainty as U
 from . import findings as F
 from .pages_nations import housing_nations_block, schools_nations_block
-from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page
+from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page, jobs_people_block
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 RECENT = 2022  # the first year after the pandemic years (2020 and 2021), for a recent comparison beside the default pair
@@ -1000,6 +1000,7 @@ def _work(facts, d, num, sources):
                              years=oyears, breaks=[(oyears.index(2021), "New job classification")] if 2021 in oyears else (), split_breaks=True, ymin=0, kind="pct", num=num,
                              finding=F.leader("{name} jobs were the largest group {span}", which="last")))
     body.append(details_table("Show job types for every year", "Share of people in work by job type (major group), January to December", head, rows))
+    body.extend(jobs_people_block(facts, num, d))
     body.extend(work_ages_block(facts, num))
     body.extend(industry_block(facts, num, d))
     body.extend(places_block(facts, num, "work"))
