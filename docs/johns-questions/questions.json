@@ -97,7 +97,11 @@
           "evidence": [
             {
               "page": "international.html",
-              "text": "the UK had the second lowest tax as a share of GDP in 2024 (of the 6 with a figure for that year), and the fourth highest government spending as a share of GDP in 2024."
+              "text": "UK taxes were the second lowest as a share of GDP among the G7 (of the 6 with a figure for that year)"
+            },
+            {
+              "page": "international.html",
+              "text": "UK government spending was the fourth highest in 2024"
             }
           ]
         },

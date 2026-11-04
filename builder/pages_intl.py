@@ -1,5 +1,5 @@
 """How UK tax and government spending compare with other OECD countries, as a share of GDP."""
-from .html import FOLD, page, table, details_table, bars, line_chart, switch, source_line, esc, fmt
+from .html import FOLD, NOFOLD, page, table, details_table, bars, line_chart, switch, source_line, esc, fmt
 from .pages_money import derive
 from . import findings as F
 
@@ -82,14 +82,14 @@ COMPARE_WITH = ["USA", "FRA", "JPN"]
 
 
 def _uk_us_fr(facts, num, it, sy):
-    """UK government spending beside the United States and France, shown without a click.
+    """The UK's government spending beside the United States and France, in words (no chart).
 
     Plain words, computed from the figures: 'close to' within 1 point, otherwise 'higher than'
-    or 'lower than'. Returns nothing if any of the three figures is missing, so no gap is hidden.
+    or 'lower than'. Returns '' if any of the three figures is missing, so no gap is hidden.
     """
     ids = {a: f"intl.spend.{a}.{sy}" for a in [UK] + COMPARE_WITH}
     if any(i not in facts or facts[i].value is None for i in ids.values()):
-        return []
+        return ""
 
     def rel(gap):
         return "close to" if abs(gap) < 1 else ("higher than" if gap > 0 else "lower than")
@@ -98,48 +98,65 @@ def _uk_us_fr(facts, num, it, sy):
     def the(a):
         return "the United States" if a == "USA" else it["names"][a]
     parts = [f"{rel(uk - facts[ids[a]].value)} {the(a)} ({num(ids[a], 'pct')})" for a in COMPARE_WITH]
-    lede = f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: {', '.join(parts[:-1])} and {parts[-1]}."
-    order = sorted([UK] + COMPARE_WITH, key=lambda a: -facts[ids[a]].value)
-    items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]),
-              ids[a], "" if a == UK else "alt") for a in order]
-    return [
-        f'<div class="answer"><p class="lede">{lede}</p></div>',
-        bars(items, "pct", num, maxval=60,
-             caption=f"Government spending, % of GDP, {sy}. The UK has the darker bar."),
-    ]
+    return f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: {', '.join(parts[:-1])} and {parts[-1]}."
+
+
+def _latest_before(facts, prefix, a, year):
+    """The latest figure for one country that is older than `year`, as (year, fact id), or None."""
+    for y in range(int(year) - 1, int(year) - 6, -1):
+        fid = f"{prefix}.{a}.{y}"
+        if fid in facts and facts[fid].value is not None:
+            return str(y), fid
+    return None
 
 
 def _g7(facts, num, it, ty, sy):
-    """The UK's place among the G7, the group of seven large economies, on tax and on spending."""
+    """The UK's place among the G7, the group of seven large economies, on tax and on spending.
+
+    Every G7 member is drawn, so no one is picked out. A member without a figure for the year
+    gets a plain line saying so, with its latest earlier figure labelled by its own year; it is
+    not ranked and no zero is drawn.
+    """
     def order(prefix, year):
         have = [a for a in G7 if facts.get(f"{prefix}.{a}.{year}") and facts[f"{prefix}.{a}.{year}"].value is not None]
         return sorted(have, key=lambda a: -facts[f"{prefix}.{a}.{year}"].value)
     t, s = order("intl.tax", ty), order("intl.spend", sy)
     tp, sp = t.index(UK) + 1, s.index(UK) + 1
-    missing = [it["names"][a] for a in G7 if a not in t or a not in s]
     rows = []
     for a in sorted(G7, key=lambda a: t.index(a) if a in t else 99):
         name = esc(it["names"][a])
         name = f"<strong>{name}</strong>" if a == UK else name
-        rows.append([name, num(f"intl.tax.{a}.{ty}", "pct"), f"{t.index(a) + 1}" if a in t else "",
-                     num(f"intl.spend.{a}.{sy}", "pct"), f"{s.index(a) + 1}" if a in s else ""])
+        rows.append([name, num(f"intl.tax.{a}.{ty}", "pct") if a in t else "not published",
+                     f"{t.index(a) + 1}" if a in t else "",
+                     num(f"intl.spend.{a}.{sy}", "pct") if a in s else "not published",
+                     f"{s.index(a) + 1}" if a in s else ""])
     def among(n):
-        return "" if n == 7 else f" (of the {n} with a figure for that year)"
+        return "" if n == len(G7) else f" (of the {n} with a figure for that year)"
     def g7_bars(order_, prefix, year, what):
         items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]), f"{prefix}.{a}.{year}", "" if a == UK else "alt")
                  for a in order_]
-        return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar.")
-    out = [f'<h2 id="g7">The UK beside the other G7 countries</h2>',
-           *_uk_us_fr(facts, num, it, sy),
-           f"<p>The G7 is a group of seven large economies. Among them, the UK had the {place_word(tp, len(t))} tax as a share of GDP in {ty}{among(len(t))}, and the {place_word(sp, len(s))} government spending as a share of GDP in {sy}{among(len(s))}.</p>",
+        for a in G7:
+            if a in order_:
+                continue
+            last = _latest_before(facts, prefix, a, year)
+            words = f"no {year} figure yet" if year else "no figure"
+            if last:
+                words += f" (latest, {last[0]}: {num(last[1], 'pct')})"
+            items.append((f"{esc(it['names'][a])}: {words}", None, "gap"))
+        return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar. Countries without a figure have no bar.")
+    lede = _uk_us_fr(facts, num, it, sy)
+    out = [f'<h2 id="g7">The UK beside the other G7 countries</h2>{NOFOLD}',
+           f'<div class="answer">'
+           f"<p>In {ty}, UK taxes were the {place_word(tp, len(t))} as a share of GDP among the G7{among(len(t))}, and UK government spending was the {place_word(sp, len(s))} in {sy}{among(len(s))}.</p></div>",
            switch("Show the G7", [
                ("Taxes", f"The UK ranked {nth(tp)} of {len(t)} on tax in {ty}, where 1st is the highest.", g7_bars(t, "intl.tax", ty, "All taxes, including social security contributions,")),
                ("Spending", f"The UK ranked {nth(sp)} of {len(s)} on government spending in {sy}, where 1st is the highest.", g7_bars(s, "intl.spend", sy, "General government spending")),
            ]),
            details_table("Show the G7 as a table", f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest.",
                          ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
-    if missing:
-        out.append(f"<p class='small'>Not ranked: {esc(', '.join(missing))}, because the OECD had not published a figure.</p>")
+    if lede:
+        out.insert(-1, f"<p>{lede}</p>")
+    out.append("<p>The G7 is the group of seven large economies: Canada, France, Germany, Italy, Japan, the UK and the United States. The site shows every member, and chooses none of them.</p>")
     out.append("<p>Debt, borrowing costs and debt interest are on their own page: <a href='borrowing.html'>UK debt and borrowing costs beside the G7</a>.</p>")
     return "\n".join(out)
 
