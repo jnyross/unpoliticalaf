@@ -29,7 +29,7 @@ def _answer(facts, num):
     return (f'<div class="answer"><p>There is no single answer, because “easier” depends on what is measured. '
             f'Aged 25 to 34, a larger share were in work in {w_last} ({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}); '
             f'aged 18 to 24, {num(f"work.age.18_24.{w_last}", "pct")} against {num(f"work.age.18_24.{w_first}", "pct")}. '
-            f'The middle-priced home cost {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings in {AFFORD_FIRST} and {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
+            f'The middle-priced home in England and Wales has gone from {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
             f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
             f'University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. '
             f'State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. '
