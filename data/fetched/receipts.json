@@ -239,6 +239,14 @@
   "sha256": "a014a38563622e3361db3fb4b3d70689dd74f23f1aebe625c1393f2c0e9fa15d",
   "retrieved": "2026-11-02T10:24:32Z"
  },
+ "explain-hmrc-nondom-2025": {
+  "url": "https://www.gov.uk/government/statistics/statistics-on-non-domiciled-taxpayers-in-the-uk/statistical-commentary-on-non-domiciled-taxpayers-in-the-uk",
+  "file": "explain/hmrc-nondom-commentary-2025.html",
+  "bytes": 114495,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "69c863d113342d5f1e356033e9ecb4739b6d594ef7f1c959d383a04d50be2b6a",
+  "retrieved": "2026-11-04T08:50:02Z"
+ },
  "explain-hmrc-spi-2324-commentary": {
   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
   "file": "explain/hmrc-spi-2023-24-commentary.html",
@@ -319,6 +327,14 @@
   "sha256": "437e97eabdfb29532c793323cff9476b0b2d8edbb1c933abe43c8ce878756960",
   "retrieved": "2026-11-02T10:18:15Z"
  },
+ "explain-ons-ltim-yearending-dec-2025": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+  "file": "explain/ons-ltim-yearending-dec-2025.html",
+  "bytes": 161701,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "7b3a85015d669feee86ad1afc06704c7342e560c9de0796c89e23f71d47d7353",
+  "retrieved": "2026-11-04T08:49:55Z"
+ },
  "explain-ons-psf-2021-03": {
   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
   "file": "explain/ons-psf-march2021.html",
@@ -358,6 +374,14 @@
   "content_type": "text/html;charset=utf-8",
   "sha256": "ce572f701943247919febab9393574f50e6f32f0a6bcb337be036fc076b98b54",
   "retrieved": "2026-11-02T10:18:29Z"
+ },
+ "explain-ons-uk-emigration-explained": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/articles/ukemigrationexplainedwhatweknowaboutbritsmovingabroad/2026-05-21",
+  "file": "explain/ons-uk-emigration-explained-2026.html",
+  "bytes": 79992,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "83b3738612fdbd60f137c6fdd21de0a3940104f4cf1bf5ac98c4d5d0a57e023e",
+  "retrieved": "2026-11-04T08:49:58Z"
  },
  "gbts-2019-gb-summary": {
   "url": "https://www.visitbritain.org/media/3009/download?attachment",
