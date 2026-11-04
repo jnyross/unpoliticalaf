@@ -4,6 +4,9 @@ An independent, phone-first website that explains UK public money and everyday
 life using only official statistics. It answers four questions, with the answer
 first and the method close by:
 
+> **Taking over this project?** Read [docs/HANDOFF.md](docs/HANDOFF.md) first. It
+> has the project goal, the success test, the current status and the constraints.
+
 - **Where does public money go?** (`spending.html`)
 - **Which taxes raise the money?** Taxes, other receipts and borrowing, kept apart (`taxes.html`)
 - **Who pays?** Income Tax by taxpayer group, and all taxes by household income (`who-pays.html`)
