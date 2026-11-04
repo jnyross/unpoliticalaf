@@ -1238,6 +1238,8 @@ def build_all():
     d["intl"] = data_intl.build(facts)
     from . import data_borrow
     d["borrow"] = data_borrow.build(facts)
+    from . import data_debthist
+    d["debt_history"] = data_debthist.build(facts)
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
     population(facts)

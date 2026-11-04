@@ -89,12 +89,27 @@ BUDGET = [
     },
 ]
 
+BUDGET.insert(1, {
+    "name": "Replacing council tax and stamp duty with a revenue-neutral property levy",
+    "effect": "About 0% of GDP: the levy is designed to raise the same revenue as the two taxes it replaces.",
+    "conversion": "None: revenue neutrality is the design assumption, so the budget effect is zero by construction.",
+    "source": "Resolution Foundation, Home economics (2026): a levy of 0.7% of a property's value, with rebates for low-income households.",
+    "growth": "Not quantified in GDP terms. The source says the current stamp duty stops about 100,000 house purchases a year, which it argues holds back growth, but it gives no GDP figure.",
+    "confidence": "Medium to low: a policy design from one think tank; the revenue-neutral levy is an assumption of the design.",
+})
+BUDGET.insert(2, {
+    "name": "Abolishing stamp duty on main homes (not revenue-neutral)",
+    "effect": "Costs about 0.5% of GDP a year: the Resolution Foundation puts the revenue loss at £15 billion.",
+    "conversion": "£15 billion ÷ GDP of about £3 trillion ≈ 0.5% of GDP a year. GDP is a rounded assumption. The figure is before any change in house sales, which the source says would rise.",
+    "source": "Resolution Foundation, Home economics (2026), press release.",
+    "growth": "Not quantified in GDP terms.",
+    "confidence": "Medium: the revenue loss is a costing from one think tank; the timing of the change is not set.",
+})
+
 # Options without a comparable figure on either basis.
 NOT_RANKED = [
-    ("Property taxes",
-     "The UK raises 3.7% of GDP from property taxes against an OECD average of 2% (2023). The Resolution Foundation's figure that Londoners under-pay by £3.1 billion is a regional redistribution, not a net gain to the Exchequer, so it cannot be ranked on either basis."),
     ("Faster electricity grid connection and energy reform",
-     "The OECD recommends faster grid connection reform but gives no quantified effect in its survey. The energy shock that NIESR estimates is taking 0.3% off GDP growth this year is a cost of the shock, not an effect of reform, so it cannot be ranked."),
+     "The only figure found is an industry plan, not a model estimate. The ENA and BEAMA plan (October 2026) says £181 billion of electricity network investment could add £58 billion of gross value added to the UK economy by 2035, with 210,000 jobs. Conversion: £58 billion ÷ GDP of about £3 trillion ≈ 1.9% of GDP by 2035. That is gross output from the investment and does not net off what would happen without it, and the plan is written by the industries that would be paid for the work. It is therefore not comparable with the OECD and Resolution Foundation figures, and it stays unranked. The OECD survey recommends faster grid connection reform but gives no quantified effect."),
 ]
 
 SOURCES = [
@@ -105,6 +120,8 @@ SOURCES = [
     ("CBI, Potential impact of childcare reform (draft)", "https://www.cbi.org.uk/media/iqzlrkfd/childcare-gdp-static-dynamic-estimates.pdf"),
     ("IFS, What do you need to know about the triple lock?", "https://ifs.org.uk/articles/what-do-you-need-know-about-triple-lock"),
     ("Tax Expenditures in the United Kingdom: an International Perspective (2025)", "https://www.taxexpenditures.org/2025/12/15/tax-expenditures-in-the-united-kingdom-an-international-perspective/"),
+    ("Resolution Foundation, Home economics (2026) and its press release", "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/"),
+    ("ENA and BEAMA, electricity network investment plan (October 2026), as reported by edie", "https://www.edie.net/electricity-network-investment-could-unlock-58bn-for-uk-economy-industry-plan-finds/"),
     ("Resolution Foundation, Broken housing taxes (press release)", "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/"),
 ]
 
@@ -132,7 +149,7 @@ def options_page():
     sources = "".join(f'<li><a href="{url}">{title}</a></li>' for title, url in SOURCES)
     body = f"""
 <h1>Ways to improve the UK economy: ten options</h1>
-<p>Six options are ranked on one measure: the effect on the level of GDP after about ten years, as a percentage of GDP. The estimates come from different sources and models, so they are not like-for-like. The ranking shows the conversion for each. A second, separate list covers budget effects. Two options have no comparable figure on either basis and are not ranked.</p>
+<p>Six options are ranked on one measure: the effect on the level of GDP after about ten years, as a percentage of GDP. The estimates come from different sources and models, so they are not like-for-like. The ranking shows the conversion for each. A second, separate list covers budget effects. Property taxes have budget figures but no GDP figure, so they appear in the budget list only. Grid and energy reform has only an industry plan figure, so it stays unranked.</p>
 <p>The OECD measures each of its effects as a percentage of baseline potential GDP. Its full package, combining these reforms, gives +4.0% of potential GDP after 10 years and +7.7% after 25 years.</p>
 <h2>Ranked: the GDP level after about ten years</h2>
 <ol>{ranked}</ol>

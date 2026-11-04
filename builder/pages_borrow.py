@@ -170,7 +170,7 @@ def borrowing_page(facts, d, num, sources):
 <li>The OECD and IMF revise these figures as countries send newer data. Figures here are as downloaded on the date on each source page.</li>
 </ul></div>''')
     body.append(f'''<div class="limit"><p><strong>Why the UK figures differ from other pages.</strong> The <a href="spending.html">spending</a> and <a href="spending-history.html">spending history</a> pages use UK figures for financial years and the whole public sector from the OBR and HM Treasury. The figures here are for calendar years and general government, measured the same way for every country, so they do not match those pages exactly and are not joined to them.</p></div>''')
-    body.append(f'<p>See also: <a href="international.html">how UK taxes and spending compare with other countries</a>.</p>')
+    body.append(f'<p>See also: <a href="international.html">how UK taxes and spending compare with other countries</a>, and <a href="why-debt.html">why UK government debt is high</a>.</p>')
     body.append(source_line(sources, ["imf-weo-debt", "oecd-gov-pf-g7", "oecd-finmark-irlt"],
                             "OECD data is published under the Creative Commons Attribution 4.0 licence. IMF data is reproduced with attribution."))
     return page("borrowing.html", "How do UK debt and borrowing costs compare with other major countries?", "\n".join(body),
