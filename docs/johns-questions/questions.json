@@ -494,6 +494,167 @@
           ]
         }
       ]
+    },
+    {
+      "id": "J5",
+      "asked": "Why can't we afford to spend more money on defence",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "Defence spending is read as the government's official defence spending (PESA, the COFOG defence function), compared with other G7 countries on the same function in OECD figures. \"Can't afford\" is read as: what would extra spending cost, how could it be paid for, and what would have to give. The premise is contested, so the site sets out the choices and the figures rather than deciding whether the UK can afford more.",
+      "probes": [
+        {
+          "id": "J5.1",
+          "question": "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?",
+          "options": {
+            "A": "About £30 billion, about 1% of GDP",
+            "B": "About £65 billion, about 2.1% of GDP",
+            "C": "About £130 billion, about 4.2% of GDP",
+            "D": "About £200 billion, about 6.5% of GDP"
+          },
+          "answer": "B",
+          "why": "PESA 2026 outturn for 2025-26: £65.4 billion, 2.1% of GDP.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "In 2025-26 the UK spent £65.4bn on defence, 2.1% of GDP."
+            }
+          ]
+        },
+        {
+          "id": "J5.2",
+          "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
+          "options": {
+            "A": "Higher after inflation, lower as a share of GDP",
+            "B": "Lower after inflation, higher as a share of GDP",
+            "C": "Higher after inflation and higher as a share of GDP",
+            "D": "Lower after inflation and lower as a share of GDP"
+          },
+          "answer": "A",
+          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
+            },
+            {
+              "page": "defence.html",
+              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
+            }
+          ]
+        },
+        {
+          "id": "J5.3",
+          "question": "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?",
+          "options": {
+            "A": "The highest of them all",
+            "B": "The second highest, behind the United States",
+            "C": "The lowest of them all",
+            "D": "About the same as France"
+          },
+          "answer": "B",
+          "why": "OECD Government at a Glance, 2024: UK 2.3% of GDP, behind the United States (3.1%) and ahead of France (1.9%), Germany, Japan and Italy. Canada has no figure in the table.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "the second highest of the 6 G7 countries with a figure."
+            },
+            {
+              "page": "defence.html",
+              "text": "The highest was the United States, at 3.1%."
+            }
+          ]
+        },
+        {
+          "id": "J5.4",
+          "question": "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?",
+          "options": {
+            "A": "£1",
+            "B": "£5",
+            "C": "£13",
+            "D": "£33"
+          },
+          "answer": "B",
+          "why": "PESA 2026: defence was £5.3 of every £100 spent on services in 2025-26; social protection was £33.2 and health £21.0.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "defence took £5.3."
+            },
+            {
+              "page": "defence.html",
+              "text": "Social protection took £33.2 and health £21.0."
+            }
+          ]
+        },
+        {
+          "id": "J5.5",
+          "question": "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?",
+          "options": {
+            "A": "About £3 billion",
+            "B": "About £31 billion",
+            "C": "About £130 billion",
+            "D": "About £300 billion"
+          },
+          "answer": "B",
+          "why": "1% of 2025-26 nominal GDP (£3,070 billion, OBR) is £30.7 billion.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Each extra 1% of GDP in defence spending would cost about £30.7bn a year at 2025-26 levels."
+            }
+          ]
+        },
+        {
+          "id": "J5.6",
+          "question": "Which of these does the site set out as ways to pay for extra defence spending?",
+          "options": {
+            "A": "Only higher taxes",
+            "B": "Only borrowing",
+            "C": "Borrowing, higher taxes, or spending less on other things",
+            "D": "None of these"
+          },
+          "answer": "C",
+          "why": "The defence page lists three broad ways: borrowing, tax, and less spending elsewhere, and says most plans combine them.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "There are three broad ways, and most plans combine them."
+            },
+            {
+              "page": "defence.html",
+              "text": "Less spending elsewhere."
+            }
+          ]
+        },
+        {
+          "id": "J5.7",
+          "question": "Does the site say whether the UK can afford more defence spending?",
+          "options": {
+            "A": "Yes, it can afford more",
+            "B": "No, it cannot afford more",
+            "C": "It sets out the choices and does not decide",
+            "D": "It says the answer is borrowing"
+          },
+          "answer": "C",
+          "why": "The defence page says whether the UK can afford more depends on which costs people accept, and that the page does not decide that.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Whether the UK can afford more depends on which costs people accept, and this page does not decide that for you."
+            }
+          ]
+        },
+        {
+          "id": "J5.8",
+          "question": "How much room do the government's fiscal rules leave for extra defence spending?",
+          "gap": "The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending."
+        },
+        {
+          "id": "J5.9",
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP?",
+          "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
+        }
+      ]
     }
   ]
 }

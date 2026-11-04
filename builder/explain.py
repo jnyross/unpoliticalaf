@@ -55,6 +55,14 @@ EXPLANATIONS = {
         quote=["a 1 percentage point increase in gilt rates in 2024-25 (which persists in each subsequent year of the forecast) increases debt interest payments by rising amounts over the forecast period, reaching £12.0 billion by the end of the forecast. This increases steadily over time as the rate increase only affects new gilt issuance;",
                "a 1 percentage point increase in RPI inflation in 2024-25 increases debt interest payments by £5.9 billion in the same year and by rising amounts over the forecast period;"],
         gloss="The OBR is the UK's official forecaster of the public finances. The first passage means a rise in yields raises the interest bill slowly, as old gilts are repaid and new ones sold. The second shows how inflation raises it at once, through index-linked gilts, whose payments rise with the Retail Prices Index (RPI)."),
+    # ------------------------------------------------------------ fiscal rules
+    "defence-fiscal-rule-2025": dict(
+        question="What fiscal rule was the government working to in 2025?",
+        source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
+        title="Fiscal risks and sustainability – July 2025", date="8 July 2025",
+        quote=["In October 2024, the newly elected Government adopted a new fiscal rule targeting public sector net financial liabilities (PSNFL).",
+               "the fiscal rule is for PSNFL to be falling as a share of GDP in a particular year of the forecast (currently 2029-30)"],
+        gloss="PSNFL is the balance-sheet measure the rule uses. The Budget and Spring Forecast since then may have changed the rule, which this site has not yet checked."),
     "borrowing-costs-2025": dict(
         question="Have borrowing costs risen only in the UK?",
         source="explain-obr-frs-2025", publisher="Office for Budget Responsibility",
