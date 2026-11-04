@@ -12,9 +12,17 @@ class Formatting(unittest.TestCase):
         self.assertEqual(fmt(1360.1, "bn"), "£1,360bn")
         self.assertEqual(fmt(50.43, "bn"), "£50.4bn")
         self.assertEqual(fmt(33.18, "per100"), "£33")
-        self.assertEqual(fmt(27.25, "pct"), "27.2%")
+        self.assertEqual(fmt(27.25, "pct"), "27.3%")
         self.assertEqual(fmt(58712, "millions"), "58.7 million")
         self.assertIsNone(fmt(None, "pct"))
+
+    def test_exact_halves_round_up_not_to_even(self):
+        # Python's own rounding sends an exact half to the even digit; readers expect it up.
+        self.assertEqual(fmt(132.5, "bn"), "£133bn")
+        self.assertEqual(fmt(31150, "millions"), "31.2 million")
+        self.assertEqual(fmt(2.5, "pct0"), "3%")
+        self.assertEqual(fmt(-2.5, "pct0"), "-3%")
+        self.assertEqual(fmt(2.25, "pts"), "+2.3 points")
 
     def test_missing_figure_is_not_zero(self):
         facts = Facts()
@@ -68,6 +76,14 @@ class Charts(unittest.TestCase):
         # 2021 to 2022 is a turn back up at the end, so it is named rather than folded into the fall
         self.assertIn("From 5.0% in 2018, rose to a high of 9.0% in 2019, fell to a low of 2.0% in 2021, then rose to 4.0% in 2022", text)
         self.assertIn("No figure for 2020", text)
+
+    def test_summary_names_a_dip_inside_the_last_move(self):
+        # The line rose to 52.3, dipped to 43.4 and rose a little to 44.3: the dip is named, not skipped.
+        from builder import findings as F
+        labels = ["2019", "2020", "2021", "2022", "2023"]
+        vals = [39.1, 52.3, 43.4, 44.1, 44.3]
+        text = F.sentence(labels, vals, lambda i: f"{vals[i]:.1f}%", extremes=False)
+        self.assertEqual(text, "Rose from 39.1% in 2019 to a high of 52.3% in 2020, then fell to 43.4% in 2021, then rose again to 44.3% in 2023.")
 
     def test_summary_does_not_compare_across_a_definition_break(self):
         svg = line_chart("t", ["1", "2", "3", "4", "5", "6"], [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")], "u",

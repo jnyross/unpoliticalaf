@@ -68,7 +68,7 @@ def home_page(facts, d, num, sources):
 <span class="more">Income Tax and all taxes, by group</span></a>
 <a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
-<p>Taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income on average in 2023/24. That is an average across households, not anyone's tax rate.</p>
+<p>Taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income on average in 2023/24. That is an average across all people, not anyone's tax rate.</p>
 <p>The lowest-income fifth paid {num("etb.t8.gross.all.q1", "pct")} of its gross income in tax, and the highest-income fifth paid {num("etb.t8.gross.all.q5", "pct")}. For the lowest, most of it is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of their gross income). For the highest, most is direct tax such as Income Tax.</p>
 {v_hh}
 <span class="more">Direct, indirect and combined taxes</span></a>

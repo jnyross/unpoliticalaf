@@ -435,6 +435,11 @@ def year_spark(facts, num, topic, y, caption=True, mkey=None, measure=None, year
         return ""
     if y is None:
         y = have[-1][0]  # the latest year with a figure
+    # The axis ends at the last figure, so a series that stops early is not drawn or labelled as running on
+    # to a later year. A year after it still gets its "no figure" sentence in the caption.
+    last_fig = have[-1][0]
+    years = [yr for yr in years if yr <= last_fig]
+    pts = [(yr, v) for yr, v in pts if yr <= last_fig]
     breaks = bool(group) and len({group(yr) for yr in years}) > 1
     yl = point_label or (sy if topic == "housing" else str)  # housing figures are for survey years, April to March
     aria = f"Dot chart of {label.lower()} for each year from {yl(years[0])} to {yl(years[-1])}, with {yl(y)} shown as a larger dark dot. The caption gives the values."
@@ -1519,7 +1524,9 @@ def housing_costs_block(facts, num, d):
     out.append(f'<div class="answer"><p>In {b}, households renting privately in England paid {num(f"house.rent.private.{base}", "pounds")} a week on average, '
                f'social renters {num(f"house.rent.social.{base}", "pounds")} and households with a mortgage {num(f"house.mortpay.{base}", "pounds")}. '
                f'After inflation, in {b} prices, the {sy(FIRST)} figures were {num(f"house.real.rent.private.{FIRST}", "pounds")}, '
-               f'{num(f"house.real.rent.social.{FIRST}", "pounds")} and {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p></div>')
+               f'{num(f"house.real.rent.social.{FIRST}", "pounds")} and {num(f"house.real.mortpay.{FIRST}", "pounds")}.</p>'
+               '<p class="small">The mortgage payment is ONS’s mean for all mortgage types, the row that both the older and newer ONS tables share, '
+               'so the series is kept on one basis. ONS’s separate row for all mortgagors gives a slightly lower mean.</p></div>')
     out.append(series_chart(facts, "Average weekly housing costs in England, after inflation",
                             [("Private rent", lambda y: f"house.real.rent.private.{y}", "a"), ("Mortgage payment", lambda y: f"house.real.mortpay.{y}", "b"),
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],

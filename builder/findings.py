@@ -226,6 +226,28 @@ def phrase(labels, vals, a=0, b=None, short=False, upto=False):
     return ", ".join(words + [last])
 
 
+def _inner_turn(vals, s0, e0, w, span):
+    """The point inside one move (s0 to e0, direction w) where the line turned: its lowest point for a
+    fall, its highest for a rise. None unless the line has moved back toward e0 by FOLD_RISE of the
+    whole range, so a small wobble is not called a turn."""
+    pts = measured(vals, s0 + 1, e0)
+    if not pts or vals[e0] is None:
+        return None
+    t = min(pts, key=lambda i: (vals[i] * -w, i))
+    back = (vals[e0] - vals[t]) * -w
+    return t if back > 0 and back >= FOLD_RISE * span else None
+
+
+def _turn_mark(vals, t, w, lo, hi):
+    """'a low of ' or 'a high of ' when point t is the lowest (after a fall) or highest (after a rise)
+    of the whole stretch, so an earlier, lower dip is not called the low. '' otherwise."""
+    if w < 0 and vals[t] == vals[lo]:
+        return "a low of "
+    if w > 0 and vals[t] == vals[hi]:
+        return "a high of "
+    return ""
+
+
 def sentence(labels, vals, show, a=0, b=None, extremes=True):
     """The trend of one stretch of a line in words, with traceable numbers.
 
@@ -259,7 +281,13 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
         for n, (s0, e0, w) in enumerate(lg):
             verb = "rose" if w > 0 else "fell"
             if n == len(lg) - 1:
-                parts.append(f"then {verb} to {show(e0)} in {labels[e0]}")
+                t = _inner_turn(vals, s0, e0, w, vals[hi] - vals[lo])
+                if t is None:
+                    parts.append(f"then {verb} to {show(e0)} in {labels[e0]}")
+                else:
+                    # the line turned inside its last move and has moved back since: say so
+                    parts.append(f"then {verb} to {_turn_mark(vals, t, w, lo, hi)}{show(t)} in {labels[t]}, "
+                                 f"then {'rose' if w < 0 else 'fell'} again to {show(e0)} in {labels[e0]}")
             else:
                 # "a high" only when no later point in the stretch passes it, so an earlier, lower peak is not read as the high
                 later = [vals[i] for i in measured(vals, e0 + 1, b)]
@@ -282,8 +310,16 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
             mark = f"a {high} of " if vals[e0] == top else ""
             h = held(vals, e0, b)
             hold = f"stayed at {show(e0)} until {labels[h]}, " if h > e0 else ""
-            text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
-                    f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
+            # The last move may turn inside itself (a low in 2021-22, then a small rise to the latest year):
+            # name that turn, as the title does, rather than skip it.
+            t = _inner_turn(vals, e0, l, lg[1][2], vals[hi] - vals[lo])
+            if t is None:
+                text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
+                        f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
+            else:
+                text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
+                        f"{hold}then {'fell' if w0 > 0 else 'rose'} to {_turn_mark(vals, t, lg[1][2], lo, hi)}{show(t)} in {labels[t]}, "
+                        f"then {'rose' if w0 > 0 else 'fell'} again to {show(l)} in {labels[l]}.")
     if extremes and len(pts) >= 3:
         extra = []
         if hi not in said:

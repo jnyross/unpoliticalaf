@@ -730,7 +730,7 @@ def housing_costs(facts):
             j = _col(rows, "mean payment")
             i = _row(rows, "all mortgage types")
             facts.add(Fact(f"house.mortpay.{y}", num(rows[i][j]), "£ a week", f"{name} survey year", sid, f"{name}!{ref(i, j)}", "published",
-                           note="owners buying with a mortgage (including shared owners), mean weekly mortgage payment"))
+                           note="owners buying with a mortgage (including shared owners), mean weekly payment for all mortgage types (the row both tables share); the all-mortgagors row in the newer table gives a slightly lower mean"))
     latest = max(y for y in YEARS if f"house.rent.private.{y}" in facts)
     base = _cpih_survey_year(facts, cpih, latest)
     out["base"] = latest

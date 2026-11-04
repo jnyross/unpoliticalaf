@@ -61,7 +61,7 @@ Where the site says it:
 
 - `household-tax.html`: "taxes took 33.6% of gross household income in 2023/24"
 - `household-tax.html`: "It is not the tax rate any one person pays"
-- `index.html`: "That is an average across households, not anyone's tax rate"
+- `index.html`: "That is an average across all people, not anyone's tax rate"
 
 ## 6. B: Taxes on spending, such as VAT
 
