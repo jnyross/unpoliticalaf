@@ -461,6 +461,13 @@ def hide_chart_marks(body):
 YEARFIND_CSS = "details.findyear{margin:0;border:0;padding:0}details.findyear>summary{min-height:44px}"
 
 
+# Question pages. The first answer box on each gets id="answer", so the Questions page can link
+# straight to it (see builder/pages_questions.py).
+QUESTION_PAGES = {"spending.html", "taxes.html", "who-pays.html", "household-tax.html", "international.html",
+                  "productivity.html", "borrowing.html", "why-debt.html", "defence.html", "high-earners.html",
+                  "leaving-uk.html", "manifesto.html", "immigration.html"}
+
+
 def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
     depth = path.count("/")
     up = "../" * depth
@@ -476,6 +483,8 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
         body = toc(body, after_first=toc_after_first)
     body = re.sub(r'<!--/?beforetoc-->', '', body)
     body = hide_chart_marks(body)
+    if path in QUESTION_PAGES and '<div class="answer">' in body:
+        body = body.replace('<div class="answer">', '<div class="answer" id="answer">', 1)
     if "data-chart=" in body:
         scripts = scripts + CHART_JS
     if "data-view=" in body:
