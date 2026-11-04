@@ -50,6 +50,27 @@ in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
 
+### Test performance
+
+`make test` (also part of `make verify`) uses the standard-library unittest
+runner with the same `tests/test*.py` discovery and verbose results. It measures
+suite wall time and each test with a monotonic clock, prints the ten slowest
+tests, and writes `test-results/timings.json` and `test-results/summary.md`.
+Per-test time includes setup, teardown and cleanups; class/module fixtures are
+included only in suite time. Discovery is excluded. Failed tests, import errors
+and unexpected successes still fail the command; reports are also written for
+failed runs. An empty suite fails rather than appearing green.
+
+The `Build and check` workflow shows the summary on every PR/main run and retains
+the full timing reports as a `test-performance-<run>-<attempt>` artifact for 30
+days, including on test failure. Download reports from the Actions run's
+**Artifacts** section. Compare `suite_seconds` and matching test IDs across runs
+on comparable runners/Python versions to investigate regressions; JSON also
+records the commit, timestamp, Python version, platform and outcome counts.
+Timings are diagnostic, not a fixed speed gate, since shared-runner load varies.
+If setup/build/check fails before tests start, no timing report is produced.
+Generated reports are ignored by Git.
+
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
 locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that

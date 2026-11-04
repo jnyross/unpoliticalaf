@@ -6,6 +6,7 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
+/test-results/
 # Local runtime, private configuration, credentials and working notes
 .codeaf/
 .senior-dev/

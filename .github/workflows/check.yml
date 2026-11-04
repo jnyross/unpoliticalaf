@@ -18,6 +18,17 @@ jobs:
           python-version: "3.12"
       - run: make setup
       - run: make verify
+      - name: Summarize unit test performance
+        if: always() && hashFiles('test-results/summary.md') != ''
+        run: cat test-results/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain unit test timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-performance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/
+          retention-days: 30
+          if-no-files-found: warn
 
   accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
