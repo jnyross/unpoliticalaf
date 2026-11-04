@@ -680,6 +680,16 @@
    "id": "oecd-ctp-dataflows",
    "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS",
    "file": "oecd/ctp-dataflows.xml"
+  },
+  {
+   "id": "nhs-workforce-mar26-digital",
+   "url": "https://digital.nhs.uk/data-and-information/publications/statistical/nhs-workforce-statistics/march-2026",
+   "file": "nhs/workforce-statistics-march-2026-digital-page.html"
+  },
+  {
+   "id": "oecd-pit-top-rates",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_PIT@DF_PIT_TOP_EARN_THRESH,/all?startPeriod=2000&format=csvfilewithlabels",
+   "file": "oecd/pit-top-rates.csv"
   }
  ]
 }
