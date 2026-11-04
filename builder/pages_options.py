@@ -72,8 +72,8 @@ RANKED = [
 # sourced budget figure; the tax reliefs line is arithmetic, not an estimate.
 BUDGET = [
     {
-        "name": "Keeping the state pension triple lock (reforming it to earnings uprating)",
-        "effect": "Saves about £16 billion a year against earnings uprating, about 0.5% of GDP a year. Keeping the triple lock to 2050 would cost about £20 billion a year in expectation (range £5 to £40 billion).",
+        "name": "Reforming the state pension triple lock to earnings uprating",
+        "effect": "Moving to earnings uprating would save about £16 billion a year compared with keeping the triple lock, about 0.5% of GDP a year. Keeping the triple lock to 2050 would cost about £20 billion a year in expectation (range £5 to £40 billion).",
         "conversion": "£16 billion ÷ GDP of about £3 trillion ≈ 0.5%. GDP is a rounded assumption. The saving ignores any change in behaviour.",
         "source": "IFS, What do you need to know about the triple lock?",
         "growth": "No GDP effect.",

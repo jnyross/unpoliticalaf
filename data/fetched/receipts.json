@@ -15,6 +15,14 @@
   "sha256": "b5848e0ecfeecc88237730a42242781e04a4e19d834526e5bd3f2849cd3465d9",
   "retrieved": "2026-11-02T08:58:35Z"
  },
+ "boe-mortgage-rates": {
+  "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/mortgage-rates-new-lending.csv",
+  "bytes": 4873,
+  "content_type": "application/csv",
+  "sha256": "20b1a82eeb111d81d722a112b6f270753d5658301704673ef952822bb83cea2b",
+  "retrieved": "2026-11-04T13:30:12Z"
+ },
  "dfe-spc-2015-page": {
   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
   "file": "dfe/spc-2015-page.html",
@@ -55,6 +63,38 @@
   "sha256": "11a591e4a2144ed6a686be6a9ded4e5d5b3b8d4887bd57c1ff0632bd251009de",
   "retrieved": "2026-11-04T13:30:30Z"
  },
+ "dwp-spa-timetable": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+  "file": "dwp/spa-timetable.pdf",
+  "bytes": 49037,
+  "content_type": "application/pdf",
+  "sha256": "493afc7aa63961f0f0dba2bccf53bf1bd9aec20b1a29ee89f3b169d740a40385",
+  "retrieved": "2026-11-04T13:32:50Z"
+ },
+ "ehs-annex-ch1": {
+  "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch1-profile.ods",
+  "bytes": 216223,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "c7a80822b18159461aaf9413294df5dcb082d75b2b1da7bb1351e3c6d2240221",
+  "retrieved": "2026-11-04T13:29:48Z"
+ },
+ "ehs-annex-ch2": {
+  "url": "https://assets.publishing.service.gov.uk/media/693026b2502f392086ee8b0b/2024-25_EHS_Headline_Report_Chapter_2_Housing_Costs_and_Affordability_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch2-costs.ods",
+  "bytes": 100556,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "5075faa4f3c9d37361e6829d54c51abe7404372ada551efe9847f05878854d5b",
+  "retrieved": "2026-11-04T13:29:52Z"
+ },
+ "ehs-annex-ch3": {
+  "url": "https://assets.publishing.service.gov.uk/media/693026cb502f392086ee8b0c/2024-25_EHS_Headline_Report_Chapter_3_Housing_History_and_future_housing_Annex_Tables.ods",
+  "file": "ehs/annex-2024-25-ch3-history.ods",
+  "bytes": 47275,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "2533721df91a7f2750dfca8bedf694e5d8629e595bc00e2f4ec5ee1c8936bea1",
+  "retrieved": "2026-11-04T13:29:56Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
@@ -70,6 +110,22 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "c704cfa68d6d53e0fc533d47f7898fb5528b842f6735cb17a36ae39a9a8651fe",
   "retrieved": "2026-11-02T09:51:10Z"
+ },
+ "ehs-fa2222": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a4da2d6ed5ddb5c8626f49e/FA2222_type_of_purchase_by_age_of_HRP_and_household_type.ods",
+  "file": "ehs/FA2222_type_of_purchase_by_age_of_hrp.ods",
+  "bytes": 15437,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "a4f4cc2636650c0b68532e7bcab496df1804e2085eba4965a79db7e67faf9776",
+  "retrieved": "2026-11-04T13:30:07Z"
+ },
+ "ehs-fa2301": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af37fbfe36e0000d6fa888/FA2301_age_of_hrp_by_type_of_ownership.ods",
+  "file": "ehs/FA2301_age_of_hrp_by_type_of_ownership.ods",
+  "bytes": 38743,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "4cc473993062413179f0ce430e0fc56db302eb66cea4f024fe26aca16bbc2363",
+  "retrieved": "2026-11-04T13:30:03Z"
  },
  "ehs-fa2501": {
   "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
@@ -94,6 +150,14 @@
   "content_type": "application/vnd.oasis.opendocument.spreadsheet",
   "sha256": "f15a9066129dd7d38406b5000391e8b1d15d2ebaaaa33707beda0734c906eb35",
   "retrieved": "2026-11-02T09:50:52Z"
+ },
+ "ehs-fc2101": {
+  "url": "https://assets.publishing.service.gov.uk/media/64af396cc033c100108061f6/FC2101_Percentage_of_each_age_group_that_are_owner-occupiers.ods",
+  "file": "ehs/FC2101_owner_occupiers_by_age.ods",
+  "bytes": 70515,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "daf34fa5968eb4518fed625cc8ae73046872ee02d0c1b5ffaff1e9f1add6b125",
+  "retrieved": "2026-11-04T13:30:00Z"
  },
  "ehs-ft1101": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
@@ -495,6 +559,14 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "gov-self-employed-ni": {
+  "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+  "file": "gov/self-employed-national-insurance-rates.html",
+  "bytes": 73884,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "54a0d9c5eb74205a47f189389c9c94945eaaaf30ee13e1de50942282ef6761d0",
+  "retrieved": "2026-11-04T13:30:04Z"
+ },
  "hmrc-spi-2324-tables": {
   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
@@ -518,14 +590,6 @@
   "content_type": "application/pdf",
   "sha256": "efd05e4a7e715b361617390016356df04af83ea6febecb9475ce173bf2cffb75",
   "retrieved": "2026-11-04T13:30:25Z"
- },
- "nhs-workforce-mar26-page": {
-  "url": "https://www.gov.uk/government/statistics/nhs-workforce-statistics-march-2026",
-  "file": "nhs/workforce-statistics-march-2026-page.html",
-  "bytes": 66009,
-  "content_type": "text/html; charset=utf-8",
-  "sha256": "477d172cca70bf46073dc5307b6e9651e481d1810337ed57a020ab34624eec82",
-  "retrieved": "2026-11-04T14:15:44Z"
  },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
@@ -710,14 +774,6 @@
   "content_type": "text/csv",
   "sha256": "a5abe6b9a6ea82bece140972bec5ee335e9af3e0331d238301aeb50678625d2e",
   "retrieved": "2026-11-02T16:30:02Z"
- },
- "oecd-ctp-dataflows": {
-  "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS",
-  "file": "oecd/ctp-dataflows.xml",
-  "bytes": 934589,
-  "content_type": "application/vnd.sdmx.structure+xml; charset=utf-8; version=2.1",
-  "sha256": "8e052e7fc225dfb19ad665ca8f39797701b8350e6b2d689f33bab68cb21ef4a5",
-  "retrieved": "2026-11-04T14:15:48Z"
  },
  "oecd-finmark-irlt": {
   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels",
@@ -1030,6 +1086,22 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "parl-cbp-tuition-fees": {
+  "url": "https://dera.ioe.ac.uk/id/eprint/40996/1/CBP-10155.pdf",
+  "file": "parl/CBP-10155.pdf",
+  "bytes": 1125592,
+  "content_type": "application/pdf",
+  "sha256": "0d168212eab351a3ee460fc90afed0b77f735cac8acfc3aed023b9f0706701f0",
+  "retrieved": "2026-11-04T13:47:58Z"
+ },
+ "parl-hansard-1998-tuition-fees": {
+  "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
+  "file": "parl/hansard-1998-12-07-tuition-fees.html",
+  "bytes": 12666,
+  "content_type": "text/html",
+  "sha256": "b4052322ab109f35d37a3384ce2520ac05e6753a2aa053cf83fd6aa8c8007e4a",
+  "retrieved": "2026-11-04T13:48:01Z"
  },
  "scot-primary-class-2025": {
   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",

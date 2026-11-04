@@ -56,9 +56,15 @@ def home_page(facts, d, num, sources):
                                    ("life/schools.html#key-answer", "Class sizes"), ("life/holidays.html#key-answer", "Holidays"),
                                    ("life/housing.html#key-answer", "Renting"),
                                    ("life/generations.html#key-answer", "Did parents have it easier?")])
+    # The question pages that readers look for most, one tap from the top of the home page:
+    # readers who do not find them in the cards below, or in the menu, can start here.
+    TOPICS = jump("Questions", [("immigration.html", "Immigration"), ("defence.html", "Defence spending"),
+                                ("manifesto.html", "Labour's manifesto"), ("borrowing.html", "Debt and borrowing"),
+                                ("why-debt.html", "Why debt is high"), ("questions.html", "All questions")])
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 {QUICK}
+{TOPICS}
 <h2 id="money">Public money: four questions</h2>
 <div class="cards">
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>

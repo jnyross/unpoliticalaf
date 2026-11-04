@@ -122,6 +122,11 @@
    "file": "gov/national-insurance-rates.html"
   },
   {
+   "id": "gov-self-employed-ni",
+   "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+   "file": "gov/self-employed-national-insurance-rates.html"
+  },
+  {
    "id": "dfe-spc-2015-page",
    "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
    "file": "dfe/spc-2015-page.html"
@@ -672,19 +677,54 @@
    "file": "ons/mye-uk-mid2025.html"
   },
   {
-   "id": "nhs-workforce-mar26-page",
-   "url": "https://www.gov.uk/government/statistics/nhs-workforce-statistics-march-2026",
-   "file": "nhs/workforce-statistics-march-2026-page.html"
+   "id": "ehs-annex-ch1",
+   "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch1-profile.ods"
   },
   {
-   "id": "oecd-ctp-dataflows",
-   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS",
-   "file": "oecd/ctp-dataflows.xml"
+   "id": "ehs-annex-ch2",
+   "url": "https://assets.publishing.service.gov.uk/media/693026b2502f392086ee8b0b/2024-25_EHS_Headline_Report_Chapter_2_Housing_Costs_and_Affordability_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch2-costs.ods"
   },
   {
-   "id": "nhs-workforce-mar26-digital",
-   "url": "https://digital.nhs.uk/data-and-information/publications/statistical/nhs-workforce-statistics/march-2026",
-   "file": "nhs/workforce-statistics-march-2026-digital-page.html"
+   "id": "ehs-annex-ch3",
+   "url": "https://assets.publishing.service.gov.uk/media/693026cb502f392086ee8b0c/2024-25_EHS_Headline_Report_Chapter_3_Housing_History_and_future_housing_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch3-history.ods"
+  },
+  {
+   "id": "ehs-fc2101",
+   "url": "https://assets.publishing.service.gov.uk/media/64af396cc033c100108061f6/FC2101_Percentage_of_each_age_group_that_are_owner-occupiers.ods",
+   "file": "ehs/FC2101_owner_occupiers_by_age.ods"
+  },
+  {
+   "id": "ehs-fa2301",
+   "url": "https://assets.publishing.service.gov.uk/media/64af37fbfe36e0000d6fa888/FA2301_age_of_hrp_by_type_of_ownership.ods",
+   "file": "ehs/FA2301_age_of_hrp_by_type_of_ownership.ods"
+  },
+  {
+   "id": "ehs-fa2222",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4da2d6ed5ddb5c8626f49e/FA2222_type_of_purchase_by_age_of_HRP_and_household_type.ods",
+   "file": "ehs/FA2222_type_of_purchase_by_age_of_hrp.ods"
+  },
+  {
+   "id": "boe-mortgage-rates",
+   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/mortgage-rates-new-lending.csv"
+  },
+  {
+   "id": "dwp-spa-timetable",
+   "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+   "file": "dwp/spa-timetable.pdf"
+  },
+  {
+   "id": "parl-cbp-tuition-fees",
+   "url": "https://dera.ioe.ac.uk/id/eprint/40996/1/CBP-10155.pdf",
+   "file": "parl/CBP-10155.pdf"
+  },
+  {
+   "id": "parl-hansard-1998-tuition-fees",
+   "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
+   "file": "parl/hansard-1998-12-07-tuition-fees.html"
   },
   {
    "id": "oecd-pit-top-rates",

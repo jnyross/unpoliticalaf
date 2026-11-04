@@ -1,0 +1,155 @@
+{
+ "reader": "R4-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 38,
+ "url": "life/holidays.html#key-answer",
+ "ops": [],
+ "scroll": 594,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/schools.html#years",
+   "ops": [],
+   "scroll": 1913
+  },
+  {
+   "url": "life/compare/2011-2019.html#schools",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > details:nth-of-type(5) > summary:nth-of-type(1)",
+     "y": 4039
+    }
+   ],
+   "scroll": 4599
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [3] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [1] link: Unpolitical",
+  "tap [11] link: Pay after inflation",
+  "back",
+  "tap [12] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "tap [17] link: Pick a year, or compare two years of class sizes",
+  "tap [13] button: Compare 2011 and 2019",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [11] expand: More on Class sizes chart, table, limits and sources",
+  "scroll down",
+  "tap [1] link: Unpolitical",
+  "tap [14] link: Renting",
+  "back",
+  "tap [13] link: Holidays",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/0d35274c-eb3c-5060-bb27-78ab1580f6c1/scratchpad/shots/R4-phone",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Top ten"
+  }
+ ]
+}
