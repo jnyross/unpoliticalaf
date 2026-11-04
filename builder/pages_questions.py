@@ -1,5 +1,5 @@
 """The questions page: every question page on the site in one list, linked from the main menu."""
-from .html import page, esc
+from .html import page, esc, QUESTION_PAGES
 
 # (page, question, one line on what the page shows). Questions are the same wording the home page uses.
 GROUPS = [
@@ -23,6 +23,9 @@ GROUPS = [
 ]
 
 
+assert {href for _, items in GROUPS for href, _, _ in items} == QUESTION_PAGES, "every question page is listed here"
+
+
 def questions_page():
     body = ['<h1>Questions the site answers</h1>',
             '<p class="lead">Each question below has its own page. The page gives the answer first, then the official figures and what they cannot show.</p>']
@@ -30,7 +33,7 @@ def questions_page():
         body.append(f'<h2>{esc(title)}</h2>')
         body.append('<ul class="principles">')
         for href, question, line in items:
-            body.append(f'<li><a href="{esc(href)}"><strong>{esc(question)}</strong></a> {esc(line)}</li>')
+            body.append(f'<li><a href="{esc(href)}#answer"><strong>{esc(question)}</strong></a> {esc(line)}</li>')
         body.append('</ul>')
     body.append('<p>Want a single year rather than a question? See <a href="life/index.html">everyday life, year by year</a>.</p>')
     return page("questions.html", "Questions the site answers", "\n".join(body),

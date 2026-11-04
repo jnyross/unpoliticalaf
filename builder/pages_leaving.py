@@ -24,9 +24,9 @@ SOURCES_LINE = (
 
 def leaving_page(facts, d, num, sources):
     b = [f'<h1>{esc(TITLE)}</h1>']
-    b.append('<p class="lead"><strong>Yes, a large number of people leave the UK each year, and the official estimate has risen since 2022.</strong> '
+    b.append('<div class="answer"><p class="lead"><strong>Yes, a large number of people leave the UK each year, and the official estimate has risen since 2022.</strong> '
              'About 642,000 people left the UK to live abroad for at least 12 months in the year ending December 2025, according to provisional ONS estimates. '
-             'That was 38,000 fewer than the year before.</p>')
+             'That was 38,000 fewer than the year before.</p></div>')
     b.append('<p>The official figures record when people leave. None of them records why anyone left, so they cannot show whether taxes or living standards were a reason.</p>')
 
     b.append('<h2 id="short">The short answer</h2>')

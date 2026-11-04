@@ -16,10 +16,10 @@ def _link(sources, key):
 def immigration_page(facts, d, num, sources):
     body = [
         "<h1>Is immigration a good or a bad thing?</h1>",
-        "<p><strong>The site does not answer that question, because the answer depends on what you value.</strong> "
+        '<div class="answer"><p><strong>The site does not answer that question, because the answer depends on what you value.</strong> '
         "It shows what official evidence says about the parts that can be measured: how many people move to the UK, "
         "their effect on public money, how they relate to public services, and their effect on the economy. "
-        "Where official estimates differ, the range is shown.</p>",
+        "Where official estimates differ, the range is shown.</p></div>",
 
         "<h2>How many people move to the UK?</h2>",
         "<p>Official figures count people who come to live in the UK for 12 months or more, minus those who leave for "
