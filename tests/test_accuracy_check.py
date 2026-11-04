@@ -27,6 +27,14 @@ class Calculations(unittest.TestCase):
         self.assertAlmostEqual(ac.evaluate("100 × a.1 ÷ a.10", {"a.1": 5, "a.10": 20}), 25)
         self.assertAlmostEqual(ac.evaluate("t − sum of the two named groups", {"t": 10, "x": 3, "y": 2}, ["t", "x", "y"]), 5)
 
+    def test_formula_ending_with_its_period_is_evaluated(self):
+        values = {"a.2025-26": 1, "b.2025-26": 2, "c.2025-26": 6}
+        self.assertAlmostEqual(ac.evaluate("100 × (a + b) ÷ c, 2025-26", values, list(values)), 50)
+
+    def test_total_less_named_taxes_is_evaluated(self):
+        values = {"t.2025-26": 10, "x.2025-26": 3, "y.2025-26": 2}
+        self.assertAlmostEqual(ac.evaluate("t.2025-26 − sum of the named taxes", values, list(values)), 5)
+
     def test_page_rounding(self):
         self.assertTrue(ac.page_matches({"text": "£44.2bn", "value": 44.24, "kind": "bn"})[0])
         self.assertFalse(ac.page_matches({"text": "£44.2bn", "value": 44.26, "kind": "bn"})[0])
