@@ -81,7 +81,11 @@ EXPLANATIONS = {
         title="Income Tax liabilities statistics: commentary", date="15 July 2026",
         quote=["The introduction of the additional rate in 2010 on taxable income over £150,000 led to a behavioural response by individuals bringing forward, or ‘forestalling’, income in 2009 to 2010.",
                "In April 2013, the additional rate was reduced from 50% to 45% which led to the deferral of income from the 2012 to 2013 tax year to the 2013 to 2014 tax year.",
-               "The peak in shares of Income Tax liabilities at the top end of the distribution in 2021 to 2022, and subsequent fall in 2022 to 2023 onwards, is also due to the freeze in the higher rate threshold and Personal Allowance. This means there were more Income Tax payers overall in these years, changing the distribution among percentile groups."]),
+               "The peak in shares of Income Tax liabilities at the top end of the distribution in 2021 to 2022, and subsequent fall in 2022 to 2023 onwards, is also due to the freeze in the higher rate threshold and Personal Allowance. This means there were more Income Tax payers overall in these years, changing the distribution among percentile groups.",
+               "In 2023 to 2024, the additional rate threshold was lowered from £150,000 to £125,140. This is estimated to have led to a small amount of forestalled income into 2022 to 2023.",
+               "The share of income for higher rate taxpayers with earnings around the new threshold was:",
+               "artificially high in 2022 to 2023",
+               "artificially low in 2023 to 2024"]),
     "retired-net": dict(
         question="Do retired households get back more than they pay in tax?",
         source="explain-ons-etb-latest", publisher="Office for National Statistics",
