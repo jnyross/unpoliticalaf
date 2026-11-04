@@ -5,8 +5,9 @@ name: Accuracy check (random sample)
 #
 # A pull request merged by auto-merge.yml uses the workflow token, and that
 # merge does not start a push workflow. So auto-merge.yml starts this workflow
-# itself when a merge touches these files, and the schedule below picks up any
-# audit folder that still has a sample but no results.json.
+# itself when a merge touches these files, and after each run it starts this
+# workflow for any audit folder that still has a sample but no results.json.
+# The schedule below is a backstop only: scheduled runs are sparse on this repo.
 on:
   # Main only. This job commits results back to the branch with the default
   # token, and that commit does not start CI, so on a PR branch the head would
