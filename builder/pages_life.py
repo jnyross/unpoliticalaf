@@ -1069,6 +1069,9 @@ def _earnings(facts, d, num, sources):
                              "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
                              breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
                              finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
+    body.append('<p><strong>Why the chart starts in 2002.</strong> The pay figures come from the Annual Survey of Hours and Earnings (ASHE). '
+                'The ASHE table this site uses starts in 2002, so the chart does too. ONS holds older pay figures from the New Earnings Survey (1970 to 2003) and from earlier ASHE years (1997 onwards). '
+                'This site does not use them, so it cannot show pay before 2002. Joining them to these figures would mean crossing survey changes, so this page does not do it.</p>')
     body.append(f'<p>The chart breaks in 2011, so the years either side are not joined into one change. '
                 f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}. '
                 f'From April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
