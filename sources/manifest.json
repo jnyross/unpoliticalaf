@@ -652,6 +652,26 @@
    "file": "ons/icproductivityupdated.xlsx"
   },
   {
+   "id": "nato-def-exp-2026",
+   "url": "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+   "file": "nato/def-exp-2026.pdf"
+  },
+  {
+   "id": "dwp-benefit-exp-sf2026",
+   "url": "https://assets.publishing.service.gov.uk/media/69dcdc8c6b695d635c34dcc4/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
+   "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
+  },
+  {
+   "id": "nhs-staff-nationality-jun25",
+   "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
+   "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
+  },
+  {
+   "id": "ons-mye-uk-mid2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
+   "file": "ons/mye-uk-mid2025.html"
+  },
+  {
    "id": "ehs-annex-ch1",
    "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
    "file": "ehs/annex-2024-25-ch1-profile.ods"
@@ -686,5 +706,5 @@
    "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
    "file": "boe/mortgage-rates-new-lending.csv"
   }
- ]
+]
 }

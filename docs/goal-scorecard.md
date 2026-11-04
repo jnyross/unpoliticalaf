@@ -11,6 +11,66 @@ generous. From Audit 9, audits use rubric v3, where Claude stand-ins replace
 the people tests ([standins/README.md](standins/README.md)); a pass under v3 is
 recorded as "met (simulated)".
 
+## Audit 17: 4 November 2026 (rubric v3, provisional: reader stand-ins not re-run)
+
+- Commit audited: `5767bbb` on `main` (T123, #198, the latest merge). The live site was not reachable from the audit container (`curl` to `https://unpoliticalaf.vercel.app/` is refused by the proxy), so the site was built locally with `make build`. The build reports `commit 5767bbb` in `site/build.json`. The "Live site matches main" check for this commit has not been run here and must be confirmed on the audit PR's CI run.
+- Automated checks run on this commit: `make verify` passes (175 tests, all figures re-read from their source cells, every page number and link checked). `python scripts/ux_heuristics.py` checks 121 pages at 360 x 640 and 1100 x 800.
+- Changes since audit 16 (`d72127d`): 32 commits (#183 to #209). They address audit 16's gaps 1, 2, 5, 6, 7, 8 and 9, and part of gap 10 (the Budget and OBR glossary entry, #188). They also add answers to several of John's questions, including the economy options (#191, #194), who pays by household (#208) and the sticky phone header (#206).
+- **Reader stand-ins were not re-run on `5767bbb`.** Audit 16's phone, new-question, prior-knowledge, John's-question, screen-reader, fact-check and impartiality results are for `d72127d`. The site has changed too much since then for those results to carry over. This audit therefore scores provisionally, and no dimension is scored at 5 on reader evidence.
+
+**Total: 42 out of 55, provisional. Target not met.** Each score below is either confirmed by a check on `5767bbb` or carried from audit 16 and marked as needing a re-run. Nothing here is "met (simulated)".
+
+### Stand-in and check results
+
+| Check | Result on 5767bbb | Status |
+|---|---|---|
+| Simulated phone test (12 questions) | Not re-run | Needs re-run |
+| New questions and prior knowledge | Not re-run | Needs re-run |
+| John's questions (probes) | 70 of 90 probes answered on the built site; 20 open across J2, J4, J5, J10, J11 and J12 (see gaps) | Target not met |
+| Informal check and screen-reader reader | Not re-run; screen-reader result from audit 16 (12/12) | Needs re-run |
+| Fact-checker (30 claims) | Not re-run on the new pages (T118 to T130 added figures and claims) | Needs re-run |
+| Impartiality critics and judge | Not re-run; audit 16's one material finding (spending window) fixed by #185 | Needs re-run |
+| UX heuristics (`ux_heuristics.py`) | 16 of 17 checks pass on every sampled page. A3 (prose at least 16px) fails on 116 of 121 pages at 14.4 to 15px. This is the trade-off recorded in [goal-rubric.md](goal-rubric.md) (T128) | Recorded gap |
+| `make verify` | Passes (175 tests) | Pass |
+
+### Dimension scores (provisional)
+
+| Dimension | Score | Why |
+|---|---|---|
+| D1 Public money answers | 4 | Who-pays labels (#186) and debt measure (#187) are fixed. The reader check that would show level 5 has not been re-run. |
+| D2 Life: breadth and depth | 4 | The housing renting figure, pay by age and home ownership by age are still missing (open probes J11.6, J12.6, J12.7). |
+| D3 Life: choosing and comparing | 4 | The class-size single-year picker is not re-checked (audit 16 gap 4). |
+| D4 Explanation and understanding | 4 | The jobs-against-people explanation (#184) and the Budget and OBR glossary entry (#188) are in. No self-employed tax example is on the built site yet (audit 16 gap 10). |
+| D5 Visual design and charts | 4 | The UX check A3 is a recorded trade-off, and running text on 116 pages is 14.4 to 15px. Chart text (A4) passes. |
+| D6 Phone experience and navigation | 4 | The sticky header (#206) addresses audit 16 gap 2. A2 (no sideways scroll) and U1 (back to top) pass. The reader check has not been re-run. |
+| D7 Accuracy and traceability | 4 | Audit 16's three minor items are fixed (#189) and the IMF JSON reader (#183) is in. The 30-claim check has not been re-run on the new pages. |
+| D8 Impartiality | 3 | The one material finding (spending window) is fixed (#185). The critics and judge have not re-reviewed the new pages, so the level stays at 3, not 4. |
+| D9 Accessibility and no JavaScript | 4 | U2 and U3 pass, A1 and K1 pass on every page. The screen-reader reader and the axe run on this commit are still needed. |
+| D10 Honesty about limits and continuity | 4 | The HMRC caveat and the "every year" wording (#189) are fixed. Missing series for J2, J4, J10, J11 and J12 are shown as gaps, not as zero. |
+| D11 Reader evidence | 3 | A recorded simulated phone test exists (audit 16, `d72127d`) with its problems fixed. It has not been run on this commit, so level 5 is withheld. |
+| **Total** | **42 / 55 (provisional)** | |
+
+### Gaps, most valuable first
+
+1. Re-run the reader stand-ins (phone test, new questions, prior knowledge, John's questions, screen reader), the fact-checker and the impartiality critics on `5767bbb`. Without this, no dimension can be scored at 5 and the target cannot be claimed.
+2. Close the 20 open John's probes:
+   - J12 (did our parents have it easier): home ownership by age, pay by age group, tuition fees and loan terms, state pension age, life expectancy by age, tax at one income level by year, and contract and job-change figures (J12.6 to J12.12, 7 probes).
+   - J11 (buying a house): first-time buyer age, home ownership by age, take-home pay for mortgage holders, and mortgage rates (J11.5 to J11.8).
+   - J4 (rich people and tax): what Capital Gains Tax and Inheritance Tax raise, top income tax rates against other countries, and the top 1%'s share of all taxes (J4.6 to J4.8).
+   - J2 (immigration): migrants' use of public services, NHS and adult social care nationality figures, and births and deaths (J2.4 to J2.6).
+   - J5 (defence): the fiscal rules and headroom, and NATO's UK defence figures (J5.8 and J5.9).
+   - J10 (welfare): the welfare split by benefit type over 50 years, from the DWP benefit expenditure tables (J10.6).
+3. Decide whether the 14.4 to 15px running text on 116 pages stays. The T128 note says a change needs John's approval, because a larger size pushes pages over the phone length limits.
+4. Done (T137, #212, evidence in [docs/standins/audits/audit-17/findability-T137.md](standins/audits/audit-17/findability-T137.md)): on a 360px phone from the home page, the renting figure takes 1 action (the first answer box shows 19% of English households renting privately, 2024-25), and the single-year class-size picker takes 7 actions (Class sizes card, three scrolls, expand "Find one year's figure", scroll, tap 2019). Both are within 40 actions, so no route change was needed. The check was run by a worker who knows the site, so these counts are a best case, not a reader test.
+5. Add a self-employed tax example to the tax pages (audit 16 gap 10).
+6. Re-run the accuracy and impartiality stand-ins on the new pages from T118 to T130: immigration, defence, high earners, leaving the UK, the manifesto tracker, productivity, welfare and economy options.
+7. Confirm the "Live site matches main" check on this audit's CI run, because the audit container cannot reach the live site.
+
+### Notes
+
+- Scores here do not claim a pass for any reader or reviewer stand-in. Audit 16's stand-in results cannot carry over to this commit because too much has changed.
+- The UX heuristics run used its default sample of 121 pages, not `--all`.
+
 ## Audit 16: 4 November 2026 (rubric v3, after the audit 15 fixes #172 to #180)
 
 - Commit audited: `d72127d` on `main` (T107, #180). The site was built from that commit and served locally, because the audit container cannot reach the live site (`https://unpoliticalaf.vercel.app/` returns no response from here). The "Live site matches main" check is not re-run for this audit: the site has not changed since `d72127d`, and `main` has only moved for the accuracy workflow results (`2873935`, #181 follow-up). Confirm on the audit PR's CI run.

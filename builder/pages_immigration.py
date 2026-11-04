@@ -46,12 +46,17 @@ def immigration_page(facts, d, num, sources):
         "The results depend on whether public spending rises to match the extra population.</p>",
         box("imm-obr-scenarios", sources, heading="h3"),
 
+        "<h2>What drove recent population growth?</h2>",
+        f"<p>In the year to mid-2025 the UK population grew by {num('mye.change.2025', 'int')} people. "
+        f"The main reason was net international migration: {num('mye.netmig.2025', 'int')} people. "
+        f"Natural change (births minus deaths) added {num('mye.natural.2025', 'int')}, from {num('mye.births.2025', 'int')} births and {num('mye.deaths.2025', 'int')} deaths.</p>",
+        '<p class="small">Source: ONS mid-year population estimates for the UK, year to mid-2025. Estimates are rounded and do not add exactly to the total change.</p>',
+
         "<h2>What the site does not yet show</h2>",
         "<ul>"
         "<li>How many NHS and adult social care staff are non-UK nationals. The official figures are in spreadsheets "
         "published with the NHS workforce statistics, and the site has not yet taken them.</li>"
         "<li>A measured figure for how much public services migrants use, as opposed to what the OBR assumes.</li>"
-        "<li>What drove recent population growth, once births and deaths are counted alongside net migration.</li>"
         "</ul>",
 
         "<h2>Where values come in</h2>",
@@ -68,6 +73,7 @@ def immigration_page(facts, d, num, sources):
         f"<li>{_link(sources, 'explain-mac-annual-2025')}</li>"
         f"<li>{_link(sources, 'explain-obr-migration-fiscal')}, first published March 2024</li>"
         f"<li>{_link(sources, 'explain-obr-migration-gdp')}, March 2026</li>"
+        f"<li>{_link(sources, 'ons-mye-uk-mid2025')}</li>"
         "</ul>",
     ]
     return page(
