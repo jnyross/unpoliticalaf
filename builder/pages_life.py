@@ -1033,6 +1033,13 @@ def earn_before_after(num, a, b, ch, cls="ba"):
             f'<p><span class="ba-y">April {b}</span><span class="ba-v">{num(f"earn.real.ft.{b}", "pounds")}</span></p></div>')
 
 
+def _change_words(facts, num, a, b):
+    """Plain words and the tagged change for real pay between two years inside one stretch."""
+    ch = 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)
+    word = "was about the same" if abs(ch) < 2 else ("rose" if ch > 0 else "fell")
+    return f"{word} ({change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')})"
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
@@ -1045,7 +1052,9 @@ def _earnings(facts, d, num, sources):
               + earn_before_after(num, a, b, ch) +
               f'<p>After allowing for rising prices, pay in April {b} was {_how(ch)} in April {a} ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
               f'In cash, at the time, pay went from {num(f"earn.ft.{a}", "pounds")} to {num(f"earn.ft.{b}", "pounds")} a week.</p>'
-              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>'
+              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. '
+              f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}, and from April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
+              f'The 2011 break sits between those two periods, so this page gives no single change from 2008 to 2014. Earlier stretches:</p>'
               f'<ul class="ba-list">{earlier}</ul></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
