@@ -14,7 +14,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, pages_generations, version
+from . import pages_money_extra, pages_generations, pages_manifesto, version
 from . import pages_options, downloads, pages_money, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
@@ -51,6 +51,7 @@ def render():
     pages["international.html"] = pages_intl.international_page(facts, d, num, sources)
     pages["borrowing.html"] = pages_borrow.borrowing_page(facts, d, num, sources)
     pages["why-debt.html"] = pages_debt.why_debt_page(facts, d, num, sources)
+    pages["manifesto.html"] = pages_manifesto.manifesto_page()
     pages["defence.html"] = pages_defence.defence_page(facts, d, num, sources)
     pages["immigration.html"] = pages_immigration.immigration_page(facts, d, num, sources)
     pages["economy-options.html"] = pages_options.options_page()
