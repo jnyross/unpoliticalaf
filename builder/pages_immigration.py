@@ -34,8 +34,9 @@ def immigration_page(facts, d, num, sources):
         box("imm-obr-time", sources, heading="h3"),
 
         "<h2>How do migrants relate to public services?</h2>",
-        "<p>Official estimates of public-service use by migrants are not on this page yet. The Office for Budget "
-        "Responsibility (OBR) explains how its forecast treats them.</p>",
+        "<p>The official sources the site uses do not give a measured figure for how much public services migrants use. "
+        "The Office for Budget Responsibility (OBR) explains how its forecast treats them: public-service spending is "
+        "set by the government, not by a fixed link to the number of people.</p>",
         box("imm-obr-services", sources, heading="h3"),
 
         "<h2>What does migration do to the economy?</h2>",

@@ -396,7 +396,20 @@
         {
           "id": "J2.4",
           "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
-          "gap": "The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services."
+          "options": {
+            "A": "Yes: it shows measured use of each public service by migrants",
+            "B": "No: the official sources do not give a measured figure for migrants' use of public services, and the site says so",
+            "C": "Yes: it shows use of the NHS only",
+            "D": "No: it does not discuss public services"
+          },
+          "answer": "B",
+          "why": "Immigration page, public services section: the official sources the site uses do not give a measured figure for how much public services migrants use. The OBR's approach is that public-service spending is set by the government, not by a fixed link to population.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "The official sources the site uses do not give a measured figure for how much public services migrants use."
+            }
+          ]
         },
         {
           "id": "J2.5",
