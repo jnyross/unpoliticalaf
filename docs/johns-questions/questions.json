@@ -304,42 +304,131 @@
         {
           "id": "J2.1",
           "question": "Does the site say whether immigration is a good thing or a bad thing?",
-          "gap": "There is no immigration page yet. It must say plainly that good or bad depends on values, that it does not decide that, and which parts the evidence does settle, reachable in a few taps from the home page."
+          "options": {
+            "A": "Yes: it is a good thing",
+            "B": "Yes: it is a bad thing",
+            "C": "No: it says the answer depends on what you value, and shows what the evidence says about the measurable parts",
+            "D": "No: it does not discuss the question at all"
+          },
+          "answer": "C",
+          "why": "The immigration page opens by saying the site does not answer the question, because the answer depends on what people value, and then sets out the measurable parts.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "The site does not answer that question, because the answer depends on what you value."
+            }
+          ]
         },
         {
           "id": "J2.2",
-          "question": "According to official estimates, does a migrant's effect on public finances depend on their age, visa route or employment?",
-          "gap": "No page shows fiscal effects of migrants yet. It must show the OBR and Migration Advisory Committee estimates by migrant type (age, visa route, employment), with the period, population and units."
+          "question": "According to official estimates, does a migrant’s effect on public finances depend on their age, visa route or employment?",
+          "options": {
+            "A": "No: every migrant has the same effect",
+            "B": "Yes: it depends on things such as visa route, age and employment",
+            "C": "Only on nationality",
+            "D": "It cannot be estimated at all"
+          },
+          "answer": "B",
+          "why": "The MAC estimates the Partner route as a lifetime deficit, and says that partner and Skilled Worker dependants contribute less through taxation than UK residents but are still more fiscally positive. Higher spending as people age and a lower employment rate also change the result.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "the partners of British citizens and settled residents, will incur a net lifetime fiscal deficit of -£5.6bn in present value terms"
+            },
+            {
+              "page": "immigration.html",
+              "text": "Partner applicants and SW adult dependants can contribute considerably less through taxation than UK residents and still be more fiscally positive."
+            },
+            {
+              "page": "immigration.html",
+              "text": "This, combined with a decline in their employment rate and higher public spending as they age, causes the cohort to incur an annual net fiscal deficit as they remain in the UK."
+            }
+          ]
         },
         {
           "id": "J2.3",
-          "question": "Do official estimates of migrants' effect on public finances differ between the short run and the long run?",
-          "gap": "The site must show whether the official estimates give different results over short and long periods, with the period and main assumptions for each."
+          "question": "Do official estimates of migrants’ effect on public finances differ between the short run and the long run?",
+          "options": {
+            "A": "No: the effect is the same in the short and long run",
+            "B": "Yes: a positive annual contribution in the first two decades, then an annual deficit as they stay in the UK",
+            "C": "Yes: a deficit in the first two decades only",
+            "D": "Neither: no official estimates exist"
+          },
+          "answer": "B",
+          "why": "The MAC finds a positive annual contribution in a cohort’s first two decades, then a deficit as they stay. The OBR says the fiscal impact is likely to become less beneficial over time.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "During their first two decades in the UK, the cohort make an annual positive net fiscal contribution."
+            },
+            {
+              "page": "immigration.html",
+              "text": "The fiscal impacts of migration are likely to become less beneficial over time"
+            }
+          ]
         },
         {
           "id": "J2.4",
           "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
-          "gap": "No public-services use page yet. It must show what official sources measure about migrants' use of public services and say where they cannot separate migrants from other people."
+          "gap": "The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services."
         },
         {
           "id": "J2.5",
           "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
-          "gap": "No workforce page yet. It must show the latest NHS England and Skills for Care figures on non-UK nationals in the NHS and adult social care, with the date and definition used."
+          "gap": "NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed."
         },
         {
           "id": "J2.6",
           "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
-          "gap": "The population page shows total population only. It must show ONS net migration and natural change for the latest year, with the year and the source."
+          "gap": "The site has ONS net migration but not births and deaths, which are needed to say what drove recent population growth."
         },
         {
           "id": "J2.7",
           "question": "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?",
-          "gap": "No economic-effects page yet. It must show what the OBR and other official estimates say about migration's effect on total GDP and on GDP per person, and explain the difference."
+          "options": {
+            "A": "Yes, it raises GDP per person by as much as total GDP",
+            "B": "It raises total GDP, but its effect on GDP per person is much more uncertain, and may be slightly positive or slightly negative",
+            "C": "It lowers total GDP",
+            "D": "It has no effect on GDP"
+          },
+          "answer": "B",
+          "why": "The OBR says net migration has been a significant driver of GDP growth, but its effect on GDP per person is much more uncertain, and was either slightly positive or slightly negative in its scenarios.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "Net inward migration has been a significant driver of GDP growth, but its impact on GDP per person is much more uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "the impact on real GDP per person was either slightly positive or slightly negative"
+            }
+          ]
         },
         {
           "id": "J2.8",
           "question": "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?",
-          "gap": "Each immigration estimate must show the range from the official sources, with no single figure picked to favour a view. Nothing on the site does this for immigration yet."
+          "options": {
+            "A": "No: the site gives one figure for each estimate",
+            "B": "Yes: it shows the range of official estimates and says how uncertain they are",
+            "C": "No: it shows no estimates at all",
+            "D": "Only the government’s own figures are shown"
+          },
+          "answer": "B",
+          "why": "The page shows the OBR’s higher and lower migration scenarios, and says they are simplified and highly uncertain, rather than picking one figure.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "in which net migration is 200,000 a year higher or lower than in our central forecast."
+            },
+            {
+              "page": "immigration.html",
+              "text": "These scenarios are a simplification and are highly uncertain."
+            },
+            {
+              "page": "immigration.html",
+              "text": "Where official estimates differ, the range is shown."
+            }
+          ]
         }
       ]
     },
@@ -403,6 +492,301 @@
               "text": "a percentage of baseline potential GDP"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "J5",
+      "asked": "Why can't we afford to spend more money on defence",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "Defence spending is read as the government's official defence spending (PESA, the COFOG defence function), compared with other G7 countries on the same function in OECD figures. \"Can't afford\" is read as: what would extra spending cost, how could it be paid for, and what would have to give. The premise is contested, so the site sets out the choices and the figures rather than deciding whether the UK can afford more.",
+      "probes": [
+        {
+          "id": "J5.1",
+          "question": "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?",
+          "options": {
+            "A": "About £30 billion, about 1% of GDP",
+            "B": "About £65 billion, about 2.1% of GDP",
+            "C": "About £130 billion, about 4.2% of GDP",
+            "D": "About £200 billion, about 6.5% of GDP"
+          },
+          "answer": "B",
+          "why": "PESA 2026 outturn for 2025-26: £65.4 billion, 2.1% of GDP.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "In 2025-26 the UK spent £65.4bn on defence, 2.1% of GDP."
+            }
+          ]
+        },
+        {
+          "id": "J5.2",
+          "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
+          "options": {
+            "A": "Higher after inflation, lower as a share of GDP",
+            "B": "Lower after inflation, higher as a share of GDP",
+            "C": "Higher after inflation and higher as a share of GDP",
+            "D": "Lower after inflation and lower as a share of GDP"
+          },
+          "answer": "A",
+          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
+            },
+            {
+              "page": "defence.html",
+              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
+            }
+          ]
+        },
+        {
+          "id": "J5.3",
+          "question": "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?",
+          "options": {
+            "A": "The highest of them all",
+            "B": "The second highest, behind the United States",
+            "C": "The lowest of them all",
+            "D": "About the same as France"
+          },
+          "answer": "B",
+          "why": "OECD Government at a Glance, 2024: UK 2.3% of GDP, behind the United States (3.1%) and ahead of France (1.9%), Germany, Japan and Italy. Canada has no figure in the table.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "the second highest of the 6 G7 countries with a figure."
+            },
+            {
+              "page": "defence.html",
+              "text": "The highest was the United States, at 3.1%."
+            }
+          ]
+        },
+        {
+          "id": "J5.4",
+          "question": "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?",
+          "options": {
+            "A": "£1",
+            "B": "£5",
+            "C": "£13",
+            "D": "£33"
+          },
+          "answer": "B",
+          "why": "PESA 2026: defence was £5.3 of every £100 spent on services in 2025-26; social protection was £33.2 and health £21.0.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "defence took £5.3."
+            },
+            {
+              "page": "defence.html",
+              "text": "Social protection took £33.2 and health £21.0."
+            }
+          ]
+        },
+        {
+          "id": "J5.5",
+          "question": "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?",
+          "options": {
+            "A": "About £3 billion",
+            "B": "About £31 billion",
+            "C": "About £130 billion",
+            "D": "About £300 billion"
+          },
+          "answer": "B",
+          "why": "1% of 2025-26 nominal GDP (£3,070 billion, OBR) is £30.7 billion.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Each extra 1% of GDP in defence spending would cost about £30.7bn a year at 2025-26 levels."
+            }
+          ]
+        },
+        {
+          "id": "J5.6",
+          "question": "Which of these does the site set out as ways to pay for extra defence spending?",
+          "options": {
+            "A": "Only higher taxes",
+            "B": "Only borrowing",
+            "C": "Borrowing, higher taxes, or spending less on other things",
+            "D": "None of these"
+          },
+          "answer": "C",
+          "why": "The defence page lists three broad ways: borrowing, tax, and less spending elsewhere, and says most plans combine them.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "There are three broad ways, and most plans combine them."
+            },
+            {
+              "page": "defence.html",
+              "text": "Less spending elsewhere."
+            }
+          ]
+        },
+        {
+          "id": "J5.7",
+          "question": "Does the site say whether the UK can afford more defence spending?",
+          "options": {
+            "A": "Yes, it can afford more",
+            "B": "No, it cannot afford more",
+            "C": "It sets out the choices and does not decide",
+            "D": "It says the answer is borrowing"
+          },
+          "answer": "C",
+          "why": "The defence page says whether the UK can afford more depends on which costs people accept, and that the page does not decide that.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "Whether the UK can afford more depends on which costs people accept, and this page does not decide that for you."
+            }
+          ]
+        },
+        {
+          "id": "J5.8",
+          "question": "How much room do the government's fiscal rules leave for extra defence spending?",
+          "gap": "The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending."
+        },
+        {
+          "id": "J5.9",
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP?",
+          "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
+        }
+      ]
+    },
+    {
+      "id": "J12",
+      "asked": "did our parents have it easier than this generation?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where the site has no figures for a measure at the same age, the probe stays open until the figure is added from an official source.",
+      "probes": [
+        {
+          "id": "J12.1",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 25 to 34 year olds in work change?",
+          "options": {
+            "A": "It fell by about ten points",
+            "B": "It rose by about ten points",
+            "C": "It stayed about the same",
+            "D": "It rose by about two points"
+          },
+          "answer": "B",
+          "why": "Labour Force Survey, UK: 73.6% of 25 to 34 year olds were in work in April to June 1992 and 84.3% in April to June 2025, a rise of about 11 points.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Aged 25 to 34 73.6% 84.3%"
+            }
+          ]
+        },
+        {
+          "id": "J12.2",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 18 to 24 year olds in work change?",
+          "options": {
+            "A": "It rose by about five points",
+            "B": "It fell by about five points",
+            "C": "It stayed about the same",
+            "D": "It fell by about twenty points"
+          },
+          "answer": "B",
+          "why": "Labour Force Survey, UK: 65.4% of 18 to 24 year olds were in work in 1992 and 60.7% in 2025. Many in this age group are students.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Aged 18 to 24 65.4% 60.7%"
+            }
+          ]
+        },
+        {
+          "id": "J12.3",
+          "question": "How many times a year’s earnings did the middle-priced home in England and Wales cost in 1999, and in 2025?",
+          "options": {
+            "A": "2.5 times in 1999 and 4.5 times in 2025",
+            "B": "3.89 times in 1999 and 7.55 times in 2025",
+            "C": "7.55 times in 1999 and 3.89 times in 2025",
+            "D": "About 3 times in both years"
+          },
+          "answer": "B",
+          "why": "Ratio of median house price to median full-time earnings, England and Wales: 3.89 in 1999 and 7.55 in 2025. 1999 is the first year measured the same way.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "has gone from 3.89 times a year’s earnings to 7.55 times in 2025"
+            }
+          ]
+        },
+        {
+          "id": "J12.4",
+          "question": "Between 2008-09 and 2024-25, how did the share of households in England who own their home change? This is all households, not one age group.",
+          "options": {
+            "A": "It rose by about three points",
+            "B": "It fell by about three points",
+            "C": "It stayed exactly the same",
+            "D": "It fell by about ten points"
+          },
+          "answer": "B",
+          "why": "English Housing Survey: 67.9% of households owned their home in 2008-09 and 64.8% in 2024-25, a fall of about three points. The figure covers all ages.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Households in England who own their home, all ages 67.9% 64.8%"
+            }
+          ]
+        },
+        {
+          "id": "J12.5",
+          "question": "What was the average primary class size in England in January 2006 and in January 2025?",
+          "options": {
+            "A": "About 26 pupils in both years",
+            "B": "About 20 in 2006 and about 26 in 2025",
+            "C": "About 30 in 2006 and about 20 in 2025",
+            "D": "About 26 in 2006 and about 30 in 2025"
+          },
+          "answer": "A",
+          "why": "Average primary class size, England: 26.3 pupils in January 2006 and 26.4 in January 2025, about the same.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "Pupils per class 26.3 26.4"
+            }
+          ]
+        },
+        {
+          "id": "J12.6",
+          "question": "Were people aged 30 more or less likely to own their home in the 1990s than people aged 30 now?",
+          "gap": "The site has no home ownership figures by age, so it cannot compare people at 30 with earlier years. Needs English Housing Survey or Labour Force Survey tenure tables by age, from the 1990s."
+        },
+        {
+          "id": "J12.7",
+          "question": "How did pay after inflation for people aged 30 change between 2002 and 2025?",
+          "gap": "The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked."
+        },
+        {
+          "id": "J12.8",
+          "question": "How much did a university degree cost a student in tuition fees and loans in 1998, compared with 2025?",
+          "gap": "The site has no tuition fee or student loan figures. Needs the fee caps and loan terms by year, from government sources."
+        },
+        {
+          "id": "J12.9",
+          "question": "How has the state pension age changed for people born in 1960 compared with people born in 1990?",
+          "gap": "The site has no state pension age or pension coverage figures. Needs the state pension age timetable and pension coverage by year, from DWP and ONS."
+        },
+        {
+          "id": "J12.10",
+          "question": "How long can a 30 year old now expect to live, compared with 30 years ago?",
+          "gap": "The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure."
+        },
+        {
+          "id": "J12.11",
+          "question": "Did a person on the same real income pay more or less tax in 2025 than in 1992?",
+          "gap": "The site has tax figures by age group for 2023-24 only, and by income band for recent years. Needs income tax and National Insurance on one income level, in each year, from an official source."
+        },
+        {
+          "id": "J12.12",
+          "question": "Has job security changed for people aged 25 to 34 since 1992?",
+          "gap": "The site has no figures on contract types, temporary work or how long people stay in a job. Needs ONS labour market tables on contracts and job changes by age, from 1992."
         }
       ]
     },
