@@ -150,7 +150,7 @@ def jobs_by_industry(facts):
         pf = facts.add(Fact(f"jobs.people.{y}", p, "thousand people", f"June {y}", "ons-mgrz", f"{pmeta.get('CDID')} row '{y} JUN'", "published",
                             note="People in employment aged 16 and over, seasonally adjusted, United Kingdom"))
         facts.add(Fact(f"jobs.gap.{y}", None if p is None or jt.value is None else jt.value - p, "thousand", f"June {y}", "ons-jobs02",
-                       f"{jt.locator} minus {pf.locator}", "provisional" if y == out["provisional"] else "calculated",
+                       f"{jt.locator} minus {pf.locator}", "calculated",
                        formula=f"{jt.id} − {pf.id}", inputs=[jt.id, pf.id],
                        note="Workforce jobs minus people in employment. Not a count of people with two jobs: the two counts also differ in source and coverage."))
     return out
