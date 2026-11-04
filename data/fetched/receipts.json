@@ -28,8 +28,8 @@
   "file": "ons/life-tables-historic-dataset-page.html",
   "bytes": 19279,
   "content_type": "text/html; charset=utf-8",
-  "sha256": "37302bc0ad3fd01e76ffc0ec7bf618d97d0e1da8334dd4235aea46bb69a3f871",
-  "retrieved": "2026-11-04T15:48:39Z"
+  "sha256": "1db57641575c2a69042e38d65d5d1044d6c504cd2ae8fea4a8ede40ea4a72c5d",
+  "retrieved": "2026-11-04T15:19:31Z"
  },
  "dfe-spc-2015-page": {
   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
@@ -868,8 +868,8 @@
   "file": "ons/ashe-adhoc-3671-page.html",
   "bytes": 36536,
   "content_type": "text/html;charset=utf-8",
-  "sha256": "0bfe660fc39383f80cddca2c073cfe294c49d4f5ce8e6330292668621c19e819",
-  "retrieved": "2026-11-04T15:48:46Z"
+  "sha256": "530a3f643e5b225806e2f4cd8fd659b34e2c62b14362a9411ce3261f0a5ae576",
+  "retrieved": "2026-11-04T15:19:38Z"
  },
  "ons-ashe-qmi": {
   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
@@ -988,8 +988,8 @@
   "file": "ons/life-tables-2024-related-data.html",
   "bytes": 67153,
   "content_type": "text/html; charset=UTF-8",
-  "sha256": "0789dfac12fba75c6864e41b28bb5a19c371323287cb50fcc54e8ab9b2168907",
-  "retrieved": "2026-11-04T15:48:43Z"
+  "sha256": "1763ec9aa8f8f9e1ffad05458a8e601b658ac37742c38b1e06f0950fe538f29c",
+  "retrieved": "2026-11-04T15:19:35Z"
  },
  "ons-mgrz": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
@@ -1022,6 +1022,14 @@
   "content_type": "text/csv;charset=utf-8",
   "sha256": "7d1fc100fb19972c60448bf79bb2c41b130671f529e2511e02426427eabde096",
   "retrieved": "2026-11-02T16:23:45Z"
+ },
+ "ons-single-year-life-tables-uk": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+  "file": "ons/single-year-life-tables-uk.xlsx",
+  "bytes": 623585,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "34d2b0ee90ed78994e87d83a558caba977f0087a3ac306175c6a5cd24031730a",
+  "retrieved": "2026-11-04T15:31:01Z"
  },
  "ons-ukpop": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",

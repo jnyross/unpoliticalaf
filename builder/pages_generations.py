@@ -22,6 +22,7 @@ OWN_FIRST, OWN_LAST = 2008, 2024  # English Housing Survey: 2008-09 to 2024-25 (
 SCHOOL_FIRST = 2006  # first January class-size census in the explorer
 AGES = [("18_24", "18 to 24"), ("25_34", "25 to 34"), ("35_49", "35 to 49")]
 LAST = YEARS[-1]
+LIFE_FIRST, LIFE_LAST = 1994, 2024  # single year life tables, UK: the same question 30 years apart
 
 
 def _answer(facts, num):
@@ -32,8 +33,7 @@ def _answer(facts, num):
             f'The middle-priced home in England and Wales has gone from {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
             f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
             f'University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. '
-            f'State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. '
-            f'Pay, tax and life expectancy are not compared yet.</p></div>')
+            f'State Pension age: 66 for people born in 1960, 68 from April 1978.</p></div>')
 
 
 def _same_age_rows(facts, num):
@@ -51,8 +51,7 @@ def page_body(facts, d, num, sources):
     body = ['<p class="small"><a href="index.html">Everyday life, year by year</a></p>',
             '<h1 id="key-answer">Did parents have it easier than this generation?</h1>',
             _answer(facts, num),
-            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for one age group in one year. '
-            'It does not follow one person through their life.</p>',
+            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for one age group in one year.</p>',
             "<h2 id='what-easier-means'>What “easier” could mean</h2>",
             "<p>People mean different things by “easier”. This page separates them, so each can be read on its own:</p>",
             FOLD,
@@ -73,7 +72,6 @@ def page_body(facts, d, num, sources):
             f'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
             f'<a href="work.html#work-age">Employment by age, every year</a>.</p>',
             "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
-            "<p>These figures are for everyone, not for people of one age, so they show the position of the whole market rather than of people at 30.</p>",
             _afford_chart(facts, num),
             FOLD,
             table(f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {LAST}",
@@ -111,15 +109,24 @@ def page_body(facts, d, num, sources):
             "<p>The Pensions Act 2007 sets the rise from 67 to 68 for 2044 to 2046. "
             "The government has launched a third review of State Pension age, and a review could change the timetable for 68.</p>",
             source_line(sources, ["dwp-spa-timetable"], up="../"),
+            "<h2 id='life-expectancy'>Life expectancy at 30</h2>",
+            f"<p>In {LIFE_LAST} a man aged 30 could expect to live {num(f'life.ex30.male.{LIFE_LAST}', 'dp1')} more years, and a woman {num(f'life.ex30.female.{LIFE_LAST}', 'dp1')}. "
+            f"Since {LIFE_FIRST} the figure has risen by about {_gain(facts, 'male')} years for men and about {_gain(facts, 'female')} for women.</p>",
+            FOLD,
+            table(f"Years a person aged 30 can expect to live, UK, {LIFE_FIRST} and {LIFE_LAST}", ["Measure", str(LIFE_FIRST), str(LIFE_LAST)],
+                  [["Men", num(f"life.ex30.male.{LIFE_FIRST}", "dp1"), num(f"life.ex30.male.{LIFE_LAST}", "dp1")],
+                   ["Women", num(f"life.ex30.female.{LIFE_FIRST}", "dp1"), num(f"life.ex30.female.{LIFE_LAST}", "dp1")]]),
+            "<p>These are period figures: they show what one year’s death rates would mean over a lifetime, not what people born in those years will live. "
+            "They come from the single-year tables, which move more from year to year than the three-year tables. 2020 and 2021 reflect the pandemic.</p>",
+            source_line(sources, ["ons-single-year-life-tables-uk"], up="../"),
             "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
-            "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
+            "<p>Figures the site does not yet hold, with the source each needs:</p>",
             "<ul>"
             "<li><strong>Home ownership at a given age</strong>: owning or renting by the age of the household’s main person, across the 1990s to now (English Housing Survey and Labour Force Survey tables by age).</li>"
             "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
             "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
             "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
             "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
-            "<li><strong>Life expectancy at 30</strong>: national life tables, by year.</li>"
             "<li><strong>Job security</strong>: how long people stay in a job, and the share on temporary or insecure contracts, by age.</li>"
             "</ul>",
             CAUSE,
@@ -132,6 +139,10 @@ def page_body(facts, d, num, sources):
             source_line(sources, ["ons-ybud", "ons-ybug", "ons-ybuj", "ons-affordability", "ehs-ft1101", "dfe-spc-2015-tables", "dfe_api"], up="../"),
             ]
     return "\n".join(body)
+
+
+def _gain(facts, sex):
+    return round(facts[f"life.ex30.{sex}.{LIFE_LAST}"].value - facts[f"life.ex30.{sex}.{LIFE_FIRST}"].value)
 
 
 def spa_range(facts):

@@ -18,6 +18,9 @@ FEE_FILE = "data/fetched/parl/CBP-10155.pdf"
 HANSARD_SOURCE = "parl-hansard-1998-tuition-fees"
 HANSARD_FILE = "data/fetched/parl/hansard-1998-12-07-tuition-fees.html"
 CPI_FILE = "data/fetched/ons/l522.csv"
+LIFE_SOURCE = "ons-single-year-life-tables-uk"
+LIFE_FILE = "data/fetched/ons/single-year-life-tables-uk.xlsx"
+LIFE_YEARS = (1994, 2024)  # 30 years apart: the same question, asked of the two ends of the period
 
 
 def _pages(path):
@@ -63,8 +66,29 @@ def build_fees(facts):
                    note="April 1998 index used for the 1998-99 academic year. CPIH, the index the site uses for real pay."))
 
 
+def build_life(facts):
+    """Period life expectancy at exact age 30, from the single year life tables (UK edition)."""
+    import openpyxl
+    from openpyxl.utils import get_column_letter
+    wb = openpyxl.load_workbook(ROOT / LIFE_FILE, data_only=True)
+    for y in LIFE_YEARS:
+        rows = [[c.value for c in r] for r in wb[str(y)].iter_rows()]
+        hdr = next((r for r in rows if r and r[0] == "age"), None)
+        if not hdr or hdr[5] != "ex" or hdr[7] != "age" or hdr[12] != "ex":
+            raise SystemExit(f"ONS single year life tables changed: header layout on sheet {y} is not as expected")
+        row_no = next((i for i, r in enumerate(rows) if len(r) > 12 and r[0] == 30 and r[7] == 30), None)
+        if row_no is None:
+            raise SystemExit(f"ONS single year life tables changed: no age 30 row on sheet {y}")
+        for sex, col in (("male", 5), ("female", 12)):
+            cell = f"{get_column_letter(col + 1)}{row_no + 1}"
+            facts.add(Fact(f"life.ex30.{sex}.{y}", wb[str(y)][cell].value, "years of life expected", f"{y} (period life table)",
+                           LIFE_SOURCE, f"{y}!{cell}",
+                           note="Period expectation of life at exact age 30, UK. Single-year tables are more volatile than the 3-year tables; 2020 and 2021 reflect the pandemic."))
+
+
 def build(facts):
     build_fees(facts)
+    build_life(facts)
     pages = _pages(SPA_FILE)
     # Born 6 October 1954 to 5 April 1960: State Pension age is reached on the 66th birthday.
     p_66 = _page_of(pages, "6 October 1954 – 5 April 1960 66th birthday")
