@@ -10,7 +10,7 @@ Re-run of the John's-questions stand-in with the procedure changed to one fresh 
 
 - 56 of 82 probes passed (4 or 5 of 5 right with the site). 26 failed. 12 open probes are reported as gaps too, so the scorer lists 38 gaps.
 - T142 (single 40-action session over the whole sheet): 11 of 78 passed. The two are not the same test. Here every group has its own 40 actions, so this run measures what the pages hold, not what 40 actions can reach. Do not read the jump as the pages having improved on their own.
-- Per group (probes passed of probes): tax-and-spending 12 of 14; immigration 8 of 8 (J2.4 and J2.5 are open); defence 8 of 8 (J5.2 open); high-earners-and-economy 9 of 12 (J8.1 to J8.3 fail); manifesto 10 of 10; debt-history 8 of 8; welfare-housing-generations 2 of 22 answered (see below).
+- Per group (probes passed of scored probes; open probes not counted): tax-and-spending 12 of 14; immigration 6 of 6; defence 8 of 8; high-earners-and-economy 11 of 14; manifesto 10 of 10; debt-history 8 of 8; welfare-housing-generations 1 of 22.
 
 ## What fails
 
