@@ -1291,6 +1291,15 @@ def topic_page(facts, d, num, sources, key):
             WORK_CAUSE if key == "work" else "",
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Pick a year, or compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
+    # Find or compare years sits straight after the long chart, not at the foot of the page
+    # (audit 16 gaps 3 and 4: readers ran out of their 40 actions before the renting, holiday
+    # and class-size pickers). It moves here, so the page's length does not change. The comparison
+    # comes before the year finder, so the numbers a screen-reader or voice-control reader already
+    # knows (audit 14 gap 8) stay the same when the finder's links appear.
+    body.append(f"<h2 id='years'>Find or compare years</h2>")
+    body.append(NOFOLD + compare_form("", anchor=key))
+    # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
+    body.append(year_finder(facts, num, key))
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
     body.append("<h2 id='about'>About these figures</h2>")
@@ -1303,13 +1312,6 @@ def topic_page(facts, d, num, sources, key):
     body.append(f'<p class="small">{esc(dict((k, sc) for k, _, sc in TOPICS)[key])}</p>')
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
-    body.append(f"<h2 id='years'>Find or compare years</h2>")
-    # The comparison opens at this topic's section. It comes before the year finder, so when the
-    # finder's links appear, the numbers a screen-reader or voice-control reader already knows
-    # (audit 14 gap 8) stay the same: only the links that follow move on.
-    body.append(NOFOLD + compare_form("", anchor=key))
-    # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
-    body.append(year_finder(facts, num, key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
