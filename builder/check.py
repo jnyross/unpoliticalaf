@@ -102,6 +102,9 @@ def cell_value(src_file, locator):
             return None
     if src_file.endswith(".json"):
         data = json.loads((ROOT / src_file).read_text())
+        m = re.fullmatch(r"year (\d{4})", locator)
+        if m:  # a transcribed figure kept by year (see builder/data_nato.py)
+            return data["values"].get(m.group(1))
         m = re.fullmatch(r"value\[(\d+)\]", locator)
         if m:  # JSON-stat (Eurostat): flat value list keyed by position
             return data["value"].get(m.group(1))
@@ -414,7 +417,7 @@ DEFAULT_COMPARE = "default comparison"
 # The life hub gets 8.8 like the topic pages: its "Jump to" bar (audit 9 gap 7) costs about a quarter of a screen.
 MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.8,
                "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
-               "life/holidays.html": 8.8, "life/schools.html": 8.8, DEFAULT_COMPARE: 8.8,
+               "life/holidays.html": 8.8, "life/schools.html": 8.8, "life/generations.html": 8.8, DEFAULT_COMPARE: 8.8,
                "methods.html": 9.5, "sources.html": 4, "self-employed-tax.html": 8.5}
 
 
