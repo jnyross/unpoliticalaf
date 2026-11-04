@@ -298,7 +298,24 @@
         {
           "id": "J4.7",
           "question": "According to the site, how do the UK's rates on top incomes compare with other large countries?",
-          "gap": "The international page compares total tax as a share of GDP, but does not compare top income tax rates or the tax paid by top earners with other countries."
+          "options": {
+            "A": "The UK has the highest top rate of the G7 countries",
+            "B": "Only the United States has a lower top rate among the G7; the site also says a top rate alone does not show what top earners pay",
+            "C": "The UK's top rate is the same as France's",
+            "D": "The site does not compare top rates with other countries"
+          },
+          "answer": "B",
+          "why": "International page, top rate of income tax: in 2025 the UK's top statutory income tax rate was 45%. Only the United States had a lower top rate among the G7 (43.7%). The page says a top rate alone does not show what top earners pay.",
+          "evidence": [
+            {
+              "page": "international.html",
+              "text": "Only the United States had a lower top rate"
+            },
+            {
+              "page": "international.html",
+              "text": "A top rate alone does not show what top earners pay"
+            }
+          ]
         },
         {
           "id": "J4.8",

@@ -161,6 +161,32 @@ def _g7(facts, num, it, ty, sy):
     return "\n".join(out)
 
 
+def _top_rates(facts, num, it, sources):
+    """Top statutory income tax rate beside the other G7 countries: where the UK ranks, and what a rate does not show."""
+    py = it["pit_year"]
+    rate = {a: facts[f"intl.pit.{a}.{py}"].value for a in G7}
+    names = it["names"]
+    lower = [a for a in G7 if a != UK and rate[a] < rate[UK]]
+    higher = [a for a in G7 if a != UK and rate[a] > rate[UK]]
+    if len(lower) == 0:
+        rank_text = "No other G7 country had a lower top rate."
+    elif len(lower) == 1:
+        rank_text = f"Only the {names[lower[0]]} had a lower top rate, at {num(f'intl.pit.{lower[0]}.{py}', 'pct')}."
+    else:
+        rank_text = f"{len(lower)} other G7 countries had a lower top rate."
+    rows = [[names[a], num(f"intl.pit.{a}.{py}", "pct")] for a in sorted(G7, key=lambda a: -rate[a])]
+    return "\n".join([
+        f'<h2 id="top-rates">The top rate of income tax, G7, {py}</h2>',
+        f'<p>In {py} the top statutory income tax rate in the UK was {num(f"intl.pit.{UK}.{py}", "pct")}. '
+        f'This is the rate on the highest band of earnings. {rank_text} '
+        f'{len(higher)} other G7 countries had a higher top rate.</p>',
+        "<p>A top rate alone does not show what top earners pay. Thresholds, allowances, other taxes and what each country counts as earnings all differ between countries.</p>",
+        source_line(sources, ["oecd-pit-top-rates"], "Statutory rates on gross wage earnings: the rate on the highest band, as set in each country's own tax system."),
+        details_table("Show the top rates as a table", f"Top statutory personal income tax rate, % of earnings, G7 countries, {py}. Highest first.",
+                      ["Country", f"Top rate, {py}"], rows),
+    ])
+
+
 def international_page(facts, d, num, sources):
     it = d["intl"]
     ty, sy, ky, fy = it["tax_year"], it["spend_year"], it["kind_year"], it["fn_year"]
@@ -173,6 +199,7 @@ def international_page(facts, d, num, sources):
     body.append(f'''<div class="answer"><p class="lede">In {ty}, UK taxes were {num(t_uk, "pct")} of GDP, {_beside(facts, t_uk, t_avg)} the OECD average of {num(t_avg, "pct")}. Government spending{"" if sy == ty else " in " + str(sy)} was {num(s_uk, "pct")} of GDP, {_beside(facts, s_uk, s_avg)} the average of {num(s_avg, "pct")}.</p></div>''')
     year_word = str(ty) if ty == sy else f"{ty} and {sy}"
     body.append(_g7(facts, num, it, ty, sy))
+    body.append(_top_rates(facts, num, it, sources))
     body.append(f'<h2 id="countries">The UK beside each OECD country, {year_word}</h2>')
     short_note = "Shown: the three highest, the UK with the two countries either side of it, the OECD average and the three lowest. Rank 1 is the highest."
     def ranking(short, full, n, caption):
