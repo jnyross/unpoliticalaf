@@ -1262,7 +1262,7 @@ def topic_page(facts, d, num, sources, key):
                   detail[first_chart].replace(WORK_CAUSE, ""), "<!--keepfold-->"]
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
-    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
+    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Find or compare years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")

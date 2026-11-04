@@ -1,7 +1,7 @@
 """Home page, the methods page and the list of sources."""
 import re
 
-from .html import page, esc, table, bars
+from .html import page, esc, table, bars, jump
 
 
 def home_page(facts, d, num, sources):
@@ -46,8 +46,14 @@ def home_page(facts, d, num, sources):
         if abs(ch) < 2:
             return "about the same as"
         return f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than"
+    # Five figures a reader most often comes for, one tap each (audit 14 gap 2): each link opens
+    # the topic page at its answer, so the figure is not hidden in a fold further down.
+    QUICK = jump("Quick answers", [("life/earnings.html#key-answer", "Pay after inflation"), ("life/schools.html#key-answer", "Class sizes"),
+                                   ("life/holidays.html#key-answer", "Holidays"), ("life/housing.html#key-answer", "Renting"),
+                                   ("life/work.html#key-answer", "Women's employment")])
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
+{QUICK}
 <h2 id="money">Public money: four questions</h2>
 <div class="cards">
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>
