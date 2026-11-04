@@ -31,7 +31,7 @@ def _answer(facts, num):
             f'({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}). '
             f'Since {AFFORD_FIRST}, the first year measured the same way, the middle-priced home in England and Wales has gone from '
             f'{num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
-            f'This site cannot yet compare home ownership, pay, university costs, tax or life expectancy for people of the same age, '
+            f'Tuition fees and the State Pension age are now compared, but this site cannot yet compare home ownership, pay, tax or life expectancy for people of the same age, '
             f'so it does not give an overall answer.</p></div>')
 
 
@@ -90,20 +90,30 @@ def page_body(facts, d, num, sources):
                   [["Pupils per class", num(f"school.primary.{SCHOOL_FIRST}", "dp1"), num(f"school.primary.{LAST}", "dp1")]]),
             f'<p>These figures describe the classes in each year, not the classes the parents attended. The site holds no class size figures from before 2006. '
             f'<a href="schools.html">Class sizes, every year</a>.</p>',
+            "<h2 id='university'>University tuition fees</h2>",
+            "<p>In 1998 the fee was up to £1,000 across the UK, paid up front rather than through a loan. The 2025-26 figure is the cap for England: £9,535.</p>",
+            FOLD,
+            table("Tuition fee for a full-time undergraduate, 1998-99 and 2025-26", ["Measure", "1998-99", "2025-26"],
+                  [["Fee, cash", num("fee.ft.1998", "pounds"), num("fee.ft.2025", "pounds")],
+                   ["1998 fee in April 2025 prices (calculated)", num("fee.ft.1998.2025", "pounds"), num("fee.ft.2025", "pounds")]]),
+            "<p>From 2006 students could borrow a tuition fee loan, repaid after graduation. "
+            "The 1998 figure in 2025 prices uses the CPIH index, which the site uses elsewhere for real pay.</p>",
+            source_line(sources, ["parl-cbp-tuition-fees", "parl-hansard-1998-tuition-fees"], up="../"),
             "<h2 id='pension-age'>State Pension age</h2>",
-            "<p>The State Pension age is the earliest age a person can start to claim the State Pension. The law has changed it several times.</p>",
-            table("State Pension age under current law, by year of birth", ["Born in", "1960", "1990"],
-                  [["State Pension age", f"66, plus {spa_range(facts)} months (depending on birth month)", f"{num('spa.years.1990', 'int')} years"]]),
             "<p>People born in 1960 reach State Pension age at 66 years and 0 to 9 months, depending on the month of birth. "
-            "For people born from 6 April 1978 it is 68 under current law: the Pensions Act 2007 sets the rise from 67 to 68 for 2044 to 2046. "
+            "For people born from 6 April 1978 it is 68 under current law.</p>",
+            FOLD,
+            table("State Pension age under current law, by year of birth", ["Born in", "1960", "1990"],
+                  [["State Pension age", f"66, plus {spa_range(facts)} months (depending on birth month)", f"{int(facts['spa.months.1990'].value // 12)} years"]]),
+            "<p>The Pensions Act 2007 sets the rise from 67 to 68 for 2044 to 2046. "
             "The government has launched a third review of State Pension age, and a review could change the timetable for 68.</p>",
-            source_line(sources, ["dwp-spa-timetable"]),
+            source_line(sources, ["dwp-spa-timetable"], up="../"),
             "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
             "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
             "<ul>"
             "<li><strong>Home ownership at a given age</strong>: owning or renting by the age of the household’s main person, across the 1990s to now (English Housing Survey and Labour Force Survey tables by age).</li>"
             "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
-            "<li><strong>University costs</strong>: tuition fees and student loans, as the amount a student pays and borrows, in each year since the 1990s.</li>"
+            "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
             "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
             "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
             "<li><strong>Life expectancy at 30</strong>: national life tables, by year.</li>"
@@ -121,7 +131,8 @@ def page_body(facts, d, num, sources):
 
 
 def spa_range(facts):
-    return f"0 to {int(facts['spa.months.1960.max'].value)}"
+    """Months after 66 for people born in 1960, from the timetable's stated ages."""
+    return f"0 to {int(facts['spa.months.1960.max'].value - facts['spa.months.1960.min'].value)}"
 
 
 def _same_age_chart(facts, num):

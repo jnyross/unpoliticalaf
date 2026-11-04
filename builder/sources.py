@@ -173,6 +173,8 @@ FETCHED = {
     "wg-schools-census-2025": ("Welsh Government", "Schools' census results: January 2025, tables 16 and 17 (infant and junior class sizes)", "Wales", "Infant and junior classes in maintained schools"),
     "ashe-2025-fig1": ("Office for National Statistics", "Employee earnings in the UK: 2025, Figure 1 data", "United Kingdom", "Employee jobs"),
     "dwp-spa-timetable": ("Department for Work and Pensions (GOV.UK)", "State Pension age timetables (DWP PDF, tables 1 to 5)", "United Kingdom", "Men and women, by date of birth"),
+    "parl-cbp-tuition-fees": ("House of Commons Library", "Tuition fees in England: history, debates, and international comparisons (research briefing CBP 10155, 2 December 2024; archived copy)", "England, with the 1998 fee across the UK", "Full-time undergraduate students"),
+    "parl-hansard-1998-tuition-fees": ("UK Parliament (Hansard)", "Written answers, 7 December 1998: tuition fees", "United Kingdom", "Students in higher education"),
     "ehs-ft1101": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FT1101: trends in tenure", "England", "All households"),
     "ehs-ft1241": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FT1241: trends in tenure, households with dependent children", "England", "Couples and lone parents with dependent children"),
     "ehs-fa3201": ("Ministry of Housing, Communities and Local Government", "English Housing Survey live table FA3201: rent before housing support", "England", "Social and private renting households paying rent"),

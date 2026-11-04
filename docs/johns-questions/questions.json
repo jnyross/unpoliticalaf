@@ -766,7 +766,24 @@
         {
           "id": "J12.8",
           "question": "How much did a university degree cost a student in tuition fees and loans in 1998, compared with 2025?",
-          "gap": "The site has no tuition fee or student loan figures. Needs the fee caps and loan terms by year, from government sources."
+          "options": {
+            "A": "About the same in both years",
+            "B": "£1,000 in 1998, paid up front; £9,535 in 2025-26 for England",
+            "C": "£9,535 in 1998 and £1,000 in 2025-26",
+            "D": "£3,000 in both years"
+          },
+          "answer": "B",
+          "why": "House of Commons Library briefing CBP 10155: in 1998 means-tested fees of up to £1,000 across the UK were paid up front rather than through a loan. The cap for home undergraduates in England was announced as £9,535 for 2025-26. The 1998 fee is about £1,934 in 2025 prices (CPIH, calculated).",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "In 1998 the fee was up to £1,000 across the UK, paid up front rather than through a loan"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "The 2025-26 figure is the cap for England"
+            }
+          ]
         },
         {
           "id": "J12.9",
