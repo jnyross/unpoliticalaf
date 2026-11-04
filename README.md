@@ -53,8 +53,37 @@ checked by GitHub Actions instead.
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
 locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
-build. The `Live site matches main` workflow runs this after every push to `main`
+build. The `Verify and record production deployment` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
+
+That workflow lives in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+It also requires a successful Vercel commit status before recording a `production`
+deployment in GitHub, with the exact SHA, Vercel deployment link and verification
+run. Vercel's existing Git integration remains the deployer; this does not add a
+second deployer, require a Vercel token or redeploy on a schedule. Failed checks
+create no successful deployment record. Daily checks and reruns reuse the record
+for a commit, even after a newer deployment has made it inactive.
+The successful deployment status's `log_url` is the authoritative verification
+run; the payload's `recording_run` identifies the run that first created the
+record, which may have been interrupted before the success status was written.
+
+`live.yml` remains a manual-dispatch compatibility entry point for older
+auto-merge runs and calls `deploy.yml`. Its earlier history remains available
+with `gh run list --workflow=live.yml`. Commits superseded before live verification
+are not counted.
+
+To inspect actual shipping frequency (not the number of live checks):
+
+```sh
+gh run list --workflow=deploy.yml --limit 30
+python3 scripts/record_deployment.py --report  # uses the authenticated gh CLI
+```
+
+The read-only report counts distinct, successfully verified production commits in
+each of the last four seven-day windows, using Vercel's deployment timestamps.
+The target is at least two per week. Records start when this workflow is merged;
+no historical releases or deployment frequency are invented. Low counts call for
+shipping useful, checked changes, not scheduled no-op deployments.
 
 The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `claude/` branch once every check on its latest commit has passed. It runs when
