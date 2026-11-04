@@ -23,6 +23,14 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "4 November 2026",
+        "pages": [("methods.html", "Methods"), ("spending.html", "Where does public money go?"), ("spending-areas.html", "Spending on each area, every year"),
+                  ("international.html", "How do UK taxes and spending compare with other countries?")],
+        "was": "The methods page said poverty and hardship “are not measured here”, though official low-income and inequality series exist. The spending page gave total spending growth without a per-person figure, so it overstated growth as the population rose. The spending-by-area summary named the largest rise by pounds, which always favours the biggest area. The first G7 chart showed four of the seven countries, with no stated rule for choosing them.",
+        "now": "The methods page says those series exist and that the site does not show them yet. The spending page gives per-person spending after inflation beside the total, and its year-by-year table has a per-person column. The spending-by-area summary ranks rises in per cent. The first G7 chart shows every G7 country that has a figure for the year.",
+        "pr": 176,
+    },
+    {
+        "date": "4 November 2026",
         "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home"), ("life/house-prices.html", "House prices"),
                   ("life/2025.html", "Everyday life in 2025")],
         "was": "Exact halves were rounded to the even digit, so £132.5bn showed as £132bn and 31,150 thousand visits as 31.1 million. The words under the share-of-GDP chart skipped the 2021-22 low of 43.4%. The home page called ONS’s 33.6% an average across households, though it covers all people. The house-price lead said “In 2025” for the year to September 2025. A small chart of private renting on year pages ran to 2025-26, though its last figure is 2024-25.",
