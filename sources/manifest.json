@@ -1,5 +1,5 @@
 {
- "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern.",
+ "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page.",
  "sources": [
   {
    "id": "ons-mgrz",
@@ -600,6 +600,26 @@
    "id": "explain-obr-frs-2025",
    "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
    "file": "explain/obr-frs-2025.html"
+  },
+  {
+   "id": "explain-mac-annual-2025",
+   "url": "https://www.gov.uk/government/publications/migration-advisory-committee-annual-report-2025/migration-advisory-committee-mac-annual-report-2025-accessible",
+   "file": "explain/mac-annual-2025.html"
+  },
+  {
+   "id": "explain-obr-migration-fiscal",
+   "url": "https://obr.uk/box/the-impact-of-migration-on-the-fiscal-forecast/",
+   "file": "explain/obr-migration-fiscal-box.html"
+  },
+  {
+   "id": "explain-obr-migration-gdp",
+   "url": "https://obr.uk/box/net-migration-and-gdp-per-person/",
+   "file": "explain/obr-migration-gdp-box.html"
+  },
+  {
+   "id": "explain-ons-ltim-dec2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+   "file": "explain/ons-ltim-dec2025.html"
   }
  ]
 }
