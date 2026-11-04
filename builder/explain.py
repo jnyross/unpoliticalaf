@@ -216,6 +216,89 @@ EXPLANATIONS = {
         quote=["Large Classes - An infant class is described as ‘large’ when it exceeds the statutory limit of 30 pupils. There are no formal policy restrictions on any other class sizes.",
                "This means that a class of, for example, 32 pupils is lawful if two or more of those pupils have been admitted under lawful exceptions."],
         gloss="This is the rule in England. Infant classes are reception, year 1 and year 2. The primary and secondary averages say nothing about the limit on their own; the infant figures on the class sizes page show how many pupils are in classes of more than 30, some of which are lawful exceptions."),
+    # ------------------------------------------------------------ leaving the UK
+    "leave-total-2025": dict(
+        question="How many people left the UK in the latest year?",
+        source="explain-ons-ltim-yearending-dec-2025", publisher="Office for National Statistics",
+        title="Long-term international migration, provisional: year ending December 2025", date="21 May 2026",
+        quote=["The provisional estimate for total long-term emigration in the most recent period is 642,000.",
+               "Emigration has been increasing since 2022 but was down by 38,000 from the updated YE December 2024 estimate of 680,000; which was mainly because of a slower increase in non-EU+ emigration and larger decrease in EU+ emigration in the last 12 months."],
+        gloss="“Long-term” means a person who leaves the UK to live elsewhere for 12 months or more. The ONS figures are provisional and it revises them as more data arrives."),
+    "leave-definition": dict(
+        question="What counts as leaving the UK?",
+        source="explain-ons-ltim-yearending-dec-2025", publisher="Office for National Statistics",
+        title="Long-term international migration, provisional: year ending December 2025", date="21 May 2026",
+        quote=["When we refer to emigration, we are referring to long-term emigration from the UK. This is when a person has left the UK to live in another country for a period of at least 12 months."],
+        gloss="Short trips, including holidays, do not count, even though they are many millions a year."),
+    "leave-by-nationality": dict(
+        question="Who left the UK in the year ending December 2025?",
+        source="explain-ons-ltim-yearending-dec-2025", publisher="Office for National Statistics",
+        title="Long-term international migration, provisional: year ending December 2025", date="21 May 2026",
+        quote=["In YE December 2025, 278,000 non-EU+ nationals left the UK; just over half of these originally arrived with study-related visas.",
+               "Emigration of EU+ nationals declined in YE December 2025 to 118,000, down by 24% from the updated YE December 2024 estimates of 155,000.",
+               "In YE December 2025, 246,000 British nationals left the UK, a slight decline of 4% from the updated YE December 2024 estimates of 257,000."],
+        gloss="As ONS defines them, EU+ is all current EU countries plus Norway, Iceland, Liechtenstein and Switzerland. Non-EU+ is every other country. British nationals are counted separately."),
+    "leave-reasons": dict(
+        question="Does the official data record why people left?",
+        source="explain-ons-ltim-yearending-dec-2025", publisher="Office for National Statistics",
+        title="Long-term international migration, provisional: year ending December 2025", date="21 May 2026",
+        quote=["Reasons for emigration are based on the initial reason why an individual arrived in the UK."],
+        gloss="So the “reason” recorded is the visa or route a person first came to the UK on, such as a study visa. It is not a reason given for leaving."),
+    "leave-method": dict(
+        question="Has the British figure risen, or has the way it is measured changed?",
+        source="explain-ons-uk-emigration-explained", publisher="Office for National Statistics",
+        title="UK emigration explained: what we know about Brits moving abroad", date="21 May 2026",
+        quote=["For instance, using IPS data we had previously estimated that 77,000 British nationals emigrated out of the UK in the year ending December 2024. With our new method, we have been able to revise that to 257,000, a difference of 180,000.",
+               "This does not mean 180,000 more Brits suddenly left the UK. We just now have a clearer idea of the true number that do emigrate each year. The significant change in our methods means we cannot compare our improved estimates with those from before June 2021.",
+               "But it is not correct to say that our migration statistics show a recent rise in emigration of British nationals."],
+        gloss="IPS means the International Passenger Survey, which ONS used before its new method. It asked travellers at ports and airports about their plans."),
+    "leave-british-net": dict(
+        question="How do British nationals who leave compare with those who arrive?",
+        source="explain-ons-uk-emigration-explained", publisher="Office for National Statistics",
+        title="UK emigration explained: what we know about Brits moving abroad", date="21 May 2026",
+        quote=["We have also seen a drop in the number of Brits immigrating to the UK (arriving to live long-term), from 140,000 in 2024 to 110,000 in 2025. This has widened the gap between those leaving and arriving. When more people leave than arrive, it is known as negative net migration. Around 136,000 more Brits left than arrived in 2025.",
+               "Our estimates for 2025 are provisional however, and may be revised up or down as more complete information becomes available."],
+        gloss="Net migration is the number arriving minus the number leaving. A negative figure means more people left than arrived."),
+    "leave-difficult": dict(
+        question="Why is it hard to count British people who leave?",
+        source="explain-ons-uk-emigration-explained", publisher="Office for National Statistics",
+        title="UK emigration explained: what we know about Brits moving abroad", date="21 May 2026",
+        quote=["Estimating British emigration is difficult – British nationals do not require a visa to leave or enter the UK, and millions regularly travel internationally for holidays and other short-term trips which do not count as emigration."]),
+    "leave-surveys": dict(
+        question="What do the statistics not cover?",
+        source="explain-ons-uk-emigration-explained", publisher="Office for National Statistics",
+        title="UK emigration explained: what we know about Brits moving abroad", date="21 May 2026",
+        quote=["We do not produce estimates on how many British nationals are living abroad or where they are.",
+               "We cannot carry out high-quality surveys overseas, or access the administrative data foreign governments hold about their populations."]),
+    "nondom-regime": dict(
+        question="What changed for non-domiciled taxpayers in April 2025?",
+        source="explain-hmrc-nondom-2025", publisher="HM Revenue and Customs",
+        title="Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", date="published July 2026",
+        quote=["From 6 April 2025 the remittance basis of taxation, which is based on domicile status, was replaced with a new tax regime based on residence",
+               "this release is for tax year ending 2025 which occurred prior to these policy changes being implemented."],
+        gloss="“Domicile” is a legal idea about a person's permanent home. The new regime is based on how long a person lives in the UK instead."),
+    "nondom-flows": dict(
+        question="Did fewer non-domiciled taxpayers leave in 2024 to 2025?",
+        source="explain-hmrc-nondom-2025", publisher="HM Revenue and Customs",
+        title="Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", date="published July 2026",
+        quote=["Fewer taxpayers flowed out of the non-domiciled taxpayer population than in the previous year (around 9,000 compared with 11,200), while the number of newly arrived non-domiciled taxpayers also fell (around 8,600 compared with 10,000)."],
+        gloss="HMRC counts people who stop claiming non-domiciled status as “flowing out” of that group. The commentary does not say how many of them left the UK."),
+    "nondom-residence": dict(
+        question="Do most non-domiciled taxpayers live in the UK?",
+        source="explain-hmrc-nondom-2025", publisher="HM Revenue and Customs",
+        title="Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", date="published July 2026",
+        quote=["As in previous years, the majority of non-domiciled taxpayers in the tax year ending 2025 indicated UK residence."]),
+    "nondom-income-tax": dict(
+        question="How much Income Tax did non-domiciled taxpayers pay?",
+        source="explain-hmrc-nondom-2025", publisher="HM Revenue and Customs",
+        title="Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", date="published July 2026",
+        quote=["At around £9.7 billion, the Income Tax revenue from non-domiciled and deemed domiciled taxpayers is £556 million (or 6%) higher than in tax year ending 2024 and is at its highest level since tax year ending 2017."],
+        gloss="Deemed domiciled taxpayers are former non-domiciled taxpayers who are now treated as UK domiciled for Income Tax and Capital Gains Tax."),
+    "nondom-provisional": dict(
+        question="How firm are the latest non-dom numbers?",
+        source="explain-hmrc-nondom-2025", publisher="HM Revenue and Customs",
+        title="Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", date="published July 2026",
+        quote=["Figures for tax years ending 2023, 2024 and 2025 are provisional (subject to future updates)."]),
 }
 
 _text_cache = {}

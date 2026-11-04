@@ -175,6 +175,159 @@
           "asked": "as part fo that question we should clearly answer \"what do the bond markets thing of the uk vs other countries e.g. how eassy is it to raise more moeny and how much interest do we pay? becuase it's a sign of how confident the markets are in how our economy is being run\""
         }
       ]
+    },
+    {
+      "id": "J5",
+      "asked": "Are people really leaving the UK becasue taxes are too high and living standards are too low?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "Read as two questions. First: are more people leaving the UK than before? Official figures can answer this for emigration overall and for British, EU+ and non-EU+ nationals, and for non-domiciled taxpayers at HMRC. Second: are taxes or living standards the reason? No official source records why people leave, so the site can only say what the figures can and cannot show about that.",
+      "probes": [
+        {
+          "id": "J5.1",
+          "question": "About how many people left the UK to live abroad for at least 12 months in the year ending December 2025 (provisional)?",
+          "options": {
+            "A": "About 246,000",
+            "B": "About 642,000",
+            "C": "About 278,000",
+            "D": "About 1.2 million"
+          },
+          "answer": "B",
+          "why": "ONS gives 642,000 for total long-term emigration in the year ending December 2025. The 246,000 figure is British nationals only.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "The provisional estimate for total long-term emigration in the most recent period is 642,000."
+            }
+          ]
+        },
+        {
+          "id": "J5.2",
+          "question": "How did the number of British nationals leaving the UK change from the year ending December 2024 to the year ending December 2025?",
+          "options": {
+            "A": "It rose sharply",
+            "B": "It fell slightly, from 257,000 to 246,000",
+            "C": "It stayed exactly the same",
+            "D": "It doubled"
+          },
+          "answer": "B",
+          "why": "ONS: 246,000 British nationals left in the year ending December 2025, a 4% decline from the updated figure of 257,000 for 2024.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "In YE December 2025, 246,000 British nationals left the UK, a slight decline of 4% from the updated YE December 2024 estimates of 257,000."
+            }
+          ]
+        },
+        {
+          "id": "J5.3",
+          "question": "Do the official figures show why people leave the UK?",
+          "options": {
+            "A": "Yes, they record the main reason each person gave",
+            "B": "Yes, but only for people who leave for work",
+            "C": "No, they record when people leave, not why",
+            "D": "Only for British nationals"
+          },
+          "answer": "C",
+          "why": "The ONS records the visa or route a person first arrived on, not a reason for leaving. No official figure here records why anyone left.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "None of the official figures on this page records why anyone left."
+            }
+          ]
+        },
+        {
+          "id": "J5.4",
+          "question": "Can the British emigration figures for 2025 be compared with those before June 2021?",
+          "options": {
+            "A": "Yes, the method has not changed",
+            "B": "No, the way British departures are estimated changed, so they cannot be compared",
+            "C": "Yes, both show record levels",
+            "D": "Only for people aged 16 to 24"
+          },
+          "answer": "B",
+          "why": "ONS changed its method for British nationals and revised the series back to June 2021, but says earlier figures cannot be compared with the new ones.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "The significant change in our methods means we cannot compare our improved estimates with those from before June 2021."
+            }
+          ]
+        },
+        {
+          "id": "J5.5",
+          "question": "What happened to the number of non-domiciled taxpayers leaving that group in the tax year 2024 to 2025 (HMRC)?",
+          "options": {
+            "A": "It rose to about 11,200",
+            "B": "It fell to about 9,000, from about 11,200",
+            "C": "It stayed at about 11,200",
+            "D": "It rose to about 20,000"
+          },
+          "answer": "B",
+          "why": "HMRC: around 9,000 taxpayers flowed out of the non-domiciled group in 2024 to 2025, compared with 11,200 the year before.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "Fewer taxpayers flowed out of the non-domiciled taxpayer population than in the previous year (around 9,000 compared with 11,200), while the number of newly arrived non-domiciled taxpayers also fell (around 8,600 compared with 10,000)."
+            }
+          ]
+        },
+        {
+          "id": "J5.6",
+          "question": "What happened to the Income Tax paid by non-domiciled and deemed domiciled taxpayers in the tax year 2024 to 2025 (HMRC)?",
+          "options": {
+            "A": "It fell by 6%",
+            "B": "It rose by 6%, to its highest level since 2017",
+            "C": "It stayed the same",
+            "D": "It fell to zero"
+          },
+          "answer": "B",
+          "why": "HMRC: Income Tax from this group was £556 million (6%) higher than the year before, at its highest level since 2017.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "At around £9.7 billion, the Income Tax revenue from non-domiciled and deemed domiciled taxpayers is £556 million (or 6%) higher than in tax year ending 2024 and is at its highest level since tax year ending 2017."
+            }
+          ]
+        },
+        {
+          "id": "J5.7",
+          "question": "Can these official figures show whether taxes or living standards were a reason people left?",
+          "options": {
+            "A": "Yes, clearly",
+            "B": "Yes, but only for high earners",
+            "C": "No, the figures on this page cannot show it",
+            "D": "Yes, the tax figures show it directly"
+          },
+          "answer": "C",
+          "why": "None of the sources here records why people left, what they paid in tax, or how their living standards changed. The site says so and points to separate pages.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "The figures on this page cannot show whether taxes or living standards were a reason for leaving."
+            }
+          ]
+        },
+        {
+          "id": "J5.8",
+          "question": "How many more British nationals left the UK than arrived in 2025, on ONS's provisional figures?",
+          "options": {
+            "A": "About 110,000",
+            "B": "About 136,000",
+            "C": "About 246,000",
+            "D": "About 642,000"
+          },
+          "answer": "B",
+          "why": "ONS: around 136,000 more British nationals left than arrived in 2025. The 110,000 figure is British arrivals.",
+          "evidence": [
+            {
+              "page": "leaving-uk.html",
+              "text": "Around 136,000 more Brits left than arrived in 2025."
+            }
+          ]
+        }
+      ]
     }
   ]
 }
