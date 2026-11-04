@@ -1,0 +1,97 @@
+{
+ "reader": "I1",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 26,
+ "url": "spending.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 2800
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 4480
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/earnings.html#key-answer",
+   "ops": [],
+   "scroll": 1810
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 0
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: How much household income goes on tax? 33.6% Taxes took 33.6% of gross household",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: Home",
+  "tap [11] link: Pay after inflation",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Housing",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [2] link: Spending",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/74f424e4-e3a6-5900-b0ea-caa2d0b8eebf/scratchpad/audit16/shots/I1",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "GDP"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "as a share of GDP over time"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "beside other countries"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "interest on government debt"
+  }
+ ]
+}

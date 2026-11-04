@@ -1,0 +1,137 @@
+{
+ "reader": "R5-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 38,
+ "url": "life/compare/2011-2019.html#schools",
+ "ops": [],
+ "scroll": 3015,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 1120
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 3920
+    }
+   ],
+   "scroll": 3920
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1680
+    }
+   ],
+   "scroll": 1680
+  },
+  {
+   "url": "life/index.html#earnings",
+   "ops": [],
+   "scroll": 2911
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "life/schools.html#years",
+   "ops": [],
+   "scroll": 4719
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [13] link: Earnings",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Holidays in every year since 1980",
+  "scroll down",
+  "scroll down",
+  "tap [9] link: Class sizes",
+  "scroll down",
+  "scroll down",
+  "tap [10] link: Pick a year, or compare two years of class sizes",
+  "tap [6] button: Compare 2011 and 2019",
+  "scroll up",
+  "scroll up"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/74f424e4-e3a6-5900-b0ea-caa2d0b8eebf/scratchpad/audit16/shots/R5",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ol:nth-of-type(2) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Housing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Work chart, table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Earnings chart, table, limits and sources"
+  }
+ ]
+}

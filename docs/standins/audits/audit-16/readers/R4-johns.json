@@ -1,0 +1,75 @@
+{
+ "reader": "R4-johns",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 19,
+ "url": "glossary.html#borrowing",
+ "ops": [],
+ "scroll": 3196,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "borrowing.html",
+   "ops": [],
+   "scroll": 5516
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 560
+  },
+  {
+   "url": "international.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "tap [6] link: Debt",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [5] link: beside other countries",
+  "scroll down",
+  "scroll down",
+  "tap [5] link: borrowing"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/74f424e4-e3a6-5900-b0ea-caa2d0b8eebf/scratchpad/audit16/shots/R4",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > dl:nth-of-type(2) > dd:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "UK debt and borrowing costs beside the G7"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > dl:nth-of-type(2) > dd:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "UK debt beside the G7"
+  }
+ ]
+}

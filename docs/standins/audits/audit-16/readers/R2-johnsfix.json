@@ -1,0 +1,139 @@
+{
+ "reader": "R2-johnsfix",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 36,
+ "url": "international.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "borrowing.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 4480
+    }
+   ],
+   "scroll": 4480
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "index.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 1120
+  },
+  {
+   "url": "life/index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 2800
+  }
+ ],
+ "log": [
+  "tap [6] link: Debt",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll up",
+  "tap [5] link: Tax and income",
+  "tap [1] link: Unpolitical",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [1] link: Unpolitical",
+  "tap [3] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [9] link: How the UK compares with other countries",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/74f424e4-e3a6-5900-b0ea-caa2d0b8eebf/scratchpad/audit16/shots/R2fix",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > p:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Show the G7 as a table"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "borrowing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "debt interest"
+  }
+ ]
+}
