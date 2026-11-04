@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-dev build site check test test-stability verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -24,6 +24,10 @@ check:
 
 test:
 	$(RUN_PYTHON) -m unittest discover -s tests -v
+
+# Fresh processes and different hash seeds; no failing attempt is forgiven.
+test-stability:
+	$(RUN_PYTHON) -m scripts.test_stability
 
 verify: build check test
 

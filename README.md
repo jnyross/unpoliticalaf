@@ -41,6 +41,7 @@ make setup     # create .venv and install openpyxl
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
+make test-stability  # repeat the full suite three times and report unstable tests
 make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
@@ -49,6 +50,28 @@ Vercel: install `make setup`, build `make build`, output directory `site`, all s
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+### Flaky-test detection
+
+The `check` CI job builds and checks the site, then runs every unit test three
+times in fresh Python processes with `PYTHONHASHSEED=1`, `2` and `3`. A changing
+outcome is flagged as flaky. Any failure, unexpected success, missing test,
+crash, timeout or empty suite fails the job, even if a later run passes.
+Stable skips and expected failures are recorded, not counted as passing tests.
+This samples stability; three passes do not prove a test can never flake.
+
+Each PR and main push retains a `test-stability-<run>-<attempt>` Actions artifact
+for 30 days. It contains `report.json` (per-test outcomes, pass rates, flaky IDs,
+run durations and commit), `summary.md` (also in the job summary), and full
+`run-*.log` tracebacks. Compare artifacts to track repeat offenders across commits.
+
+Reproduce locally with `make build && make test-stability`. For a longer probe:
+`.venv/bin/python -m scripts.test_stability --runs 10 --timeout 300`.
+Reports are written to the ignored `artifacts/test-stability/` directory.
+When a test is flagged, use its ID and failing hash seed from the report to run
+`PYTHONHASHSEED=<seed> .venv/bin/python -m unittest discover -s tests -v -k '<test ID>'`.
+Track the ID, run URL, seed and failure in a bug issue, fix the cause, then rerun
+the stability check. Do not silence it with a skip or rerun-until-green policy.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds

@@ -1,5 +1,6 @@
 # Deterministic generated output and Python caches
 /site/
+/artifacts/test-stability/
 __pycache__/
 *.py[cod]
 .venv/
