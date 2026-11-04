@@ -63,6 +63,14 @@
   "sha256": "11a591e4a2144ed6a686be6a9ded4e5d5b3b8d4887bd57c1ff0632bd251009de",
   "retrieved": "2026-11-04T13:30:30Z"
  },
+ "dwp-spa-timetable": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+  "file": "dwp/spa-timetable.pdf",
+  "bytes": 49037,
+  "content_type": "application/pdf",
+  "sha256": "493afc7aa63961f0f0dba2bccf53bf1bd9aec20b1a29ee89f3b169d740a40385",
+  "retrieved": "2026-11-04T13:32:50Z"
+ },
  "ehs-annex-ch1": {
   "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
   "file": "ehs/annex-2024-25-ch1-profile.ods",
@@ -1070,6 +1078,22 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "9aa31c33f4e0be0777f0ab13e701249bd816deb1f18bfa87b0f0710ff1254891",
   "retrieved": "2026-11-02T08:58:38Z"
+ },
+ "parl-cbp-tuition-fees": {
+  "url": "https://dera.ioe.ac.uk/id/eprint/40996/1/CBP-10155.pdf",
+  "file": "parl/CBP-10155.pdf",
+  "bytes": 1125592,
+  "content_type": "application/pdf",
+  "sha256": "0d168212eab351a3ee460fc90afed0b77f735cac8acfc3aed023b9f0706701f0",
+  "retrieved": "2026-11-04T13:47:58Z"
+ },
+ "parl-hansard-1998-tuition-fees": {
+  "url": "https://api.parliament.uk/historic-hansard/written-answers/1998/dec/07/tuition-fees",
+  "file": "parl/hansard-1998-12-07-tuition-fees.html",
+  "bytes": 12666,
+  "content_type": "text/html",
+  "sha256": "b4052322ab109f35d37a3384ce2520ac05e6753a2aa053cf83fd6aa8c8007e4a",
+  "retrieved": "2026-11-04T13:48:01Z"
  },
  "scot-primary-class-2025": {
   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
