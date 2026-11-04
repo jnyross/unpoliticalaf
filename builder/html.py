@@ -28,7 +28,7 @@ a:focus-visible,summary:focus-visible,select:focus-visible,button:focus-visible,
 header.site{border-bottom:1px solid var(--line);background:#fff}
 .backtop{display:flex;align-items:center;width:max-content;min-height:44px;margin:0 16px 12px auto;padding:0 14px;border:1px solid var(--ink2);border-radius:22px;background:#fff;color:var(--ink);font-size:.93rem;font-weight:600;text-decoration:none}.backtop:hover{border-color:var(--ink)}
 header.site .wrap{display:flex;flex-direction:column;padding-top:0;padding-bottom:0}
-.js .backtop{display:none}.quickbar{position:fixed;top:0;left:0;right:0;z-index:6;background:#fff;border-bottom:1px solid var(--line);visibility:hidden}.quickbar.show{visibility:visible}html.js{scroll-padding-top:60px}.js dl.glossary dt{scroll-margin-top:0}
+.js .backtop{display:none}.js header.site{position:sticky;top:0;z-index:6}html.js{scroll-padding-top:156px}.js dl.glossary dt{scroll-margin-top:0}@media (min-width:640px){html.js{scroll-padding-top:72px}}
 .quickbar>.wrap{display:flex;align-items:center;justify-content:space-between;padding-top:0;padding-bottom:0}.qmenu,.qmenu[open]{margin:0;border:0;padding:0}.qmenu>summary{min-height:44px;margin:2px 0;padding:0 16px;border:1px solid var(--ink2);color:var(--ink);border-radius:22px}.qmenu[open]>summary{background:var(--ink);color:#fff}
 .qmenu nav{position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line);max-height:calc(100vh - 56px);overflow:auto}.qmenu ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.qmenu a{display:flex;align-items:center;min-height:44px;color:var(--ink);border-bottom:1px solid var(--line)}
 .brand{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-weight:750;letter-spacing:-.01em;color:var(--ink);text-decoration:none;font-size:1.1rem}
@@ -1257,22 +1257,12 @@ var s=document.getElementById(a.getAttribute('href').slice(1)),i=s&&s.querySelec
 if(i){i.checked=true;}});});
 </script>"""
 
-# Once the header and its menu have scrolled out of view, a slim bar stays at the top
-# of the screen with a "Menu" button that opens the menu in place, so a reader can move
-# on from anywhere without losing their place (goal audit 12). It is added only with
-# JavaScript; without it the menu is at the top and the foot of every page, and
-# "Top and menu" is an ordinary link before the footer.
+# With JavaScript the header (name and main links) stays at the top of the screen while a
+# reader scrolls, so its links never move or change number as the page scrolls (audit 15 gap 3:
+# a Menu bar that appeared after scrolling moved the links readers had just found). Without
+# JavaScript the header scrolls away as before, and "Top and menu" is an ordinary link before the footer.
 BACKTOP_JS = """<script>
-(function(){var r=document.documentElement,h=document.querySelector('header.site'),u=h&&h.querySelector('nav.main ul');if(!u)return;r.classList.add('js');
-var q=document.createElement('div');q.className='quickbar';q.innerHTML='<div class="wrap"><a class="brand" tabindex="-1"></a><details class="qmenu"><summary>Menu</summary><nav aria-label="Menu"><div class="wrap"><a class="qtop" href="#top">↑ Back to top</a></div></nav></details></div>';
-var b=h.querySelector('.brand'),a=q.querySelector('.brand');a.href=b.href;a.textContent=b.textContent;
-var w=q.querySelector('nav .wrap');w.insertBefore(u.cloneNode(true),w.firstChild);h.parentNode.insertBefore(q,h.nextSibling);
-var m=q.querySelector('details');
-function set(){var on=window.scrollY>h.offsetHeight;q.classList.toggle('show',on);if(!on&&m.open)m.open=false;}
-window.addEventListener('scroll',set,{passive:true});set();
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.open){m.open=false;m.querySelector('summary').focus();}});
-document.addEventListener('click',function(e){if(m.open&&!m.contains(e.target))m.open=false;});
-q.querySelector('a.qtop').addEventListener('click',function(){m.open=false;});})();
+(function(){document.documentElement.classList.add('js');})();
 </script>"""
 
 
