@@ -14,10 +14,12 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
+from .logging import get_logger, run_logged
 from . import pages_money_extra, pages_generations, pages_manifesto, version
 from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, pages_questions, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
+logger = get_logger("build")
 # The product spec requires every page to be under 500,000 bytes. Reading pages
 # (everything except the figure records) have a tighter limit so they stay quick
 # on a phone; a page that grows past it should be split, as the life explorer was.
@@ -121,6 +123,7 @@ def write_build_record():
 
 
 def main():
+    logger.info("build.started")
     facts, sources, pages, num = render()
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -140,11 +143,16 @@ def main():
     (OUT / "data/facts.json").write_text(json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1), encoding="utf-8")
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
     write_build_record()
-    print(f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
+    logger.info("build.completed", extra={"context": {
+        "pages": len(pages), "csv_downloads": len(downloads.FILES),
+        "facts": len(facts), "shown": len(num.used), "output": str(OUT.relative_to(ROOT)),
+    }})
     if num.absent:
-        print(f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}")
+        logger.warning("build.figures_unavailable", extra={"context": {
+            "count": len(num.absent), "examples": sorted(num.absent)[:8],
+        }})
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_logged(main, logger))

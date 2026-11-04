@@ -10,6 +10,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from builder.logging import get_logger, run_logged
+
+logger = get_logger("fetch_sources")
 OUT = ROOT / "data" / "fetched"
 UA = {"User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"}
 
@@ -22,18 +26,25 @@ def get(url):
         except Exception as e:  # retry transient failures and rate limits
             if attempt == 3:
                 raise
-            time.sleep(30 * (attempt + 1) if "429" in str(e) else 2 ** attempt)
+            delay = 30 * (attempt + 1) if "429" in str(e) else 2 ** attempt
+            logger.warning("source.retry", extra={"context": {
+                "attempt": attempt + 1, "delay_seconds": delay, "error_type": type(e).__name__,
+            }})
+            time.sleep(delay)
 
 
 def main(only=None, refresh=False):
+    logger.info("fetch.started", extra={"context": {"refresh": refresh}})
     manifest = json.loads((ROOT / "sources/manifest.json").read_text())
     receipts_path = OUT / "receipts.json"
     receipts = json.loads(receipts_path.read_text()) if receipts_path.exists() else {}
     failures = []
+    downloaded = skipped = 0
     for s in manifest["sources"]:
         if only and s["id"] not in only:
             continue
         if not refresh and not only and s["id"] in receipts and (OUT / receipts[s["id"]]["file"]).exists():
+            skipped += 1
             continue  # keep the retained copy; pass --refresh to download again
         time.sleep(3)  # be polite to the publishers' servers
         try:
@@ -56,15 +67,22 @@ def main(only=None, refresh=False):
             receipts[s["id"]] = {"url": url, "file": name, "bytes": len(body), "content_type": ctype,
                                  "sha256": hashlib.sha256(body).hexdigest(),
                                  "retrieved": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
-            print("ok  ", s["id"], len(body), url)
-        except Exception as e:
+            downloaded += 1
+            logger.info("source.downloaded", extra={"context": {
+                "source_id": s["id"], "bytes": len(body), "file": name,
+                "sha256": receipts[s["id"]]["sha256"],
+            }})
+        except Exception:
             failures.append(s["id"])
-            print("FAIL", s["id"], e)
+            logger.exception("source.failed", extra={"context": {"source_id": s["id"]}})
     OUT.mkdir(parents=True, exist_ok=True)
     receipts_path.write_text(json.dumps(dict(sorted(receipts.items())), indent=1) + "\n")
-    print("failures:", failures)
+    log_summary = logger.error if failures else logger.info
+    log_summary("fetch.completed", extra={"context": {
+        "downloaded": downloaded, "skipped": skipped, "failures": failures,
+    }})
 
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if a != "--refresh"]
-    main(set(args) or None, refresh="--refresh" in sys.argv)
+    sys.exit(run_logged(lambda: main(set(args) or None, refresh="--refresh" in sys.argv), logger))

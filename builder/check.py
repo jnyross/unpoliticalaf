@@ -25,9 +25,11 @@ import sys
 from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
+from .logging import get_logger, run_logged
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
+logger = get_logger("check")
 
 # Words that judge rather than describe. Matched as whole words in visible text.
 LOADED = ["shocking", "staggering", "soared", "soaring", "plummeted", "plunged", "massive", "huge", "crisis", "waste", "wasted",
@@ -717,6 +719,7 @@ def check_explanations():
 
 
 def main():
+    logger.info("check.started")
     data = json.loads((SITE / "data/facts.json").read_text(encoding="utf-8"))
     facts, checked, recalculated = check_facts(data)
     years, pairs = check_structure()
@@ -734,21 +737,22 @@ def main():
                  "glossary.html", "questions.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/generations.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
-    print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
-    print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
-    print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
-    print(f"Checked that {n_findings} chart headings state their finding in neutral words.")
-    print(f"Checked that {n_trends} trend headings name every big rise and fall of their line.")
-    print(f"Checked that {n_axes} line charts whose scale starts above zero say so.")
-    print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
+    logger.info("check.completed", extra={"context": {
+        "source_figures": checked, "recalculated": recalculated, "shown": shown,
+        "pages": n_pages, "year_pages": years, "comparison_pages": pairs,
+        "csv_downloads": n_csv, "findings": n_findings, "trends": n_trends,
+        "axis_notes": n_axes, "quotes": n_quotes, "problems": len(problems),
+    }})
     if problems:
-        print(f"\n{len(problems)} problems:")
         for p in problems[:200]:
-            print(" -", p)
+            logger.error("check.problem", extra={"context": {"detail": p}})
+        logger.error("check.failed", extra={"context": {
+            "problems": len(problems), "reported": min(len(problems), 200),
+        }})
         return 1
-    print("All checks passed.")
+    logger.info("check.passed")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_logged(main, logger))
