@@ -1,0 +1,48 @@
+name: Release verified site
+
+# The live workflow covers pushes, daily recovery and auto-merge's explicit
+# dispatch (GITHUB_TOKEN merges do not start push workflows).
+on:
+  workflow_run:
+    workflows: ["Live site matches main"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-release-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Never build the workflow_run default ref or download upstream artifacts.
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup
+      - run: make verify
+      - name: Package the exact verified commit
+        env:
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: .venv/bin/python scripts/package_release.py --commit "$COMMIT" --output "$RUNNER_TEMP/release"
+      - name: Publish a complete release, or resume an interrupted draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+          LIVE_RUN: ${{ github.event.workflow_run.html_url }}
+        run: bash scripts/publish_release.sh
