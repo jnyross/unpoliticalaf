@@ -622,6 +622,21 @@
    "file": "explain/ons-ltim-dec2025.html"
   },
   {
+   "id": "explain-ons-ltim-yearending-dec-2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+   "file": "explain/ons-ltim-yearending-dec-2025.html"
+  },
+  {
+   "id": "explain-ons-uk-emigration-explained",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/articles/ukemigrationexplainedwhatweknowaboutbritsmovingabroad/2026-05-21",
+   "file": "explain/ons-uk-emigration-explained-2026.html"
+  },
+  {
+   "id": "explain-hmrc-nondom-2025",
+   "url": "https://www.gov.uk/government/statistics/statistics-on-non-domiciled-taxpayers-in-the-uk/statistical-commentary-on-non-domiciled-taxpayers-in-the-uk",
+   "file": "explain/hmrc-nondom-commentary-2025.html"
+  },
+  {
    "id": "ons-icp",
    "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
    "file": "ons/icproductivityupdated.xlsx"

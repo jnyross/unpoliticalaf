@@ -97,6 +97,18 @@ def affordability(facts):
                 v = num(rows[i][j])
                 facts.add(Fact(f"afford.{kind}.{key}.{y}", v, unit, period, "ons-affordability", f"{sheet}!{ref(i, j)}", "published",
                                note=f"{rows[i][1]}: {note}" + (" (annualised weekly earnings)" if y <= 1998 and kind != "price" else "")))
+    # A 10% deposit on the median home, in pounds and as years of median full-time pay before tax.
+    # One assumed deposit size, chosen for illustration; it is not what buyers actually put down.
+    for y in years:
+        p, e = facts.get(f"afford.price.ew.{y}"), facts.get(f"afford.earn.ew.{y}")
+        if p is None or e is None:
+            continue
+        facts.add(Fact(f"afford.depamt.ew.{y}", None if p.value is None else 0.1 * p.value, "£", f"year ending September {y}", "ons-affordability",
+                       p.locator, "calculated", formula=f"0.1 × {p.id}", inputs=[p.id],
+                       note="A 10% deposit on the median house price (an assumed deposit size, for illustration)"))
+        facts.add(Fact(f"afford.deposit.ew.{y}", None if p.value is None or not e.value else 0.1 * p.value / e.value, "years of pay before tax",
+                       f"year ending September {y}", "ons-affordability", p.locator, "calculated", formula=f"0.1 × {p.id} ÷ {e.id}", inputs=[p.id, e.id],
+                       note="A 10% deposit as years of median full-time gross pay (ignores tax, rent, existing savings and gifts)"))
     return out
 
 

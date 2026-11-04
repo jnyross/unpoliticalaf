@@ -103,6 +103,29 @@ def afford_block(facts, num, d):
             f'<p class="more-link"><a href="house-prices.html">House prices and earnings since {first}</a>, with each region.</p>']
 
 
+def _harder_block(facts, num, d):
+    """T128, how much harder it is to buy: three measures, each with its years and limits."""
+    af = d["life_extra"]["afford"]
+    years = af["years"]
+    last, first = years[-1], comparable_from(years)
+    mp_then, mp_now = 2008, 2024  # EHS survey years 2008-09 and 2024-25, in 2024-25 prices
+    rise = 100 * (_v(facts, f"house.real.mortpay.{mp_now}") / _v(facts, f"house.real.mortpay.{mp_then}") - 1)
+    return ["<h2 id='harder'>How much harder is it to buy a home than it was?</h2>",
+            f'<div class="answer"><p>Measured against earnings, the middle-priced home now costs about twice as much as it did in {first}. Three measures cover this, each with its limits:</p>'
+            f'<ul>'
+            f'<li><strong>House prices against earnings.</strong> In the year to September {last}, the middle-priced home in England and Wales cost {num(f"afford.ratio.ew.{last}", "times2")} '
+            f'a year’s pay before tax, against {num(f"afford.ratio.ew.{first}", "times2")} in {first}.</li>'
+            f'<li><strong>A 10% deposit.</strong> In the year to September {last}, a 10% deposit on the middle-priced home was {num(f"afford.depamt.ew.{last}", "pounds")}, '
+            f'which is {num(f"afford.deposit.ew.{last}", "dp2")} years of middle full-time pay before tax. In {first} it was {num(f"afford.depamt.ew.{first}", "pounds")}, '
+            f'or {num(f"afford.deposit.ew.{first}", "dp2")} years.</li>'
+            f'<li><strong>Mortgage payments.</strong> After inflation, the average mortgage payment for owners with a mortgage in England rose from '
+            f'{num(f"house.real.mortpay.{mp_then}", "pounds")} a week in {mp_then}-{str(mp_then + 1)[2:]} to {num(f"house.real.mortpay.{mp_now}", "pounds")} a week in {mp_now}-{str(mp_now + 1)[2:]} '
+            f'(in {mp_now}-{str(mp_now + 1)[2:]} prices), an increase of {rise:.0f}%.</li></ul>'
+            f'<p>The price measures and the payment measure tell different stories, and each leaves something out. House prices and deposits are for the middle home sold, not for first-time buyers. '
+            f'Mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer pays, and they rose much less than prices. '
+            f'The site does not yet show the age at which people buy their first home, home ownership by age, mortgage interest rates, or mortgage payments as a share of take-home pay.</p></div>']
+
+
 def afford_page(facts, d, num, sources):
     """A page of its own, so the housing page stays within its size limit."""
     from .html import page, source_line, FOLD
@@ -111,7 +134,7 @@ def afford_page(facts, d, num, sources):
     years = af["years"]
     first, last = years[0], years[-1]
     body = ['<p class="small"><a href="index.html">Everyday life, year by year</a> › <a href="housing.html">Housing</a></p>',
-            f"<h1>How do house prices compare with earnings, and how has that changed since {first}?</h1>", _afford_answer(facts, num, d), topic_nav("housing"), CAUSE]
+            f"<h1>How do house prices compare with earnings, and how has that changed since {first}?</h1>", _afford_answer(facts, num, d), *_harder_block(facts, num, d), topic_nav("housing"), CAUSE]
     body.append("<h2 id='trend'>The ratio over time</h2>")
     body.append(_chart(facts, num, "Median house price as a multiple of median full-time earnings", years,
                        [("England", lambda y: f"afford.ratio.england.{y}", "a"), ("Wales", lambda y: f"afford.ratio.wales.{y}", "b")],
@@ -136,7 +159,7 @@ def afford_page(facts, d, num, sources):
                 f'Earnings are for one full-time employee working in the area, not household income, and {first} and {first + 1} use weekly pay scaled up to a year, which ONS says is not directly comparable with later years. '
                 f'The ratio does not include mortgage interest rates, deposits or rents, so it is not a measure of monthly housing costs: see <a href="housing.html#housing-costs">what housing costs</a>. '
                 f'ONS publishes the ratio rounded to two decimal places and revises these figures each year.</p></div>')
-    body.append(source_line(sources, ["ons-affordability"], up="../"))
+    body.append(source_line(sources, ["ons-affordability", "ehs-fa2501", "ehs-fa2555"], up="../"))
     return page(AFFORD_PAGE, f"House prices and earnings since {first}", "\n".join(body),
                 f"Median house prices compared with median full-time earnings in England and Wales and each English region, every year since {first}, from ONS.")
 
