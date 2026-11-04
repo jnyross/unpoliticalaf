@@ -1,685 +1,685 @@
 {
-  "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page.",
-  "sources": [
-    {
-      "id": "ons-mgrz",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
-      "file": "ons/mgrz.csv"
-    },
-    {
-      "id": "ons-lf24",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf24/lms",
-      "file": "ons/lf24.csv"
-    },
-    {
-      "id": "ons-mgsv",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms",
-      "file": "ons/mgsv.csv"
-    },
-    {
-      "id": "ons-lf25",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
-      "file": "ons/lf25.csv"
-    },
-    {
-      "id": "ons-ycbe",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",
-      "file": "ons/ycbe.csv"
-    },
-    {
-      "id": "ons-l522",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
-      "file": "ons/l522.csv"
-    },
-    {
-      "id": "ons-a3wx",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
-      "file": "ons/a3wx.csv"
-    },
-    {
-      "id": "ashe-2025-fig1",
-      "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/cfe85f05&format=csv",
-      "file": "ons/ashe-2025-fig1.csv"
-    },
-    {
-      "id": "ashe-2025-fig2",
-      "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/247173f1&format=csv",
-      "file": "ons/ashe-2025-fig2.csv"
-    },
-    {
-      "id": "nomis-ashe-resident",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/ashe-resident-uk-median-weekly.csv"
-    },
-    {
-      "id": "nomis-ashe-sex-codes",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/sex.def.sdmx.json",
-      "file": "nomis/ashe-sex-codes.json"
-    },
-    {
-      "id": "ehs-tenure-page",
-      "url": "https://www.gov.uk/government/statistical-data-sets/tenure-trends-and-cross-tenure-analysis",
-      "file": "ehs/tenure-page.html"
-    },
-    {
-      "id": "ott-uk-residents-page",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad",
-      "file": "ott/uk-residents-page.html"
-    },
-    {
-      "id": "dfe-spc-page",
-      "url": "https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics",
-      "file": "dfe/spc-page.html"
-    },
-    {
-      "id": "ons-ycbh",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbh/lms",
-      "file": "ons/ycbh.csv"
-    },
-    {
-      "id": "ehs-ft1101",
-      "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
-      "file": "ehs/FT1101_Trends_in_tenure.ods"
-    },
-    {
-      "id": "ehs-ft1241",
-      "url": "https://assets.publishing.service.gov.uk/media/6a4d9aa9ed5ddb5c8626f49b/FT1241_Trends_in_tenure_households_with_dependent_children.ods",
-      "file": "ehs/FT1241_Trends_in_tenure_households_with_dependent_children.ods"
-    },
-    {
-      "id": "ehs-ft1421",
-      "url": "https://assets.publishing.service.gov.uk/media/64af30aec033c100108061f1/FT1421_Trends_in_overcrowding_by_tenure.ods",
-      "file": "ehs/FT1421_Trends_in_overcrowding_by_tenure.ods"
-    },
-    {
-      "id": "ott-2025",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
-      "file": "ott/ukresidents2025annual.xlsx"
-    },
-    {
-      "id": "ott-2019to2023",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2019to2023/traveltrendssection3ukresidentsvisitsabroad.xlsx",
-      "file": "ott/section3-2019to2023.xlsx"
-    },
-    {
-      "id": "ott-2009to2019",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
-      "file": "ott/section3-2009to2019.xlsx"
-    },
-    {
-      "id": "gov-income-tax-rates",
-      "url": "https://www.gov.uk/income-tax-rates",
-      "file": "gov/income-tax-rates.html"
-    },
-    {
-      "id": "gov-income-tax-rates-previous",
-      "url": "https://www.gov.uk/income-tax-rates/previous-tax-years",
-      "file": "gov/income-tax-rates-previous.html"
-    },
-    {
-      "id": "gov-ni-rates",
-      "url": "https://www.gov.uk/national-insurance-rates-letters",
-      "file": "gov/national-insurance-rates.html"
-    },
-    {
-      "id": "dfe-spc-2015-page",
-      "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
-      "file": "dfe/spc-2015-page.html"
-    },
-    {
-      "id": "dfe-spc-2015-tables",
-      "page": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
-      "find": "https://assets\\.publishing\\.service\\.gov\\.uk/[^\"']*[Nn]ational[^\"']*\\.xlsx",
-      "file": "dfe/spc-2015-national-tables"
-    },
-    {
-      "id": "ott-2024",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
-      "file": "ott/ukresidents2024annual.xlsx"
-    },
-    {
-      "id": "gbts-2025-toplines",
-      "url": "https://www.visitbritain.org/media/5894/download?attachment",
-      "file": "gbts/gbts-2025-toplines.pdf"
-    },
-    {
-      "id": "gbts-2024-q4-annual-tables",
-      "url": "https://www.visitbritain.org/media/4472/download?attachment",
-      "file": "gbts/gbts-2024-q4-annual-tables.xlsx"
-    },
-    {
-      "id": "gbts-2022to2023-tables",
-      "url": "https://www.visitbritain.org/media/3719/download?attachment",
-      "file": "gbts/gbts-2022to2023-tables.xlsx"
-    },
-    {
-      "id": "gbts-2019-gb-summary",
-      "url": "https://www.visitbritain.org/media/3009/download?attachment",
-      "file": "gbts/gbts-2019-gb-summary.xlsx"
-    },
-    {
-      "id": "ons-ukpop",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
-      "file": "ons/ukpop.csv"
-    },
-    {
-      "id": "ons-gbpop",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
-      "file": "ons/gbpop.csv"
-    },
-    {
-      "id": "ehs-fa3201",
-      "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
-      "file": "ehs/FA3201_rent_before_housing_support.ods"
-    },
-    {
-      "id": "ehs-fa2555",
-      "url": "https://assets.publishing.service.gov.uk/media/6a4da2f96a73e62ba1029999/FA2555_mortgage_payment_per_week__by_type_of_mortgage_age_economic_status.ods",
-      "file": "ehs/FA2555_mortgage_payment_per_week.ods"
-    },
-    {
-      "id": "ehs-fa2501",
-      "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
-      "file": "ehs/FA2501_mortgage_payment_per_week_2021-22.ods"
-    },
-    {
-      "id": "ehs-fa1401",
-      "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
-      "file": "ehs/FA1401_number_of_rooms_by_tenure.ods"
-    },
-    {
-      "id": "ehs-fa1422",
-      "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
-      "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
-    },
-    {
-      "id": "nomis-aps-emp-places",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
-      "file": "nomis/aps-employment-rate-nations-regions.csv"
-    },
-    {
-      "id": "nomis-ashe-places",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
-    },
-    {
-      "id": "ons-ybud",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
-      "file": "ons/ybud.csv"
-    },
-    {
-      "id": "ons-ybug",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
-      "file": "ons/ybug.csv"
-    },
-    {
-      "id": "ons-ybuj",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybuj/lms",
-      "file": "ons/ybuj.csv"
-    },
-    {
-      "id": "ons-lf2u",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf2u/lms",
-      "file": "ons/lf2u.csv"
-    },
-    {
-      "id": "ons-lfk6",
-      "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lfk6/lms",
-      "file": "ons/lfk6.csv"
-    },
-    {
-      "id": "dluhc-lt109",
-      "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
-      "file": "dluhc/LiveTable109.ods"
-    },
-    {
-      "id": "wg-schools-census-2025",
-      "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
-      "file": "wg/schools-census-results-january-2025.ods"
-    },
-    {
-      "id": "nomis-aps-emp-places-ci",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21003&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
-      "file": "nomis/aps-employment-rate-nations-regions-ci.csv"
-    },
-    {
-      "id": "nomis-aps-measure-codes",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/measures.def.sdmx.json",
-      "file": "nomis/aps-measure-codes.json"
-    },
-    {
-      "id": "nomis-ashe-resident-cv",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/ashe-resident-uk-median-weekly-cv.csv"
-    },
-    {
-      "id": "nomis-ashe-measure-codes",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/measures.def.sdmx.json",
-      "file": "nomis/ashe-measure-codes.json"
-    },
-    {
-      "id": "ons-lfs-a11",
-      "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
-      "find": "/file\\?uri=[^\"']*a11[^\"']*\\.xlsx?",
-      "file": "ons/lfs-sampling-variability-a11"
-    },
-    {
-      "id": "ons-lfs-a11-page",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
-      "file": "ons/lfs-sampling-variability-a11-page.html"
-    },
-    {
-      "id": "nomis-ashe-article",
-      "url": "https://www.nomisweb.co.uk/articles/1320.aspx",
-      "file": "nomis/ashe-article-1320.html"
-    },
-    {
-      "id": "nomis-ashe-def",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.def.sdmx.json",
-      "file": "nomis/ashe-dataset-def.json"
-    },
-    {
-      "id": "nomis-aps-def",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.def.sdmx.json",
-      "file": "nomis/aps-dataset-def.json"
-    },
-    {
-      "id": "ons-ashe-qmi",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
-      "file": "ons/ashe-qmi.pdf"
-    },
-    {
-      "id": "ons-uncertainty-guide",
-      "url": "https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit",
-      "file": "ons/uncertainty-guide.html"
-    },
-    {
-      "id": "explain-ons-psf-2021-03",
-      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
-      "file": "explain/ons-psf-march2021.html"
-    },
-    {
-      "id": "explain-ons-2008-recession",
-      "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
-      "file": "explain/ons-2008-recession.html"
-    },
-    {
-      "id": "explain-ons-ashe-2022",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
-      "file": "explain/ons-ashe-2022.html"
-    },
-    {
-      "id": "explain-ons-lmo-latest",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
-      "file": "explain/ons-labour-market-latest.html"
-    },
-    {
-      "id": "explain-ons-travel-2024",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
-      "file": "explain/ons-travel-trends-2024.html"
-    },
-    {
-      "id": "explain-hmrc-itl-commentary",
-      "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
-      "file": "explain/hmrc-itl-commentary.html"
-    },
-    {
-      "id": "explain-ons-etb-latest",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
-      "file": "explain/ons-etb-latest.html"
-    },
-    {
-      "id": "explain-ons-etb-fye2016",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2016",
-      "file": "explain/ons-etb-fye2016.html"
-    },
-    {
-      "id": "explain-ons-psf-2023-03",
-      "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
-      "file": "explain/ons-psf-march2023.html"
-    },
-    {
-      "id": "explain-ons-travel-2021",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
-      "file": "explain/ons-travel-trends-2021.html"
-    },
-    {
-      "id": "explain-ons-travel-2022",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
-      "file": "explain/ons-travel-trends-2022.html"
-    },
-    {
-      "id": "explain-ehs-2023-24-rented-report",
-      "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
-      "file": "explain/ehs-2023-24-rented-sectors.html"
-    },
-    {
-      "id": "explain-ehs-2024-25-ch1",
-      "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
-      "file": "explain/ehs-2024-25-chapter-1.html"
-    },
-    {
-      "id": "explain-ehs-2024-25-ch2",
-      "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
-      "file": "explain/ehs-2024-25-chapter-2.html"
-    },
-    {
-      "id": "hmrc-spi-2324-tables",
-      "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
-      "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods"
-    },
-    {
-      "id": "explain-hmrc-spi-2324-commentary",
-      "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
-      "file": "explain/hmrc-spi-2023-24-commentary.html"
-    },
-    {
-      "id": "explain-hmrc-spi-quality",
-      "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
-      "file": "explain/hmrc-spi-quality-report.html"
-    },
-    {
-      "id": "scot-stock-by-tenure",
-      "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2018/09/housing-statistics-stock-by-tenure/documents/stock-by-tenure-2017/stock-by-tenure-2017/govscot%3Adocument/2025%2B-%2BStock%2Bby%2Btenure.xlsx",
-      "file": "nations/scot-stock-by-tenure-2025.xlsx"
-    },
-    {
-      "id": "ni-de-enrolments-2025-26",
-      "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
-      "file": "nations/ni-school-enrolments-2025-26-page.html"
-    },
-    {
-      "id": "scot-primary-class-2025",
-      "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
-      "file": "nations/scot-primary-class-size-dataset-2025.xlsx"
-    },
-    {
-      "id": "scot-pupil-census-2025",
-      "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
-      "file": "nations/scot-pupil-census-supplementary-2025.xlsx"
-    },
-    {
-      "id": "ni-housing-2025-26",
-      "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
-      "file": "nations/ni-housing-stats-25-26-tables1.ods"
-    },
-    {
-      "id": "wales-dwelling-stock-meta",
-      "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
-      "file": "nations/wales-dwelling-stock-metadata.json"
-    },
-    {
-      "id": "wales-dwelling-stock",
-      "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
-      "file": "nations/wales-dwelling-stock-by-tenure.csv"
-    },
-    {
-      "id": "etb-hist-quintile-all",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
-      "file": "etb/hist-quintile-all.xlsx"
-    },
-    {
-      "id": "etb-hist-deflator",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/deflator/deflator.xlsx",
-      "file": "etb/hist-deflator.xlsx"
-    },
-    {
-      "id": "etb-fye2018",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2018/etb2018referencetablesv3final.xlsx",
-      "file": "etb/fye2018.xlsx"
-    },
-    {
-      "id": "etb-fye2019",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending/etb2019referencetablesfinal1.xlsx",
-      "file": "etb/fye2019.xlsx"
-    },
-    {
-      "id": "etb-fye2020",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2020/201920etbtablesrevised.xlsx",
-      "file": "etb/fye2020.xlsx"
-    },
-    {
-      "id": "etb-fye2021",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2021/etb2021correctionuploadv3.xlsx",
-      "file": "etb/fye2021.xlsx"
-    },
-    {
-      "id": "etb-fye2022",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2022/etbreferencetablesfye2022correction2.xlsx",
-      "file": "etb/fye2022.xlsx"
-    },
-    {
-      "id": "etb-fye2023",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2023/etbreferencetablesfye202223.xlsx",
-      "file": "etb/fye2023.xlsx"
-    },
-    {
-      "id": "etb-hist-page",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets",
-      "file": "etb/hist-dataset-page.html"
-    },
-    {
-      "id": "nomis-ashe-item-codes",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/item.def.sdmx.json",
-      "file": "nomis/ashe-item-codes.json"
-    },
-    {
-      "id": "nomis-ashe-percentiles",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/ashe-resident-uk-weekly-percentiles.csv"
-    },
-    {
-      "id": "nomis-wfj-search",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/def.sdmx.json?search=*workforce*",
-      "file": "nomis/wfj-search.json"
-    },
-    {
-      "id": "nomis-wfj-def",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.def.sdmx.json",
-      "file": "nomis/wfj-def.json"
-    },
-    {
-      "id": "nomis-wfj-latest",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
-      "file": "nomis/wfj-uk-latest.csv"
-    },
-    {
-      "id": "ons-affordability",
-      "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
-      "find": "/file\\?uri=[^\"']*ratioofhousepricetoworkplacebasedearnings[^\"']*\\.xlsx?",
-      "file": "ons/affordability-workplace"
-    },
-    {
-      "id": "ons-affordability-page",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
-      "file": "ons/affordability-workplace-page.html"
-    },
-    {
-      "id": "ons-jobs02-page",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
-      "file": "ons/jobs02-page.html"
-    },
-    {
-      "id": "nomis-wfj-uk-industry",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/wfj-uk-industry.csv"
-    },
-    {
-      "id": "nomis-wfj-uk-industry-long",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
-      "file": "nomis/wfj-uk-industry-long.csv"
-    },
-    {
-      "id": "nomis-wfj-industry-codes",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
-      "file": "nomis/wfj-industry-codes.json"
-    },
-    {
-      "id": "nomis-wfj-industry-types",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
-      "file": "nomis/wfj-industry-types.json"
-    },
-    {
-      "id": "nomis-wfj-industry-children",
-      "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
-      "file": "nomis/wfj-industry-children.json"
-    },
-    {
-      "id": "ons-jobs02",
-      "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
-      "find": "/file\\?uri=[^\"']*jobs02[^\"']*\\.xlsx?",
-      "file": "ons/jobs02"
-    },
-    {
-      "id": "ons-ott-timeseries",
-      "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
-      "file": "ott/ott-timeseries.csv"
-    },
-    {
-      "id": "explain-ons-lfs-qmi",
-      "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
-      "file": "explain/ons-lfs-qmi.html"
-    },
-    {
-      "id": "eurostat-ilc-mdes02-uk",
-      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_mdes02?geo=UK&unit=PC&format=JSON&lang=en",
-      "file": "eurostat/ilc-mdes02-uk.json"
-    },
-    {
-      "id": "ons-families-households",
-      "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
-      "find": "/file\\?uri=[^\"']*familiesandhouseholds[^\"']*\\.xlsx?",
-      "file": "ons/families-households"
-    },
-    {
-      "id": "ons-families-households-page",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
-      "file": "ons/families-households-page.html"
-    },
-    {
-      "id": "oecd-rs-tax",
-      "file": "oecd/revenue-statistics-tax-gdp.csv",
-      "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels"
-    },
-    {
-      "id": "oecd-gov-pf",
-      "file": "oecd/gov-at-a-glance-expenditure-revenue-gdp.csv",
-      "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A..GE+GR.PT_B1GQ.S13..?startPeriod=1995&format=csvfilewithlabels"
-    },
-    {
-      "id": "oecd-gov-cofog",
-      "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
-      "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels"
-    },
-    {
-      "id": "oecd-finmark-irlt",
-      "file": "oecd/finmark-long-term-rates-g7.csv",
-      "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels"
-    },
-    {
-      "id": "oecd-gov-pf-g7",
-      "file": "oecd/gov-at-a-glance-all-measures-g7.csv",
-      "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A.CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD_REP.....?startPeriod=2007&format=csvfilewithlabels"
-    },
-    {
-      "id": "imf-weo-debt",
-      "file": "imf/weo-gg-debt-gdp.json",
-      "url": "https://www.imf.org/external/datamapper/api/v1/GG_DEBT_GDP/CAN/FRA/DEU/ITA/JPN/GBR/USA"
-    },
-    {
-      "id": "explain-dmo-about-gilts",
-      "url": "https://www.dmo.gov.uk/responsibilities/gilt-market/about-gilts/",
-      "file": "explain/dmo-about-gilts.html"
-    },
-    {
-      "id": "explain-obr-debt-interest",
-      "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
-      "file": "explain/obr-debt-interest.html"
-    },
-    {
-      "id": "explain-obr-additional-rate-2012",
-      "url": "https://obr.uk/box/the-additional-rate-of-income-tax/",
-      "file": "explain/obr-additional-rate-2012.html"
-    },
-    {
-      "id": "explain-obr-additional-rate-2014",
-      "url": "https://obr.uk/box/effect-of-the-additional-rate-of-income-tax-on-receipts/",
-      "file": "explain/obr-additional-rate-2014.html"
-    },
-    {
-      "id": "explain-obr-frs-2025",
-      "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
-      "file": "explain/obr-frs-2025.html"
-    },
-    {
-      "id": "explain-mac-annual-2025",
-      "url": "https://www.gov.uk/government/publications/migration-advisory-committee-annual-report-2025/migration-advisory-committee-mac-annual-report-2025-accessible",
-      "file": "explain/mac-annual-2025.html"
-    },
-    {
-      "id": "explain-obr-migration-fiscal",
-      "url": "https://obr.uk/box/the-impact-of-migration-on-the-fiscal-forecast/",
-      "file": "explain/obr-migration-fiscal-box.html"
-    },
-    {
-      "id": "explain-obr-migration-gdp",
-      "url": "https://obr.uk/box/net-migration-and-gdp-per-person/",
-      "file": "explain/obr-migration-gdp-box.html"
-    },
-    {
-      "id": "explain-ons-ltim-dec2025",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
-      "file": "explain/ons-ltim-dec2025.html"
-    },
-    {
-      "id": "explain-ons-ltim-yearending-dec-2025",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
-      "file": "explain/ons-ltim-yearending-dec-2025.html"
-    },
-    {
-      "id": "explain-ons-uk-emigration-explained",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/articles/ukemigrationexplainedwhatweknowaboutbritsmovingabroad/2026-05-21",
-      "file": "explain/ons-uk-emigration-explained-2026.html"
-    },
-    {
-      "id": "explain-hmrc-nondom-2025",
-      "url": "https://www.gov.uk/government/statistics/statistics-on-non-domiciled-taxpayers-in-the-uk/statistical-commentary-on-non-domiciled-taxpayers-in-the-uk",
-      "file": "explain/hmrc-nondom-commentary-2025.html"
-    },
-    {
-      "id": "ons-icp",
-      "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
-      "file": "ons/icproductivityupdated.xlsx"
-    },
-    {
-      "id": "nato-def-exp-2026",
-      "url": "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
-      "file": "nato/def-exp-2026.pdf"
-    },
-    {
-      "id": "dwp-benefit-exp-sf2026",
-      "url": "https://assets.publishing.service.gov.uk/media/69dcdc8c6b695d635c34dcc4/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
-      "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
-    },
-    {
-      "id": "nhs-staff-nationality-jun25",
-      "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
-      "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
-    },
-    {
-      "id": "ons-mye-uk-mid2025",
-      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
-      "file": "ons/mye-uk-mid2025.html"
-    },
-    {
-      "id": "nhs-workforce-mar26-page",
-      "url": "https://www.gov.uk/government/statistics/nhs-workforce-statistics-march-2026",
-      "file": "nhs/workforce-statistics-march-2026-page.html"
-    },
-    {
-      "id": "oecd-ctp-dataflows",
-      "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS",
-      "file": "oecd/ctp-dataflows.xml"
-    }
-  ]
+ "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page.",
+ "sources": [
+  {
+   "id": "ons-mgrz",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgrz/lms",
+   "file": "ons/mgrz.csv"
+  },
+  {
+   "id": "ons-lf24",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf24/lms",
+   "file": "ons/lf24.csv"
+  },
+  {
+   "id": "ons-mgsv",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/mgsv/lms",
+   "file": "ons/mgsv.csv"
+  },
+  {
+   "id": "ons-lf25",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf25/lms",
+   "file": "ons/lf25.csv"
+  },
+  {
+   "id": "ons-ycbe",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbe/lms",
+   "file": "ons/ycbe.csv"
+  },
+  {
+   "id": "ons-l522",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/l522/mm23",
+   "file": "ons/l522.csv"
+  },
+  {
+   "id": "ons-a3wx",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a3wx/lms",
+   "file": "ons/a3wx.csv"
+  },
+  {
+   "id": "ashe-2025-fig1",
+   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/cfe85f05&format=csv",
+   "file": "ons/ashe-2025-fig1.csv"
+  },
+  {
+   "id": "ashe-2025-fig2",
+   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/247173f1&format=csv",
+   "file": "ons/ashe-2025-fig2.csv"
+  },
+  {
+   "id": "nomis-ashe-resident",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-uk-median-weekly.csv"
+  },
+  {
+   "id": "nomis-ashe-sex-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/sex.def.sdmx.json",
+   "file": "nomis/ashe-sex-codes.json"
+  },
+  {
+   "id": "ehs-tenure-page",
+   "url": "https://www.gov.uk/government/statistical-data-sets/tenure-trends-and-cross-tenure-analysis",
+   "file": "ehs/tenure-page.html"
+  },
+  {
+   "id": "ott-uk-residents-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad",
+   "file": "ott/uk-residents-page.html"
+  },
+  {
+   "id": "dfe-spc-page",
+   "url": "https://explore-education-statistics.service.gov.uk/find-statistics/school-pupils-and-their-characteristics",
+   "file": "dfe/spc-page.html"
+  },
+  {
+   "id": "ons-ycbh",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ycbh/lms",
+   "file": "ons/ycbh.csv"
+  },
+  {
+   "id": "ehs-ft1101",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a8892f65594cb02999e/FT1101_Trends_in_tenure.ods",
+   "file": "ehs/FT1101_Trends_in_tenure.ods"
+  },
+  {
+   "id": "ehs-ft1241",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d9aa9ed5ddb5c8626f49b/FT1241_Trends_in_tenure_households_with_dependent_children.ods",
+   "file": "ehs/FT1241_Trends_in_tenure_households_with_dependent_children.ods"
+  },
+  {
+   "id": "ehs-ft1421",
+   "url": "https://assets.publishing.service.gov.uk/media/64af30aec033c100108061f1/FT1421_Trends_in_overcrowding_by_tenure.ods",
+   "file": "ehs/FT1421_Trends_in_overcrowding_by_tenure.ods"
+  },
+  {
+   "id": "ott-2025",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2025/ukresidents2025annual.xlsx",
+   "file": "ott/ukresidents2025annual.xlsx"
+  },
+  {
+   "id": "ott-2019to2023",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2019to2023/traveltrendssection3ukresidentsvisitsabroad.xlsx",
+   "file": "ott/section3-2019to2023.xlsx"
+  },
+  {
+   "id": "ott-2009to2019",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2009to2019/section3ukresidentsvisitsabroad2009to2019.xlsx",
+   "file": "ott/section3-2009to2019.xlsx"
+  },
+  {
+   "id": "gov-income-tax-rates",
+   "url": "https://www.gov.uk/income-tax-rates",
+   "file": "gov/income-tax-rates.html"
+  },
+  {
+   "id": "gov-income-tax-rates-previous",
+   "url": "https://www.gov.uk/income-tax-rates/previous-tax-years",
+   "file": "gov/income-tax-rates-previous.html"
+  },
+  {
+   "id": "gov-ni-rates",
+   "url": "https://www.gov.uk/national-insurance-rates-letters",
+   "file": "gov/national-insurance-rates.html"
+  },
+  {
+   "id": "dfe-spc-2015-page",
+   "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
+   "file": "dfe/spc-2015-page.html"
+  },
+  {
+   "id": "dfe-spc-2015-tables",
+   "page": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
+   "find": "https://assets\\.publishing\\.service\\.gov\\.uk/[^\"']*[Nn]ational[^\"']*\\.xlsx",
+   "file": "dfe/spc-2015-national-tables"
+  },
+  {
+   "id": "ott-2024",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/ukresidentsvisitsabroad/2024/ukresidents2024annual.xlsx",
+   "file": "ott/ukresidents2024annual.xlsx"
+  },
+  {
+   "id": "gbts-2025-toplines",
+   "url": "https://www.visitbritain.org/media/5894/download?attachment",
+   "file": "gbts/gbts-2025-toplines.pdf"
+  },
+  {
+   "id": "gbts-2024-q4-annual-tables",
+   "url": "https://www.visitbritain.org/media/4472/download?attachment",
+   "file": "gbts/gbts-2024-q4-annual-tables.xlsx"
+  },
+  {
+   "id": "gbts-2022to2023-tables",
+   "url": "https://www.visitbritain.org/media/3719/download?attachment",
+   "file": "gbts/gbts-2022to2023-tables.xlsx"
+  },
+  {
+   "id": "gbts-2019-gb-summary",
+   "url": "https://www.visitbritain.org/media/3009/download?attachment",
+   "file": "gbts/gbts-2019-gb-summary.xlsx"
+  },
+  {
+   "id": "ons-ukpop",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
+   "file": "ons/ukpop.csv"
+  },
+  {
+   "id": "ons-gbpop",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/gbpop/pop",
+   "file": "ons/gbpop.csv"
+  },
+  {
+   "id": "ehs-fa3201",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d7fdf92f65594cb029990/FA3201_rent_before_housing_support.ods",
+   "file": "ehs/FA3201_rent_before_housing_support.ods"
+  },
+  {
+   "id": "ehs-fa2555",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4da2f96a73e62ba1029999/FA2555_mortgage_payment_per_week__by_type_of_mortgage_age_economic_status.ods",
+   "file": "ehs/FA2555_mortgage_payment_per_week.ods"
+  },
+  {
+   "id": "ehs-fa2501",
+   "url": "https://assets.publishing.service.gov.uk/media/64af384b8bc29f000d2ccc62/FA2501_mortgage_payment_per_week__by_type_of_mortgage.ods",
+   "file": "ehs/FA2501_mortgage_payment_per_week_2021-22.ods"
+  },
+  {
+   "id": "ehs-fa1401",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
+   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods"
+  },
+  {
+   "id": "ehs-fa1422",
+   "url": "https://assets.publishing.service.gov.uk/media/668f07cbfc8e12ac3edafaaa/FA1422_overcrowding_and_under-occupation_by_tenure.ods",
+   "file": "ehs/FA1422_overcrowding_and_under-occupation_by_tenure.ods"
+  },
+  {
+   "id": "nomis-aps-emp-places",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21001&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+   "file": "nomis/aps-employment-rate-nations-regions.csv"
+  },
+  {
+   "id": "nomis-ashe-places",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
+  },
+  {
+   "id": "ons-ybud",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybud/lms",
+   "file": "ons/ybud.csv"
+  },
+  {
+   "id": "ons-ybug",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybug/lms",
+   "file": "ons/ybug.csv"
+  },
+  {
+   "id": "ons-ybuj",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/ybuj/lms",
+   "file": "ons/ybuj.csv"
+  },
+  {
+   "id": "ons-lf2u",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lf2u/lms",
+   "file": "ons/lf2u.csv"
+  },
+  {
+   "id": "ons-lfk6",
+   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/timeseries/lfk6/lms",
+   "file": "ons/lfk6.csv"
+  },
+  {
+   "id": "dluhc-lt109",
+   "url": "https://assets.publishing.service.gov.uk/media/6ac3c719c9bd185c481eca13/LiveTable109.ods",
+   "file": "dluhc/LiveTable109.ods"
+  },
+  {
+   "id": "wg-schools-census-2025",
+   "url": "https://www.gov.wales/sites/default/files/statistics-and-research/2025-07/schools-census-results-january-2025.ods",
+   "file": "wg/schools-census-results-january-2025.ods"
+  },
+  {
+   "id": "nomis-aps-emp-places-ci",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS72-latest&variable=45&measures=20599,21003&select=date,date_name,geography_name,geography_code,geography_type,variable_name,measures_name,obs_value,obs_status_name",
+   "file": "nomis/aps-employment-rate-nations-regions-ci.csv"
+  },
+  {
+   "id": "nomis-aps-measure-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5/measures.def.sdmx.json",
+   "file": "nomis/aps-measure-codes.json"
+  },
+  {
+   "id": "nomis-ashe-resident-cv",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-uk-median-weekly-cv.csv"
+  },
+  {
+   "id": "nomis-ashe-measure-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/measures.def.sdmx.json",
+   "file": "nomis/ashe-measure-codes.json"
+  },
+  {
+   "id": "ons-lfs-a11",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
+   "find": "/file\\?uri=[^\"']*a11[^\"']*\\.xlsx?",
+   "file": "ons/lfs-sampling-variability-a11"
+  },
+  {
+   "id": "ons-lfs-a11-page",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/labourforcesurveysamplingvariabilitya11",
+   "file": "ons/lfs-sampling-variability-a11-page.html"
+  },
+  {
+   "id": "nomis-ashe-article",
+   "url": "https://www.nomisweb.co.uk/articles/1320.aspx",
+   "file": "nomis/ashe-article-1320.html"
+  },
+  {
+   "id": "nomis-ashe-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.def.sdmx.json",
+   "file": "nomis/ashe-dataset-def.json"
+  },
+  {
+   "id": "nomis-aps-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_17_5.def.sdmx.json",
+   "file": "nomis/aps-dataset-def.json"
+  },
+  {
+   "id": "ons-ashe-qmi",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/methodologies/annualsurveyofhoursandearningslowpayandannualsurveyofhoursandearningspensionresultsqmi/pdf",
+   "file": "ons/ashe-qmi.pdf"
+  },
+  {
+   "id": "ons-uncertainty-guide",
+   "url": "https://www.ons.gov.uk/methodology/methodologytopicsandstatisticalconcepts/uncertaintyandhowwemeasureit",
+   "file": "ons/uncertainty-guide.html"
+  },
+  {
+   "id": "explain-ons-psf-2021-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",
+   "file": "explain/ons-psf-march2021.html"
+  },
+  {
+   "id": "explain-ons-2008-recession",
+   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
+   "file": "explain/ons-2008-recession.html"
+  },
+  {
+   "id": "explain-ons-ashe-2022",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2022",
+   "file": "explain/ons-ashe-2022.html"
+  },
+  {
+   "id": "explain-ons-lmo-latest",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/bulletins/uklabourmarket/latest",
+   "file": "explain/ons-labour-market-latest.html"
+  },
+  {
+   "id": "explain-ons-travel-2024",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
+   "file": "explain/ons-travel-trends-2024.html"
+  },
+  {
+   "id": "explain-hmrc-itl-commentary",
+   "url": "https://www.gov.uk/government/statistics/income-tax-liabilities-statistics-tax-year-2023-to-2024-to-tax-year-2026-to-2027/bulletin-commentary",
+   "file": "explain/hmrc-itl-commentary.html"
+  },
+  {
+   "id": "explain-ons-etb-latest",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/latest",
+   "file": "explain/ons-etb-latest.html"
+  },
+  {
+   "id": "explain-ons-etb-fye2016",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/financialyearending2016",
+   "file": "explain/ons-etb-fye2016.html"
+  },
+  {
+   "id": "explain-ons-psf-2023-03",
+   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2023",
+   "file": "explain/ons-psf-march2023.html"
+  },
+  {
+   "id": "explain-ons-travel-2021",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2021",
+   "file": "explain/ons-travel-trends-2021.html"
+  },
+  {
+   "id": "explain-ons-travel-2022",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2022",
+   "file": "explain/ons-travel-trends-2022.html"
+  },
+  {
+   "id": "explain-ehs-2023-24-rented-report",
+   "url": "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors/english-housing-survey-2023-24-rented-sectors",
+   "file": "explain/ehs-2023-24-rented-sectors.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch1",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-1-profile-of-households-and-dwellings",
+   "file": "explain/ehs-2024-25-chapter-1.html"
+  },
+  {
+   "id": "explain-ehs-2024-25-ch2",
+   "url": "https://www.gov.uk/government/statistics/chapters-for-english-housing-survey-2024-to-2025-headline-findings-on-demographics-and-household-resilience/chapter-2-housing-costs-and-affordability",
+   "file": "explain/ehs-2024-25-chapter-2.html"
+  },
+  {
+   "id": "hmrc-spi-2324-tables",
+   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
+   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods"
+  },
+  {
+   "id": "explain-hmrc-spi-2324-commentary",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/personal-incomes-statistics-2023-to-2024-commentary",
+   "file": "explain/hmrc-spi-2023-24-commentary.html"
+  },
+  {
+   "id": "explain-hmrc-spi-quality",
+   "url": "https://www.gov.uk/government/statistics/personal-incomes-statistics-for-the-tax-year-2023-to-2024/background-quality-report-personal-income-statistics-release",
+   "file": "explain/hmrc-spi-quality-report.html"
+  },
+  {
+   "id": "scot-stock-by-tenure",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2018/09/housing-statistics-stock-by-tenure/documents/stock-by-tenure-2017/stock-by-tenure-2017/govscot%3Adocument/2025%2B-%2BStock%2Bby%2Btenure.xlsx",
+   "file": "nations/scot-stock-by-tenure-2025.xlsx"
+  },
+  {
+   "id": "ni-de-enrolments-2025-26",
+   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
+   "file": "nations/ni-school-enrolments-2025-26-page.html"
+  },
+  {
+   "id": "scot-primary-class-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/03/primary-school-class-sizes/documents/primary-school-class-sizes-2025/primary-school-class-sizes-2025/govscot%3Adocument/Primary%2BClass%2BSize%2BDataset%2B2025.xlsx",
+   "file": "nations/scot-primary-class-size-dataset-2025.xlsx"
+  },
+  {
+   "id": "scot-pupil-census-2025",
+   "url": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/07/pupil-census-supplementary-tables/documents/pupil-census-supplementary-statistics-2025/pupil-census-supplementary-statistics-2025/govscot%3Adocument/Pupil%2Bcensus%2Bsupplementary%2Bstatistics%2B2025%2B-%2BMarch.xlsx",
+   "file": "nations/scot-pupil-census-supplementary-2025.xlsx"
+  },
+  {
+   "id": "ni-housing-2025-26",
+   "url": "https://www.communities-ni.gov.uk/system/files/2026-09/ni-housing-stats-25-26-tables1.ods",
+   "file": "nations/ni-housing-stats-25-26-tables1.ods"
+  },
+  {
+   "id": "wales-dwelling-stock-meta",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f",
+   "file": "nations/wales-dwelling-stock-metadata.json"
+  },
+  {
+   "id": "wales-dwelling-stock",
+   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
+   "file": "nations/wales-dwelling-stock-by-tenure.csv"
+  },
+  {
+   "id": "etb-hist-quintile-all",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/incometaxandbenefitdatabyincomequintileforallhouseholds/incometaxandbenefitbyincomequintileforallhouseholds.xlsx",
+   "file": "etb/hist-quintile-all.xlsx"
+  },
+  {
+   "id": "etb-hist-deflator",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets/deflator/deflator.xlsx",
+   "file": "etb/hist-deflator.xlsx"
+  },
+  {
+   "id": "etb-fye2018",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2018/etb2018referencetablesv3final.xlsx",
+   "file": "etb/fye2018.xlsx"
+  },
+  {
+   "id": "etb-fye2019",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending/etb2019referencetablesfinal1.xlsx",
+   "file": "etb/fye2019.xlsx"
+  },
+  {
+   "id": "etb-fye2020",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2020/201920etbtablesrevised.xlsx",
+   "file": "etb/fye2020.xlsx"
+  },
+  {
+   "id": "etb-fye2021",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2021/etb2021correctionuploadv3.xlsx",
+   "file": "etb/fye2021.xlsx"
+  },
+  {
+   "id": "etb-fye2022",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2022/etbreferencetablesfye2022correction2.xlsx",
+   "file": "etb/fye2022.xlsx"
+  },
+  {
+   "id": "etb-fye2023",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomefinancialyearending2014/financialyearending2023/etbreferencetablesfye202223.xlsx",
+   "file": "etb/fye2023.xlsx"
+  },
+  {
+   "id": "etb-hist-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/datasets/theeffectsoftaxesandbenefitsonhouseholdincomehistoricaldatasets",
+   "file": "etb/hist-dataset-page.html"
+  },
+  {
+   "id": "nomis-ashe-item-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1/item.def.sdmx.json",
+   "file": "nomis/ashe-item-codes.json"
+  },
+  {
+   "id": "nomis-ashe-percentiles",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=7,8&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item,item_name,pay_name,measures,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/ashe-resident-uk-weekly-percentiles.csv"
+  },
+  {
+   "id": "nomis-wfj-search",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/def.sdmx.json?search=*workforce*",
+   "file": "nomis/wfj-search.json"
+  },
+  {
+   "id": "nomis-wfj-def",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.def.sdmx.json",
+   "file": "nomis/wfj-def.json"
+  },
+  {
+   "id": "nomis-wfj-latest",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latest",
+   "file": "nomis/wfj-uk-latest.csv"
+  },
+  {
+   "id": "ons-affordability",
+   "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
+   "find": "/file\\?uri=[^\"']*ratioofhousepricetoworkplacebasedearnings[^\"']*\\.xlsx?",
+   "file": "ons/affordability-workplace"
+  },
+  {
+   "id": "ons-affordability-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/ratioofhousepricetoworkplacebasedearningslowerquartileandmedian",
+   "file": "ons/affordability-workplace-page.html"
+  },
+  {
+   "id": "ons-jobs02-page",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+   "file": "ons/jobs02-page.html"
+  },
+  {
+   "id": "nomis-wfj-uk-industry",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS120-latest&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/wfj-uk-industry.csv"
+  },
+  {
+   "id": "nomis-wfj-uk-industry-long",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1.data.csv?geography=2092957697&date=latestMINUS192-latestMINUS121&item=1&measures=20100,20301&select=date_name,geography_name,industry,industry_name,industry_code,item_name,measures_name,obs_value,obs_status,obs_status_name",
+   "file": "nomis/wfj-uk-industry-long.csv"
+  },
+  {
+   "id": "nomis-wfj-industry-codes",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry.def.sdmx.json?search=*",
+   "file": "nomis/wfj-industry-codes.json"
+  },
+  {
+   "id": "nomis-wfj-industry-types",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/types.def.sdmx.json",
+   "file": "nomis/wfj-industry-types.json"
+  },
+  {
+   "id": "nomis-wfj-industry-children",
+   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_130_1/industry/37748736.def.sdmx.json",
+   "file": "nomis/wfj-industry-children.json"
+  },
+  {
+   "id": "ons-jobs02",
+   "page": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/workforcejobsbyindustryjobs02",
+   "find": "/file\\?uri=[^\"']*jobs02[^\"']*\\.xlsx?",
+   "file": "ons/jobs02"
+  },
+  {
+   "id": "ons-ott-timeseries",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
+   "file": "ott/ott-timeseries.csv"
+  },
+  {
+   "id": "explain-ons-lfs-qmi",
+   "url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/methodologies/labourforcesurveylfsqmi",
+   "file": "explain/ons-lfs-qmi.html"
+  },
+  {
+   "id": "eurostat-ilc-mdes02-uk",
+   "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_mdes02?geo=UK&unit=PC&format=JSON&lang=en",
+   "file": "eurostat/ilc-mdes02-uk.json"
+  },
+  {
+   "id": "ons-families-households",
+   "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
+   "find": "/file\\?uri=[^\"']*familiesandhouseholds[^\"']*\\.xlsx?",
+   "file": "ons/families-households"
+  },
+  {
+   "id": "ons-families-households-page",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds",
+   "file": "ons/families-households-page.html"
+  },
+  {
+   "id": "oecd-rs-tax",
+   "file": "oecd/revenue-statistics-tax-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_OECD@DF_RSOECD,/.TAX_REV.S13._T+T_1100+T_1200+T_2000+T_4000+T_5000._T.PT_B1GQ.A?startPeriod=1965&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-pf",
+   "file": "oecd/gov-at-a-glance-expenditure-revenue-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A..GE+GR.PT_B1GQ.S13..?startPeriod=1995&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-cofog",
+   "file": "oecd/gov-at-a-glance-expenditure-by-function-gdp.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV_COFOG@DF_GOV_COFOG_YU,/A..GE.PT_B1GQ.S13.GF01+GF02+GF03+GF04+GF05+GF06+GF07+GF08+GF09+GF10..?startPeriod=2015&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-finmark-irlt",
+   "file": "oecd/finmark-long-term-rates-g7.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_FINMARK,/CAN+FRA+DEU+ITA+JPN+GBR+USA.A+M.IRLT......?startPeriod=1990&format=csvfilewithlabels"
+  },
+  {
+   "id": "oecd-gov-pf-g7",
+   "file": "oecd/gov-at-a-glance-all-measures-g7.csv",
+   "url": "https://sdmx.oecd.org/public/rest/data/OECD.GOV.GIP,DSD_GOV@DF_GOV_PF_YU,/A.CAN+FRA+DEU+ITA+JPN+GBR+USA+OECD_REP.....?startPeriod=2007&format=csvfilewithlabels"
+  },
+  {
+   "id": "imf-weo-debt",
+   "file": "imf/weo-gg-debt-gdp.json",
+   "url": "https://www.imf.org/external/datamapper/api/v1/GG_DEBT_GDP/CAN/FRA/DEU/ITA/JPN/GBR/USA"
+  },
+  {
+   "id": "explain-dmo-about-gilts",
+   "url": "https://www.dmo.gov.uk/responsibilities/gilt-market/about-gilts/",
+   "file": "explain/dmo-about-gilts.html"
+  },
+  {
+   "id": "explain-obr-debt-interest",
+   "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
+   "file": "explain/obr-debt-interest.html"
+  },
+  {
+   "id": "explain-obr-additional-rate-2012",
+   "url": "https://obr.uk/box/the-additional-rate-of-income-tax/",
+   "file": "explain/obr-additional-rate-2012.html"
+  },
+  {
+   "id": "explain-obr-additional-rate-2014",
+   "url": "https://obr.uk/box/effect-of-the-additional-rate-of-income-tax-on-receipts/",
+   "file": "explain/obr-additional-rate-2014.html"
+  },
+  {
+   "id": "explain-obr-frs-2025",
+   "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
+   "file": "explain/obr-frs-2025.html"
+  },
+  {
+   "id": "explain-mac-annual-2025",
+   "url": "https://www.gov.uk/government/publications/migration-advisory-committee-annual-report-2025/migration-advisory-committee-mac-annual-report-2025-accessible",
+   "file": "explain/mac-annual-2025.html"
+  },
+  {
+   "id": "explain-obr-migration-fiscal",
+   "url": "https://obr.uk/box/the-impact-of-migration-on-the-fiscal-forecast/",
+   "file": "explain/obr-migration-fiscal-box.html"
+  },
+  {
+   "id": "explain-obr-migration-gdp",
+   "url": "https://obr.uk/box/net-migration-and-gdp-per-person/",
+   "file": "explain/obr-migration-gdp-box.html"
+  },
+  {
+   "id": "explain-ons-ltim-dec2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+   "file": "explain/ons-ltim-dec2025.html"
+  },
+  {
+   "id": "explain-ons-ltim-yearending-dec-2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+   "file": "explain/ons-ltim-yearending-dec-2025.html"
+  },
+  {
+   "id": "explain-ons-uk-emigration-explained",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/articles/ukemigrationexplainedwhatweknowaboutbritsmovingabroad/2026-05-21",
+   "file": "explain/ons-uk-emigration-explained-2026.html"
+  },
+  {
+   "id": "explain-hmrc-nondom-2025",
+   "url": "https://www.gov.uk/government/statistics/statistics-on-non-domiciled-taxpayers-in-the-uk/statistical-commentary-on-non-domiciled-taxpayers-in-the-uk",
+   "file": "explain/hmrc-nondom-commentary-2025.html"
+  },
+  {
+   "id": "ons-icp",
+   "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
+   "file": "ons/icproductivityupdated.xlsx"
+  },
+  {
+   "id": "nato-def-exp-2026",
+   "url": "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+   "file": "nato/def-exp-2026.pdf"
+  },
+  {
+   "id": "dwp-benefit-exp-sf2026",
+   "url": "https://assets.publishing.service.gov.uk/media/69dcdc8c6b695d635c34dcc4/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
+   "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
+  },
+  {
+   "id": "nhs-staff-nationality-jun25",
+   "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
+   "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
+  },
+  {
+   "id": "ons-mye-uk-mid2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
+   "file": "ons/mye-uk-mid2025.html"
+  },
+  {
+   "id": "nhs-workforce-mar26-page",
+   "url": "https://www.gov.uk/government/statistics/nhs-workforce-statistics-march-2026",
+   "file": "nhs/workforce-statistics-march-2026-page.html"
+  },
+  {
+   "id": "oecd-ctp-dataflows",
+   "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS",
+   "file": "oecd/ctp-dataflows.xml"
+  }
+ ]
 }
