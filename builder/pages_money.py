@@ -197,7 +197,7 @@ def spending_areas_page(facts, d, num, sources):
     body = ['<p class="small"><a href="spending.html">Where does public money go?</a></p>',
             f"<h1>Spending on each area, every year from {first} to {y}</h1>"]
     body.append(f'<p>One small chart for each area of <a href="spending.html">public spending</a>, so you can see when each one rose or fell. Switch between cash, after inflation and share of GDP. '
-                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>.</p>')
+                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>. For welfare (social security) over the last 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.</p>')
     area_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     area_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices", "gdp": "Per cent of GDP"}
 
