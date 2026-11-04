@@ -375,6 +375,14 @@
   "sha256": "5c803fc4fcdc4eacabc4a7a77818d1879de7fbbe39c8e1f035e7381d37ec3e62",
   "retrieved": "2026-11-03T09:37:34Z"
  },
+ "explain-obr-efo-oct-2026": {
+  "url": "https://obr.uk/efo/economic-and-fiscal-outlook-october-2026/",
+  "file": "explain/obr-efo-oct-2026.html",
+  "bytes": 890858,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "1f8482d9f6b7d265a988c6a9fdf84243562966f10864f0d5882dbfdfd8ff268e",
+  "retrieved": "2026-11-04T14:18:45Z"
+ },
  "explain-obr-frs-2025": {
   "url": "https://obr.uk/frs/fiscal-risks-and-sustainability-july-2025/",
   "file": "explain/obr-frs-2025.html",

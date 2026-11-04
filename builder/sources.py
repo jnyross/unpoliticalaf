@@ -137,6 +137,17 @@ SOURCES["obrhist-amounts"] = dict(SOURCES["obrhist"], title="Historical public f
 SOURCES["obrhist-welfare-gdp"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security, pensioner and non-pensioner spending as a share of GDP")
 SOURCES["obrhist-welfare-amounts"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security, pensioner and non-pensioner spending in £")
 SOURCES["obrhist-welfare-calc"] = dict(SOURCES["obrhist"], title="Historical public finances database: social security after inflation, per person and as a share of all spending (calculated)")
+SOURCES["nato-uk-table3"] = dict(
+    publisher="NATO",
+    title="Defence Investment of NATO Countries (2014-2026), table 3: core defence expenditure as a share of real GDP, United Kingdom (transcribed from the PDF)",
+    page="https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+    url="https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+    file="data/transcribed/nato-uk-core-defence-share.json",
+    sha256="f965bd0bb5ddffc8d4ebfc895c8ba684fabfd0f45119bf6bf633fde5d01dad4b",
+    published="data as at 3 July 2026", retrieved="4 November 2026",
+    geography="United Kingdom",
+    population="Core defence expenditure on NATO's definition (includes military pensions); 2025 and 2026 are NATO estimates",
+)
 
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
@@ -246,6 +257,8 @@ FETCHED = {
     "explain-dmo-about-gilts": ("UK Debt Management Office", "About gilts", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-debt-interest": ("Office for Budget Responsibility", "Debt interest (central government, net of APF): explainer", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-frs-2025": ("Office for Budget Responsibility", "Fiscal risks and sustainability, July 2025", "United Kingdom", "Not applicable (report)"),
+    "explain-obr-efo-oct-2026": ("Office for Budget Responsibility", "Economic and fiscal outlook, October 2026 (published 28 October 2026)", "United Kingdom", "Not applicable (report)"),
+    "dwp-benefit-exp-sf2026": ("Department for Work and Pensions", "Benefit expenditure and caseload tables, outturn and forecast tables, Spring Forecast 2026: expenditure by benefit (£ million, nominal)", "United Kingdom (DWP coverage); Great Britain for tax credits and Child Benefit", "Benefit recipients, by benefit; financial years 1948/49 onwards"),
     "explain-mac-annual-2025": ("Migration Advisory Committee", "Migration Advisory Committee annual report 2025 (accessible HTML version), including its fiscal analysis of the Family visa", "United Kingdom", "Migrants on the Family and Skilled Worker visa routes, and the population of the UK"),
     "explain-obr-migration-fiscal": ("Office for Budget Responsibility", "The impact of migration on the fiscal forecast (box from the March 2024 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
     "explain-obr-migration-gdp": ("Office for Budget Responsibility", "Net migration and GDP per person (box from the March 2026 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
