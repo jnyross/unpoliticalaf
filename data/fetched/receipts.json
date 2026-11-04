@@ -255,6 +255,22 @@
   "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
   "retrieved": "2026-11-02T15:15:37Z"
  },
+ "explain-obr-additional-rate-2012": {
+  "url": "https://obr.uk/box/the-additional-rate-of-income-tax/",
+  "file": "explain/obr-additional-rate-2012.html",
+  "bytes": 102746,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "2fa5ee5c91469708b2d52eba50bbc2cd28b84e87c814fde8026a34a4225a5365",
+  "retrieved": "2026-11-04T09:15:36Z"
+ },
+ "explain-obr-additional-rate-2014": {
+  "url": "https://obr.uk/box/effect-of-the-additional-rate-of-income-tax-on-receipts/",
+  "file": "explain/obr-additional-rate-2014.html",
+  "bytes": 96158,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "f391859c2589a6988bc4e42ae212a3d90be45f300107abeb4c9d3116591b9710",
+  "retrieved": "2026-11-04T09:15:39Z"
+ },
  "explain-obr-debt-interest": {
   "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
   "file": "explain/obr-debt-interest.html",
