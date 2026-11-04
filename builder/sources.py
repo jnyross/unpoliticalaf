@@ -236,6 +236,9 @@ FETCHED = {
     "explain-obr-migration-gdp": ("Office for Budget Responsibility", "Net migration and GDP per person (box from the March 2026 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
     "explain-ons-ltim-dec2025": ("Office for National Statistics", "Long-term international migration, provisional: year ending December 2025 (released 21 May 2026)", "United Kingdom", "All long-term international migrants to and from the UK, by nationality group"),
     "dfe-spc-page": ("Department for Education", "Schools, pupils and their characteristics: academic year 2025/26 (release page)", "England", "Pupils in schools in England"),
+    "explain-ons-ltim-yearending-dec-2025": ("Office for National Statistics", "Long-term international migration, provisional: year ending December 2025 (statistical bulletin, official statistics in development)", "United Kingdom", "Long-term international migrants: people moving to or from the UK for 12 months or more"),
+    "explain-ons-uk-emigration-explained": ("Office for National Statistics", "UK emigration explained: what we know about Brits moving abroad (article, 21 May 2026)", "United Kingdom and overseas countries", "British nationals (as defined by ONS) who emigrate for 12 months or more"),
+    "explain-hmrc-nondom-2025": ("HM Revenue and Customs", "Statistical commentary on non-domiciled taxpayers in the UK: tax year 2024 to 2025", "United Kingdom", "Non-domiciled and deemed domiciled taxpayers who file Self Assessment returns"),
 }
 
 
