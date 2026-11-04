@@ -675,6 +675,41 @@
    "id": "ons-mye-uk-mid2025",
    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
    "file": "ons/mye-uk-mid2025.html"
+  },
+  {
+   "id": "ehs-annex-ch1",
+   "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch1-profile.ods"
+  },
+  {
+   "id": "ehs-annex-ch2",
+   "url": "https://assets.publishing.service.gov.uk/media/693026b2502f392086ee8b0b/2024-25_EHS_Headline_Report_Chapter_2_Housing_Costs_and_Affordability_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch2-costs.ods"
+  },
+  {
+   "id": "ehs-annex-ch3",
+   "url": "https://assets.publishing.service.gov.uk/media/693026cb502f392086ee8b0c/2024-25_EHS_Headline_Report_Chapter_3_Housing_History_and_future_housing_Annex_Tables.ods",
+   "file": "ehs/annex-2024-25-ch3-history.ods"
+  },
+  {
+   "id": "ehs-fc2101",
+   "url": "https://assets.publishing.service.gov.uk/media/64af396cc033c100108061f6/FC2101_Percentage_of_each_age_group_that_are_owner-occupiers.ods",
+   "file": "ehs/FC2101_owner_occupiers_by_age.ods"
+  },
+  {
+   "id": "ehs-fa2301",
+   "url": "https://assets.publishing.service.gov.uk/media/64af37fbfe36e0000d6fa888/FA2301_age_of_hrp_by_type_of_ownership.ods",
+   "file": "ehs/FA2301_age_of_hrp_by_type_of_ownership.ods"
+  },
+  {
+   "id": "ehs-fa2222",
+   "url": "https://assets.publishing.service.gov.uk/media/6a4da2d6ed5ddb5c8626f49e/FA2222_type_of_purchase_by_age_of_HRP_and_household_type.ods",
+   "file": "ehs/FA2222_type_of_purchase_by_age_of_hrp.ods"
+  },
+  {
+   "id": "boe-mortgage-rates",
+   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/mortgage-rates-new-lending.csv"
   }
- ]
+]
 }
