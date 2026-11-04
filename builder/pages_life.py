@@ -1363,7 +1363,7 @@ def hub_quick(facts, d, num):
     names = d["countries"]["names"]
     firsts = {top_countries(facts, d, y, 1)[0] for y in d["countries"]["all"] if top_countries(facts, d, y, 1)}
     items = ['<strong>Change is not cause:</strong> these figures show what changed, not why.',
-             f'<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More</a>']
+             f'<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More on large classes</a>']
     if len(firsts) == 1:
         c = esc(names[firsts.pop()])
         ys = d["countries"]["all"]
