@@ -177,6 +177,124 @@
       ]
     },
     {
+      "id": "J4",
+      "asked": "Are rish people really not paying enough tax?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 4 of his list of ten)",
+      "reading": "\"Enough\" is a value judgment, so the site gives the measured facts and does not say what is enough. The facts are: the share of Income Tax and of all taxes paid by top income groups, the share of income that each fifth of people pays in tax (including National Insurance, VAT and other taxes on spending), how the top rates compare with other countries, and what the main proposals (for example, a wealth tax or aligning Capital Gains Tax with Income Tax) are estimated to raise. Each is shown with its year, population and source.",
+      "probes": [
+        {
+          "id": "J4.1",
+          "question": "In tax year 2023 to 2024, what share of all Income Tax did the top 1% of Income Tax payers owe?",
+          "options": {
+            "A": "12.4%",
+            "B": "27.2%",
+            "C": "34.0%",
+            "D": "59.1%"
+          },
+          "answer": "B",
+          "why": "Who pays page: the top 1% of Income Tax payers owed 27.2% of all Income Tax in 2023 to 2024, and had 12.4% of Income Tax payers' income. The 59.1% is the top 10%'s share of Income Tax.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "the top 1% of Income Tax payers owed 27.2% of all Income Tax, and had 12.4% of all Income Tax payers' income"
+            }
+          ]
+        },
+        {
+          "id": "J4.2",
+          "question": "Across 1999-00 to 2023-24, how did the top 1%'s share of Income Tax compare with their share of income?",
+          "options": {
+            "A": "Lower than their share of income in every year",
+            "B": "Equal to their share of income",
+            "C": "Higher than their share of income in every year",
+            "D": "Higher in some years and lower in others"
+          },
+          "answer": "C",
+          "why": "Who pays page, Income Tax by person: the top 1%'s share of Income Tax was higher than their share of income in every year from 1999-00 to 2023-24.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "The top 1%'s share of Income Tax was higher than their share of income in every year from 1999-00 to 2023-24"
+            }
+          ]
+        },
+        {
+          "id": "J4.3",
+          "question": "What does the 46.0% figure for the richest fifth of people in 2023/24 measure?",
+          "options": {
+            "A": "The share of their income that they paid in tax",
+            "B": "The share of all taxes paid by UK households that the richest fifth paid",
+            "C": "The tax rate on the top income band",
+            "D": "The share of all government revenue, including borrowing"
+          },
+          "answer": "B",
+          "why": "Who pays page: the richest fifth paid 46.0% of all taxes paid by UK households. The page says this is a share of the total, not the share of income that goes on tax (36.2%), and covers household taxes, not all government revenue.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "In 2023/24 the richest fifth of people paid 46.0% of all taxes paid by UK households."
+            },
+            {
+              "page": "who-pays.html",
+              "text": "A share of the total, not the share of income that goes on tax"
+            }
+          ]
+        },
+        {
+          "id": "J4.4",
+          "question": "In 2023/24, how did the share of gross household income that went on all taxes compare between the highest-income fifth and the lowest-income fifth?",
+          "options": {
+            "A": "The highest-income fifth paid a much larger share",
+            "B": "The two shares were less than one percentage point apart",
+            "C": "The lowest-income fifth paid a much larger share",
+            "D": "Both paid about a quarter of their income in tax"
+          },
+          "answer": "B",
+          "why": "Tax and income page (household-tax.html): taxes took a similar share of income for the lowest-income fifth (36.7%) and the highest-income fifth (36.2%) in 2023/24, less than one percentage point apart.",
+          "evidence": [
+            {
+              "page": "household-tax.html",
+              "text": "Taxes took a similar share of income for the lowest-income fifth and the highest-income fifth in 2023/24, less than one percentage point apart"
+            }
+          ]
+        },
+        {
+          "id": "J4.5",
+          "question": "In 2023/24, how much of the highest-income fifth's gross household income went on Income Tax alone?",
+          "options": {
+            "A": "22.3%",
+            "B": "36.2%",
+            "C": "21.0%",
+            "D": "33.6%"
+          },
+          "answer": "A",
+          "why": "Tax and income page: for people in the highest-income fifth most tax is direct, and Income Tax alone was 22.3% of gross household income. The 36.2% is all taxes for that fifth.",
+          "evidence": [
+            {
+              "page": "household-tax.html",
+              "text": "Income Tax alone was 22.3% of gross household income"
+            }
+          ]
+        },
+        {
+          "id": "J4.6",
+          "question": "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?",
+          "gap": "The site does not yet show what Capital Gains Tax and Inheritance Tax raise, or estimate what wealth tax or Capital Gains Tax changes would raise."
+        },
+        {
+          "id": "J4.7",
+          "question": "According to the site, how do the UK's rates on top incomes compare with other large countries?",
+          "gap": "The international page compares total tax as a share of GDP, but does not compare top income tax rates or the tax paid by top earners with other countries."
+        },
+        {
+          "id": "J4.8",
+          "question": "According to the site, what share of all taxes, including VAT and National Insurance, do the top 1% of people pay?",
+          "gap": "The site shows the top 1%'s share of Income Tax only, not their share of all taxes, so the top 1%'s total tax share is not shown."
+        }
+      ]
+    },
+    {
       "id": "J2",
       "asked": "How does UK productivity compare to other countries",
       "added": "2026-11-04",
