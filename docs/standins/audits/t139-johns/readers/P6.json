@@ -1,0 +1,45 @@
+{
+  "reader": "P6",
+  "profile": "P6",
+  "site_commit": "9dcade5",
+  "budget": 40,
+  "actions_used": 38,
+  "johns_without_site": {
+    "J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E",
+    "J4.1": "E", "J4.2": "E", "J4.3": "E", "J4.4": "E", "J4.5": "E", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "johns_with_site": {
+    "J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "B", "J1.7": "C",
+    "J4.1": "B", "J4.2": "E", "J4.3": "B", "J4.4": "B", "J4.5": "A", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "B", "J12.5": "A",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "confusions": [
+    "The debt answer on the borrowing-cost page says the UK is 'lower than Japan, Italy, the United States, France and Canada and higher than Germany', which reads oddly and I had to work out that it meant second lowest.",
+    "The IMF and OECD debt measures were both shown with a switch and I could not tell which one the question meant, so I did not trust either for the comparison.",
+    "On the Work section I only found the overall 16 to 64 employment rate, not the age-group figures for 18 to 24 and 25 to 34 year olds, so I could not answer those questions and stopped looking.",
+    "The UK interest-payments figure was described as 'the third highest of the G7' and I had to check the chart to see which countries were above it.",
+    "The 2008-09 home-ownership figure was not stated in words, so I read it roughly off the chart and I am not sure of it.",
+    "The Back button sent me to an earlier page rather than back to the section I came from, which cost me actions.",
+    "Scrolling a long page on the phone was slow, so I ran out of my 40 actions before reaching the defence, welfare, debt-history, manifesto and OBR sections, and I left those as Not sure.",
+    "The 'Who pays' section mixes HMRC and ONS figures, and the 46.0% figure and the 36.2% figure were close enough that I had to read the label carefully to see what each measured."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "reader": "P5",
+  "profile": "P5",
+  "site_commit": "9dcade5",
+  "budget": 40,
+  "actions_used": 37,
+  "johns_without_site": {
+    "J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E",
+    "J4.1": "E", "J4.2": "E", "J4.3": "E", "J4.4": "E", "J4.5": "E", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "johns_with_site": {
+    "J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "E", "J1.7": "E",
+    "J4.1": "B", "J4.2": "E", "J4.3": "B", "J4.4": "B", "J4.5": "A", "J4.6": "E", "J4.8": "B",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "B", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "A",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "confusions": [
+    "The debt page's long text was hard to get through on the phone, and I ran out of actions before I reached the section on what debt interest costs, so I could not answer J1.6 or J1.7.",
+    "The Work page only shows the share of people aged 16 to 64 in work, so I could not find the 18 to 24 or 25 to 34 figures I was asked about.",
+    "The Who pays page has two sources, HM Revenue and Customs and the Office for National Statistics, that count different people and taxes, and I was not sure which one to trust for each figure.",
+    "The housing chart lines break at 2007 and 2008, so I could not read the 2008-09 home ownership figure clearly.",
+    "I could not tell from the Who pays page whether the top 1% share of all taxes is shown, since it only shows Income Tax by person, so I picked the Income Tax only option.",
+    "I tapped the Back button and it took me to the Spending page instead of the page I came from, which slowed me down.",
+    "Tapping the debt interest link opened a long glossary page, which was not the answer I needed."
+  ]
+}
