@@ -282,12 +282,12 @@
           "question": "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?",
           "options": {
             "A": "An official estimate of about £10 billion a year",
-            "B": "The site gives no estimate for proposals; it shows what Capital Gains Tax and Inheritance Tax raised in 2025-26",
+            "B": "The site gives no estimate for those proposals; it does not show what they would raise",
             "C": "Less than £1 billion a year, from an official estimate",
             "D": "Nothing: the proposals would raise no money"
           },
           "answer": "B",
-          "why": "Who pays page, section 3: the site shows what Capital Gains Tax and Inheritance Tax raised in 2025-26, and says it does not estimate what a wealth tax or a change to Capital Gains Tax would raise.",
+          "why": "Who pays page, limits: the site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.",
           "evidence": [
             {
               "page": "who-pays.html",

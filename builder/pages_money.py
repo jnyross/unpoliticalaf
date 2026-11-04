@@ -421,7 +421,7 @@ def who_pays_page(facts, d, num, sources):
     rows = [[h + (" (projection)" if int(h[:4]) >= 2024 else ""), num(f"hmrc.share.top1.{h}", "pct"), num(f"hmrc.share.top10.{h}", "pct"), num(f"hmrc.share.bottom50.{h}", "pct")] for h in hy]
     body.append(details_table("Show every year", "Share of all Income Tax by group of taxpayers", ["Tax year", "Top 1%", "Top 10%", "Bottom 50%"], rows))
     oy = y[:4] + "-" + y[-2:] if " to " in y else y  # the same tax year as the figures above, on the OBR's basis (2023-24 is not 2025-26)
-    body.append(f'''<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09.</p></div>''')
+    body.append(f'''<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09. The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p></div>''')
     body.append(source_line(sources, ["hmrc24"], "Survey of Personal Incomes. 2023-24 is outturn; later years are projections."))
     # ETB
     body.append(f'''<h2 id="households">2. All taxes, by household income</h2>
@@ -448,10 +448,6 @@ def who_pays_page(facts, d, num, sources):
     body.append(households_short(facts, d, num))
     body.append(net_section(facts, d, num, sources))
     body.append(income_tax_age_section(facts, d, num, sources))
-    body.append(f'''<h2 id="capital-taxes">3. Capital taxes and proposals</h2>
-<p>Capital Gains Tax raised {num("rec.cgt.2025-26", "bn")} and Inheritance Tax raised {num("rec.iht.2025-26", "bn")} in 2025-26 (OBR, all receipts from these taxes for the year).</p>
-<p>The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year. These figures are receipts from the taxes as they are now, not estimates for any proposal.</p>
-<p>The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. Section 1 shows their share of Income Tax.</p>''')
     return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.", toc_after_first=True)
 
 
