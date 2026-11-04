@@ -791,6 +791,159 @@
       ]
     },
     {
+      "id": "J13",
+      "asked": "Why do we have such high debt in this country?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 1 of 10 in one message)",
+      "reading": "Why is UK government debt high? Read as public sector net debt (the OBR's measure, net of financial assets, as a share of GDP), its history since 1900, what raised it (borrowing in each year, in particular the 2008 recession, the Covid pandemic and the 2022-23 energy support), and what official bodies say about the causes. The question is about the UK on its own; comparison with other countries is on the borrowing page (J1). Official bodies give more than one view of the causes, so the site shows the figures and the quoted explanations without choosing between them.",
+      "probes": [
+        {
+          "id": "J13.1",
+          "question": "Since 1900, in which year was UK public sector net debt highest as a share of GDP, according to the site?",
+          "options": {
+            "A": "1918-19, at the end of the First World War",
+            "B": "1946-47, just after the Second World War",
+            "C": "2022-23, the latest year shown",
+            "D": "2010-11, after the 2008 recession"
+          },
+          "answer": "B",
+          "why": "Why-debt page, OBR figures: debt was highest in 1946-47, at 249.1% of GDP.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Debt was highest in 1946-47, at 249.1% of GDP."
+            }
+          ]
+        },
+        {
+          "id": "J13.2",
+          "question": "Between 2007-08 and 2009-10, how did UK public sector net debt change, as a share of GDP?",
+          "options": {
+            "A": "It fell from about 36% to about 22%",
+            "B": "It stayed at about 36%",
+            "C": "It rose from about 36% to about 65% of GDP",
+            "D": "It rose from about 65% to about 100% of GDP"
+          },
+          "answer": "C",
+          "why": "Why-debt page, OBR figures: 35.6% of GDP in 2007-08 and 64.5% in 2009-10.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Debt rose from 35.6% of GDP to 64.5% over the same period."
+            }
+          ]
+        },
+        {
+          "id": "J13.3",
+          "question": "How much did UK public sector borrowing reach as a share of GDP in 2020-21, the first year of the Covid pandemic?",
+          "options": {
+            "A": "About 2%",
+            "B": "About 5%",
+            "C": "About 15%",
+            "D": "About 25%"
+          },
+          "answer": "C",
+          "why": "Why-debt page, OBR figures: borrowing was 15.0% of GDP in 2020-21.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Borrowing reached 15.0% of GDP in 2020-21"
+            }
+          ]
+        },
+        {
+          "id": "J13.4",
+          "question": "According to the ONS, how much did the furlough schemes alone add to borrowing in the year to March 2021?",
+          "options": {
+            "A": "£7.8 billion",
+            "B": "£78.2 billion",
+            "C": "£782 million",
+            "D": "£203.2 billion"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the ONS (April 2021): the furlough schemes alone added £78.2 billion to borrowing.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "with the furlough schemes alone adding £78.2 billion to borrowing in the FYE March 2021."
+            }
+          ]
+        },
+        {
+          "id": "J13.5",
+          "question": "What does the OBR say pushed up borrowing and debt in 2020-21?",
+          "options": {
+            "A": "Only the government's own spending decisions",
+            "B": "The impact of the shocks on the economy, combined with the government's response to them",
+            "C": "Nothing: borrowing was unchanged",
+            "D": "Only higher interest rates"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the OBR (July 2025): the impact of the shocks, combined with the government's policy response, pushed up borrowing and debt in 2020-21.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "The impact of these shocks on the economy, combined with the Government’s policy response to them, pushed up borrowing to 15 per cent of GDP"
+            }
+          ]
+        },
+        {
+          "id": "J13.6",
+          "question": "What is the difference between debt and borrowing, as the site uses the words?",
+          "options": {
+            "A": "They are the same thing",
+            "B": "Debt is what the public sector owes at the end of each year, less its financial assets; borrowing is the amount added during the year",
+            "C": "Borrowing is the total owed; debt is the amount borrowed in one year",
+            "D": "Debt is only the money lent by the Bank of England"
+          },
+          "answer": "B",
+          "why": "Why-debt page, opening section: debt is the amount owed at year end, less financial assets; borrowing is the amount borrowed during the year, which adds to debt.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "Borrowing is the amount it borrowed during the year, which adds to debt."
+            }
+          ]
+        },
+        {
+          "id": "J13.7",
+          "question": "According to the ONS, what raised interest payable on government debt by £34.0 billion in 2022-23?",
+          "options": {
+            "A": "Lower inflation",
+            "B": "Rises in the Retail Prices Index, which raised the payments on index-linked gilts",
+            "C": "Only the Bank of England's interest rate",
+            "D": "A fall in tax receipts"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the ONS (April 2023): rises in the Retail Prices Index increased the interest payable on index-linked gilts.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "as the rises in the Retail Prices Index have increased the interest payable on index-linked gilts."
+            }
+          ]
+        },
+        {
+          "id": "J13.8",
+          "question": "What does the OBR project for the long term, if current policy settings continue?",
+          "options": {
+            "A": "Borrowing below 5% and debt below 100% of GDP",
+            "B": "Borrowing above 20% and debt above 270% of GDP by the early 2070s",
+            "C": "Debt falling to zero by 2050",
+            "D": "No change from today's levels"
+          },
+          "answer": "B",
+          "why": "Why-debt page, quoting the OBR (July 2025): on current policy settings, borrowing above 20% and debt above 270% of GDP by the early 2070s, driven partly by an ageing population.",
+          "evidence": [
+            {
+              "page": "why-debt.html",
+              "text": "projected to push borrowing above 20 per cent and debt above 270 per cent of GDP by the early 2070s."
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "J6",
       "asked": "How many people, espeicalyl high earners, need to leave the UK before tax receipts are meaningfully damaged?",
       "added": "2026-11-04",
