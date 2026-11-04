@@ -26,6 +26,10 @@ TAIL = 0.15
 NEAR = 0.05
 # "in most years" means at least this share of year-to-year moves went the same way.
 MOST = 0.75
+# A rise after the last fall that is too small to count as a move (see legs) is still named when
+# it is at least this share of the range, so a title never says "then fell" about a line that
+# bottomed earlier and has risen since (audit 13 gap 6).
+FOLD_RISE = 0.05
 
 
 def measured(vals, a=0, b=None):
@@ -206,7 +210,13 @@ def phrase(labels, vals, a=0, b=None, short=False, upto=False):
     s0, e0, w = lg[-1]
     s0 = held(vals, s0, b) if len(lg) > 1 else s0
     last = "then rose" if w > 0 else "then fell"
-    if max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
+    seg = measured(vals, s0, e0 + 1)
+    low_i = min(seg, key=lambda i: (vals[i], i))
+    span = vals[s["hi"]] - vals[s["lo"]]
+    if w < 0 and not upto and low_i < e0 and vals[e0] - vals[low_i] >= FOLD_RISE * span:
+        # the line fell to a low and has risen a little since: say so, rather than "fell back part of the way"
+        last = f"then fell until {labels[low_i]}, then rose again by {labels[e0]}"
+    elif max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
         # a smaller turn back at the end (see TAIL): say when, not how far
         last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" between {labels[s0]} and {labels[e0]}"
     elif upto:
@@ -232,7 +242,10 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
     said = {f, l}
     if k == "same":
         return f"{show(f)} in every year from {labels[f]} to {labels[l]}."
-    if k in ("up", "down"):
+    if k in ("up", "down") and re.sub(r"<[^>]+>", "", show(f)) == re.sub(r"<[^>]+>", "", show(l)):
+        # the figures differ, but not once rounded as shown: "fell from 2.1% to 2.1%" would be wrong
+        text = f"{show(f)} in {labels[f]} and {show(l)} in {labels[l]}: little changed overall."
+    elif k in ("up", "down"):
         verb, ing = ("Rose", "rising") if k == "up" else ("Fell", "falling")
         text = f"{verb} from {show(f)} in {labels[f]} to {show(l)} in {labels[l]}"
         if s["most"]:
@@ -565,7 +578,8 @@ def both(*rules, sep="; "):
 
 
 def place(points, y, group=None):
-    """Where year y sits among the other years: ', higher than in 7 of the other 17 years shown'.
+    """Where year y sits among the other years: ', higher than in 7 of the other 17 years shown'
+    (with ties: ', higher than in 7 of the other 17 years shown, level with 2 other years').
 
     points: (year, value) pairs with a value. Only years measured the same way
     (same group) are counted. Returns '' when y has no value or nothing to compare."""
@@ -579,8 +593,14 @@ def place(points, y, group=None):
     which = "measured the same way" if group else "shown"
     higher = sum(1 for v in others if mine > v)
     lower = sum(1 for v in others if mine < v)
+    level = n - higher - lower  # years with exactly the same figure: a tie is said, not left out
     if higher == n:
         return f", the highest of the {n + 1} years {which}"
     if lower == n:
         return f", the lowest of the {n + 1} years {which}"
-    return f", higher than in {higher} of the other {n} years {which}"
+    if higher == 0:
+        if level == n:
+            return f", level with every other year {which}"
+        return f", not higher than in any of the other {n} years {which}, level with {level} of them"
+    tie = "" if level == 0 else f", level with {level} other year{'s' if level != 1 else ''}"
+    return f", higher than in {higher} of the other {n} years {which}{tie}"

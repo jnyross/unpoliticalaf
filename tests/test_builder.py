@@ -139,7 +139,11 @@ class Findings(unittest.TestCase):
         # Spending as a share of GDP: a ten-year fall before the 2020-21 rise. The small
         # rise from 43.0 to 46.0 comes before the fall, so the fall is measured from 46.0.
         gdp = [43.0, 46.0, 45.5, 44.4, 43.8, 42.2, 41.6, 40.8, 40.0, 39.7, 39.1, 39.1, 52.3, 43.4, 44.1]
-        self.assertEqual(phrase(years, gdp), "fell until 2019, held level until 2020, rose in 2021, then fell back part of the way")
+        # The line bottomed in 2022 and rose a little by 2023: the title says so, not "fell back part of the way".
+        self.assertEqual(phrase(years, gdp), "fell until 2019, held level until 2020, rose in 2021, then fell until 2022, then rose again by 2023")
+        # A rise after the last fall under 5% of the range (0.6 of 13.2) stays folded into the fall, as before.
+        small = [39.1, 52.3, 43.4, 43.8, 43.7, 43.9, 44.0]
+        self.assertEqual(phrase(years[:7], small), "rose in 2010, then fell back part of the way")
 
     def test_check_finds_a_title_that_leaves_out_a_turn(self):
         from builder.check import big_turns
