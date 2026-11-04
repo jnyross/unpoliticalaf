@@ -37,13 +37,22 @@ so the core answers and comparisons work without JavaScript.
 Python 3.10 or later.
 
 ```
-make setup     # create .venv and install openpyxl
+make setup     # create .venv and install build dependencies
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-dev && make check-deps   # unused, missing and transitive dependencies
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+`make check-deps` runs deptry in the project's virtual environment and also runs
+in pull-request and main-branch CI. It scans the maintained builder and scripts,
+not the pinned upstream copy in `reference/`. Build dependencies live in
+`requirements.txt`; optional browser-check dependencies live in
+`requirements-a11y.txt`, so both are checked for unused imports.
+`requirements-dev.txt` installs both sets plus developer-only tools such as
+deptry. Production `make setup` remains build-only.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,

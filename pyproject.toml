@@ -1,0 +1,8 @@
+[tool.deptry]
+# Check both the build and the optional browser-check imports for unused packages.
+requirements_files = ["requirements.txt", "requirements-a11y.txt"]
+requirements_files_dev = ["requirements-dev.txt"]
+# Directly executed scripts import these sibling modules by filename.
+known_first_party = ["user_test", "johns_questions"]
+# Pinned upstream source is reference material, not part of the maintained builder.
+extend_exclude = ["^reference/"]
