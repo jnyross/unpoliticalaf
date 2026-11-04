@@ -497,154 +497,162 @@
     },
     {
       "id": "J5",
-      "asked": "Are people really leaving the UK becasue taxes are too high and living standards are too low?",
+      "asked": "Why can't we afford to spend more money on defence",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04",
-      "reading": "Read as two questions. First: are more people leaving the UK than before? Official figures can answer this for emigration overall and for British, EU+ and non-EU+ nationals, and for non-domiciled taxpayers at HMRC. Second: are taxes or living standards the reason? No official source records why people leave, so the site can only say what the figures can and cannot show about that.",
+      "reading": "Defence spending is read as the government's official defence spending (PESA, the COFOG defence function), compared with other G7 countries on the same function in OECD figures. \"Can't afford\" is read as: what would extra spending cost, how could it be paid for, and what would have to give. The premise is contested, so the site sets out the choices and the figures rather than deciding whether the UK can afford more.",
       "probes": [
         {
           "id": "J5.1",
-          "question": "About how many people left the UK to live abroad for at least 12 months in the year ending December 2025 (provisional)?",
+          "question": "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?",
           "options": {
-            "A": "About 246,000",
-            "B": "About 642,000",
-            "C": "About 278,000",
-            "D": "About 1.2 million"
+            "A": "About £30 billion, about 1% of GDP",
+            "B": "About £65 billion, about 2.1% of GDP",
+            "C": "About £130 billion, about 4.2% of GDP",
+            "D": "About £200 billion, about 6.5% of GDP"
           },
           "answer": "B",
-          "why": "ONS gives 642,000 for total long-term emigration in the year ending December 2025. The 246,000 figure is British nationals only.",
+          "why": "PESA 2026 outturn for 2025-26: £65.4 billion, 2.1% of GDP.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "The provisional estimate for total long-term emigration in the most recent period is 642,000."
+              "page": "defence.html",
+              "text": "In 2025-26 the UK spent £65.4bn on defence, 2.1% of GDP."
             }
           ]
         },
         {
           "id": "J5.2",
-          "question": "How did the number of British nationals leaving the UK change from the year ending December 2024 to the year ending December 2025?",
+          "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
           "options": {
-            "A": "It rose sharply",
-            "B": "It fell slightly, from 257,000 to 246,000",
-            "C": "It stayed exactly the same",
-            "D": "It doubled"
+            "A": "Higher after inflation, lower as a share of GDP",
+            "B": "Lower after inflation, higher as a share of GDP",
+            "C": "Higher after inflation and higher as a share of GDP",
+            "D": "Lower after inflation and lower as a share of GDP"
           },
-          "answer": "B",
-          "why": "ONS: 246,000 British nationals left in the year ending December 2025, a 4% decline from the updated figure of 257,000 for 2024.",
+          "answer": "A",
+          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "In YE December 2025, 246,000 British nationals left the UK, a slight decline of 4% from the updated YE December 2024 estimates of 257,000."
+              "page": "defence.html",
+              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
+            },
+            {
+              "page": "defence.html",
+              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
             }
           ]
         },
         {
           "id": "J5.3",
-          "question": "Do the official figures show why people leave the UK?",
+          "question": "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?",
           "options": {
-            "A": "Yes, they record the main reason each person gave",
-            "B": "Yes, but only for people who leave for work",
-            "C": "No, they record when people leave, not why",
-            "D": "Only for British nationals"
+            "A": "The highest of them all",
+            "B": "The second highest, behind the United States",
+            "C": "The lowest of them all",
+            "D": "About the same as France"
           },
-          "answer": "C",
-          "why": "The ONS records the visa or route a person first arrived on, not a reason for leaving. No official figure here records why anyone left.",
+          "answer": "B",
+          "why": "OECD Government at a Glance, 2024: UK 2.3% of GDP, behind the United States (3.1%) and ahead of France (1.9%), Germany, Japan and Italy. Canada has no figure in the table.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "None of the official figures on this page records why anyone left."
+              "page": "defence.html",
+              "text": "the second highest of the 6 G7 countries with a figure."
+            },
+            {
+              "page": "defence.html",
+              "text": "The highest was the United States, at 3.1%."
             }
           ]
         },
         {
           "id": "J5.4",
-          "question": "Can the British emigration figures for 2025 be compared with those before June 2021?",
+          "question": "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?",
           "options": {
-            "A": "Yes, the method has not changed",
-            "B": "No, the way British departures are estimated changed, so they cannot be compared",
-            "C": "Yes, both show record levels",
-            "D": "Only for people aged 16 to 24"
+            "A": "£1",
+            "B": "£5",
+            "C": "£13",
+            "D": "£33"
           },
           "answer": "B",
-          "why": "ONS changed its method for British nationals and revised the series back to June 2021, but says earlier figures cannot be compared with the new ones.",
+          "why": "PESA 2026: defence was £5.3 of every £100 spent on services in 2025-26; social protection was £33.2 and health £21.0.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "The significant change in our methods means we cannot compare our improved estimates with those from before June 2021."
+              "page": "defence.html",
+              "text": "defence took £5.3."
+            },
+            {
+              "page": "defence.html",
+              "text": "Social protection took £33.2 and health £21.0."
             }
           ]
         },
         {
           "id": "J5.5",
-          "question": "What happened to the number of non-domiciled taxpayers leaving that group in the tax year 2024 to 2025 (HMRC)?",
+          "question": "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?",
           "options": {
-            "A": "It rose to about 11,200",
-            "B": "It fell to about 9,000, from about 11,200",
-            "C": "It stayed at about 11,200",
-            "D": "It rose to about 20,000"
+            "A": "About £3 billion",
+            "B": "About £31 billion",
+            "C": "About £130 billion",
+            "D": "About £300 billion"
           },
           "answer": "B",
-          "why": "HMRC: around 9,000 taxpayers flowed out of the non-domiciled group in 2024 to 2025, compared with 11,200 the year before.",
+          "why": "1% of 2025-26 nominal GDP (£3,070 billion, OBR) is £30.7 billion.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "Fewer taxpayers flowed out of the non-domiciled taxpayer population than in the previous year (around 9,000 compared with 11,200), while the number of newly arrived non-domiciled taxpayers also fell (around 8,600 compared with 10,000)."
+              "page": "defence.html",
+              "text": "Each extra 1% of GDP in defence spending would cost about £30.7bn a year at 2025-26 levels."
             }
           ]
         },
         {
           "id": "J5.6",
-          "question": "What happened to the Income Tax paid by non-domiciled and deemed domiciled taxpayers in the tax year 2024 to 2025 (HMRC)?",
+          "question": "Which of these does the site set out as ways to pay for extra defence spending?",
           "options": {
-            "A": "It fell by 6%",
-            "B": "It rose by 6%, to its highest level since 2017",
-            "C": "It stayed the same",
-            "D": "It fell to zero"
+            "A": "Only higher taxes",
+            "B": "Only borrowing",
+            "C": "Borrowing, higher taxes, or spending less on other things",
+            "D": "None of these"
           },
-          "answer": "B",
-          "why": "HMRC: Income Tax from this group was £556 million (6%) higher than the year before, at its highest level since 2017.",
+          "answer": "C",
+          "why": "The defence page lists three broad ways: borrowing, tax, and less spending elsewhere, and says most plans combine them.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "At around £9.7 billion, the Income Tax revenue from non-domiciled and deemed domiciled taxpayers is £556 million (or 6%) higher than in tax year ending 2024 and is at its highest level since tax year ending 2017."
+              "page": "defence.html",
+              "text": "There are three broad ways, and most plans combine them."
+            },
+            {
+              "page": "defence.html",
+              "text": "Less spending elsewhere."
             }
           ]
         },
         {
           "id": "J5.7",
-          "question": "Can these official figures show whether taxes or living standards were a reason people left?",
+          "question": "Does the site say whether the UK can afford more defence spending?",
           "options": {
-            "A": "Yes, clearly",
-            "B": "Yes, but only for high earners",
-            "C": "No, the figures on this page cannot show it",
-            "D": "Yes, the tax figures show it directly"
+            "A": "Yes, it can afford more",
+            "B": "No, it cannot afford more",
+            "C": "It sets out the choices and does not decide",
+            "D": "It says the answer is borrowing"
           },
           "answer": "C",
-          "why": "None of the sources here records why people left, what they paid in tax, or how their living standards changed. The site says so and points to separate pages.",
+          "why": "The defence page says whether the UK can afford more depends on which costs people accept, and that the page does not decide that.",
           "evidence": [
             {
-              "page": "leaving-uk.html",
-              "text": "The figures on this page cannot show whether taxes or living standards were a reason for leaving."
+              "page": "defence.html",
+              "text": "Whether the UK can afford more depends on which costs people accept, and this page does not decide that for you."
             }
           ]
         },
         {
           "id": "J5.8",
-          "question": "How many more British nationals left the UK than arrived in 2025, on ONS's provisional figures?",
-          "options": {
-            "A": "About 110,000",
-            "B": "About 136,000",
-            "C": "About 246,000",
-            "D": "About 642,000"
-          },
-          "answer": "B",
-          "why": "ONS: around 136,000 more British nationals left than arrived in 2025. The 110,000 figure is British arrivals.",
-          "evidence": [
-            {
-              "page": "leaving-uk.html",
-              "text": "Around 136,000 more Brits left than arrived in 2025."
-            }
-          ]
+          "question": "How much room do the government's fiscal rules leave for extra defence spending?",
+          "gap": "The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending."
+        },
+        {
+          "id": "J5.9",
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP?",
+          "gap": "NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet."
         }
       ]
     }
