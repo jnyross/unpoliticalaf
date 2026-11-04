@@ -783,7 +783,7 @@
         {
           "id": "J12.7",
           "question": "How did pay after inflation for people aged 30 change between 2002 and 2025?",
-          "gap": "The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked."
+          "gap": "The site has pay figures for all full-time employees, not by age group. The held ASHE file by single year of age covers only ages 16 to 25, not age 30. ASHE Table 6 gives median pay for 30 to 39 year olds, but that table is not held for every year from 2002. Needs median pay for 30 to 39 from ASHE Table 6, each year from 2002, with the survey breaks marked."
         },
         {
           "id": "J12.8",
@@ -832,7 +832,24 @@
         {
           "id": "J12.10",
           "question": "How long can a 30 year old now expect to live, compared with 30 years ago?",
-          "gap": "The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure."
+          "options": {
+            "A": "Fewer years than 30 years ago, for both men and women",
+            "B": "About 5 more years for men and about 4 more for women than in 1994",
+            "C": "The same as 30 years ago",
+            "D": "About 20 more years for both men and women"
+          },
+          "answer": "B",
+          "why": "ONS single-year life tables, UK, 1980 to 2024 (period expectation of life at exact age 30): men aged 30 could expect 45.4 more years in 1994 and 50.3 in 2024; women 50.2 and 53.9. These are period figures, and the single-year tables move more from year to year than the three-year tables.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "a man aged 30 could expect to live 50.3 more years"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "Since 1994 the figure has risen by about 5 years for men and about 4 for women"
+            }
+          ]
         },
         {
           "id": "J12.11",
