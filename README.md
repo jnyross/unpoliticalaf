@@ -76,6 +76,28 @@ Official data files live in `data/raw/`, `data/payers/raw/`, `data/life/sources/
 and `data/fetched/`. If any file changes without its recorded hash being updated,
 the build stops.
 
+## Job diagnostics
+
+Build, check and source-fetch jobs emit one JSON record per line to **stderr**
+using `builder/logging.py` (Python's standard logging library). Each record has a
+UTC `timestamp`, `level`, `logger`, stable `event` name and typed `context`
+fields. Failures include their traceback in `exception`; checks also emit
+individual `check.problem` records. Downloads record their source ID, byte count
+and hash, and retries record the attempt and delay. Report-producing scripts
+still write reports to stdout. Logs never enter the generated site.
+
+The default level is `INFO`. Set `LOG_LEVEL` to `DEBUG`, `INFO`, `WARNING`,
+`ERROR` or `CRITICAL`, for example `LOG_LEVEL=WARNING make build`. To save JSON
+diagnostics without Make's command echoes:
+
+```sh
+.venv/bin/python -m builder.check 2>check.jsonl
+```
+
+When adding diagnostics, use `get_logger("component")` and a stable event name,
+with data in `extra={"context": {...}}`. Keep credentials, private data and
+authenticated URLs out of log fields and exception messages.
+
 ## Updating the data
 
 1. Add or change the download in `sources/manifest.json` and push. The fetch
