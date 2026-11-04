@@ -22,6 +22,13 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "4 November 2026",
+        "pages": [("life/holidays.html", "Holidays since 1980")],
+        "was": "The chart title said holiday visits abroad “rose until 2019, fell in 2021, then rose until 2023; later years use a new method and are not compared”, although the chart also shows 2024 and 2025, including the 58.4 million in the headline. The title read as if the chart stopped in 2023.",
+        "now": "The title names the two years after the method change: “…then rose until 2023; 2024 and 2025 use a new method and are not compared”.",
+        "pr": 166,
+    },
+    {
         "date": "3 November 2026",
         "pages": [("household-tax.html", "How much of household income goes on tax?")],
         "was": "A heading asked “Why did direct taxes rise in 2023/24?”, and the explanation under it said fiscal drag made people pay a greater proportion of their income in tax. The page's own figures showed direct taxes fell as a share of gross income, from 23.2% in 2022/23 to 22.9% in 2023/24.",

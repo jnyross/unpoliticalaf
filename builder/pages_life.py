@@ -1121,7 +1121,7 @@ def _holidays(facts, d, num, sources):
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents, new method. No 2020 figure: the survey stopped on 16 March", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
                              finding=F.trend("Holiday visits abroad by UK residents", which="first",
-                                             after="; later years use a new method and are not compared")))
+                                             after="; 2024 and 2025 use a new method and are not compared")))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), _hol_cell(facts, num, y), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
