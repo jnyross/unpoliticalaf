@@ -1052,15 +1052,17 @@ def _earnings(facts, d, num, sources):
               + earn_before_after(num, a, b, ch) +
               f'<p>After allowing for rising prices, pay in April {b} was {_how(ch)} in April {a} ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
               f'In cash, at the time, pay went from {num(f"earn.ft.{a}", "pounds")} to {num(f"earn.ft.{b}", "pounds")} a week.</p>'
-              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. '
-              f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}, and from April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
-              f'The 2011 break sits between those two periods, so this page gives no single change from 2008 to 2014. Earlier stretches:</p>'
+              f'<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>'
               f'<ul class="ba-list">{earlier}</ul></div>')
     body.append(U.topic_line(num, "earnings", LAST))
     body.append(series_chart(facts, "Median weekly pay of full-time employees, after inflation", [("Men", lambda y: f"earn.real.ft_men.{y}", "a"), ("Women", lambda y: f"earn.real.ft_women.{y}", "b")],
                              "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
                              breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
                              finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
+    body.append(f'<p>The chart breaks in 2011, so the years either side are not joined into one change. '
+                f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}. '
+                f'From April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
+                f'This page therefore gives no single change from 2008 to 2014.</p>')
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))

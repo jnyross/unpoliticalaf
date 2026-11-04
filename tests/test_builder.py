@@ -963,16 +963,17 @@ class BeforeTwoThousandEight(unittest.TestCase):
         if not U.MARGINS:
             U.add_facts(self.facts, self.d)
         answer, body = pages_life._earnings(self.facts, self.d, Num(self.facts), {})
-        # Every tagged change in the answer compares two years on the same basis (the 2008 to 2014
-        # words are two changes inside their own stretches, never one change across the 2011 break).
+        # Every tagged change on the earnings page compares two years on the same basis (the 2008 to
+        # 2014 words are two changes inside their own stretches, never one change across the 2011 break).
         import re
-        pairs = re.findall(r'data-from="earn\.real\.ft\.(\d+)" data-to="earn\.real\.ft\.(\d+)"', answer)
+        page = answer + "".join(body)
+        pairs = re.findall(r'data-from="earn\.real\.ft\.(\d+)" data-to="earn\.real\.ft\.(\d+)"', page)
         self.assertTrue(pairs)
         for a_, b_ in pairs:
             self.assertEqual(pages_life.earn_basis(int(a_)), pages_life.earn_basis(int(b_)), (a_, b_))
-        self.assertIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2010"', answer)
-        self.assertIn('data-from="earn.real.ft.2011" data-to="earn.real.ft.2014"', answer)
-        self.assertNotIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2014"', answer)
+        self.assertIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2010"', page)
+        self.assertIn('data-from="earn.real.ft.2011" data-to="earn.real.ft.2014"', page)
+        self.assertNotIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2014"', page)
         self.assertIn("about the same as in April 2021", answer)
         places = "".join(pages_life.places_block(self.facts, Num(self.facts), "earnings"))
         self.assertIn("Change, 2021 to", places)
