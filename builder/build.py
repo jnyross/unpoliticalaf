@@ -14,8 +14,8 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, version
-from . import downloads, pages_money, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, glossary, trace, uncertainty
+from . import pages_money_extra, pages_generations, version
+from . import pages_options, downloads, pages_money, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, pages_defence, pages_immigration, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -51,6 +51,9 @@ def render():
     pages["tax-history.html"] = pages_taxmixhist.tax_history_page(facts, d, num, sources)
     pages["international.html"] = pages_intl.international_page(facts, d, num, sources)
     pages["borrowing.html"] = pages_borrow.borrowing_page(facts, d, num, sources)
+    pages["defence.html"] = pages_defence.defence_page(facts, d, num, sources)
+    pages["immigration.html"] = pages_immigration.immigration_page(facts, d, num, sources)
+    pages["economy-options.html"] = pages_options.options_page()
     pages["who-pays.html"] = pages_money.who_pays_page(facts, d, num, sources)
     pages["who-pays-age.html"] = pages_money_extra.income_tax_age_page(facts, d, num, sources)
     pages["who-pays-households.html"] = pages_money_extra.households_page(facts, d, num, sources)
@@ -62,6 +65,7 @@ def render():
     pages["life/jobs-by-industry.html"] = pages_life.industry_page(facts, d, num, sources)
     pages["life/house-prices.html"] = pages_life.afford_page(facts, d, num, sources)
     pages["life/housing-places.html"] = pages_life.places_page(facts, d, num, sources)
+    pages[pages_generations.PAGE] = pages_generations.generations_page(facts, d, num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for y in EARLY_YEARS:
