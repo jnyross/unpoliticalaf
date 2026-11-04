@@ -1,0 +1,3 @@
+1347 charts checked
+Every chart has a text summary with figures.
+exit 0

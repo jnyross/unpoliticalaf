@@ -141,6 +141,7 @@ SOURCES["obrhist-welfare-calc"] = dict(SOURCES["obrhist"], title="Historical pub
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
 FETCHED = {
+    "ons-mye-uk-mid2025": ("Office for National Statistics", "Population estimates for the UK, England, Wales, Scotland and Northern Ireland: mid-2025 (statistical bulletin)", "United Kingdom", "All usual residents of the UK; births, deaths and migration in the year to mid-2025"),
     "ons-mgrz": ("Office for National Statistics", "Labour market statistics: people in employment aged 16 and over (MGRZ)", "United Kingdom", "People aged 16 and over"),
     "ons-lf24": ("Office for National Statistics", "Labour market statistics: employment rate, aged 16 to 64 (LF24)", "United Kingdom", "People aged 16 to 64"),
     "ons-mgsv": ("Office for National Statistics", "Labour market statistics: male employment rate, aged 16 to 64 (MGSV)", "United Kingdom", "Men aged 16 to 64"),
@@ -196,6 +197,7 @@ FETCHED = {
     "hmrc-spi-2324-tables": ("HM Revenue and Customs", "Personal Incomes Statistics, tax year 2023 to 2024: collated tables 3.1 to 3.11 (Survey of Personal Incomes)", "United Kingdom", "Individuals with some Income Tax liability (taxpayers only)"),
     "gov-income-tax-rates": ("HM Revenue and Customs (GOV.UK)", "Income Tax rates and Personal Allowances", "England, Wales and Northern Ireland", "Individuals"),
     "gov-ni-rates": ("HM Revenue and Customs (GOV.UK)", "National Insurance rates and categories", "United Kingdom", "Employees"),
+    "gov-self-employed-ni": ("HM Revenue and Customs (GOV.UK)", "Self-employed National Insurance rates (Class 2 and Class 4)", "United Kingdom", "Self-employed people with profits from self-employment"),
     # Explanatory publications quoted word for word on the pages (see builder/explain.py).
     "explain-ons-psf-2021-03": ("Office for National Statistics", "Public sector finances, UK: March 2021 (statistical bulletin)", "United Kingdom", "Whole public sector"),
     "explain-ons-psf-2023-03": ("Office for National Statistics", "Public sector finances, UK: March 2023 (statistical bulletin)", "United Kingdom", "Whole public sector"),

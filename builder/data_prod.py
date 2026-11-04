@@ -106,6 +106,17 @@ def build(facts):
         _add(facts, "prod.change." + fid[len("prod.trend."):], series[fid] - 100, "% change since 2008", y, facts[fid].locator,
              "calculated", formula=f"{fid} − 100", inputs=[fid])
 
+    # UK output per hour over the whole ONS series, from its first year to the latest (impartiality rule: first and latest year).
+    uk_years = sorted(int(k.rsplit(".", 1)[1]) for k in series if k.startswith("prod.ohv.GBR.") and k.rsplit(".", 1)[1].isdigit())
+    if uk_years and f"prod.ohv.GBR.{latest}" in series:
+        first_uk = uk_years[0]
+        out["uk_first"] = first_uk
+        full = 100 * series[f"prod.ohv.GBR.{latest}"] / series[f"prod.ohv.GBR.{first_uk}"] - 100
+        _add(facts, f"prod.fullchange.GBR.{latest}", full, f"% change since {first_uk}", latest,
+             facts[f"prod.ohv.GBR.{latest}"].locator, "calculated",
+             formula=f"100 × prod.ohv.GBR.{latest} ÷ prod.ohv.GBR.{first_uk} − 100",
+             inputs=[f"prod.ohv.GBR.{latest}", f"prod.ohv.GBR.{first_uk}"])
+
     # How far UK output per hour is below each country, in the latest year (levels).
     uk = series.get(f"prod.oph.GBR.{latest}")
     for iso in G7:

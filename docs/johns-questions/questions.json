@@ -280,7 +280,20 @@
         {
           "id": "J4.6",
           "question": "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?",
-          "gap": "The site does not yet show what Capital Gains Tax and Inheritance Tax raise, or estimate what wealth tax or Capital Gains Tax changes would raise."
+          "options": {
+            "A": "An official estimate of about £10 billion a year",
+            "B": "The site gives no estimate for those proposals; it does not show what they would raise",
+            "C": "Less than £1 billion a year, from an official estimate",
+            "D": "Nothing: the proposals would raise no money"
+          },
+          "answer": "B",
+          "why": "Who pays page, limits: the site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year"
+            }
+          ]
         },
         {
           "id": "J4.7",
@@ -290,7 +303,20 @@
         {
           "id": "J4.8",
           "question": "According to the site, what share of all taxes, including VAT and National Insurance, do the top 1% of people pay?",
-          "gap": "The site shows the top 1%'s share of Income Tax only, not their share of all taxes, so the top 1%'s total tax share is not shown."
+          "options": {
+            "A": "The site shows the top 1%'s share of all taxes as a percentage",
+            "B": "The site shows the top 1%'s share of Income Tax only, and says it does not show their share of all taxes",
+            "C": "The site shows that the top 1% pay no taxes on spending",
+            "D": "The site shows their share of National Insurance only"
+          },
+          "answer": "B",
+          "why": "Who pays page, section 3: the official survey covers Income Tax only, so the site shows the top 1%'s share of Income Tax and says it does not show their share of all taxes.",
+          "evidence": [
+            {
+              "page": "who-pays.html",
+              "text": "The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only"
+            }
+          ]
         }
       ]
     },
@@ -380,7 +406,20 @@
         {
           "id": "J2.6",
           "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
-          "gap": "The site has ONS net migration but not births and deaths, which are needed to say what drove recent population growth."
+          "options": {
+            "A": "Births were higher than deaths, so natural change was the main reason",
+            "B": "Net international migration was the main reason, and was larger than natural change",
+            "C": "Natural change was the main reason, and net migration was negative",
+            "D": "Neither: the population fell"
+          },
+          "answer": "B",
+          "why": "ONS mid-year estimates, UK, year to mid-2025: the population grew by 227,700. Net international migration was 222,900 and natural change added 4,900 (652,400 births and 647,500 deaths).",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "The main reason was net international migration"
+            }
+          ]
         },
         {
           "id": "J2.7",
@@ -523,24 +562,7 @@
         {
           "id": "J5.2",
           "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
-          "options": {
-            "A": "Higher after inflation, lower as a share of GDP",
-            "B": "Lower after inflation, higher as a share of GDP",
-            "C": "Higher after inflation and higher as a share of GDP",
-            "D": "Lower after inflation and lower as a share of GDP"
-          },
-          "answer": "A",
-          "why": "PESA 2026: after inflation (2025-26 prices) defence rose from £59.0 billion in 2010-11 to £65.4 billion in 2025-26; as a share of GDP it fell from 2.4% to 2.1%.",
-          "evidence": [
-            {
-              "page": "defence.html",
-              "text": "After inflation the rise was 10.8%, from £59.0bn to £65.4bn at 2025-26 prices."
-            },
-            {
-              "page": "defence.html",
-              "text": "Its share of GDP was lower in 2025-26 than in 2010-11: 2.1% against 2.4%."
-            }
-          ]
+          "gap": "The defence comparison now uses the ten-year window the impartiality rule allows (2015-16 to 2025-26), so the page no longer compares with 2010-11, the year this question names. Whether John wants 2010-11 shown as well is a decision for him."
         },
         {
           "id": "J5.3",
@@ -1288,11 +1310,11 @@
           "evidence": [
             {
               "page": "productivity.html",
-              "text": "UK output per hour rose by 3.9% between 2008 and 2021"
+              "text": "Over 2008 to 2021, UK output per hour rose by 3.9%"
             },
             {
               "page": "productivity.html",
-              "text": "rose by 10.3% on average over the same years"
+              "text": "the other five G7 countries on this page rose by 10.3% on average"
             }
           ]
         },

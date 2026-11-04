@@ -122,6 +122,11 @@
    "file": "gov/national-insurance-rates.html"
   },
   {
+   "id": "gov-self-employed-ni",
+   "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+   "file": "gov/self-employed-national-insurance-rates.html"
+  },
+  {
    "id": "dfe-spc-2015-page",
    "url": "https://www.gov.uk/government/statistics/schools-pupils-and-their-characteristics-january-2015",
    "file": "dfe/spc-2015-page.html"
@@ -650,6 +655,26 @@
    "id": "ons-icp",
    "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
    "file": "ons/icproductivityupdated.xlsx"
+  },
+  {
+   "id": "nato-def-exp-2026",
+   "url": "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+   "file": "nato/def-exp-2026.pdf"
+  },
+  {
+   "id": "dwp-benefit-exp-sf2026",
+   "url": "https://assets.publishing.service.gov.uk/media/69dcdc8c6b695d635c34dcc4/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
+   "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
+  },
+  {
+   "id": "nhs-staff-nationality-jun25",
+   "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
+   "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
+  },
+  {
+   "id": "ons-mye-uk-mid2025",
+   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
+   "file": "ons/mye-uk-mid2025.html"
   }
  ]
 }

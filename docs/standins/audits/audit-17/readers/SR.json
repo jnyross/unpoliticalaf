@@ -1,0 +1,8 @@
+{"reader": "SR", "site_commit": "f113d8a", "budget": 40, "actions_used": 13,
+ "with_site": {"1":"A","2":"C","3":"D","4":"C","5":"A","6":"B","7":"D","8":"B","9":"A","10":"C","11":"B","12":"D"},
+ "confusions": [
+  "Class sizes page: the year picker is a combobox pair plus a 'Compare 2011 and 2019' button, with the 2019 figure for one year only reachable by opening a collapsed 'Find one year's figure' group of 55 year links; I read 27.1 from the chart text instead (not blocking).",
+  "Holidays page: no 2015 vs 2025 comparison is stated directly; I inferred answer C from a note that 2019 and 2025 are not compared because of survey change, and the comparable chart ends in 2023 (uncertain, not blocking).",
+  "Home page: several long link names read the whole card text aloud, which is verbose (not blocking).",
+  "Charts on the life pages are announced only as an image description; the numbers are in a collapsed 'What the chart shows, in words' group (not blocking)."
+ ]}

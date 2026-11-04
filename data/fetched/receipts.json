@@ -47,6 +47,14 @@
   "sha256": "2fb92e0ad64000e96279cd7afbae29bdc686b0779ae3aaa834789deb1b25f8a9",
   "retrieved": "2026-11-02T10:28:45Z"
  },
+ "dwp-benefit-exp-sf2026": {
+  "url": "https://assets.publishing.service.gov.uk/media/69dcdc8c6b695d635c34dcc4/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
+  "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx",
+  "bytes": 1707003,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "11a591e4a2144ed6a686be6a9ded4e5d5b3b8d4887bd57c1ff0632bd251009de",
+  "retrieved": "2026-11-04T13:30:30Z"
+ },
  "ehs-fa1401": {
   "url": "https://assets.publishing.service.gov.uk/media/6a4d9a6f6a73e62ba1029995/FA1401_number_of_rooms_by_tenure.ods",
   "file": "ehs/FA1401_number_of_rooms_by_tenure.ods",
@@ -487,6 +495,14 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "gov-self-employed-ni": {
+  "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+  "file": "gov/self-employed-national-insurance-rates.html",
+  "bytes": 73884,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "54a0d9c5eb74205a47f189389c9c94945eaaaf30ee13e1de50942282ef6761d0",
+  "retrieved": "2026-11-04T13:30:04Z"
+ },
  "hmrc-spi-2324-tables": {
   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
@@ -502,6 +518,14 @@
   "content_type": "application/json",
   "sha256": "4a67462421197fa592f01d338870070d98c1a69f6be7698dccab4b2251682d43",
   "retrieved": "2026-11-03T09:32:45Z"
+ },
+ "nato-def-exp-2026": {
+  "url": "https://www.nato.int/content/dam/nato/webready/documents/finance/def-exp-2026-en.pdf",
+  "file": "nato/def-exp-2026.pdf",
+  "bytes": 10177392,
+  "content_type": "application/pdf",
+  "sha256": "efd05e4a7e715b361617390016356df04af83ea6febecb9475ce173bf2cffb75",
+  "retrieved": "2026-11-04T13:30:25Z"
  },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
@@ -878,6 +902,14 @@
   "content_type": "application/octet-stream;charset=utf-8",
   "sha256": "9d2008ed9769b8f4d80cc26d81dce4861b39d32a327319cccc4428503ffcb6fe",
   "retrieved": "2026-11-02T08:58:24Z"
+ },
+ "ons-mye-uk-mid2025": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/bulletins/annualmidyearpopulationestimates/mid2025",
+  "file": "ons/mye-uk-mid2025.html",
+  "bytes": 87552,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "96b6d5fe9a7a606e2e1b4c5c78fd30622af35c851a5408f78fa86a8195f72ef0",
+  "retrieved": "2026-11-04T13:30:43Z"
  },
  "ons-ott-timeseries": {
   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/leisureandtourism/datasets/internationalpassengersurveytimeseriesspreadsheet/current/ott.csv",
