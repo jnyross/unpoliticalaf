@@ -487,6 +487,14 @@
   "sha256": "249a21c85fb84305a86240cdafc35b6b03ae8436a2156ca74c6666e337b1e050",
   "retrieved": "2026-11-02T08:59:06Z"
  },
+ "gov-self-employed-ni": {
+  "url": "https://www.gov.uk/self-employed-national-insurance-rates",
+  "file": "gov/self-employed-national-insurance-rates.html",
+  "bytes": 73884,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "54a0d9c5eb74205a47f189389c9c94945eaaaf30ee13e1de50942282ef6761d0",
+  "retrieved": "2026-11-04T13:30:04Z"
+ },
  "hmrc-spi-2324-tables": {
   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
