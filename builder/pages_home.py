@@ -8,7 +8,7 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
-    from .pages_life import FIRST, earn_stretches, earn_before_after, _how_short
+    from .pages_life import FIRST, earn_stretches, earn_before_after
     ea, eb, ech = earn_stretches(facts)[0]
     from .data import EARLY_YEARS
     E = EARLY_YEARS[0]
@@ -41,30 +41,36 @@ def home_page(facts, d, num, sources):
               "housing": mini(long_spark(facts, num, "housing", 2024, caption=False)),
               "holidays": mini(long_spark(facts, num, "holidays", caption=False)),
               "schools": mini(long_spark(facts, num, "schools", Ls, caption=False))}
+    def pay_phrase(ch):
+        """How pay after inflation moved, in words a reader can take in at once."""
+        if abs(ch) < 2:
+            return "about the same as"
+        return f"{abs(ch):.0f}% more than" if ch > 0 else f"{abs(ch):.0f}% less than"
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 <h2 id="money">Public money: four questions</h2>
 <div class="cards">
 <a class="card" href="spending.html"><h3>Where does public money go?</h3>
 <span class="big">{num(f"spend.cash.tme.{sp}", "bn")}</span>
-<p>spent by the public sector in {esc(sp)}. HM Treasury splits {num(f"spend.cash.services.{sp}", "bn")} of this by area, the spending on services; the rest is accounting entries it does not split. Of every £100 spent on services, the largest area was social protection, including pensions: {num(per["social"], "per100")}. General public services ({num(per["general"], "per100")}) includes debt interest ({num(per["debt_interest"], "per100")} of the {num(per["general"], "per100")}), counted as interest paid out; the “net” figure the OBR and IFS often quote, after interest received, is lower.</p>
+<p>Pensions, benefits and social care take the largest share: {num(per["social"], "per100")} of every £100 spent on services. Health takes {num(per["health"], "per100")}. General public services take {num(per["general"], "per100")}, of which {num(per["debt_interest"], "per100")} is interest paid on debt, counted before interest received. The OBR and IFS often quote a lower figure that subtracts interest received.</p>
+<p>The total was {num(f"spend.cash.tme.{sp}", "bn")} in {esc(sp)}. HM Treasury splits {num(f"spend.cash.services.{sp}", "bn")} of it by area; the rest is accounting adjustments that are not split by area.</p>
 {v_spend}
 <span class="more">Spending by area and over time</span></a>
 <a class="card" href="taxes.html"><h3>Which taxes raise the money?</h3>
 <span class="big">{num(f"rec.taxes.{y}", "bn")}</span>
-<p>raised in taxes in {y}. Income Tax, National Insurance and VAT raised {num(f"rec.big3share.{y}", "pct0")} of it. Borrowing covered another {num(f"agg.psnb.{y}", "bn")}.</p>
+<p>Taxes raised {num(f"rec.taxes.{y}", "bn")} in {y}. Income Tax, National Insurance and VAT raised {num(f"rec.big3share.{y}", "pct0")} of that. Borrowing added another {num(f"agg.psnb.{y}", "bn")}.</p>
 {v_tax}
 <span class="more">Taxes, other receipts and borrowing</span></a>
 <a class="card" href="who-pays.html"><h3>Who pays?</h3>
 <span class="big">{num("hmrc.share.top1.2023 to 2024", "pct")}</span>
-<p>of all Income Tax for the year was owed by the top 1% of Income Tax payers in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
+<p>The top 1% of Income Tax payers owed {num("hmrc.share.top1.2023 to 2024", "pct")} of all Income Tax in 2023 to 2024. They had {num("hmrc.income.top1.2023 to 2024", "pct")} of all Income Tax payers' income. Every household also pays taxes on spending, such as VAT.</p>
 {v_who}
 <span class="more">Income Tax and all taxes, by group</span></a>
 <a class="card" href="household-tax.html"><h3>How much household income goes on tax?</h3>
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
-<p>of gross household income, on average across everyone, in 2023/24. That is an average across households, not anyone's tax rate. By income fifth:</p>
+<p>Taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income on average in 2023/24. That is an average across households, not anyone's tax rate.</p>
+<p>The lowest-income fifth paid {num("etb.t8.gross.all.q1", "pct")} of its gross income in tax, and the highest-income fifth paid {num("etb.t8.gross.all.q5", "pct")}. For the lowest, most of it is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of their gross income). For the highest, most is direct tax such as Income Tax.</p>
 {v_hh}
-<p>For the lowest-income fifth, most of this is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of income, or {num("etb.t8.spend.indirect.q1", "pct")} of their spending: the share depends on what it is divided by); for the highest-income fifth, most is direct tax such as Income Tax.</p>
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
@@ -73,7 +79,7 @@ def home_page(facts, d, num, sources):
 <p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages stop at {L}.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3>{earn_before_after(num, ea, eb, ech)}<p>a week before tax for the middle full-time employee, UK, both in April {L} prices: <strong>{_how_short(ech).lower()}</strong>. In cash, {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")}. Compared from {ea}, when the survey last changed how it codes jobs. The {L} figure is provisional. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>The {L} figure is provisional. Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, when that series ends.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages stop at {L}.</p>{sparks["schools"]}</a>
