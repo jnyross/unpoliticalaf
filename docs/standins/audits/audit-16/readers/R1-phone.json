@@ -1,0 +1,137 @@
+{
+ "reader": "R1-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "life/compare/2015-2025.html#housing",
+ "ops": [],
+ "scroll": 3281,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html#tme-views",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2722
+    }
+   ],
+   "scroll": 2722
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 3920
+    }
+   ],
+   "scroll": 3920
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1680
+    }
+   ],
+   "scroll": 1680
+  },
+  {
+   "url": "life/index.html#earnings",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015",
+     "y": 4031
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025",
+     "y": 4031
+    }
+   ],
+   "scroll": 4031
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [4] link: as a share of GDP over time",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [3] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [13] link: Earnings",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "choose [3] First year = 2015",
+  "choose [4] Second year = 2025",
+  "tap [5] button: Compare 2015 and 2025",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Housing",
+  "scroll up"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/74f424e4-e3a6-5900-b0ea-caa2d0b8eebf/scratchpad/audit16/shots/R1",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Work chart, table, limits and sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Earnings table, limits and sources"
+  }
+ ]
+}

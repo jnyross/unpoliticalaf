@@ -1,0 +1,341 @@
+{
+ "title": "New questions audit 16",
+ "questions": [
+  {
+   "id": 1,
+   "topic": "Public spending",
+   "question": "In UK public spending by purpose, which area is the largest?",
+   "options": {
+    "A": "Defence",
+    "B": "Social protection, including pensions and benefits",
+    "C": "Transport",
+    "D": "Public order and safety"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Social protection is the largest function of UK public spending, with health usually second."
+  },
+  {
+   "id": 2,
+   "topic": "Public spending",
+   "question": "Spending in pounds rose every year, yet spending as a share of GDP fell. How is this possible?",
+   "options": {
+    "A": "The economy grew faster than spending",
+    "B": "The figures must be wrong",
+    "C": "Prices fell during the period",
+    "D": "Borrowing was zero"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "A share of GDP falls if the economy grows faster than spending, even when cash spending rises."
+  },
+  {
+   "id": 3,
+   "topic": "Public spending",
+   "question": "Which best describes the national debt?",
+   "options": {
+    "A": "Money the government borrows in a single year",
+    "B": "The total owed from past borrowing that has not yet been repaid",
+    "C": "All tax collected in a year",
+    "D": "Interest paid in one year"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Borrowing in a year adds to the accumulated stock of debt."
+  },
+  {
+   "id": 4,
+   "topic": "Public spending",
+   "question": "Which of these is counted as part of government spending?",
+   "options": {
+    "A": "Interest paid on government debt",
+    "B": "Income tax receipts",
+    "C": "Council tax bills not yet paid",
+    "D": "Money borrowed from markets"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Debt interest is spending; tax receipts and borrowing are ways of funding it."
+  },
+  {
+   "id": 5,
+   "topic": "Taxes raised",
+   "question": "Which three taxes raise the most money for UK central government?",
+   "options": {
+    "A": "Income tax, National Insurance and VAT",
+    "B": "Fuel duty, stamp duty and alcohol duty",
+    "C": "Corporation tax, tobacco duty and air passenger duty",
+    "D": "Council tax, inheritance tax and VAT"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Income tax, National Insurance contributions and VAT are the three largest receipts."
+  },
+  {
+   "id": 6,
+   "topic": "Taxes raised",
+   "question": "Is government borrowing a type of tax revenue?",
+   "options": {
+    "A": "Yes, it is the largest tax",
+    "B": "Yes, but only in recessions",
+    "C": "No, it is money raised by issuing debt that must be repaid",
+    "D": "No, it is a type of National Insurance"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Borrowing funds a gap between spending and receipts; it is not a tax."
+  },
+  {
+   "id": 7,
+   "topic": "Taxes raised",
+   "question": "Who legally pays corporation tax?",
+   "options": {
+    "A": "Employees on their wages",
+    "B": "Companies, on their taxable profits",
+    "C": "Shoppers at the till",
+    "D": "Landlords only"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Corporation tax is charged on company profits."
+  },
+  {
+   "id": 8,
+   "topic": "Taxes raised",
+   "question": "A tax series has a break in 2010 because the definition changed. How should a chart treat 2005 and 2015?",
+   "options": {
+    "A": "Show the break and not compare the two sides directly as if the same measure",
+    "B": "Join the line smoothly as one measure",
+    "C": "Delete the earlier years",
+    "D": "Guess an adjustment to the 2005 figure"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "A break means the before and after figures are measured differently."
+  },
+  {
+   "id": 9,
+   "topic": "Who pays",
+   "question": "Higher earners pay a large share of all income tax. What does this show on its own?",
+   "options": {
+    "A": "They pay the highest tax rate on every pound",
+    "B": "Where the revenue comes from, not the rate anyone pays",
+    "C": "That tax rates are unfair",
+    "D": "That low earners pay no tax"
+   },
+   "answer": "B",
+   "critical": true,
+   "why": "A share of revenue says who supplies the money, not the personal tax rate."
+  },
+  {
+   "id": 10,
+   "topic": "Who pays",
+   "question": "If your pay rises just above the higher-rate threshold, how is the higher rate applied?",
+   "options": {
+    "A": "To all your income",
+    "B": "To none of your income",
+    "C": "To your income above the threshold only",
+    "D": "To your income below the threshold only"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Income tax rates apply to slices of income (bands)."
+  },
+  {
+   "id": 11,
+   "topic": "Who pays",
+   "question": "Council tax bills in England depend mainly on which feature of the home?",
+   "options": {
+    "A": "The income of the occupants",
+    "B": "Its valuation band",
+    "C": "The number of rooms exactly",
+    "D": "The age of the owner"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Council tax is set by valuation band and the local authority's rate."
+  },
+  {
+   "id": 12,
+   "topic": "Who pays",
+   "question": "Which statement about who pays tax can be true at the same time?",
+   "options": {
+    "A": "Richer households pay more pounds, poorer ones may pay a larger share on indirect tax",
+    "B": "Everyone pays the same rate on all taxes",
+    "C": "Only the rich pay VAT",
+    "D": "Poor households never pay tax"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Cash amounts and shares of income can point in different directions."
+  },
+  {
+   "id": 13,
+   "topic": "Household tax",
+   "question": "Across the UK, indirect taxes such as VAT take a larger share of income from which group?",
+   "options": {
+    "A": "The richest fifth of households",
+    "B": "The poorest fifth of households",
+    "C": "They take the same share from all",
+    "D": "Only retired households"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Official analysis shows indirect taxes are regressive as a share of disposable income."
+  },
+  {
+   "id": 14,
+   "topic": "Household tax",
+   "question": "An official table gives the average share of household income paid in tax. What does that average mean?",
+   "options": {
+    "A": "Every household pays exactly that share",
+    "B": "Income tax is charged at that rate",
+    "C": "It is a group average, not any one household's rate",
+    "D": "It is the share of all tax that households raise"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "A household average is neither a personal rate nor a share of total revenue."
+  },
+  {
+   "id": 15,
+   "topic": "Household tax",
+   "question": "A website shows a 'typical family' paying \u00a3X in tax using assumed pay and spending. What is this?",
+   "options": {
+    "A": "An illustration built on assumptions, not a measured figure",
+    "B": "A measured national average",
+    "C": "A survey of real families",
+    "D": "An official forecast"
+   },
+   "answer": "A",
+   "critical": true,
+   "why": "Illustrative households come from chosen assumptions rather than measured data."
+  },
+  {
+   "id": 16,
+   "topic": "Household tax",
+   "question": "Direct taxes, such as income tax, take what share of gross income as household income rises?",
+   "options": {
+    "A": "A falling share",
+    "B": "A rising share on average",
+    "C": "Exactly the same share",
+    "D": "None"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Direct taxes as a share of gross income are higher for richer households on average."
+  },
+  {
+   "id": 17,
+   "topic": "Work",
+   "question": "Why can the number of jobs be higher than the number of people in work?",
+   "options": {
+    "A": "Some people hold more than one job",
+    "B": "Jobs are counted before they begin",
+    "C": "Children are counted as jobs",
+    "D": "It cannot be higher"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "A person with two jobs appears twice in a count of jobs."
+  },
+  {
+   "id": 18,
+   "topic": "Work",
+   "question": "The employment rate is the share of which group who are in paid work?",
+   "options": {
+    "A": "The whole UK population",
+    "B": "People aged 16 to 64 or other stated age group",
+    "C": "Only people looking for work",
+    "D": "Only full-time workers"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Employment rate is employment divided by the population of the stated age group."
+  },
+  {
+   "id": 19,
+   "topic": "Earnings",
+   "question": "Pay rose 3% in cash terms while prices rose 6%. What happened to pay after allowing for inflation?",
+   "options": {
+    "A": "It rose",
+    "B": "It stayed the same",
+    "C": "It fell",
+    "D": "It rose by 3%"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Prices rose faster than pay, so real pay fell."
+  },
+  {
+   "id": 20,
+   "topic": "Housing",
+   "question": "In England, which housing tenure has the most households?",
+   "options": {
+    "A": "Social renting",
+    "B": "Private renting",
+    "C": "Owner occupation",
+    "D": "Shared ownership only"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Owner occupation is England's largest tenure."
+  },
+  {
+   "id": 21,
+   "topic": "Holidays",
+   "question": "Which country do UK residents visit most often on overseas holidays?",
+   "options": {
+    "A": "Spain",
+    "B": "Australia",
+    "C": "Japan",
+    "D": "Canada"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Spain has long been the most common destination for UK residents' trips abroad."
+  },
+  {
+   "id": 22,
+   "topic": "Schools",
+   "question": "An average class size of 27 is quoted. What must you check before comparing it with another figure?",
+   "options": {
+    "A": "The colour of the chart",
+    "B": "The nation and school phase",
+    "C": "The headteacher's name",
+    "D": "The weather that year"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Class size differs by nation and by primary or secondary phase, and definitions vary."
+  },
+  {
+   "id": 23,
+   "topic": "Schools",
+   "question": "Average class sizes fell over ten years. What can the figures alone tell you?",
+   "options": {
+    "A": "Which policy caused the fall",
+    "B": "That teaching improved",
+    "C": "Pupil numbers certainly fell",
+    "D": "That class sizes changed, but not why"
+   },
+   "answer": "D",
+   "critical": true,
+   "why": "Data show change over time; cause needs separate evidence."
+  },
+  {
+   "id": 24,
+   "topic": "Holidays",
+   "question": "A holiday chart has no data for 2020 because the survey was not run. How should it be drawn?",
+   "options": {
+    "A": "Show a gap and say so",
+    "B": "Invent a figure for 2020",
+    "C": "Join 2019 to 2021 with a straight line",
+    "D": "Hide 2020 and 2021 entirely"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Missing years should be shown as missing, not filled in."
+  }
+ ]
+}

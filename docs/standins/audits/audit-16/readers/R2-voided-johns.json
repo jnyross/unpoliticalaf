@@ -1,0 +1,12 @@
+{
+ "voided": "R2 johns phase run without a fresh session (answers copied from phase 2 pages); replaced by R2-johnsfix.json",
+ "johns_with_site": {
+  "J1.1": "A",
+  "J1.2": "C",
+  "J1.3": "C",
+  "J1.4": "C",
+  "J1.5": "A",
+  "J1.6": "B",
+  "J1.7": "C"
+ }
+}
