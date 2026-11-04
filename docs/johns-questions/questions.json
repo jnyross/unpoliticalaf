@@ -186,17 +186,56 @@
         {
           "id": "J8.1",
           "question": "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?",
-          "gap": "The site does not yet show the OECD's estimates for the UK reform packages (trade barriers and R&D, long-term sick activation, planning and full expensing), so it cannot say which raises GDP most."
+          "options": {
+            "A": "Trade barriers and research and development support",
+            "B": "Getting people on long-term sick leave back into work",
+            "C": "Planning reform, full expensing and access to finance",
+            "D": "Keeping the state pension triple lock"
+          },
+          "answer": "C",
+          "why": "The OECD estimates planning reform, full expensing and access to finance at +2.1% of potential GDP after 10 years, the largest of its packages (long-term sick +1.4%, trade and R&D +0.5%).",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "Capital deepening: planning reform, extension of full expensing, access to finance"
+            }
+          ]
         },
         {
           "id": "J8.2",
           "question": "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?",
-          "gap": "The site does not yet give the OECD's combined estimate of about 4.0% after ten years and 7.7% after 25 years, with its source."
+          "options": {
+            "A": "+1.0% after 10 years and +2.0% after 25 years",
+            "B": "+4.0% after 10 years and +7.7% after 25 years",
+            "C": "+0.5% after 10 years and +1.7% after 25 years",
+            "D": "No estimate is given"
+          },
+          "answer": "B",
+          "why": "The OECD's combined package is +4.0% of potential GDP after 10 years and +7.7% after 25 years.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "gives +4.0% of potential GDP after 10 years and +7.7% after 25 years"
+            }
+          ]
         },
         {
           "id": "J8.3",
           "question": "What measure do the OECD's reform estimates use for the size of each effect?",
-          "gap": "The site does not yet say how the OECD measures each reform's effect (percentage change in the level of potential GDP, relative to a baseline) or that the estimates rest on many assumptions."
+          "options": {
+            "A": "Pounds of extra tax revenue",
+            "B": "A percentage of baseline potential GDP",
+            "C": "Change in employment numbers",
+            "D": "Change in the deficit alone"
+          },
+          "answer": "B",
+          "why": "The OECD measures each effect as a percentage of baseline potential GDP.",
+          "evidence": [
+            {
+              "page": "economy-options.html",
+              "text": "a percentage of baseline potential GDP"
+            }
+          ]
         }
       ]
     }
