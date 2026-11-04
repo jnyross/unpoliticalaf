@@ -330,7 +330,7 @@ def timing_note(sources, up, *periods):
 CAUSE = '<p class="note"><strong>Change is not cause.</strong> These figures show what changed between years. They do not show why. Many things happen at once, including changes in the economy, prices, population and government policy, and these statistics cannot separate them.</p>'
 # The same point, placed beside the employment rates for women and men, where a reader
 # looking for why a rate changed will see it.
-WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> The employment rates for women and men show what share of each was in work, not why that share changed. Many things happen at once, including changes in the economy, population and government policy, and these statistics cannot separate them.</p>'
+WORK_CAUSE = '<p class="note"><strong>Change is not cause.</strong> These rates show what share of women and men were in work, not why that share changed. Many things happen at once, such as the economy and government policy, and these statistics cannot separate them.</p>'
 
 
 def topic_block_for_year(facts, num, sources, topic, y, up):
@@ -971,12 +971,17 @@ def _work(facts, d, num, sources):
     jf, jl = jb["years"][0], jb["years"][-1]
     # Manufacturing's long fall is asked about often, so it sits in the answer box,
     # not only in the jobs by industry section lower down (audit 11 gap 6).
-    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>'
+    # Women's and men's rates sit in the answer box too, so a reader who stops at the first
+    # screen sees them (audit 14 gap 1: a phone reader could not find them).
+    wf = FIRST_YEAR["work"]
+    sex = (f'<p>Since {wf}, women\'s rate went from {num(f"work.women.{wf}", "pct")} to {num(f"work.women.{y}", "pct")}; '
+           f'men\'s from {num(f"work.men.{wf}", "pct")} to {num(f"work.men.{y}", "pct")}.</p>')
+    answer = (f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>{sex}'
               f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
               f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>')
     body.append(U.topic_line(num, "work", LAST))
     body.append(series_chart(facts, "Employment rate, ages 16 to 64", [("Men", lambda y: f"work.men.{y}", "a"), ("Women", lambda y: f"work.women.{y}", "b")], "Per cent of people aged 16 to 64 in work, April to June each year", kind="pct", num=num,
-                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")) + WORK_CAUSE)
+                             finding=F.narrowing("The gap between men's and women's employment rates", lambda d: f"{d:.1f} points")))
     body.append(details_table("Show work figures for every year", "Work, United Kingdom", ["Year", "Employment rate 16-64", "Men", "Women", "People in work", "Part-time share"],
                               [[str(y), num(f"work.rate.{y}", "pct"), num(f"work.men.{y}", "pct"), num(f"work.women.{y}", "pct"), num(f"work.level.{y}", "millions_people"), num(f"work.ptshare.{y}", "pct")] for y in YEARS]))
     groups = d["work"]["occ_groups"]
@@ -1038,6 +1043,13 @@ def earn_before_after(num, a, b, ch, cls="ba"):
             f'<p><span class="ba-y">April {b}</span><span class="ba-v">{num(f"earn.real.ft.{b}", "pounds")}</span></p></div>')
 
 
+def _change_words(facts, num, a, b):
+    """Plain words and the tagged change for real pay between two years inside one stretch."""
+    ch = 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1)
+    word = "was about the same" if abs(ch) < 2 else ("rose" if ch > 0 else "fell")
+    return f"{word} ({change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')})"
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
@@ -1057,6 +1069,10 @@ def _earnings(facts, d, num, sources):
                              "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
                              breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS], split_breaks=True, kind="pounds", num=num,
                              finding=F.narrowing("After inflation, the gap between men's and women's median full-time pay", lambda d: f"£{d:,.0f} a week", which="last")))
+    body.append(f'<p>The chart breaks in 2011, so the years either side are not joined into one change. '
+                f'From April 2008 to April 2010 real pay {_change_words(facts, num, 2008, 2010)}. '
+                f'From April 2011 to April 2014 it {_change_words(facts, num, 2011, 2014)}. '
+                f'This page therefore gives no single change from 2008 to 2014.</p>')
     body.append(details_table("Show earnings for every year", "Median gross weekly pay, United Kingdom, April each year",
                               ["Year", "Full-time (cash)", "Full-time (2025 prices)", "Full-time men", "Full-time women", "Part-time"],
                               [[str(y), num(f"earn.ft.{y}", "pounds"), num(f"earn.real.ft.{y}", "pounds"), num(f"earn.real.ft_men.{y}", "pounds"), num(f"earn.real.ft_women.{y}", "pounds"), num(f"earn.real.pt.{y}", "pounds")] for y in YEARS]))
@@ -1126,7 +1142,7 @@ def _holidays(facts, d, num, sources):
     body.append(series_chart(facts, "Holiday visits abroad", [("Holiday visits abroad", lambda y: f"hol.world.holiday.{y}", "a")],
                              "Millions of visits. Up to 2023 UK residents; from 2024 Great Britain residents, new method. No 2020 figure: the survey stopped on 16 March", breaks=[(YEARS.index(2024), "New method"), (YEARS.index(2025), "Fully new method")], ymin=0, scale=1000, split_breaks=True, kind="millions", num=num,
                              finding=F.trend("Holiday visits abroad by UK residents", which="first",
-                                             after="; later years use a new method and are not compared")))
+                                             after="; 2024 and 2025 use a new method and are not compared")))
     body.append(details_table("Show holidays for every year", "Visits abroad, millions",
                               ["Year", "Residents of", "Holiday visits", "Per 100 residents", "Of which to Europe", "To North America", "Share of visits that were holidays"],
                               [[str(y), hol_basis(y), _hol_cell(facts, num, y), num(f"hol.abroad.per100.{y}", "int"), num(f"hol.europe.holiday.{y}", "millions"), num(f"hol.namerica.holiday.{y}", "millions"),
@@ -1253,8 +1269,8 @@ def topic_page(facts, d, num, sources, key):
     # 1970s or 1980s sees it first (audit 11 gap 3). Its table, limits and sources fold away.
     from . import pages_history
     long_shown, long_folded = pages_history.block(facts, num, sources, key)
-    # On work, the "change is not cause" note sits under the long chart of women's and
-    # men's employment rates instead of with the topic links (audit 11 gap 2).
+    # On work, the "change is not cause" note sits under the answer box, beside the women's
+    # and men's rates, instead of with the topic links (audit 11 gap 2, audit 14 gap 1).
     # Then the years since 2008, with more measures. Work, pay, housing and class sizes
     # repeat the long chart's measure over fewer years, so on a phone that chart waits in
     # the fold; holidays shows holiday visits, which the longer series does not have.
@@ -1262,12 +1278,14 @@ def topic_page(facts, d, num, sources, key):
     if key == "holidays":
         recent = [FOLD, detail[first_chart]]
     else:
-        # The note already sits under the long chart, so it is not repeated here.
         recent = [f"<p>From {since} the official tables cover more each year: {esc(TOPIC_PAGES[key][1])}.</p>", FOLD,
-                  detail[first_chart].replace(WORK_CAUSE, ""), "<!--keepfold-->"]
+                  detail[first_chart], "<!--keepfold-->"]
     recent += detail[:first_chart] + detail[first_chart + 1:first_chart + 2]
     rest = detail[first_chart + 2:]
-    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f"<h1>{esc(question)}</h1>", answer,
+    # On work the note sits straight under the answer, before the long chart, so a phone
+    # reader sees it on the first screen (audit 14 gap 1).
+    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
+            WORK_CAUSE if key == "work" else "",
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Find or compare years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
@@ -1283,10 +1301,12 @@ def topic_page(facts, d, num, sources, key):
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
     body.append(f"<h2 id='years'>Find or compare years</h2>")
+    # The comparison opens at this topic's section. It comes before the year finder, so when the
+    # finder's links appear, the numbers a screen-reader or voice-control reader already knows
+    # (audit 14 gap 8) stay the same: only the links that follow move on.
+    body.append(NOFOLD + compare_form("", anchor=key))
     # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
     body.append(year_finder(facts, num, key))
-    # The comparison opens at this topic's section; every other topic follows it.
-    body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 

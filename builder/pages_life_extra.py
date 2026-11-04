@@ -238,6 +238,8 @@ def holiday_afford_block(facts, num, d):
                f'{num(f"holafford.low.{last}", "pct")} of people in low-income households and {num(f"holafford.notlow.{last}", "pct")} of people in other households.</p>'
                + (f'<p>The survey changed in {" and ".join(str(c) for c in cuts)}, so only years in the same run are compared: {"; ".join(moves)}.</p>' if moves else "")
                + '</div>')
+    # The answer gives each group's figures; the chart and its limits wait in the fold on a phone.
+    out.append("<!--keepfold-->")
     out.append(_chart(facts, num, "People whose household could not afford a week’s holiday away from home", years,
                       [("Low-income households", lambda y: f"holafford.low.{y}", "b"), ("Everyone", lambda y: f"holafford.all.{y}", "a"),
                        ("Other households", lambda y: f"holafford.notlow.{y}", "c")],
