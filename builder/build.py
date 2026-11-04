@@ -15,7 +15,7 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import pages_money_extra, pages_generations, pages_manifesto, version
-from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, glossary, trace, uncertainty
+from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -46,6 +46,7 @@ def render():
     pages["spending.html"] = pages_money.spending_page(facts, d, num, sources)
     pages["spending-areas.html"] = pages_money.spending_areas_page(facts, d, num, sources)
     pages["spending-history.html"] = pages_spendhist.spending_history_page(facts, d, num, sources)
+    pages["welfare.html"] = pages_welfare.welfare_page(facts, d, num, sources)
     pages["taxes.html"] = pages_money.taxes_page(facts, d, num, sources)
     pages["tax-history.html"] = pages_taxmixhist.tax_history_page(facts, d, num, sources)
     pages["international.html"] = pages_intl.international_page(facts, d, num, sources)
