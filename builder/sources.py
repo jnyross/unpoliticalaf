@@ -237,6 +237,7 @@ FETCHED = {
     "explain-dmo-about-gilts": ("UK Debt Management Office", "About gilts", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-debt-interest": ("Office for Budget Responsibility", "Debt interest (central government, net of APF): explainer", "United Kingdom", "Not applicable (guidance)"),
     "explain-obr-frs-2025": ("Office for Budget Responsibility", "Fiscal risks and sustainability, July 2025", "United Kingdom", "Not applicable (report)"),
+    "explain-obr-efo-oct-2026": ("Office for Budget Responsibility", "Economic and fiscal outlook, October 2026 (published 28 October 2026)", "United Kingdom", "Not applicable (report)"),
     "explain-mac-annual-2025": ("Migration Advisory Committee", "Migration Advisory Committee annual report 2025 (accessible HTML version), including its fiscal analysis of the Family visa", "United Kingdom", "Migrants on the Family and Skilled Worker visa routes, and the population of the UK"),
     "explain-obr-migration-fiscal": ("Office for Budget Responsibility", "The impact of migration on the fiscal forecast (box from the March 2024 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
     "explain-obr-migration-gdp": ("Office for Budget Responsibility", "Net migration and GDP per person (box from the March 2026 Economic and fiscal outlook)", "United Kingdom", "Net migration into the UK, as in the OBR forecast"),
