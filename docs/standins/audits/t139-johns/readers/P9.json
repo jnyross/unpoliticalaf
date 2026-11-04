@@ -1,0 +1,44 @@
+{
+  "reader": "P9",
+  "profile": "P9",
+  "site_commit": "9dcade5",
+  "budget": 40,
+  "actions_used": 31,
+  "johns_without_site": {
+    "J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E",
+    "J4.1": "E", "J4.2": "E", "J4.3": "E", "J4.4": "E", "J4.5": "E", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "johns_with_site": {
+    "J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "B", "J1.7": "E",
+    "J4.1": "B", "J4.2": "E", "J4.3": "B", "J4.4": "B", "J4.5": "A", "J4.6": "E", "J4.8": "E",
+    "J2.1": "E", "J2.2": "E", "J2.3": "E", "J2.6": "E", "J2.7": "E", "J2.8": "E",
+    "J8.1": "E", "J8.2": "E", "J8.3": "E",
+    "J5.1": "E", "J5.3": "E", "J5.4": "E", "J5.5": "E", "J5.6": "E", "J5.7": "E",
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "A",
+    "J13.1": "E", "J13.2": "E", "J13.3": "E", "J13.4": "E", "J13.5": "E", "J13.6": "E", "J13.7": "E", "J13.8": "E",
+    "J7.1": "E", "J7.2": "E", "J7.3": "E", "J7.4": "E", "J7.5": "E", "J7.6": "E", "J7.7": "E", "J7.8": "E", "J7.9": "E", "J7.10": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E",
+    "J9.1": "E", "J9.2": "E", "J9.3": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E",
+    "J6.1": "E", "J6.2": "E", "J6.3": "E", "J6.4": "E", "J6.5": "E", "J6.6": "E", "J6.7": "E", "J6.8": "E"
+  },
+  "confusions": [
+    "The debt page gives two different debt figures (IMF and OECD) with a note that neither is the only correct one, and I did not know which to go by.",
+    "On the tax and income pages, 46.0% and 36.2% are both about the richest fifth, one a share of all taxes and one a share of income, and I could not keep them apart.",
+    "The class size section has lots of close numbers (26.3, 21.5, 23.1, 26.4) and a Scotland figure, so I could not tell which one was the England primary figure.",
+    "The Work section shows one overall employment chart with no 18 to 24 or 25 to 34 figures that I could find, so I gave up looking for them.",
+    "The housing ownership chart is a dotted line with no clear 2008-09 figure I could read, so I could not work out the change.",
+    "The borrowing-cost page is long text and I skimmed past the quotes about what moves borrowing costs, so I did not get the list of factors.",
+    "The top 1% and wealth-tax questions were not answered in what I read, and I ran out of actions before reaching defence, migration, welfare, OECD and debt-history pages."
+  ]
+}
