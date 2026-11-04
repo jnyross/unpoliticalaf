@@ -127,7 +127,7 @@ svg[data-chart],.sm svg{touch-action:pan-y;cursor:crosshair}[data-chart]:focus-v
 .sm .smt{font-size:.87rem;font-weight:650;line-height:1.25;margin:0 0 2px;color:var(--ink)}.smkey{font-size:.87rem;color:var(--ink2);margin:2px 0 6px}
 .sm use.c,.sm use.o{fill:none;stroke-linecap:round;stroke-linejoin:round}.sm use.c{stroke:#d5d9dd;stroke-width:1}.sm use.o{stroke:#3d4852;stroke-width:2.5}
 svg{display:block;overflow:visible}
-svg text{font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#4a5158}
+svg text{font:16.5px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;fill:#4a5158}
 svg text.lbl{font-weight:650;fill:#1f252b;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
 svg text.lbl.b{fill:#5d666e}
 .key{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.87rem;color:var(--ink2);margin:4px 0 6px}
