@@ -391,7 +391,7 @@ def who_pays_page(facts, d, num, sources):
                 "For each fifth, the ONS then estimates the average income and taxes of the households those people live in. Each fifth has the same number of people, but not the same number of households. "
                 "This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>")
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
-    body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
+    body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance, student loan repayments and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
     body.append('<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are modelled from what households report spending.</p></div>')
     body.append(source_line(sources, ["etb"], "Table 2a. Survey-based estimates for April 2023 to March 2024."))
     from .pages_money_extra import households_short, net_section, income_tax_age_section

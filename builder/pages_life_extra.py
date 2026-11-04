@@ -60,7 +60,7 @@ def spread_block(facts, num, d, first):
     out.append(f'<p class="small">The 10th and 90th percentiles are the pay of the employee one tenth of the way up the ladder and nine tenths of the way up. '
                f'They are lines on the ladder, not averages of the groups. Only full-time employees are counted: part-time workers and the self-employed are not, and pay is for one job before tax, '
                f'not household income. The ratio does not depend on inflation, because both lines are in the same year’s prices. '
-               f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay. {last} figures are provisional.</p>')
+               f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay.</p>')
     return out
 
 
