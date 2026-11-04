@@ -374,7 +374,6 @@ def who_pays_page(facts, d, num, sources):
                          (num("etb.2a.alltax.q5", "pounds"), f'a year in all taxes, on average, by the households of the highest-income fifth of people ({num("etb.t8.gross.all.q5", "pct")} of their gross income), 2023/24', False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 <p>The two household figures above count all taxes, including VAT and other taxes on spending. For tax as a share of household income, see <a href="household-tax.html">Tax and income</a>.</p>
-<p>Indirect taxes are charged on spending. The lowest-income fifth paid {cav[0]} of its spending in indirect taxes, close to the other fifths ({cav[1]} to {cav[2]}). ONS also warns that lump sums of tax put off from earlier years can make the lowest fifths' direct taxes look high. Both points are explained on <a href="household-tax.html">Tax and income</a>.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
@@ -421,7 +420,7 @@ def who_pays_page(facts, d, num, sources):
                 "This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>")
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
     body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
-    body.append('<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are modelled from what households report spending.</p></div>')
+    body.append(f'<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are charged on spending: the lowest fifth paid {cav[0]} of its spending in indirect taxes, close to the other fifths ({cav[1]} to {cav[2]}). ONS warns that lump sums of deferred tax can make its direct taxes look high.</p></div>')
     body.append(source_line(sources, ["etb"], "Table 2a. Survey-based estimates for April 2023 to March 2024."))
     from .pages_money_extra import households_short, net_section, income_tax_age_section
     body.append(households_short(facts, d, num))
