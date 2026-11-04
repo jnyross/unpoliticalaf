@@ -1278,10 +1278,12 @@ def topic_page(facts, d, num, sources, key):
     body.append(explain.for_topic(key, sources, up="../"))
     body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../"))
     body.append(f"<h2 id='years'>Find or compare years</h2>")
+    # The comparison opens at this topic's section. It comes before the year finder, so when the
+    # finder's links appear, the numbers a screen-reader or voice-control reader already knows
+    # (audit 14 gap 8) stay the same: only the links that follow move on.
+    body.append(NOFOLD + compare_form("", anchor=key))
     # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
     body.append(year_finder(facts, num, key))
-    # The comparison opens at this topic's section; every other topic follows it.
-    body.append(NOFOLD + compare_form("", anchor=key))
     return page(f"life/{key}.html", f"{title} since {first}", "\n".join(body),
                 f"{title} in the UK every year since {first}, from official statistics: {TOPIC_PAGES[key][1]}.", toc_after_first=True, scripts=COMPARE_JS)
 
