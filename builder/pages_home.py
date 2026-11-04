@@ -86,6 +86,7 @@ def home_page(facts, d, num, sources):
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
 <p><a href="international.html">How do UK taxes and spending compare with other countries?</a> The UK beside the other OECD countries, as a share of GDP.</p>
+<p><a href="productivity.html">How does UK productivity compare with other countries?</a> Output per hour worked and per worker beside the other G7 countries.</p>
 <p><a href="defence.html">Why can't we afford to spend more on defence?</a> UK defence spending in cash, after inflation and as a share of GDP, beside the G7, and what extra spending would cost.</p>
 <p><a href="borrowing.html">How do UK debt and borrowing costs compare with other major countries?</a> Debt, 10-year borrowing costs and debt interest beside the other G7 countries.</p>
 <p><a href="why-debt.html">Why is UK government debt high?</a> Debt and borrowing since 1900, the periods that raised them, and what the Office for Budget Responsibility and the ONS say.</p>

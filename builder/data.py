@@ -1227,6 +1227,8 @@ def build_all():
     }
     from . import data_nations
     d["nations"] = data_nations.build(facts)
+    from . import data_prod
+    d["productivity"] = data_prod.build(facts)
     from . import data_taxhist
     d["tax_history"] = data_taxhist.build(facts)
     from . import data_spendhist

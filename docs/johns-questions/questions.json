@@ -1240,6 +1240,81 @@
           "gap": "The site has no mortgage interest rate series yet, so it cannot show how borrowing costs have moved."
         }
       ]
+    },
+    {
+      "id": "J9",
+      "asked": "How does UK productivity compare to other countries",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 9 of a list of ten)",
+      "reading": "Productivity is read as output per hour worked (GDP divided by hours worked), the standard international measure, with output per worker as a second measure. Other countries are read as the G7 (Canada, France, Germany, Italy, Japan, the UK and the United States), because the ONS comparison covers them. Levels are in pounds converted with purchasing power parities; trends are after inflation and start in 2008. The series ends in 2021, when the ONS stopped publishing it, so the site says so rather than using later figures from another source.",
+      "probes": [
+        {
+          "id": "J9.1",
+          "question": "In 2021, how did UK output per hour worked compare with France and the United States?",
+          "options": {
+            "A": "Higher than both",
+            "B": "Lower than both",
+            "C": "Higher than France but lower than the United States",
+            "D": "About the same as both"
+          },
+          "answer": "B",
+          "why": "Productivity page, 2021: UK £46.92 an hour, against £55.50 in France and £58.88 in the United States (in pounds at current prices, converted with purchasing power parities).",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "UK output per hour worked was £46.92"
+            },
+            {
+              "page": "productivity.html",
+              "text": "£58.88 in the United States"
+            },
+            {
+              "page": "productivity.html",
+              "text": "£55.50 in France"
+            }
+          ]
+        },
+        {
+          "id": "J9.2",
+          "question": "From 2008 to 2021, after inflation, did UK output per hour worked rise more or less than the average of the other five G7 countries on the page?",
+          "options": {
+            "A": "More",
+            "B": "Less",
+            "C": "The same",
+            "D": "It fell"
+          },
+          "answer": "B",
+          "why": "Productivity page: UK output per hour rose by 3.9% between 2008 and 2021, while the other five G7 countries rose by 10.3% on average.",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "UK output per hour rose by 3.9% between 2008 and 2021"
+            },
+            {
+              "page": "productivity.html",
+              "text": "rose by 10.3% on average over the same years"
+            }
+          ]
+        },
+        {
+          "id": "J9.3",
+          "question": "What is the latest year of figures for this comparison, and why does the page stop there?",
+          "options": {
+            "A": "2024; the ONS stopped in 2025",
+            "B": "2023; the figures are still being collected",
+            "C": "2021; the ONS stopped publishing the series in 2024",
+            "D": "2019; the figures before the pandemic are the only reliable ones"
+          },
+          "answer": "C",
+          "why": "Productivity page limits: the series ends in 2021, and the ONS stopped publishing it in 2024.",
+          "evidence": [
+            {
+              "page": "productivity.html",
+              "text": "The series ends in 2021. The ONS stopped publishing it in 2024."
+            }
+          ]
+        }
+      ]
     }
   ]
 }

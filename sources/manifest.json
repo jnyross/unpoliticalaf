@@ -635,6 +635,11 @@
    "id": "explain-hmrc-nondom-2025",
    "url": "https://www.gov.uk/government/statistics/statistics-on-non-domiciled-taxpayers-in-the-uk/statistical-commentary-on-non-domiciled-taxpayers-in-the-uk",
    "file": "explain/hmrc-nondom-commentary-2025.html"
+  },
+  {
+   "id": "ons-icp",
+   "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
+   "file": "ons/icproductivityupdated.xlsx"
   }
  ]
 }
