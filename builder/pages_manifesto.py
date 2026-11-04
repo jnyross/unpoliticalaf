@@ -45,7 +45,7 @@ def _ratings():
 
 BODY = f"""
 <h1>Did Labour keep its 2024 manifesto?</h1>
-<p>Partly, and most of it cannot be judged yet. We checked ten pledges on public money and everyday costs from Labour’s 2024 manifesto, using budgets, laws and official figures published up to 15 October 2026. Three are kept: one is complete and two are on track so far. Two are partly kept, because the wording allows more than one reading. One is not kept on its plain wording. Four cannot be tested until their deadlines or measures arrive.</p>
+<div class="answer"><p>Partly, and most of it cannot be judged yet. We checked ten pledges on public money and everyday costs from Labour’s 2024 manifesto, using budgets, laws and official figures published up to 15 October 2026. Three are kept: one is complete and two are on track so far. Two are partly kept, because the wording allows more than one reading. One is not kept on its plain wording. Four cannot be tested until their deadlines or measures arrive.</p></div>
 <p>The table lists each pledge with its rating. Tap a pledge to see the quote, what has happened and the sources. Last checked {CHECKED}.</p>
 {_summary_table()}
 

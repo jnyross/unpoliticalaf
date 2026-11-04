@@ -65,7 +65,7 @@ def borrowing_page(facts, d, num, sources):
 
     body = ["<h1>How do UK debt and borrowing costs compare with other major countries?</h1>"]
     body.append(f'''<div class="answer"><p class="lede">In {iy}, UK government debt was {num(f"borrow.imf.{UK}.{iy}", "pct")} of GDP, the {_ordinal(debt_place)} of the seven G7 countries: {_higher_lower(debt_order, names)}.</p>
-<p>In {yy}, the latest full year, the market rate (yield) for new 10-year UK government borrowing averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
+<p>The OECD, which values bonds at market prices, gives {num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP in {dy}, the {_ordinal(oecd_place)} of the G7. Both measures are below.</p>
 </div>''')
 
     # ---------------------------------------------------------------- debt
@@ -83,13 +83,13 @@ def borrowing_page(facts, d, num, sources):
     ]))
     body.append(f'<p>Among all OECD countries, UK debt was {above} the OECD average: {num(f"borrow.debt.{UK}.{dy}", "pct")} of GDP against {num(f"borrow.debt.{AVG}.{dy}", "pct")} in {dy}, on the OECD\'s measure.</p>')
     body.append("<p>The G7 is the group of seven large, high-income economies: Canada, France, Germany, Italy, Japan, the United Kingdom and the United States. Debt and interest are compared as a share of GDP, the value of everything a country produces in a year, so that countries of different sizes can be compared.</p>")
+    body.append(FOLD)
     body.append(f'''<p><strong>Which debt measure to read.</strong> Both measures are published by international organisations, and both are shown here, so you can see the difference. Neither is the only correct figure: they value the same debt in different ways.</p>
 <ul>
 <li><strong>IMF (face value):</strong> the amount governments owe and must repay. Read this to see how much debt each government has borrowed.</li>
 <li><strong>OECD (market value):</strong> the OECD follows the international system of national accounts, which counts government bonds at their market price. Read this to see debt as those accounts value it, at the prices bonds trade at.</li>
 </ul>
 <p class="small">The market price of existing bonds falls when interest rates rise, so OECD debt can fall without any debt being repaid. This is one reason the OECD's figure for the UK went from {num(f"borrow.debt.{UK}.2021", "pct")} of GDP in 2021 to {num(f"borrow.debt.{UK}.2022", "pct")} in 2022, while the IMF's went from {num(f"borrow.imf.{UK}.2021", "pct")} to {num(f"borrow.imf.{UK}.2022", "pct")}.</p>''')
-    body.append(FOLD)
     years = b["imf_years"]
     series = [(names[a], [facts[f"borrow.imf.{a}.{y}"].value if f"borrow.imf.{a}.{y}" in facts else None for y in years]) for a in g7]
     ids = [[f"borrow.imf.{a}.{y}" if f"borrow.imf.{a}.{y}" in facts else None for y in years] for a in g7]
@@ -103,6 +103,8 @@ def borrowing_page(facts, d, num, sources):
 
     # ---------------------------------------------------------------- yields
     body.append(f'<h2 id="yields">How much does each government pay to borrow?</h2>')
+    body.append(f'''<div class="answer"><p>In {yy}, the latest full year, the market rate (yield) for new 10-year UK government borrowing averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
+</div>''')
     body.append("<p>The UK Debt Management Office and the Office for Budget Responsibility explain what moves borrowing costs: <a href='#why'>their words are quoted further down</a>.</p>")
     body.append(f'''<div class="answer"><p>Governments borrow by selling bonds: promises to repay on a set date, with interest every year until then. UK government bonds are called gilts. The <strong>yield</strong> on a 10-year bond is the yearly interest, as a percentage of what is paid for the bond, that a buyer would earn by keeping it for 10 years. When yields are higher, new borrowing costs the government more.</p>
 <p>Over the whole of {yy}, the latest full year, the UK's 10-year yield averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")}, the {_ordinal(yy_place)} of the G7: {_higher_lower(yy_order, names)}. In the latest month, {b["yield_month_name"]}, it was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p></div>''')
