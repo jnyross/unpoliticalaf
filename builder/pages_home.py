@@ -54,7 +54,8 @@ def home_page(facts, d, num, sources):
     # employment reaches it in one tap from the home page (audit 15 gap 3: it was last in the list).
     QUICK = jump("Quick answers", [("life/work.html#key-answer", "Women's employment"), ("life/earnings.html#key-answer", "Pay after inflation"),
                                    ("life/schools.html#key-answer", "Class sizes"), ("life/holidays.html#key-answer", "Holidays"),
-                                   ("life/housing.html#key-answer", "Renting")])
+                                   ("life/housing.html#key-answer", "Renting"),
+                                   ("life/generations.html#key-answer", "Did parents have it easier?")])
     body = [f'''<div class="hero"><h1>Public money and everyday life in the UK, in plain numbers</h1>
 <p class="lede">Where public money goes, who pays for it, and how work, pay, housing, holidays and schools have changed. Every figure is an official statistic, and shows where it comes from and what it can't tell you.</p></div>
 {QUICK}
