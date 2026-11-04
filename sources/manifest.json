@@ -1,5 +1,5 @@
 {
- "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page.",
+ "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page. The data-gov-life-tables-historic, ons-life-tables-2024-related and ons-ashe-age-single-year-adhoc pages were added for the life expectancy and pay-by-age probes (J12); the files they link to are pinned once fetched.",
  "sources": [
   {
    "id": "ons-mgrz",
