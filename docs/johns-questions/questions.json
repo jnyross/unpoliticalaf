@@ -175,6 +175,163 @@
           "asked": "as part fo that question we should clearly answer \"what do the bond markets thing of the uk vs other countries e.g. how eassy is it to raise more moeny and how much interest do we pay? becuase it's a sign of how confident the markets are in how our economy is being run\""
         }
       ]
+    },
+    {
+      "id": "J6",
+      "asked": "How many people, espeicalyl high earners, need to leave the UK before tax receipts are meaningfully damaged?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04 (question 6 of 10)",
+      "reading": "Read as: how many people, especially high earners, would have to leave before the Income Tax lost is large enough to count as meaningful. The site gives the arithmetic from HMRC's tax by income band (a stated number of leavers, each counted at their group's average tax, before any other change), yardsticks a reader can weigh (one per cent of receipts; the OBR's forecast errors), and the OBR's evidence on how high earners respond to tax rates. What counts as meaningful is a judgement, and the site does not make it.",
+      "probes": [
+        {
+          "id": "J6.1",
+          "question": "In 2023-24, how many taxpayers had total income of £1 million or more?",
+          "options": {
+            "A": "About 2,600",
+            "B": "About 26,000",
+            "C": "About 260,000",
+            "D": "About 2.6 million"
+          },
+          "answer": "B",
+          "why": "HMRC's Survey of Personal Incomes, Table 3.3, 2023-24: 26 thousand taxpayers in the band of £1 million and over.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "26,000 taxpayers had total income of £1 million or more"
+            }
+          ]
+        },
+        {
+          "id": "J6.2",
+          "question": "In 2023-24, what share of all Income Tax did taxpayers with total income of £1 million or more pay?",
+          "options": {
+            "A": "About 1%",
+            "B": "About 10%",
+            "C": "About 27%",
+            "D": "About 50%"
+          },
+          "answer": "B",
+          "why": "Table 3.3: £27.7 billion of the £274 billion total, which is 10.1%.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "Together they paid £27.7bn of Income Tax, 10.1% of the total"
+            }
+          ]
+        },
+        {
+          "id": "J6.3",
+          "question": "If 1,000 taxpayers with total income of £1 million or more left the UK and nothing else changed, roughly how much Income Tax would be lost?",
+          "options": {
+            "A": "About £1.1 million",
+            "B": "About £1.1 billion",
+            "C": "About £11 billion",
+            "D": "About £110 billion"
+          },
+          "answer": "B",
+          "why": "Their average Income Tax is about £1.07 million each, so 1,000 of them pay about £1.1 billion.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "1,000 leavers from this group would take £1.1bn of tax with them"
+            }
+          ]
+        },
+        {
+          "id": "J6.4",
+          "question": "Does the site say exactly how many leavers would meaningfully damage receipts?",
+          "options": {
+            "A": "Yes: 10,000 leavers",
+            "B": "Yes: 100,000 leavers",
+            "C": "No: it says that is a judgement and gives yardsticks instead",
+            "D": "No: it says the question cannot be answered at all"
+          },
+          "answer": "C",
+          "why": "The page says the site does not set a threshold and that whether a loss is meaningful is a judgement, so it gives yardsticks rather than a verdict.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "so the page gives yardsticks rather than a verdict"
+            },
+            {
+              "page": "high-earners.html",
+              "text": "The site does not set a threshold"
+            }
+          ]
+        },
+        {
+          "id": "J6.5",
+          "question": "One per cent of public sector receipts in 2023-24 is roughly the tax of how many taxpayers with total income of £1 million or more?",
+          "options": {
+            "A": "About 1,000",
+            "B": "About 10,000",
+            "C": "About 26,000",
+            "D": "About 100,000"
+          },
+          "answer": "B",
+          "why": "One per cent of receipts is £11.0 billion, which is the tax of about 10,000 of the £1 million group (40% of it).",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "That is the tax of about 10,000 leavers from the £1 million group (40% of it)"
+            }
+          ]
+        },
+        {
+          "id": "J6.6",
+          "question": "After HMRC's analysis of how high earners responded, what did the OBR say the underlying yield of the 50p rate was for 2012-13?",
+          "options": {
+            "A": "Raised from £2.6 billion to £7 billion",
+            "B": "Reduced from £2.6 billion to £0.6 billion",
+            "C": "Unchanged at £2.6 billion",
+            "D": "Reduced to nothing"
+          },
+          "answer": "B",
+          "why": "The OBR's 2014 review of the 50p rate says the estimated underlying yield for 2012-13 was reduced from £2.6 billion to £0.6 billion.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "was also reduced from £2.6 billion to £0.6 billion"
+            }
+          ]
+        },
+        {
+          "id": "J6.7",
+          "question": "What did the OBR's 2012 costing of the 50p rate say high earners might do in response?",
+          "options": {
+            "A": "Nothing: the rate had no effect",
+            "B": "Work less, retire early, leave the country or use tax planning",
+            "C": "Only pay more tax",
+            "D": "Move to the UK"
+          },
+          "answer": "B",
+          "why": "The OBR listed labour supply responses such as working less, retiring early or leaving the country, and greater tax planning, avoidance and evasion.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "retiring early, or leaving the country"
+            }
+          ]
+        },
+        {
+          "id": "J6.8",
+          "question": "By how much were 2024-25 receipts higher than the OBR's March 2023 forecast made two years before?",
+          "options": {
+            "A": "£3.5 billion",
+            "B": "£35 billion",
+            "C": "£350 billion",
+            "D": "Not at all"
+          },
+          "answer": "B",
+          "why": "The OBR's June 2026 evaluation says 2024-25 receipts were £35 billion (3.2%) higher than its March 2023 two-year-ahead forecast.",
+          "evidence": [
+            {
+              "page": "high-earners.html",
+              "text": "were £35 billion (3.2%) higher than its March 2023 forecast"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

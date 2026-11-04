@@ -1240,6 +1240,8 @@ def build_all():
     d["borrow"] = data_borrow.build(facts)
     from . import data_life_extra
     d["life_extra"] = data_life_extra.build(facts)
+    from . import data_top_earners
+    d["top_earners"] = data_top_earners.build(facts)
     population(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)

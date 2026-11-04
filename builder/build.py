@@ -15,7 +15,7 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import pages_money_extra, version
-from . import downloads, pages_money, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, glossary, trace, uncertainty
+from . import downloads, pages_money, pages_top_earners, pages_spendhist, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_borrow, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -53,6 +53,7 @@ def render():
     pages["who-pays.html"] = pages_money.who_pays_page(facts, d, num, sources)
     pages["who-pays-age.html"] = pages_money_extra.income_tax_age_page(facts, d, num, sources)
     pages["who-pays-households.html"] = pages_money_extra.households_page(facts, d, num, sources)
+    pages["high-earners.html"] = pages_top_earners.high_earners_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
