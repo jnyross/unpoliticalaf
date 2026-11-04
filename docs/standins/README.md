@@ -58,9 +58,14 @@ check's run for the audited commit.
    2. answers the 12 questions using only the phone tool, within 40 actions;
    3. starts a fresh phone session (`--state R1-new.json`) and answers the 24
       new questions within 40 actions;
-   4. starts another fresh session (`--state R1-johns.json`) and answers
-      John's questions (`python scripts/johns_questions.py sheet`) within 40
-      actions. Their "without the site" answers are given in step 1.
+   4. answers John's questions by topic group, one fresh session per group
+      (`--state R1-johns-<group>.json`), each within 40 actions. The groups are
+      listed by `python scripts/johns_questions.py groups`; each group's sheet
+      is `python scripts/johns_questions.py sheet <group>`. A session answers
+      only its group's questions, so each group gets its own 40 actions. The
+      reader answers each group's sheet without the site first, as in step 1.
+      Merge the seven group answer sets into one reader file, keyed by
+      question id as before, and record the actions used per group.
 
    Give the questions without their answers: the question sheet
    `docs/user-test/question-sheet.md`, and the new questions with the
