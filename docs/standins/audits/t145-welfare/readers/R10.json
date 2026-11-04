@@ -1,0 +1,13 @@
+{"reader": "R10", "profile": "P10", "site_commit": "working-tree", "budget": 40,
+ "welfare_actions": 40,
+ "welfare_without_site": {"J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E", "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E", "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"},
+ "welfare_with_site": {"J12.1": "B", "J12.2": "B", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "B", "J12.9": "B", "J11.1": "D", "J11.2": "B", "J11.3": "C", "J11.4": "B", "J11.5": "B", "J11.9": "E", "J11.10": "B", "J11.11": "B", "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "E", "J10.7": "E"},
+ "confusions": [
+  "I could not find the figure for people aged 75 and over in the home ownership part, because a line of the summary was hidden under the top bar when I scrolled and I ran out of taps before I found the table.",
+  "I could not find how the State Pension splits the DWP benefit spending, so I left J10.6 and J10.7 as not sure.",
+  "I did not know what 'social security', 'welfare' and 'DWP benefits' mean, and the page calls welfare social security without saying what counts as DWP benefits.",
+  "Terms like 'owner occupiers', 'gross household income' and 'median full-time pay' were not explained in plain words, so I was not sure what the numbers were measuring.",
+  "The question list has lots of similar titles and I had to scroll a long way down it each time to find the right one, which slowed me down a lot.",
+  "The 'On this page' menu and the expand boxes meant I had to tap several times to reach a section, and it was hard to tell which section held the answer I wanted.",
+  "One scroll failed with a message saying the site had not been built, which stopped me for a moment before the same scroll worked again."
+ ]}

@@ -465,7 +465,8 @@ YEARFIND_CSS = "details.findyear{margin:0;border:0;padding:0}details.findyear>su
 # straight to it (see builder/pages_questions.py).
 QUESTION_PAGES = {"spending.html", "taxes.html", "who-pays.html", "household-tax.html", "international.html",
                   "productivity.html", "borrowing.html", "why-debt.html", "defence.html", "high-earners.html",
-                  "leaving-uk.html", "manifesto.html", "immigration.html"}
+                  "leaving-uk.html", "manifesto.html", "immigration.html",
+                  "welfare.html", "life/house-prices.html", "life/generations.html"}
 
 
 def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
