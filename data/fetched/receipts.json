@@ -519,6 +519,22 @@
   "sha256": "fe8cac45c2c7ae15552192928dd242e0ce770ed5197568b41e3e968772a657cf",
   "retrieved": "2026-11-02T16:28:29Z"
  },
+ "nomis-ashe-places": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697,TYPE499,TYPE480&date=latestMINUS28-latest&sex=8&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,geography_code,geography_type,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-nations-regions-ft-median-weekly.csv",
+  "bytes": 123468,
+  "content_type": "text/csv",
+  "sha256": "deca9bd82f8e8bf82a2c731832c3ed7463c67d999623267aec0e83f06e6f5928",
+  "retrieved": "2026-11-04T04:48:17Z"
+ },
+ "nomis-ashe-resident": {
+  "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
+  "file": "nomis/ashe-resident-uk-median-weekly.csv",
+  "bytes": 23816,
+  "content_type": "text/csv",
+  "sha256": "69eb8072e641f2936c29d9d6f3066c5ce4188d27fcfe75db789667ad8c3dea98",
+  "retrieved": "2026-11-04T04:48:12Z"
+ },
  "nomis-ashe-resident-cv": {
   "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100,20701&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
   "file": "nomis/ashe-resident-uk-median-weekly-cv.csv",
