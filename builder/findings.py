@@ -30,6 +30,11 @@ MOST = 0.75
 # it is at least this share of the range, so a title never says "then fell" about a line that
 # bottomed earlier and has risen since (audit 13 gap 6).
 FOLD_RISE = 0.05
+# A stretch of at least four year-to-year steps whose two ends are within this share of the
+# line's range counts as little changed. "Rising in most years" must not pass over one (audit 14 judge).
+FLAT_RUN = 0.04
+# ...and the stretch must cover at least this share of the line's steps.
+FLAT_SHARE = 0.25
 
 
 def measured(vals, a=0, b=None):
@@ -248,6 +253,25 @@ def _turn_mark(vals, t, w, lo, hi):
     return ""
 
 
+def flat_run(vals, pts):
+    """The longest stretch of at least a quarter of the line's steps (measured points pts)
+    whose two ends are within FLAT_RUN of the line's range, as (first, last) indices; None
+    when there is none. A short flat patch in a long line does not count."""
+    span = max(vals[i] for i in pts) - min(vals[i] for i in pts)
+    steps = len(pts) - 1
+    need = max(4, FLAT_SHARE * steps)
+    best = None
+    for x in range(len(pts)):
+        for y in range(len(pts) - 1, x + 3, -1):
+            if y - x < need:
+                break
+            if abs(vals[pts[y]] - vals[pts[x]]) <= FLAT_RUN * span:
+                if best is None or y - x > best[1] - best[0]:
+                    best = (x, y)
+                break
+    return None if best is None else (pts[best[0]], pts[best[1]])
+
+
 def sentence(labels, vals, show, a=0, b=None, extremes=True):
     """The trend of one stretch of a line in words, with traceable numbers.
 
@@ -270,7 +294,12 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
     elif k in ("up", "down"):
         verb, ing = ("Rose", "rising") if k == "up" else ("Fell", "falling")
         text = f"{verb} from {show(f)} in {labels[f]} to {show(l)} in {labels[l]}"
-        if s["most"]:
+        run = flat_run(vals, pts) if s["most"] else None
+        if run is not None:
+            # "in most years" would pass over this stretch, so name it instead
+            a0, b0 = run
+            text += f", with little change from {labels[a0]} ({show(a0)}) to {labels[b0]} ({show(b0)})"
+        elif s["most"]:
             text += f", {ing} in most years"
         text += "."
     elif k == "flat":

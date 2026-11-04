@@ -110,13 +110,10 @@ EXPLANATIONS = {
         gloss="“In cash” means the pounds paid rose. As a share of gross income, direct taxes did not rise: the table above (Table 8 of the same survey) shows 22.9% in 2023/24, down from 23.2% in 2022/23. After inflation, the same ONS bulletin says direct taxes fell for the average household."),
     "indirect-spending": dict(
         question="Why can indirect taxes be a large share of income for lower-income households?",
-        source="explain-ons-etb-fye2016", publisher="Office for National Statistics",
-        title="Effects of taxes and benefits on UK household income: financial year ending 2016", date="25 April 2017",
-        quote=["The amount of indirect tax (such as Value Added Tax (VAT) and duties on alcohol and fuel) each household pays is determined by their expenditure rather than their income.",
-               "Some households, particularly those at the lower end of the income distribution, may have annual expenditure that exceeds their annual income.",
-               "For these households, their expenditure is not being funded entirely from income.",
-               "During periods of low income, these households may maintain their standard of living by funding their expenditure from savings or borrowing, thereby adjusting their lifetime consumption."],
-        gloss="This is from the ONS bulletin for April 2015 to March 2016. The figures on this page are for 2023/24, and the latest ONS bulletin does not repeat this explanation."),
+        source="explain-ons-etb-latest", publisher="Office for National Statistics",
+        title="Effects of taxes and benefits on UK household income: financial year ending 2024", date="25 September 2025",
+        quote=["indirect taxes are then paid via expenditure; disposable income minus indirect taxes is referred to as \"post-tax income\", where indirect taxes refer to those on goods and services such as Value Added Tax (VAT), duty on tobacco, alcohol and fuel, and Stamp Duty"],
+        gloss="ONS's latest bulletin defines the steps in this order: gross income, then direct taxes, then indirect taxes paid on spending. The table below measures the lowest-income fifth's indirect taxes against gross income, disposable income and spending, so you can see how much the answer depends on the total used."),
     "redistribution": dict(
         question="What do taxes and benefits do to the gap between richer and poorer households?",
         source="explain-ons-etb-latest", publisher="Office for National Statistics",

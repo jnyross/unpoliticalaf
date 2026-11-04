@@ -109,6 +109,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
             '<li><strong>No invented households presented as fact.</strong> Where a made-up person helps explain a rule, it is labelled “Illustration, not a statistic” and kept apart from the official figures.</li>'
             '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why in its own words. Where an official body such as the Office for National Statistics or HM Revenue and Customs has published its own explanation, we quote it word for word, name who said it, and link to it. The check confirms that every quote still matches the publication.</li>'
+            '<li id="topics"><strong>How we choose the everyday topics.</strong> Each is an everyday subject that official statistics measure across several years. A subject with no such series is left out, not estimated. Poverty and hardship are not measured here.</li>'
             '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li>'
             '<li><strong>How we choose what to show.</strong> Headline figures use the publisher’s own main measure for the latest year it has measured. '
             'Comparisons over time use fixed windows (ten years for spending by area, the first and latest year for each series) and the same lead figure on every comparison page, '
