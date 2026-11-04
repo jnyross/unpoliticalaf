@@ -393,8 +393,8 @@ def who_pays_page(facts, d, num, sources):
     body = ["<h1>Who pays?</h1>"]
     cav = fifth_indirect_caveat(facts, num)
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
-                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, by the households of the lowest-income fifth of people ({num("etb.t8.gross.all.q1", "pct")} of their gross income), 2023/24', False),
-                         (num("etb.2a.taxshare.q5", "pct"), "of all taxes paid by UK households in 2023/24 were paid by the richest fifth", False)]))
+                         (num("etb.2a.alltax.q1", "pounds"), f'a year in all taxes, on average, for the lowest-income fifth of people: {num("etb.t8.gross.all.q1", "pct")} of their gross income (share of income), 2023/24', False),
+                         (num("etb.2a.taxshare.q5", "pct"), "share of all taxes paid by UK households (a share of the total, not of income), 2023/24: the richest fifth paid it", False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 </div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
