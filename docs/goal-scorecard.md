@@ -61,7 +61,7 @@ recorded as "met (simulated)".
    - J5 (defence): the fiscal rules and headroom, and NATO's UK defence figures (J5.8 and J5.9).
    - J10 (welfare): the welfare split by benefit type over 50 years, from the DWP benefit expenditure tables (J10.6).
 3. Decide whether the 14.4 to 15px running text on 116 pages stays. The T128 note says a change needs John's approval, because a larger size pushes pages over the phone length limits.
-4. Confirm the class-size single-year picker is visible from the class sizes page (audit 16 gap 4) and that the renting figure is reachable within 40 actions (audit 16 gap 3). Neither was re-checked here.
+4. Done (T137, #212, evidence in [docs/standins/audits/audit-17/findability-T137.md](standins/audits/audit-17/findability-T137.md)): on a 360px phone from the home page, the renting figure takes 1 action (the first answer box shows 19% of English households renting privately, 2024-25), and the single-year class-size picker takes 7 actions (Class sizes card, three scrolls, expand "Find one year's figure", scroll, tap 2019). Both are within 40 actions, so no route change was needed. The check was run by a worker who knows the site, so these counts are a best case, not a reader test.
 5. Add a self-employed tax example to the tax pages (audit 16 gap 10).
 6. Re-run the accuracy and impartiality stand-ins on the new pages from T118 to T130: immigration, defence, high earners, leaving the UK, the manifesto tracker, productivity, welfare and economy options.
 7. Confirm the "Live site matches main" check on this audit's CI run, because the audit container cannot reach the live site.
