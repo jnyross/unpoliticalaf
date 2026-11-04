@@ -650,6 +650,16 @@
    "id": "ons-icp",
    "url": "https://www.ons.gov.uk/file?uri=/economy/economicoutputandproductivity/productivitymeasures/datasets/internationalcomparisonsofproductivityfirstestimates/current/icproductivityupdated.xlsx",
    "file": "ons/icproductivityupdated.xlsx"
+  },
+  {
+   "id": "dwp-spa-timetable",
+   "url": "https://assets.publishing.service.gov.uk/media/5a7f02e640f0b62305b84929/spa-timetable.pdf",
+   "file": "dwp/spa-timetable.pdf"
+  },
+  {
+   "id": "parl-cbp-tuition-fees",
+   "url": "https://commonslibrary.parliament.uk/research-briefings/cbp-10155/",
+   "file": "parl/cbp-10155.html"
   }
  ]
 }
