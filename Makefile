@@ -23,7 +23,7 @@ check:
 	$(RUN_PYTHON) -m builder.check
 
 test:
-	$(RUN_PYTHON) -m unittest discover -s tests -v
+	$(RUN_PYTHON) -m scripts.test_performance
 
 verify: build check test
 
