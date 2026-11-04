@@ -6,6 +6,8 @@ The questions and probes live in docs/johns-questions/questions.json.
     python scripts/johns_questions.py gaps    # one line per probe the site cannot answer yet
     python scripts/johns_questions.py pack    # answered probes as a reader question set (JSON)
     python scripts/johns_questions.py sheet   # the same probes as a question sheet, without answers
+    python scripts/johns_questions.py sheet GROUP   # one topic group only (see TOPIC_GROUPS)
+    python scripts/johns_questions.py groups  # the topic groups and the questions in each
 """
 import json
 import re
@@ -113,14 +115,35 @@ def pack(data=None):
                      for _, p in probes(data) if is_open(p)]}
 
 
-def sheet(data=None):
-    """Answered probes as a sheet for the simulated readers: no answers, no evidence."""
+# The stand-in measures John's questions one topic group at a time: each group is a fresh reader
+# session with its own 40 actions (docs/standins/README.md, step 4). A group lists John's question
+# ids; every question must appear in exactly one group (tests/test_johns_questions.py checks this).
+TOPIC_GROUPS = {
+    "tax-and-spending": ["J1", "J4"],
+    "immigration": ["J2"],
+    "defence": ["J5"],
+    "high-earners-and-economy": ["J6", "J8", "J9"],
+    "manifesto": ["J7"],
+    "debt-history": ["J13"],
+    "welfare-housing-generations": ["J10", "J11", "J12"],
+}
+
+
+def sheet(data=None, group=None):
+    """Answered probes as a sheet for the simulated readers: no answers, no evidence.
+
+    With group, only the questions in that topic group (TOPIC_GROUPS)."""
     data = data or load()
+    if group is not None and group not in TOPIC_GROUPS:
+        raise SystemExit(f"unknown group {group!r}; see: python scripts/johns_questions.py groups")
+    wanted = set(TOPIC_GROUPS[group]) if group else None
     out = ["# John's questions: question sheet\n\n",
            f"Answer with one letter each. If you don't know, choose E ({data['not_sure']}).\n"]
-    for q in pack(data)["questions"]:
-        out.append(f"\n## {q['id']}. {q['question']}\n\n")
-        out += [f"- **{k}** {v}\n" for k, v in q["options"].items()]
+    for q, p in probes(data):
+        if is_open(p) or (wanted is not None and q["id"] not in wanted):
+            continue
+        out.append(f"\n## {p['id']}. {p['question']}\n\n")
+        out += [f"- **{k}** {v}\n" for k, v in p["options"].items()]
         out.append(f"- **E** {data['not_sure']}\n")
     return "".join(out)
 
@@ -144,7 +167,11 @@ def main(argv):
         print(json.dumps(pack(), indent=2, ensure_ascii=False))
         return 0
     if cmd == "sheet":
-        print(sheet(), end="")
+        print(sheet(group=argv[2] if len(argv) > 2 else None), end="")
+        return 0
+    if cmd == "groups":
+        for name, ids in TOPIC_GROUPS.items():
+            print(f"{name}: {', '.join(ids)}")
         return 0
     print(__doc__)
     return 2

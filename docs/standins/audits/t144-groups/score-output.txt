@@ -1,0 +1,135 @@
+Readers: R10 (P10), R3 (P3), R4 (P4), R8 (P8), R9 (P9)
+John's questions:
+  J1.1: 5/5 right with the site, 0 without: PASS
+  J1.2: 5/5 right with the site, 0 without: PASS
+  J1.3: 5/5 right with the site, 0 without: PASS
+  J1.4: 5/5 right with the site, 0 without: PASS
+  J1.5: 5/5 right with the site, 0 without: PASS
+  J1.6: 5/5 right with the site, 0 without: PASS
+  J1.7: 5/5 right with the site, 0 without: PASS
+  J4.1: 5/5 right with the site, 0 without: PASS
+  J4.2: 4/5 right with the site, 0 without: PASS
+  J4.3: 5/5 right with the site, 0 without: PASS
+  J4.4: 5/5 right with the site, 0 without: PASS
+  J4.5: 5/5 right with the site, 0 without: PASS
+  J4.6: 0/5 right with the site, 0 without: FAIL
+  J4.8: 0/5 right with the site, 0 without: FAIL
+  J2.1: 5/5 right with the site, 0 without: PASS
+  J2.2: 5/5 right with the site, 0 without: PASS
+  J2.3: 5/5 right with the site, 0 without: PASS
+  J2.6: 4/5 right with the site, 0 without: PASS
+  J2.7: 5/5 right with the site, 0 without: PASS
+  J2.8: 5/5 right with the site, 0 without: PASS
+  J8.1: 0/5 right with the site, 0 without: FAIL
+  J8.2: 0/5 right with the site, 0 without: FAIL
+  J8.3: 0/5 right with the site, 0 without: FAIL
+  J5.1: 5/5 right with the site, 0 without: PASS
+  J5.3: 5/5 right with the site, 0 without: PASS
+  J5.4: 5/5 right with the site, 0 without: PASS
+  J5.5: 5/5 right with the site, 0 without: PASS
+  J5.6: 5/5 right with the site, 0 without: PASS
+  J5.7: 5/5 right with the site, 0 without: PASS
+  J5.8: 5/5 right with the site, 0 without: PASS
+  J5.9: 5/5 right with the site, 0 without: PASS
+  J12.1: 2/5 right with the site, 0 without: FAIL
+  J12.2: 2/5 right with the site, 0 without: FAIL
+  J12.3: 2/5 right with the site, 0 without: FAIL
+  J12.4: 3/5 right with the site, 0 without: FAIL
+  J12.5: 5/5 right with the site, 0 without: PASS
+  J12.8: 0/5 right with the site, 0 without: FAIL
+  J12.9: 0/5 right with the site, 0 without: FAIL
+  J13.1: 5/5 right with the site, 0 without: PASS
+  J13.2: 5/5 right with the site, 0 without: PASS
+  J13.3: 5/5 right with the site, 0 without: PASS
+  J13.4: 5/5 right with the site, 0 without: PASS
+  J13.5: 5/5 right with the site, 0 without: PASS
+  J13.6: 5/5 right with the site, 0 without: PASS
+  J13.7: 5/5 right with the site, 0 without: PASS
+  J13.8: 5/5 right with the site, 0 without: PASS
+  J7.1: 5/5 right with the site, 0 without: PASS
+  J7.2: 5/5 right with the site, 0 without: PASS
+  J7.3: 5/5 right with the site, 0 without: PASS
+  J7.4: 5/5 right with the site, 0 without: PASS
+  J7.5: 5/5 right with the site, 0 without: PASS
+  J7.6: 5/5 right with the site, 0 without: PASS
+  J7.7: 5/5 right with the site, 0 without: PASS
+  J7.8: 5/5 right with the site, 0 without: PASS
+  J7.9: 5/5 right with the site, 0 without: PASS
+  J7.10: 5/5 right with the site, 0 without: PASS
+  J11.1: 2/5 right with the site, 0 without: FAIL
+  J11.2: 2/5 right with the site, 0 without: FAIL
+  J11.3: 2/5 right with the site, 0 without: FAIL
+  J11.4: 0/5 right with the site, 0 without: FAIL
+  J11.5: 0/5 right with the site, 0 without: FAIL
+  J11.9: 0/5 right with the site, 0 without: FAIL
+  J11.10: 0/5 right with the site, 0 without: FAIL
+  J11.11: 0/5 right with the site, 0 without: FAIL
+  J9.1: 5/5 right with the site, 0 without: PASS
+  J9.2: 5/5 right with the site, 0 without: PASS
+  J9.3: 5/5 right with the site, 0 without: PASS
+  J10.1: 0/5 right with the site, 0 without: FAIL
+  J10.2: 0/5 right with the site, 0 without: FAIL
+  J10.3: 0/5 right with the site, 0 without: FAIL
+  J10.4: 0/5 right with the site, 0 without: FAIL
+  J10.5: 0/5 right with the site, 0 without: FAIL
+  J10.6: 0/5 right with the site, 0 without: FAIL
+  J10.7: 0/5 right with the site, 0 without: FAIL
+  J6.1: 5/5 right with the site, 0 without: PASS
+  J6.2: 5/5 right with the site, 0 without: PASS
+  J6.3: 5/5 right with the site, 0 without: PASS
+  J6.4: 5/5 right with the site, 0 without: PASS
+  J6.5: 5/5 right with the site, 0 without: PASS
+  J6.6: 5/5 right with the site, 0 without: PASS
+  J6.7: 5/5 right with the site, 0 without: PASS
+  J6.8: 4/5 right with the site, 0 without: PASS
+  open, not on the site yet: J4.7
+  open, not on the site yet: J2.4
+  open, not on the site yet: J2.5
+  open, not on the site yet: J5.2
+  open, not on the site yet: J12.6
+  open, not on the site yet: J12.7
+  open, not on the site yet: J12.10
+  open, not on the site yet: J12.11
+  open, not on the site yet: J12.12
+  open, not on the site yet: J11.6
+  open, not on the site yet: J11.7
+  open, not on the site yet: J11.8
+  FAIL: 38 gaps
+  gap: J4.7: The international page compares total tax as a share of GDP, but does not compare top income tax rates or the tax paid by top earners with other countries.
+  gap: J2.4: The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services.
+  gap: J2.5: NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed.
+  gap: J5.2: The defence comparison now uses the ten-year window the impartiality rule allows (2015-16 to 2025-26), so the page no longer compares with 2010-11, the year this question names. Whether John wants 2010-11 shown as well is a decision for him.
+  gap: J12.6: The site holds owner occupation by age from 2008-09 (English Housing Survey table FC2101). The 1981 and 1991 rows in the same file have no source written on the sheet, so they are not used. Needs a documented official source for owning or renting by age in the 1990s.
+  gap: J12.7: The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked.
+  gap: J12.10: The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure.
+  gap: J12.11: Needs income tax and employee National Insurance on one income level, in 1992-93 and 2025-26, from official rate tables. The site holds the 2025-26 rates, but not the 1992-93 rates, and the calculation needs a clearly labelled single-person illustration.
+  gap: J12.12: Needs ONS labour market tables of temporary employees and job changes by age, from 1992. The site holds only the overall employment figures, not the age split of temporary work or job changes.
+  gap: J11.6: The site shows home ownership by age from 2008-09 to 2021-22 (see J11.9), but not back to the 1990s: the earlier rows in the same source are not yet documented well enough to compare.
+  gap: J11.7: The site shows mortgage payments as a share of gross household income from 2010-11 (see J11.10). It cannot show take-home pay, which is not in the source, or 2008-09, which the table does not give.
+  gap: J11.8: The site shows the average rate on new mortgages from January 2016 (see J11.11). It has no mortgage rate series back to 2008 yet.
+  gap: J4.6: readers could not answer "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?" from the site (0 of 5 right); see their confusion notes.
+  gap: J4.8: readers could not answer "According to the site, what share of all taxes, including VAT and National Insurance, do the top 1% of people pay?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.1: readers could not answer "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.2: readers could not answer "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.3: readers could not answer "What measure do the OECD's reform estimates use for the size of each effect?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.1: readers could not answer "Between April to June 1992 and April to June 2025, how did the share of 25 to 34 year olds in work change?" from the site (2 of 5 right); see their confusion notes.
+  gap: J12.2: readers could not answer "Between April to June 1992 and April to June 2025, how did the share of 18 to 24 year olds in work change?" from the site (2 of 5 right); see their confusion notes.
+  gap: J12.3: readers could not answer "How many times a year’s earnings did the middle-priced home in England and Wales cost in 1999, and in 2025?" from the site (2 of 5 right); see their confusion notes.
+  gap: J12.4: readers could not answer "Between 2008-09 and 2024-25, how did the share of households in England who own their home change? This is all households, not one age group." from the site (3 of 5 right); see their confusion notes.
+  gap: J12.8: readers could not answer "How much did a university degree cost a student in tuition fees and loans in 1998, compared with 2025?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.9: readers could not answer "How has the state pension age changed for people born in 1960 compared with people born in 1990?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.1: readers could not answer "Measured as years of pay before tax, how did the middle-priced home in England and Wales change between 1999 and the year to September 2025?" from the site (2 of 5 right); see their confusion notes.
+  gap: J11.2: readers could not answer "In the year to September 2025, how many years of median full-time pay before tax would a 10% deposit on the middle-priced home come to?" from the site (2 of 5 right); see their confusion notes.
+  gap: J11.3: readers could not answer "After inflation, how did the average mortgage payment for owners with a mortgage in England change between 2008-09 and 2024-25?" from the site (2 of 5 right); see their confusion notes.
+  gap: J11.4: readers could not answer "Do the mortgage payment figures show what someone buying a home today would pay each week?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.5: readers could not answer "At what age do people today buy their first home, compared with earlier years?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.9: readers could not answer "Between 2008-09 and 2021-22, how did home ownership change for people aged 25 to 34, and for people aged 75 and over?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.10: readers could not answer "What share of household income, before tax, goes on mortgage payments for owner occupiers who make them, in 2010-11 and in 2024-25?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.11: readers could not answer "Between January 2016 and September 2026, how did the average rate on new mortgages change?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.1: readers could not answer "Between 1955-56 and 2021-22, how did welfare spending (social security) change as a share of GDP?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.2: readers could not answer "After inflation, how did total welfare spending in 2021-22 compare with 1955-56?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.3: readers could not answer "In 2021-22, what share of social security spending went to pensioners?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.4: readers could not answer "After inflation, how much welfare spending was there per person in 2021-22?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.5: readers could not answer "On the site, what does the 'without pensions' measure of welfare leave out?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.6: readers could not answer "In 2021-22, how much of DWP benefit spending went on the State Pension?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.7: readers could not answer "In 2021-22, which of these took the largest share of DWP benefit spending after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?" from the site (0 of 5 right); see their confusion notes.
