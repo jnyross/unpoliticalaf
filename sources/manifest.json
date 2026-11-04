@@ -1,5 +1,5 @@
 {
- "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern.",
+ "note": "Official sources fetched byte-for-byte by scripts/fetch_sources.py. 'find' entries download the first link on the page matching the pattern. The explain-mac-annual-2025, explain-obr-migration-fiscal, explain-obr-migration-gdp and explain-ons-ltim-dec2025 entries back the immigration evidence page.",
  "sources": [
   {
    "id": "ons-mgrz",
