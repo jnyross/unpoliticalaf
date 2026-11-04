@@ -143,18 +143,20 @@ def _g7(facts, num, it, ty, sy):
             if last:
                 words += f" (latest, {last[0]}: {num(last[1], 'pct')})"
             items.append((f"{esc(it['names'][a])}: {words}", None, "gap"))
-        return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar. Countries without a {year} figure have no bar, and are not ranked.")
+        return bars(items, "pct", num, maxval=60, caption=f"{what} as a % of GDP, {year}, G7 countries. The UK has the darker bar. Countries without a figure have no bar.")
     lede = _uk_us_fr(facts, num, it, sy)
     out = [f'<h2 id="g7">The UK beside the other G7 countries</h2>{NOFOLD}',
-           f'<div class="answer">' + (f'<p class="lede">{lede}</p>' if lede else "") +
+           f'<div class="answer">'
            f"<p>In {ty}, UK taxes were the {place_word(tp, len(t))} as a share of GDP among the G7{among(len(t))}, and UK government spending was the {place_word(sp, len(s))} in {sy}{among(len(s))}.</p></div>",
-           f"<p>The G7 is the group of seven large economies: Canada, France, Germany, Italy, Japan, the UK and the United States. The site shows every member, and chooses none of them.</p>",
            switch("Show the G7", [
                ("Taxes", f"The UK ranked {nth(tp)} of {len(t)} on tax in {ty}, where 1st is the highest.", g7_bars(t, "intl.tax", ty, "All taxes, including social security contributions,")),
                ("Spending", f"The UK ranked {nth(sp)} of {len(s)} on government spending in {sy}, where 1st is the highest.", g7_bars(s, "intl.spend", sy, "General government spending")),
            ]),
            details_table("Show the G7 as a table", f"Taxes and government spending, % of GDP, G7 countries{', ' + str(ty) if ty == sy else ''}. Rank 1 is the highest.",
                          ["Country", f"Taxes, {ty}", "Rank", f"Spending, {sy}", "Rank"], rows)]
+    if lede:
+        out.insert(-1, f"<p>{lede}</p>")
+    out.append("<p>The G7 is the group of seven large economies: Canada, France, Germany, Italy, Japan, the UK and the United States. The site shows every member, and chooses none of them.</p>")
     out.append("<p>Debt, borrowing costs and debt interest are on their own page: <a href='borrowing.html'>UK debt and borrowing costs beside the G7</a>.</p>")
     return "\n".join(out)
 
