@@ -1,0 +1,15 @@
+{"reader": "R2", "profile": "P7", "site_commit": "c2c044e", "budget": 40,
+ "actions_used": 40, "new_actions_used": 35,
+ "without_site": {"1": "E", "2": "E", "3": "E", "4": "E", "5": "E", "6": "E", "7": "E", "8": "E", "9": "E", "10": "E", "11": "E", "12": "E"},
+ "with_site": {"1": "A", "2": "C", "3": "D", "4": "C", "5": "A", "6": "E", "7": "D", "8": "E", "9": "E", "10": "E", "11": "E", "12": "E"},
+ "new_without_site": {"1": "B", "2": "E", "3": "B", "4": "A", "5": "E", "6": "B", "7": "E", "8": "E", "9": "E", "10": "E", "11": "E", "12": "E", "13": "E", "14": "E", "15": "E", "16": "E", "17": "E", "18": "E", "19": "C", "20": "E", "21": "E", "22": "E", "23": "E", "24": "E"},
+ "new_with_site": {"1": "B", "2": "C", "3": "B", "4": "A", "5": "B", "6": "B", "7": "C", "8": "C", "9": "B", "10": "C", "11": "A", "12": "C", "13": "B", "14": "B", "15": "B", "16": "E", "17": "B", "18": "C", "19": "C", "20": "B", "21": "C", "22": "C", "23": "A", "24": "C"},
+ "johns_without_site": {"J1.1": "E", "J1.2": "E", "J1.3": "E", "J1.4": "E", "J1.5": "E", "J1.6": "E", "J1.7": "E"},
+ "johns_with_site": {"J1.1": "A", "J1.2": "C", "J1.3": "C", "J1.4": "C", "J1.5": "A", "J1.6": "B", "J1.7": "C"},
+ "confusions": [
+  "Running out of the 40 taps on the 12-question sheet, I never reached the questions on pay, class size, holidays, renting and women's employment.",
+  "The numbered tap list changed when the Menu button was open, so I tapped the wrong thing a couple of times (Spending toggle instead of the G7 box).",
+  "Page-top links such as Debt only appear at the very top, so after scrolling I had to open Menu first and waste a tap.",
+  "I could not find anything on the changing mix of jobs since the 1970s, so I left that one as not sure.",
+  "On the household tax page I could not see why the poorest fifth's indirect taxes look so high, so my answer there is a guess."
+ ]}

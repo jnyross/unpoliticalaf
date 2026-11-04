@@ -1,0 +1,136 @@
+{
+ "reader": "R4-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 35,
+ "url": "life/compare/2015-2025.html",
+ "ops": [],
+ "scroll": 2240,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 560
+    }
+   ],
+   "scroll": 560
+  },
+  {
+   "url": "taxes.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2800
+    }
+   ],
+   "scroll": 2800
+  },
+  {
+   "url": "life/index.html#earnings",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "2015",
+     "y": 3471
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025",
+     "y": 3471
+    }
+   ],
+   "scroll": 4031
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [3] link: GDP",
+  "back",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [6] link: who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: how much of household income goes on tax",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [13] link: Earnings",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "choose [5] First year = 2015",
+  "choose [6] Second year = 2025",
+  "scroll down",
+  "tap [5] button: Compare 2015 and 2025",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R4",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(5) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Chart of every year"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 7 sections"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "Employment rate"
+  }
+ ]
+}

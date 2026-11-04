@@ -1,0 +1,94 @@
+{
+ "reader": "R4-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 27,
+ "url": "life/schools.html",
+ "ops": [],
+ "scroll": 560,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 683
+  },
+  {
+   "url": "life/work.html#work-industry",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 3815
+    }
+   ],
+   "scroll": 3815
+  },
+  {
+   "url": "life/index.html#earnings",
+   "ops": [],
+   "scroll": 2351
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "life/holidays.html",
+   "ops": [],
+   "scroll": 1120
+  }
+ ],
+ "log": [
+  "tap [7] link: Year by year",
+  "tap [12] link: Work",
+  "scroll down",
+  "scroll up",
+  "tap [6] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "tap [3] link: Jobs by industry",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [13] link: Earnings",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Housing in every year since 1981",
+  "scroll down",
+  "scroll down",
+  "tap [8] link: Holidays",
+  "scroll down",
+  "scroll down",
+  "tap [9] link: Class sizes",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R4",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Classes of more than 30"
+  }
+ ]
+}

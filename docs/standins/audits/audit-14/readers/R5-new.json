@@ -1,0 +1,127 @@
+{
+ "reader": "R5-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 37,
+ "url": "life/earnings.html",
+ "ops": [],
+ "scroll": 1120,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2800
+    }
+   ],
+   "scroll": 2800
+  },
+  {
+   "url": "taxes.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1680
+    }
+   ],
+   "scroll": 1680
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2240
+    }
+   ],
+   "scroll": 2240
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2800
+    }
+   ],
+   "scroll": 2800
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 1803
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [6] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [12] link: Work",
+  "tap [6] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll down",
+  "scroll down",
+  "tap [4] link: Earnings in every year since 2002",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R5",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "What the chart shows, in words"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > p:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}

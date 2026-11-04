@@ -1,0 +1,139 @@
+{
+ "reader": "R1-new",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 36,
+ "url": "life/work.html",
+ "ops": [],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2240
+    }
+   ],
+   "scroll": 2240
+  },
+  {
+   "url": "who-pays.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2240
+    }
+   ],
+   "scroll": 2240
+  },
+  {
+   "url": "life/index.html#holidays",
+   "ops": [],
+   "scroll": 3733
+  },
+  {
+   "url": "life/schools.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "life/index.html#work",
+   "ops": [],
+   "scroll": 683
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [8] link: Year by year",
+  "tap [15] link: Holidays",
+  "scroll down",
+  "tap [4] link: Holidays in every year since 1980",
+  "scroll down",
+  "back",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "tap [4] link: Class sizes in every year since 2006",
+  "scroll down",
+  "scroll up",
+  "tap [7] link: Year by year",
+  "tap [12] link: Work",
+  "tap [6] link: Work in every year since 1971",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R1",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Earnings"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Housing"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Holidays"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Class sizes"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Find or compare years of work"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(2) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 7 sections"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Since 2008, in more detail chart and table"
+  }
+ ]
+}

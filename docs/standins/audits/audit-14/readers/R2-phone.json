@@ -1,0 +1,129 @@
+{
+ "reader": "R2-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 40,
+ "url": "who-pays.html",
+ "ops": [],
+ "scroll": 2240,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html#tme-views",
+   "ops": [],
+   "scroll": 2465
+  },
+  {
+   "url": "international.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 677
+    },
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1237
+    }
+   ],
+   "scroll": 1237
+  },
+  {
+   "url": "borrowing.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 5516
+    }
+   ],
+   "scroll": 5516
+  },
+  {
+   "url": "taxes.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 2240
+    }
+   ],
+   "scroll": 2240
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "tap [4] link: as a share of GDP over time",
+  "tap [3] link: How this compares with other countries",
+  "scroll down",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "tap [4] input: Taxes",
+  "scroll up",
+  "tap [4] expand: More on The UK beside the other G7 countries chart and table",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [7] link: Debt",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [4] link: Taxes",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [2] expand: Menu",
+  "tap [5] link: Who pays",
+  "scroll down",
+  "scroll up",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude/audit14/shots-R2",
+ "items": [
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > div:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "Menu"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "how much of household income goes on tax"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(2) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on All taxes, by household income table, limits and sources"
+  }
+ ]
+}
