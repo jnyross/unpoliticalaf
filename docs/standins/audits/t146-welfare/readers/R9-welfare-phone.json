@@ -1,0 +1,127 @@
+{
+ "reader": "R9-welfare-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 30,
+ "url": "life/house-prices.html#owners-by-age",
+ "ops": [
+  {
+   "op": "tap",
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "y": 744
+  }
+ ],
+ "scroll": 4257,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "questions.html",
+   "ops": [],
+   "scroll": 1680
+  },
+  {
+   "url": "welfare.html#answer",
+   "ops": [],
+   "scroll": 2335
+  },
+  {
+   "url": "questions.html",
+   "ops": [],
+   "scroll": 2240
+  }
+ ],
+ "log": [
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [7] link: Questions",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [13] link: How has welfare spending changed?",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [7] link: Questions",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [12] link: Did parents have it easier than this generation?",
+  "scroll down",
+  "tap [10] expand: On this page: 8 sections",
+  "tap [14] link: Public services: school classes",
+  "back",
+  "tap [11] link: Have houses become harder to afford?",
+  "scroll down",
+  "tap [12] expand: On this page: 8 sections",
+  "tap [17] link: Home ownership by age",
+  "scroll down",
+  "scroll up",
+  "scroll up",
+  "scroll up"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/00596add-a585-51db-a5f0-027ec3a8c0ed/scratchpad/t146b/readers/R9/shots",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Questions"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > p:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Download this data (CSV)"
+  }
+ ]
+}

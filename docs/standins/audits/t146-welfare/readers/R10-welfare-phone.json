@@ -1,0 +1,118 @@
+{
+ "reader": "R10-welfare-phone",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 32,
+ "url": "life/house-prices.html#answer",
+ "ops": [],
+ "scroll": 6344,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 0
+  },
+  {
+   "url": "questions.html",
+   "ops": [],
+   "scroll": 2240
+  }
+ ],
+ "log": [
+  "tap [7] link: Questions",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [13] link: How has welfare spending changed?",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "scroll down",
+  "tap [12] link: Did parents have it easier than this generation?",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "back",
+  "tap [11] link: Have houses become harder to afford?",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/00596add-a585-51db-a5f0-027ec3a8c0ed/scratchpad/t146b/readers/R10/shots",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Questions"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > details:nth-of-type(6) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "More on Mortgage interest rates table"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(8) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "not directly comparable"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(8) > p:nth-of-type(1) > a:nth-of-type(2)",
+   "kind": "link",
+   "label": "what housing costs"
+  }
+ ]
+}

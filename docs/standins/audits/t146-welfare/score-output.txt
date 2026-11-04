@@ -1,0 +1,25 @@
+Welfare-housing-generations group, T146 re-run at badb1ba: readers R3, R4, R8, R9, R10 (full 40 actions)
+  J10.1: 5/5 right with the site: PASS
+  J10.2: 5/5 right with the site: PASS
+  J10.3: 5/5 right with the site: PASS
+  J10.4: 5/5 right with the site: PASS
+  J10.5: 5/5 right with the site: PASS
+  J10.6: 5/5 right with the site: PASS
+  J10.7: 5/5 right with the site: PASS
+  J11.1: 5/5 right with the site: PASS
+  J11.2: 5/5 right with the site: PASS
+  J11.3: 5/5 right with the site: PASS
+  J11.4: 5/5 right with the site: PASS
+  J11.5: 4/5 right with the site: PASS
+  J11.9: 4/5 right with the site: PASS
+  J11.10: 5/5 right with the site: PASS
+  J11.11: 4/5 right with the site: PASS
+  J12.1: 4/5 right with the site: PASS
+  J12.2: 4/5 right with the site: PASS
+  J12.3: 5/5 right with the site: PASS
+  J12.4: 5/5 right with the site: PASS
+  J12.5: 5/5 right with the site: PASS
+  J12.8: 4/5 right with the site: PASS
+  J12.9: 4/5 right with the site: PASS
+  22 of 22 pass
+  actions used: {'R3': 34, 'R4': 38, 'R8': 37, 'R9': 30, 'R10': 32}
