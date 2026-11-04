@@ -116,6 +116,15 @@ def cell_value(src_file, locator):
         after = text[text.index(m.group(2)) + len(m.group(2)):]
         line = after[after.index(m.group(3)) + len(m.group(3)):].split("\n", 1)[0]
         return re.findall(r"-?[\d,]+(?:\.\d+)?", line)[int(m.group(4)) - 1].replace(",", "")
+    if src_file.endswith(".html"):
+        # ONS bulletin text: the first number after a sentence that appears once in the page
+        import html as _html
+        m = re.fullmatch(r"after '(.+)' number (\d+)", locator)
+        raw = (ROOT / src_file).read_text(encoding="utf-8", errors="replace")
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", "", raw, flags=re.S))))
+        assert text.count(m.group(1)) == 1, m.group(1)
+        tail = text[text.index(m.group(1)) + len(m.group(1)):]
+        return re.findall(r"\d[\d,]*", tail)[int(m.group(2)) - 1].replace(",", "")
     raise ValueError(f"cannot read {src_file} at {locator}")
 
 

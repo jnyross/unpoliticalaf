@@ -448,6 +448,10 @@ def who_pays_page(facts, d, num, sources):
     body.append(households_short(facts, d, num))
     body.append(net_section(facts, d, num, sources))
     body.append(income_tax_age_section(facts, d, num, sources))
+    body.append(f'''<h2 id="capital-taxes">3. Capital taxes and proposals</h2>
+<p>Capital Gains Tax raised {num("rec.cgt.2025-26", "bn")} and Inheritance Tax raised {num("rec.iht.2025-26", "bn")} in 2025-26 (OBR, all receipts from these taxes for the year).</p>
+<p>The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year. These figures are receipts from the taxes as they are now, not estimates for any proposal.</p>
+<p>The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. Section 1 shows their share of Income Tax.</p>''')
     return page("who-pays.html", "Who pays?", "\n".join(body), "Who pays UK taxes: Income Tax shares by taxpayer group and all taxes by household income group.", toc_after_first=True)
 
 

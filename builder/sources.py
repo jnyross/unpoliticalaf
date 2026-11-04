@@ -141,6 +141,7 @@ SOURCES["obrhist-welfare-calc"] = dict(SOURCES["obrhist"], title="Historical pub
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
 FETCHED = {
+    "ons-mye-uk-mid2025": ("Office for National Statistics", "Population estimates for the UK, England, Wales, Scotland and Northern Ireland: mid-2025 (statistical bulletin)", "United Kingdom", "All usual residents of the UK; births, deaths and migration in the year to mid-2025"),
     "ons-mgrz": ("Office for National Statistics", "Labour market statistics: people in employment aged 16 and over (MGRZ)", "United Kingdom", "People aged 16 and over"),
     "ons-lf24": ("Office for National Statistics", "Labour market statistics: employment rate, aged 16 to 64 (LF24)", "United Kingdom", "People aged 16 to 64"),
     "ons-mgsv": ("Office for National Statistics", "Labour market statistics: male employment rate, aged 16 to 64 (MGSV)", "United Kingdom", "Men aged 16 to 64"),
