@@ -1286,7 +1286,7 @@ def topic_page(facts, d, num, sources, key):
     # reader sees it on the first screen (audit 14 gap 1).
     body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
             WORK_CAUSE if key == "work" else "",
-            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Find or compare years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
+            f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Pick a year, or compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
     body.append(f"<h2 id='recent'>Since {since}, in more detail</h2>")
     body.extend(recent + rest)
