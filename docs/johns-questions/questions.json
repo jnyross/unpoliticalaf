@@ -295,6 +295,55 @@
       ]
     },
     {
+      "id": "J2",
+      "asked": "Is immigration a good thing or a bad thing?",
+      "added": "2026-11-04",
+      "source": "John, project chat, 2026-11-04",
+      "reading": "The site does not say whether immigration is good or bad. That is a judgment that depends on values. It answers what official evidence says about the parts that can be measured: the public-money effects of migrants by type, use of public services, the NHS and care workforce, and population and growth. It says which parts are evidence and which depend on values, and shows the range of credible estimates. Immigration is read as people moving to live in the UK (net migration, all routes), with EU and non-EU migrants shown separately where official figures split them. The answer should be easy to find from the home page in a few taps on a phone.",
+      "probes": [
+        {
+          "id": "J2.1",
+          "question": "Does the site say whether immigration is a good thing or a bad thing?",
+          "gap": "There is no immigration page yet. It must say plainly that good or bad depends on values, that it does not decide that, and which parts the evidence does settle, reachable in a few taps from the home page."
+        },
+        {
+          "id": "J2.2",
+          "question": "According to official estimates, does a migrant's effect on public finances depend on their age, visa route or employment?",
+          "gap": "No page shows fiscal effects of migrants yet. It must show the OBR and Migration Advisory Committee estimates by migrant type (age, visa route, employment), with the period, population and units."
+        },
+        {
+          "id": "J2.3",
+          "question": "Do official estimates of migrants' effect on public finances differ between the short run and the long run?",
+          "gap": "The site must show whether the official estimates give different results over short and long periods, with the period and main assumptions for each."
+        },
+        {
+          "id": "J2.4",
+          "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
+          "gap": "No public-services use page yet. It must show what official sources measure about migrants' use of public services and say where they cannot separate migrants from other people."
+        },
+        {
+          "id": "J2.5",
+          "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
+          "gap": "No workforce page yet. It must show the latest NHS England and Skills for Care figures on non-UK nationals in the NHS and adult social care, with the date and definition used."
+        },
+        {
+          "id": "J2.6",
+          "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
+          "gap": "The population page shows total population only. It must show ONS net migration and natural change for the latest year, with the year and the source."
+        },
+        {
+          "id": "J2.7",
+          "question": "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?",
+          "gap": "No economic-effects page yet. It must show what the OBR and other official estimates say about migration's effect on total GDP and on GDP per person, and explain the difference."
+        },
+        {
+          "id": "J2.8",
+          "question": "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?",
+          "gap": "Each immigration estimate must show the range from the official sources, with no single figure picked to favour a view. Nothing on the site does this for immigration yet."
+        }
+      ]
+    },
+    {
       "id": "J8",
       "asked": "What are the empirical best ways to get the UK economy into a better position, a ranked list of ten things",
       "added": "2026-11-04",
