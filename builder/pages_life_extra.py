@@ -3,7 +3,8 @@ pay spread (earnings), house prices against earnings (housing) and jobs by
 industry (work). Each returns a list of parts starting with an <h3>, which
 topic_page() turns into its own section.
 """
-from .html import NOFOLD, details_table, esc, line_chart, table
+from .html import FOLD, NOFOLD, details_table, esc, line_chart, table
+from .data_buyers import AGE_GROUPS
 from . import findings as F
 
 
@@ -62,6 +63,56 @@ def spread_block(facts, num, d, first):
                f'not household income. The ratio does not depend on inflation, because both lines are in the same year’s prices. '
                f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay.</p>')
     return out
+
+
+def buyers_blocks(facts, d, num):
+    """T135: who buys and at what age, home ownership by age, mortgage payments as a share of household income,
+    and the rate on new mortgages. Each measure keeps its own years and its own break."""
+    b = d["buyers"]
+    ages, own, share, rates = b["age_years"], b["own_years"], b["share_years"], b["rate_months"]
+    a0, a1 = ages[0], ages[-1]
+    y0, y1 = own[0], own[-1]
+    s0, s1 = share[0], share[-1]
+    rate_first, rate_last = rates[0], rates[-1]
+    peak = max(rates, key=lambda m: (_v(facts, f"rate.new.{m}"), m))
+    trough = min(rates, key=lambda m: (_v(facts, f"rate.new.{m}"), m))
+    out = ["<h2 id='buyers'>Who buys, and at what age?</h2>",
+           f'<div class="answer"><p>The average age of first-time buyers in England rose from {num(f"ftb.age.{a0}", "int")} in {a0}-{str(a0 + 1)[2:]} to {num(f"ftb.age.{a1}", "int")} in {a1}-{str(a1 + 1)[2:]}. '
+           f'It was {num(f"ftb.age.{2019}", "int")} in 2019-20. These are recent first-time buyers (bought in the last three years), so they are a small sample each year and the figures move around.</p></div>',
+           _chart(facts, num, "Average age of recent first-time buyers in England", ages,
+                  [("England, all first-time buyers", lambda y: f"ftb.age.{y}", "a")], "Years of age (mean). Calendar years are survey years, e.g. 2024 is 2024-25.", "dp1",
+                  breaks=[(2008, "Survey changed from 2008-09")], split_breaks=True,
+                  finding=F.trend("The average age of recent first-time buyers in England", which="last", after="; the years before 2008-09 come from another survey and are not compared")),
+           FOLD,
+           details_table("Show the average age of first-time buyers for every year", "Mean age of recent first-time buyers in England, with the survey years and sample sizes",
+                         ["Survey year", "Mean age (years)"], [[f"{y}-{str(y + 1)[2:]}", num(f"ftb.age.{y}", "dp1")] for y in ages]),
+           "<p class=\"small\">Before 2008-09 the figures come from the Survey of English Housing, and from 2008-09 from the English Housing Survey; the two are not joined. The sample is small (under 500 recent first-time buyers in most years). The figures are averages, not the age of a typical buyer, and one year can differ from the next by a year or more.</p>",
+           "<h2 id='owners-by-age'>Home ownership by age</h2>",
+           f'<div class="answer"><p>Between {y0}-{str(y0 + 1)[2:]} and {y1}-{str(y1 + 1)[2:]}, the share of people aged 25 to 34 who owned their home fell from {num(f"own.25-34.{y0}", "pct0")} to {num(f"own.25-34.{y1}", "pct0")}, '
+           f'and for people aged 35 to 44 it fell from {num(f"own.35-44.{y0}", "pct0")} to {num(f"own.35-44.{y1}", "pct0")}. For people aged 75 and over it rose, from {num(f"own.75+.{y0}", "pct0")} to {num(f"own.75+.{y1}", "pct0")}.</p></div>',
+           details_table("Show home ownership for every age group and year", "Percentage of each age group who are owner occupiers, England",
+                         ["Survey year"] + AGE_GROUPS, [[f"{y}-{str(y + 1)[2:]}"] + [num(f"own.{g}.{y}", "pct") for g in AGE_GROUPS] for y in own]),
+           "<p class=\"small\">These are the English Housing Survey figures for each age group, so they cover England only. Ownership is for the whole age group, not for people who have just bought. The table begins in 2008-09 here; earlier rows in the same source are not used.</p>",
+           "<h2 id='mortgage-share'>Mortgage payments and household income</h2>",
+           f'<div class="answer"><p>For owner occupiers who make mortgage payments, the payment took {num(f"mortshare.{s0}", "pct0")} of gross household income in {s0}-{str(s0 + 1)[2:]} and {num(f"mortshare.{s1}", "pct0")} in {s1}-{str(s1 + 1)[2:]}. '
+           f'The income is the whole household’s, before tax, including housing support. The table does not give take-home pay, and it starts in {s0}-{str(s0 + 1)[2:]}, so it does not show 2008-09.</p></div>',
+           "<p class=\"small\">Gross household income is before tax and National Insurance, so a payment that is a fifth of it takes more than a fifth of take-home pay. The source is the English Housing Survey, for England.</p>",
+           "<h2 id='rates'>Mortgage interest rates</h2>",
+           f'<div class="answer"><p>The average rate on new mortgages rose from {num(f"rate.new.{rate_first}", "pct2")} in {_month(rate_first)} to {num(f"rate.new.{rate_last}", "pct2")} in {_month(rate_last)}. '
+           f'It was lowest at {num(f"rate.new.{trough}", "pct2")} in {_month(trough)} and highest at {num(f"rate.new.{peak}", "pct2")} in {_month(peak)}.</p></div>',
+           FOLD,
+           details_table("Show the average rate on new mortgages for every month", "Effective interest rate on new mortgages, total, monthly (Bank of England series CFMZ6JM)",
+                         ["Month", "Rate"], [[_month(m), num(f"rate.new.{m}", "pct2")] for m in rates]),
+           "<p class=\"small\">This is the average rate on mortgages taken out in each month, across all new mortgages to individuals. It is not the rate any one buyer gets, and it does not show the monthly payment, which also depends on the loan size and term. The series starts in January 2016 here, so the site cannot yet compare with 2008.</p>",
+           ]
+    return out
+
+
+def _month(key):
+    """'2016-01' -> 'January 2016'."""
+    import calendar
+    y, m = key.split("-")
+    return f"{calendar.month_name[int(m)]} {y}"
 
 
 # ---------------------------------------------------------------- housing: house prices against earnings
@@ -124,7 +175,7 @@ def _harder_block(facts, num, d):
             f'(in {mp_now}-{str(mp_now + 1)[2:]} prices), an increase of {rise:.0f}%.</li></ul>'
             f'<p>The price measures and the payment measure tell different stories, and each leaves something out. House prices and deposits are for the middle home sold, not for first-time buyers. '
             f'Mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer pays, and they rose much less than prices. '
-            f'The site does not yet show the age at which people buy their first home, home ownership by age, mortgage interest rates, or mortgage payments as a share of take-home pay.</p></div>']
+            f'Below: the age of first-time buyers, home ownership by age, mortgage payments as a share of household income, and mortgage interest rates. Mortgage rates start in 2016 and household income here is before tax, not take-home pay.</p></div>']
 
 
 def afford_page(facts, d, num, sources):
@@ -154,6 +205,7 @@ def afford_page(facts, d, num, sources):
                       ["Place", str(base), str(mid), str(last)],
                       [[esc(n), num(f"afford.ratio.{k}.{base}", "dp2"), num(f"afford.ratio.{k}.{mid}", "dp2"), num(f"afford.ratio.{k}.{last}", "dp2")]
                        for k, n in af["places"]]))
+    body.extend(buyers_blocks(facts, d, num))
     body.append("<h2 id='about'>About these figures</h2>")
     body.append(f'<div class="limit"><p>England and Wales only: Scotland and Northern Ireland publish their own house price figures, which are measured differently, so they are not shown here. '
                 f'House prices are the middle price of all homes sold in the year ending September, including homes bought without a mortgage; they are not the price of the same homes each year. '

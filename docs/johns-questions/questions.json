@@ -1137,7 +1137,7 @@
       "asked": "how much harder is it to buy a house now than it was in the past",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04 (ticket T128)",
-      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, and average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25). Not yet measured on the site: the age at which people buy their first home, home ownership by age, mortgage interest rates, and mortgage payments as a share of take-home pay. Those are open probes until the sources are added.",
+      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25), the average age of recent first-time buyers (2003-04 to 2024-25), home ownership by age (2008-09 to 2021-22), mortgage payments as a share of gross household income (2010-11 to 2024-25), and the average rate on new mortgages (January 2016 to September 2026). Not yet measured on the site: take-home pay (the mortgage share is before tax), mortgage payments before 2010-11 as a share of income, mortgage rates before 2016, and home ownership by age before 2008-09. Those stay open probes until the sources are added.",
       "probes": [
         {
           "id": "J11.1",
@@ -1222,22 +1222,93 @@
         {
           "id": "J11.5",
           "question": "At what age do people today buy their first home, compared with earlier years?",
-          "gap": "The site has no official series for the age of first-time buyers yet, so it cannot answer this."
+          "options": {
+            "A": "About 25, the same as in 2003-04",
+            "B": "About 31 in 2003-04 and about 34 in 2024-25, a rise of about three years",
+            "C": "About 40 in 2024-25, up from about 30",
+            "D": "About 45 in 2024-25, up from about 35"
+          },
+          "answer": "B",
+          "why": "House prices page: the average age of first-time buyers in England was 31 in 2003-04 and 34 in 2024-25 (English Housing Survey, Annex Table 3.3). The site shows recent first-time buyers, so the figures are averages and small samples.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "rose from 31 in 2003-04 to 34 in 2024-25"
+            }
+          ]
         },
         {
           "id": "J11.6",
           "question": "How has home ownership changed for people of each age since the 1990s?",
-          "gap": "The site has no home ownership figures by age yet; the English Housing Survey table by age of household reference person is not fetched."
+          "gap": "The site shows home ownership by age from 2008-09 to 2021-22 (see J11.9), but not back to the 1990s: the earlier rows in the same source are not yet documented well enough to compare."
         },
         {
           "id": "J11.7",
           "question": "What share of take-home pay goes on a mortgage payment for households with a mortgage, now and in 2008-09?",
-          "gap": "The site does not yet have take-home pay for households with a mortgage, so it cannot compare mortgage payments with take-home pay."
+          "gap": "The site shows mortgage payments as a share of gross household income from 2010-11 (see J11.10). It cannot show take-home pay, which is not in the source, or 2008-09, which the table does not give."
         },
         {
           "id": "J11.8",
           "question": "How have mortgage interest rates changed since 2008?",
-          "gap": "The site has no mortgage interest rate series yet, so it cannot show how borrowing costs have moved."
+          "gap": "The site shows the average rate on new mortgages from January 2016 (see J11.11). It has no mortgage rate series back to 2008 yet."
+        },
+        {
+          "id": "J11.9",
+          "question": "Between 2008-09 and 2021-22, how did home ownership change for people aged 25 to 34, and for people aged 75 and over?",
+          "options": {
+            "A": "It rose for both age groups",
+            "B": "It fell for people aged 25 to 34 and rose for people aged 75 and over",
+            "C": "It fell for both age groups",
+            "D": "It stayed about the same for both age groups"
+          },
+          "answer": "B",
+          "why": "House prices page: the share of people aged 25 to 34 who owned their home fell from 51% in 2008-09 to 41% in 2021-22; for people aged 75 and over it rose from 72% to 80%. English Housing Survey live table FC2101.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "fell from 51% to 41%"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "For people aged 75 and over it rose, from 72% to 80%"
+            }
+          ]
+        },
+        {
+          "id": "J11.10",
+          "question": "What share of household income, before tax, goes on mortgage payments for owner occupiers who make them, in 2010-11 and in 2024-25?",
+          "options": {
+            "A": "About a tenth in both years",
+            "B": "Close to a fifth in both years, and a little higher in 2024-25",
+            "C": "About half in both years",
+            "D": "About two-fifths, and falling"
+          },
+          "answer": "B",
+          "why": "House prices page: the payment took 18% of gross household income in 2010-11 and 19% in 2024-25 (English Housing Survey, Annex Table 2.5). Income is gross, before tax, so it is not take-home pay.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "took 18% of gross household income in 2010-11 and 19% in 2024-25"
+            }
+          ]
+        },
+        {
+          "id": "J11.11",
+          "question": "Between January 2016 and September 2026, how did the average rate on new mortgages change?",
+          "options": {
+            "A": "It fell, from about 4.6% to about 2.5%",
+            "B": "It rose by about two percentage points, from about 2.5% to about 4.6%",
+            "C": "It stayed about the same, near 3%",
+            "D": "It rose above 10%"
+          },
+          "answer": "B",
+          "why": "House prices page: the average rate on new mortgages rose from 2.47% in January 2016 to 4.63% in September 2026, peaking at 5.34% in November 2023 (Bank of England series CFMZ6JM).",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "rose from 2.47% in January 2016 to 4.63% in September 2026"
+            }
+          ]
         }
       ]
     },

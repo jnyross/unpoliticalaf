@@ -86,7 +86,9 @@ def cell_value(src_file, locator):
         if m:
             lines = list(csv.reader(io.StringIO(text)))
             head = lines[0]
-            return lines[int(m.group(1)) - 1][head.index("OBS_VALUE" if "OBS_VALUE" in head else "Data values")]
+            series = re.match(r"(\w+) line ", locator)  # e.g. "CFMZ6JM line 2": the column is named by its series code
+            key = series.group(1) if series and series.group(1) in head else ("OBS_VALUE" if "OBS_VALUE" in head else "Data values")
+            return lines[int(m.group(1)) - 1][head.index(key)]
         m = re.fullmatch(r"CDID (\w+) row '(.+)'", locator)
         if m:  # a time-series file with one column per series, found by its CDID row
             rows = list(csv.reader(io.StringIO(text)))
