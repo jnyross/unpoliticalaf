@@ -742,10 +742,9 @@
    "file": "ons/ashe-adhoc-3671-page.html"
   },
   {
-    "id": "ons-expectation-of-life-uk",
-    "page": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/expectationoflifeunitedkingdom",
-    "find": "/file\\?uri=[^\\\"']*\\.xlsx?",
-    "file": "ons/expectation-of-life-uk"
+    "id": "ons-single-year-life-tables-uk",
+    "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+    "file": "ons/single-year-life-tables-uk.xlsx"
   }
  ]
 }
