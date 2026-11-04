@@ -22,6 +22,14 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "4 November 2026",
+        "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home"), ("life/house-prices.html", "House prices"),
+                  ("life/2025.html", "Everyday life in 2025")],
+        "was": "Exact halves were rounded to the even digit, so £132.5bn showed as £132bn and 31,150 thousand visits as 31.1 million. The words under the share-of-GDP chart skipped the 2021-22 low of 43.4%. The home page called ONS’s 33.6% an average across households, though it covers all people. The house-price lead said “In 2025” for the year to September 2025. A small chart of private renting on year pages ran to 2025-26, though its last figure is 2024-25.",
+        "now": "Exact halves are rounded up: £133bn and 31.2 million. The words name the 2021-22 low before the 2025-26 figure. The home page says the 33.6% is an average across all people. The house-price lead says the price is for the year to September 2025 and the earnings for April 2025. The chart’s axis and caption end at its last figure.",
+        "pr": 168,
+    },
+    {
         "date": "3 November 2026",
         "pages": [("household-tax.html", "How much of household income goes on tax?")],
         "was": "A heading asked “Why did direct taxes rise in 2023/24?”, and the explanation under it said fiscal drag made people pay a greater proportion of their income in tax. The page's own figures showed direct taxes fell as a share of gross income, from 23.2% in 2022/23 to 22.9% in 2023/24.",
