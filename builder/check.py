@@ -350,7 +350,7 @@ def check_downloads():
 
 
 def check_structure():
-    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "borrowing.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
+    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
@@ -376,7 +376,7 @@ def check_structure():
 
 # Pages whose first chart must start high enough on a 360 x 640 phone that at
 # least CHART_SHOWN pixels of it are visible within the first two screens.
-CHART_EARLY = ["spending.html", "taxes.html", "tax-history.html", "international.html", "borrowing.html", "who-pays.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html",
+CHART_EARLY = ["spending.html", "taxes.html", "tax-history.html", "international.html", "productivity.html", "borrowing.html", "who-pays.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html",
                "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html"]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
 # Pages that must stay short on a 360px phone with every "More on ..." section closed,
@@ -699,7 +699,7 @@ def main():
         dc = default_compare()
         if dc is None:
             fail("life/index.html: no 'Start with' comparison link")
-        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "borrowing.html",
+        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
