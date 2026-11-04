@@ -76,13 +76,16 @@ def productivity_page(facts, d, num, sources):
     higher = join([phrase(i) for i in above])
     gap_note = f"Japan has no {latest} figure in this series." if p["missing_latest"] else ""
     rise = num(f"prod.change.{UK}.{latest}", "pct")
+    full_rise = num(f"prod.fullchange.{UK}.{latest}", "pct")
+    first_uk = p["uk_first"]
     avg_rise = num(f"prod.change.avg5.{latest}", "pct")
     body = ["<h1>How does UK productivity compare with other countries?</h1>"]
     body.append(
         f'<div class="answer"><p class="lede">In {latest}, UK output per hour worked was {uk_lvl}. '
         f'That was lower than {lower}, and higher than {higher}. {gap_note}</p>'
-        f'<p>After inflation, UK output per hour rose by {rise} between {BASE} and {latest}. '
-        f'The other five G7 countries on this page rose by {avg_rise} on average over the same years.</p></div>')
+        f'<p>After inflation, UK output per hour rose by {full_rise} between {first_uk}, the first year of the ONS series, and {latest}. '
+        f'The comparison with other G7 countries starts in {BASE}, the first year all five of them have a figure. Over {BASE} to {latest}, UK output per hour rose by {rise}, '
+        f'and the other five G7 countries on this page rose by {avg_rise} on average.</p></div>')
 
     body.append(switch("Show", [
         ("Levels", f"Output per hour worked in {latest}, in pounds, for each G7 country.", _levels_bars(facts, num, p, latest)),

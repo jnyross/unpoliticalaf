@@ -1,0 +1,187 @@
+The question file matches the seal.
+Simulated phone test (goal's bar):
+  R1: 12/12, passes
+  R2: 12/12, passes
+  R3: 12/12, passes
+  R4: 12/12, passes
+  R5: 12/12, passes
+  Total: 60/60 (needs 48)
+  Result: MET
+Prior-knowledge check: 15/60 right without the site, 60 with it, so the site added 45 (needs 20): PASS
+New questions: 120/120 right with the site (100%, needs 80%); 93 without it: PASS
+Screen-reader reader: 12/12: PASS
+John's questions:
+  J1.1: 3/5 right with the site, 0 without: FAIL
+  J1.2: 3/5 right with the site, 0 without: FAIL
+  J1.3: 5/5 right with the site, 0 without: PASS
+  J1.4: 3/5 right with the site, 0 without: FAIL
+  J1.5: 5/5 right with the site, 0 without: PASS
+  J1.6: 5/5 right with the site, 0 without: PASS
+  J1.7: 5/5 right with the site, 3 without: PASS
+  J4.1: 5/5 right with the site, 0 without: PASS
+  J4.2: 0/5 right with the site, 0 without: FAIL
+  J4.3: 5/5 right with the site, 0 without: PASS
+  J4.4: 5/5 right with the site, 0 without: PASS
+  J4.5: 4/5 right with the site, 0 without: PASS
+  J2.1: 0/5 right with the site, 4 without: FAIL
+  J2.2: 0/5 right with the site, 1 without: FAIL
+  J2.3: 0/5 right with the site, 0 without: FAIL
+  J2.7: 0/5 right with the site, 0 without: FAIL
+  J2.8: 0/5 right with the site, 0 without: FAIL
+  J8.1: 0/5 right with the site, 0 without: FAIL
+  J8.2: 0/5 right with the site, 0 without: FAIL
+  J8.3: 0/5 right with the site, 0 without: FAIL
+  J5.1: 0/5 right with the site, 0 without: FAIL
+  J5.3: 0/5 right with the site, 0 without: FAIL
+  J5.4: 3/5 right with the site, 0 without: FAIL
+  J5.5: 0/5 right with the site, 0 without: FAIL
+  J5.6: 0/5 right with the site, 4 without: FAIL
+  J5.7: 0/5 right with the site, 2 without: FAIL
+  J12.1: 0/5 right with the site, 0 without: FAIL
+  J12.2: 0/5 right with the site, 0 without: FAIL
+  J12.3: 0/5 right with the site, 0 without: FAIL
+  J12.4: 0/5 right with the site, 0 without: FAIL
+  J12.5: 1/5 right with the site, 0 without: FAIL
+  J13.1: 0/5 right with the site, 2 without: FAIL
+  J13.2: 0/5 right with the site, 0 without: FAIL
+  J13.3: 0/5 right with the site, 0 without: FAIL
+  J13.4: 0/5 right with the site, 0 without: FAIL
+  J13.5: 0/5 right with the site, 1 without: FAIL
+  J13.6: 0/5 right with the site, 4 without: FAIL
+  J13.7: 0/5 right with the site, 0 without: FAIL
+  J13.8: 0/5 right with the site, 0 without: FAIL
+  J7.1: 0/5 right with the site, 0 without: FAIL
+  J7.2: 0/5 right with the site, 3 without: FAIL
+  J7.3: 0/5 right with the site, 2 without: FAIL
+  J7.4: 0/5 right with the site, 0 without: FAIL
+  J7.5: 0/5 right with the site, 0 without: FAIL
+  J7.6: 0/5 right with the site, 0 without: FAIL
+  J7.7: 0/5 right with the site, 1 without: FAIL
+  J7.8: 0/5 right with the site, 0 without: FAIL
+  J7.9: 0/5 right with the site, 0 without: FAIL
+  J7.10: 0/5 right with the site, 0 without: FAIL
+  J11.1: 0/5 right with the site, 0 without: FAIL
+  J11.2: 0/5 right with the site, 0 without: FAIL
+  J11.3: 0/5 right with the site, 0 without: FAIL
+  J11.4: 0/5 right with the site, 2 without: FAIL
+  J9.1: 0/5 right with the site, 0 without: FAIL
+  J9.2: 0/5 right with the site, 0 without: FAIL
+  J9.3: 0/5 right with the site, 0 without: FAIL
+  J10.1: 0/5 right with the site, 0 without: FAIL
+  J10.2: 0/5 right with the site, 0 without: FAIL
+  J10.3: 0/5 right with the site, 0 without: FAIL
+  J10.4: 0/5 right with the site, 0 without: FAIL
+  J10.5: 0/5 right with the site, 0 without: FAIL
+  J6.1: 0/5 right with the site, 0 without: FAIL
+  J6.2: 0/5 right with the site, 0 without: FAIL
+  J6.3: 0/5 right with the site, 0 without: FAIL
+  J6.4: 0/5 right with the site, 0 without: FAIL
+  J6.5: 0/5 right with the site, 0 without: FAIL
+  J6.6: 0/5 right with the site, 0 without: FAIL
+  J6.7: 0/5 right with the site, 1 without: FAIL
+  J6.8: 0/5 right with the site, 0 without: FAIL
+  open, not on the site yet: J4.6
+  open, not on the site yet: J4.7
+  open, not on the site yet: J4.8
+  open, not on the site yet: J2.4
+  open, not on the site yet: J2.5
+  open, not on the site yet: J2.6
+  open, not on the site yet: J5.2
+  open, not on the site yet: J5.8
+  open, not on the site yet: J5.9
+  open, not on the site yet: J12.6
+  open, not on the site yet: J12.7
+  open, not on the site yet: J12.8
+  open, not on the site yet: J12.9
+  open, not on the site yet: J12.10
+  open, not on the site yet: J12.11
+  open, not on the site yet: J12.12
+  open, not on the site yet: J11.5
+  open, not on the site yet: J11.6
+  open, not on the site yet: J11.7
+  open, not on the site yet: J11.8
+  open, not on the site yet: J10.6
+  FAIL: 82 gaps
+  gap: J4.6: The site does not yet show what Capital Gains Tax and Inheritance Tax raise, or estimate what wealth tax or Capital Gains Tax changes would raise.
+  gap: J4.7: The international page compares total tax as a share of GDP, but does not compare top income tax rates or the tax paid by top earners with other countries.
+  gap: J4.8: The site shows the top 1%'s share of Income Tax only, not their share of all taxes, so the top 1%'s total tax share is not shown.
+  gap: J2.4: The page says the OBR treats public-service spending as a policy choice, not a fixed link to population. It still needs an official figure for how much migrants actually use public services.
+  gap: J2.5: NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed.
+  gap: J2.6: The site has ONS net migration but not births and deaths, which are needed to say what drove recent population growth.
+  gap: J5.2: The defence comparison now uses the ten-year window the impartiality rule allows (2015-16 to 2025-26), so the page no longer compares with 2010-11, the year this question names. Whether John wants 2010-11 shown as well is a decision for him.
+  gap: J5.8: The site does not yet show the government's fiscal rules or the headroom under them, so it cannot answer how much room there is for extra defence spending.
+  gap: J5.9: NATO's own UK defence spending figures, which use a wider definition than the OECD and PESA, are not on the site yet.
+  gap: J12.6: The site has no home ownership figures by age, so it cannot compare people at 30 with earlier years. Needs English Housing Survey or Labour Force Survey tenure tables by age, from the 1990s.
+  gap: J12.7: The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked.
+  gap: J12.8: The site has no tuition fee or student loan figures. Needs the fee caps and loan terms by year, from government sources.
+  gap: J12.9: The site has no state pension age or pension coverage figures. Needs the state pension age timetable and pension coverage by year, from DWP and ONS.
+  gap: J12.10: The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure.
+  gap: J12.11: The site has tax figures by age group for 2023-24 only, and by income band for recent years. Needs income tax and National Insurance on one income level, in each year, from an official source.
+  gap: J12.12: The site has no figures on contract types, temporary work or how long people stay in a job. Needs ONS labour market tables on contracts and job changes by age, from 1992.
+  gap: J11.5: The site has no official series for the age of first-time buyers yet, so it cannot answer this.
+  gap: J11.6: The site has no home ownership figures by age yet; the English Housing Survey table by age of household reference person is not fetched.
+  gap: J11.7: The site does not yet have take-home pay for households with a mortgage, so it cannot compare mortgage payments with take-home pay.
+  gap: J11.8: The site has no mortgage interest rate series yet, so it cannot show how borrowing costs have moved.
+  gap: J10.6: The site does not yet split welfare spending into the State Pension, working-age, disability, housing, tax credit and Universal Credit, and Child Benefit parts over these years; it needs the Department for Work and Pensions benefit expenditure tables (https://www.gov.uk/government/publications/benefit-expenditure-and-caseload-tables-2026).
+  gap: J1.1: readers could not answer "In 2024, how did total UK tax, as a share of the economy (GDP), compare with France, Germany and Italy?" from the site (3 of 5 right); see their confusion notes.
+  gap: J1.2: readers could not answer "In 2024, how did UK government spending, as a share of GDP, compare with the United States and France?" from the site (3 of 5 right); see their confusion notes.
+  gap: J1.4: readers could not answer "Where does the UK rank among the G7 countries on tax as a share of GDP, and on spending?" from the site (3 of 5 right); see their confusion notes.
+  gap: J4.2: readers could not answer "Across 1999-00 to 2023-24, how did the top 1%'s share of Income Tax compare with their share of income?" from the site (0 of 5 right); see their confusion notes.
+  gap: J2.1: readers could not answer "Does the site say whether immigration is a good thing or a bad thing?" from the site (0 of 5 right); see their confusion notes.
+  gap: J2.2: readers could not answer "According to official estimates, does a migrant’s effect on public finances depend on their age, visa route or employment?" from the site (0 of 5 right); see their confusion notes.
+  gap: J2.3: readers could not answer "Do official estimates of migrants’ effect on public finances differ between the short run and the long run?" from the site (0 of 5 right); see their confusion notes.
+  gap: J2.7: readers could not answer "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?" from the site (0 of 5 right); see their confusion notes.
+  gap: J2.8: readers could not answer "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.1: readers could not answer "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.2: readers could not answer "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?" from the site (0 of 5 right); see their confusion notes.
+  gap: J8.3: readers could not answer "What measure do the OECD's reform estimates use for the size of each effect?" from the site (0 of 5 right); see their confusion notes.
+  gap: J5.1: readers could not answer "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?" from the site (0 of 5 right); see their confusion notes.
+  gap: J5.3: readers could not answer "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?" from the site (0 of 5 right); see their confusion notes.
+  gap: J5.4: readers could not answer "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?" from the site (3 of 5 right); see their confusion notes.
+  gap: J5.5: readers could not answer "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?" from the site (0 of 5 right); see their confusion notes.
+  gap: J5.6: readers could not answer "Which of these does the site set out as ways to pay for extra defence spending?" from the site (0 of 5 right); see their confusion notes.
+  gap: J5.7: readers could not answer "Does the site say whether the UK can afford more defence spending?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.1: readers could not answer "Between April to June 1992 and April to June 2025, how did the share of 25 to 34 year olds in work change?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.2: readers could not answer "Between April to June 1992 and April to June 2025, how did the share of 18 to 24 year olds in work change?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.3: readers could not answer "How many times a year’s earnings did the middle-priced home in England and Wales cost in 1999, and in 2025?" from the site (0 of 5 right); see their confusion notes.
+  gap: J12.4: readers could not answer "Between 2008-09 and 2024-25, how did the share of households in England who own their home change? This is all households, not one age group." from the site (0 of 5 right); see their confusion notes.
+  gap: J12.5: readers could not answer "What was the average primary class size in England in January 2006 and in January 2025?" from the site (1 of 5 right); see their confusion notes.
+  gap: J13.1: readers could not answer "Since 1900, in which year was UK public sector net debt highest as a share of GDP, according to the site?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.2: readers could not answer "Between 2007-08 and 2009-10, how did UK public sector net debt change, as a share of GDP?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.3: readers could not answer "How much did UK public sector borrowing reach as a share of GDP in 2020-21, the first year of the Covid pandemic?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.4: readers could not answer "According to the ONS, how much did the furlough schemes alone add to borrowing in the year to March 2021?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.5: readers could not answer "What does the OBR say pushed up borrowing and debt in 2020-21?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.6: readers could not answer "What is the difference between debt and borrowing, as the site uses the words?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.7: readers could not answer "According to the ONS, what raised interest payable on government debt by £34.0 billion in 2022-23?" from the site (0 of 5 right); see their confusion notes.
+  gap: J13.8: readers could not answer "What does the OBR project for the long term, if current policy settings continue?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.1: readers could not answer "What did Labour’s 2024 manifesto say it would not increase?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.2: readers could not answer "Has the government changed the standard VAT rate of 20% since Labour took office?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.3: readers could not answer "Have the basic, higher and additional income tax rates on earnings changed since Labour took office?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.4: readers could not answer "What did Budget 2025 do to income tax on dividends, savings and property income?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.5: readers could not answer "Why do readers disagree on whether the National Insurance pledge was kept?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.6: readers could not answer "Did Budget 2025 extend the freeze on income tax and National Insurance thresholds?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.7: readers could not answer "Did Labour’s private school VAT measure take effect, and when?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.8: readers could not answer "What did Labour’s manifesto promise on defence spending?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.9: readers could not answer "How many net additional homes does the government estimate were added in England from 9 July 2024 to 20 September 2026, against the 1.5 million target?" from the site (0 of 5 right); see their confusion notes.
+  gap: J7.10: readers could not answer "In August 2026, what share of waiting pathways for consultant-led NHS treatment had waited up to 18 weeks?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.1: readers could not answer "Measured as years of pay before tax, how did the middle-priced home in England and Wales change between 1999 and the year to September 2025?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.2: readers could not answer "In the year to September 2025, how many years of median full-time pay before tax would a 10% deposit on the middle-priced home come to?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.3: readers could not answer "After inflation, how did the average mortgage payment for owners with a mortgage in England change between 2008-09 and 2024-25?" from the site (0 of 5 right); see their confusion notes.
+  gap: J11.4: readers could not answer "Do the mortgage payment figures show what someone buying a home today would pay each week?" from the site (0 of 5 right); see their confusion notes.
+  gap: J9.1: readers could not answer "In 2021, how did UK output per hour worked compare with France and the United States?" from the site (0 of 5 right); see their confusion notes.
+  gap: J9.2: readers could not answer "From 2008 to 2021, after inflation, did UK output per hour worked rise more or less than the average of the other five G7 countries on the page?" from the site (0 of 5 right); see their confusion notes.
+  gap: J9.3: readers could not answer "What is the latest year of figures for this comparison, and why does the page stop there?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.1: readers could not answer "Between 1955-56 and 2021-22, how did welfare spending (social security) change as a share of GDP?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.2: readers could not answer "After inflation, how did total welfare spending in 2021-22 compare with 1955-56?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.3: readers could not answer "In 2021-22, what share of social security spending went to pensioners?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.4: readers could not answer "After inflation, how much welfare spending was there per person in 2021-22?" from the site (0 of 5 right); see their confusion notes.
+  gap: J10.5: readers could not answer "On the site, what does the 'without pensions' measure of welfare leave out?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.1: readers could not answer "In 2023-24, how many taxpayers had total income of £1 million or more?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.2: readers could not answer "In 2023-24, what share of all Income Tax did taxpayers with total income of £1 million or more pay?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.3: readers could not answer "If 1,000 taxpayers with total income of £1 million or more left the UK and nothing else changed, roughly how much Income Tax would be lost?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.4: readers could not answer "Does the site say exactly how many leavers would meaningfully damage receipts?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.5: readers could not answer "One per cent of public sector receipts in 2023-24 is roughly the tax of how many taxpayers with total income of £1 million or more?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.6: readers could not answer "After HMRC's analysis of how high earners responded, what did the OBR say the underlying yield of the 50p rate was for 2012-13?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.7: readers could not answer "What did the OBR's 2012 costing of the 50p rate say high earners might do in response?" from the site (0 of 5 right); see their confusion notes.
+  gap: J6.8: readers could not answer "By how much were 2024-25 receipts higher than the OBR's March 2023 forecast made two years before?" from the site (0 of 5 right); see their confusion notes.
+Reader stand-ins for D11 level 5: all PASS, recorded as met (simulated)

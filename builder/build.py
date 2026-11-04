@@ -63,6 +63,7 @@ def render():
     pages["who-pays-households.html"] = pages_money_extra.households_page(facts, d, num, sources)
     pages["high-earners.html"] = pages_top_earners.high_earners_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
+    pages["self-employed-tax.html"] = pages_money.self_employed_tax_page(facts, d, num, sources, rates)
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
     for key, _, _ in pages_life.TOPICS:

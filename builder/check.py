@@ -86,7 +86,9 @@ def cell_value(src_file, locator):
         if m:
             lines = list(csv.reader(io.StringIO(text)))
             head = lines[0]
-            return lines[int(m.group(1)) - 1][head.index("OBS_VALUE" if "OBS_VALUE" in head else "Data values")]
+            series = re.match(r"(\w+) line ", locator)  # e.g. "CFMZ6JM line 2": the column is named by its series code
+            key = series.group(1) if series and series.group(1) in head else ("OBS_VALUE" if "OBS_VALUE" in head else "Data values")
+            return lines[int(m.group(1)) - 1][head.index(key)]
         m = re.fullmatch(r"CDID (\w+) row '(.+)'", locator)
         if m:  # a time-series file with one column per series, found by its CDID row
             rows = list(csv.reader(io.StringIO(text)))
@@ -133,6 +135,15 @@ def cell_value(src_file, locator):
         after = text[text.index(m.group(2)) + len(m.group(2)):]
         line = after[after.index(m.group(3)) + len(m.group(3)):].split("\n", 1)[0]
         return re.findall(r"-?[\d,]+(?:\.\d+)?", line)[int(m.group(4)) - 1].replace(",", "")
+    if src_file.endswith(".html"):
+        # ONS bulletin text: the first number after a sentence that appears once in the page
+        import html as _html
+        m = re.fullmatch(r"after '(.+)' number (\d+)", locator)
+        raw = (ROOT / src_file).read_text(encoding="utf-8", errors="replace")
+        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", "", raw, flags=re.S))))
+        assert text.count(m.group(1)) == 1, m.group(1)
+        tail = text[text.index(m.group(1)) + len(m.group(1)):]
+        return re.findall(r"\d[\d,]*", tail)[int(m.group(2)) - 1].replace(",", "")
     raise ValueError(f"cannot read {src_file} at {locator}")
 
 
@@ -367,7 +378,7 @@ def check_downloads():
 
 
 def check_structure():
-    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
+    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "self-employed-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
@@ -404,7 +415,7 @@ DEFAULT_COMPARE = "default comparison"
 MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.8,
                "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
                "life/holidays.html": 8.8, "life/schools.html": 8.8, DEFAULT_COMPARE: 8.8,
-               "methods.html": 9.5, "sources.html": 4}
+               "methods.html": 9.5, "sources.html": 4, "self-employed-tax.html": 8.5}
 
 
 def default_compare():
@@ -716,7 +727,7 @@ def main():
         dc = default_compare()
         if dc is None:
             fail("life/index.html: no 'Start with' comparison link")
-        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html",
+        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "self-employed-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html",
                  "glossary.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/generations.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
                  "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
                  "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])

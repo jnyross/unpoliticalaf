@@ -1204,6 +1204,8 @@ def income_tax_by_age(facts):
 
 def build_all():
     facts = Facts()
+    from . import data_mye
+    data_mye.build(facts)
     d = {
         "spending": spending(facts),
         "receipts": receipts(facts),
@@ -1246,6 +1248,8 @@ def build_all():
     d["life_extra"] = data_life_extra.build(facts)
     from . import data_generations
     d["generations"] = data_generations.build(facts)
+    from . import data_buyers
+    d["buyers"] = data_buyers.build(facts)
     from . import data_top_earners
     d["top_earners"] = data_top_earners.build(facts)
     population(facts)

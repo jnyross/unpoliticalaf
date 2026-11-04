@@ -1,0 +1,341 @@
+{
+ "title": "New questions 17",
+ "questions": [
+  {
+   "id": 1,
+   "topic": "Where public money goes",
+   "question": "Which area receives the largest share of UK public spending?",
+   "options": {
+    "A": "Defence",
+    "B": "Social protection, including state pensions and benefits",
+    "C": "Transport",
+    "D": "Public order and safety"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Social protection is consistently the largest function in HM Treasury PESA spending tables."
+  },
+  {
+   "id": 2,
+   "topic": "Where public money goes",
+   "question": "Roughly what share of the UK's national income (GDP) does total public spending equal in recent years?",
+   "options": {
+    "A": "About 10%",
+    "B": "About 25%",
+    "C": "About 40% to 45%",
+    "D": "About 75%"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Total managed expenditure has been around 40-45% of GDP in recent years."
+  },
+  {
+   "id": 3,
+   "topic": "Where public money goes",
+   "question": "Each year, which receives more UK public money?",
+   "options": {
+    "A": "Defence",
+    "B": "Health",
+    "C": "Both receive about the same",
+    "D": "Neither; both are funded only by charities"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Health spending is several times larger than defence spending in PESA."
+  },
+  {
+   "id": 4,
+   "topic": "Where public money goes",
+   "question": "Spending on a service rose 20% in cash terms over ten years. What do you also need to know if it grew in real terms?",
+   "options": {
+    "A": "How much prices rose over the period",
+    "B": "How many staff it employs",
+    "C": "Which party was in government",
+    "D": "Nothing else; cash growth is real growth"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "Real growth is cash growth adjusted for inflation."
+  },
+  {
+   "id": 5,
+   "topic": "Which taxes raise it",
+   "question": "Which single tax raises the most money for the UK government?",
+   "options": {
+    "A": "VAT",
+    "B": "Council tax",
+    "C": "Income tax",
+    "D": "Fuel duty"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Income tax is the largest single source of receipts in OBR and HMRC figures."
+  },
+  {
+   "id": 6,
+   "topic": "Which taxes raise it",
+   "question": "Which three together raise more than half of UK government receipts?",
+   "options": {
+    "A": "Fuel duty, alcohol duty and stamp duty",
+    "B": "Income tax, National Insurance and VAT",
+    "C": "Council tax, business rates and inheritance tax",
+    "D": "Corporation tax, tobacco duty and air passenger duty"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Income tax, NICs and VAT together make up well over half of receipts."
+  },
+  {
+   "id": 7,
+   "topic": "Which taxes raise it",
+   "question": "When the government spends more than it receives in a year, how is the gap mainly covered?",
+   "options": {
+    "A": "By borrowing",
+    "B": "By an automatic extra VAT charge",
+    "C": "By the Bank of England's profits",
+    "D": "It cannot happen; budgets must balance"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "The gap is public sector net borrowing, which is not a tax."
+  },
+  {
+   "id": 8,
+   "topic": "Which taxes raise it",
+   "question": "Which UK tax is charged on the profits that companies make?",
+   "options": {
+    "A": "VAT",
+    "B": "Corporation tax",
+    "C": "Council tax",
+    "D": "Stamp duty"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Corporation tax is the UK tax on company profits, as described by HMRC."
+  },
+  {
+   "id": 9,
+   "topic": "Who pays",
+   "question": "Roughly what share of all income tax is paid by the top 1% of income taxpayers?",
+   "options": {
+    "A": "About 2%",
+    "B": "About 10%",
+    "C": "Around a quarter to a third",
+    "D": "About 80%"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "HMRC estimates put the top 1% share of income tax at roughly 25-30%."
+  },
+  {
+   "id": 10,
+   "topic": "Who pays",
+   "question": "ONS figures show the poorest fifth of households pay indirect taxes such as VAT that take what share of their disposable income, compared with the richest fifth?",
+   "options": {
+    "A": "A larger share",
+    "B": "A smaller share",
+    "C": "Exactly the same share",
+    "D": "None at all"
+   },
+   "answer": "A",
+   "critical": false,
+   "why": "ONS Effects of taxes and benefits shows indirect taxes take a higher proportion of income for the poorest fifth."
+  },
+  {
+   "id": 11,
+   "topic": "Who pays",
+   "question": "Measured in pounds, which group of households pays the most tax on average?",
+   "options": {
+    "A": "The poorest fifth",
+    "B": "The middle fifth",
+    "C": "The richest fifth",
+    "D": "All fifths pay the same amount"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "ONS shows the richest fifth pay far more tax in pounds, even though shares of income differ less."
+  },
+  {
+   "id": 12,
+   "topic": "Who pays",
+   "question": "'The top 1% pay 28% of income tax.' What does the 28% describe?",
+   "options": {
+    "A": "Their personal income tax rate",
+    "B": "Their share of all income tax collected",
+    "C": "Their share of the UK population",
+    "D": "The average household's tax rate"
+   },
+   "answer": "B",
+   "critical": true,
+   "why": "It is a share of total revenue, not a tax rate paid on anyone's income."
+  },
+  {
+   "id": 13,
+   "topic": "Household income and tax",
+   "question": "Which of these is an indirect tax?",
+   "options": {
+    "A": "Income tax",
+    "B": "National Insurance",
+    "C": "VAT",
+    "D": "Council tax"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "VAT is paid through prices; ONS treats income tax, NICs and council tax as direct taxes."
+  },
+  {
+   "id": 14,
+   "topic": "Household income and tax",
+   "question": "A chart says households in a group pay 30% of their income in all taxes on average. What does this tell you?",
+   "options": {
+    "A": "Every household in the group pays exactly 30%",
+    "B": "Your own income tax rate is 30%",
+    "C": "An average across those households, including direct and indirect taxes",
+    "D": "30% of all UK tax revenue comes from them"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "A household average across all taxes is neither an individual rate nor a share of revenue."
+  },
+  {
+   "id": 15,
+   "topic": "Household income and tax",
+   "question": "A page shows 'Example: two adults, two children, earning \u00a340,000', with its tax bill. What is this?",
+   "options": {
+    "A": "A labelled illustration, not a measured statistic",
+    "B": "The official average UK family",
+    "C": "A survey of real families",
+    "D": "The legal definition of a typical household"
+   },
+   "answer": "A",
+   "critical": true,
+   "why": "Worked examples are illustrations and must be kept separate from measured figures."
+  },
+  {
+   "id": 16,
+   "topic": "Household income and tax",
+   "question": "In ONS household tax figures, what are 'combined' or total taxes?",
+   "options": {
+    "A": "Income tax only",
+    "B": "Direct and indirect taxes added together",
+    "C": "Taxes paid by businesses",
+    "D": "Tax minus benefits received"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "Total taxes are the sum of direct and indirect taxes paid by households."
+  },
+  {
+   "id": 17,
+   "topic": "Earnings",
+   "question": "Average pay rose 10% while prices rose 12% over the same period. What happened to pay after inflation?",
+   "options": {
+    "A": "It rose about 10%",
+    "B": "It rose about 22%",
+    "C": "It fell about 2%",
+    "D": "It stayed exactly the same"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Real pay falls when prices rise faster than cash pay."
+  },
+  {
+   "id": 18,
+   "topic": "Work",
+   "question": "Employment rose in the years after a new policy started. What does that chart alone show?",
+   "options": {
+    "A": "The policy caused the rise",
+    "B": "That employment rose, not why it rose",
+    "C": "The policy failed",
+    "D": "Employment would have fallen without it"
+   },
+   "answer": "B",
+   "critical": true,
+   "why": "A change over time does not by itself show what caused it."
+  },
+  {
+   "id": 19,
+   "topic": "Work",
+   "question": "The ONS headline employment rate is the share of which group who are in work?",
+   "options": {
+    "A": "Everyone in the UK, including children",
+    "B": "People aged 16 to 64",
+    "C": "Only people in full-time jobs",
+    "D": "Only people claiming benefits"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "The ONS headline employment rate covers people aged 16 to 64 in any paid work."
+  },
+  {
+   "id": 20,
+   "topic": "Housing",
+   "question": "What is the most common way English households occupy their homes?",
+   "options": {
+    "A": "Renting privately",
+    "B": "Renting from a council or housing association",
+    "C": "Owning, outright or with a mortgage",
+    "D": "Living in hostels"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "The English Housing Survey shows around two-thirds of households are owner-occupiers."
+  },
+  {
+   "id": 21,
+   "topic": "Schools",
+   "question": "In England, what is the legal limit for most infant (Key Stage 1) class sizes with one teacher?",
+   "options": {
+    "A": "20 pupils",
+    "B": "25 pupils",
+    "C": "30 pupils",
+    "D": "40 pupils"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "The infant class size limit in England is 30 pupils per school teacher."
+  },
+  {
+   "id": 22,
+   "topic": "Schools",
+   "question": "A class-size figure is labelled 'England, state-funded primary schools'. What does it describe?",
+   "options": {
+    "A": "All UK schools",
+    "B": "Secondary schools in Scotland",
+    "C": "Primary schools in England only",
+    "D": "Private schools in Wales"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Class-size statistics are specific to the nation and school phase stated."
+  },
+  {
+   "id": 23,
+   "topic": "Holidays",
+   "question": "Which country do UK residents visit most often on trips abroad?",
+   "options": {
+    "A": "United States",
+    "B": "Spain",
+    "C": "Australia",
+    "D": "Germany"
+   },
+   "answer": "B",
+   "critical": false,
+   "why": "ONS Travel Trends consistently shows Spain as the top destination for UK residents' visits abroad."
+  },
+  {
+   "id": 24,
+   "topic": "Everyday life",
+   "question": "A survey was not run in 2020 and changed its definitions in 2008. How should a chart show this?",
+   "options": {
+    "A": "Fill 2020 with zero",
+    "B": "Join the line smoothly across both",
+    "C": "Show 2020 as a gap and mark 2008 as a break",
+    "D": "Leave out all years before 2008 without saying so"
+   },
+   "answer": "C",
+   "critical": false,
+   "why": "Missing years and definition changes should be shown explicitly, not filled or hidden."
+  }
+ ]
+}

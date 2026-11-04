@@ -17,7 +17,7 @@ from . import findings as F
 
 UK, AVG = "GBR", "OECD_REP"
 G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
-CASH_PAIR = 2010  # the year used for the "compared with 2010-11" sentence
+CASH_PAIR = 2015  # the start of the ten-year window used for the "compared with 2015-16" sentence (impartiality rule: ten years for spending by area)
 
 
 def _ordinal_word(n):
@@ -99,9 +99,11 @@ def defence_page(facts, d, num, sources):
                     ymin=0, kind="pct", num=num, ids=[[f"spend.gdp.defence.{y}" for y in years]],
                     finding=F.trend("Defence as a share of GDP", which="all", dips=0.1))),
     ]))
+    gdp_v, gdp_base_v = facts[gdp].value, facts[share_base].value
+    share_cmp = "lower" if gdp_v < gdp_base_v else ("higher" if gdp_v > gdp_base_v else "the same")
     body.append(f"<p>Defence spending was {num(cash, 'bn')} in {latest}, up from {num(f'spend.cash.defence.{CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}', 'bn')} in {CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}. "
                 f"After inflation the rise was {num(real_change, 'pct')}, from {num(real_base, 'bn')} to {num(real, 'bn')} at 2025-26 prices. "
-                f"Its share of GDP was lower in {latest} than in {CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}: {num(gdp, 'pct')} against {num(share_base, 'pct')}. In cash terms, defence spending grew more slowly than GDP over those years.</p>")
+                f"Its share of GDP was {share_cmp} in {latest} than in {CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}: {num(gdp, 'pct')} against {num(share_base, 'pct')}.</p>")
     body.append(FOLD)
     rows = [[y, num(f"spend.cash.defence.{y}", "bn"), num(f"spend.real.defence.{y}", "bn"), num(f"spend.gdp.defence.{y}", "pct")] for y in years]
     body.append(details_table("Show defence spending every year", f"UK defence spending, {first} to {latest}: cash, after inflation and % of GDP",
