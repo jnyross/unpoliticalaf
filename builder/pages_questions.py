@@ -20,6 +20,11 @@ GROUPS = [
         ("manifesto.html", "Did Labour keep its 2024 manifesto?", "Ten pledges, each quoted, with what has happened and every reading the wording allows."),
         ("immigration.html", "Is immigration a good or a bad thing?", "What official evidence says about public money, public services and the economy, and where it cannot decide."),
     ]),
+    ("Welfare, housing and generations", [
+        ("welfare.html", "How has welfare spending changed?", "Social security spending over 50 years, after inflation, per person and as a share of GDP, and what each measure leaves out."),
+        ("life/house-prices.html", "Have houses become harder to afford?", "House prices beside earnings and mortgage payments, by region, since 1997."),
+        ("life/generations.html", "Did parents have it easier than this generation?", "Work, housing, university costs, pension age and class sizes for people of the same age, then and now."),
+    ]),
 ]
 
 

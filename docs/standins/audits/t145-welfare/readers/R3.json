@@ -1,0 +1,23 @@
+{"reader": "R3", "profile": "P3", "site_commit": "working-tree", "budget": 40,
+ "welfare_actions": 40,
+ "welfare_without_site": {
+  "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+  "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+  "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"
+ },
+ "welfare_with_site": {
+  "J12.1": "B", "J12.2": "B", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "E", "J12.9": "B",
+  "J11.1": "D", "J11.2": "B", "J11.3": "C", "J11.4": "B", "J11.5": "B", "J11.9": "B", "J11.10": "B", "J11.11": "B",
+  "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "C", "J10.7": "C"
+ },
+ "confusions": [
+  "The Questions list is very long and the welfare, housing and generations questions are spread across several pages, so I had to scroll through many screens to find them.",
+  "The house prices page says the years before 2008-09 come from another survey and are not compared, yet the answer quotes a 2003-04 age figure for first-time buyers, which I did not trust.",
+  "The welfare chart switches between cash, after inflation and per person views, and I could not tell from the picture how much the 1955-56 figure was in today's money, so I was guessing at the 'ten times' answer.",
+  "The grey header covers the top line of text as I scroll, so I missed a sentence about university fees and the state pension age wording.",
+  "The generations answer says university fees were up to 1,000 pounds in 1998 but I could not find the 2025-26 fee figure anywhere, and the Debt page was about national debt instead.",
+  "The state pension answer gives 66 for people born in 1960 and 68 for people born from 6 April 1978, so I had to work out the 1990 answer for myself.",
+  "The site went to a 'No built site' error and later a 'File not found' page when I scrolled, which made me think the page was broken before it recovered.",
+  "The mortgage payment figures are said to be for loans already taken out, which I read as not telling me what a new buyer pays."
+ ]
+}

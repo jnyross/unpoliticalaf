@@ -1,0 +1,27 @@
+{
+  "reader": "R10",
+  "profile": "P8",
+  "site_commit": "badb1ba",
+  "budget": 40,
+  "welfare_actions": 32,
+  "welfare_without_site": {
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"
+  },
+  "welfare_with_site": {
+    "J12.1": "B", "J12.2": "B", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "B", "J12.9": "B",
+    "J11.1": "D", "J11.2": "B", "J11.3": "C", "J11.4": "B", "J11.5": "B", "J11.9": "B", "J11.10": "B", "J11.11": "B",
+    "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "C", "J10.7": "C"
+  },
+  "confusions": [
+    "I had to go through the Questions list and scroll a long way down before I found the welfare, housing and generations section, and it was not obvious which link was which.",
+    "The welfare page was long and the 'without pensions' meaning was buried in the middle, so I only found out what it leaves out by reading the definitions bullet.",
+    "The welfare answer gave cash totals for 1955-56 and 2021-22 but not a multiple, so I had to work out the 'ten times' comparison myself.",
+    "The pensioner share of social security (54%) and the State Pension share of DWP spending (43.7%) are on different parts of the page, so I had to hunt for which one was which.",
+    "The house price page is twelve screens long and the mortgage rate answer sits right at the bottom, so I nearly missed it.",
+    "The figure for the over-75s owning their home was cut off at the bottom of a screen, so I had to scroll back to be sure I had the right number.",
+    "The state pension age was only in a summary paragraph (66 for 1960, 68 for 1978 onwards), and I did not find any detail on the wording used in the answer options.",
+    "The class size figures were in a table under a heading I had to scroll past several charts to reach, which took time I did not have."
+  ]
+}
