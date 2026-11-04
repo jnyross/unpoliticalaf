@@ -255,6 +255,14 @@
   "sha256": "46718d51c1a750b259976d543bd8004b1d9232c89569af81e8f5fd9ea8ac16c5",
   "retrieved": "2026-11-02T15:15:37Z"
  },
+ "explain-mac-annual-2025": {
+  "url": "https://www.gov.uk/government/publications/migration-advisory-committee-annual-report-2025/migration-advisory-committee-mac-annual-report-2025-accessible",
+  "file": "explain/mac-annual-2025.html",
+  "bytes": 521943,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "7ec49312638c9f282f57b327108d05b42957656095f4e649eb1512fd5babb9f0",
+  "retrieved": "2026-11-04T09:22:09Z"
+ },
  "explain-obr-debt-interest": {
   "url": "https://obr.uk/forecasts-in-depth/tax-by-tax-spend-by-spend/debt-interest-central-government-net/",
   "file": "explain/obr-debt-interest.html",
@@ -270,6 +278,22 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "35971195412625caa19a76c28d6bbd86f0c99be55ad659c981604c0551eb4b52",
   "retrieved": "2026-11-03T09:37:37Z"
+ },
+ "explain-obr-migration-fiscal": {
+  "url": "https://obr.uk/box/the-impact-of-migration-on-the-fiscal-forecast/",
+  "file": "explain/obr-migration-fiscal-box.html",
+  "bytes": 99912,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "9c0bd81cc2e1935ce905f55e5e845dc3ad555ccd8819a3e59ae1c5fe35123825",
+  "retrieved": "2026-11-04T09:22:12Z"
+ },
+ "explain-obr-migration-gdp": {
+  "url": "https://obr.uk/box/net-migration-and-gdp-per-person/",
+  "file": "explain/obr-migration-gdp-box.html",
+  "bytes": 100575,
+  "content_type": "text/html; charset=UTF-8",
+  "sha256": "96b0e4c95fc79ea81121bd396622db95cdc90abd3fc335c121c7ae9d056dd2ea",
+  "retrieved": "2026-11-04T09:22:15Z"
  },
  "explain-ons-2008-recession": {
   "url": "https://www.ons.gov.uk/economy/grossdomesticproductgdp/articles/the2008recession10yearson/2018-04-30",
@@ -318,6 +342,14 @@
   "content_type": "text/html;charset=utf-8",
   "sha256": "437e97eabdfb29532c793323cff9476b0b2d8edbb1c933abe43c8ce878756960",
   "retrieved": "2026-11-02T10:18:15Z"
+ },
+ "explain-ons-ltim-dec2025": {
+  "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/longterminternationalmigrationprovisional/yearendingdecember2025",
+  "file": "explain/ons-ltim-dec2025.html",
+  "bytes": 161701,
+  "content_type": "text/html;charset=utf-8",
+  "sha256": "6c49b45e3af0195cb617c9b8e3075644e00b1219e0619c6cbfeea0c2e9dc8319",
+  "retrieved": "2026-11-04T09:22:19Z"
  },
  "explain-ons-psf-2021-03": {
   "url": "https://www.ons.gov.uk/economy/governmentpublicsectorandtaxes/publicsectorfinance/bulletins/publicsectorfinances/march2021",

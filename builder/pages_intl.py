@@ -264,5 +264,6 @@ Government spending was above the average in {len(s_above)} of the {s_both} year
 The OECD uses calendar years and general government only, and counts some items differently, so its UK figures do not match those pages exactly. They are shown here, not joined to the UK series, because they are measured the same way for every country.</p></div>''')
     body.append(source_line(sources, ["oecd-rs-tax", "oecd-gov-pf", "oecd-gov-cofog"],
                             "OECD data is published under the Creative Commons Attribution 4.0 licence. Differences from the average calculated here."))
+    body.append('<p>See also: <a href="economy-options.html">ten options for improving the UK economy, ranked on published estimates</a>.</p>')
     return page("international.html", "How do UK taxes and spending compare with other countries?", "\n".join(body),
                 "UK taxes and government spending as a share of GDP beside the 37 other OECD countries and the OECD average, from OECD Revenue Statistics and Government at a Glance.")

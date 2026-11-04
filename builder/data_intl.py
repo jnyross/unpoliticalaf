@@ -27,6 +27,8 @@ COFOG_FILE = "data/fetched/oecd/gov-at-a-glance-expenditure-by-function-gdp.csv"
 TAX_SRC, SPEND_SRC, COFOG_SRC = "oecd-rs-tax", "oecd-gov-pf", "oecd-gov-cofog"
 
 UK, AVG = "GBR", "OECD_REP"  # OECD_REP: the OECD's "OECD average country" (unweighted)
+G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
+DEFENCE = "GF02"
 
 # Kinds of tax in the OECD's classification, with a plain name and the nearest UK taxes.
 TAX_KINDS = [
@@ -102,13 +104,16 @@ def build(facts):
     out["spend_years"] = sorted(y for (a, y) in spend if a == UK and spend[(a, y)] is not None and y <= sy)
     out["spend_missing"] = [a for a in members if spend.get((a, sy)) is None]
 
-    # Spending by function: UK and the average, % of GDP.
+    # Spending by function: UK and the average, % of GDP. Defence is also kept for the
+    # other G7 countries, for the defence page (builder/pages_defence.py).
     fn = {}
     for line, r in _rows(COFOG_FILE):
         a, y, g = r["REF_AREA"], r["TIME_PERIOD"], r["EXPENDITURE"]
-        if a in (UK, AVG) and r["UNIT_MEASURE"] == "PT_B1GQ" and g in dict(FUNCTIONS):
+        if (a in (UK, AVG) or (g == DEFENCE and a in G7)) and r["UNIT_MEASURE"] == "PT_B1GQ" and g in dict(FUNCTIONS):
             fn[(a, g, y)] = _add(facts, f"intl.fn.{g}.{a}.{y}", r, line, COFOG_SRC, f"{r['Expenditure']} expenditure % GDP")
     fyears = [y for y in {y for (_, _, y) in fn} if all(fn.get((a, g, y)) is not None for a in (UK, AVG) for g, _ in FUNCTIONS)]
     out["fn_year"] = max(fyears)
+    # Defence for the G7 countries that have a figure (Canada has none in this table).
+    out["defence_years"] = {a: sorted(y for (b, g, y) in fn if b == a and g == DEFENCE) for a in G7 + [AVG]}
     out["functions"], out["tax_kinds"] = FUNCTIONS, TAX_KINDS
     return out
