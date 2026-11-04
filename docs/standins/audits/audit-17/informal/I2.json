@@ -1,0 +1,148 @@
+{
+ "reader": "I2",
+ "mode": "phone",
+ "budget": 40,
+ "actions": 28,
+ "url": "life/compare/1971-2025.html",
+ "ops": [],
+ "scroll": 1680,
+ "history": [
+  {
+   "url": "index.html",
+   "ops": [],
+   "scroll": 5040
+  },
+  {
+   "url": "life/housing.html",
+   "ops": [
+    {
+     "op": "tap",
+     "sel": "body > main:nth-of-type(1) > figure:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+     "y": 1120
+    }
+   ],
+   "scroll": 522
+  },
+  {
+   "url": "household-tax.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "spending.html",
+   "ops": [],
+   "scroll": 1120
+  },
+  {
+   "url": "life/index.html#compare",
+   "ops": [
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(1) > select:nth-of-type(1)",
+     "value": "1971",
+     "y": 3858
+    },
+    {
+     "op": "choose",
+     "sel": "body > main:nth-of-type(1) > form:nth-of-type(1) > label:nth-of-type(2) > select:nth-of-type(1)",
+     "value": "2025",
+     "y": 3858
+    }
+   ],
+   "scroll": 3858
+  }
+ ],
+ "log": [
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "scroll down",
+  "tap [11] link: Housing 65% of households in England owned their home, 2024-25. 1981 2024-25",
+  "scroll down",
+  "scroll down",
+  "tap [10] expand: What the chart shows, in words",
+  "scroll up",
+  "tap [5] link: Tax and income",
+  "scroll down",
+  "scroll down",
+  "tap [2] link: Spending",
+  "scroll down",
+  "scroll down",
+  "tap [7] link: Year by year",
+  "tap [17] link: Compare years",
+  "choose [12] First year = 1971",
+  "choose [13] Second year = 2025",
+  "tap [14] button: Compare 1971 and 2025",
+  "scroll down",
+  "scroll down",
+  "scroll down"
+ ],
+ "shots": "/tmp/claude-0/-home-claude-unpoliticalaf/0d35274c-eb3c-5060-bb27-78ab1580f6c1/scratchpad/shots/I2",
+ "items": [
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Unpolitical"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Spending"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Taxes"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(3) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Who pays"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Tax and income"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(5) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Debt"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(6) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Year by year"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(7) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Glossary"
+  },
+  {
+   "sel": "body > header:nth-of-type(1) > div:nth-of-type(1) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(8) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "Sources"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(5) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "1980 and 2023"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > div:nth-of-type(6) > p:nth-of-type(1) > a:nth-of-type(1)",
+   "kind": "link",
+   "label": "2006 and 2025"
+  },
+  {
+   "sel": "body > main:nth-of-type(1) > nav:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+   "kind": "expand",
+   "label": "On this page: 6 sections"
+  }
+ ]
+}
