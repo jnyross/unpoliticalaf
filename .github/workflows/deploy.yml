@@ -1,0 +1,44 @@
+name: Verify and record production deployment
+
+# After every push to main, wait for Vercel to deploy it, then check that every
+# live file is exactly the build of that commit, then record the verified Vercel
+# deployment in GitHub. Auto-merge starts it by hand
+# after a merge, because its merges don't fire push workflows. Also runs daily, so a failed
+# or skipped production deploy shows up even when nothing new is pushed.
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  statuses: read
+  deployments: write
+
+# Serialize receipt writes, including legacy dispatches, to avoid duplicate records.
+concurrency:
+  group: live-check
+  cancel-in-progress: false
+
+jobs:
+  live:
+    # A manual dispatch on a feature branch must never record production.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup
+      - run: make build
+      - name: Verify and record the automatic Vercel deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/record_deployment.py --wait ${{ github.event_name == 'schedule' && 60 || 1500 }}
