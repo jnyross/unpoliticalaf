@@ -50,8 +50,7 @@ def page_body(facts, d, num, sources):
     body = ['<p class="small"><a href="index.html">Everyday life, year by year</a></p>',
             '<h1 id="key-answer">Did parents have it easier than this generation?</h1>',
             _answer(facts, num),
-            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for one age group in one year. '
-            'It does not follow one person through their life.</p>',
+            '<p class="note"><strong>Different people, not the same people.</strong> Each figure is for one age group in one year.</p>',
             "<h2 id='what-easier-means'>What “easier” could mean</h2>",
             "<p>People mean different things by “easier”. This page separates them, so each can be read on its own:</p>",
             FOLD,
@@ -72,7 +71,6 @@ def page_body(facts, d, num, sources):
             f'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
             f'<a href="work.html#work-age">Employment by age, every year</a>.</p>',
             "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
-            "<p>These figures are for everyone, not for people of one age, so they show the position of the whole market rather than of people at 30.</p>",
             _afford_chart(facts, num),
             FOLD,
             table(f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {LAST}",
@@ -110,9 +108,9 @@ def page_body(facts, d, num, sources):
             "<p>The Pensions Act 2007 sets the rise from 67 to 68 for 2044 to 2046. "
             "The government has launched a third review of State Pension age, and a review could change the timetable for 68.</p>",
             source_line(sources, ["dwp-spa-timetable"], up="../"),
-            "<h2 id='life-expectancy'>How long a 30 year old can expect to live</h2>",
-            f"<p>In {LIFE_LAST} a man aged 30 could expect to live {num(f'life.ex30.male.{LIFE_LAST}', 'dp1')} more years, and a woman {num(f'life.ex30.female.{LIFE_LAST}', 'dp1')} more years, "
-            f"on that year’s death rates. Since {LIFE_FIRST} the figure has risen by about {_gain(facts, 'male')} years for men and about {_gain(facts, 'female')} for women.</p>",
+            "<h2 id='life-expectancy'>Life expectancy at 30</h2>",
+            f"<p>In {LIFE_LAST} a man aged 30 could expect to live {num(f'life.ex30.male.{LIFE_LAST}', 'dp1')} more years, and a woman {num(f'life.ex30.female.{LIFE_LAST}', 'dp1')}. "
+            f"Since {LIFE_FIRST} the figure has risen by about {_gain(facts, 'male')} years for men and about {_gain(facts, 'female')} for women.</p>",
             FOLD,
             table(f"Years a person aged 30 can expect to live, UK, {LIFE_FIRST} and {LIFE_LAST}", ["Measure", str(LIFE_FIRST), str(LIFE_LAST)],
                   [["Men", num(f"life.ex30.male.{LIFE_FIRST}", "dp1"), num(f"life.ex30.male.{LIFE_LAST}", "dp1")],
@@ -121,7 +119,7 @@ def page_body(facts, d, num, sources):
             "They come from the single-year tables, which move more from year to year than the three-year tables. 2020 and 2021 reflect the pandemic.</p>",
             source_line(sources, ["ons-single-year-life-tables-uk"], up="../"),
             "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
-            "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
+            "<p>Figures the site does not yet hold, with the source each needs:</p>",
             "<ul>"
             "<li><strong>Home ownership at a given age</strong>: owning or renting by the age of the household’s main person, across the 1990s to now (English Housing Survey and Labour Force Survey tables by age).</li>"
             "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
