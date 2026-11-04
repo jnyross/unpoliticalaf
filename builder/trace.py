@@ -23,6 +23,14 @@ FIG_DIR = "figures"
 CORRECTIONS = [
     {
         "date": "4 November 2026",
+        "pages": [("spending.html", "Where does public money go?"), ("index.html", "Home"), ("life/house-prices.html", "House prices"),
+                  ("life/2025.html", "Everyday life in 2025")],
+        "was": "Exact halves were rounded to the even digit, so £132.5bn showed as £132bn and 31,150 thousand visits as 31.1 million. The words under the share-of-GDP chart skipped the 2021-22 low of 43.4%. The home page called ONS’s 33.6% an average across households, though it covers all people. The house-price lead said “In 2025” for the year to September 2025. A small chart of private renting on year pages ran to 2025-26, though its last figure is 2024-25.",
+        "now": "Exact halves are rounded up: £133bn and 31.2 million. The words name the 2021-22 low before the 2025-26 figure. The home page says the 33.6% is an average across all people. The house-price lead says the price is for the year to September 2025 and the earnings for April 2025. The chart’s axis and caption end at its last figure.",
+        "pr": 168,
+    },
+    {
+        "date": "4 November 2026",
         "pages": [("life/holidays.html", "Holidays since 1980")],
         "was": "The chart title said holiday visits abroad “rose until 2019, fell in 2021, then rose until 2023; later years use a new method and are not compared”, although the chart also shows 2024 and 2025, including the 58.4 million in the headline. The title read as if the chart stopped in 2023.",
         "now": "The title names the two years after the method change: “…then rose until 2023; 2024 and 2025 use a new method and are not compared”.",

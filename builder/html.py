@@ -8,6 +8,7 @@ without JavaScript, and each one sits next to a complete table.
 import json
 import math
 import re
+from decimal import Decimal, ROUND_HALF_UP
 from html import escape
 from . import version, downloads
 from . import findings as F
@@ -515,53 +516,65 @@ def keyfigs(items):
 
 # ------------------------------------------------------------------ numbers
 
+def _hu(value, places, comma=True, sign=False):
+    """A number rounded half away from zero, as people expect: 132.5 shows as 133.
+    Python's own rounding in f-strings sends an exact half to the even digit (132.5 would
+    show as 132), so every figure goes through here."""
+    x = float(value)
+    if not math.isfinite(x):
+        return f"{x:g}"
+    d = Decimal(repr(x)).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP)
+    spec = ("+" if sign else "") + ("," if comma else "") + f".{places}f"
+    return format(d, spec)
+
+
 def fmt(value, kind):
     """Format a number for display. kind controls rounding and units."""
     if value is None:
         return None
     if kind == "bn":
-        return f"£{value:,.1f}bn" if abs(value) < 100 else f"£{value:,.0f}bn"
+        return f"£{_hu(value, 1)}bn" if abs(value) < 100 else f"£{_hu(value, 0)}bn"
     if kind == "bn1":
-        return f"£{value:,.1f}bn"
+        return f"£{_hu(value, 1)}bn"
     if kind == "pct":
-        return f"{value:.1f}%"
+        return f"{_hu(value, 1)}%"
     if kind == "pct2":
-        return f"{value:.2f}%"
+        return f"{_hu(value, 2)}%"
     if kind == "pct0":
-        return f"{value:.0f}%"
+        return f"{_hu(value, 0)}%"
     if kind == "pounds":
-        return f"£{value:,.0f}"
+        return f"£{_hu(value, 0)}"
     if kind == "pounds2":
-        return f"£{value:,.2f}"
+        return f"£{_hu(value, 2)}"
     if kind == "per100":
-        return f"£{value:.0f}"
+        return f"£{_hu(value, 0)}"
     if kind == "per100dp1":
-        return f"£{value:.1f}"
+        return f"£{_hu(value, 1)}"
     if kind == "pts":
-        return f"{value:+.1f} points"
+        return f"{_hu(value, 1, sign=True)} points"
     if kind == "dp1":
-        return f"{value:.1f}"
+        return _hu(value, 1, comma=False)
     if kind == "times":
-        return f"{value:.1f} times"
+        return f"{_hu(value, 1)} times"
     if kind == "times2":
-        return f"{value:.2f} times"
+        return f"{_hu(value, 2)} times"
     if kind == "dp2":
-        return f"{value:.2f}"
+        return _hu(value, 2, comma=False)
     if kind == "millions":
-        return f"{value / 1000:.1f} million"
+        return f"{_hu(value / 1000, 1, comma=False)} million"
     if kind == "millions_people":
-        return f"{value / 1000:.1f} million"
+        return f"{_hu(value / 1000, 1, comma=False)} million"
     if kind == "millions_raw":
-        return f"{value / 1_000_000:.1f} million"
+        return f"{_hu(value / 1_000_000, 1, comma=False)} million"
     if kind == "int":
-        return f"{value:,.0f}"
+        return _hu(value, 0)
     # Margins of error (95%), shown after the figure they belong to
     if kind == "pm_pp":
-        return f"±{value:.1f} points"
+        return f"±{_hu(value, 1)} points"
     if kind == "pm_pounds":
-        return f"±£{value:,.0f}"
+        return f"±£{_hu(value, 0)}"
     if kind == "pm_pct":
-        return f"±{value:.0f}%" if value >= 9.5 else f"±{value:.1f}%"
+        return f"±{_hu(value, 0)}%" if value >= 9.5 else f"±{_hu(value, 1)}%"
     raise ValueError(kind)
 
 
