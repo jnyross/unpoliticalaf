@@ -230,7 +230,8 @@ def block(facts, num, sources, topic):
     Returns (shown, folded): the chart, whose title states the long-run finding,
     stays in view; the long-run figures in words, the every-year table, its
     limits, earlier-year links and sources fold away."""
-    shown = [chart(facts, num, topic) + (L.WORK_CAUSE if topic == "work" else "")]
+    # On work, the "change is not cause" note sits under the answer box (pages_life.topic_page).
+    shown = [chart(facts, num, topic)]
     folded = [f'<div class="answer"><p>{answer(facts, num, topic)}</p></div>', table_for(facts, num, topic), f'<div class="limit"><p>{esc(LIMITS[topic])}</p></div>',
               f'<p class="small" id="early-{topic}">Pick an earlier year:</p><ul class="yearnav" aria-labelledby="early-{topic}">{early_links("", topic)}</ul>',
               source_line(sources, [s for s in SOURCES[topic] if s in sources], up="../")]
