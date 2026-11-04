@@ -99,13 +99,17 @@ def _uk_us_fr(facts, num, it, sy):
         return "the United States" if a == "USA" else it["names"][a]
     parts = [f"{rel(uk - facts[ids[a]].value)} {the(a)} ({num(ids[a], 'pct')})" for a in COMPARE_WITH]
     lede = f"In {sy}, UK government spending was {num(ids[UK], 'pct')} of GDP: {', '.join(parts[:-1])} and {parts[-1]}."
-    order = sorted([UK] + COMPARE_WITH, key=lambda a: -facts[ids[a]].value)
+    # The chart shows every G7 country with a figure for the year, so no selection needs explaining (audit 15 judge).
+    have = [a for a in G7 if f"intl.spend.{a}.{sy}" in facts and facts[f"intl.spend.{a}.{sy}"].value is not None]
+    order = sorted(have, key=lambda a: -facts[f"intl.spend.{a}.{sy}"].value)
     items = [(f"<strong>{esc(it['names'][a])}</strong>" if a == UK else esc(it["names"][a]),
-              ids[a], "" if a == UK else "alt") for a in order]
+              f"intl.spend.{a}.{sy}", "" if a == UK else "alt") for a in order]
+    missing = [it["names"][a] for a in G7 if a not in have]
+    note = (f" Not shown: {esc(', '.join(missing))}, because the OECD had not published a figure." if missing else "")
     return [
         f'<div class="answer"><p class="lede">{lede}</p></div>',
         bars(items, "pct", num, maxval=60,
-             caption=f"Government spending, % of GDP, {sy}. The UK has the darker bar."),
+             caption=f"Government spending, % of GDP, {sy}, all {len(have)} G7 countries with a figure for that year. The UK has the darker bar.{note}"),
     ]
 
 

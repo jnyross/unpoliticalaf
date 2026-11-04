@@ -8,6 +8,8 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
+    from .pages_money import fifth_indirect_caveat
+    cav = fifth_indirect_caveat(facts, num)
     from .pages_life import FIRST, earn_stretches, earn_before_after
     ea, eb, ech = earn_stretches(facts)[0]
     from .data import EARLY_YEARS
@@ -76,6 +78,7 @@ def home_page(facts, d, num, sources):
 <span class="big">{num("etb.t8.gross.all.all", "pct")}</span>
 <p>Taxes took {num("etb.t8.gross.all.all", "pct")} of gross household income on average in 2023/24. That is an average across all people, not anyone's tax rate.</p>
 <p>The lowest-income fifth paid {num("etb.t8.gross.all.q1", "pct")} of its gross income in tax, and the highest-income fifth paid {num("etb.t8.gross.all.q5", "pct")}. For the lowest, most of it is indirect tax such as VAT ({num("etb.t8.gross.indirect.q1", "pct")} of their gross income). For the highest, most is direct tax such as Income Tax.</p>
+<p>Indirect taxes are charged on spending: the lowest-income fifth paid {cav[0]} of its spending in indirect taxes, and the other fifths between {cav[1]} and {cav[2]}. ONS warns that lump sums of tax put off from earlier years can make the lowest fifths' direct taxes look high.</p>
 {v_hh}
 <span class="more">Direct, indirect and combined taxes</span></a>
 </div>
@@ -109,7 +112,7 @@ def methods_page(facts, sources, used_counts):
             '<li><strong>No invented continuity.</strong> Missing years are shown as missing. Where a definition changes, the series is broken and no change is calculated across the break.</li>'
             '<li><strong>No invented households presented as fact.</strong> Where a made-up person helps explain a rule, it is labelled “Illustration, not a statistic” and kept apart from the official figures.</li>'
             '<li><strong>Change is not cause.</strong> The site shows what changed. It does not say why in its own words. Where an official body such as the Office for National Statistics or HM Revenue and Customs has published its own explanation, we quote it word for word, name who said it, and link to it. The check confirms that every quote still matches the publication.</li>'
-            '<li id="topics"><strong>How we choose the everyday topics.</strong> Each is an everyday subject that official statistics measure across several years. A subject with no such series is left out, not estimated. Poverty and hardship are not measured here.</li>'
+            '<li id="topics"><strong>How we choose the everyday topics.</strong> Each is an everyday subject that official statistics measure across several years. A subject with no such series is left out, not estimated. Poverty and hardship do have official series, such as the low-income series and the ONS measure of income inequality, but the site does not show them yet. That is a gap in what has been built, not a judgement that they matter less.</li>'
             '<li><strong>Neutral language.</strong> We describe figures; we don’t judge them.</li>'
             '<li><strong>How we choose what to show.</strong> Headline figures use the publisher’s own main measure for the latest year it has measured. '
             'Comparisons over time use fixed windows (ten years for spending by area, the first and latest year for each series) and the same lead figure on every comparison page, '

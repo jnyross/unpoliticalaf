@@ -369,14 +369,18 @@ def _common(series, a, b, first):
     return max(set(ends), key=lambda i: (ends.count(i), -i if first else i))
 
 
-def overview(labels, series, a, b, show, group_breaks=None):
+def overview(labels, series, a, b, show, group_breaks=None, pct=False):
     """One sentence comparing every group's first and last figure in one stretch:
     how many were higher and lower, and which moved most. For small multiples whose
     full figures are in a table beside the chart. show(si, i) formats a figure.
 
     group_breaks: {series index: [(index, text), ...]} definition changes that affect
     only some groups. Such a group is left out of the comparison if a break falls
-    inside the stretch, and its change is then given separately, from the break on."""
+    inside the stretch, and its change is then given separately, from the break on.
+
+    pct: rank the changes as a percentage of each group's earlier figure (money and counts, as
+    methods.html says), not by the difference in pounds, so a big area is not always the largest rise.
+    """
     f, l = _common(series, a, b, True), _common(series, a, b, False)
     if f is None or f == l:
         return ""
@@ -387,8 +391,15 @@ def overview(labels, series, a, b, show, group_breaks=None):
         text = re.sub(r"<[^>]+>", "", show(si, i)).replace(",", "").replace("£", "")
         m = re.search(r"-?\d+(?:\.\d+)?", text)
         return float(m.group(0)) if m else series[si][1][i]
-    moved = [(round(shown(si, l) - shown(si, f), 6), si) for si, (_, vals) in enumerate(series)
-             if si not in crossed and vals[f] is not None and vals[l] is not None]
+    def raw_change(si):
+        """Unrounded change over the stretch: a per cent change when pct, else the difference of the figures shown."""
+        vals = series[si][1]
+        if pct:
+            return 100 * (vals[l] / vals[f] - 1)
+        return shown(si, l) - shown(si, f)
+
+    moved = [(round(raw_change(si), 0 if pct else 6), si) for si, (_, vals) in enumerate(series)
+             if si not in crossed and vals[f] is not None and vals[l] is not None and (not pct or vals[f] != 0)]
     if len(moved) < 2:
         return ""
     n = len(moved)
@@ -410,9 +421,9 @@ def overview(labels, series, a, b, show, group_breaks=None):
         best = max(ms) if word == "rise" else min(ms)
         tied = [m for m in ms if m[0] == best[0]]
         # Within a tie on the rounded figures, the unrounded data still have an order: put it first and say so.
-        raw = {si: series[si][1][l] - series[si][1][f] for _, si in tied}
+        raw = {si: raw_change(si) for _, si in tied}
         tied.sort(key=lambda m: -abs(raw[m[1]]))
-        names = [f"{series[si][0]} ({show(si, f)} to {show(si, l)})" for _, si in tied]
+        names = [f"{series[si][0]} ({show(si, f)} to {show(si, l)}{f', {m:+.0f}%' if pct else ''})" for m, si in tied]
         if len(names) == 1:
             return f"the largest {word} was {names[0]}"
         text = f"the largest {word}s, equal on the figures shown, were " + ", ".join(names[:-1]) + " and " + names[-1]

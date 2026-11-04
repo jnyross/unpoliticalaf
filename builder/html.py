@@ -930,7 +930,7 @@ def _lower_first(text):
 
 
 def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
-                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None, group_breaks=None):
+                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None, group_breaks=None, pct_change=False):
     """One small line chart per group, so no group is hidden behind a key.
 
     Used instead of line_chart() when more than three groups matter. Every panel
@@ -952,6 +952,8 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     group_breaks: {series index: [(index, text)]} definition changes that affect only
     some groups. Each is drawn in that group's panel only and its group's line breaks
     there; the summary compares that group only from the break on.
+    pct_change: rank the groups' changes in per cent of their earlier figure, not in
+    the difference of the figures (for money in cash or after inflation).
     """
     raw = [(nm, vals, "a") for nm, vals in series]
     heading = _finding(finding, point_labels or labels, series, breaks, split_breaks, None)
@@ -1049,7 +1051,7 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     if summary_note:
         # Read from the last break on, whether or not the line is split there.
         a, b = _stretches(n, breaks, None)[-1]
-        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i), group_breaks=group_breaks)
+        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i), group_breaks=group_breaks, pct=pct_change)
         notes = [f"The amber dashed line in the {esc(series[si][0])} panel before {esc(plabels[i])} marks a change ({esc(_lower_first(t))})."
                  for si, br in sorted(group_breaks.items()) for i, t in br]
         note = f'<p class="small csum-note">{" ".join(notes)}</p>' if notes else ""
