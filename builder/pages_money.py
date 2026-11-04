@@ -85,7 +85,7 @@ def spending_page(facts, d, num, sources):
                     "£ per £100", y, "pesa4", [f"spend.cash.debt_interest.{y}", f"spend.cash.tme.{y}"],
                     f"100 × spend.cash.debt_interest.{y} ÷ spend.cash.tme.{y}")
     body.append(f'''<div class="answer"><p class="lede">In {y} the UK public sector spent {num(f"spend.cash.tme.{y}", "bn")} in total, {num(f"spend.gdp.tme.{y}", "pct")} of GDP.</p>
-<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care. For welfare (social security) over 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.
+<p>Of every £100 spent on services, the largest share, {num(per[top[0]], "per100")}, went on <strong>social protection</strong>: mainly State Pension, other benefits and social care.
 <strong>Health</strong> was next with {num(per[second[0]], "per100")}.</p>
 <p>See it {view_link("as a share of GDP over time", "tme-views", 2)} or <a href="international.html">beside other countries</a>.</p></div>''')
     body.append(f'<h2 id="per100">Out of every £100 spent on services, {y}</h2>')
