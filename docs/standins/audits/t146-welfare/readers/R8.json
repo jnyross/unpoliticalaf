@@ -1,0 +1,26 @@
+{
+  "reader": "R8",
+  "profile": "P4",
+  "site_commit": "badb1ba",
+  "budget": 40,
+  "welfare_actions": 37,
+  "welfare_without_site": {
+    "J12.1": "E", "J12.2": "E", "J12.3": "E", "J12.4": "E", "J12.5": "E", "J12.8": "E", "J12.9": "E",
+    "J11.1": "E", "J11.2": "E", "J11.3": "E", "J11.4": "E", "J11.5": "E", "J11.9": "E", "J11.10": "E", "J11.11": "E",
+    "J10.1": "E", "J10.2": "E", "J10.3": "E", "J10.4": "E", "J10.5": "E", "J10.6": "E", "J10.7": "E"
+  },
+  "welfare_with_site": {
+    "J12.1": "E", "J12.2": "E", "J12.3": "B", "J12.4": "B", "J12.5": "A", "J12.8": "E", "J12.9": "E",
+    "J11.1": "D", "J11.2": "B", "J11.3": "C", "J11.4": "B", "J11.5": "E", "J11.9": "E", "J11.10": "B", "J11.11": "E",
+    "J10.1": "B", "J10.2": "C", "J10.3": "C", "J10.4": "B", "J10.5": "A", "J10.6": "C", "J10.7": "C"
+  },
+  "confusions": [
+    "The housing page was very long and I lost my place when scrolling, so I missed the line about people aged 75 and over, which I needed for the home ownership question.",
+    "I could not find the age split for people working (25 to 34 and 18 to 24) on the Work page, which only gave the figure for everyone aged 16 to 64.",
+    "I could not find the state pension age or university tuition fee figures anywhere I looked, so I stopped and guessed nothing.",
+    "I could not find the mortgage rate figures or the age I first bought a home, and I ran out of taps before I checked the rest of the house prices page.",
+    "The Questions list is very long and the welfare question sits below the taxes and debt ones, so I had to scroll past several screens to find it.",
+    "The housing page said the lines break at 2008-09 and the values either side are not compared, which I did not understand and it made me unsure whether the ownership figures could be compared.",
+    "Scrolling back up did not reliably return me to the part I had just skipped, which made the long pages hard to follow with large text."
+  ]
+}

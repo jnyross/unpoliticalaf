@@ -145,7 +145,12 @@ def _afford_answer(facts, num, d, short=False):
     return (f'<div class="answer"><p>In the year to September {last}, the middle-priced home sold in England and Wales cost {num(f"afford.price.ew.{last}", "pounds")}, '
             f'and the middle full-time employee earned {num(f"afford.earn.ew.{last}", "pounds")} a year before tax. '
             f'So the home cost {num(f"afford.ratio.ew.{last}", "times2")} a year’s earnings, compared with {num(f"afford.ratio.ew.{first}", "times2")} in {first}, the first year measured the same way.{peak_txt} '
-            + ("" if short else f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}.') + '</p></div>')
+            + ("" if short else f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}. '
+               f'Mortgage payments took {num("mortshare.2010", "pct0")} of gross household income in 2010-11 and {num("mortshare.2024", "pct0")} in 2024-25. '
+               f'Owning among people aged 25 to 34 fell from {num("own.25-34.2008", "pct0")} in 2008-09 to {num("own.25-34.2021", "pct0")} in 2021-22; for people aged 75 and over it rose, from {num("own.75+.2008", "pct0")} to {num("own.75+.2021", "pct0")}. '
+               f'A 10% deposit on the middle-priced home is {num(f"afford.deposit.ew.{last}", "dp2")} years of median full-time pay before tax. '
+               f'After inflation, the average mortgage payment for owners with a mortgage in England rose by about {round(100 * (_v(facts, "house.real.mortpay.2024") / _v(facts, "house.real.mortpay.2008") - 1))}% from 2008-09 to 2024-25. '
+               f'Mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer would pay each week.') + '</p></div>')
 
 
 def afford_block(facts, num, d):
