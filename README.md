@@ -50,6 +50,22 @@ in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
 
+### Agent guidance validation
+
+Run `python3 scripts/check_agents.py` without installing dependencies. The
+`AGENTS.md freshness` workflow runs it on every pull request and push to `main`,
+including code-only changes that could remove or rename a documented path.
+It checks root `AGENTS.md` literal repository paths in backticks, inline Markdown
+links and link definitions, reports broken references with line numbers, and
+rejects paths that escape the checkout. External URLs and absolute operator
+paths are not fetched or checked. Link fragments, prose and command execution
+are outside this check's scope.
+
+This check does not modify protected instructions or certify acceptance-policy
+alignment. The v1 target paragraph still awaits the supported operator route in
+[issue #56](https://github.com/jnyross/unpoliticalaf/issues/56); the current
+product target is defined in `docs/product-spec.md`.
+
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
 locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
