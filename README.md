@@ -56,6 +56,11 @@ locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 
+The same check exports HTTP latency, response sizes, failures and its outcome as
+Prometheus metrics in `.metrics/live.prom`. The live workflow retains this file
+for 14 days, including failed checks. See [Metrics](docs/metrics.md) for collection,
+queries and limitations. Nothing is added to the public site or visitors' browsers.
+
 The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `claude/` branch once every check on its latest commit has passed. It runs when
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
