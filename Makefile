@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-dev setup-quality complexity build site check test verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -9,9 +9,18 @@ setup:
 	$(PYTHON) -m venv .venv
 	$(RUN_PYTHON) -m pip install -q -r requirements.txt
 
-# Adds the browser accessibility tools used by `make a11y`.
+# Adds the accessibility and code quality tools.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+
+# Complexity checks do not need the production or browser dependencies.
+setup-quality:
+	$(PYTHON) -m venv .venv
+	$(RUN_PYTHON) -m pip install -q -r requirements-quality.txt
+
+complexity:
+	$(RUN_PYTHON) -m unittest discover -s tests/quality -v
+	$(RUN_PYTHON) scripts/check_complexity.py
 
 build: site
 

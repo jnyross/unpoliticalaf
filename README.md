@@ -42,6 +42,7 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-quality && make complexity  # enforce Python cyclomatic complexity
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -49,6 +50,24 @@ Vercel: install `make setup`, build `make build`, output directory `site`, all s
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+### Complexity gate
+
+The `complexity` CI job uses pinned Radon to analyze every Python file in
+`builder/`, `scripts/` and `tests/`, including methods, async functions and nested
+functions. New functions must have cyclomatic complexity **20 or lower**
+(Radon A–C). Production setup and `make verify` do not require quality tools;
+run `make setup-quality && make complexity` locally, or use `make setup-dev`.
+
+`complexity-baseline.json` records the 52 existing functions above 20 at adoption
+(base commit `b8e6ab5`).
+These are measured on every run, not excluded: an increase fails CI, as does
+any new over-limit function. The gate prints the remaining debt. If a function
+gets simpler, lower its recorded ceiling to the measured value, or remove its
+entry once it reaches 20. Deleted or renamed entries also fail until removed.
+Do not raise ceilings or add entries to accommodate new complexity; split the
+logic into focused helpers instead. There is intentionally no baseline-update
+command. Changes to the baseline need the same review as source changes.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
