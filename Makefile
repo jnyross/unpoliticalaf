@@ -26,6 +26,7 @@ test:
 	$(RUN_PYTHON) -m unittest discover -s tests -v
 
 typecheck:
+	$(RUN_PYTHON) -m compileall -q -f builder scripts tests
 	$(RUN_PYTHON) -m mypy --config-file mypy.ini
 
 verify: build check test

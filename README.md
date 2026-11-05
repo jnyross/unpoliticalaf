@@ -47,6 +47,8 @@ make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
 `mypy.ini` checks `builder/`, `scripts/` and `tests/` using Python 3.10 rules.
+`make typecheck` first compiles every Python file with the active interpreter,
+even with warm caches, so cached mypy results cannot hide incompatible syntax.
 The source-format readers, tax-rate calculations, CSV exports and build-version
 helpers are strictly typed: every function's arguments, return value and body
 are checked. The remaining modules use gradual typing; unannotated function

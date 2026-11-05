@@ -1190,7 +1190,8 @@ def _schools(facts, d, num, sources):
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
               f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST_YEAR["schools"]} the figures were {num(f"school.primary.{FIRST_YEAR['schools']}", "dp1")} and {num(f"school.secondary.{FIRST_YEAR['schools']}", "dp1")}.{latest}</p>'
+    first = FIRST_YEAR["schools"]
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
               f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
