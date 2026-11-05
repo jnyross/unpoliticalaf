@@ -42,6 +42,7 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-architecture && make architecture  # import boundaries + regression tests
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -83,6 +84,31 @@ This is separate from the site's deployments from `main`.
 Official data files live in `data/raw/`, `data/payers/raw/`, `data/life/sources/`
 and `data/fetched/`. If any file changes without its recorded hash being updated,
 the build stops.
+
+### Enforced module boundaries
+
+`.importlinter` checks direct and indirect imports in `builder/` and `scripts/`.
+The `architecture` CI job runs these contracts and regression tests on every PR
+and push to `main`, separately from `make verify`:
+
+- `builder` cannot depend on operational `scripts`.
+- No builder module can import the build entry point or the independent checker.
+- `builder.check` and `scripts.accuracy_check` cannot import fact producers,
+  pages, or new builder modules. The checker has four explicit shared APIs:
+  formatting (`html`), quote verification (`explain`), source metadata (`sources`)
+  and the ODS decoder (`readers`). The independent accuracy audit shares none.
+- Reusable readers, source metadata, rates, versioning, findings, downloads,
+  HTML helpers and quote helpers can only use the downward imports listed in
+  the configuration, never facts, pages or orchestration.
+
+New builder modules are covered by wildcard rules automatically. The shared
+API lists preserve existing reuse without allowing validation to import the
+answers it is meant to check. Unused allow-list entries fail the check.
+`architecture_tests/` injects forbidden imports into temporary package copies,
+including function-local and indirect imports, to prove the rules reject them.
+It needs the architecture dependencies, unlike the production-only unit suite.
+When a boundary fails, move shared code down to a suitable helper or pass data
+from the caller; do not add a broad ignore rule.
 
 ## Updating the data
 
