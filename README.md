@@ -154,6 +154,14 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
 
+## Code quality metrics
+
+The [quality dashboard](quality/README.md) reports Python line and branch
+coverage, function complexity and per-file maintainability on every pull
+request and push to `main`. The **Code quality metrics** Actions run has a
+summary table and a downloadable offline dashboard with detailed coverage.
+Run it locally with `make -f quality/Makefile setup metrics`.
+
 ## Release notes
 
 Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
