@@ -61,6 +61,15 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
 
+## Automated PR reviews
+
+Pull requests receive diff-scoped Python correctness and security reviews from
+Ruff and Bandit, with actionable inline findings and an explicit coverage summary.
+No paid service or review-service secret is required. These static reviews do not
+approve PRs or replace independent review and the existing checks.
+See [docs/automated-pr-review.md](docs/automated-pr-review.md) for scope, security,
+validation and rollout.
+
 ## Release notes
 
 Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
