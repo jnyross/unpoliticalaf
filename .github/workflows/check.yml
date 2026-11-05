@@ -9,8 +9,18 @@ permissions:
   contents: read
 
 jobs:
-  check:
+  flag_configurations:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - rollout: defaults
+            flags: '{}'
+          - rollout: static-fallbacks
+            flags: '{"chart_interactions":false,"sticky_navigation":false}'
+    name: Build and check (${{ matrix.rollout }})
+    env:
+      UNPOLITICAL_FEATURE_FLAGS: ${{ matrix.flags }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -18,6 +28,17 @@ jobs:
           python-version: "3.12"
       - run: make setup
       - run: make verify
+
+  # Keep the check-run name consumed by auto-merge.yml and branch protection.
+  check:
+    runs-on: ubuntu-latest
+    needs: flag_configurations
+    if: always()
+    steps:
+      - name: Require every flag configuration to pass
+        env:
+          RESULT: ${{ needs.flag_configurations.result }}
+        run: test "$RESULT" = success
 
   accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
