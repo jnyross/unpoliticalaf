@@ -45,6 +45,28 @@ make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
+### Duplicate code
+
+With Node.js 22 or later, run `npm ci --ignore-scripts`, then
+`npm run check:duplicates`. The pinned jscpd check scans all Python in `builder/`,
+`scripts/` and `tests/`, including the large source-reader and validation modules.
+It ignores comments and whitespace and reports matching blocks of at least five
+lines and 50 tokens, both within a file and across files.
+
+The check fails above **0.5% duplicated lines**. The initial full scan measured
+0.30% (nine matches across 72 files), leaving a small budget for existing
+duplication without refactoring the deliberately independent source checks.
+Generated `site/` pages, official data and the pinned `reference/` tree are not
+maintained Python source and are outside the scan. No maintained Python files or
+individual code blocks are excluded.
+
+The `Duplicate code` CI job runs on every pull request and push to `main`. It
+prints file and line references and saves `reports/duplication/jscpd-report.json`
+as an artifact even when the check fails. Review the matches and reuse shared
+logic where appropriate, rather than raising the limit or hiding matches.
+Keep the financial source checks independent. Node is only needed for this
+development check; the Python build and Vercel setup are unchanged.
+
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
