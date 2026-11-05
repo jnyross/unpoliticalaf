@@ -37,7 +37,8 @@ so the core answers and comparisons work without JavaScript.
 Python 3.10 or later.
 
 ```
-make setup     # create .venv and install openpyxl
+make setup     # create .venv and install production build dependencies
+make setup-test # add pytest and build dependencies, without browser tools
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
@@ -66,10 +67,45 @@ To preview the generated site, run
 and open the forwarded port 8000. Stop the preview with Ctrl+C. After changing the
 container configuration or dependency files, rebuild the container to rerun setup.
 
+### Local unit tests
+
+From a fresh checkout, run `make setup-test && make build && make test`.
+Build first because some tests read the generated pages and data in `site/`.
+Setup needs network access to install the pinned dependencies into `.venv`;
+it does not change your system Python. The tests use `unittest`, and pytest
+can collect the same tests without running them:
+
+```sh
+.venv/bin/python -m pytest --collect-only tests/test_household_shares.py
+```
+
+Use `.venv/bin/python`, not an unconfigured system `python3`, for pytest commands.
+Alternatively, activate the environment with `. .venv/bin/activate` before
+running `python -m pytest --collect-only tests/test_household_shares.py`.
+`make setup-dev` includes the test dependencies as well as the optional browser
+tools. Production deployments still use `make setup`, without either set of tools.
+CI checks the lightweight test setup, bounded pytest collection and `make verify`.
+
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+### Agent guidance validation
+
+Run `python3 scripts/check_agents.py` without installing dependencies. The
+`AGENTS.md freshness` workflow runs it on every pull request and push to `main`,
+including code-only changes that could remove or rename a documented path.
+It checks root `AGENTS.md` literal repository paths in backticks, inline Markdown
+links and link definitions, reports broken references with line numbers, and
+rejects paths that escape the checkout. External URLs and absolute operator
+paths are not fetched or checked. Link fragments, prose and command execution
+are outside this check's scope.
+
+This check does not modify protected instructions or certify acceptance-policy
+alignment. The v1 target paragraph still awaits the supported operator route in
+[issue #56](https://github.com/jnyross/unpoliticalaf/issues/56); the current
+product target is defined in `docs/product-spec.md`.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
@@ -81,6 +117,14 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `claude/` branch once every check on its latest commit has passed. It runs when
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
+
+## Release notes
+
+Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
+with generated notes, contributor credits and a full comparison link. Pull
+requests are grouped by optional labels; unlabelled contributions are included.
+See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
+This is separate from the site's deployments from `main`.
 
 ## How it is built
 
