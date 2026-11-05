@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DIR = ROOT / "docs/accuracy-check"
 spec = importlib.util.spec_from_file_location("accuracy_check", ROOT / "scripts/accuracy_check.py")
+assert spec is not None and spec.loader is not None
 ac = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ac)
 

@@ -42,8 +42,21 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-dev && make typecheck  # Python static type checks (also npm run typecheck)
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+`mypy.ini` checks `builder/`, `scripts/` and `tests/` using Python 3.10 rules.
+`make typecheck` first compiles every Python file with the active interpreter,
+even with warm caches, so cached mypy results cannot hide incompatible syntax.
+The source-format readers, tax-rate calculations, CSV exports and build-version
+helpers are strictly typed: every function's arguments, return value and body
+are checked. The remaining modules use gradual typing; unannotated function
+bodies there are not yet fully checked. Add annotations as those modules change
+and extend the strict module list as they become fully typed.
+CI runs `make typecheck` on Python 3.10 and 3.12 for every pull request and push
+to `main`. Type-checking tools and library stubs are development dependencies
+only; the production `make setup` and `make verify` commands stay unchanged.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,

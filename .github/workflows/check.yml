@@ -19,6 +19,19 @@ jobs:
       - run: make setup
       - run: make verify
 
+  typecheck:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: make setup-dev
+      - run: make typecheck
+
   accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
     runs-on: ubuntu-24.04

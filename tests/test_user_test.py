@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("user_test", ROOT / "scripts" / "user_test.py")
+assert spec is not None and spec.loader is not None
 ut = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ut)
 
