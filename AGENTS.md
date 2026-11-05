@@ -37,6 +37,61 @@ they do not push, change policy, access credentials or operate deployment tools.
 - Keep secrets, private factory state, agent notes and runtime bindings out of Git.
   Keep this repository private until John explicitly approves public source release.
 
+## Source naming conventions
+
+These rules apply to new and changed first-party source in `builder/`, `scripts/`
+and `tests/`, including the HTML, CSS and JavaScript embedded in Python strings.
+Reviewers must request corrections for naming that departs from these rules,
+unless an exception below applies. Do not rename unrelated existing code merely
+to apply this agreement.
+
+### Python
+
+| Kind | Convention | Repository example |
+| --- | --- | --- |
+| Modules and scripts | Lowercase `snake_case` with a .py extension | `builder/data_top_earners.py`, `scripts/check_live.py` |
+| Functions, methods, parameters and variables | Lowercase `snake_case` | `find_row`, `get_value`, `used_counts` |
+| Classes, including dataclasses and test classes | `CapWords` | `Fact`, `Facts`, `Formatting` |
+| Module-level constants and fixed lookup tables | `UPPER_SNAKE_CASE` | `EARLY_YEARS`, `MAX_PAGE_BYTES` |
+| Internal helpers | One leading underscore plus `snake_case` | `_cell_col` |
+| Unit test files and methods | `test_<subject>` with a .py extension; `test_<behaviour>` methods | `tests/test_builder.py`, `test_missing_figure_is_not_zero` |
+
+- Use `self` for instance methods and `cls` for class methods. Keep required
+  Python special methods such as `__init__` unchanged.
+- Write acronyms in lowercase inside functions and modules (`gdp`, `data_nato`),
+  rather than introducing mixed forms such as `readGDP`.
+- Use descriptive domain names. Short loop indices and established local names
+  such as `wb` and `ws` are fine in a small scope; avoid opaque names in new APIs.
+  Distinguish amounts, shares and units in names where confusion is possible
+  (for example, `tax_bn` versus `tax_share_pct`).
+
+### Embedded web code
+
+- Use `camelCase` for JavaScript functions and local variables, and
+  `UPPER_SNAKE_CASE` for fixed shared constants. Preserve browser API spellings
+  such as `getElementById` and `scrollIntoView`.
+- Use lowercase, hyphen-separated words for new multiword CSS classes, HTML IDs,
+  `data-*` attributes and public page slugs, as in the class `pick-status`,
+  attribute `data-fact` and page stem `who-pays`. Keep their Python string
+  producers, CSS selectors, JavaScript consumers and tests in sync.
+
+### Stable names and review checks
+
+- Preserve publisher filenames, worksheet labels, official series codes and
+  upstream schemas exactly. Do not rename retained data or anything in
+  `reference/un-political/` to match source-code style.
+- Treat existing fact IDs, source IDs, JSON keys, download names, URLs and
+  fragment IDs as compatibility contracts, not ordinary Python identifiers.
+  Follow the adjacent registry's pattern for new entries. Any necessary rename
+  must update all producers, consumers, provenance references and tests together,
+  and preserve existing public links.
+- Explain any new externally required naming exception in a nearby comment or
+  docstring. Independent review must check both identifier spelling and all
+  references affected by a rename. Run `make test` for source changes and
+  `make verify` when names affect generated pages or data. These checks catch
+  broken references; naming style itself is enforced through review, not a
+  naming linter.
+
 ## Sources and completion
 
 `docs/product-spec.md` owns requirements; GitHub owns the live backlog. Reference
