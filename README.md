@@ -56,11 +56,25 @@ locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 
-## Automated releases
+The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
+`claude/` branch once every check on its latest commit has passed. It runs when
+`Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
+title starting with WIP keeps a PR open.
 
-After `Live site matches main` succeeds for `main`, `Release verified site`
-checks out that exact commit, runs `make verify`, and publishes a GitHub Release
-tagged `site-<full commit SHA>`. Each release contains:
+## Release notes
+
+Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
+with generated notes, contributor credits and a full comparison link. Pull
+requests are grouped by optional labels; unlabelled contributions are included.
+See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
+This is separate from the site's deployments from `main`.
+
+## Automated deployment archives
+
+After `Verify and record production deployment` (or the legacy
+`Live site matches main` entry point) succeeds for this repository's `main`,
+`Release verified site` checks out that exact commit, runs `make verify`, and
+publishes a GitHub Release tagged `site-<full commit SHA>`. Each release contains:
 
 - `site.tar.gz`: the complete static site, including its build record.
 - `build.json`: the commit and every served file's SHA-256, also available separately.
@@ -75,32 +89,21 @@ Vercel remains the only deployment path. No Vercel token or extra deployment is
 needed. The release workflow uses only GitHub's built-in token, with write access
 limited to its release job. Failed or cancelled live checks and non-main runs
 cannot publish a release. This also covers auto-merge's explicit live-check
-dispatch, not just ordinary pushes.
+dispatch, not just ordinary pushes. Both entry points serialize releases by SHA,
+so a legacy dispatch and a routine deployment cannot publish duplicate releases.
 
 Assets upload to a draft before publication. Rerunning a failed release job
 resumes its draft; an already published release stays unchanged. The daily live
 check also retries a missing release. Releases are commit-addressed archives,
 not a rolling “latest” release, and do not redeploy or roll back production.
+Version tags (`v...`) remain owned by `Publish release notes`. Site archives never
+claim latest or become the comparison boundary for version notes. See
+[docs/releases.md](docs/releases.md) for the two release families.
 To reproduce packaging locally after `make verify`:
 
 ```sh
 .venv/bin/python scripts/package_release.py --commit "$(git rev-parse HEAD)" --output /tmp/unpoliticalaf-release
 ```
-
-## Pull request automation
-
-The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
-`claude/` branch once every check on its latest commit has passed. It runs when
-`Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
-title starting with WIP keeps a PR open.
-
-## Release notes
-
-Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
-with generated notes, contributor credits and a full comparison link. Pull
-requests are grouped by optional labels; unlabelled contributions are included.
-See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
-This is separate from the site's deployments from `main`.
 
 ## How it is built
 

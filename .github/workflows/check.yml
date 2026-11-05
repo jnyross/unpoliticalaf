@@ -9,6 +9,17 @@ permissions:
   contents: read
 
 jobs:
+  release-integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/release_notes.test.cjs tests/release_workflows.test.cjs
+
   check:
     runs-on: ubuntu-latest
     steps:

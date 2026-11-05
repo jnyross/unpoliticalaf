@@ -2,9 +2,33 @@
 
 The **Publish release notes** workflow creates a GitHub release whenever a tag
 matching `v[0-9]*` is pushed. GitHub generates the notes from merged pull requests,
-including contributor credits and a full comparison link. It uses the previous
-release as the starting point; the first release covers the available history.
+including contributor credits and a full comparison link. It explicitly selects
+the most recently created published version release in the tag's ancestry as the
+starting point, ignoring `site-<sha>` archives and drafts. Stable versions also
+ignore prereleases. The first version lists merged `main` PRs across the tag's
+full history, with contributor credits and a history link, even if site archives
+already exist. This initial list is ungrouped; subsequent version notes use the
+categories below.
 No Conventional Commit format, npm publication or extra service token is needed.
+
+## Deployment archives and version checkpoints
+
+There are two disjoint release families:
+
+| Tag | Trigger and owner | Meaning |
+| --- | --- | --- |
+| `site-<full SHA>` | Successful main verification, `Release verified site` | Byte-verified deployed snapshot with static archive and checksums; never marked latest |
+| `v[0-9]*` | Explicit version-tag push, `Publish release notes` | Deliberate version checkpoint with release notes |
+
+The site workflow accepts both `Verify and record production deployment`
+(`deploy.yml`, the routine entry point after the deployment-recording change) and
+`Live site matches main` (`live.yml`, retained for legacy dispatches).
+Only successful, same-repository `main` push/schedule/manual runs may publish.
+Both names share a per-SHA concurrency key and the same `site-<sha>` tag:
+rechecks or compatibility dispatches reuse a draft or leave a published archive
+unchanged. They do not create version tags, publish version notes or redeploy.
+Version publishing never modifies site archives, and explicitly choosing its
+version-only history boundary prevents frequent snapshots from truncating notes.
 
 ## Publish a release
 
