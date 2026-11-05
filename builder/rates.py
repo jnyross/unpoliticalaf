@@ -5,22 +5,62 @@ expected wording is not found, so a changed page cannot silently change it.
 """
 import html
 import re
+from collections.abc import Mapping
+from typing import TypedDict
 
 from .readers import ROOT
 
 
-def _text(path):
+class EmployeeIllustration(TypedDict):
+    salary: float
+    allowance: int
+    income_tax: float
+    ni_lower: str
+    ni_upper: str
+    ni: float
+    ni_rate: float
+    basic_rate: float
+    total: float
+    average_rate: float
+    marginal: float
+
+
+class SelfEmployedIllustration(TypedDict):
+    profit: float
+    allowance: int
+    income_tax: float
+    class4: float
+    class4_rate: float
+    class4_lower: str
+    class4_upper: str
+    basic_rate: float
+    total: float
+    average_rate: float
+    marginal: float
+    retrieved: str
+
+
+class Rates(TypedDict):
+    year: str
+    basic: str
+    allowance: str
+    retrieved: str
+    illustration: EmployeeIllustration
+    self_employed: SelfEmployedIllustration
+
+
+def _text(path: str) -> str:
     t = (ROOT / path).read_text(encoding="utf-8")
     t = re.sub(r"<script.*?</script>|<style.*?</style>", "", t, flags=re.S)
     t = html.unescape(re.sub(r"<[^>]+>", " ", t))
     return re.sub(r"\s+", " ", t)
 
 
-def _money(s):
+def _money(s: str) -> float:
     return float(s.replace(",", ""))
 
 
-def read_rates(sources, salary=30000):
+def read_rates(sources: Mapping[str, Mapping[str, str]], salary: float = 30000) -> Rates:
     it = _text("data/fetched/gov/income-tax-rates.html")
     ni = _text("data/fetched/gov/national-insurance-rates.html")
     year = re.search(r"The current tax year is from 6 April (\d{4}) to 5 April (\d{4})", it)
@@ -58,7 +98,13 @@ def read_rates(sources, salary=30000):
     )
 
 
-def _self_employed(sources, year_text, allowance, basic_rate, profit):
+def _self_employed(
+    sources: Mapping[str, Mapping[str, str]],
+    year_text: str,
+    allowance: float,
+    basic_rate: float,
+    profit: float,
+) -> SelfEmployedIllustration:
     """Income Tax and Class 4 National Insurance on one made-up self-employed profit.
 
     Class 4 rates and profit limits come from the GOV.UK self-employed page; Income Tax
