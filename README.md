@@ -149,6 +149,12 @@ requests are grouped by optional labels; unlabelled contributions are included.
 See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
 This is separate from the site's deployments from `main`.
 
+## Contributing
+
+Follow the [working agreement and source naming conventions](AGENTS.md#source-naming-conventions)
+for Python, tests and embedded web code, including the rules for stable data IDs
+and official source filenames.
+
 ## How it is built
 
 See [Service architecture and dependencies](docs/architecture.md) for the
