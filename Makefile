@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-dev setup-architecture architecture build site check test verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -9,9 +9,17 @@ setup:
 	$(PYTHON) -m venv .venv
 	$(RUN_PYTHON) -m pip install -q -r requirements.txt
 
-# Adds the browser accessibility tools used by `make a11y`.
+# Adds architecture and browser accessibility tools.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+
+# Lightweight alternative to setup-dev when no browser checks are needed.
+setup-architecture: setup
+	$(RUN_PYTHON) -m pip install -q -r requirements-architecture.txt
+
+architecture:
+	.venv/bin/lint-imports --no-cache
+	$(RUN_PYTHON) -m unittest discover -s architecture_tests -v
 
 build: site
 

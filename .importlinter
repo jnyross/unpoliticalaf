@@ -1,0 +1,71 @@
+[importlinter]
+root_packages =
+    builder
+    scripts
+
+[importlinter:contract:application-not-scripts]
+name = Builder must not depend on operational scripts
+type = forbidden
+source_modules = builder
+forbidden_modules = scripts
+
+[importlinter:contract:build-entrypoint]
+name = Build orchestration is not a library
+type = forbidden
+source_modules =
+    builder
+    builder.**
+forbidden_modules = builder.build
+as_packages = False
+
+[importlinter:contract:producer-not-checker]
+name = Production modules must not depend on the checker
+type = forbidden
+source_modules =
+    builder
+    builder.**
+forbidden_modules = builder.check
+as_packages = False
+
+[importlinter:contract:independent-checkers]
+name = Checkers must remain independent of producers
+type = forbidden
+source_modules =
+    builder.check
+    scripts.accuracy_check
+forbidden_modules = builder.**
+as_packages = False
+# The checker shares formatting, quote verification, the source registry and
+# the ODS decoder, but must re-read/recalculate facts rather than import them.
+# These are explicit shared APIs, not exceptions for producer dependencies.
+ignore_imports =
+    builder.check -> builder.html
+    builder.check -> builder.explain
+    builder.check -> builder.sources
+    builder.check -> builder.readers
+
+[importlinter:contract:reusable-foundations]
+name = Shared helpers must stay below facts and pages
+type = forbidden
+source_modules =
+    builder.readers
+    builder.sources
+    builder.rates
+    builder.version
+    builder.findings
+    builder.downloads
+    builder.html
+    builder.explain
+forbidden_modules = builder.**
+as_packages = False
+# Allowed downward edges. Unmatched entries are errors, so stale permissions
+# must be removed when an import disappears. All other builder imports fail.
+ignore_imports =
+    builder.sources -> builder.readers
+    builder.rates -> builder.readers
+    builder.version -> builder.readers
+    builder.html -> builder.version
+    builder.html -> builder.downloads
+    builder.html -> builder.findings
+    builder.explain -> builder.html
+    builder.explain -> builder.readers

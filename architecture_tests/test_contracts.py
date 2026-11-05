@@ -1,0 +1,110 @@
+"""Exercise the real import contracts in isolated copies, never the checkout."""
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import unittest
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class ImportContracts(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        for package in ("builder", "scripts"):
+            shutil.copytree(
+                ROOT / package, self.root / package,
+                ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+            )
+        shutil.copy2(ROOT / ".importlinter", self.root / ".importlinter")
+
+    def add_import(self, module, statement):
+        path = self.root / (module.replace(".", "/") + ".py")
+        with path.open("a", encoding="utf-8") as stream:
+            stream.write("\n" + statement + "\n")
+
+    def lint(self):
+        return subprocess.run(
+            [str(Path(sys.executable).with_name("lint-imports")), "--no-cache"],
+            cwd=self.root,
+            env={**os.environ, "PYTHONPATH": str(self.root), "NO_COLOR": "1"},
+            text=True, capture_output=True, timeout=30,
+        )
+
+    def assert_broken(self, contract):
+        result = self.lint()
+        output = result.stdout + result.stderr
+        self.assertEqual(result.returncode, 1, output)
+        self.assertIn(contract + " BROKEN", output)
+
+    def test_current_architecture_passes(self):
+        result = self.lint()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Contracts: 5 kept, 0 broken.", result.stdout)
+
+    def test_builder_cannot_import_scripts(self):
+        self.add_import("builder.pages_home", "import scripts.user_test")
+        self.assert_broken("Builder must not depend on operational scripts")
+
+    def test_page_cannot_import_build_orchestration(self):
+        self.add_import("builder.pages_home", "from . import build")
+        self.assert_broken("Build orchestration is not a library")
+
+    def test_producer_cannot_import_checker_even_inside_a_function(self):
+        self.add_import(
+            "builder.data", "def architecture_probe():\n    from . import check",
+        )
+        self.assert_broken("Production modules must not depend on the checker")
+
+    def add_nested_import(self, statement):
+        package = self.root / "builder" / "feature"
+        package.mkdir()
+        (package / "__init__.py").write_text('"""Feature fixture."""\n')
+        self.add_import("builder.feature.worker", statement)
+
+    def test_nested_module_cannot_import_build_orchestration(self):
+        self.add_nested_import("from .. import build")
+        self.assert_broken("Build orchestration is not a library")
+
+    def test_nested_module_cannot_import_checker(self):
+        self.add_nested_import("import builder.check")
+        self.assert_broken("Production modules must not depend on the checker")
+
+    def test_package_initializer_cannot_import_build_orchestration(self):
+        self.add_import("builder.__init__", "from . import build")
+        self.assert_broken("Build orchestration is not a library")
+
+    def test_package_initializer_cannot_import_checker(self):
+        self.add_import("builder.__init__", "from . import check")
+        self.assert_broken("Production modules must not depend on the checker")
+
+    def test_checker_cannot_reuse_fact_producer(self):
+        self.add_import("builder.check", "from builder.data import build_all")
+        self.assert_broken("Checkers must remain independent of producers")
+
+    def test_accuracy_audit_cannot_reuse_page_producer(self):
+        self.add_import("scripts.accuracy_check", "import builder.pages_money")
+        self.assert_broken("Checkers must remain independent of producers")
+
+    def test_shared_helper_cannot_import_pages(self):
+        self.add_import("builder.html", "from . import pages_home")
+        self.assert_broken("Shared helpers must stay below facts and pages")
+
+    def test_indirect_checker_dependency_is_rejected(self):
+        self.add_import("builder.check", "from . import architecture_bridge")
+        self.add_import("builder.architecture_bridge", "from . import data")
+        self.assert_broken("Checkers must remain independent of producers")
+
+    def test_new_modules_cannot_bypass_foundation_boundary(self):
+        self.add_import("builder.findings", "from . import new_feature")
+        self.add_import("builder.new_feature", "VALUE = 1")
+        self.assert_broken("Shared helpers must stay below facts and pages")
+
+
+if __name__ == "__main__":
+    unittest.main()
