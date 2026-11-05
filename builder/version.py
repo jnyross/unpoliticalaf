@@ -1,4 +1,5 @@
 """Which commit a build came from, so the live site can be matched to the code."""
+
 import functools
 import os
 import subprocess
@@ -15,8 +16,9 @@ def commit():
     sha = os.environ.get("VERCEL_GIT_COMMIT_SHA", "").strip()
     if not sha:
         try:
-            sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True,
-                                 text=True, check=True).stdout.strip()
+            sha = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True
+            ).stdout.strip()
         except (OSError, subprocess.CalledProcessError):
             sha = ""
     return sha or "unknown"

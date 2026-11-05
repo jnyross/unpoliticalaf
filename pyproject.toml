@@ -1,0 +1,8 @@
+[tool.black]
+required-version = "25.9.0"
+line-length = 100
+target-version = ["py310"]
+# Retained source snapshots and generated output are not maintained Python code.
+extend-exclude = '''
+/(reference|data|site|\.factory)/
+'''

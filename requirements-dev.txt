@@ -1,3 +1,4 @@
 -r requirements.txt
+black==25.9.0
 axe-playwright-python==0.1.7
 playwright==1.56.0

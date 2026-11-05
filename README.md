@@ -42,8 +42,16 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-dev # install the pinned formatter and accessibility tools
+make format    # apply Black to builder/, scripts/ and tests/
+make format-check # check formatting without changing files (also runs in CI)
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+Black's Python 3.10 target and 100-character line length are configured in
+`pyproject.toml`. Run `make format` before committing Python changes. Formatting
+does not touch official data, the pinned `reference/` snapshot or generated
+`site/` output. Production `make setup` does not install development tools.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,

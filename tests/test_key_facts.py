@@ -1,4 +1,5 @@
 """Facts readers look for sit in the answer box at the top of their page (audit 11 gap 6). Run with: make test"""
+
 import re
 import unittest
 from pathlib import Path
@@ -7,7 +8,10 @@ SITE = Path(__file__).resolve().parent.parent / "site"
 # page -> words its answer box must contain, and the section it links to
 KEY_FACTS = {
     "life/schools.html": (["law limits infant classes", "30 pupils"], "#schools-large"),
-    "life/work.html": (["Manufacturing went from", "of all jobs", "women's rate went from"], "#work-industry"),
+    "life/work.html": (
+        ["Manufacturing went from", "of all jobs", "women's rate went from"],
+        "#work-industry",
+    ),
     "life/holidays.html": (["most visited countries for holidays", "Spain"], "#holidays-countries"),
 }
 

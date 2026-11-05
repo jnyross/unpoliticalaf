@@ -5,6 +5,7 @@ so the checker can confirm the text matches the stored fact and its source.
 Charts are plain HTML/CSS or inline SVG drawn at build time, so they work
 without JavaScript, and each one sits next to a complete table.
 """
+
 import json
 import math
 import re
@@ -272,17 +273,21 @@ def toc(body, after_first=False):
     found = re.findall(r'<h2 id=["\']([^"\']+)["\']>(.*?)</h2>', body, flags=re.S)
     if len(found) < 3:
         return body
-    items = "".join(f'<li><a href="#{esc(i)}">{re.sub(r"<[^>]+>", "", t)}</a></li>' for i, t in found)
+    items = "".join(
+        f'<li><a href="#{esc(i)}">{re.sub(r"<[^>]+>", "", t)}</a></li>' for i, t in found
+    )
     # Folded, so on a phone the contents list costs one line rather than a screen.
-    nav = (f'<nav class="toc" aria-label="On this page"><details><summary>On this page: {len(found)} sections</summary>'
-           f'<ol>{items}</ol></details></nav>')
-    m = re.search(r'<!--beforetoc-->(.*?)<!--/beforetoc-->', body, re.S)
+    nav = (
+        f'<nav class="toc" aria-label="On this page"><details><summary>On this page: {len(found)} sections</summary>'
+        f"<ol>{items}</ol></details></nav>"
+    )
+    m = re.search(r"<!--beforetoc-->(.*?)<!--/beforetoc-->", body, re.S)
     if m:
         # Notes a page wants straight after its first section, above the contents.
-        body = body[:m.start()] + body[m.end():]
+        body = body[: m.start()] + body[m.end() :]
         nav = m.group(1) + nav
-    k = list(re.finditer(r'<h2 id=', body))[1 if after_first else 0]
-    return body[:k.start()] + nav + "\n" + body[k.start():]
+    k = list(re.finditer(r"<h2 id=", body))[1 if after_first else 0]
+    return body[: k.start()] + nav + "\n" + body[k.start() :]
 
 
 def before_toc(html):
@@ -304,7 +309,7 @@ def _top_answer(sec):
     if not m:
         return None
     depth, i = 0, m.start()
-    for t in re.finditer(r'<(/?)div\b[^>]*>', sec[m.start():]):
+    for t in re.finditer(r"<(/?)div\b[^>]*>", sec[m.start() :]):
         depth += -1 if t.group(1) else 1
         if depth == 0:
             return m.start(), m.start() + t.end()
@@ -318,7 +323,7 @@ def _contents_hint(html):
         kinds.append("chart")
     if "<table" in html:
         kinds.append("table")
-    if 'class="limit' in html or "class=\"note" in html:
+    if 'class="limit' in html or 'class="note' in html:
         kinds.append("limits")
     if 'class="official' in html or "What official bodies say" in html:
         kinds.append("official words")
@@ -333,7 +338,7 @@ def _contents_hint(html):
 
 _CHART_OPEN = re.compile(r'<(figure)\b[^>]*>|<(ul) class="(?:bars|cmp-list)[^"]*">')
 _CAPTION = re.compile(r'<p class="small">(?:(?!</p>).)*</p>\s*$', re.S)
-_NEST = re.compile(r'<(/?)(details|aside|div|figure|ul|blockquote|table)\b[^>]*>')
+_NEST = re.compile(r"<(/?)(details|aside|div|figure|ul|blockquote|table)\b[^>]*>")
 _DL = re.compile(r'\s*<p class="dl">.*?</p>', re.S)
 KEEP_ROWS = 2  # rows of a comparison list kept in view; the rest fold away
 
@@ -352,7 +357,7 @@ def _first_chart(rest):
             continue
         tag = m.group(1) or m.group(2)
         level = 0
-        for t in re.finditer(rf'<(/?){tag}\b[^>]*>', rest[m.start():]):
+        for t in re.finditer(rf"<(/?){tag}\b[^>]*>", rest[m.start() :]):
             level += -1 if t.group(1) else 1
             if level == 0:
                 start, end = m.start(), m.start() + t.end()
@@ -360,7 +365,9 @@ def _first_chart(rest):
                 if dl:  # the chart's CSV download travels with it
                     end = dl.end()
                 cap = _CAPTION.search(rest[:start])
-                if cap and not re.search(r"<(?:div|ul|details|table|figure|aside)\b", rest[cap.start():start]):
+                if cap and not re.search(
+                    r"<(?:div|ul|details|table|figure|aside)\b", rest[cap.start() : start]
+                ):
                     start = cap.start()
                 return start, end
         return None
@@ -372,11 +379,13 @@ def _split_long_list(chart):
     m = re.match(r'(.*?<ul class="cmp-list">)(.*)(</ul>)(\s*<p class="dl">.*?</p>)?$', chart, re.S)
     if not m:
         return chart, ""
-    rows = re.findall(r'<li>.*?</li>(?=<li>|$)', m.group(2), re.S)
+    rows = re.findall(r"<li>.*?</li>(?=<li>|$)", m.group(2), re.S)
     if len(rows) <= KEEP_ROWS:
         return chart, ""
-    return (m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3) + (m.group(4) or ""),
-            '<ul class="cmp-list cont">' + "".join(rows[KEEP_ROWS:]) + "</ul>")
+    return (
+        m.group(1) + "".join(rows[:KEEP_ROWS]) + m.group(3) + (m.group(4) or ""),
+        '<ul class="cmp-list cont">' + "".join(rows[KEEP_ROWS:]) + "</ul>",
+    )
 
 
 def keep_chart(lead, rest):
@@ -392,12 +401,12 @@ def keep_chart(lead, rest):
     c = _first_chart(rest)
     if not c:
         return lead, rest
-    chart = rest[c[0]:c[1]]
+    chart = rest[c[0] : c[1]]
     shown, more = _split_long_list(chart)
-    return lead + "\n" + shown, rest[:c[0]] + more + rest[c[1]:]
+    return lead + "\n" + shown, rest[: c[0]] + more + rest[c[1] :]
 
 
-_BEFORE_TOC = re.compile(r'<!--beforetoc-->.*?<!--/beforetoc-->', re.S)
+_BEFORE_TOC = re.compile(r"<!--beforetoc-->.*?<!--/beforetoc-->", re.S)
 
 
 def _fold_section(h, sec):
@@ -411,7 +420,7 @@ def _fold_section(h, sec):
         a = _top_answer(sec)
         if not a:
             return head + sec
-        lead, rest = sec[:a[1]], sec[a[1]:]
+        lead, rest = sec[: a[1]], sec[a[1] :]
     lead, rest = keep_chart(lead, rest)
     if not rest.strip():
         return head + lead
@@ -436,10 +445,10 @@ def fold(body):
     heads = list(_H2.finditer(body))
     if not heads:
         return body
-    out = [body[:heads[0].start()]]
+    out = [body[: heads[0].start()]]
     for k, h in enumerate(heads):
         end = heads[k + 1].start() if k + 1 < len(heads) else len(body)
-        sec = body[h.end():end]
+        sec = body[h.end() : end]
         # Notes meant for above the contents list never go inside a fold.
         kept = "".join(_BEFORE_TOC.findall(sec))
         out.append(_fold_section(h, _BEFORE_TOC.sub("", sec)) + kept)
@@ -453,36 +462,66 @@ def hide_chart_marks(body):
     """A chart drawn as an image is read out by its name (and its summary and
     table), so screen readers should not also read its axis labels one by one.
     Some, such as VoiceOver on iOS, otherwise do."""
-    return _SVG_IMG.sub(lambda m: m.group(0) if 'aria-hidden' in m.group(2)[:40]
-                        else f'{m.group(1)}<g aria-hidden="true">{m.group(2)}</g>{m.group(3)}', body)
+    return _SVG_IMG.sub(
+        lambda m: (
+            m.group(0)
+            if "aria-hidden" in m.group(2)[:40]
+            else f'{m.group(1)}<g aria-hidden="true">{m.group(2)}</g>{m.group(3)}'
+        ),
+        body,
+    )
 
 
 # Only pages with the one-year finder carry its rule, so other pages stay the same size.
-YEARFIND_CSS = "details.findyear{margin:0;border:0;padding:0}details.findyear>summary{min-height:44px}"
+YEARFIND_CSS = (
+    "details.findyear{margin:0;border:0;padding:0}details.findyear>summary{min-height:44px}"
+)
 
 
 # Question pages. The first answer box on each gets id="answer", so the Questions page can link
 # straight to it (see builder/pages_questions.py).
-QUESTION_PAGES = {"spending.html", "taxes.html", "who-pays.html", "household-tax.html", "international.html",
-                  "productivity.html", "borrowing.html", "why-debt.html", "defence.html", "high-earners.html",
-                  "leaving-uk.html", "manifesto.html", "immigration.html",
-                  "welfare.html", "life/house-prices.html", "life/generations.html"}
+QUESTION_PAGES = {
+    "spending.html",
+    "taxes.html",
+    "who-pays.html",
+    "household-tax.html",
+    "international.html",
+    "productivity.html",
+    "borrowing.html",
+    "why-debt.html",
+    "defence.html",
+    "high-earners.html",
+    "leaving-uk.html",
+    "manifesto.html",
+    "immigration.html",
+    "welfare.html",
+    "life/house-prices.html",
+    "life/generations.html",
+}
 
 
-def page(path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False):
+def page(
+    path, title, body, description="", scripts="", contents=True, folded=True, toc_after_first=False
+):
     depth = path.count("/")
     up = "../" * depth
     nav = "".join(
         f'<li><a href="{up}{href}"{" aria-current=page" if href == path or (href == "life/index.html" and path.startswith("life/")) or (href == "who-pays.html" and path.startswith("who-pays-")) else ""}>{esc(label)}</a></li>'
-        for href, label in NAV if href != "index.html")
+        for href, label in NAV
+        if href != "index.html"
+    )
     foot = "".join(f'<li><a href="{up}{href}">{esc(label)}</a></li>' for href, label in FOOT_NAV)
     full_title = SITE if path == "index.html" else f"{title} – {SITE}"
-    body = downloads.add_links(body, path) if not path.startswith("figures/") else downloads.strip(body)
+    body = (
+        downloads.add_links(body, path)
+        if not path.startswith("figures/")
+        else downloads.strip(body)
+    )
     if folded:
         body = fold(body)
     if contents:
         body = toc(body, after_first=toc_after_first)
-    body = re.sub(r'<!--/?beforetoc-->', '', body)
+    body = re.sub(r"<!--/?beforetoc-->", "", body)
     body = hide_chart_marks(body)
     if path in QUESTION_PAGES and '<div class="answer">' in body:
         body = body.replace('<div class="answer">', '<div class="answer" id="answer">', 1)
@@ -523,11 +562,15 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
 
 def keyfigs(items):
     """Key figures as large tiles. items: (number html, what it is, wide?)."""
-    lis = "".join(f'<li{" class=wide" if wide else ""}><span class="big">{n}</span><span class="what">{w}</span></li>' for n, w, wide in items)
+    lis = "".join(
+        f'<li{" class=wide" if wide else ""}><span class="big">{n}</span><span class="what">{w}</span></li>'
+        for n, w, wide in items
+    )
     return f'<ul class="keyfigs">{lis}</ul>'
 
 
 # ------------------------------------------------------------------ numbers
+
 
 def _hu(value, places, comma=True, sign=False):
     """A number rounded half away from zero, as people expect: 132.5 shows as 133.
@@ -619,7 +662,9 @@ def source_line(sources, ids, extra="", up=""):
     parts = []
     for sid in ids:
         s = sources[sid]
-        parts.append(f'<a href="{up}figures/{esc(sid)}.html">{esc(s["publisher"])}: {esc(s["title"])}</a>')
+        parts.append(
+            f'<a href="{up}figures/{esc(sid)}.html">{esc(s["publisher"])}: {esc(s["title"])}</a>'
+        )
     if len(parts) <= 2:
         return f'<p class="src">Source: {"; ".join(parts)}.{(" " + extra) if extra else ""}</p>'
     # A long run of links buries the page on a phone: name the publishers, list the tables one tap away.
@@ -629,11 +674,14 @@ def source_line(sources, ids, extra="", up=""):
         if p not in pubs:
             pubs.append(p)
     items = "".join(f"<li>{a}</li>" for a in parts)
-    return (f'<details class="src"><summary>Sources: {esc(", ".join(pubs))} ({len(parts)} tables)</summary>'
-            f'<ul>{items}</ul>{("<p>" + extra + "</p>") if extra else ""}</details>')
+    return (
+        f'<details class="src"><summary>Sources: {esc(", ".join(pubs))} ({len(parts)} tables)</summary>'
+        f'<ul>{items}</ul>{("<p>" + extra + "</p>") if extra else ""}</details>'
+    )
 
 
 # ------------------------------------------------------------------ charts
+
 
 def bars(items, kind, num, maxval=None, caption=""):
     """Horizontal bar list. items: (label, fact_id, style) ; style '' | 'alt' | 'fc'.
@@ -650,8 +698,10 @@ def bars(items, kind, num, maxval=None, caption=""):
             continue
         v = num.facts[fid].value
         w = 0 if v is None else max(0.0, 100 * v / top)
-        lis.append(f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)}</span></div>'
-                   f'<div class="track" aria-hidden="true"><div class="fill {style}" style="width:{w:.1f}%"></div></div></li>')
+        lis.append(
+            f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)}</span></div>'
+            f'<div class="track" aria-hidden="true"><div class="fill {style}" style="width:{w:.1f}%"></div></div></li>'
+        )
     cap = f'<p class="small">{caption}</p>' if caption else ""
     return f'{cap}<ul class="bars">{"".join(lis)}</ul>'
 
@@ -671,9 +721,11 @@ def change_bars(items, kind, num, caption=""):
         w = 0 if v is None else 50 * abs(v) / top
         side = "left:50%" if (v or 0) >= 0 else f"right:50%"
         word = "" if v is None else ("rise" if v > 0 else ("fall" if v < 0 else "no change"))
-        lis.append(f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)} <span class="dir">{word}</span></span></div>'
-                   + (f'<div class="sub">{sub}</div>' if sub else "")
-                   + f'<div class="track ctr" aria-hidden="true"><div class="fill{" neg" if (v or 0) < 0 else ""}" style="{side};width:{w:.1f}%"></div></div></li>')
+        lis.append(
+            f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)} <span class="dir">{word}</span></span></div>'
+            + (f'<div class="sub">{sub}</div>' if sub else "")
+            + f'<div class="track ctr" aria-hidden="true"><div class="fill{" neg" if (v or 0) < 0 else ""}" style="{side};width:{w:.1f}%"></div></div></li>'
+        )
     cap = f'<p class="small">{caption}</p>' if caption else ""
     return f'{cap}<ul class="bars change">{"".join(lis)}</ul>'
 
@@ -690,16 +742,37 @@ def table(caption, head, rows, first_col_header=True):
                 cells.append(f"<td>{c}</td>")
         body.append("<tr>" + "".join(cells) + "</tr>")
     label = re.sub(r"<[^>]+>", "", str(caption))
-    return (f'<div class="tablewrap" tabindex="0" role="region" aria-label="{esc(label)}"><table><caption>{caption}</caption><thead><tr>{th}</tr></thead>'
-            f'<tbody>{"".join(body)}</tbody></table></div>')
+    return (
+        f'<div class="tablewrap" tabindex="0" role="region" aria-label="{esc(label)}"><table><caption>{caption}</caption><thead><tr>{th}</tr></thead>'
+        f'<tbody>{"".join(body)}</tbody></table></div>'
+    )
 
 
 def details_table(summary, caption, head, rows):
     return f"<details><summary>{summary}</summary>{table(caption, head, rows)}</details>"
 
 
-def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None, ymin=None, ymax=None, height=240, desc="", scale=1, split_breaks=False,
-               kind=None, ids=None, num=None, events=(), point_labels=None, future="forecast", finding=None):
+def line_chart(
+    title,
+    labels,
+    series,
+    unit_label,
+    breaks=(),
+    forecast_from=None,
+    ymin=None,
+    ymax=None,
+    height=240,
+    desc="",
+    scale=1,
+    split_breaks=False,
+    kind=None,
+    ids=None,
+    num=None,
+    events=(),
+    point_labels=None,
+    future="forecast",
+    finding=None,
+):
     """Inline SVG line chart.
 
     labels: list of x labels. series: list of (name, values list (None = gap), style 'a'|'b').
@@ -718,8 +791,17 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     shows. It becomes the chart's heading and title moves beneath it as a subtitle.
     """
     raw = series
-    heading = _finding(finding, point_labels or labels, [(nm, vals) for nm, vals, _ in series], breaks, split_breaks, forecast_from)
-    described = _described(finding, len(labels), breaks, split_breaks, forecast_from) if heading else []
+    heading = _finding(
+        finding,
+        point_labels or labels,
+        [(nm, vals) for nm, vals, _ in series],
+        breaks,
+        split_breaks,
+        forecast_from,
+    )
+    described = (
+        _described(finding, len(labels), breaks, split_breaks, forecast_from) if heading else []
+    )
     W, H = 400, round(height * 400 / 480) + 20
     direct = len(series) <= 3 and all(len(nm) <= 26 for nm, _, _ in series) and len(series) > 1
     L, R, T, B = 44, 8, 14, 30
@@ -741,14 +823,18 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
 
     def y(v):
         return T + (H - T - B) * (1 - (v - lo2) / (hi2 - lo2))
+
     parts = []
     # grid and y ticks at round numbers
     v = lo2
     while v <= hi2 + step_v / 1000:
         yy = y(v)
         parts.append(f'<line x1="{L}" x2="{W - R}" y1="{yy:.1f}" y2="{yy:.1f}" stroke="#e3e5e8"/>')
-        parts.append(f'<text x="{L - 6}" y="{yy + 4:.1f}" text-anchor="end">{_tick(v, step_v)}</text>')
+        parts.append(
+            f'<text x="{L - 6}" y="{yy + 4:.1f}" text-anchor="end">{_tick(v, step_v)}</text>'
+        )
         v += step_v
+
     # x labels: first, last and as many between as fit without touching
     def extent(i):
         w = 8.2 * len(_short(labels[i]))
@@ -757,6 +843,7 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         if i == n - 1:
             return x(i) - w, x(i)
         return x(i) - w / 2, x(i) + w / 2
+
     step = max(1, math.ceil(n / 5))
     idx = []
     for i in list(range(0, n - 1, step)):
@@ -769,15 +856,23 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     idx.append(n - 1)
     for i in idx:
         anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
-        parts.append(f'<text x="{x(i):.1f}" y="{H - 10}" text-anchor="{anchor}">{esc(_short(labels[i]))}</text>')
+        parts.append(
+            f'<text x="{x(i):.1f}" y="{H - 10}" text-anchor="{anchor}">{esc(_short(labels[i]))}</text>'
+        )
     if forecast_from is not None and forecast_from < n:
         fx = x(forecast_from) - (x(1) - x(0)) / 2
-        parts.append(f'<rect x="{fx:.1f}" y="{T}" width="{W - R - fx:.1f}" height="{H - T - B}" fill="#f1f2f3"/>')
-        parts.append(f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">{future.capitalize()}</text>')
+        parts.append(
+            f'<rect x="{fx:.1f}" y="{T}" width="{W - R - fx:.1f}" height="{H - T - B}" fill="#f1f2f3"/>'
+        )
+        parts.append(
+            f'<text x="{W - R - 2}" y="{H - B - 6}" text-anchor="end">{future.capitalize()}</text>'
+        )
     taken = []  # x ranges of break labels already drawn
     for i, text in breaks:
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
-        parts.append(f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>')
+        parts.append(
+            f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>'
+        )
         # Right-align the label when it would run past the chart's right edge.
         # Width is estimated for the 15px chart font (about 8.4 units a character).
         w = len(text) * 8.4
@@ -788,15 +883,21 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
         taken.append((lo_, hi_))
         ty = T + 12
         if right:
-            parts.append(f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(
+                f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>'
+            )
         else:
             parts.append(f'<text x="{bx + 3:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
     for i, text in events:
         ex = x(i)
-        parts.append(f'<line x1="{ex:.1f}" x2="{ex:.1f}" y1="{T}" y2="{H - B}" stroke="#8d969e" stroke-dasharray="1 3" stroke-width="1.5"/>')
+        parts.append(
+            f'<line x1="{ex:.1f}" x2="{ex:.1f}" y1="{T}" y2="{H - B}" stroke="#8d969e" stroke-dasharray="1 3" stroke-width="1.5"/>'
+        )
         # Labelled at the foot of the chart, clear of the line ends and their labels
         if ex > W * 0.65:
-            parts.append(f'<text x="{ex - 3:.1f}" y="{H - B - 6}" text-anchor="end">{esc(text)}</text>')
+            parts.append(
+                f'<text x="{ex - 3:.1f}" y="{H - B - 6}" text-anchor="end">{esc(text)}</text>'
+            )
         else:
             parts.append(f'<text x="{ex + 3:.1f}" y="{H - B - 6}">{esc(text)}</text>')
     for name, vals, style in series:
@@ -819,14 +920,23 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
             segs.append(cur)
         for seg in segs:
             solid = [(i, v) for i, v in seg if forecast_from is None or i < forecast_from]
-            dashed = [(i, v) for i, v in seg if forecast_from is not None and i >= forecast_from - 1]
+            dashed = [
+                (i, v) for i, v in seg if forecast_from is not None and i >= forecast_from - 1
+            ]
             for pts, dash in ((solid, ""), (dashed, ' stroke-dasharray="5 4"')):
                 if len(pts) > 1:
-                    d = " ".join(f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}" for k, (i, v) in enumerate(pts))
-                    parts.append(f'<path d="{d}" fill="none" stroke="{colour}" stroke-width="{width}"{dash}/>')
+                    d = " ".join(
+                        f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}"
+                        for k, (i, v) in enumerate(pts)
+                    )
+                    parts.append(
+                        f'<path d="{d}" fill="none" stroke="{colour}" stroke-width="{width}"{dash}/>'
+                    )
             for i, v in seg:
                 if style == "c":
-                    parts.append(f'<rect x="{x(i) - 3.5:.1f}" y="{y(v) - 3.5:.1f}" width="7" height="7" fill="{colour}"/>')
+                    parts.append(
+                        f'<rect x="{x(i) - 3.5:.1f}" y="{y(v) - 3.5:.1f}" width="7" height="7" fill="{colour}"/>'
+                    )
                 elif len(seg) == 1:
                     parts.append(f'<circle cx="{x(i):.1f}" cy="{y(v):.1f}" r="3" fill="{colour}"/>')
     if direct:
@@ -840,24 +950,57 @@ def line_chart(title, labels, series, unit_label, breaks=(), forecast_from=None,
     if kind:
         names = [nm for nm, _, _ in raw]
         plabels = list(point_labels or labels)
-        rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals, _ in raw] for i in range(n)]
-        read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows,
-                "fc": forecast_from}
+        rows = [
+            [plabels[i]]
+            + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals, _ in raw]
+            for i in range(n)
+        ]
+        read = {
+            "x": [round(x(i), 1) for i in range(n)],
+            "t": T,
+            "b": H - B,
+            "names": names,
+            "rows": rows,
+            "fc": forecast_from,
+        }
         attrs = _chart_attr(read)
-        summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks,
-                                forecast_from=forecast_from, events=events, future=future)
-    svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label.replace("..", "."))} The table below gives every value."{attrs}>'
-           + "".join(parts) + "</svg>")
+        summary = chart_summary(
+            plabels,
+            raw,
+            kind,
+            ids=ids,
+            num=num,
+            breaks=breaks,
+            split_breaks=split_breaks,
+            forecast_from=forecast_from,
+            events=events,
+            future=future,
+        )
+    svg = (
+        f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(label.replace("..", "."))} The table below gives every value."{attrs}>'
+        + "".join(parts)
+        + "</svg>"
+    )
     if not kind:  # no readout data, so the figures travel to the CSV download in a comment
         plabels = list(point_labels or labels)
-        svg += downloads.chart_data([nm for nm, _, _ in series], [[plabels[i]] + [downloads.raw(vals[i]) for _, vals, _ in series] for i in range(n)])
+        svg += downloads.chart_data(
+            [nm for nm, _, _ in series],
+            [[plabels[i]] + [downloads.raw(vals[i]) for _, vals, _ in series] for i in range(n)],
+        )
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
-        items = [] if direct else [f'<span><i class="{"" if s == "a" else s}"></i>{esc(nm)}</span>' for nm, _, s in series]
+        items = (
+            []
+            if direct
+            else [
+                f'<span><i class="{"" if s == "a" else s}"></i>{esc(nm)}</span>'
+                for nm, _, s in series
+            ]
+        )
         if forecast_from is not None:
             items.append(f'<span><i class="d"></i>{future.capitalize()} (dashed)</span>')
         key = f'<div class="key">{"".join(items)}</div>'
-    return f'<figure>{_titles(heading, title, described, breaks)}{key}{svg}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
+    return f"<figure>{_titles(heading, title, described, breaks)}{key}{svg}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>"
 
 
 _SW_COUNT = [0]
@@ -872,10 +1015,15 @@ def switch(legend, views, default=0, anchor=None):
     """
     _SW_COUNT[0] += 1
     name = f"sw{_SW_COUNT[0]}"
-    opts = "".join(f'<input type="radio" name="{name}" id="{name}-{k}" class="v{k}"{" checked" if k == default else ""}>'
-                   f'<label for="{name}-{k}">{esc(label)}</label>' for k, (label, _, _) in enumerate(views))
-    panels = "".join(f'<div class="panel p{k}"><p class="vhead">{esc(label)}</p><p class="vnote">{note}</p>{html}</div>'
-                     for k, (label, note, html) in enumerate(views))
+    opts = "".join(
+        f'<input type="radio" name="{name}" id="{name}-{k}" class="v{k}"{" checked" if k == default else ""}>'
+        f'<label for="{name}-{k}">{esc(label)}</label>'
+        for k, (label, _, _) in enumerate(views)
+    )
+    panels = "".join(
+        f'<div class="panel p{k}"><p class="vhead">{esc(label)}</p><p class="vnote">{note}</p>{html}</div>'
+        for k, (label, note, html) in enumerate(views)
+    )
     sid = f' id="{esc(anchor)}"' if anchor else ""
     return f'<div class="switch"{sid}><fieldset class="seg"><legend>{esc(legend)}</legend><div class="opts">{opts}</div></fieldset>{panels}</div>'
 
@@ -883,7 +1031,11 @@ def switch(legend, views, default=0, anchor=None):
 def _chart_attr(read):
     """The readout data as a single-quoted attribute, so JSON quotes need no escaping."""
     text = json.dumps(read, ensure_ascii=False, separators=(",", ":"))
-    return " data-chart='" + text.replace("&", "&amp;").replace("<", "&lt;").replace("'", "&#39;") + "'"
+    return (
+        " data-chart='"
+        + text.replace("&", "&amp;").replace("<", "&lt;").replace("'", "&#39;")
+        + "'"
+    )
 
 
 _SM_COUNT = [0]
@@ -919,7 +1071,9 @@ def spark(points, label, highlight=None, group=None, axis=None, kind=None, point
             if len(seg) > 1:
                 parts.append(f'<polyline class="ln" points="{" ".join(seg)}"/>')
             seg = []
-            parts.append(f'<line class="gap" x1="{x(i) - 3:.1f}" y1="{H - 2}" x2="{x(i) + 3:.1f}" y2="{H - 2}"/>')
+            parts.append(
+                f'<line class="gap" x1="{x(i) - 3:.1f}" y1="{H - 2}" x2="{x(i) + 3:.1f}" y2="{H - 2}"/>'
+            )
             continue
         seg.append(f"{x(i):.1f},{y(v):.1f}")
     if len(seg) > 1:
@@ -928,13 +1082,27 @@ def spark(points, label, highlight=None, group=None, axis=None, kind=None, point
     for i, (yr, v) in enumerate(points):
         if v is not None:
             on = yr == highlight
-            dots.append((on, f'<circle class="{"hi" if on else "pt"}" cx="{x(i):.1f}" cy="{y(v):.1f}" r="{5 if on else 2.5}"/>'))
+            dots.append(
+                (
+                    on,
+                    f'<circle class="{"hi" if on else "pt"}" cx="{x(i):.1f}" cy="{y(v):.1f}" r="{5 if on else 2.5}"/>',
+                )
+            )
     parts += [d for on, d in dots if not on] + [d for on, d in dots if on]
-    svg = (f'<svg class="spark" viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label)}" focusable="false">'
-           f'{"".join(parts)}</svg>')
+    svg = (
+        f'<svg class="spark" viewBox="0 0 {W} {H}" role="img" aria-label="{esc(label)}" focusable="false">'
+        f'{"".join(parts)}</svg>'
+    )
     a, b = axis or (points[0][0], points[-1][0])
-    csv_rows = [[point_label(yr), (fmt(v, kind) if kind else downloads.raw(v)) if v is not None else ""] for yr, v in points]
-    return svg + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>' + downloads.chart_data(["Value"], csv_rows)
+    csv_rows = [
+        [point_label(yr), (fmt(v, kind) if kind else downloads.raw(v)) if v is not None else ""]
+        for yr, v in points
+    ]
+    return (
+        svg
+        + f'<div class="spark-ax" aria-hidden="true"><span>{a}</span><span>{b}</span></div>'
+        + downloads.chart_data(["Value"], csv_rows)
+    )
 
 
 def _lower_first(text):
@@ -942,8 +1110,25 @@ def _lower_first(text):
     return text if text[1:2].isupper() else text[:1].lower() + text[1:]
 
 
-def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None, breaks=(), split_breaks=False,
-                    ymin=None, scale=1, point_labels=None, desc="", summary_note="", finding=None, group_breaks=None, pct_change=False):
+def small_multiples(
+    title,
+    labels,
+    series,
+    unit_label,
+    kind,
+    ids=None,
+    num=None,
+    breaks=(),
+    split_breaks=False,
+    ymin=None,
+    scale=1,
+    point_labels=None,
+    desc="",
+    summary_note="",
+    finding=None,
+    group_breaks=None,
+    pct_change=False,
+):
     """One small line chart per group, so no group is hidden behind a key.
 
     Used instead of line_chart() when more than three groups matter. Every panel
@@ -1011,7 +1196,9 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
         if len(seg) == 1:  # a lone year: a round dot drawn by the line cap
             i, v = seg[0]
             return f"M{x(i):.1f},{y(v):.1f}h0.1"
-        return " ".join(f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}" for k, (i, v) in enumerate(seg))
+        return " ".join(
+            f"{'M' if k == 0 else 'L'}{x(i):.1f},{y(v):.1f}" for k, (i, v) in enumerate(seg)
+        )
 
     # The axes and every group's line are drawn once, in the first panel, and
     # reused by the others (<use>), which keeps pages with many panels small.
@@ -1022,21 +1209,36 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
     while v <= hi2 + step_v / 1000:
         yy = y(v)
         frame.append(f'<line x1="{L}" x2="{W - R}" y1="{yy:.1f}" y2="{yy:.1f}" stroke="#e3e5e8"/>')
-        frame.append(f'<text x="{L - 5}" y="{yy + 5:.1f}" text-anchor="end">{_tick(v, step_v)}</text>')
+        frame.append(
+            f'<text x="{L - 5}" y="{yy + 5:.1f}" text-anchor="end">{_tick(v, step_v)}</text>'
+        )
         v += step_v
-    frame.append(f'<text x="{x(0):.1f}" y="{H - 4}" text-anchor="start">{esc(_short(labels[0]))}</text>')
+    frame.append(
+        f'<text x="{x(0):.1f}" y="{H - 4}" text-anchor="start">{esc(_short(labels[0]))}</text>'
+    )
     if n > 1:
-        frame.append(f'<text x="{x(n - 1):.1f}" y="{H - 4}" text-anchor="end">{esc(_short(labels[-1]))}</text>')
+        frame.append(
+            f'<text x="{x(n - 1):.1f}" y="{H - 4}" text-anchor="end">{esc(_short(labels[-1]))}</text>'
+        )
+
     def bline(i):
         bx = x(i) - (x(1) - x(0)) / 2 if n > 1 else x(i)
         return f'<line x1="{bx:.1f}" x2="{bx:.1f}" y1="{T}" y2="{H - B}" stroke="#b58900" stroke-dasharray="4 3"/>'
+
     for i, _ in breaks:
         frame.append(bline(i))
-    drawn = {si: " ".join(path(seg) for seg in segments(vals, {i for i, _ in group_breaks.get(si, ())})) for si, vals in enumerate(scaled)}
+    drawn = {
+        si: " ".join(path(seg) for seg in segments(vals, {i for i, _ in group_breaks.get(si, ())}))
+        for si, vals in enumerate(scaled)
+    }
     # Each panel draws every line in light grey, then its own group in black on top.
-    defs = (f'<defs><g id="{pid}f">{"".join(frame)}</g>'
-            + "".join(f'<path id="{pid}s{si}" d="{d}"/>' for si, d in drawn.items() if d)
-            + f'<g id="{pid}a">' + "".join(f'<use href="#{pid}s{si}"/>' for si, d in drawn.items() if d) + "</g></defs>")
+    defs = (
+        f'<defs><g id="{pid}f">{"".join(frame)}</g>'
+        + "".join(f'<path id="{pid}s{si}" d="{d}"/>' for si, d in drawn.items() if d)
+        + f'<g id="{pid}a">'
+        + "".join(f'<use href="#{pid}s{si}"/>' for si, d in drawn.items() if d)
+        + "</g></defs>"
+    )
     panels = []
     for si, (name, vals) in enumerate(series):
         parts = [defs] if si == 0 else []
@@ -1046,32 +1248,74 @@ def small_multiples(title, labels, series, unit_label, kind, ids=None, num=None,
             parts.append(f'<use href="#{pid}s{si}" class="o"/>')
             parts.extend(_end_value(vals, scaled[si], kind, None, x, y, T - 2))
         else:
-            parts.append(f'<text x="{(L + W - R) / 2:.1f}" y="{(T + H - B) / 2 + 5:.1f}" text-anchor="middle">No figures</text>')
+            parts.append(
+                f'<text x="{(L + W - R) / 2:.1f}" y="{(T + H - B) / 2 + 5:.1f}" text-anchor="middle">No figures</text>'
+            )
         # The panel's name read by screen readers also gives its latest figure, as the line end does on screen.
         last = max((i for i, v in enumerate(vals) if v is not None), default=None)
-        spoken = name if last is None else f"{name}: {fmt(vals[last], kind)} in {(point_labels or labels)[last]}"
-        svg = (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(spoken)}">'
-               + "".join(parts) + "</svg>")
+        spoken = (
+            name
+            if last is None
+            else f"{name}: {fmt(vals[last], kind)} in {(point_labels or labels)[last]}"
+        )
+        svg = (
+            f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" aria-label="{esc(spoken)}">'
+            + "".join(parts)
+            + "</svg>"
+        )
         panels.append(f'<div><p class="smt" aria-hidden="true">{esc(name)}</p>{svg}</div>')
     plabels = list(point_labels or labels)
     names = [nm for nm, _ in series]
-    rows = [[plabels[i]] + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals in series] for i in range(n)]
-    read = {"x": [round(x(i), 1) for i in range(n)], "t": T, "b": H - B, "names": names, "rows": rows, "fc": None}
+    rows = [
+        [plabels[i]]
+        + [fmt(vals[i], kind) if vals[i] is not None else "no figure" for _, vals in series]
+        for i in range(n)
+    ]
+    read = {
+        "x": [round(x(i), 1) for i in range(n)],
+        "t": T,
+        "b": H - B,
+        "names": names,
+        "rows": rows,
+        "fc": None,
+    }
     label = (f"{heading}. " if heading else "") + f"{title}. " + (f"{desc} " if desc else "")
-    grid = (f'<div class="sm" role="group" aria-label="{esc(label)}One small chart for each of {len(series)} groups, all on the same scale. The summary and table below give every value."'
-            f'{_chart_attr(read)}>' + "".join(panels) + "</div>")
+    grid = (
+        f'<div class="sm" role="group" aria-label="{esc(label)}One small chart for each of {len(series)} groups, all on the same scale. The summary and table below give every value."'
+        f"{_chart_attr(read)}>" + "".join(panels) + "</div>"
+    )
     key = '<p class="smkey">Each panel shows one group in black; the other groups are in light grey. All panels use the same scale.</p>'
     if summary_note:
         # Read from the last break on, whether or not the line is split there.
         a, b = _stretches(n, breaks, None)[-1]
-        over = F.overview(plabels, series, a, b, lambda si, i: _show(series, ids, num, kind, si, i), group_breaks=group_breaks, pct=pct_change)
-        notes = [f"The amber dashed line in the {esc(series[si][0])} panel before {esc(plabels[i])} marks a change ({esc(_lower_first(t))})."
-                 for si, br in sorted(group_breaks.items()) for i, t in br]
+        over = F.overview(
+            plabels,
+            series,
+            a,
+            b,
+            lambda si, i: _show(series, ids, num, kind, si, i),
+            group_breaks=group_breaks,
+            pct=pct_change,
+        )
+        notes = [
+            f"The amber dashed line in the {esc(series[si][0])} panel before {esc(plabels[i])} marks a change ({esc(_lower_first(t))})."
+            for si, br in sorted(group_breaks.items())
+            for i, t in br
+        ]
         note = f'<p class="small csum-note">{" ".join(notes)}</p>' if notes else ""
         summary = f'<details class="csum"><summary>{CSUM_LABEL}</summary><p>{over} {summary_note}</p></details>{note}'
     else:
-        summary = chart_summary(plabels, raw, kind, ids=ids, num=num, breaks=breaks, split_breaks=split_breaks, extremes=False)
-    return f'<figure>{_titles(heading, title)}{key}{grid}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>'
+        summary = chart_summary(
+            plabels,
+            raw,
+            kind,
+            ids=ids,
+            num=num,
+            breaks=breaks,
+            split_breaks=split_breaks,
+            extremes=False,
+        )
+    return f"<figure>{_titles(heading, title)}{key}{grid}<figcaption>{_caption(unit_label, lo2, step_v)}</figcaption>{summary}</figure>"
 
 
 def _caption(unit_label, lo, step):
@@ -1090,12 +1334,18 @@ ZERO_NOTE = "The scale starts at {}, not at zero."
 
 def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
     """Write the latest measured value beside the end of a single line."""
-    pts = [i for i, v in enumerate(vals) if v is not None and (forecast_from is None or i < forecast_from)]
+    pts = [
+        i
+        for i, v in enumerate(vals)
+        if v is not None and (forecast_from is None or i < forecast_from)
+    ]
     if not pts:
         return []
     i = pts[-1]
     ly = max(y(vals[i]) - 9, top + 12)
-    return [f'<text class="lbl" x="{x(i) - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(fmt(raw_vals[i], kind))}</text>']
+    return [
+        f'<text class="lbl" x="{x(i) - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(fmt(raw_vals[i], kind))}</text>'
+    ]
 
 
 def _stretches(n, breaks, forecast_from):
@@ -1150,8 +1400,19 @@ def _show(series, ids, num, kind, si, i):
 CSUM_LABEL = "What the chart shows, in words"
 
 
-def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_breaks=False, forecast_from=None, events=(), future="forecast",
-                  extremes=True):
+def chart_summary(
+    labels,
+    series,
+    kind,
+    ids=None,
+    num=None,
+    breaks=(),
+    split_breaks=False,
+    forecast_from=None,
+    events=(),
+    future="forecast",
+    extremes=True,
+):
     """A plain-English reading of a line chart: for each line, whether it rose, fell,
     peaked or changed little, with the first, latest and any turning-point values,
     the highest and lowest, and any missing years. Built from the same values
@@ -1159,6 +1420,7 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
     and forecasts are kept apart from measured years. extremes=False leaves out the
     highest and lowest, for small multiples with many groups, where each panel shows them.
     """
+
     def show(si, i):
         return _show(series, ids, num, kind, si, i)
 
@@ -1167,7 +1429,9 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
     for si, (name, vals, _) in enumerate(series):
         parts = []
         for a, b in spans:
-            text = F.sentence([esc(str(v)) for v in labels], vals, lambda i: show(si, i), a, b, extremes=extremes)
+            text = F.sentence(
+                [esc(str(v)) for v in labels], vals, lambda i: show(si, i), a, b, extremes=extremes
+            )
             if not text:
                 continue
             first, last = F.measured(vals, a, b)[0], F.measured(vals, a, b)[-1]
@@ -1180,7 +1444,9 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
         if forecast_from is not None and forecast_from < len(labels):
             fpts = [i for i in range(forecast_from, len(labels)) if vals[i] is not None]
             if fpts:
-                parts.append(f"{future.capitalize()} for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}.")
+                parts.append(
+                    f"{future.capitalize()} for {esc(labels[fpts[-1]])}: {show(si, fpts[-1])}."
+                )
         if parts:
             text = " ".join(parts)
             if len(series) > 1:
@@ -1189,11 +1455,17 @@ def chart_summary(labels, series, kind, ids=None, num=None, breaks=(), split_bre
     notes = []
     for i, text in breaks:
         if split_breaks:
-            notes.append(f"The line breaks at {esc(labels[i])} ({esc(_lower_first(text))}), so values either side are not compared.")
+            notes.append(
+                f"The line breaks at {esc(labels[i])} ({esc(_lower_first(text))}), so values either side are not compared."
+            )
         else:
-            notes.append(f"The amber dashed line before {esc(labels[i])} marks a change ({esc(_lower_first(text))}), so each side is read separately here.")
+            notes.append(
+                f"The amber dashed line before {esc(labels[i])} marks a change ({esc(_lower_first(text))}), so each side is read separately here."
+            )
     for i, text in events:
-        notes.append(f"The grey dotted line marks {esc(labels[i])} ({esc(text)}). It shows when it happened, not what it caused.")
+        notes.append(
+            f"The grey dotted line marks {esc(labels[i])} ({esc(text)}). It shows when it happened, not what it caused."
+        )
     if forecast_from is not None and forecast_from < len(labels):
         notes.append(f"Years from {esc(labels[forecast_from])} are {future}s, not measurements.")
     if not items:
@@ -1232,7 +1504,10 @@ def _end_labels(series, x, y, top, bottom):
     for k in range(len(labs) - 2, -1, -1):
         if labs[k + 1][0] - labs[k][0] < 17:
             labs[k][0] = labs[k + 1][0] - 17
-    return [f'<text class="lbl{" b" if st == "b" else ""}" x="{lx - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(nm)}</text>' for ly, lx, nm, st in labs]
+    return [
+        f'<text class="lbl{" b" if st == "b" else ""}" x="{lx - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(nm)}</text>'
+        for ly, lx, nm, st in labs
+    ]
 
 
 def _nice_step(raw):

@@ -1,4 +1,5 @@
 """The richest fifth's share of all household taxes (ONS Table 2a, goal gap: audit 15 item 1)."""
+
 import unittest
 
 from builder.data import Fact, Facts
@@ -6,15 +7,39 @@ from builder.pages_money import FIFTHS, household_tax_shares
 
 # ONS Table 2a, financial year 2023/24: average taxes per household (£) and households (thousands).
 TABLE_2A = {
-    "q1": (8625, 5875), "q2": (12380, 5902), "q3": (17338, 5559), "q4": (25280, 5298), "q5": (51903, 5806),
+    "q1": (8625, 5875),
+    "q2": (12380, 5902),
+    "q3": (17338, 5559),
+    "q4": (25280, 5298),
+    "q5": (51903, 5806),
 }
 
 
 def _facts():
     facts = Facts()
     for q, (tax, hh) in TABLE_2A.items():
-        facts.add(Fact(f"etb.2a.alltax.{q}", tax, "£ a year per household", "2023/24", "etb", "Table 2a!x", "calculated"))
-        facts.add(Fact(f"etb.2a.households.{q}", hh, "thousands of households", "2023/24", "etb", "Table 2a!y", "outturn"))
+        facts.add(
+            Fact(
+                f"etb.2a.alltax.{q}",
+                tax,
+                "£ a year per household",
+                "2023/24",
+                "etb",
+                "Table 2a!x",
+                "calculated",
+            )
+        )
+        facts.add(
+            Fact(
+                f"etb.2a.households.{q}",
+                hh,
+                "thousands of households",
+                "2023/24",
+                "etb",
+                "Table 2a!y",
+                "outturn",
+            )
+        )
     return facts
 
 
