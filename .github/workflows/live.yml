@@ -31,4 +31,13 @@ jobs:
       - run: make setup
       - run: make build
       - name: Compare the live site with this build
-        run: python3 scripts/check_live.py --wait ${{ github.event_name == 'schedule' && 60 || 1500 }}
+        run: .venv/bin/python scripts/check_live.py --wait ${{ github.event_name == 'schedule' && 60 || 1500 }}
+      - name: Retain live-site performance metrics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-site-metrics
+          path: .metrics/*.prom
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: warn
