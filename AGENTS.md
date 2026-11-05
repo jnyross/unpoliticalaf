@@ -49,12 +49,12 @@ to apply this agreement.
 
 | Kind | Convention | Repository example |
 | --- | --- | --- |
-| Modules and scripts | Lowercase `snake_case.py` | `data_top_earners.py`, `check_live.py` |
+| Modules and scripts | Lowercase `snake_case` with a .py extension | `builder/data_top_earners.py`, `scripts/check_live.py` |
 | Functions, methods, parameters and variables | Lowercase `snake_case` | `find_row`, `get_value`, `used_counts` |
 | Classes, including dataclasses and test classes | `CapWords` | `Fact`, `Facts`, `Formatting` |
 | Module-level constants and fixed lookup tables | `UPPER_SNAKE_CASE` | `EARLY_YEARS`, `MAX_PAGE_BYTES` |
 | Internal helpers | One leading underscore plus `snake_case` | `_cell_col` |
-| Unit test files and methods | `test_<subject>.py`, `test_<behaviour>` | `test_builder.py`, `test_missing_figure_is_not_zero` |
+| Unit test files and methods | `test_<subject>` with a .py extension; `test_<behaviour>` methods | `tests/test_builder.py`, `test_missing_figure_is_not_zero` |
 
 - Use `self` for instance methods and `cls` for class methods. Keep required
   Python special methods such as `__init__` unchanged.
@@ -71,9 +71,9 @@ to apply this agreement.
   `UPPER_SNAKE_CASE` for fixed shared constants. Preserve browser API spellings
   such as `getElementById` and `scrollIntoView`.
 - Use lowercase, hyphen-separated words for new multiword CSS classes, HTML IDs,
-  `data-*` attributes and public page slugs, as in `.pick-status`, `data-fact`
-  and `who-pays.html`. Keep their Python string producers, CSS selectors,
-  JavaScript consumers and tests in sync.
+  `data-*` attributes and public page slugs, as in the class `pick-status`,
+  attribute `data-fact` and page stem `who-pays`. Keep their Python string
+  producers, CSS selectors, JavaScript consumers and tests in sync.
 
 ### Stable names and review checks
 
