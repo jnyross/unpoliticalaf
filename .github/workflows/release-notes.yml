@@ -1,0 +1,47 @@
+name: Publish release notes
+
+# Releases are deliberate checkpoints, separate from main's Vercel deployments.
+on:
+  push:
+    tags: ["v[0-9]*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-notes-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      # No checkout or third-party release service is needed.
+      - name: Generate notes and publish the tagged release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const tag = context.ref.slice("refs/tags/".length);
+            try {
+              const existing = await github.rest.repos.getReleaseByTag({
+                owner, repo, tag
+              });
+              core.info(`Release already exists: ${existing.data.html_url}; leaving it unchanged.`);
+              return;
+            } catch (error) {
+              // Only a missing release is safe to create. Fail on auth/API errors.
+              if (error.status !== 404) throw error;
+            }
+
+            const prerelease = tag.includes("-");
+            const release = await github.rest.repos.createRelease({
+              owner, repo, tag_name: tag, name: tag,
+              generate_release_notes: true,
+              prerelease,
+              make_latest: prerelease ? "false" : "legacy"
+            });
+            core.notice(`Published release notes: ${release.data.html_url}`);
