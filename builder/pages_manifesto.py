@@ -4,28 +4,66 @@ Each pledge is quoted from the manifesto, then what has happened is set out with
 source, then a rating from fixed definitions. Where the wording allows more than one reading, every reading
 is shown with its own result. The text is written by hand because the pledges are wording, not series.
 """
+
 from .html import page
 
 CHECKED = "4 November 2026"
 
 RATINGS = [
     ("Kept", "The pledge has been carried out as worded."),
-    ("Kept so far", "The pledge runs for longer than the evidence so far, and what has happened is in line with it."),
-    ("Partly kept", "Met on one reasonable reading of the wording and not on another, or met for only part of what the pledge covers."),
+    (
+        "Kept so far",
+        "The pledge runs for longer than the evidence so far, and what has happened is in line with it.",
+    ),
+    (
+        "Partly kept",
+        "Met on one reasonable reading of the wording and not on another, or met for only part of what the pledge covers.",
+    ),
     ("Not kept", "The evidence shows the plain wording of the pledge has been broken."),
-    ("Not yet testable", "The deadline has not come, or no official measure exists yet. We say how things look so far."),
+    (
+        "Not yet testable",
+        "The deadline has not come, or no official measure exists yet. We say how things look so far.",
+    ),
 ]
 
 PLEDGES = [
-    ("working-people", "Will not increase taxes on working people", "Not kept on the plain wording; readings differ"),
+    (
+        "working-people",
+        "Will not increase taxes on working people",
+        "Not kept on the plain wording; readings differ",
+    ),
     ("national-insurance", "Will not increase National Insurance", "Partly kept; readings differ"),
-    ("income-tax", "Will not increase the basic, higher or additional rates of Income Tax", "Partly kept; readings differ"),
+    (
+        "income-tax",
+        "Will not increase the basic, higher or additional rates of Income Tax",
+        "Partly kept; readings differ",
+    ),
     ("vat-rate", "Will not increase VAT", "Kept so far"),
-    ("private-schools", "Will end the VAT exemption and business rates relief for private schools", "Kept"),
-    ("fiscal-rules", "Will balance the current budget and make debt fall as a share of the economy", "Not yet testable; on course in the latest forecast"),
-    ("defence", "Will set out the path to spending 2.5% of GDP on defence", "Kept so far; readings differ"),
-    ("housing", "Will build 1.5 million new homes over the next parliament", "Not yet testable; behind the pace needed so far"),
-    ("nhs", "Will meet the 18-week standard and deliver two million more NHS operations, scans and appointments a year", "Not yet testable; below the 92% standard so far"),
+    (
+        "private-schools",
+        "Will end the VAT exemption and business rates relief for private schools",
+        "Kept",
+    ),
+    (
+        "fiscal-rules",
+        "Will balance the current budget and make debt fall as a share of the economy",
+        "Not yet testable; on course in the latest forecast",
+    ),
+    (
+        "defence",
+        "Will set out the path to spending 2.5% of GDP on defence",
+        "Kept so far; readings differ",
+    ),
+    (
+        "housing",
+        "Will build 1.5 million new homes over the next parliament",
+        "Not yet testable; behind the pace needed so far",
+    ),
+    (
+        "nhs",
+        "Will meet the 18-week standard and deliver two million more NHS operations, scans and appointments a year",
+        "Not yet testable; below the 92% standard so far",
+    ),
     ("warm-homes", "Will upgrade five million homes to cut bills", "Not yet testable"),
 ]
 
@@ -34,7 +72,8 @@ def _summary_table():
     # A plain list, not a table: reading pages need a CSV download beside every table, and this is a list of ratings.
     rows = "".join(
         f'<li><a href="#{anchor}">{text}</a>: <strong>{rating}</strong></li>'
-        for anchor, text, rating in PLEDGES)
+        for anchor, text, rating in PLEDGES
+    )
     return f'<p><strong>Ten pledges on public money and everyday costs, rated {CHECKED}</strong></p><ul class="ratings">{rows}</ul>'
 
 

@@ -1,4 +1,5 @@
 """Checks of the phone user-test pack in docs/user-test/. Run with: make test"""
+
 import importlib.util
 import unittest
 from pathlib import Path
@@ -17,7 +18,10 @@ class Pack(unittest.TestCase):
     def test_shape_matches_the_goal(self):
         self.assertEqual(len(self.qs), 12)
         self.assertEqual(self.pack["time_limit_seconds"], 8 * 60)
-        self.assertEqual(self.pack["pass_rules"], {"participants": 5, "min_correct_each": 9, "min_correct_total": 48})
+        self.assertEqual(
+            self.pack["pass_rules"],
+            {"participants": 5, "min_correct_each": 9, "min_correct_total": 48},
+        )
         crit = sorted(q["critical_area"] for q in self.qs if q["critical"])
         self.assertEqual(crit, ["Causation", "Illustrative households", "Tax interpretation"])
 
@@ -29,8 +33,11 @@ class Pack(unittest.TestCase):
 
     def test_generated_sheets_are_up_to_date(self):
         for name, text in ut.rendered().items():
-            self.assertEqual((ut.PACK / name).read_text(encoding="utf-8"), text,
-                             f"{name} is stale: run python scripts/user_test.py render")
+            self.assertEqual(
+                (ut.PACK / name).read_text(encoding="utf-8"),
+                text,
+                f"{name} is stale: run python scripts/user_test.py render",
+            )
 
     def test_answers_are_on_the_built_site(self):
         if not (ut.SITE / "index.html").exists():
@@ -44,8 +51,14 @@ class Scoring(unittest.TestCase):
         self.key = {f"q{q['id']}": q["answer"] for q in self.pack["questions"]}
 
     def row(self, name, wrong=(), secs="400", commit="abc1234"):
-        r = {"participant": name, "consent": "yes", "eligible": "yes", "site_commit": commit,
-             "phone": "x", "seconds_taken": secs}
+        r = {
+            "participant": name,
+            "consent": "yes",
+            "eligible": "yes",
+            "site_commit": commit,
+            "phone": "x",
+            "seconds_taken": secs,
+        }
         r.update(self.key)
         for q in wrong:
             r[f"q{q}"] = "E"

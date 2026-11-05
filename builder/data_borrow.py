@@ -16,6 +16,7 @@ UK financial-year public sector figures on other pages. They are never joined.
 Every figure keeps its CSV line (or JSON path) as its locator, so check.py can
 re-read it.
 """
+
 import csv
 import io
 import json
@@ -30,12 +31,32 @@ PF_SRC, YIELD_SRC, IMF_SRC = "oecd-gov-pf-g7", "oecd-finmark-irlt", "imf-weo-deb
 
 UK, AVG = "GBR", "OECD_REP"
 G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
-NAMES = {"CAN": "Canada", "FRA": "France", "DEU": "Germany", "ITA": "Italy", "JPN": "Japan",
-         "GBR": "United Kingdom", "USA": "United States", AVG: "OECD average"}
+NAMES = {
+    "CAN": "Canada",
+    "FRA": "France",
+    "DEU": "Germany",
+    "ITA": "Italy",
+    "JPN": "Japan",
+    "GBR": "United Kingdom",
+    "USA": "United States",
+    AVG: "OECD average",
+}
 # Government at a Glance measures used, all as % of GDP.
 PF_MEASURES = {"GGD": "debt", "GGINTN": "int", "GR": "rev"}
-MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August",
-          "September", "October", "November", "December"]
+MONTHS = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+]
 
 
 def _rows(path):
@@ -70,8 +91,18 @@ def build(facts):
         if v is None:
             continue
         status = "provisional" if r["OBS_STATUS"] == "P" else "published"
-        facts.add(Fact(f"borrow.{k}.{a}.{y}", v, "% of GDP", y, PF_SRC, f"{a} {r['Measure']} % GDP line {line}", status,
-                       note="Provisional figure" if status == "provisional" else ""))
+        facts.add(
+            Fact(
+                f"borrow.{k}.{a}.{y}",
+                v,
+                "% of GDP",
+                y,
+                PF_SRC,
+                f"{a} {r['Measure']} % GDP line {line}",
+                status,
+                note="Provisional figure" if status == "provisional" else "",
+            )
+        )
         pf[k][(a, y)] = v
     for k in pf:
         out[f"{k}_year"] = _latest(pf[k], G7)
@@ -82,8 +113,19 @@ def build(facts):
         rv = pf["rev"].get((a, y))
         if rv:
             i, rr = f"borrow.int.{a}.{y}", f"borrow.rev.{a}.{y}"
-            facts.add(Fact(f"borrow.intrev.{a}.{y}", v / rv * 100, "% of revenue", y, PF_SRC, facts[i].locator, "calculated",
-                           formula=f"{i} ÷ {rr} × 100", inputs=[i, rr]))
+            facts.add(
+                Fact(
+                    f"borrow.intrev.{a}.{y}",
+                    v / rv * 100,
+                    "% of revenue",
+                    y,
+                    PF_SRC,
+                    facts[i].locator,
+                    "calculated",
+                    formula=f"{i} ÷ {rr} × 100",
+                    inputs=[i, rr],
+                )
+            )
 
     # 10-year government bond yields: yearly averages and the latest month.
     yearly, monthly = {}, {}
@@ -94,7 +136,16 @@ def build(facts):
             continue
         if f == "A":
             yearly[(a, p)] = v
-            facts.add(Fact(f"borrow.yield.{a}.{p}", v, "% a year", p, YIELD_SRC, f"{a} long-term interest rate, yearly average line {line}"))
+            facts.add(
+                Fact(
+                    f"borrow.yield.{a}.{p}",
+                    v,
+                    "% a year",
+                    p,
+                    YIELD_SRC,
+                    f"{a} long-term interest rate, yearly average line {line}",
+                )
+            )
         elif f == "M":
             monthly[(a, p)] = (v, line)
     out["yield_year"] = _latest(yearly, G7)
@@ -103,7 +154,16 @@ def build(facts):
     out["yield_month"] = ym
     for a in G7:
         v, line = monthly[(a, ym)]
-        facts.add(Fact(f"borrow.yieldm.{a}.{ym}", v, "% a year", ym, YIELD_SRC, f"{a} long-term interest rate, monthly average line {line}"))
+        facts.add(
+            Fact(
+                f"borrow.yieldm.{a}.{ym}",
+                v,
+                "% a year",
+                ym,
+                YIELD_SRC,
+                f"{a} long-term interest rate, monthly average line {line}",
+            )
+        )
     out["yield_month_name"] = month_name(ym)
 
     # IMF: general government gross debt, % of GDP, the IMF's historical series.
@@ -113,7 +173,16 @@ def build(facts):
         for y, v in imf.get(a, {}).items():
             if v is None:
                 continue
-            facts.add(Fact(f"borrow.imf.{a}.{y}", float(v), "% of GDP", y, IMF_SRC, f"values.GG_DEBT_GDP.{a}.{y}"))
+            facts.add(
+                Fact(
+                    f"borrow.imf.{a}.{y}",
+                    float(v),
+                    "% of GDP",
+                    y,
+                    IMF_SRC,
+                    f"values.GG_DEBT_GDP.{a}.{y}",
+                )
+            )
             have[(a, y)] = v
     out["imf_year"] = _latest(have, G7)
     out["imf_from"] = "1990"

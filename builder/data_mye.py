@@ -4,6 +4,7 @@ The bulletin is an HTML page, so each figure is read from the sentence that stat
 the anchor text is found once in the page's plain text and the figure is the first number
 after it. The locator "after '<anchor>' number 1" lets the check script read it again.
 """
+
 import html as _html
 import re
 
@@ -33,11 +34,21 @@ def plain_text(path=PATH):
 def read(anchor, n=1):
     text = plain_text()
     assert text.count(anchor) == 1, f"anchor not unique: {anchor!r}"
-    tail = text[text.index(anchor) + len(anchor):]
+    tail = text[text.index(anchor) + len(anchor) :]
     return float(re.findall(r"\d[\d,]*", tail)[n - 1].replace(",", ""))
 
 
 def build(facts):
     for fid, anchor, unit in FIGURES:
-        facts.add(Fact(fid, read(anchor), unit, "year to mid-2025", SOURCE,
-                       f"after '{anchor}' number 1", "published", note="UK, year to mid-2025"))
+        facts.add(
+            Fact(
+                fid,
+                read(anchor),
+                unit,
+                "year to mid-2025",
+                SOURCE,
+                f"after '{anchor}' number 1",
+                "published",
+                note="UK, year to mid-2025",
+            )
+        )

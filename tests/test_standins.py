@@ -2,6 +2,7 @@
 
 These need no browser: they cover sealing and the pass bars. The phone and
 screen-reader tools are exercised by the goal audit itself."""
+
 import importlib.util
 import json
 import tempfile
@@ -19,15 +20,31 @@ WRONG = {k: "E" for k in KEY}
 
 
 def new_pack(n=24):
-    return {"title": "t", "questions": [{"id": i, "options": {"A": "a", "B": "b", "C": "c", "D": "d"},
-                                         "answer": "B", "critical": False} for i in range(1, n + 1)]}
+    return {
+        "title": "t",
+        "questions": [
+            {
+                "id": i,
+                "options": {"A": "a", "B": "b", "C": "c", "D": "d"},
+                "answer": "B",
+                "critical": False,
+            }
+            for i in range(1, n + 1)
+        ],
+    }
 
 
 def reader(i, with_site=KEY, without=WRONG, new_right=24, actions=30):
-    return {"reader": f"R{i}", "site_commit": "abc1234", "budget": 40, "actions_used": actions,
-            "with_site": dict(with_site), "without_site": dict(without),
-            "new_with_site": {str(q): ("B" if q <= new_right else "A") for q in range(1, 25)},
-            "new_without_site": {}}
+    return {
+        "reader": f"R{i}",
+        "site_commit": "abc1234",
+        "budget": 40,
+        "actions_used": actions,
+        "with_site": dict(with_site),
+        "without_site": dict(without),
+        "new_with_site": {str(q): ("B" if q <= new_right else "A") for q in range(1, 25)},
+        "new_without_site": {},
+    }
 
 
 class Score(unittest.TestCase):
@@ -41,8 +58,10 @@ class Score(unittest.TestCase):
             return si.score(d, PACK, new or new_pack())[0]
 
     def test_all_right_passes(self):
-        res = self.run_score([reader(i) for i in range(1, 6)],
-                             sr={"reader": "SR", "budget": 40, "actions_used": 20, "with_site": KEY})
+        res = self.run_score(
+            [reader(i) for i in range(1, 6)],
+            sr={"reader": "SR", "budget": 40, "actions_used": 20, "with_site": KEY},
+        )
         self.assertTrue(res["phone_test"])
         self.assertTrue(res["prior_knowledge"])
         self.assertTrue(res["new_questions"])
@@ -55,7 +74,9 @@ class Score(unittest.TestCase):
             for i in range(1, 6):
                 (Path(d) / "readers" / f"R{i}.json").write_text(json.dumps(reader(i)))
                 for kind in ("phone", "new", "johns"):
-                    (Path(d) / "readers" / f"R{i}-{kind}.json").write_text(json.dumps({"actions": 12}))
+                    (Path(d) / "readers" / f"R{i}-{kind}.json").write_text(
+                        json.dumps({"actions": 12})
+                    )
             res = si.score(d, PACK, new_pack())[0]
         self.assertTrue(res["phone_test"])
         self.assertTrue(res["prior_knowledge"])
@@ -108,19 +129,48 @@ class Seal(unittest.TestCase):
 class Prompts(unittest.TestCase):
     def test_every_prompt_the_procedure_names_exists(self):
         readme = (ROOT / "docs/standins/README.md").read_text()
-        for name in ("question-writer", "informal-reader", "phone-reader", "profiles", "screen-reader",
-                     "fact-checker", "critic", "judge"):
+        for name in (
+            "question-writer",
+            "informal-reader",
+            "phone-reader",
+            "profiles",
+            "screen-reader",
+            "fact-checker",
+            "critic",
+            "judge",
+        ):
             self.assertIn(f"prompts/{name}.md", readme)
             self.assertTrue((ROOT / f"docs/standins/prompts/{name}.md").exists(), name)
 
 
 class Johns(unittest.TestCase):
-    DATA = {"not_sure": "n", "questions": [{"id": "J1", "asked": "a", "added": "d", "source": "s", "probes": [
-        {"id": "J1.1", "question": "q", "options": {"A": "a", "B": "b"}, "answer": "B", "why": "w",
-         "evidence": [{"page": "x.html", "text": "t"}]}]}]}
+    DATA = {
+        "not_sure": "n",
+        "questions": [
+            {
+                "id": "J1",
+                "asked": "a",
+                "added": "d",
+                "source": "s",
+                "probes": [
+                    {
+                        "id": "J1.1",
+                        "question": "q",
+                        "options": {"A": "a", "B": "b"},
+                        "answer": "B",
+                        "why": "w",
+                        "evidence": [{"page": "x.html", "text": "t"}],
+                    }
+                ],
+            }
+        ],
+    }
 
     def readers(self, right):
-        return [{"reader": f"R{i}", "johns_with_site": {"J1.1": "B" if i <= right else "A"}} for i in range(1, 6)]
+        return [
+            {"reader": f"R{i}", "johns_with_site": {"J1.1": "B" if i <= right else "A"}}
+            for i in range(1, 6)
+        ]
 
     def test_passes_when_four_of_five_right(self):
         res, _ = si.score_johns(self.readers(4), self.DATA)
@@ -133,8 +183,11 @@ class Johns(unittest.TestCase):
 
     def test_open_probe_is_a_gap(self):
         import copy
+
         data = copy.deepcopy(self.DATA)
-        data["questions"][0]["probes"].append({"id": "J1.2", "question": "q2", "evidence": [], "gap": "missing"})
+        data["questions"][0]["probes"].append(
+            {"id": "J1.2", "question": "q2", "evidence": [], "gap": "missing"}
+        )
         res, _ = si.score_johns(self.readers(5), data)
         self.assertFalse(res["johns_questions"])
         self.assertEqual(res["johns_gaps"], ["J1.2: missing"])

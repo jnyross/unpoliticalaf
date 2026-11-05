@@ -55,14 +55,21 @@ BUDGET = 40  # actions, about 8 minutes of phone use (12 seconds each)
 SECONDS_PER_ACTION = 12
 STEP = HEIGHT - 80  # one scroll keeps a little of the last screen in view
 
-NEW_PASS = 0.80          # new-question test: share right with the site
-JOHNS_PASS = 0.80        # John's questions: share of readers right on each probe
-UPLIFT_MIN = 20          # prior-knowledge check: extra right answers out of 60
-SR_MIN_CORRECT = 9       # screen-reader reader: same bar as one phone tester
+NEW_PASS = 0.80  # new-question test: share right with the site
+JOHNS_PASS = 0.80  # John's questions: share of readers right on each probe
+UPLIFT_MIN = 20  # prior-knowledge check: extra right answers out of 60
+SR_MIN_CORRECT = 9  # screen-reader reader: same bar as one phone tester
 
 MAIN_PAGES = [
-    "index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html",
-    "life/index.html", "glossary.html", "methods.html", "sources.html",
+    "index.html",
+    "spending.html",
+    "taxes.html",
+    "who-pays.html",
+    "household-tax.html",
+    "life/index.html",
+    "glossary.html",
+    "methods.html",
+    "sources.html",
 ]
 
 # Elements a phone user can tap, in page order.
@@ -126,6 +133,7 @@ BADGES_JS = """
 
 # ----------------------------------------------------------------- serving
 
+
 class _Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -148,6 +156,7 @@ def serve(site=SITE):
 @contextlib.contextmanager
 def browser():
     from playwright.sync_api import sync_playwright
+
     with sync_playwright() as p:
         try:
             b = p.chromium.launch()
@@ -160,6 +169,7 @@ def browser():
 
 
 # ----------------------------------------------------------- reader sessions
+
 
 def load_state(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
@@ -191,7 +201,7 @@ def _open(page, base, st):
 
 
 def _rel(url, base):
-    return url[len(base):] if url.startswith(base) else url
+    return url[len(base) :] if url.startswith(base) else url
 
 
 def _view(page, mode, st, shots):
@@ -211,7 +221,9 @@ def _view(page, mode, st, shots):
         page.screenshot(path=str(shot))
         page.evaluate("document.getElementById('__standin_badges').remove()")
         lines.append(f"Screenshot (open it to see the screen): {shot}")
-        lines.append("Numbered things you can tap on this screen (the yellow numbers in the screenshot):")
+        lines.append(
+            "Numbered things you can tap on this screen (the yellow numbers in the screenshot):"
+        )
     else:
         lines.append("What a screen reader announces on this page, in reading order:")
         lines.append(page.locator("body").aria_snapshot())
@@ -220,7 +232,11 @@ def _view(page, mode, st, shots):
         extra = ""
         if it["kind"] == "select":
             opts = it["options"]
-            shown = ", ".join(opts) if len(opts) <= 12 else f"{opts[0]} to {opts[-1]}, {len(opts)} choices"
+            shown = (
+                ", ".join(opts)
+                if len(opts) <= 12
+                else f"{opts[0]} to {opts[-1]}, {len(opts)} choices"
+            )
             extra = f" (now: {it['value']}; choices: {shown})"
         lines.append(f"  [{i}] {it['kind']}: {it['label']}{extra}")
     return "\n".join(lines)
@@ -241,17 +257,33 @@ def session(mode, args):
     path = opts["--state"]
     opt = lambda name, default: opts.get(name, default)
     if action == "start":
-        st = {"reader": Path(path).stem, "mode": mode, "budget": int(opt("--budget", BUDGET)), "actions": 0,
-              "url": "index.html", "ops": [], "scroll": 0, "history": [], "log": [],
-              "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")), "items": []}
+        st = {
+            "reader": Path(path).stem,
+            "mode": mode,
+            "budget": int(opt("--budget", BUDGET)),
+            "actions": 0,
+            "url": "index.html",
+            "ops": [],
+            "scroll": 0,
+            "history": [],
+            "log": [],
+            "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")),
+            "items": [],
+        }
     else:
         st = load_state(path)
         if st["actions"] >= st["budget"]:
-            print(f"Time is up: you have used all {st['budget']} actions. Write down your answers now.")
+            print(
+                f"Time is up: you have used all {st['budget']} actions. Write down your answers now."
+            )
             return 1
     with serve() as base, browser() as b:
-        ctx = b.new_context(viewport={"width": WIDTH, "height": HEIGHT}, is_mobile=True, has_touch=True,
-                            device_scale_factor=1)
+        ctx = b.new_context(
+            viewport={"width": WIDTH, "height": HEIGHT},
+            is_mobile=True,
+            has_touch=True,
+            device_scale_factor=1,
+        )
         page = ctx.new_page()
         if action != "start":
             _open(page, base, st)
@@ -262,7 +294,10 @@ def session(mode, args):
             pass
         elif action == "scroll" and mode == "phone":
             down = (rest[0] if rest else "down") == "down"
-            page.evaluate("d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})", STEP if down else -STEP)
+            page.evaluate(
+                "d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})",
+                STEP if down else -STEP,
+            )
             st["actions"] += 1
             st["log"].append(f"scroll {'down' if down else 'up'}")
         elif action in ("tap", "choose"):
@@ -284,8 +319,14 @@ def session(mode, args):
                 except Exception:
                     print(f"[{n}] has no choice called {value!r}. Nothing happened.")
                     return 1
-                st["ops"].append({"op": "choose", "sel": it["sel"], "value": value,
-                                  "y": page.evaluate("window.scrollY")})
+                st["ops"].append(
+                    {
+                        "op": "choose",
+                        "sel": it["sel"],
+                        "value": value,
+                        "y": page.evaluate("window.scrollY"),
+                    }
+                )
                 st["log"].append(f"choose [{n}] {it['label']} = {value}")
             else:
                 st["log"].append(f"tap [{n}] {it['kind']}: {it['label']}")
@@ -330,6 +371,7 @@ def session(mode, args):
 
 # ------------------------------------------------- automated accessibility
 
+
 def keyboard(pages=None, max_tabs=400):
     """Tab through each page from the top. A trap is focus that stops moving, or
     that comes back to an earlier element before it leaves the page."""
@@ -338,14 +380,18 @@ def keyboard(pages=None, max_tabs=400):
         page = b.new_page(viewport={"width": WIDTH, "height": HEIGHT})
         for rel in pages or MAIN_PAGES:
             page.goto(base + rel, wait_until="load")
-            total = page.evaluate("document.querySelectorAll('a[href], button, summary, select, input, [tabindex]').length")
+            total = page.evaluate(
+                "document.querySelectorAll('a[href], button, summary, select, input, [tabindex]').length"
+            )
             seen, last, stuck = [], None, 0
             for _ in range(min(max_tabs, total + 5)):
                 page.keyboard.press("Tab")
-                key = page.evaluate("""() => { const e = document.activeElement;
+                key = page.evaluate(
+                    """() => { const e = document.activeElement;
                   if (!e || e === document.body || e === document.documentElement) return null;
                   let p = [], n = e; while (n && n.parentElement) { p.unshift([...n.parentElement.children].indexOf(n)); n = n.parentElement; }
-                  return p.join('.'); }""")
+                  return p.join('.'); }"""
+                )
                 if key is None:
                     break  # focus left the page: reached the end
                 if key == last:
@@ -357,7 +403,9 @@ def keyboard(pages=None, max_tabs=400):
                 if seen and key == seen[0]:
                     break  # wrapped round to the first element: reached the end
                 if key in seen:  # back to an earlier element without leaving the page
-                    problems.append(f"{rel}: focus loops back after {len(seen)} elements, before the end of the page")
+                    problems.append(
+                        f"{rel}: focus loops back after {len(seen)} elements, before the end of the page"
+                    )
                     break
                 seen.append(key)
                 last, stuck = key, 0
@@ -368,7 +416,9 @@ def keyboard(pages=None, max_tabs=400):
 def summaries(site=SITE):
     """Every chart on a reading page has a text summary that gives numbers, not just a title."""
     problems, n = [], 0
-    chart = re.compile(r'<svg\b[^>]*role="img"[^>]*>|<ul class="(?:bars|bars change|cmp-list)"[^>]*>')
+    chart = re.compile(
+        r'<svg\b[^>]*role="img"[^>]*>|<ul class="(?:bars|bars change|cmp-list)"[^>]*>'
+    )
     for path in sorted(site.rglob("*.html")):
         rel = path.relative_to(site).as_posix()
         if rel.startswith("figures/"):
@@ -387,6 +437,7 @@ def summaries(site=SITE):
 
 # ------------------------------------------------------------- sealing
 
+
 def _digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -400,14 +451,18 @@ def seal(questions, audit_dir):
     out = Path(audit_dir) / "new-questions.sha256"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f"{_digest(questions)}  new-questions.json\n", encoding="utf-8")
-    print(f"Sealed {len(pack['questions'])} questions: commit {out} now, and keep the questions out of the repo until every reader has answered.")
+    print(
+        f"Sealed {len(pack['questions'])} questions: commit {out} now, and keep the questions out of the repo until every reader has answered."
+    )
     return 0
 
 
 def unseal(questions, audit_dir):
     want = (Path(audit_dir) / "new-questions.sha256").read_text(encoding="utf-8").split()[0]
     if _digest(questions) != want:
-        print("The question file does not match the seal: it changed after the readers were briefed.")
+        print(
+            "The question file does not match the seal: it changed after the readers were briefed."
+        )
         return 1
     print("The question file matches the seal.")
     return 0
@@ -425,26 +480,37 @@ def validate_pack(pack):
 
 # ------------------------------------------------------------- scoring
 
+
 def _correct(answers, questions):
-    return sum(1 for q in questions if str(answers.get(str(q["id"]), "")).strip().upper() == q["answer"])
+    return sum(
+        1 for q in questions if str(answers.get(str(q["id"]), "")).strip().upper() == q["answer"]
+    )
 
 
 def score(audit_dir, pack=None, new_pack=None):
     """Apply the v3 pass bars to the readers' answer files. Returns (results, lines)."""
     from user_test import score as human_score  # same pass rules as the real test
+
     audit = Path(audit_dir)
     pack = pack or json.loads(PACK.read_text(encoding="utf-8"))
     qs = pack["questions"]
-    readers = sorted(p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem))
+    readers = sorted(
+        p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem)
+    )
     readers = [json.loads(p.read_text(encoding="utf-8")) for p in readers]
     lines, res = [], {}
 
     # 1. Simulated five-person phone test, on the goal's own bar.
     rows = []
     for r in readers:
-        row = {"participant": r["reader"], "consent": "yes", "eligible": "yes",
-               "site_commit": r.get("site_commit", ""), "phone": "simulated 360x640",
-               "seconds_taken": str(r.get("actions_used", 10**6) * SECONDS_PER_ACTION)}
+        row = {
+            "participant": r["reader"],
+            "consent": "yes",
+            "eligible": "yes",
+            "site_commit": r.get("site_commit", ""),
+            "phone": "simulated 360x640",
+            "seconds_taken": str(r.get("actions_used", 10**6) * SECONDS_PER_ACTION),
+        }
         if r.get("actions_used", 10**6) > r.get("budget", BUDGET):
             row["seconds_taken"] = str(10**6)
         row.update({f"q{k}": v for k, v in r.get("with_site", {}).items()})
@@ -457,10 +523,14 @@ def score(audit_dir, pack=None, new_pack=None):
     with_site = sum(_correct(r.get("with_site", {}), qs) for r in readers)
     without = sum(_correct(r.get("without_site", {}), qs) for r in readers)
     uplift = with_site - without
-    res["prior_knowledge"] = len(readers) == pack["pass_rules"]["participants"] and uplift >= UPLIFT_MIN
-    lines.append(f"Prior-knowledge check: {without}/{len(qs) * len(readers)} right without the site, "
-                 f"{with_site} with it, so the site added {uplift} (needs {UPLIFT_MIN}): "
-                 + ("PASS" if res["prior_knowledge"] else "FAIL"))
+    res["prior_knowledge"] = (
+        len(readers) == pack["pass_rules"]["participants"] and uplift >= UPLIFT_MIN
+    )
+    lines.append(
+        f"Prior-knowledge check: {without}/{len(qs) * len(readers)} right without the site, "
+        f"{with_site} with it, so the site added {uplift} (needs {UPLIFT_MIN}): "
+        + ("PASS" if res["prior_knowledge"] else "FAIL")
+    )
 
     # 3. Same test, new questions (sealed before the run).
     new_file = audit / "new-questions.json"
@@ -478,8 +548,10 @@ def score(audit_dir, pack=None, new_pack=None):
         possible = len(nq) * len(readers)
         share = got / possible if possible else 0
         res["new_questions"] = bool(readers) and share >= NEW_PASS
-        lines.append(f"New questions: {got}/{possible} right with the site ({share:.0%}, needs {NEW_PASS:.0%}); "
-                     f"{base} without it: " + ("PASS" if res["new_questions"] else "FAIL"))
+        lines.append(
+            f"New questions: {got}/{possible} right with the site ({share:.0%}, needs {NEW_PASS:.0%}); "
+            f"{base} without it: " + ("PASS" if res["new_questions"] else "FAIL")
+        )
     elif "new_questions" not in res:
         res["new_questions"] = False
         lines.append("New questions: FAIL (no new-questions.json in the audit folder)")
@@ -489,10 +561,23 @@ def score(audit_dir, pack=None, new_pack=None):
     if sr_file.exists():
         sr = json.loads(sr_file.read_text(encoding="utf-8"))
         got = _correct(sr.get("with_site", {}), qs)
-        missed = [q["id"] for q in qs if q["critical"] and str(sr.get("with_site", {}).get(str(q["id"]), "")).upper() != q["answer"]]
-        res["screen_reader"] = got >= SR_MIN_CORRECT and not missed and sr.get("actions_used", 10**6) <= sr.get("budget", BUDGET)
-        lines.append(f"Screen-reader reader: {got}/{len(qs)}" + (f", missed critical {missed}" if missed else "")
-                     + ": " + ("PASS" if res["screen_reader"] else "FAIL"))
+        missed = [
+            q["id"]
+            for q in qs
+            if q["critical"]
+            and str(sr.get("with_site", {}).get(str(q["id"]), "")).upper() != q["answer"]
+        ]
+        res["screen_reader"] = (
+            got >= SR_MIN_CORRECT
+            and not missed
+            and sr.get("actions_used", 10**6) <= sr.get("budget", BUDGET)
+        )
+        lines.append(
+            f"Screen-reader reader: {got}/{len(qs)}"
+            + (f", missed critical {missed}" if missed else "")
+            + ": "
+            + ("PASS" if res["screen_reader"] else "FAIL")
+        )
     else:
         res["screen_reader"] = False
         lines.append("Screen-reader reader: FAIL (no readers/SR.json)")
@@ -505,38 +590,59 @@ def score(audit_dir, pack=None, new_pack=None):
 
     d11 = 5 if res["phone_test"] and res["prior_knowledge"] and res["new_questions"] else None
     res["d11_ready_for_5"] = d11 == 5
-    lines.append("Reader stand-ins for D11 level 5: " + ("all PASS, recorded as met (simulated)" if d11 else "not all passed"))
+    lines.append(
+        "Reader stand-ins for D11 level 5: "
+        + ("all PASS, recorded as met (simulated)" if d11 else "not all passed")
+    )
     return res, lines
 
 
 def score_johns(readers, data=None):
     """Score readers on John's questions. Returns (results, lines); every failure is a gap."""
     import johns_questions as jq
+
     data = data or jq.load()
     pk = jq.pack(data)
     lines, gaps = ["John's questions:"], []
     for o in pk["open"]:
         gaps.append(f"{o['id']}: {o['gap']}")
     for q in pk["questions"]:
-        right = sum(1 for r in readers
-                    if str(r.get("johns_with_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
-        before = sum(1 for r in readers
-                     if str(r.get("johns_without_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
+        right = sum(
+            1
+            for r in readers
+            if str(r.get("johns_with_site", {}).get(q["id"], "")).strip().upper() == q["answer"]
+        )
+        before = sum(
+            1
+            for r in readers
+            if str(r.get("johns_without_site", {}).get(q["id"], "")).strip().upper() == q["answer"]
+        )
         ok = bool(readers) and right / len(readers) >= JOHNS_PASS
-        lines.append(f"  {q['id']}: {right}/{len(readers)} right with the site, {before} without: "
-                     + ("PASS" if ok else "FAIL"))
+        lines.append(
+            f"  {q['id']}: {right}/{len(readers)} right with the site, {before} without: "
+            + ("PASS" if ok else "FAIL")
+        )
         if not ok:
-            gaps.append(f"{q['id']}: readers could not answer \"{q['question']}\" from the site "
-                        f"({right} of {len(readers)} right); see their confusion notes.")
+            gaps.append(
+                f"{q['id']}: readers could not answer \"{q['question']}\" from the site "
+                f"({right} of {len(readers)} right); see their confusion notes."
+            )
     lines += [f"  open, not on the site yet: {o['id']}" for o in pk["open"]]
     passed = not gaps
-    lines.append("  " + ("PASS: the site answers every one of John's questions" if passed
-                         else f"FAIL: {len(gaps)} gaps"))
+    lines.append(
+        "  "
+        + (
+            "PASS: the site answers every one of John's questions"
+            if passed
+            else f"FAIL: {len(gaps)} gaps"
+        )
+    )
     lines += ["  gap: " + g for g in gaps]
     return {"johns_questions": passed, "johns_gaps": gaps}, lines
 
 
 # ------------------------------------------------------------------ main
+
 
 def main(argv):
     cmd = argv[1] if len(argv) > 1 else ""
@@ -557,8 +663,12 @@ def main(argv):
     if cmd == "score" and len(argv) == 3:
         res, lines = score(argv[2])
         print("\n".join(lines))
-        Path(argv[2], "reader-scores.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
-        return 0 if res["d11_ready_for_5"] and res["screen_reader"] and res["johns_questions"] else 1
+        Path(argv[2], "reader-scores.json").write_text(
+            json.dumps(res, indent=1) + "\n", encoding="utf-8"
+        )
+        return (
+            0 if res["d11_ready_for_5"] and res["screen_reader"] and res["johns_questions"] else 1
+        )
     print(__doc__)
     return 2
 

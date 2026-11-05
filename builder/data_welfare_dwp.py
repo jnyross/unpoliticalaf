@@ -18,6 +18,7 @@ report tax credits and Child Benefit separately only from later years.
 Amounts are nominal (cash) in the source. The page uses shares, which do not need adjusting for
 inflation, so no deflator is applied here.
 """
+
 from .data import Fact
 from .readers import xlsx, ref
 
@@ -33,15 +34,39 @@ FIRST_COLUMN = "1955/56"
 BENEFITS = [
     ("sp", "State Pension", "Table 1a", "State Pension", True),
     ("uc", "Universal Credit", "Table 1a", "Universal Credit", True),
-    ("hb", "Housing benefit (not Universal Credit)", "Table 1a", "Housing benefits (exc. Universal Credit)", True),
-    ("esa", "Employment and Support Allowance", "Table 1a", "Employment and Support Allowance", True),
+    (
+        "hb",
+        "Housing benefit (not Universal Credit)",
+        "Table 1a",
+        "Housing benefits (exc. Universal Credit)",
+        True,
+    ),
+    (
+        "esa",
+        "Employment and Support Allowance",
+        "Table 1a",
+        "Employment and Support Allowance",
+        True,
+    ),
     ("pc", "Pension Credit", "Table 1a", "Pension Credit", True),
     ("disab_dla", "Disability Living Allowance", "Table 1a", "Disability Living Allowance", True),
-    ("disab_pip", "Personal Independence Payment", "Table 1a", "Personal Independence Payment", True),
+    (
+        "disab_pip",
+        "Personal Independence Payment",
+        "Table 1a",
+        "Personal Independence Payment",
+        True,
+    ),
     ("disab_aa", "Attendance Allowance", "Table 1a", "Attendance Allowance", True),
     ("carers", "Carer's Allowance", "Table 1a", "Carer's Allowance", True),
     ("tc", "Tax credits", "Non-DWP Welfare", "Personal tax credits", False),
-    ("cb", "Child Benefit", "Non-DWP Welfare", "Child Benefit, One Parent Benefit & Guardian's Allowance", False),
+    (
+        "cb",
+        "Child Benefit",
+        "Non-DWP Welfare",
+        "Child Benefit, One Parent Benefit & Guardian's Allowance",
+        False,
+    ),
 ]
 # The DWP-coverage total used as the denominator: Table 1a's total plus the Non-DWP total.
 TOTAL_T1A = ("Table 1a", "Total benefit expenditure")
@@ -60,7 +85,9 @@ def _find(rows, label):
         text = " / ".join(str(c).strip() for c in r[:3] if isinstance(c, str) and c.strip())
         if "real terms" in text.lower():
             break
-        if text == label or text.startswith(label + " /"):  # Table 1a adds a category, e.g. "/ (NC / NIR)"
+        if text == label or text.startswith(
+            label + " /"
+        ):  # Table 1a adds a category, e.g. "/ (NC / NIR)"
             hits.append(i)
     if len(hits) != 1:
         raise ValueError(f"expected one row for {label!r}, found {len(hits)}")
@@ -91,52 +118,160 @@ def build(facts):
     t1a_total = cash(*TOTAL_T1A, DWP_COLUMN)
     non_total = cash(*TOTAL_NON, DWP_COLUMN)
     total_m = t1a_total[2] + non_total[2]
-    t1a_id = facts.add(Fact(f"dwp.cash.t1a.{YEAR}", t1a_total[2] / 1000, "£bn", YEAR, SOURCE,
-                            f"Table 1a!{ref(t1a_total[0], t1a_total[1])}", "published",
-                            note="DWP benefits, Table 1a total", scale=0.001))
-    non_id = facts.add(Fact(f"dwp.cash.nondwp.{YEAR}", non_total[2] / 1000, "£bn", YEAR, SOURCE,
-                            f"Non-DWP Welfare!{ref(non_total[0], non_total[1])}", "published",
-                            note="Tax credits, Child Benefit and other welfare (Great Britain), total", scale=0.001))
-    dwp_total = facts.add(Fact(f"dwp.cash.dwptotal.{YEAR}", total_m / 1000, "£bn", YEAR, SOURCE, "calculated",
-                               "calculated", note="DWP benefits plus Non-DWP welfare",
-                               formula=f"{t1a_id.id} + {non_id.id}", inputs=[t1a_id.id, non_id.id]))
+    t1a_id = facts.add(
+        Fact(
+            f"dwp.cash.t1a.{YEAR}",
+            t1a_total[2] / 1000,
+            "£bn",
+            YEAR,
+            SOURCE,
+            f"Table 1a!{ref(t1a_total[0], t1a_total[1])}",
+            "published",
+            note="DWP benefits, Table 1a total",
+            scale=0.001,
+        )
+    )
+    non_id = facts.add(
+        Fact(
+            f"dwp.cash.nondwp.{YEAR}",
+            non_total[2] / 1000,
+            "£bn",
+            YEAR,
+            SOURCE,
+            f"Non-DWP Welfare!{ref(non_total[0], non_total[1])}",
+            "published",
+            note="Tax credits, Child Benefit and other welfare (Great Britain), total",
+            scale=0.001,
+        )
+    )
+    dwp_total = facts.add(
+        Fact(
+            f"dwp.cash.dwptotal.{YEAR}",
+            total_m / 1000,
+            "£bn",
+            YEAR,
+            SOURCE,
+            "calculated",
+            "calculated",
+            note="DWP benefits plus Non-DWP welfare",
+            formula=f"{t1a_id.id} + {non_id.id}",
+            inputs=[t1a_id.id, non_id.id],
+        )
+    )
     out["total"] = dwp_total.id
     named = []
     for key, name, sheet, label, in_t1a in BENEFITS:
         i, j, raw = cash(sheet, label, DWP_COLUMN)
         val = 0 if raw in (None, "") else float(raw)
-        f = facts.add(Fact(f"dwp.cash.{key}.{YEAR}", val / 1000, "£bn", YEAR, SOURCE, f"{sheet}!{ref(i, j)}",
-                           "published", note=name, scale=0.001))
+        f = facts.add(
+            Fact(
+                f"dwp.cash.{key}.{YEAR}",
+                val / 1000,
+                "£bn",
+                YEAR,
+                SOURCE,
+                f"{sheet}!{ref(i, j)}",
+                "published",
+                note=name,
+                scale=0.001,
+            )
+        )
         named.append(f)
         out["parts"][key] = f.id
     # Disability and carers' benefits: four separate rows, each counted once.
     dis = [facts[f"dwp.cash.{k}.{YEAR}"] for k in DISABILITY]
-    dis_fact = facts.add(Fact(f"dwp.cash.disability.{YEAR}", sum(f.value for f in dis), "£bn", YEAR, SOURCE, "calculated",
-                              "calculated", note="Disability and carers' benefits",
-                              formula=" + ".join(f.id for f in dis), inputs=[f.id for f in dis]))
+    dis_fact = facts.add(
+        Fact(
+            f"dwp.cash.disability.{YEAR}",
+            sum(f.value for f in dis),
+            "£bn",
+            YEAR,
+            SOURCE,
+            "calculated",
+            "calculated",
+            note="Disability and carers' benefits",
+            formula=" + ".join(f.id for f in dis),
+            inputs=[f.id for f in dis],
+        )
+    )
     out["parts"]["disability"] = dis_fact.id
     # Other: what the named rows do not cover, from the DWP total.
-    rest = [facts[f"dwp.cash.{k}.{YEAR}"] for k in ("sp", "uc", "hb", "esa", "pc", "tc", "cb")] + [dis_fact]
+    rest = [facts[f"dwp.cash.{k}.{YEAR}"] for k in ("sp", "uc", "hb", "esa", "pc", "tc", "cb")] + [
+        dis_fact
+    ]
     other_val = dwp_total.value - sum(f.value for f in rest)
-    other = facts.add(Fact(f"dwp.cash.other.{YEAR}", other_val, "£bn", YEAR, SOURCE, "calculated", "calculated",
-                           note="Other benefits: the DWP total minus the named benefits",
-                           formula=f"{dwp_total.id} - (" + " + ".join(f.id for f in rest) + ")",
-                           inputs=[dwp_total.id] + [f.id for f in rest]))
+    other = facts.add(
+        Fact(
+            f"dwp.cash.other.{YEAR}",
+            other_val,
+            "£bn",
+            YEAR,
+            SOURCE,
+            "calculated",
+            "calculated",
+            note="Other benefits: the DWP total minus the named benefits",
+            formula=f"{dwp_total.id} - (" + " + ".join(f.id for f in rest) + ")",
+            inputs=[dwp_total.id] + [f.id for f in rest],
+        )
+    )
     out["parts"]["other"] = other.id
     for key in ["sp", "uc", "hb", "esa", "pc", "tc", "cb", "disability", "other"]:
         p = facts[out["parts"][key]]
-        facts.add(Fact(f"dwp.share.{key}.{YEAR}", p.value * 100 / dwp_total.value, "% of DWP benefit spending", YEAR, SOURCE,
-                       "calculated", "calculated", note=p.note, formula=f"{p.id} × 100 ÷ {dwp_total.id}",
-                       inputs=[p.id, dwp_total.id]))
+        facts.add(
+            Fact(
+                f"dwp.share.{key}.{YEAR}",
+                p.value * 100 / dwp_total.value,
+                "% of DWP benefit spending",
+                YEAR,
+                SOURCE,
+                "calculated",
+                "calculated",
+                note=p.note,
+                formula=f"{p.id} × 100 ÷ {dwp_total.id}",
+                inputs=[p.id, dwp_total.id],
+            )
+        )
     # The State Pension's share in 1955-56, on Table 1a alone.
     t_first = cash("Table 1a", "State Pension", FIRST_COLUMN)
     t_first_total = cash(*TOTAL_T1A, FIRST_COLUMN)
-    sp_first = facts.add(Fact(f"dwp.cash.sp.{FIRST}", float(t_first[2]) / 1000, "£bn", FIRST, SOURCE,
-                              f"Table 1a!{ref(t_first[0], t_first[1])}", "published", note="State Pension", scale=0.001))
-    tot_first = facts.add(Fact(f"dwp.cash.t1a.{FIRST}", float(t_first_total[2]) / 1000, "£bn", FIRST, SOURCE,
-                               f"Table 1a!{ref(t_first_total[0], t_first_total[1])}", "published",
-                               note="DWP benefits, Table 1a total", scale=0.001))
-    facts.add(Fact(f"dwp.share.sp.{FIRST}", sp_first.value * 100 / tot_first.value, "% of Table 1a benefit spending", FIRST,
-                   SOURCE, "calculated", "calculated", note="State Pension", formula=f"{sp_first.id} × 100 ÷ {tot_first.id}",
-                   inputs=[sp_first.id, tot_first.id]))
+    sp_first = facts.add(
+        Fact(
+            f"dwp.cash.sp.{FIRST}",
+            float(t_first[2]) / 1000,
+            "£bn",
+            FIRST,
+            SOURCE,
+            f"Table 1a!{ref(t_first[0], t_first[1])}",
+            "published",
+            note="State Pension",
+            scale=0.001,
+        )
+    )
+    tot_first = facts.add(
+        Fact(
+            f"dwp.cash.t1a.{FIRST}",
+            float(t_first_total[2]) / 1000,
+            "£bn",
+            FIRST,
+            SOURCE,
+            f"Table 1a!{ref(t_first_total[0], t_first_total[1])}",
+            "published",
+            note="DWP benefits, Table 1a total",
+            scale=0.001,
+        )
+    )
+    facts.add(
+        Fact(
+            f"dwp.share.sp.{FIRST}",
+            sp_first.value * 100 / tot_first.value,
+            "% of Table 1a benefit spending",
+            FIRST,
+            SOURCE,
+            "calculated",
+            "calculated",
+            note="State Pension",
+            formula=f"{sp_first.id} × 100 ÷ {tot_first.id}",
+            inputs=[sp_first.id, tot_first.id],
+        )
+    )
     return out

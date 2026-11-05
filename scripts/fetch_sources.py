@@ -11,7 +11,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "data" / "fetched"
-UA = {"User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"}
+UA = {
+    "User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"
+}
 
 
 def get(url):
@@ -22,7 +24,7 @@ def get(url):
         except Exception as e:  # retry transient failures and rate limits
             if attempt == 3:
                 raise
-            time.sleep(30 * (attempt + 1) if "429" in str(e) else 2 ** attempt)
+            time.sleep(30 * (attempt + 1) if "429" in str(e) else 2**attempt)
 
 
 def main(only=None, refresh=False):
@@ -33,7 +35,12 @@ def main(only=None, refresh=False):
     for s in manifest["sources"]:
         if only and s["id"] not in only:
             continue
-        if not refresh and not only and s["id"] in receipts and (OUT / receipts[s["id"]]["file"]).exists():
+        if (
+            not refresh
+            and not only
+            and s["id"] in receipts
+            and (OUT / receipts[s["id"]]["file"]).exists()
+        ):
             continue  # keep the retained copy; pass --refresh to download again
         time.sleep(3)  # be polite to the publishers' servers
         try:
@@ -53,9 +60,14 @@ def main(only=None, refresh=False):
             path = OUT / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(body)
-            receipts[s["id"]] = {"url": url, "file": name, "bytes": len(body), "content_type": ctype,
-                                 "sha256": hashlib.sha256(body).hexdigest(),
-                                 "retrieved": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")}
+            receipts[s["id"]] = {
+                "url": url,
+                "file": name,
+                "bytes": len(body),
+                "content_type": ctype,
+                "sha256": hashlib.sha256(body).hexdigest(),
+                "retrieved": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
             print("ok  ", s["id"], len(body), url)
         except Exception as e:
             failures.append(s["id"])

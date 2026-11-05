@@ -1,4 +1,5 @@
 """The recorded random-sample accuracy check stays complete and readable."""
+
 import importlib.util
 import json
 import unittest
@@ -23,8 +24,9 @@ class RecordedCheck(unittest.TestCase):
 
 
 class JsonReader(unittest.TestCase):
-    IMF = json.dumps({"values": {"GG_DEBT_GDP": {"GBR": {"2023": 100.1, "2024": 101.28941}}},
-                      "api": {}}).encode()
+    IMF = json.dumps(
+        {"values": {"GG_DEBT_GDP": {"GBR": {"2023": 100.1, "2024": 101.28941}}}, "api": {}}
+    ).encode()
 
     def test_imf_datamapper_value_is_read_by_indicator_country_and_year(self):
         self.assertEqual(ac.read_cell(self.IMF, "x.json", "values.GG_DEBT_GDP.GBR.2024"), 101.28941)
@@ -35,14 +37,21 @@ class JsonReader(unittest.TestCase):
 
     def test_recorded_imf_cell_reads_from_the_repository_copy(self):
         body = (ROOT / "data/fetched/imf/weo-gg-debt-gdp.json").read_bytes()
-        value = ac.read_cell(body, "data/fetched/imf/weo-gg-debt-gdp.json", "values.GG_DEBT_GDP.GBR.2024")
+        value = ac.read_cell(
+            body, "data/fetched/imf/weo-gg-debt-gdp.json", "values.GG_DEBT_GDP.GBR.2024"
+        )
         self.assertAlmostEqual(value, 101.28941)
 
 
 class Calculations(unittest.TestCase):
     def test_formula_text_is_evaluated(self):
         self.assertAlmostEqual(ac.evaluate("100 × a.1 ÷ a.10", {"a.1": 5, "a.10": 20}), 25)
-        self.assertAlmostEqual(ac.evaluate("t − sum of the two named groups", {"t": 10, "x": 3, "y": 2}, ["t", "x", "y"]), 5)
+        self.assertAlmostEqual(
+            ac.evaluate(
+                "t − sum of the two named groups", {"t": 10, "x": 3, "y": 2}, ["t", "x", "y"]
+            ),
+            5,
+        )
 
     def test_formula_ending_with_its_period_is_evaluated(self):
         values = {"a.2025-26": 1, "b.2025-26": 2, "c.2025-26": 6}
@@ -50,12 +59,16 @@ class Calculations(unittest.TestCase):
 
     def test_total_less_named_taxes_is_evaluated(self):
         values = {"t.2025-26": 10, "x.2025-26": 3, "y.2025-26": 2}
-        self.assertAlmostEqual(ac.evaluate("t.2025-26 − sum of the named taxes", values, list(values)), 5)
+        self.assertAlmostEqual(
+            ac.evaluate("t.2025-26 − sum of the named taxes", values, list(values)), 5
+        )
 
     def test_page_rounding(self):
         self.assertTrue(ac.page_matches({"text": "£44.2bn", "value": 44.24, "kind": "bn"})[0])
         self.assertFalse(ac.page_matches({"text": "£44.2bn", "value": 44.26, "kind": "bn"})[0])
-        self.assertTrue(ac.page_matches({"text": "32.9 million", "value": 32912.0, "kind": "millions"})[0])
+        self.assertTrue(
+            ac.page_matches({"text": "32.9 million", "value": 32912.0, "kind": "millions"})[0]
+        )
 
 
 if __name__ == "__main__":

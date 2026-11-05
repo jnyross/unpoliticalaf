@@ -2,6 +2,7 @@
 
 Usage: python -m builder.build
 """
+
 import hashlib
 import json
 import shutil
@@ -15,7 +16,31 @@ from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from . import pages_money_extra, pages_generations, pages_manifesto, version
-from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, pages_questions, glossary, trace, uncertainty
+from . import (
+    pages_options,
+    downloads,
+    pages_money,
+    pages_top_earners,
+    pages_spendhist,
+    pages_welfare,
+    pages_taxmixhist,
+    pages_life,
+    pages_history,
+    pages_early_compare,
+    pages_home,
+    pages_ranges,
+    pages_intl,
+    pages_prod,
+    pages_borrow,
+    pages_debt,
+    pages_defence,
+    pages_leaving,
+    pages_immigration,
+    pages_questions,
+    glossary,
+    trace,
+    uncertainty,
+)
 
 OUT = ROOT / "site"
 # The product spec requires every page to be under 500,000 bytes. Reading pages
@@ -64,7 +89,9 @@ def render():
     pages["high-earners.html"] = pages_top_earners.high_earners_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
     pages["questions.html"] = pages_questions.questions_page()
-    pages["self-employed-tax.html"] = pages_money.self_employed_tax_page(facts, d, num, sources, rates)
+    pages["self-employed-tax.html"] = pages_money.self_employed_tax_page(
+        facts, d, num, sources, rates
+    )
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
     for key, _, _ in pages_life.TOPICS:
@@ -80,16 +107,28 @@ def render():
     for a in YEARS:
         for b in YEARS:
             if a < b:
-                pages[f"life/compare/{a}-{b}.html"] = pages_life.compare_page(facts, d, num, sources, a, b)
+                pages[f"life/compare/{a}-{b}.html"] = pages_life.compare_page(
+                    facts, d, num, sources, a, b
+                )
     for a, b in pages_early_compare.pairs():
-        pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(facts, d, num, sources, a, b)
+        pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(
+            facts, d, num, sources, a, b
+        )
     pages["life/compare/index.html"] = pages_life.compare_index(sources)
     for a, b in pages_ranges.span_pairs():
-        pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(facts, d, num, sources, a, b)
+        pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(
+            facts, d, num, sources, a, b
+        )
     pages["life/compare/spans/index.html"] = pages_ranges.span_index(facts)
     # The old single life page moved to life/index.html; keep the address working.
-    moved = page("life.html", "Everyday life, year by year", '<h1>This page has moved</h1><p><a href="life/index.html">Go to Everyday life, year by year</a>.</p>')
-    pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)
+    moved = page(
+        "life.html",
+        "Everyday life, year by year",
+        '<h1>This page has moved</h1><p><a href="life/index.html">Go to Everyday life, year by year</a>.</p>',
+    )
+    pages["life.html"] = moved.replace(
+        "<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1
+    )
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
     pages["sources.html"] = pages_home.sources_page(sources, used)
@@ -137,12 +176,19 @@ def main():
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text, encoding="utf-8", newline="")
     (OUT / "data").mkdir(exist_ok=True)
-    (OUT / "data/facts.json").write_text(json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1), encoding="utf-8")
+    (OUT / "data/facts.json").write_text(
+        json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1),
+        encoding="utf-8",
+    )
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
     write_build_record()
-    print(f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
+    print(
+        f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/"
+    )
     if num.absent:
-        print(f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}")
+        print(
+            f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}"
+        )
     return 0
 
 

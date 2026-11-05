@@ -12,6 +12,7 @@ The database's contents sheet says the OBR took these from its own 2023 compilat
 different source and are not used here. The database is not a set of national statistics,
 and its contents sheet says judgements were made to keep years consistent.
 """
+
 import re
 
 from .data import Fact
@@ -38,7 +39,18 @@ def build(facts):
             v = rows[i][col]
             if not isinstance(v, (int, float)):
                 raise ValueError(f"{SHEET} {y} {key} is not a number: {v!r}")
-            facts.add(Fact(f"debt.{key}.{y}", float(v), "% of GDP", y, SOURCE,
-                           f"{SHEET}!{ref(i, col)}", "published",
-                           note="public sector net debt" if key == "psnd" else "public sector net borrowing"))
+            facts.add(
+                Fact(
+                    f"debt.{key}.{y}",
+                    float(v),
+                    "% of GDP",
+                    y,
+                    SOURCE,
+                    f"{SHEET}!{ref(i, col)}",
+                    "published",
+                    note=(
+                        "public sector net debt" if key == "psnd" else "public sector net borrowing"
+                    ),
+                )
+            )
     return {"years": ys, "first": ys[0], "last": ys[-1]}

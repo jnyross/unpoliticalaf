@@ -11,6 +11,7 @@ It compares three things:
 Exit code 0 means the live site matches the local build byte for byte.
 Uses only the Python standard library.
 """
+
 import argparse
 import hashlib
 import json
@@ -29,7 +30,9 @@ RECORD = "build.json"
 
 def fetch(url, tries=3):
     """Return (status, body bytes). Retries network errors, not HTTP errors."""
-    req = urllib.request.Request(url, headers={"User-Agent": "unpolitical-live-check", "Cache-Control": "no-cache"})
+    req = urllib.request.Request(
+        url, headers={"User-Agent": "unpolitical-live-check", "Cache-Control": "no-cache"}
+    )
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=30) as r:
@@ -39,14 +42,17 @@ def fetch(url, tries=3):
         except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
             if attempt == tries - 1:
                 return None, str(e).encode()
-            time.sleep(2 ** attempt)
+            time.sleep(2**attempt)
 
 
 def live_record(base):
     status, body = fetch(f"{base}{RECORD}?t={int(time.time())}")
     if status != 200:
         why = f"HTTP {status}" if status else body.decode(errors="replace")
-        return None, f"could not read {base}{RECORD} ({why}); the live site may predate build records"
+        return (
+            None,
+            f"could not read {base}{RECORD} ({why}); the live site may predate build records",
+        )
     try:
         return json.loads(body), None
     except ValueError:
@@ -67,13 +73,19 @@ def compare(base, local, live):
         problems.append(f"Extra in live build record: {path}")
     for path in sorted(set(lf) & set(vf)):
         if lf[path] != vf[path]:
-            problems.append(f"Same commit but a different build of {path} (build is not reproducible)")
+            problems.append(
+                f"Same commit but a different build of {path} (build is not reproducible)"
+            )
 
     def served(path):
         status, body = fetch(base + path)
         if status != 200:
             return path, f"HTTP {status}"
-        return path, None if hashlib.sha256(body).hexdigest() == lf[path] else "content differs from the build"
+        return path, (
+            None
+            if hashlib.sha256(body).hexdigest() == lf[path]
+            else "content differs from the build"
+        )
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         for path, err in pool.map(served, sorted(lf)):
@@ -93,7 +105,9 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--url", default=DEFAULT_URL, help="live site address")
     ap.add_argument("--site", default=str(ROOT / "site"), help="local build folder")
-    ap.add_argument("--wait", type=int, default=0, help="seconds to keep waiting for the live commit to match")
+    ap.add_argument(
+        "--wait", type=int, default=0, help="seconds to keep waiting for the live commit to match"
+    )
     args = ap.parse_args(argv)
     base = args.url if args.url.endswith("/") else args.url + "/"
     path = Path(args.site) / RECORD
@@ -112,20 +126,29 @@ def main(argv=None):
             break
         if time.time() >= deadline:
             break
-        print(f"Waiting for {base} to serve {local['commit'][:7]} (now: {err or live.get('commit', '?')[:7]})")
+        print(
+            f"Waiting for {base} to serve {local['commit'][:7]} (now: {err or live.get('commit', '?')[:7]})"
+        )
         time.sleep(30)
 
     problems = [err] if err else compare(base, local, live)
     n = len(local["files"])
     if problems:
-        lines = [f"## Live site does not match the latest build", "",
-                 f"Checked {base} against commit `{local['commit']}`.", ""]
+        lines = [
+            f"## Live site does not match the latest build",
+            "",
+            f"Checked {base} against commit `{local['commit']}`.",
+            "",
+        ]
         lines += [f"- {p}" for p in problems[:50]]
         if len(problems) > 50:
             lines.append(f"- … and {len(problems) - 50} more")
     else:
-        lines = ["## Live site matches the latest build", "",
-                 f"{base} serves commit `{local['commit']}`, and all {n} files match the build byte for byte."]
+        lines = [
+            "## Live site matches the latest build",
+            "",
+            f"{base} serves commit `{local['commit']}`, and all {n} files match the build byte for byte.",
+        ]
     print("\n".join(lines))
     summary(lines)
     return 1 if problems else 0

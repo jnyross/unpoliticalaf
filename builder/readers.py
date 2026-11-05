@@ -4,6 +4,7 @@ Every reader returns plain Python values together with a locator string
 (sheet and cell, or CSV row label) so that each published number can be
 traced back to the exact place in the original file.
 """
+
 import csv
 import io
 import re
@@ -109,6 +110,7 @@ def csv_rows(path):
 def pdf_pages(path):
     """Text of each page of a PDF, one string per page (page 1 is index 0)."""
     from pypdf import PdfReader
+
     return [p.extract_text() or "" for p in PdfReader(ROOT / path).pages]
 
 
@@ -122,6 +124,6 @@ def pdf_number(path, locator):
     page, anchor, label, n = int(m.group(1)), m.group(2), m.group(3), int(m.group(4))
     lines = pdf_pages(path)[page - 1].splitlines()
     start = next(i for i, l in enumerate(lines) if l.strip().startswith(anchor))
-    line = next(l for l in lines[start + 1:] if l.strip().startswith(label))
-    nums = re.findall(r"-?[\d,]+(?:\.\d+)?", line[len(label) + line.index(label):])
+    line = next(l for l in lines[start + 1 :] if l.strip().startswith(label))
+    nums = re.findall(r"-?[\d,]+(?:\.\d+)?", line[len(label) + line.index(label) :])
     return float(nums[n - 1].replace(",", ""))
