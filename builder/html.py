@@ -10,7 +10,7 @@ import math
 import re
 from decimal import Decimal, ROUND_HALF_UP
 from html import escape
-from . import version, downloads, feature_flags
+from . import version, downloads
 from . import findings as F
 
 SITE = "Unpolitical"
@@ -486,12 +486,11 @@ def page(path, title, body, description="", scripts="", contents=True, folded=Tr
     body = hide_chart_marks(body)
     if path in QUESTION_PAGES and '<div class="answer">' in body:
         body = body.replace('<div class="answer">', '<div class="answer" id="answer">', 1)
-    if "data-chart=" in body and feature_flags.enabled("chart_interactions"):
+    if "data-chart=" in body:
         scripts = scripts + CHART_JS
     if "data-view=" in body:
         scripts = scripts + VIEW_LINK_JS
-    if feature_flags.enabled("sticky_navigation"):
-        scripts = scripts + BACKTOP_JS
+    scripts = scripts + BACKTOP_JS
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>

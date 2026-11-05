@@ -5,10 +5,15 @@ import http.server
 import importlib.util
 import json
 import os
+import shutil
 import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+
+from builder import build, feature_flags, html
+from builder.data import Facts
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("check_live", ROOT / "scripts/check_live.py")
@@ -25,6 +30,33 @@ def make_site(folder, commit="a" * 40, pages=None):
         p.write_text(text, encoding="utf-8")
         files[path] = hashlib.sha256(text.encode()).hexdigest()
     (Path(folder) / "build.json").write_text(json.dumps({"commit": commit, "files": files}))
+
+
+def make_production_site(folder, config):
+    """Exercise the actual --production entry point without all fiscal rendering.
+
+    Only the expensive page/data producers are replaced. Configuration loading,
+    optional-script gating, output writing and build manifests are real.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "assets").mkdir()
+        (root / "assets/icon.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+
+        def render(settings):
+            facts = Facts()
+            body = html.line_chart("Example", ["2020", "2021"], [("Rate", [1, 2], "a")], "units", kind="int")
+            body += "<table><caption>Example data</caption><tr><th>Year</th><td>2020</td></tr></table>"
+            output = html.page("index.html", "Example", body, folded=False, contents=False)
+            return facts, {}, build.apply_feature_flags({"index.html": output}, settings), html.Num(facts)
+
+        with patch.dict(os.environ, {}, clear=True), patch.object(feature_flags, "PRODUCTION_CONFIG", config):
+            with patch.object(build, "ROOT", root), patch.object(build, "OUT", root / "site"):
+                with patch.object(build, "render", side_effect=render), patch.object(build.downloads, "FILES", {}):
+                    with patch.object(build.version, "commit", return_value="a" * 40):
+                        if build.main(["--production"]) != 0:
+                            raise AssertionError("Production fixture build failed")
+                shutil.copytree(root / "site", folder, dirs_exist_ok=True)
 
 
 class LiveCheck(unittest.TestCase):
@@ -83,6 +115,36 @@ class LiveCheck(unittest.TestCase):
         record = json.loads(path.read_text())
         record["feature_flags"] = {"chart_interactions": False}
         path.write_text(json.dumps(record))
+        self.assertEqual(self.run_check(), 1)
+
+    def test_nondefault_production_deployment_matches_independent_rebuild(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / "production.json"
+            config.write_text('{"chart_interactions":false,"sticky_navigation":false}')
+            # Both builds read the trusted configuration, not the served manifest.
+            make_production_site(self.live.name, config)
+            make_production_site(self.local.name, config)
+        expected = json.loads((Path(self.local.name) / "build.json").read_text())
+        self.assertEqual(expected["feature_flags"], {"chart_interactions": False, "sticky_navigation": False})
+        output = (Path(self.local.name) / "index.html").read_text()
+        self.assertNotIn(html.CHART_JS, output)
+        self.assertNotIn(html.BACKTOP_JS, output)
+        self.assertIn("Example data", output)
+        self.assertEqual(self.run_check(), 0)
+
+    def test_remote_manifest_cannot_choose_expected_flags_or_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            config = Path(tmp) / "production.json"
+            config.write_text('{"chart_interactions":false,"sticky_navigation":false}')
+            make_production_site(self.local.name, config)
+            config.write_text('{"chart_interactions":true,"sticky_navigation":true}')
+            make_production_site(self.live.name, config)
+        self.assertEqual(self.run_check(), 1)
+        # Even lying about the settings cannot make different served bytes pass.
+        path = Path(self.live.name) / "build.json"
+        remote = json.loads(path.read_text())
+        remote["feature_flags"] = {"chart_interactions": False, "sticky_navigation": False}
+        path.write_text(json.dumps(remote))
         self.assertEqual(self.run_check(), 1)
 
 

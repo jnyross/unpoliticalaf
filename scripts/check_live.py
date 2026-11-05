@@ -1,7 +1,7 @@
 """Check that the live site is exactly the latest build.
 
 Usage:
-    make build && python3 scripts/check_live.py [--url URL] [--wait SECONDS]
+    make production-build && python3 scripts/check_live.py [--url URL] [--wait SECONDS]
 
 It compares three things:
 1. the commit in the live build.json with the commit of the local build;
@@ -100,7 +100,7 @@ def main(argv=None):
     base = args.url if args.url.endswith("/") else args.url + "/"
     path = Path(args.site) / RECORD
     if not path.exists():
-        print(f"{path} not found: run `make build` first.")
+        print(f"{path} not found: run `make production-build` first.")
         return 2
     local = json.loads(path.read_text(encoding="utf-8"))
     if local["commit"] == "unknown":

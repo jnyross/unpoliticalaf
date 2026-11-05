@@ -39,20 +39,21 @@ Python 3.10 or later.
 ```
 make setup     # create .venv and install openpyxl
 make build     # write the site to site/
+make production-build  # build using config/feature-flags.production.json
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
-Vercel: install `make setup`, build `make build`, output directory `site`, all set
+Vercel: install `make setup`, build `make production-build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
-locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
+locally with the same reviewed production flag file as Vercel, and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 

@@ -10,12 +10,42 @@ verification, factual content, accessibility checks or core no-JavaScript access
 | `sticky_navigation` | `true` | Omits sticky-header activation. The normal header and “Top and menu” link remain. |
 
 These two features already shipped, so their defaults preserve existing behaviour.
-New `FeatureFlag` entries default to `false`; enable new work deliberately after
-review. Use `feature_flags.enabled("registered_name")` at its rendering boundary,
-and test both paths. Unknown names raise an error, rather than silently enabling
-or hiding mistyped features.
+New `FeatureFlag` entries default to `false` for local builds; production must
+explicitly name every flag. Apply flags in `builder.build`, not in reusable HTML
+helpers. This keeps `builder.html` independent of configuration and preserves
+the import boundaries in #253. Test both enabled and disabled output.
 
-## Configure and verify
+## One reviewed production configuration
+
+`config/feature-flags.production.json` is the sole production source of truth.
+It is checked into Git, must contain every registered flag as a JSON boolean,
+and initially preserves both already-shipped enhancements. Change this file in
+a reviewed PR to roll out or roll back a feature.
+
+All production entry points read that same local file:
+
+- Vercel's `buildCommand` runs `make production-build`.
+- `.github/workflows/live.yml` rebuilds with `make production-build`.
+- `make live` also depends on `production-build` before comparing served files.
+
+`production-build` runs `python -m builder.build --production`. It rejects
+`UNPOLITICAL_FEATURE_FLAGS` if present, even if empty or `{}`. Do not configure
+that variable in Vercel; remove any prior Vercel-only override before activating
+this build command. Missing, incomplete or invalid production files fail before
+existing output is replaced. There is no silent fallback to defaults.
+
+```sh
+make production-build   # build the reviewed production settings
+make production-verify  # same build, then source/page checks and unit tests
+make live               # same build, then compare against the live site
+```
+
+The live verifier gets expected flags and hashes from the independently rebuilt
+local artifact. It never adopts settings or expected hashes from the remote
+manifest. A remote deployment with different flags fails, even at the same
+commit; lying about its flags cannot make different served bytes pass.
+
+## Local experiments
 
 `UNPOLITICAL_FEATURE_FLAGS` is a JSON object of **boolean** overrides. Unspecified
 flags keep their registered defaults. For example:
@@ -29,22 +59,23 @@ make verify  # defaults, if the variable is not exported in your shell
 
 Invalid JSON, unknown flags, duplicate keys, strings such as `"false"`, numbers
 and an explicitly empty value stop the build before existing output is replaced.
-Unset the variable or use `{}` to select defaults. Configuration is not read from
-`.env` files. The normal setup/build/check/test commands are unchanged.
+Unset the variable or use `{}` to select local defaults. Configuration is not
+read from `.env` files. `make build` and `make verify` remain local experiments;
+they are not substitutes for the explicit production build.
 
 ## Roll out and roll back
 
 1. Add a new flag with its default off and tests for enabled and disabled output.
-2. Build and check the enabled version locally with the override. GitHub Actions
-   runs `make verify` with defaults and with both existing enhancements disabled;
-   extend that matrix when adding a new flag.
-3. Keep production off while the enabled candidate is reviewed and checked.
-   If a deployment operator sets overrides, scope them separately to each
-   environment. Branch deployments remain disabled by `vercel.json`; a flag
-   does not create a preview deployment or bypass the existing release controller.
-4. Enable production only through the normal reviewed release process. To roll
-   back an enhancement, set its override to `false`, rebuild, check and deploy
-   through that same process. Setting a variable alone does not change served files.
+2. Add its explicit production setting as `false` in the production file. Build
+   and check the enabled version locally with an environment override.
+3. GitHub Actions verifies local defaults, both current static fallbacks, and the
+   reviewed production configuration. The stable `check` job requires all flag
+   configurations and its own default checks to pass. Extend the cases for new
+   features; preserve the separate architecture job supplied by #253.
+4. Enable production in the checked-in file only through the normal reviewed
+   release process. To roll back, set its production value to `false`, rebuild,
+   check and deploy through that same process. Branch deployments remain disabled
+   by `vercel.json`; flags do not create previews or bypass the release controller.
 
 Flags affect every visitor to a given built artifact. This is environment-scoped
 rollout, not percentage targeting or a runtime kill switch. Do not use flags as
@@ -53,8 +84,9 @@ flag names or values.
 
 `site/build.json` records effective `feature_flags` alongside the source commit
 and file hashes, without timestamps. Identical source and settings produce the
-same output. `make live` must use the same overrides as the deployed build; it
-checks both the flag snapshot and the generated file hashes.
+same output. One immutable flag snapshot drives rendering and the manifest;
+neither stage re-reads a potentially changed configuration. `make live` checks
+both that snapshot and the generated file hashes.
 
-Remove a temporary flag and its override from every environment once the rollout
-is complete and the fallback is no longer needed.
+Remove a temporary flag from the registry and production file, plus any local
+overrides, once the rollout is complete and the fallback is no longer needed.

@@ -18,6 +18,12 @@ build: site
 site:
 	$(RUN_PYTHON) -m builder.build
 
+.PHONY: production-build production-verify
+production-build:
+	$(RUN_PYTHON) -m builder.build --production
+
+production-verify: production-build check test
+
 # Re-reads every figure from its source file and checks every page.
 check:
 	$(RUN_PYTHON) -m builder.check
@@ -37,5 +43,5 @@ fetch:
 	$(RUN_PYTHON) scripts/fetch_sources.py
 
 # Check the live site serves exactly this build (needs network access).
-live: build
+live: production-build
 	$(RUN_PYTHON) scripts/check_live.py

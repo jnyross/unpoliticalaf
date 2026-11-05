@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -44,11 +45,66 @@ class Configuration(unittest.TestCase):
 
     def test_environment_changes_do_not_reuse_old_settings(self):
         with patch.dict(os.environ, {flags.ENV_VAR: '{"chart_interactions":false}'}):
-            self.assertFalse(flags.enabled("chart_interactions"))
+            self.assertFalse(flags.resolve()["chart_interactions"])
         with patch.dict(os.environ, {flags.ENV_VAR: "{}"}):
-            self.assertTrue(flags.enabled("chart_interactions"))
+            self.assertTrue(flags.resolve()["chart_interactions"])
             with self.assertRaises(KeyError):
-                flags.enabled("chart_interactons")
+                flags.resolve()["chart_interactons"]
+
+
+class ProductionConfiguration(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.config = Path(temporary.name) / "production.json"
+        self.config.write_text('{"chart_interactions":false,"sticky_navigation":false}')
+        mocked = patch.object(flags, "PRODUCTION_CONFIG", self.config)
+        mocked.start()
+        self.addCleanup(mocked.stop)
+
+    def test_production_uses_only_explicit_configuration(self):
+        self.assertEqual(dict(flags.production({})), {
+            "chart_interactions": False, "sticky_navigation": False,
+        })
+
+    def test_production_rejects_environment_overrides_even_when_empty(self):
+        for value in ("", "{}", '{"chart_interactions":true}'):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "unsetting"):
+                flags.production({flags.ENV_VAR: value})
+
+    def test_incomplete_or_invalid_production_configuration_fails(self):
+        for value in ('{}', '{"chart_interactions":false}', '[]', '{',
+                      '{"chart_interactions":false,"sticky_navigation":"false"}',
+                      '{"chart_interactions":false,"sticky_navigation":false,"extra":false}',
+                      '{"chart_interactions":false,"chart_interactions":true,"sticky_navigation":false}'):
+            with self.subTest(value=value):
+                self.config.write_text(value)
+                with self.assertRaises(ValueError):
+                    flags.production({})
+
+    def test_missing_production_file_never_falls_back_to_defaults(self):
+        self.config.unlink()
+        with self.assertRaises(FileNotFoundError):
+            flags.production({})
+
+    def test_production_snapshot_is_immutable_and_not_cached_by_path(self):
+        before = flags.production({})
+        self.config.write_text('{"chart_interactions":true,"sticky_navigation":true}')
+        self.assertFalse(before["chart_interactions"])
+        self.assertTrue(flags.production({})["chart_interactions"])
+        with self.assertRaises(TypeError):
+            before["chart_interactions"] = True
+
+    def test_all_production_entrypoints_share_the_explicit_build(self):
+        root = Path(__file__).resolve().parents[1]
+        vercel = json.loads((root / "vercel.json").read_text())
+        self.assertEqual(vercel["buildCommand"], "make production-build")
+        for target in ("production-build", "live"):
+            command = subprocess.check_output(["make", "-n", target], cwd=root, text=True)
+            self.assertIn("-m builder.build --production", command)
+        live = (root / ".github/workflows/live.yml").read_text()
+        self.assertIn("- run: make production-build", live)
+        self.assertNotIn("- run: make build\n", live)
 
 
 class Rendering(unittest.TestCase):
@@ -57,8 +113,9 @@ class Rendering(unittest.TestCase):
         body = chart + '<table><caption>Example data</caption><tr><th>Year</th><td>2020</td></tr></table>'
         body += '<a href="#view" data-view="0">Cash view</a>'
         with patch.dict(os.environ, {flags.ENV_VAR: json.dumps(overrides)}):
-            return html.page("example.html", "Example", body, folded=False, contents=False,
-                             scripts="<script>/* page-specific script */</script>")
+            output = html.page("example.html", "Example", body, folded=False, contents=False,
+                               scripts="<script>/* page-specific script */</script>")
+            return build.apply_feature_flags({"example.html": output}, flags.resolve())["example.html"]
 
     def test_defaults_preserve_both_enhancements(self):
         output = self.render({})
@@ -85,6 +142,21 @@ class Rendering(unittest.TestCase):
 
 
 class BuildSafety(unittest.TestCase):
+    def test_bad_production_configuration_preserves_last_good_site(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            site = Path(tmp) / "site"
+            site.mkdir()
+            index = site / "index.html"
+            index.write_text("last good build")
+            config = Path(tmp) / "production.json"
+            config.write_text("{}")
+            with patch.dict(os.environ, {}, clear=True), patch.object(flags, "PRODUCTION_CONFIG", config):
+                with patch.object(build, "OUT", site), patch.object(build, "render") as render:
+                    with self.assertRaises(ValueError):
+                        build.main(["--production"])
+                    render.assert_not_called()
+            self.assertEqual(index.read_text(), "last good build")
+
     def test_bad_configuration_preserves_last_good_site(self):
         with tempfile.TemporaryDirectory() as tmp:
             site = Path(tmp)
@@ -93,7 +165,7 @@ class BuildSafety(unittest.TestCase):
             with patch.object(build, "OUT", site), patch.object(build, "all_sources") as sources:
                 with patch.dict(os.environ, {flags.ENV_VAR: '{"typo":true}'}):
                     with self.assertRaises(ValueError):
-                        build.main()
+                        build.main([])
                 sources.assert_not_called()
             self.assertEqual(index.read_text(), "last good build")
 
@@ -103,9 +175,9 @@ class BuildSafety(unittest.TestCase):
             (site / "index.html").write_text("home")
             with patch.object(build, "OUT", site), patch.object(build.version, "commit", return_value="a" * 40):
                 with patch.dict(os.environ, {flags.ENV_VAR: '{"chart_interactions":false}'}):
-                    build.write_build_record()
+                    build.write_build_record(flags.resolve())
                     first = (site / "build.json").read_bytes()
-                    build.write_build_record()
+                    build.write_build_record(flags.resolve())
                     self.assertEqual((site / "build.json").read_bytes(), first)
             record = json.loads(first)
             self.assertEqual(record["feature_flags"], {"chart_interactions": False, "sticky_navigation": True})
