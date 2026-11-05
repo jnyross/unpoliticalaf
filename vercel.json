@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "make setup",
+  "installCommand": "npm ci --ignore-scripts && make setup",
   "buildCommand": "make build",
   "outputDirectory": "site",
+  "proxy": {
+    "entrypoint": "middleware.js"
+  },
   "git": {
     "deploymentEnabled": {
       "main": true,
