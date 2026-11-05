@@ -48,10 +48,11 @@ make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 
 ### Local unit tests
 
-From a fresh checkout, run `make setup-test && make test`. Setup needs network
-access to install the pinned dependencies into `.venv`; it does not change your
-system Python. The tests use `unittest`, and pytest can collect the same tests
-without running them:
+From a fresh checkout, run `make setup-test && make build && make test`.
+Build first because some tests read the generated pages and data in `site/`.
+Setup needs network access to install the pinned dependencies into `.venv`;
+it does not change your system Python. The tests use `unittest`, and pytest
+can collect the same tests without running them:
 
 ```sh
 .venv/bin/python -m pytest --collect-only tests/test_household_shares.py
