@@ -37,13 +37,33 @@ so the core answers and comparisons work without JavaScript.
 Python 3.10 or later.
 
 ```
-make setup     # create .venv and install openpyxl
+make setup     # create .venv and install production build dependencies
+make setup-test # add pytest and build dependencies, without browser tools
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+### Local unit tests
+
+From a fresh checkout, run `make setup-test && make build && make test`.
+Build first because some tests read the generated pages and data in `site/`.
+Setup needs network access to install the pinned dependencies into `.venv`;
+it does not change your system Python. The tests use `unittest`, and pytest
+can collect the same tests without running them:
+
+```sh
+.venv/bin/python -m pytest --collect-only tests/test_household_shares.py
+```
+
+Use `.venv/bin/python`, not an unconfigured system `python3`, for pytest commands.
+Alternatively, activate the environment with `. .venv/bin/activate` before
+running `python -m pytest --collect-only tests/test_household_shares.py`.
+`make setup-dev` includes the test dependencies as well as the optional browser
+tools. Production deployments still use `make setup`, without either set of tools.
+CI checks the lightweight test setup, bounded pytest collection and `make verify`.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
