@@ -94,6 +94,14 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
 
+## Release notes
+
+Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
+with generated notes, contributor credits and a full comparison link. Pull
+requests are grouped by optional labels; unlabelled contributions are included.
+See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
+This is separate from the site's deployments from `main`.
+
 ## How it is built
 
 | Path | What it does |
