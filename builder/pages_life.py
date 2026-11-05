@@ -1610,7 +1610,7 @@ def housing_space_block(facts, num):
 Measure: TypeAlias = tuple[str, str, str, Callable[[int], str], str, str,
                            Callable[[int], str], Callable[[int], str] | None]
 MEAS: list[Measure] = []
-OCC_NAMES: dict[str, str] = {}
+OCC_NAMES: dict[str, dict[str, str]] = {}
 
 
 def init(d):
