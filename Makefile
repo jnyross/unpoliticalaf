@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-dev hooks build site check test verify a11y fetch live
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -9,9 +9,14 @@ setup:
 	$(PYTHON) -m venv .venv
 	$(RUN_PYTHON) -m pip install -q -r requirements.txt
 
-# Adds the browser accessibility tools used by `make a11y`.
+# Adds browser accessibility tools and installs the Git quality hook.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+	$(MAKE) hooks
+
+# Reinstall after cloning or recreating .venv; production setup stays hook-free.
+hooks:
+	$(RUN_PYTHON) -m pre_commit install
 
 build: site
 
