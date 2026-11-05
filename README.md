@@ -61,6 +61,12 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
 
+## Contributing
+
+Follow the [working agreement and source naming conventions](AGENTS.md#source-naming-conventions)
+for Python, tests and embedded web code, including the rules for stable data IDs
+and official source filenames.
+
 ## How it is built
 
 | Path | What it does |
