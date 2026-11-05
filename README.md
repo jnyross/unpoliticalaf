@@ -42,8 +42,34 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-dev # developer dependencies and the Git pre-commit hook
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+### Pre-commit checks
+
+Run `make setup-dev` once after cloning. It installs the pinned `pre-commit`
+tool in `.venv` and registers the checked-in `.pre-commit-config.yaml` with Git.
+Production `make setup` does not install developer tools or hooks.
+
+Every commit runs `make verify` once for the whole project, including changes
+to data and documentation and commits that only delete files. This builds the
+site, independently checks source hashes, figures and pages, and runs the unit
+tests. A failed check blocks the commit; fix the reported problem and commit
+again. The checks use retained local sources, without downloading data or
+requiring a browser. Browser accessibility checks remain a separate CI gate.
+
+To run the same hook manually:
+
+```
+.venv/bin/python -m pre_commit run --all-files
+```
+
+`pre-commit` temporarily stashes unstaged tracked changes so the commit hook
+checks the staged version, then restores them. Keep new files needed by a change
+staged too. Generated `site/` output stays ignored and is not added to commits.
+Run `make hooks` to reinstall the hook after recreating `.venv` or if the Git
+hook needs registering again (with developer dependencies already installed).
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,

@@ -1,0 +1,12 @@
+minimum_pre_commit_version: "4.3.0"
+default_stages: [pre-commit]
+
+repos:
+  - repo: local
+    hooks:
+      - id: verify
+        name: Build, validate source data and pages, and run unit tests
+        entry: make verify
+        language: system
+        pass_filenames: false
+        always_run: true
