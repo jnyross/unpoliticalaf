@@ -45,10 +45,47 @@ make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
-Vercel: install `make setup`, build `make build`, output directory `site`, all set
+Request tracing uses Node.js 22: `npm ci --ignore-scripts && npm test`.
+These tests also run in the `tracing` CI job; the Python commands stay unchanged.
+
+Vercel: install `npm ci --ignore-scripts && make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
+
+## Request tracing
+
+`middleware.js` runs before Vercel's static cache on every path, including data,
+assets and missing pages. It leaves static bodies, status codes and cache policy
+to Vercel. No browser script, tracing backend, credentials or paid integration is
+needed. The middleware adds a small invocation to each request under the existing
+Vercel plan's compute limits.
+
+- `X-Request-ID` is forwarded downstream and returned to the caller. An incoming
+  ID is retained only if it is 1–128 ASCII letters, digits, dots, underscores or
+  hyphens and starts with a letter or digit. Otherwise a random UUID is generated.
+  Clients must use opaque IDs, never personal information or credentials.
+- A valid W3C version-00 `traceparent` keeps its trace ID and flags. Each request
+  gets a new span ID, with the incoming span recorded as its parent. Missing,
+  malformed, duplicate or unsupported context starts a new unsampled trace.
+  The resulting `traceparent` is forwarded downstream and returned in the response.
+- One JSON `request.received` event in Vercel runtime logs contains `request_id`,
+  `trace_id`, `span_id` and `parent_span_id`. Search by the response's request ID
+  to correlate a reported problem, or by trace ID to follow a caller's trace.
+  The event does not claim the final response status or full request duration.
+- Logs omit URLs, query strings, cookies, authorization and visitor headers.
+  Vendor `tracestate` and `baggage` are discarded rather than propagated. IDs
+  are correlation data only, not authentication or proof of a trusted caller.
+
+After a normal deployment, inspect response headers for `/`, `/data/facts.json`
+and a missing URL. Send a known `X-Request-ID` and version-00 `traceparent` to
+check that the request ID and trace ID survive while the span changes, then
+find the same IDs in Vercel runtime logs. Repeat a URL to check that requests
+served from cache still have distinct generated IDs. Plain Python static-file
+servers do not execute Vercel middleware. No production deployment is needed
+for `npm test`, which exercises the real Vercel continuation helper locally.
+
+## Build identity
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
