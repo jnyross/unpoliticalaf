@@ -82,6 +82,27 @@ make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
+### Dev container
+
+With Docker and VS Code's Dev Containers extension installed, open this repository
+and choose **Dev Containers: Reopen in Container**. The container uses Python 3.12
+(matching CI), runs as the non-root `vscode` user, and selects `.venv/bin/python`
+for editing and unittest discovery. On creation it runs `make setup-dev` and
+installs Playwright's Chromium browser and Linux dependencies, so the first setup
+needs network access. No API keys or deployment credentials are needed.
+
+The container's `.venv` uses a dedicated Docker volume for each dev container,
+not the host virtualenv. Existing host virtualenv files (including macOS Python
+symlinks) are neither copied into the volume nor modified. Rebuilds reuse the
+container volume and rerun setup. Docker may create an empty `.venv` mount-point
+directory on a fresh host checkout.
+
+Once setup finishes, run `make verify` and `make a11y` in the container terminal.
+To preview the generated site, run
+`.venv/bin/python -m http.server 8000 --bind 0.0.0.0 --directory site`
+and open the forwarded port 8000. Stop the preview with Ctrl+C. After changing the
+container configuration or dependency files, rebuild the container to rerun setup.
+
 ### Local unit tests
 
 From a fresh checkout, run `make setup-test && make build && make test`.
