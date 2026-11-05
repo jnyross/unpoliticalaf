@@ -42,8 +42,19 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-typing && make typecheck  # strict mypy checks, no browser install
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+Strict typing is enforced by the `typing` CI job using the pinned dependencies
+in `requirements-typing.txt`. `mypy.ini` enables all mypy strict checks, targeting
+the minimum supported Python 3.10. The initial migration covers the shared
+spreadsheet/CSV/PDF readers, tax-rate calculations, CSV downloads, build-version
+helpers and their focused tests. The legacy data extraction and page modules
+are not yet strict-checked. Add modules to `files` as they are fully annotated,
+without weakening strictness, adding `Any` escape hatches or ignoring errors.
+Production `make setup`, `make build` and `make verify` keep their existing
+dependencies and behaviour; use `make typecheck` as the additional development gate.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
