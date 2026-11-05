@@ -45,6 +45,21 @@ make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
+### Dev container
+
+With Docker and VS Code's Dev Containers extension installed, open this repository
+and choose **Dev Containers: Reopen in Container**. The container uses Python 3.12
+(matching CI), runs as the non-root `vscode` user, and selects `.venv/bin/python`
+for editing and unittest discovery. On creation it runs `make setup-dev` and
+installs Playwright's Chromium browser and Linux dependencies, so the first setup
+needs network access. No API keys or deployment credentials are needed.
+
+Once setup finishes, run `make verify` and `make a11y` in the container terminal.
+To preview the generated site, run
+`.venv/bin/python -m http.server 8000 --bind 0.0.0.0 --directory site`
+and open the forwarded port 8000. Stop the preview with Ctrl+C. After changing the
+container configuration or dependency files, rebuild the container to rerun setup.
+
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
