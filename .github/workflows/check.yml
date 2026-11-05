@@ -16,7 +16,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: make setup
+      - run: make setup-test
+      - name: Collect a unit test file without running tests
+        run: .venv/bin/python -m pytest --collect-only tests/test_household_shares.py
       - run: make verify
 
   accessibility:
