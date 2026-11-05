@@ -1,0 +1,35 @@
+name: Code quality metrics
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  metrics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned quality tools
+        run: make -f quality/Makefile setup
+      - name: Verify and measure Python quality
+        run: make -f quality/Makefile metrics
+      - name: Publish metrics in the run summary
+        if: ${{ !cancelled() && hashFiles('quality-reports/summary.md') != '' }}
+        run: cat quality-reports/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain dashboard and machine-readable reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-quality-metrics
+          path: quality-reports/
+          retention-days: 30
+          if-no-files-found: error

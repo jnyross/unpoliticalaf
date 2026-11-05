@@ -142,6 +142,14 @@ approve PRs or replace independent review and the existing checks.
 See [docs/automated-pr-review.md](docs/automated-pr-review.md) for scope, security,
 validation and rollout.
 
+## Code quality metrics
+
+The [quality dashboard](quality/README.md) reports Python line and branch
+coverage, function complexity and per-file maintainability on every pull
+request and push to `main`. The **Code quality metrics** Actions run has a
+summary table and a downloadable offline dashboard with detailed coverage.
+Run it locally with `make -f quality/Makefile setup metrics`.
+
 ## Release notes
 
 Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
