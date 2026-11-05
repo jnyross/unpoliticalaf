@@ -60,6 +60,8 @@ def compare(base, local, live):
     if lc != vc:
         problems.append(f"Live site is commit {vc}, latest build is {lc}.")
         return problems
+    if local.get("feature_flags", {}) != live.get("feature_flags", {}):
+        problems.append("Live feature flags differ from the local build; use the same rollout configuration.")
     lf, vf = local["files"], live.get("files", {})
     for path in sorted(set(lf) - set(vf)):
         problems.append(f"Missing from live build record: {path}")

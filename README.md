@@ -91,4 +91,10 @@ the build stops.
 2. Update the reader in `builder/data.py` if the layout changed.
 3. Run `make verify` and review the changed pages.
 
+## Feature flags
+
+Optional enhancements have build-time flags in `builder/feature_flags.py`. No
+external service, API key, browser storage or visitor tracking is needed. See
+[the rollout guide](docs/feature-flags.md) for configuration, testing and rollback.
+
 Contains public sector information licensed under the Open Government Licence v3.0.

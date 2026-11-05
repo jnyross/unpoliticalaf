@@ -67,6 +67,24 @@ class LiveCheck(unittest.TestCase):
         make_site(self.local.name)
         self.assertEqual(self.run_check(), 1)
 
+    def test_matching_flag_snapshots_pass(self):
+        for folder in (self.live.name, self.local.name):
+            make_site(folder)
+            path = Path(folder) / "build.json"
+            record = json.loads(path.read_text())
+            record["feature_flags"] = {"chart_interactions": False}
+            path.write_text(json.dumps(record))
+        self.assertEqual(self.run_check(), 0)
+
+    def test_different_flags_fail_even_if_page_hashes_match(self):
+        make_site(self.live.name)
+        make_site(self.local.name)
+        path = Path(self.local.name) / "build.json"
+        record = json.loads(path.read_text())
+        record["feature_flags"] = {"chart_interactions": False}
+        path.write_text(json.dumps(record))
+        self.assertEqual(self.run_check(), 1)
+
 
 class BuildRecord(unittest.TestCase):
     def test_record_lists_every_built_file(self):

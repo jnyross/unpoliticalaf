@@ -14,7 +14,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, pages_generations, pages_manifesto, version
+from . import pages_money_extra, pages_generations, pages_manifesto, version, feature_flags
 from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, pages_questions, glossary, trace, uncertainty
 
 OUT = ROOT / "site"
@@ -26,6 +26,8 @@ MAX_READING_PAGE_BYTES = 260_000
 
 
 def render():
+    # Reject bad rollout settings before reading sources or replacing site/.
+    feature_flags.resolve()
     sources = all_sources()
     problems = verify_hashes(sources)
     if problems:
@@ -116,7 +118,7 @@ def write_build_record():
         rel = p.relative_to(OUT).as_posix()
         if p.is_file() and rel != BUILD_RECORD:
             files[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-    record = {"commit": version.commit(), "files": files}
+    record = {"commit": version.commit(), "feature_flags": dict(feature_flags.resolve()), "files": files}
     (OUT / BUILD_RECORD).write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
 
 
