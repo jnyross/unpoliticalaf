@@ -143,6 +143,10 @@ This is separate from the site's deployments from `main`.
 
 ## How it is built
 
+See [Service architecture and dependencies](docs/architecture.md) for the
+architecture diagram, build-to-browser data flow, external services and failure
+boundaries.
+
 | Path | What it does |
 | --- | --- |
 | `builder/sources.py` | Registry of every source: publisher, title, link, file, SHA-256, dates, coverage |
