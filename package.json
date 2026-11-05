@@ -7,6 +7,7 @@
     "setup": "make setup",
     "build": "make build",
     "check": "make check",
+    "typecheck": "make typecheck",
     "verify": "make verify"
   }
 }

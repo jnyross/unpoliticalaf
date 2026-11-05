@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("standins", ROOT / "scripts" / "standins.py")
+assert spec is not None and spec.loader is not None
 si = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(si)
 

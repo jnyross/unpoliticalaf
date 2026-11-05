@@ -7,7 +7,7 @@ from .readers import ROOT
 
 
 @functools.lru_cache(maxsize=None)
-def commit():
+def commit() -> str:
     """Full commit hash of the source being built, or "unknown".
 
     Vercel builds without a .git folder but sets VERCEL_GIT_COMMIT_SHA.
@@ -22,6 +22,6 @@ def commit():
     return sha or "unknown"
 
 
-def short():
+def short() -> str:
     sha = commit()
     return sha if sha == "unknown" else sha[:7]

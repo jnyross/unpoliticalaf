@@ -379,7 +379,8 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     cmd = args[0] if args else "sample"
     opt = lambda name: Path(args[args.index(name) + 1]) if name in args else None
-    out = ROOT / opt("--dir") if opt("--dir") else None
+    out_dir = opt("--dir")
+    out = ROOT / out_dir if out_dir is not None else None
     if cmd == "sample":
         ids_file = opt("--ids")
         ids = [x.strip() for x in ids_file.read_text().splitlines() if x.strip()] if ids_file else None

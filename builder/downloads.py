@@ -13,9 +13,12 @@ import io
 import json
 import re
 from html import unescape
+from collections.abc import Iterable, Sequence
+from typing import TypeAlias
 
 DIR = "csv"
-FILES = {}  # site path -> CSV text
+FILES: dict[str, str] = {}  # site path -> CSV text
+CSVRows: TypeAlias = list[list[object]]
 
 LINK_TEXT = "Download this data (CSV)"
 
@@ -26,43 +29,43 @@ _LIST = re.compile(r'<ul class="(bars(?: change)?|cmp-list)">(.*?)</ul>', re.S)
 _HEADING = re.compile(r"<h[2-4]\b[^>]*>(.*?)</h[2-4]>", re.S)
 
 
-def chart_data(names, rows):
+def chart_data(names: Sequence[str], rows: Sequence[Sequence[object]]) -> str:
     """A comment that carries a chart's figures to its CSV file. Removed before the page is written."""
     text = json.dumps({"names": names, "rows": rows}, ensure_ascii=False, separators=(",", ":"))
     return "<!--csv:" + text.replace("--", "-\\u002d") + "-->"
 
 
-def raw(v):
+def raw(v: float | None) -> str:
     """A number as plain text, without float noise; empty when there is no figure."""
     return "" if v is None else f"{v:.10g}"
 
 
-def text(html):
+def text(html: str) -> str:
     """Visible text of an HTML fragment, on one line."""
     html = re.sub(r'<span class="vh">.*?</span>', "", html, flags=re.S)
     return " ".join(unescape(re.sub(r"<[^>]+>", " ", html)).split()).replace(" ,", ",").replace(" .", ".").replace("( ", "(").replace(" )", ")")
 
 
-def slug(title):
+def slug(title: str) -> str:
     s = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
     return s[:60].rstrip("-") or "data"
 
 
-def to_csv(rows):
+def to_csv(rows: Iterable[Iterable[object]]) -> str:
     out = io.StringIO()
     csv.writer(out, lineterminator="\r\n").writerows(rows)
     # A byte order mark, so spreadsheet programs read £ and – correctly
     return "﻿" + out.getvalue()
 
 
-def table_rows(inner):
-    rows = []
+def table_rows(inner: str) -> CSVRows:
+    rows: CSVRows = []
     for tr in re.findall(r"<tr>(.*?)</tr>", inner, re.S):
         rows.append([text(c) for c in re.findall(r"<t[hd]\b[^>]*>(.*?)</t[hd]>", tr, re.S)])
     return rows
 
 
-def figure_rows(inner):
+def figure_rows(inner: str) -> CSVRows | None:
     m = re.search(r"data-chart='([^']*)'", inner)
     if m:
         d = json.loads(unescape(m.group(1)))
@@ -74,38 +77,40 @@ def figure_rows(inner):
     return [["Period"] + d["names"]] + [[str(r[0])] + [("" if v == "no figure" else v) for v in r[1:]] for r in d["rows"]]
 
 
-def list_rows(kind, inner, caption=""):
+def list_rows(kind: str, inner: str, caption: str = "") -> CSVRows:
+    rows: CSVRows
     items = re.findall(r"<li>(.*?)</li>(?=<li>|$)", inner, re.S)
     if kind == "cmp-list":
         years = re.findall(r'<span class="cmp-y">(.*?)</span>', items[0], re.S)[:2] if items else []
-        head = ["Measure"] + [text(y) for y in years] + ["Change"]
+        head: list[object] = ["Measure", *(text(y) for y in years), "Change"]
         rows = [head]
         for it in items:
-            label = text((re.search(r'<p class="cmp-label">(.*?)</p>', it, re.S) or [None, ""])[1])
+            match = re.search(r'<p class="cmp-label">(.*?)</p>', it, re.S)
+            label = text(match.group(1) if match else "")
             vals = [text(v) for v in re.findall(r'<span class="cmp-v">(.*?)</span></div>', it, re.S)]
             ch = re.search(r'<p class="cmp-change">(.*?)</p>', it, re.S)
             change = re.sub(r"^Change:\s*", "", text(ch.group(1))) if ch else ""
-            rows.append([label] + vals + [change])
+            rows.append([label, *vals, change])
         return rows
     rows = [["Group", caption or "Value"]]
     for it in items:
         lab = re.search(r'<div class="lab"><span>(.*?)</span><span>(.*?)</span></div>', it, re.S)
         if lab:
             sub = re.search(r'<div class="sub">(.*?)</div>', it, re.S)
-            rows.append([text(lab.group(1)), text(lab.group(2))] + ([text(sub.group(1))] if sub else []))
+            rows.append([text(lab.group(1)), text(lab.group(2)), *([text(sub.group(1))] if sub else [])])
     if any(len(r) == 3 for r in rows[1:]):
         rows[0].append("Note")
         rows = [rows[0]] + [r + [""] * (3 - len(r)) for r in rows[1:]]
     return rows
 
 
-def add_links(body, path):
+def add_links(body: str, path: str) -> str:
     """Add a CSV download beside every table, chart and bar list in a page body."""
     base = DIR + "/" + path[:-len(".html")]
     up = "../" * path.count("/")
-    names = set()
+    names: set[str] = set()
 
-    def link(title, rows):
+    def link(title: str, rows: CSVRows) -> str:
         name = slug(title)
         k = 2
         while name in names:
@@ -116,11 +121,11 @@ def add_links(body, path):
         FILES[href] = to_csv(rows)
         return f'<p class="dl"><a href="{up}{href}" download>{LINK_TEXT}</a></p>'
 
-    def heading_before(pos):
+    def heading_before(pos: int) -> str:
         hs = list(_HEADING.finditer(body, 0, pos))
         return text(hs[-1].group(1)) if hs else "data"
 
-    edits = []  # (element start, where the link goes, title, rows)
+    edits: list[tuple[int, int, str, CSVRows]] = []  # (element start, where the link goes, title, rows)
     for m in _TABLE.finditer(body):
         cap = re.search(r"<caption>(.*?)</caption>", m.group(1), re.S)
         rows = table_rows(m.group(1))
@@ -129,17 +134,17 @@ def add_links(body, path):
     figs = []
     for m in _FIGURE.finditer(body):
         figs.append((m.start(), m.end()))
-        rows = figure_rows(m.group(1))
-        if not rows:
+        chart_rows = figure_rows(m.group(1))
+        if not chart_rows:
             continue
         # Named after what the chart measures (the subtitle under a finding), which stays the same when figures are refreshed
         t = (re.search(r'<p class="csub"[^>]*>(.*?)</p>', m.group(1), re.S) or re.search(r'<p class="ctitle"[^>]*>(.*?)</p>', m.group(1), re.S)
              or re.search(r"<strong>(.*?)</strong>", m.group(1), re.S))
         title = text(t.group(1)) if t else heading_before(m.start())
-        if rows[0][1:] == ["Value"]:
-            rows[0][1] = title
+        if chart_rows[0][1:] == ["Value"]:
+            chart_rows[0][1] = title
         close = m.end() - len("</figure>")
-        edits.append((m.start(), close, title, rows))
+        edits.append((m.start(), close, title, chart_rows))
     for m in _LIST.finditer(body):
         if any(a <= m.start() < b for a, b in figs) or body[:m.start()].endswith('aria-hidden="true">'):
             continue  # part of a figure, or a decorative copy (home page cards) of a chart shown elsewhere
@@ -155,5 +160,5 @@ def add_links(body, path):
     return strip(body)
 
 
-def strip(html):
+def strip(html: str) -> str:
     return _COMMENT.sub("", html)
