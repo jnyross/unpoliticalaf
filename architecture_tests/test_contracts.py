@@ -105,6 +105,60 @@ class ImportContracts(unittest.TestCase):
         self.add_import("builder.new_feature", "VALUE = 1")
         self.assert_broken("Shared helpers must stay below facts and pages")
 
+    def add_feature_flags(self, *, html_import=True):
+        if not (self.root / "builder" / "feature_flags.py").exists():
+            self.add_import("builder.feature_flags", '"""Dependency-free configuration fixture."""')
+        if html_import:
+            self.add_import("builder.html", "from . import feature_flags")
+
+    def test_html_can_consume_dependency_free_feature_flags(self):
+        self.add_feature_flags()
+        result = self.lint()
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_other_helpers_cannot_consume_feature_flags(self):
+        self.add_feature_flags()
+        self.add_import("builder.findings", "from . import feature_flags")
+        self.assert_broken("Shared helpers must stay below facts and pages")
+
+    def test_feature_flags_cannot_import_fact_producers(self):
+        self.add_feature_flags()
+        self.add_import("builder.feature_flags", "from . import data")
+        self.assert_broken("Shared helpers must stay below facts and pages")
+
+    def test_feature_flags_cannot_import_pages_indirectly(self):
+        self.add_feature_flags()
+        self.add_import("builder.feature_flags", "from . import architecture_bridge")
+        self.add_import("builder.architecture_bridge", "from . import pages_home")
+        self.assert_broken("Shared helpers must stay below facts and pages")
+
+    def test_present_but_unused_optional_permission_is_an_error(self):
+        self.add_feature_flags(html_import=False)
+        path = self.root / "builder" / "html.py"
+        path.write_text(path.read_text().replace(", feature_flags", ""), encoding="utf-8")
+        result = self.lint()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("builder.html -> builder.feature_flags", result.stdout + result.stderr)
+
+    def test_unused_existing_permission_remains_an_error(self):
+        path = self.root / "builder" / "rates.py"
+        path.write_text(path.read_text().replace("from .readers import ROOT", ""), encoding="utf-8")
+        result = self.lint()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("builder.rates -> builder.readers", result.stdout + result.stderr)
+
+    def test_optional_permissions_cannot_use_wildcards(self):
+        config = self.root / ".importlinter"
+        config.write_text(
+            config.read_text().replace(
+                "builder.html -> builder.feature_flags", "builder.* -> builder.feature_flags",
+            ),
+            encoding="utf-8",
+        )
+        result = self.lint()
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn("exact declared optional module", result.stdout + result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

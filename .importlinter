@@ -2,6 +2,8 @@
 root_packages =
     builder
     scripts
+contract_types =
+    optional-forbidden: scripts.import_contracts.OptionalModulesForbiddenContract
 
 [importlinter:contract:application-not-scripts]
 name = Builder must not depend on operational scripts
@@ -46,7 +48,7 @@ ignore_imports =
 
 [importlinter:contract:reusable-foundations]
 name = Shared helpers must stay below facts and pages
-type = forbidden
+type = optional-forbidden
 source_modules =
     builder.readers
     builder.sources
@@ -56,6 +58,10 @@ source_modules =
     builder.downloads
     builder.html
     builder.explain
+optional_modules =
+    builder.feature_flags
+optional_imports =
+    builder.html -> builder.feature_flags
 forbidden_modules = builder.**
 as_packages = False
 # Allowed downward edges. Unmatched entries are errors, so stale permissions

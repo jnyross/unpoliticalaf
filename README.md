@@ -92,10 +92,17 @@ and push to `main`, separately from `make verify`:
 - Reusable readers, source metadata, rates, versioning, findings, downloads,
   HTML helpers and quote helpers can only use the downward imports listed in
   the configuration, never facts, pages or orchestration.
+- HTML may also read the dependency-free `feature_flags` configuration when
+  that module is present. No other helper gains that permission, and the flag
+  module itself cannot import other builder modules.
 
 New builder modules are covered by wildcard rules automatically. The shared
 API lists preserve existing reuse without allowing validation to import the
 answers it is meant to check. Unused allow-list entries fail the check.
+The small `optional-forbidden` contract in `scripts/import_contracts.py` adds
+only exact permissions targeting a declared optional module, and only while
+that module exists. This lets independently reviewed changes land in either
+order without suppressing stale permissions or allowing wildcard exceptions.
 `architecture_tests/` injects forbidden imports into temporary package copies,
 including function-local and indirect imports, to prove the rules reject them.
 It needs the architecture dependencies, unlike the production-only unit suite.

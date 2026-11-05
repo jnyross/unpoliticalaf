@@ -9,16 +9,6 @@ permissions:
   contents: read
 
 jobs:
-  architecture:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: make setup-architecture
-      - run: make architecture
-
   check:
     runs-on: ubuntu-latest
     steps:
@@ -41,3 +31,13 @@ jobs:
       - run: .venv/bin/python -m playwright install --with-deps chromium
       - run: make build
       - run: make a11y
+
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-architecture
+      - run: make architecture
