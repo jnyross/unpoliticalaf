@@ -7,6 +7,10 @@
     "setup": "make setup",
     "build": "make build",
     "check": "make check",
+    "check:duplicates": "jscpd --config .jscpd.json",
     "verify": "make verify"
+  },
+  "devDependencies": {
+    "jscpd": "4.0.5"
   }
 }
