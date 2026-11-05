@@ -61,6 +61,15 @@ The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
 `Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
 title starting with WIP keeps a PR open.
 
+## Agent skill
+
+The repository includes
+[`verify-static-site`](.claude/skills/verify-static-site/SKILL.md), a Claude-standard
+skill for checking data, calculation and presentation changes. In Claude Code,
+invoke `/verify-static-site`; other agents can read the file directly. It covers
+the build/check/test sequence, source-integrity failures, browser checks and
+verification evidence without treating local success as product acceptance.
+
 ## How it is built
 
 | Path | What it does |
