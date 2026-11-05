@@ -46,8 +46,6 @@ def welfare_page(facts, d, num, sources):
     w = d["welfare"]
     years, pens_years = w["years"], w["pensioner_years"]
     first, last = years[0], years[-1]
-    pesa = "2020-21"
-    before, after = years[years.index(pesa) - 1], pesa  # the stretches either side of the PESA source change
 
     def f(fid):
         return facts[fid].value if fid in facts else None
@@ -62,7 +60,7 @@ def welfare_page(facts, d, num, sources):
     body = ["<h1>Welfare spending over 50 years</h1>"]
     body.append(f'''<div class="answer"><p class="lede">Welfare spending, measured as social security (benefits and the State Pension), was {num(f"wel.real.social.{first}", "bn")} in {first} and {num(f"wel.real.social.{last}", "bn")} in {last}, both after inflation. In 2021-22 the State Pension was {num("dwp.share.sp.2021-22", "pct")} of DWP benefit spending, and Universal Credit was the largest of the other benefits, at {num("dwp.share.uc.2021-22", "pct")}. Per person, after inflation, welfare spending was {num(f"wel.pp.social.{last}", "pounds")} in {last}.</p>
 <p>As a share of GDP it was {num(f"wel.gdp.social.{first}", "pct")} in {first}, peaked at {num(f"wel.gdp.social.{peak}", "pct")} in {peak}, and was {num(f"wel.gdp.social.{last}", "pct")} in {last}. As a share of all public spending it was {num(f"wel.share.social.{first}", "pct")} in {first} and {num(f"wel.share.social.{last}", "pct")} in {last}.</p>
-<p>Per person, after inflation, it was {num(f"wel.pp.social.1978-79", "pounds")} in 1978-79 and {num(f"wel.pp.social.{last}", "pounds")} in {last}. Pensioners received {num(f"wel.penssh.{last}", "pct0")} of social security in {last}, against {num(f"wel.penssh.1978-79", "pct0")} in 1978-79.</p>
+<p>Per person, after inflation, it was {num("wel.pp.social.1978-79", "pounds")} in 1978-79 and {num(f"wel.pp.social.{last}", "pounds")} in {last}. Pensioners received {num(f"wel.penssh.{last}", "pct0")} of social security in {last}, against {num("wel.penssh.1978-79", "pct0")} in 1978-79.</p>
 <p>The figures stop at {last}. The split by benefit for 2021-22 is in <a href="#benefits">the section below</a>.</p></div>''')
 
     body.append('<h2 id="define">What counts as welfare here</h2>')

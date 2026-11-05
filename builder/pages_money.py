@@ -77,7 +77,7 @@ def spending_page(facts, d, num, sources):
     pp = per_person(facts, f"spend.cash.tme.{y}", pop, "spend.perperson.tme", y, "pesa4")
     hh = households_for(y)
     ph = per_household(facts, f"spend.cash.tme.{y}", hh, "spend.perhousehold.tme", y, "pesa4")
-    body = [f"<h1>Where does public money go?</h1>"]
+    body = ["<h1>Where does public money go?</h1>"]
     body.append(keyfigs([(num(f"spend.cash.tme.{y}", "bn"), f"spent by the UK public sector in {y}", True),
                          (num(per[top[0]], "per100"), "of every £100 spent on services went on social protection, the largest area", False),
                          (num(per[second[0]], "per100"), "of every £100 spent on services went on health, the next largest", False)]))
@@ -118,7 +118,6 @@ Interest on government debt here is the interest paid out (HM Treasury: “gross
     # change over time
     body.append(f'<h2 id="change">How has spending changed since {first}?</h2>')
     tme_real = [facts[f"spend.real.tme.{yy}"].value for yy in years]
-    tme_gdp = [facts[f"spend.gdp.tme.{yy}"].value for yy in years]
     derive(facts, f"spend.realchange.tme.{first}.{y}", 100 * (tme_real[-1] / tme_real[0] - 1), "%", f"{first} to {y}", "pesa4",
            [f"spend.real.tme.{y}", f"spend.real.tme.{first}"], f"100 × (spend.real.tme.{y} ÷ spend.real.tme.{first} − 1)")
     # Per person (audit 15 judge, R4): the same real totals divided by the mid-year population of each year.
@@ -196,8 +195,8 @@ def spending_areas_page(facts, d, num, sources):
     order = _areas(facts, sp)
     body = ['<p class="small"><a href="spending.html">Where does public money go?</a></p>',
             f"<h1>Spending on each area, every year from {first} to {y}</h1>"]
-    body.append(f'<p>One small chart for each area of <a href="spending.html">public spending</a>, so you can see when each one rose or fell. Switch between cash, after inflation and share of GDP. '
-                f'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>. For welfare (social security) over the last 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.</p>')
+    body.append('<p>One small chart for each area of <a href="spending.html">public spending</a>, so you can see when each one rose or fell. Switch between cash, after inflation and share of GDP. '
+                'For spending on health, education, defence, social security and debt interest back to 1900, see <a href="spending-history.html">spending by purpose over 100 years</a>. For welfare (social security) over the last 50 years, see <a href="welfare.html">welfare spending over 50 years</a>.</p>')
     area_kind = {"cash": "bn", "real": "bn", "gdp": "pct"}
     area_unit = {"cash": "£ billion, cash", "real": "£ billion, 2025-26 prices", "gdp": "Per cent of GDP"}
 
@@ -424,7 +423,7 @@ def who_pays_page(facts, d, num, sources):
     body.append(f'''<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09. The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p></div>''')
     body.append(source_line(sources, ["hmrc24"], "Survey of Personal Incomes. 2023-24 is outturn; later years are projections."))
     # ETB
-    body.append(f'''<h2 id="households">2. All taxes, by household income</h2>
+    body.append('''<h2 id="households">2. All taxes, by household income</h2>
 <p>Fifths are five equal groups of people, ranked by household income.</p>''')
     rows = []
     for q, label in QUINTS:

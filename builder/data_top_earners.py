@@ -65,7 +65,7 @@ def build(facts):
             ids = sum_of(members, key)
             facts.add(Fact(f"spi.{g}.{key}", sum(facts[i].value for i in ids), unit, Y, SRC, facts[ids[0]].locator, "calculated",
                            formula=" + ".join(ids), inputs=ids, note=f"Sum of the bands from £{lo:,} up."))
-        n, tax, inc = facts[f"spi.{g}.n"], facts[f"spi.{g}.tax"], facts[f"spi.{g}.inc"]
+        n, tax = facts[f"spi.{g}.n"], facts[f"spi.{g}.tax"]
         facts.add(Fact(f"spi.{g}.avgtax", tax.value * 1000 / n.value, "£ a year", Y, SRC, tax.locator, "calculated",
                        formula=f"{tax.id} × 1,000 ÷ {n.id}", inputs=[tax.id, n.id],
                        note="Average Income Tax per taxpayer in the group: £ million × 1,000 ÷ thousand taxpayers."))

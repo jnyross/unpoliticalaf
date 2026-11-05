@@ -1,5 +1,5 @@
 """Why UK government debt is high: debt and borrowing over 125 years, and what official bodies say moved them."""
-from .html import FOLD, page, details_table, line_chart, source_line, esc, switch
+from .html import FOLD, page, details_table, line_chart, source_line, switch
 from .explain import box as explain
 from . import findings as F
 
@@ -61,10 +61,10 @@ Debt is what the public sector owes at the end of each year, less the financial 
     body.append(f'''<h3>The Second World War and after</h3>
 <p>From {war_years[0]} to {war_years[-1]}, borrowing was largest in {war_max_year}, at {num(f"debt.psnb.{war_max_year}", "pct")} of GDP, and smallest in {war_min_year}, at {num(f"debt.psnb.{war_min_year}", "pct")}. Debt was highest in {debt_peak}, at {num(f"debt.psnd.{debt_peak}", "pct")} of GDP. It then fell, and was {num("debt.psnd.1990-91", "pct")} of GDP in 1990-91.</p>''')
     body.append(f'''<h3 id="recession-2008">The 2008 recession</h3>
-<p>Borrowing was {num(f"debt.psnb.{v2008}", "pct")} of GDP in {v2008} and {num(f"debt.psnb.2008-09", "pct")} in 2008-09, then {num(f"debt.psnb.2009-10", "pct")} in 2009-10. Debt rose from {num(f"debt.psnd.{v2008}", "pct")} of GDP to {num(f"debt.psnd.2009-10", "pct")} over the same period.</p>''')
+<p>Borrowing was {num(f"debt.psnb.{v2008}", "pct")} of GDP in {v2008} and {num("debt.psnb.2008-09", "pct")} in 2008-09, then {num("debt.psnb.2009-10", "pct")} in 2009-10. Debt rose from {num(f"debt.psnd.{v2008}", "pct")} of GDP to {num("debt.psnd.2009-10", "pct")} over the same period.</p>''')
     body.append(explain("debt-2008", sources, heading="h4"))
     body.append(f'''<h3 id="covid">The Covid pandemic</h3>
-<p>Borrowing reached {num(f"debt.psnb.{v2020}", "pct")} of GDP in {v2020}, and debt was {num(f"debt.psnd.2021-22", "pct")} of GDP at the end of March 2022.</p>''')
+<p>Borrowing reached {num(f"debt.psnb.{v2020}", "pct")} of GDP in {v2020}, and debt was {num("debt.psnd.2021-22", "pct")} of GDP at the end of March 2022.</p>''')
     body.append(explain("covid-borrowing-2021", sources, heading="h4"))
     body.append(explain("covid-spending", sources, heading="h4"))
     body.append(f'''<h3 id="energy">Energy support and interest, 2022-23</h3>
@@ -83,7 +83,7 @@ Debt is what the public sector owes at the end of each year, less the financial 
     body.append('<h2 id="interest">Interest and other countries</h2>')
     body.append(f'''<p>Interest on debt is part of government spending. The <a href="borrowing.html">borrowing page</a> shows how much the UK pays to borrow, how much of its spending goes on interest, and how UK debt compares with the other G7 countries. On the IMF's measure, UK general government debt was {num("borrow.imf.GBR.2024", "pct")} of GDP in 2024.</p>''')
 
-    body.append(f'''<div class="limit"><p><strong>Limits.</strong></p><ul>
+    body.append('''<div class="limit"><p><strong>Limits.</strong></p><ul>
 <li>This page uses public sector net debt, which takes away the financial assets the public sector holds. Gross debt, as the IMF measures it for other countries, is higher, so the two figures are not directly comparable.</li>
 <li>The figures before 1955-56 come from a long-run compilation, and the OBR says judgements were made to keep years consistent.</li>
 <li>A share of GDP changes when GDP changes as well as when debt does. The share can fall in a year of borrowing if the economy grows faster than debt.</li>

@@ -2,7 +2,7 @@
 everyday-life overview. Each nation measures these its own way, so figures are
 shown side by side with what each one counts, and never added together."""
 from .data import YEARS
-from .html import table, details_table, esc
+from .html import table, details_table
 
 MISSING = "<span class='missing'>not published</span>"
 

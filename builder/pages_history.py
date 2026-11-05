@@ -333,7 +333,7 @@ def early_year_page(facts, d, num, sources, y):
     names = _join([dict((k, t) for k, t, _ in L.TOPICS)[t].lower() for t in have]) if have else ""
     body.append(f'<div class="answer"><p>Fewer official figures reach back to {y}. '
                 + (f"This page shows those that do, for {esc(names)}, each beside the latest year measured the same way. " if have else "")
-                + f'Work, earnings, housing and class sizes have figures from 2008, and holidays from 2009: see <a href="2008.html">2008</a> or <a href="2009.html">2009</a>.</p></div>')
+                + 'Work, earnings, housing and class sizes have figures from 2008, and holidays from 2009: see <a href="2008.html">2008</a> or <a href="2009.html">2009</a>.</p></div>')
     body.append(L.compare_with(y))
     for key, title, _scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
