@@ -410,7 +410,7 @@ def uncertainty_page(facts, d, num, sources, last):
 
     # Work
     body.append(f'<h2 id="work">Employment rate by nation and region, {last}</h2>')
-    body.append(f'<p>The Annual Population Survey asks fewer people in smaller places, so their margins are wider. A gap between two places smaller than their margins combined could be sampling noise.</p>')
+    body.append('<p>The Annual Population Survey asks fewer people in smaller places, so their margins are wider. A gap between two places smaller than their margins combined could be sampling noise.</p>')
     prow = []
     for k, n in [(k, n) for k, n in NATIONS] + [(k, n) for k, n, _ in REGIONS]:
         f = f"work.place.{k}.{last}"
@@ -439,7 +439,7 @@ def uncertainty_page(facts, d, num, sources, last):
 
     # Holidays
     body.append('<h2 id="holidays">Holidays abroad</h2>')
-    body.append(f'<p>ONS calculates its intervals from the passenger survey alone, so its own estimate can differ slightly from the published total; we show the margin as a share of the figure.</p>')
+    body.append('<p>ONS calculates its intervals from the passenger survey alone, so its own estimate can differ slightly from the published total; we show the margin as a share of the figure.</p>')
     hrow = []
     for y in (2024, 2025):
         rid = MARGINS[f"hol.world.holiday.{y}"][0]

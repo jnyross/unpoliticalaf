@@ -53,15 +53,15 @@ def spread_block(facts, num, d, first):
                       f"£ a week before tax, full-time employees, United Kingdom, April each year, in April {base} prices (adjusted with CPIH, the official consumer prices index that includes housing costs). From 2006, after the survey’s last method change; the table also gives 2002 to 2005. The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”)", "pounds",
                       breaks=sorted(sp["breaks"].items()), ymin=0, split_breaks=True,
                       finding=F.narrowing("After inflation, the gap between the top-tenth and bottom-tenth lines", lambda d: f"£{d:,.0f} a week", si=0, sj=2, which="last")))
-    out.append(details_table("Show pay spread for every year", f"Gross weekly pay of full-time employees, United Kingdom, April each year",
+    out.append(details_table("Show pay spread for every year", "Gross weekly pay of full-time employees, United Kingdom, April each year",
                              ["Year", "Bottom tenth earn less than (cash)", "Median (cash)", "Top tenth earn more than (cash)", "Top line ÷ bottom line (times)",
                               f"Bottom line ({base} prices)", f"Top line ({base} prices)"],
                              [[str(y), num(f"spread.p10.{y}", "pounds"), num(f"spread.p50.{y}", "pounds"), num(f"spread.p90.{y}", "pounds"), num(f"spread.ratio.{y}", "dp1"),
                                num(f"spread.real.p10.{y}", "pounds"), num(f"spread.real.p90.{y}", "pounds")] for y in years]))
-    out.append(f'<p class="small">The 10th and 90th percentiles are the pay of the employee one tenth of the way up the ladder and nine tenths of the way up. '
-               f'They are lines on the ladder, not averages of the groups. Only full-time employees are counted: part-time workers and the self-employed are not, and pay is for one job before tax, '
-               f'not household income. The ratio does not depend on inflation, because both lines are in the same year’s prices. '
-               f'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay.</p>')
+    out.append('<p class="small">The 10th and 90th percentiles are the pay of the employee one tenth of the way up the ladder and nine tenths of the way up. '
+               'They are lines on the ladder, not averages of the groups. Only full-time employees are counted: part-time workers and the self-employed are not, and pay is for one job before tax, '
+               'not household income. The ratio does not depend on inflation, because both lines are in the same year’s prices. '
+               'ONS notes breaks in the survey in 2004 and 2006 (method changes) and in 2011 and 2021 (new job coding). The chart starts in 2006 and breaks at 2011 and 2021, and changes are worked out only between years on the same side of every break, because a move across a break may come from the change rather than from pay.</p>')
     return out
 
 
@@ -250,11 +250,8 @@ def jobs_people_block(facts, num, d):
     """Why there can be more jobs than people in work: the answer first, then a short table."""
     jb = d["life_extra"]["jobs"]
     years, prov = jb["years"], jb["provisional"]
-    first, last = years[0], years[-1]
+    last = years[-1]
     lab = (lambda y: f"June {y} (provisional)" if y == prov else f"June {y}")
-    gaps = {y: _v(facts, f"jobs.gap.{y}") for y in years}
-    gaps = {y: g for y, g in gaps.items() if g is not None}
-    lo, hi = min(gaps, key=gaps.get), max(gaps, key=gaps.get)
     # Kept short on the work page (phone length); the sources and the gap by year sit on the jobs by industry page.
     return ["<h3 id='jobs-and-people'>Why can there be more jobs than people in work?</h3>",
             f'<p>Some people have more than one job, and jobs are counted one by one. In {lab(last)} there were {num(f"jobs.total.{last}", "millions")} jobs '
@@ -353,7 +350,6 @@ def holiday_afford_block(facts, num, d):
         va, vb = _v(facts, f"holafford.all.{a}"), _v(facts, f"holafford.all.{b}")
         word = "rose" if vb > va else ("fell" if vb < va else "was unchanged")
         moves.append(f"from {a} to {b} it {word} from {num(f'holafford.all.{a}', 'pct')} to {num(f'holafford.all.{b}', 'pct')}")
-    run_text = ", ".join(f"{r[0]} to {r[-1]}" if len(r) > 1 else str(r[0]) for r in runs)
     out.append(f'<div class="answer"><p>No yearly official statistic gives the share of people who took a holiday. '
                f'The nearest asks a different question: could the household afford a week’s holiday away from home? '
                f'In the {last} survey, {num(f"holafford.all.{last}", "pct")} of people in the UK lived in a household that could not: '
@@ -416,9 +412,9 @@ def class_detail_blocks(facts, num, d):
              num(f"school.large.ks2.{y}", "pct") if y in large["ks2"] else '<span class="missing">not in these tables</span>'] for y in py]
     out.append(details_table("Show classes of more than 30 for every year", "Pupils in classes of more than 30, % of pupils, England, January census",
                              ["January census", "School year", "Primary", "Secondary", "Infant classes", "Key stage 2 classes"], rows))
-    out.append(f'<p class="small">Up to January 2015 the DfE published these shares for primary and secondary schools only, as percentages rounded to 1 decimal place; '
-               f'the figures here add its “31 to 35 pupils” and “36 or more pupils” groups. From January 2016 they are worked out from the DfE’s pupil counts. '
-               f'Both count classes taught by one teacher.</p>')
+    out.append('<p class="small">Up to January 2015 the DfE published these shares for primary and secondary schools only, as percentages rounded to 1 decimal place; '
+               'the figures here add its “31 to 35 pupils” and “36 or more pupils” groups. From January 2016 they are worked out from the DfE’s pupil counts. '
+               'Both count classes taught by one teacher.</p>')
     a2, b2 = iy[0], iy[-1]
     out.append("<h3 id='schools-phases'>Infant and key stage 2 classes</h3>")
     i_word = _word(_v(facts, f"school.infant.{a2}"), _v(facts, f"school.infant.{b2}"), up="got bigger", down="got smaller", same="were the same size")
@@ -486,8 +482,8 @@ def holiday_spend_block(facts, num, d):
                              ["Year", "Residents of", "Spending (cash)", "Per visit (cash)", f"Per visit ({base} prices)", "Nights", "Nights per visit"], rows))
     # The answer gives the figures; the two charts wait in the fold on a phone.
     out.append("<!--keepfold-->")
-    out.append(f'<div class="limit"><p>Spending per visit and nights per visit are averages over every holiday visit, short city breaks and long trips alike, so they do not describe a typical holiday. '
-               f'Spending is adjusted for inflation with UK consumer prices (CPIH); this does not allow for exchange rates or for prices in the countries visited. '
-               f'2020 has no full-year figures because the survey was suspended, and 2021 holidays were few and unusual because of travel restrictions. '
-               f'From 2024 a new method counts Great Britain residents (2024 mixes both), so 2024 and 2025 are not compared with earlier years: a gap may be the method.</p></div>')
+    out.append('<div class="limit"><p>Spending per visit and nights per visit are averages over every holiday visit, short city breaks and long trips alike, so they do not describe a typical holiday. '
+               'Spending is adjusted for inflation with UK consumer prices (CPIH); this does not allow for exchange rates or for prices in the countries visited. '
+               '2020 has no full-year figures because the survey was suspended, and 2021 holidays were few and unusual because of travel restrictions. '
+               'From 2024 a new method counts Great Britain residents (2024 mixes both), so 2024 and 2025 are not compared with earlier years: a gap may be the method.</p></div>')
     return out

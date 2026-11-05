@@ -41,9 +41,18 @@ make setup     # create .venv and install openpyxl
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
+make setup-dev && make lint   # Python syntax and source-code quality checks
 make verify    # build + check + test
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+Ruff is pinned in `requirements-dev.txt` and configured in `ruff.toml`. It checks
+all maintained Python code, including scripts and tests, for syntax errors,
+undefined names, unused imports and variables, and other Pyflakes issues. The
+pinned upstream snapshot in `reference/` is excluded. `make lint` does not modify
+source files; fix findings before opening a pull request. The `lint` CI job runs on pull
+requests and pushes to `main`. Production setup and `make verify` do not require
+developer tools.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
