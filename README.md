@@ -69,6 +69,14 @@ request and push to `main`. The **Code quality metrics** Actions run has a
 summary table and a downloadable offline dashboard with detailed coverage.
 Run it locally with `make -f quality/Makefile setup metrics`.
 
+## Release notes
+
+Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
+with generated notes, contributor credits and a full comparison link. Pull
+requests are grouped by optional labels; unlabelled contributions are included.
+See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
+This is separate from the site's deployments from `main`.
+
 ## How it is built
 
 | Path | What it does |

@@ -1,0 +1,14 @@
+# Used by GitHub's generated release notes, both in Actions and the release UI.
+# Labels improve grouping but are optional: every other PR stays in the notes.
+changelog:
+  categories:
+    - title: Features and improvements
+      labels: [enhancement, feature]
+    - title: Fixes
+      labels: [bug, fix]
+    - title: Documentation
+      labels: [documentation]
+    - title: Maintenance and dependencies
+      labels: [maintenance, dependencies, chore]
+    - title: Other changes
+      labels: ["*"]
