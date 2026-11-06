@@ -10,7 +10,7 @@ for the English Housing Survey years, and house prices against earnings only fro
 1999, the first year measured the same way.
 """
 from .data import YEARS
-from .html import page, source_line, table, esc, FOLD, NOFOLD
+from .html import page, source_line, table, FOLD
 from . import findings as F
 from .pages_life import CAUSE, groups_chart
 from .pages_life_extra import _chart
@@ -44,7 +44,7 @@ def _same_age_rows(facts, num):
 
 
 def _owner_rows(facts, num):
-    return [[f"Households in England who own their home, all ages", num(f"house.owners.{OWN_FIRST}", "pct"), num(f"house.owners.{OWN_LAST}", "pct")]]
+    return [["Households in England who own their home, all ages", num(f"house.owners.{OWN_FIRST}", "pct"), num(f"house.owners.{OWN_LAST}", "pct")]]
 
 
 def page_body(facts, d, num, sources):
@@ -68,10 +68,10 @@ def page_body(facts, d, num, sources):
             FOLD,
             table(f"Share of each age group in work, April to June, UK, {WORK_FIRST} and {LAST}",
                   ["Age group", str(WORK_FIRST), str(LAST)], _same_age_rows(facts, num)),
-            f'<p>Employment is the share of each age group who did any paid work in the survey week, including students with part-time jobs. '
-            f'The rate for 18 to 24 year olds is lower partly because many of them are studying. '
-            f'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
-            f'<a href="work.html#work-age">Employment by age, every year</a>.</p>',
+            '<p>Employment is the share of each age group who did any paid work in the survey week, including students with part-time jobs. '
+            'The rate for 18 to 24 year olds is lower partly because many of them are studying. '
+            'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
+            '<a href="work.html#work-age">Employment by age, every year</a>.</p>',
             "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
             "<p>These figures are for everyone, not for people of one age, so they show the position of the whole market rather than of people at 30.</p>",
             _afford_chart(facts, num),
@@ -79,8 +79,8 @@ def page_body(facts, d, num, sources):
             table(f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {LAST}",
                   ["Measure", str(AFFORD_FIRST), str(LAST)],
                   [["Times a year’s earnings", num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2"), num(f"afford.ratio.ew.{LAST}", "times2")]]),
-            f'<p>House prices are for the year to September. Earnings are for one full-time employee working in the area, before tax. '
-            f'<a href="house-prices.html">House prices and earnings, every year, with each region</a>.</p>',
+            '<p>House prices are for the year to September. Earnings are for one full-time employee working in the area, before tax. '
+            '<a href="house-prices.html">House prices and earnings, every year, with each region</a>.</p>',
             table(f"Share of households in England who own their home, {OWN_FIRST}-09 and {OWN_LAST}-25, English Housing Survey",
                   ["Measure", f"{OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}", f"{OWN_LAST}-{str(OWN_LAST + 1)[2:]}"],
                   _owner_rows(facts, num)),
@@ -91,8 +91,8 @@ def page_body(facts, d, num, sources):
             table(f"Average primary class size, England, January {SCHOOL_FIRST} and {LAST}",
                   ["Measure", str(SCHOOL_FIRST), str(LAST)],
                   [["Pupils per class", num(f"school.primary.{SCHOOL_FIRST}", "dp1"), num(f"school.primary.{LAST}", "dp1")]]),
-            f'<p>These figures describe the classes in each year, not the classes the parents attended. The site holds no class size figures from before 2006. '
-            f'<a href="schools.html">Class sizes, every year</a>.</p>',
+            '<p>These figures describe the classes in each year, not the classes the parents attended. The site holds no class size figures from before 2006. '
+            '<a href="schools.html">Class sizes, every year</a>.</p>',
             "<h2 id='university'>University tuition fees</h2>",
             "<p>In 1998 the fee was up to £1,000 across the UK, paid up front rather than through a loan. The 2025-26 figure is the cap for England: £9,535.</p>",
             FOLD,

@@ -35,7 +35,7 @@ flowchart TD
     fetched -->|"NATO PDF"| transcription --> transcribed
 
     subgraph build["Build time, local checks or Vercel"]
-        setup["make setup: pinned Python libraries"]
+        setup["make setup: pinned Python libraries; setup-test adds test tools"]
         registry["sources.py: registry and hash checks"]
         facts["readers.py, data.py and data_*.py: Facts"]
         render["build.py, pages_*.py, html.py, trace.py"]
@@ -50,6 +50,7 @@ flowchart TD
     transcribed --> registry
     code --> render
     registry --> facts --> render --> output
+    setup -.->|"setup-test required"| verify
     retained -.-> verify
     fetched -.-> verify
     transcribed -.-> verify

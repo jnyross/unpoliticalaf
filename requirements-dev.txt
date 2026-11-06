@@ -1,3 +1,5 @@
 -r requirements-test.txt
-axe-playwright-python==0.1.7
-playwright==1.56.0
+-r requirements-a11y.txt
+-r requirements-typing.txt
+ruff==0.14.3
+deptry==0.25.1

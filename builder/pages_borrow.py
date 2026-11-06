@@ -69,7 +69,7 @@ def borrowing_page(facts, d, num, sources):
 </div>''')
 
     # ---------------------------------------------------------------- debt
-    body.append(f'<h2 id="debt">How much does each government owe?</h2>')
+    body.append('<h2 id="debt">How much does each government owe?</h2>')
     imf_bars = bars(_bar_items(facts, "borrow.imf", debt_order, iy, names), "pct", num, maxval=260,
                     caption=f"General government gross debt, % of GDP, {iy}. IMF figures. The UK has a darker bar.")
     oecd_bars = bars(_bar_items(facts, "borrow.debt", oecd_order, dy, names, extra=[AVG]), "pct", num, maxval=260,
@@ -102,7 +102,7 @@ def borrowing_page(facts, d, num, sources):
     body.append(source_line(sources, ["imf-weo-debt", "oecd-gov-pf-g7"], "General government means central, regional and local government together. Gross debt does not subtract what the government owns."))
 
     # ---------------------------------------------------------------- yields
-    body.append(f'<h2 id="yields">How much does each government pay to borrow?</h2>')
+    body.append('<h2 id="yields">How much does each government pay to borrow?</h2>')
     body.append(f'''<div class="answer"><p>In {yy}, the latest full year, the market rate (yield) for new 10-year UK government borrowing averaged {num(f"borrow.yield.{UK}.{yy}", "pct2")} a year, the {_ordinal(yy_place)} of the G7. The latest month, {b["yield_month_name"]}, was {num(f"borrow.yieldm.{UK}.{ym}", "pct2")}, the {_ordinal(ym_place)} of the G7.</p>
 </div>''')
     body.append("<p>The UK Debt Management Office and the Office for Budget Responsibility explain what moves borrowing costs: <a href='#why'>their words are quoted further down</a>.</p>")
@@ -129,7 +129,7 @@ def borrowing_page(facts, d, num, sources):
     body.append(source_line(sources, ["oecd-finmark-irlt"], "The OECD's long-term interest rates are the yields on government bonds with about 10 years to repay."))
 
     # ---------------------------------------------------------------- interest
-    body.append(f'<h2 id="interest">How much interest does each government pay?</h2>')
+    body.append('<h2 id="interest">How much interest does each government pay?</h2>')
     body.append(f'''<div class="answer"><p>In {ny}, the UK government's interest payments, after subtracting interest it received, were {num(f"borrow.int.{UK}.{ny}", "pct")} of GDP, the {_ordinal(int_place)} of the G7: {_higher_lower(int_order, names)}. That was {num(f"borrow.intrev.{UK}.{ny}", "pct")} of everything the government received in taxes and other income, also the {_ordinal(ir_place)} of the G7.</p></div>''')
     body.append(switch("Show", [
         ("% of GDP", f"Net interest paid, % of GDP, {ny}.",
@@ -164,15 +164,15 @@ def borrowing_page(facts, d, num, sources):
     body.append(explain("debt-interest-drivers", sources, heading="h3"))
     body.append(explain("borrowing-costs-2025", sources, heading="h3"))
 
-    body.append(f'''<div class="limit"><p><strong>Limits.</strong></p><ul>
+    body.append('''<div class="limit"><p><strong>Limits.</strong></p><ul>
 <li>Yields are market rates for new borrowing, not the average rate on all the debt a government already owes.</li>
 <li>These figures compare governments; they do not show which level of debt or interest is right, or what the borrowing paid for.</li>
 <li>Different yields can reflect different central bank rates and inflation, not only how investors judge each government. Each country's central bank sets its own interest rate, except that France, Germany and Italy share the euro and the European Central Bank's rate. These figures do not show which factor explains the gap between any two countries.</li>
 <li>GDP-based shares change when GDP changes, as well as when debt or interest changes.</li>
 <li>The OECD and IMF revise these figures as countries send newer data. Figures here are as downloaded on the date on each source page.</li>
 </ul></div>''')
-    body.append(f'''<div class="limit"><p><strong>Why the UK figures differ from other pages.</strong> The <a href="spending.html">spending</a> and <a href="spending-history.html">spending history</a> pages use UK figures for financial years and the whole public sector from the OBR and HM Treasury. The figures here are for calendar years and general government, measured the same way for every country, so they do not match those pages exactly and are not joined to them.</p></div>''')
-    body.append(f'<p>See also: <a href="international.html">how UK taxes and spending compare with other countries</a>, and <a href="why-debt.html">why UK government debt is high</a>.</p>')
+    body.append('''<div class="limit"><p><strong>Why the UK figures differ from other pages.</strong> The <a href="spending.html">spending</a> and <a href="spending-history.html">spending history</a> pages use UK figures for financial years and the whole public sector from the OBR and HM Treasury. The figures here are for calendar years and general government, measured the same way for every country, so they do not match those pages exactly and are not joined to them.</p></div>''')
+    body.append('<p>See also: <a href="international.html">how UK taxes and spending compare with other countries</a>, and <a href="why-debt.html">why UK government debt is high</a>.</p>')
     body.append(source_line(sources, ["imf-weo-debt", "oecd-gov-pf-g7", "oecd-finmark-irlt"],
                             "OECD data is published under the Creative Commons Attribution 4.0 licence. IMF data is reproduced with attribution."))
     return page("borrowing.html", "How do UK debt and borrowing costs compare with other major countries?", "\n".join(body),

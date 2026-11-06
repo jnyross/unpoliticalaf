@@ -8,7 +8,7 @@ the page says why. Averages are recorded as calculated facts with their
 formula, so the checks recalculate them like every other derived figure.
 """
 from .data import Fact, YEARS
-from .html import FOLD, page, table, details_table, source_line, esc
+from .html import FOLD, page, details_table, source_line, esc
 from . import pages_life as L
 
 SPAN = 3  # years in each span
@@ -144,7 +144,7 @@ def pair_context(a, b, brief=False):
     if not notes:
         return ""
     if brief:
-        return (f" Both years fall between the 2008-09 recession and the pandemic, so this pair shows that stretch only." if len(notes) == 2
+        return (" Both years fall between the 2008-09 recession and the pandemic, so this pair shows that stretch only." if len(notes) == 2
                 else " " + notes[0][:1].upper() + notes[0][1:] + ".")
     return (" " + "; ".join(notes)[:1].upper() + "; ".join(notes)[1:] + ". So this pair shows that stretch, not the whole period: "
             "each topic page has every year, and each comparison page gives the longer run.")
@@ -242,11 +242,10 @@ MOE_NOTE = ("Margins of error are not shown for averages: these surveys intervie
 
 
 def span_page(facts, d, num, sources, a, b):
-    titles = dict((t[0], t[1]) for t in L.TOPICS)
     up = "../../../"
     h = f"{long(a)} compared with {long(b)}"
     body = [f"<h1>{h}</h1>"]
-    body.append(f'<p><a href="index.html">Choose other years</a> · <a href="../index.html">Compare two single years</a></p>')
+    body.append('<p><a href="index.html">Choose other years</a> · <a href="../index.html">Compare two single years</a></p>')
     body.append('<h2 class="brief">In brief</h2>')
     body.append('<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved.</p>')
     for key, title, _ in L.TOPICS:

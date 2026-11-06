@@ -303,7 +303,7 @@ def _top_answer(sec):
     m = re.search(r'<div class="answer">', sec)
     if not m:
         return None
-    depth, i = 0, m.start()
+    depth = 0
     for t in re.finditer(r'<(/?)div\b[^>]*>', sec[m.start():]):
         depth += -1 if t.group(1) else 1
         if depth == 0:
@@ -669,7 +669,7 @@ def change_bars(items, kind, num, caption=""):
     for label, fid, sub in items:
         v = num.facts[fid].value
         w = 0 if v is None else 50 * abs(v) / top
-        side = "left:50%" if (v or 0) >= 0 else f"right:50%"
+        side = "left:50%" if (v or 0) >= 0 else "right:50%"
         word = "" if v is None else ("rise" if v > 0 else ("fall" if v < 0 else "no change"))
         lis.append(f'<li><div class="lab"><span>{label}</span><span>{num(fid, kind)} <span class="dir">{word}</span></span></div>'
                    + (f'<div class="sub">{sub}</div>' if sub else "")

@@ -3,6 +3,8 @@ import re
 import unittest
 from pathlib import Path
 
+from builder.pages_life import FIRST_YEAR
+
 SITE = Path(__file__).resolve().parent.parent / "site"
 # page -> words its answer box must contain, and the section it links to
 KEY_FACTS = {
@@ -13,6 +15,16 @@ KEY_FACTS = {
 
 
 class KeyFacts(unittest.TestCase):
+    def test_schools_answer_keeps_the_first_year_and_its_figures(self):
+        html = (SITE / "life/schools.html").read_text(encoding="utf-8")
+        match = re.search(r'<div class="answer">(.*?)</div>', html, re.S)
+        self.assertIsNotNone(match)
+        box = match.group(1)
+        first = FIRST_YEAR["schools"]
+        self.assertIn(f"In January {first} the figures were", box)
+        for phase in ("primary", "secondary"):
+            self.assertIn(f'data-fact="school.{phase}.{first}"', box)
+
     def test_key_facts_are_in_the_answer_box(self):
         for path, (words, anchor) in KEY_FACTS.items():
             f = SITE / path

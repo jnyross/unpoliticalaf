@@ -5,6 +5,10 @@
   "description": "Independent, sourced guide to UK public money and everyday life, built from official statistics.",
   "scripts": {
     "setup": "make setup",
+    "setup-test": "make setup-test",
+    "setup-dev": "make setup-dev",
+    "typecheck": "make typecheck",
+    "quality": "make quality",
     "build": "make build",
     "check": "make check",
     "verify": "make verify"

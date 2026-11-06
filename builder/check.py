@@ -470,7 +470,7 @@ def run_axe(paths):
         from playwright.sync_api import sync_playwright
         from axe_playwright_python.sync_playwright import Axe
     except ImportError:
-        fail("--axe needs playwright and axe-playwright-python (make setup)")
+        fail("--axe needs playwright and axe-playwright-python (make setup-dev)")
         return
     import os
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None

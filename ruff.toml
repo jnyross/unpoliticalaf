@@ -1,0 +1,9 @@
+target-version = "py310"
+
+# This is a pinned upstream snapshot, not maintained application source.
+extend-exclude = ["reference"]
+
+[lint]
+# Catch syntax errors and Pyflakes correctness issues throughout the Python
+# source, scripts and tests without reformatting the existing HTML templates.
+select = ["E9", "F"]

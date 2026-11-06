@@ -33,3 +33,27 @@ jobs:
       - run: .venv/bin/python -m playwright install --with-deps chromium
       - run: make build
       - run: make a11y
+
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-dev
+      - run: make quality
+
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: make setup-test setup-typing
+      - run: make typecheck
+      - run: make verify

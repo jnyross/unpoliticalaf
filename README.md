@@ -65,9 +65,9 @@ test or serve the site locally. There is no `.env` file to create or copy, and
 the build does not load `.env` files. The site is static: it needs no database,
 backend service or Vercel account for local development.
 
-Install Python 3.10 or later (including `venv`) and Make, then run `make setup`
+Install Python 3.10 or later (including `venv`) and Make, then run `make setup-test`
 and `make verify` from the repository root. Setup installs the pinned packages
-in `requirements.txt` into `.venv`; subsequent build, check and test commands use
+in `requirements-test.txt` into `.venv`; subsequent build, check and test commands use
 that interpreter without needing to activate it.
 
 For autonomous work, run project installation, builds and tests only in
@@ -113,6 +113,10 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
+make setup-dev && make quality # lint, typing, dependencies, guidance and dashboard
+make lint      # Ruff syntax/Pyflakes across all first-party Python
+make typecheck # forced compilation then strict core mypy checks
+make check-deps # runtime, browser and developer dependency classification
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -121,19 +125,28 @@ make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 From a fresh checkout, run `make setup-test && make build && make test`.
 Build first because some tests read the generated pages and data in `site/`.
 Setup needs network access to install the pinned dependencies into `.venv`;
-it does not change your system Python. The tests use `unittest`, and pytest
-can collect the same tests without running them:
+it does not change your system Python. Pytest runs both unittest cases and
+pytest tests, including nested `tests/` and `quality/tests/`. Collect them with:
 
 ```sh
-.venv/bin/python -m pytest --collect-only tests/test_household_shares.py
+.venv/bin/python -m pytest --collect-only
 ```
 
 Use `.venv/bin/python`, not an unconfigured system `python3`, for pytest commands.
 Alternatively, activate the environment with `. .venv/bin/activate` before
 running `python -m pytest --collect-only tests/test_household_shares.py`.
+`make setup-test` also includes the existing dashboard's test dependencies.
 `make setup-dev` includes the test dependencies as well as the optional browser
 tools. Production deployments still use `make setup`, without either set of tools.
 CI checks the lightweight test setup, bounded pytest collection and `make verify`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for naming and complete check interfaces.
+Ruff is pinned to 0.14.3; strict core typing uses mypy 1.18.2 and
+types-openpyxl 3.1.5.20261017. `mypy.ini` declares the initial strict boundary.
+Python 3.10 and 3.12 both force-compile first-party code before typing, avoiding
+warm-cache false passes. Dependency checks use deptry 0.25.1; browser packages
+live in `requirements-a11y.txt` and CLI/stub/dashboard tools are development-only.
+The existing dashboard remains descriptive, with no lowered thresholds.
 
 Vercel: install `make setup`, build `make build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,

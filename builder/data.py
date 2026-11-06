@@ -174,7 +174,6 @@ def receipts(facts):
     head = rows[3]
     cols = {str(v).strip(): j for j, v in enumerate(head) if v}
     year_rows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
-    note = " ".join(str(r[1] or r[0] or "") for r in rows[39:43])
     # Forecast years start from 2026-27 in this vintage (sheet note row 41).
     forecast_from = "2026-27"
     out = {"years": list(year_rows), "groups": [], "forecast_from": forecast_from}

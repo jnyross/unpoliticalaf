@@ -1,7 +1,7 @@
 """Home page, the methods page and the list of sources."""
 import re
 
-from .html import page, esc, table, bars, jump
+from .html import page, esc, bars, jump
 
 
 def home_page(facts, d, num, sources):

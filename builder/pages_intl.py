@@ -1,5 +1,5 @@
 """How UK tax and government spending compare with other OECD countries, as a share of GDP."""
-from .html import FOLD, NOFOLD, page, table, details_table, bars, line_chart, switch, source_line, esc, fmt
+from .html import FOLD, NOFOLD, page, details_table, bars, line_chart, switch, source_line, esc
 from .pages_money import derive
 from . import findings as F
 
@@ -232,7 +232,7 @@ def international_page(facts, d, num, sources):
     t_both = sum(1 for u, a in zip(*tv) if u is not None and a is not None)
     s_above = [y for y, u, a in zip(syears, *sv) if u is not None and a is not None and u > a]
     s_both = sum(1 for u, a in zip(*sv) if u is not None and a is not None)
-    body.append(f'<h2 id="time">How has this changed over time?</h2>')
+    body.append('<h2 id="time">How has this changed over time?</h2>')
     body.append(f'''<div class="answer"><p>Taxes in the UK were {num(f"intl.tax.{UK}.{tyears[0]}", "pct")} of GDP in {tyears[0]}, when the OECD average was {num(f"intl.tax.{AVG}.{tyears[0]}", "pct")}, and {num(t_uk, "pct")} in {ty}, against {num(t_avg, "pct")}. The UK share was above the average in {t_above} of the {t_both} years.
 Government spending was above the average in {len(s_above)} of the {s_both} years from {syears[0]} to {sy}.</p></div>''')
     body.append(switch("Show", [
@@ -280,14 +280,14 @@ Government spending was above the average in {len(s_above)} of the {s_both} year
     body.append(f"<p class='small'>Areas follow COFOG, the international classification also used on the <a href='spending.html'>spending page</a>. {fy} is the latest year with figures for the UK and the average.</p>")
     body.append(FOLD)
 
-    body.append(f'''<div class="limit"><p><strong>Limits.</strong></p><ul>
+    body.append('''<div class="limit"><p><strong>Limits.</strong></p><ul>
 <li>These figures show how large taxes and spending are compared with each economy. They do not show which level is better, or what people get in return.</li>
 <li>Countries pay for the same things in different ways. Where health insurance or pensions are compulsory but paid to private firms, as health insurance is in Switzerland, the money may not count as tax or government spending at all. Some countries pay benefits that are then taxed, which raises both tax and spending.</li>
 <li>GDP is not a perfect measure of an economy's size. In Ireland it is raised by the profits of large multinational companies, which makes Ireland's shares look lower; Ireland's own statistics office publishes another measure for this reason.</li>
 <li>The “OECD average” counts each country equally, so Iceland counts as much as the United States. It is not the share for the OECD as a whole.</li>
 <li>The OECD revises these figures as countries send newer data. Figures here are as downloaded on the date shown on each source page.</li>
 </ul></div>''')
-    body.append(f'''<div class="limit"><p><strong>Why the UK figures differ from other pages.</strong> The <a href="taxes.html">taxes</a> and <a href="spending.html">spending</a> pages use UK figures for financial years (April to March) and the whole public sector, including public corporations, from the OBR and HM Treasury.
+    body.append('''<div class="limit"><p><strong>Why the UK figures differ from other pages.</strong> The <a href="taxes.html">taxes</a> and <a href="spending.html">spending</a> pages use UK figures for financial years (April to March) and the whole public sector, including public corporations, from the OBR and HM Treasury.
 The OECD uses calendar years and general government only, and counts some items differently, so its UK figures do not match those pages exactly. They are shown here, not joined to the UK series, because they are measured the same way for every country.</p></div>''')
     body.append(source_line(sources, ["oecd-rs-tax", "oecd-gov-pf", "oecd-gov-cofog"],
                             "OECD data is published under the Creative Commons Attribution 4.0 licence. Differences from the average calculated here."))

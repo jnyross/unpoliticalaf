@@ -45,7 +45,7 @@ HM Treasury's figures, a different source, give {last} as social security {g("so
                                ids=ids, num=num, breaks=breaks, ymin=0, point_labels=ys,
                                finding=F.leader("{name} was the largest of the five {span}", which="last"))
 
-    body.append(f"<h2 id='purposes'>Five purposes since the Second World War</h2>")
+    body.append("<h2 id='purposes'>Five purposes since the Second World War</h2>")
     body.append(f"<p>Health, education, defence, social security and interest on government debt, from {full_from}, the OBR's first year with figures for every purpose except social security, which starts in {h['first']['social']}. "
                 f"Amounts after inflation start in {start}, the first year of the price index used. The chart back to {years[0]}, through both world wars, is further down.</p>")
     body.append(views(chart, order=("gdp", "real"), default="gdp", notes={

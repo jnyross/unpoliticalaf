@@ -5,7 +5,7 @@ export COVERAGE_RCFILE := quality/coverage.ini
 
 .PHONY: setup metrics tooling-tests
 setup:
-	$(MAKE) setup
+	$(MAKE) setup-test
 	$(PYTHON) -m pip install -q -r quality/requirements.txt
 
 tooling-tests:
@@ -17,7 +17,7 @@ metrics: tooling-tests
 	mkdir -p quality-reports
 	$(COVERAGE) run -m builder.build
 	$(COVERAGE) run --append -m builder.check
-	$(COVERAGE) run --append -m unittest discover -s tests -v
+	$(COVERAGE) run --append -m pytest tests quality/tests
 	$(COVERAGE) report
 	$(COVERAGE) html
 	$(COVERAGE) xml

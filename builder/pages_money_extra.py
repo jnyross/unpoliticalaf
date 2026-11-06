@@ -122,7 +122,7 @@ def household_types_section(facts, d, num, sources):
     """ETB Tables 12a-12c: all taxes by type of household."""
     w = d["who_types"]
     types = [t for t in w["types"] if t[0] != "all"]
-    out = [f'''<h2 id="household-type">By type of household</h2>
+    out = ['''<h2 id="household-type">By type of household</h2>
 <p>The same survey also groups people by the kind of household they live in. Every figure here is <strong>adjusted for household size</strong>, so the amounts are not the bill any household receives.</p>''']
     lone, couple2, ret1 = "nc1", "nc22", "r1"
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
@@ -287,7 +287,7 @@ def tax_history_section(facts, d, num, sources):
     out.append(FOLD)  # keep the main chart in view on phones
     out.append(f'''<p>The older method put households into fifths; the current one puts people into fifths and, from {adj}, adds an estimate of income that very high earners do not report in the survey.
 For {ov}, the one year published both ways, the share for everyone was {num(oall, "pct")} on the older method and {num(f"etbp.all.{key(ov)}.all", "pct")} on the current way of ranking, before the top-income adjustment.</p>''')
-    out.append(f'''<p>On the older method, the share for the lowest-income fifth was below the share for the highest-income fifth in every year from 1977 to 1987, and above it in every year from 1988 to 2017/18. On the current method the two have been within five percentage points of each other, with the order changing from year to year. The make-up differs: for the lowest-income fifth most tax is indirect, such as VAT, and for the highest-income fifth most is direct, such as Income Tax. The panels below show each fifth on the same scale.</p>''')
+    out.append('''<p>On the older method, the share for the lowest-income fifth was below the share for the highest-income fifth in every year from 1977 to 1987, and above it in every year from 1988 to 2017/18. On the current method the two have been within five percentage points of each other, with the order changing from year to year. The make-up differs: for the lowest-income fifth most tax is indirect, such as VAT, and for the highest-income fifth most is direct, such as Income Tax. The panels below show each fifth on the same scale.</p>''')
     out.append(small_multiples(f"All taxes as a share of gross household income, by fifth, UK, {first} to {last}", labels,
                                [(lab, vals(series_ids(q))) for q, lab in FIFTHS],
                                "Per cent of gross household income. Fifths of households to 2017/18; fifths of people from 2018/19.", "pct",
@@ -321,7 +321,7 @@ For {ov}, the one year published both ways, the share for everyone was {num(oall
 <li><strong>Not counted.</strong> Taxes paid by companies, such as Corporation Tax, are not allocated to households. Some taxes paid by businesses are counted as indirect taxes passed on in prices.</li>
 </ul></div>''')
     out.append(source_line(sources, ["etb-hist-quintile-all", "etb-hist-quintile-all-2", "etb-fye2018", "etb-fye2019", "etb-fye2020", "etb-fye2021", "etb-fye2022", "etb-fye2023", "etb"],
-                           f"Older method: historical tables, one sheet per year; shares calculated here as (total direct taxes + total indirect taxes) ÷ gross income. Current method: Table 8 of each year’s reference tables, all individuals."))
+                           "Older method: historical tables, one sheet per year; shares calculated here as (total direct taxes + total indirect taxes) ÷ gross income. Current method: Table 8 of each year’s reference tables, all individuals."))
     return "\n".join(out)
 
 
