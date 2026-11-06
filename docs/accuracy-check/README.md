@@ -1,5 +1,14 @@
 # Accuracy check: 50 figures traced to the publishers' files
 
+**Current operating note — 5 November 2026.** The dated assessment below is
+preserved, not fresh acceptance evidence. Its instruction to run the
+source-writing "Accuracy check" workflow is superseded: that writer is disabled.
+Use a reviewed intentional accuracy-check run against fresh publisher files in
+credential-free Boat; workflow activation needs independent exact-candidate
+review and must not enable dormant schedules or commit results to main. Store
+post-freeze reports on the non-deploying evidence branch with the audited source
+SHA, following [the current procedure](../standins/README.md).
+
 Checked on 2 November 2026 against the site built from main at `e1bc5ec`.
 
 **Result: all 50 figures match the publishers' own files.** One problem was

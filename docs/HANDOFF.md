@@ -1,5 +1,49 @@
 # Handoff: Unpolitical
 
+## Current handoff — 5 November 2026 decisions
+
+Read [product-spec.md](product-spec.md), [goal-rubric.md](goal-rubric.md)
+and [AGENTS.md](../AGENTS.md) for current instructions. The target is >=49/55,
+every dimension >=4, D11=5, all recorded John's probes passing and no unresolved
+material finding on the same live candidate. Acceptance is entirely agent-run,
+without mandatory human recruitment, consent, real-phone, outside-human or
+actual screen-reader gates. Label a pass "met (simulated)" with the rubric's
+limits, not proof about real newcomers. No new final acceptance is claimed here.
+
+Public source and reviewed PR delivery are approved. Independent agent review
+(not the author), credential-free Boat checks and CI must pass on the exact
+candidate before an agent manages the merge; then verify Vercel's revision and
+production bytes. No direct-main/controller publication or self-approval.
+Keep one writer per overlapping path and one active browser validator per small
+Boat sandbox. Use parallel work only within those constraints and allowance.
+
+The old controller, claims, bindings, dormant audit/watchdog schedules and
+auto-merge/source-fetch/accuracy-result writers stay paused and preserved.
+Use reviewed explicit source/integration runs; do not silently enable schedules.
+Provider, endpoint, subscription, speed, billing and credentials stay unchanged.
+Paid services, unapproved integrations and material scope changes still need John.
+Project execution stays inside credential-free Boat, not on the host.
+
+The verified baseline is 94 probes, 84 with evidence and 10 open, not the
+older counts below. April 2026 earnings acquisition is in scope, not blocked
+merely because the retained series ends in 2025. Inspect actual PR heads and
+current source availability before taking work. Keep original branches,
+parent dirty work, pinned references/hashes and dated assessments intact.
+Final acceptance requires fresh same-candidate evidence; preserve earlier
+failures. Commit the seal and README before source freeze, then store formal
+audits on a non-deploying evidence branch naming the audited source SHA.
+
+## Historical handoff — 4 November 2026 (preserved verbatim)
+
+Everything below is the dated handoff record, including the original goal
+quotation, stale counts, source-access assumptions and then-current operating
+claims. Its operating instructions are not current guidance. Still-applicable
+constraints (hosting allowance, page-length budgets, source hash stops and
+public corrections) remain in force; stale source-access assumptions do not.
+Its human gate, self-review merge rule,
+unbounded concurrency, old-controller precedence and "workflow left on" claims
+are explicitly superseded above. Unperformed human evidence remains unperformed.
+
 This file is for the next agent taking over the project. It sets out the goal,
 what success means, where the work stands, what is still open, the constraints
 that have bitten before, and how the project was run. The project goal text is

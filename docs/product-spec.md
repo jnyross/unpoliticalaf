@@ -1,6 +1,110 @@
 # UnpoliticalAF product specification
 
-## Controlling v2 outcome and acceptance contract — 31 October 2026
+## Controlling decisions — 5 November 2026
+
+John approved the current [eleven-dimension goal rubric](goal-rubric.md) as the
+acceptance goal: **at least 49/55, every dimension at least 4, D11 = 5, every
+recorded John's-question probe passing and no unresolved material finding on
+the same live candidate**. The old v1 31/32 and frozen-v2 96/100 targets are
+superseded, not alternate gates. Independently assess each deployed wave, keep
+its dated evidence and create concrete deficit tickets until this goal is met.
+
+All testing and acceptance are autonomous and agent-run. There is no mandatory
+human study, recruitment, consent, real-phone study, outside-human review or
+actual VoiceOver/TalkBack gate. The accepted result is labelled **"met
+(simulated)"**, with the rubric's limits: AI readers are not people, screenshots
+are not phones in the hand, and an accessibility tree is not a real screen
+reader. It is not proof of real-world newcomer comprehension. Unperformed
+studies, human reviews and a year of freshness history remain honestly
+unperformed historical evidence, not current acceptance blockers.
+
+### Current product scope and evidence
+
+The v1 product requirements 1–12 and reuse/source boundaries remain applicable
+except where explicitly superseded by the current decisions and rubric. This
+includes release/as-of dates and announced next releases, reading grade 7 or
+below, the banned evaluative-word list, equivalent party treatment for deferred
+proposal work, methods/definitions/limits, OGL attribution, downloads, operator
+and verified funding information, a public error-reporting route, and a
+one-command refresh with a reviewable diff. Historical labelling preserves their
+record; it does not remove these unaffected requirements.
+
+Retain the four fiscal questions (spending; taxes, other receipts and borrowing;
+who pays; household tax-to-income interpretation) and all five life topics
+(work/job types, real earnings, housing, holidays and class sizes). Preserve
+meaningful supported splits, long reliable histories, actual periods, geography,
+populations and observed/estimate/provisional/forecast labels. Annual navigation,
+year/pair/range comparisons and core answers work without JavaScript. Retain the
+existing 1971–2025 coverage and extend 2026 only with supported observations;
+missing splits and years remain missing.
+
+The outcome/design, annual-anchor definitions, method boundaries and fiscal
+source/calculation safeguards recorded below and in [v2-contract.md](v2-contract.md)
+still apply where consistent with the current rubric. No missing-to-zero,
+forward-filling, silent interpolation, incompatible comparisons, false
+denominators, fictional household as observation or change-as-cause claim.
+Retain official source bytes/hashes, exact locators, formulas and operands;
+independent checking must reopen originals rather than share producer formulas.
+Keep answer-first white/grey pages, adjacent chart tables, source/download links,
+limits next to claims, corrections and existing phone/page-length budgets.
+
+The current rubric controls access: all generated HTML at 360px and 1100px
+with disclosures expanded, plus changed-template default-state, real keyboard,
+contrast and no-JavaScript checks. Inspect axe incomplete findings. Use the
+screen-reader-tree stand-in; preserve the recorded T128 secondary-text/page-length
+trade-off. Do not import the superseded global 44px or human-device gates.
+
+Use the existing [stand-in procedure](standins/README.md): three informal
+readers, five independent screenshot readers, twelve fixed and twenty-four
+fresh sealed questions, without-site answers first, seven separate John's
+groups with 40 actions each, screen-reader-tree/keyboard checks, source
+fact-checking, two impartiality critics and a judge. Preserve every numeric bar
+and material-error cap. Actions are not measured human seconds. All probes,
+including open or failed ones, count in the verdict; D11 alone is not a pass.
+
+### Current delivery and preservation
+
+The source is public with John's approval. Deliver via pull requests,
+independent agent review, credential-free Boat (`--no-env`) checks, CI and
+agent-managed merges, followed by Vercel deployment and exact production-byte
+verification against a rebuild of that committed candidate with the same flags.
+No self-approval, direct-main publication or controller-only delivery.
+Keep setup/build/verify, deterministic output, existing source/negative/
+reconciliation/access/smoke checks and last-good recovery.
+
+Keep the old controller, claims, bindings and disabled schedules paused and
+preserved; do not operate or repair them. Auto-merge, source-fetch and
+accuracy-result writers remain disabled unless intentionally activated after
+review; no dormant schedule is authorised. Source acquisition and integration
+checks use reviewed explicit runs, not an automatic source push. No provider,
+endpoint, subscription, speed, billing or credential change, new paid service
+or unapproved integration is authorised. Consolidation of the approved tooling
+PRs is in scope; do not treat the old docs-ticket dependency freeze as a ban.
+
+Root [AGENTS.md](../AGENTS.md), [START.md](../START.md) and
+[AUTONOMOUS-BRIEF.md](../AUTONOMOUS-BRIEF.md) state this delivery direction.
+Pinned references, original hashes, dated assessments and all original work
+stay intact. Commit the sealed-question hash and accurate README before final
+source freeze. Save post-freeze formal audits under `docs/standins/audits/` on
+a non-deploying evidence branch identifying the audited source SHA, without
+moving main merely to store evidence. A changed product needs requalification.
+This guidance update supplies no new acceptance or live-verification evidence.
+
+## Historical v2 outcome and acceptance contract — 31 October 2026
+
+**Preserved record with explicit supersessions.** The v1 product requirements
+1–12 and reuse/source boundaries still apply except as superseded by the current
+decisions above. The historical v2 and v1 text below retains the original
+hashes, assessments and unperformed evidence; its old operating instructions
+do not override the current ones.
+Its targets, G6 controller/private delivery, G7 real study, recruitment,
+consent, actual-device/manual-human requirements, protected-instruction
+alignment route, eight/ten-path docs-ticket allowlist, source-byte docs-ticket
+budget, dependency freeze and scheduled-update requirement are superseded by
+the current decisions above. No sentence below reinstates those gates.
+In v1, this explicitly supersedes the private-source part of item 10,
+scheduled/controller delivery in items 11–12, the human acceptance tickets,
+31/32 target and factory qualification sequence.
 
 John authorised the annual life scope and reference-design reset on
 31 October 2026. This section and [the frozen v2 contract](v2-contract.md) control

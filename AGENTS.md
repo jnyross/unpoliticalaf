@@ -8,11 +8,19 @@ implementation and autonomous deployment on 30 October 2026. Read
 restrictions. Reuse the pinned product source and data in `reference/un-political/`
 and `data/`; the original `/home/john/projects/un-political` is read-only.
 
-Work only in the assigned UnpoliticalAF checkout. The existing software factory
-owns GitHub claims, Git commits/publication, Boat checks, recovery and deployment
-to `https://unpoliticalaf.vercel.app`. Direct-main publication is authorised for
-this repository through that controller. Model workers return edits/findings;
-they do not push, change policy, access credentials or operate deployment tools.
+John's decisions on 5 November 2026 supersede the old acceptance and delivery
+rules. Work only in the assigned UnpoliticalAF checkout. The source is public
+with John's approval. Deliver through pull requests, not direct-main pushes:
+independent agent review, credential-free Boat checks and CI must pass on the
+exact candidate before an agent manages its merge. No author may approve their
+own work. Verify deployment to `https://unpoliticalaf.vercel.app` against a
+rebuild of that same commit with its production flags.
+
+Keep the old software-factory controller, claims, bindings and disabled
+schedules paused and preserved. Do not operate or repair them. Do not enable
+auto-merge, source-fetch or accuracy-result writers without reviewed intentional
+activation; no dormant schedule is authorised. No credential, provider, endpoint,
+subscription, speed or billing changes are authorised.
 
 ## Delivery rules
 
@@ -25,17 +33,22 @@ they do not push, change policy, access credentials or operate deployment tools.
   no-JavaScript content, and adjacent table alternatives to charts.
 - Keep independent review and exact-candidate checks. A model must not approve
   its own implementation or fiscal interpretation. Fix findings and rerun checks.
-- Record evidence honestly. Human studies/reviews and a year of freshness history
-  stay pending until observed. Use the explicit human-gate issues for these.
-- The acceptance goal is 9.5/10 on the unchanged source rubric, meaning at least
-  31/32. Independently score each deployed wave and turn verified deficits into
+- Acceptance testing and review are agent-run. No human study, recruitment,
+  consent, actual-phone, outside-human review or actual screen-reader gate is
+  required. Record agent-tested results as "met (simulated)", with simulation
+  limits, never as real-person comprehension or elapsed human time. Preserve
+  unperformed human evidence and freshness history honestly as historical gaps.
+- The current goal is `docs/goal-rubric.md`: at least 49/55, every dimension at
+  least 4, D11 = 5, all recorded John's probes passing and no unresolved material
+  finding on the same live candidate. The old 31/32 and frozen-v2 96/100 targets
+  are historical. Independently score each deployed wave and turn deficits into
   follow-up tickets until the target is achieved. Preserve evidence and scores;
   never redefine success or treat the first ticket list as the end of the work.
-- All Claude calls use the existing CLIProxy subscription route. Use the installed
-  factory's configured native model roles and standard speed. Do not add direct
+- All Claude calls use the existing CLIProxy subscription route. Use the existing
+  configured model roles and standard speed. Do not add direct
   paid API keys, new paid services or change provider/billing defaults.
 - Keep secrets, private factory state, agent notes and runtime bindings out of Git.
-  Keep this repository private until John explicitly approves public source release.
+  Public source approval does not authorise exposing private runtime evidence.
 
 ## Source naming conventions
 
@@ -95,12 +108,15 @@ to apply this agreement.
 ## Sources and completion
 
 `docs/product-spec.md` owns requirements; GitHub owns the live backlog. Reference
-material is pinned and hashed in `reference/un-political/SOURCE.json`. The installed
-factory guide at `/home/john/.local/lib/software-factory/current/README.md` owns
-operation and recovery, with private configuration outside the repository.
+material is pinned and hashed in `reference/un-political/SOURCE.json`. Preserve
+pinned originals, hashes and dated assessments. The installed factory and its
+operational guide are historical, not the current delivery procedure; private
+configuration stays outside the repository.
 
 Complete a ticket only when its specified checks and independent review pass on
-the exact candidate and the controller verifies its live deployment where required.
+the exact candidate, it merges through a reviewed PR, and its live deployment is
+verified where required.
 Report a concrete failed check or missing decision rather than inventing evidence
-or requesting permissions already granted above. Paid services, public visibility,
-unapproved integrations and material product-scope changes still need John.
+or requesting permissions already granted above. Paid services, unapproved
+integrations, provider/billing/credential/schedule changes and material
+product-scope changes still need John.

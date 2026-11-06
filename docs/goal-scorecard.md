@@ -4,6 +4,21 @@ This file scores the live site against the project goal. Each goal audit adds a
 new dated section at the top, so later audits can see what changed. Older
 sections stay as they were.
 
+**Current authority — 5 November 2026.** John selected
+[goal-rubric.md](goal-rubric.md) as the accepted agent-tested completion goal:
+>=49/55, every dimension >=4, D11=5, all recorded probes passing and no
+unresolved material finding on the same live candidate. No human study,
+consent, recruitment, real-phone, outside-human or actual screen-reader gate
+remains. Public source and independently reviewed PR/Boat/CI/agent-managed
+delivery supersede old private/controller rules; the controller and disabled
+schedules stay paused, and provider/billing/credentials stay unchanged.
+Record passes as "met (simulated)" with simulation limits, not proof about
+people. This introduction claims no new score or acceptance. Every dated audit
+below is preserved history; its human-step or "decide with John" gaps do not
+reinstate removed gates. Final formal audits go on the non-deploying evidence
+branch under `docs/standins/audits/`, identifying the separately audited source
+SHA; evidence commits must not change the deployed candidate.
+
 From Audit 2 onwards, audits use [goal-rubric.md](goal-rubric.md): eleven
 dimensions scored 0 to 5 against named benchmarks and reader evidence. Audit 1
 used a checklist that only asked whether each feature existed, and it was too

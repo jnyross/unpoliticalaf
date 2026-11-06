@@ -4,8 +4,34 @@ An independent, phone-first website that explains UK public money and everyday
 life using only official statistics. It answers four questions, with the answer
 first and the method close by:
 
-> **Taking over this project?** Read [docs/HANDOFF.md](docs/HANDOFF.md) first. It
-> has the project goal, the success test, the current status and the constraints.
+> **Taking over this project?** Read the current section of
+> [docs/HANDOFF.md](docs/HANDOFF.md#current-handoff--5-november-2026-decisions)
+> first. The older handoff is preserved history, not the current acceptance test.
+
+## Current goal and delivery
+
+John's decisions on **5 November 2026** select [docs/goal-rubric.md](docs/goal-rubric.md):
+**>=49/55, every dimension >=4, D11=5, all recorded John's-question probes
+passing and no unresolved material finding on the same live candidate**.
+Testing and acceptance are agent-run. No human recruitment, consent, real-phone,
+outside-human review or actual screen-reader gate is required. A pass is labelled
+**"met (simulated)"**, with the rubric's simulation limits, not proof of real
+newcomer comprehension. Old 31/32 and frozen-v2 96/100 targets are historical.
+
+The source is public with John's approval. Deliver through PRs with independent
+agent review, credential-free Boat checks and CI on the exact candidate, then
+agent-managed merge and Vercel/live-byte verification. No self-approval or
+direct-main/controller publication. The old controller, claims, bindings and
+disabled schedules stay paused and preserved; provider, billing and credentials
+stay unchanged. Do not silently enable dormant source or merge writers.
+
+**Completion is not yet established.** [docs/goal-scorecard.md](docs/goal-scorecard.md)
+contains dated historical assessments, not a fresh final same-candidate pass.
+This guidance change claims no new reader, accessibility or live acceptance.
+Commit the sealed-question hash and accurate README before final source freeze;
+post-freeze formal audits belong under `docs/standins/audits/` on a non-deploying
+evidence branch naming the audited source SHA. Preserve pinned sources/hashes,
+dated evidence and unperformed human/freshness history.
 
 - **Where does public money go?** (`spending.html`)
 - **Which taxes raise the money?** Taxes, other receipts and borrowing, kept apart (`taxes.html`)
@@ -44,6 +70,14 @@ and `make verify` from the repository root. Setup installs the pinned packages
 in `requirements.txt` into `.venv`; subsequent build, check and test commands use
 that interpreter without needing to activate it.
 
+For autonomous work, run project installation, builds and tests only in
+credential-free Boat (`--no-env`) from a reviewed tracked/index export, never
+with host credentials or `.git`. Use Python 3.12 normally and the existing
+Python 3.10 compatibility checks where applicable, Node 22 for project tooling
+and Node 24 for agent-browser. The commands below describe the project interface,
+not permission for agents to execute the project on the host. Sandbox previews
+bind loopback port 3181; stop owned processes and verify sandbox deletion.
+
 The optional settings are:
 
 | Setting | Default when unset | When to use it |
@@ -59,10 +93,10 @@ commands for refreshing sources and checking the deployed site. Accessibility
 checks also need the development packages (`make setup-dev`) and a Chromium
 installation (`.venv/bin/python -m playwright install --with-deps chromium`).
 
-After `make build`, preview the generated files at `http://127.0.0.1:8000`:
+After `make build`, preview inside Boat at `http://127.0.0.1:3181`:
 
 ```sh
-.venv/bin/python -m http.server 8000 --bind 127.0.0.1 --directory site
+.venv/bin/python -m http.server 3181 --bind 127.0.0.1 --directory site
 ```
 
 Deployment and automation credentials belong in their hosting or CI settings,
@@ -117,10 +151,10 @@ rejects paths that escape the checkout. External URLs and absolute operator
 paths are not fetched or checked. Link fragments, prose and command execution
 are outside this check's scope.
 
-This check does not modify protected instructions or certify acceptance-policy
-alignment. The v1 target paragraph still awaits the supported operator route in
-[issue #56](https://github.com/jnyross/unpoliticalaf/issues/56); the current
-product target is defined in `docs/product-spec.md`.
+This reference check does not certify acceptance-policy alignment.
+`tests/test_goal_guidance.py` protects key current-goal and delivery regressions;
+independent review checks the full active-versus-historical meaning. John's
+approved current target is in `docs/product-spec.md` and `docs/goal-rubric.md`.
 
 Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
@@ -128,10 +162,9 @@ locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 
-The `Auto-merge green PRs` workflow squash-merges any open, non-draft PR from a
-`claude/` branch once every check on its latest commit has passed. It runs when
-`Build and check` finishes and every 5 minutes. A draft, a `hold` label or a
-title starting with WIP keeps a PR open.
+The legacy `Auto-merge green PRs` workflow is disabled. Agents manage merges
+only after independent review and required checks pass on the exact candidate.
+Do not re-enable the old five-minute writer or bypass review with green CI alone.
 
 ## Code quality metrics
 
@@ -168,7 +201,7 @@ boundaries.
 | `builder/pages_*.py` | Writes the pages; every displayed figure is a `<data data-fact="…">` element |
 | `builder/check.py` | Independent checks: hashes, source cells, recalculations, page numbers, links, wording, accessibility |
 | `sources/manifest.json`, `scripts/fetch_sources.py` | List and download newer sources into `data/fetched/` |
-| `.github/workflows/fetch-sources.yml` | Runs the downloader on GitHub and commits the files with a receipt (`data/fetched/receipts.json`) |
+| `.github/workflows/fetch-sources.yml` | Disabled legacy source writer; intentional activation needs reviewed implementation, not an automatic push |
 
 Official data files live in `data/raw/`, `data/payers/raw/`, `data/life/sources/`
 and `data/fetched/`. If any file changes without its recorded hash being updated,
@@ -176,9 +209,13 @@ the build stops.
 
 ## Updating the data
 
-1. Add or change the download in `sources/manifest.json` and push. The fetch
-   workflow downloads it and commits it with its hash and retrieval time.
+1. Add or change the download in `sources/manifest.json` on a branch. Source-fetch
+   and accuracy-result writers are disabled. Use a reviewed explicit acquisition
+   run in credential-free Boat (or an intentionally reviewed workflow run),
+   retain source bytes and retrieval/hash receipts, and preserve last-good inputs
+   on failure. Do not enable dormant schedules or assume a push fetched anything.
 2. Update the reader in `builder/data.py` if the layout changed.
-3. Run `make verify` and review the changed pages.
+3. Run `make verify`, independently reopen official source cells/calculations,
+   review the changed pages and deliver the source update through a reviewed PR.
 
 Contains public sector information licensed under the Open Government Licence v3.0.

@@ -18,7 +18,7 @@ flowchart TD
     manifest["sources/manifest.json"]
 
     subgraph acquisition["Source acquisition, only when requested"]
-        fetch["scripts/fetch_sources.py on GitHub Actions"]
+        fetch["scripts/fetch_sources.py, legacy GitHub writer disabled"]
         transcription["Manual transcription checked against retained PDF"]
     end
 
@@ -31,7 +31,7 @@ flowchart TD
 
     manifest --> fetch
     publishers -->|"HTTPS downloads"| fetch
-    fetch -->|"commit source bytes and receipts"| fetched
+    fetch -->|"legacy workflow commit route, disabled"| fetched
     fetched -->|"NATO PDF"| transcription --> transcribed
 
     subgraph build["Build time, local checks or Vercel"]
@@ -69,10 +69,11 @@ flowchart TD
    either to a fixed URL or to a link found on a publisher page. It keeps the
    response bytes and records the resolved URL, retrieval time, content type,
    byte count and SHA-256 in `data/fetched/receipts.json`.
-   [The fetch workflow](../.github/workflows/fetch-sources.yml) runs on pushes
-   changing the manifest, fetcher or workflow, or by manual dispatch. It commits
-   downloaded files back to the checked-out branch. It is not a scheduled
-   refresh service.
+   [The legacy fetch workflow](../.github/workflows/fetch-sources.yml) is
+   disabled. Its definition can commit downloaded files back to the checked-out
+   branch, but a source push does not currently run it. Acquisition uses an
+   explicit reviewed run; intentional workflow activation needs review and must
+   not enable dormant schedules or a competing source writer.
 2. **Verify and read retained inputs.**
    [The source registry](../builder/sources.py) combines explicit entries with
    downloaded-file receipts. `verify_hashes()` runs before rendering.
@@ -130,12 +131,15 @@ downloaded by that manifest. Receipts record the URLs actually retrieved.
 | Eurostat (`ec.europa.eu`), OECD (`sdmx.oecd.org`), IMF (`www.imf.org`) | Eurostat dissemination JSON, OECD SDMX CSV and IMF DataMapper JSON for international comparisons | Fetcher during acquisition |
 | NATO (`www.nato.int`), NHS Digital (`digital.nhs.uk`), Bank of England (`www.bankofengland.co.uk`) | Defence reports, NHS workforce files and mortgage-rate CSV | Fetcher during acquisition |
 | Parliament (`api.parliament.uk`), document archive (`dera.ioe.ac.uk`), data catalogue (`www.data.gov.uk`) | Historical policy records, archived reports and source discovery | Fetcher during acquisition; not every manifest entry is rendered |
-| GitHub / GitHub Actions | Git source and PR checks; fetch workflow writes retained files; live workflow compares the deployed build | Development, acquisition and verification, not page rendering |
+| GitHub / GitHub Actions | Public Git source, independent PR review and CI; disabled legacy fetch writer; live workflow compares the deployed build | Development, explicit acquisition and verification, not page rendering |
 | Python package index and package-download hosts | Install pinned `openpyxl`, `pypdf`, `xlrd`; development requirements add Playwright and axe tooling | `make setup` / `make setup-dev`; browser tests also download Chromium |
 | Vercel (`unpoliticalaf.vercel.app`) | Build and static HTTPS hosting; serves HTML, CSV and JSON files | Production page requests and live checks |
 
 Publisher URLs are public reads; the fetcher has no API-key configuration.
-GitHub's fetch workflow uses its workflow token to commit files. Vercel's Git
+GitHub's disabled legacy fetch workflow defines workflow-token commits; do not
+activate it without independent review. Current delivery uses reviewed PRs and
+agent-managed merges, not the paused old controller or direct-main pushes.
+Vercel's Git
 integration is managed outside the application. No publisher or deployment
 credentials are embedded in generated pages. There is no separate frontend
 package build: [package.json](../package.json) wraps the Make commands.

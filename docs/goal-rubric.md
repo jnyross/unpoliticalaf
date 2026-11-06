@@ -12,9 +12,15 @@ stand-in, run by fresh Claude sessions, so audits can reach the target without
 waiting for people. How to run the stand-ins is in
 [standins/README.md](standins/README.md).
 
-A result reached with the stand-ins is recorded as **"met (simulated)"**. That
-is not the goal's own definition of success, which asks for five consenting UK
-adults and outside checks, and it must never be presented publicly as that.
+**Current authority — 5 November 2026.** John approved this agent-tested target
+as the acceptance goal. A pass is recorded as **"met (simulated)"**, not a human
+study or proof of real-world newcomer comprehension. No mandatory human study,
+consent, recruitment, actual-phone, outside-human or actual screen-reader gate
+remains. The old 31/32 and frozen-v2 96/100 targets are historical.
+Public source and independently reviewed PR/credential-free Boat/CI delivery,
+agent-managed merge and exact production-byte verification supersede the old
+private/controller rules. The controller and disabled schedules stay paused
+and preserved; provider, billing and credentials stay unchanged.
 
 ## How to score
 
@@ -54,15 +60,15 @@ sees the code, the answer key or the other stand-ins' results. Where possible
 the readers run on a smaller, less capable model than the reviewers, so they
 behave more like a hurried newcomer than an expert.
 
-| Human step in v2 | Stand-in | Pass bar | Counts for |
+| Human step in rubric v2 (now removed) | Stand-in | Pass bar | Counts for |
 |---|---|---|---|
 | Informal phone check | 3 simulated newcomers browse the site at 360 × 640 and write down what confused them. | Notes recorded; anything that blocks an answer is fixed. | D11 level 2 |
-| Five-person phone test | 5 simulated readers, each with a different newcomer profile, answer the 12 questions in [user-test/](user-test/). They see only screenshots of the audited build in a 360 × 640 phone browser, can only tap, scroll and pick from lists, and get 40 actions (about 8 minutes). | The goal's own bar: at least 48 of 60, each at least 9 of 12 within the 40 actions, all three critical questions right. | D11 level 5, D1 to D6 level 5 |
+| Five-person phone test | 5 simulated readers, each with a different newcomer profile, answer the 12 questions in [user-test/](user-test/). They see only screenshots of the audited build in a 360 × 640 phone browser, can only tap, scroll and pick from lists, and get 40 actions. Actions do not measure human elapsed time. | The goal's own bar: at least 48 of 60, each at least 9 of 12 within the 40 actions, all three critical questions right. | D11 level 5, D1 to D6 level 5 |
 | Same test, new questions | A separate session writes 24 new questions from the goal text alone, without seeing the site. Their hash is committed (sealed) before the readers start. The same 5 readers answer them. | At least 80% right. Stops the site being tuned to the 12 known questions. | D11 level 5, D1 to D6 level 5 |
-| John's questions | John's own questions the site must answer, in [johns-questions/](johns-questions/). Each is tested by multiple-choice probes. The same 5 readers answer the probes the site already covers, with a fresh 40 actions, and first without the site. | Every probe has its answer on the site, and on each probe at least 4 of the 5 readers are right with the site. | Target (below); a failed probe is a gap |
+| John's questions | John's own questions the site must answer, in [johns-questions/](johns-questions/). Each is tested by multiple-choice probes. The same 5 readers answer seven topic groups, each in a fresh 40-action session, without-site answers first. Derive membership from `johns_questions.py groups`; do not omit open or failed probes from acceptance. | Every probe has its answer on the site, and on each probe at least 4 of the 5 readers are right with the site. | Target (below); a failed probe is a gap |
 | Prior-knowledge check | The same readers answer every question first without the site. | The group scores at least 20 of 60 higher on the 12 questions with the site than without it. Questions they get right without the site are not evidence. | D11 level 5, D1 to D6 level 5 |
 | VoiceOver and TalkBack test | A reader gets only what a screen reader would announce (the accessibility tree in reading order) and answers the 12 questions. Automated checks: axe-core on every page at 360 px and 1100 px (`make a11y`), keyboard-trap check, chart text summaries. | 9 of 12 and all critical questions right within 40 actions, zero axe failures, no keyboard traps, every chart has a text summary. | D9 level 5 |
-| Outside accuracy review | An adversarial fact-checker picks 30 headline claims from the rendered pages and traces each to the publisher's own file through the "Accuracy check" workflow. | No material errors. | D7 level 5, D10 level 5 (with the impartiality stand-in) |
+| Outside accuracy review | An independent adversarial agent picks 30 headline claims from rendered pages and traces each to fresh publisher files through a reviewed intentional accuracy-check run. The source-writing workflow stays disabled unless its exact implementation is reviewed for intentional activation; do not push evidence to main to trigger it. Supply additional headline coverage needed for a claimed level; 30 samples are not exhaustive. | No material errors. | D7 level 5, D10 level 5 (with the impartiality stand-in) |
 | Outside impartiality review | Two red-team critics, one arguing the site leans left and one right, each list their strongest examples. A third neutral judge rules on each. Start years, chart scales and ordering are checked against the written rule in [standins/impartiality-rule.md](standins/impartiality-rule.md). | No upheld material finding left open. | D8 level 5, D10 level 5 (with the accuracy stand-in) |
 
 **People tests are optional and override.** If the real five-person phone test
@@ -70,6 +76,10 @@ behave more like a hurried newcomer than an expert.
 accuracy, impartiality or accessibility, that result replaces the stand-in for
 the dimensions it covers, in either direction. A failed human test drops those
 dimensions back and reopens the goal.
+
+This is an optional evidence policy, not a recruitment or human-approval
+requirement. Record any actual result honestly; never fabricate consent,
+eligibility or measured seconds for an agent.
 
 **Guarding against gaming.** Workers fixing the site may not see the readers'
 answers, the new question set or the answer key's reasoning beyond what is
@@ -149,6 +159,10 @@ judged against those two.
   context where it helps, comfortable tap targets, fast loading on a slow
   connection, and a reader can answer a typical question in under a minute.
 
+The under-minute wording is a human UX aspiration, not timing measured by
+agent actions. Preserve it without inventing seconds or claiming an unobserved
+human-speed result; independent scoring must state this simulation limit.
+
 ### D7. Accuracy and traceability
 
 - **3:** Every figure is traced to an official file and cell, and an automated
@@ -195,8 +209,15 @@ judged against those two.
   bar (at least 48 of 60, each reader at least 9 of 12 within 40 actions, all
   three critical questions right), the new-question test passed (at least 80%)
   and the prior-knowledge check passed (at least 20 of 60 higher with the
-  site). `python scripts/standins.py score AUDIT_DIR` applies these bars. A
+  site). `python scripts/standins.py score AUDIT_DIR` is the scoring entry
+  point, subject to the current implementation limitation below. A
   real five-person phone test, if run, replaces this in either direction.
+
+**Current scorer limitation.** The existing scorer still fills human consent
+and eligibility internally and converts actions to synthetic seconds. Until
+the separate autonomous-scorer correction removes that adapter and verifies
+grouped budgets and the complete probe verdict, its output is **not acceptance
+evidence**. This guidance does not claim the correction has run or passed.
 
 ## Target
 
@@ -209,12 +230,15 @@ commit:
   no probe is still open, and the readers answer each probe as above.
 - No stand-in has an open material finding (accuracy, impartiality,
   accessibility or reader confusion that blocks an answer), and the build is
-  reproducible (`make verify` passes and the "Live site matches main" check is
-  green for that commit).
+  reproducible (`make verify` passes and exact live comparison is green for that
+  committed source SHA, its production flags and served-file manifest).
 
-It becomes **met** in the goal's own sense only when the real five-person phone
-test has passed and people outside the project have reviewed accuracy,
-impartiality and accessibility with no unresolved material findings.
+This is the accepted completion target, with no unresolved material finding.
+No additional human upgrade is required. Record the simulation limits below
+with every accepted result. Seal the new-question hash and accurate README on
+the implementation branch before final source freeze. Save subsequent formal
+reports under `docs/standins/audits/` on a non-deploying evidence branch naming
+the audited source SHA; do not redeploy merely to store audit evidence.
 
 ## What the stand-ins cannot prove
 

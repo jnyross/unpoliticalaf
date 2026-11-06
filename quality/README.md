@@ -2,7 +2,7 @@
 
 The **Code quality metrics** GitHub Actions workflow runs on every pull request
 and push to `main`, and can also be run manually. It needs no service token or
-external quality platform. Source and reports stay in this private repository's
+external quality platform. Source and reports stay in this repository's
 Actions runs.
 
 Open the workflow's run summary for line/branch coverage, maximum function

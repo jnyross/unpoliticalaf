@@ -1,7 +1,22 @@
 # Phone user-test pack
 
-Everything needed to run the five-person phone test in the project goal's
-definition of success:
+**Optional human pack, not an acceptance gate — 5 November 2026.** John selected
+the agent-only [goal-rubric.md](../goal-rubric.md): >=49/55, every dimension >=4,
+D11=5, all recorded probes passing and no unresolved material finding on the
+same live candidate. Use [the stand-ins](../standins/README.md) for acceptance;
+no human recruitment, consent, actual-phone, outside-human or actual
+screen-reader step is required. Agent-tested passes are "met (simulated)",
+not proof of human comprehension. Never invent human consent, eligibility or
+elapsed time for agents.
+
+Public source and independently reviewed PR/credential-free Boat/CI/agent-managed
+delivery supersede private/controller rules; keep the old controller/schedules
+paused and provider/billing/credentials unchanged.
+
+The rest of this pack applies **only if an optional real-person study is
+explicitly undertaken**. It preserves the original human protocol and does not
+authorise recruitment, contact or spending. Its source goal quotation is
+historical, not a mandatory current requirement:
 
 > Five consenting UK adults who do not follow politics closely must test the same
 > delivered version on phones. Together, they must answer at least 48 of 60
