@@ -95,8 +95,10 @@ manifest. Set `VERCEL_GIT_COMMIT_SHA` when exporting without Git metadata.
 
 5. **Screen-reader reader (D9).** One reader with
    [prompts/screen-reader.md](prompts/screen-reader.md), using
-   `python scripts/standins.py sr ...`. Save `readers/SR.json`. Then run the
-   automated checks and save their output in `accessibility.txt`:
+   `python scripts/standins.py sr ... --state readers/SR-state.json`. After the
+   session, save the answers in `readers/SR.json`, separately from that tool
+   state. Run the automated checks and save their
+   output in `accessibility.txt`:
 
    ```
    make a11y                                   # or use the CI run for the commit
@@ -155,6 +157,15 @@ manifest. Set `VERCEL_GIT_COMMIT_SHA` when exporting without Git metadata.
   "budget": 40,
   "actions_used": 34,
   "new_actions_used": 38,
+  "johns_actions_used": {
+    "tax-and-spending": 40,
+    "immigration": 35,
+    "defence": 28,
+    "high-earners-and-economy": 40,
+    "manifesto": 24,
+    "debt-history": 30,
+    "welfare-housing-generations": 40
+  },
   "without_site": {"1": "B", "2": "C"},
   "with_site": {"1": "A", "2": "C"},
   "new_without_site": {"1": "E"},
@@ -173,12 +184,19 @@ seconds. Do not fill those fields to satisfy a human scorer. The required
 simulation path must use actual states/actions and include every failed/open
 John's probe as well as D11, rejecting missing results or mixed candidates.
 
-**Current scorer limitation:** `score` still fills human consent/eligibility
-and converts actions to synthetic seconds internally. Until the separate
-autonomous-scorer correction removes that adapter and verifies grouped budgets
-and the complete probe verdict, its output is **not acceptance evidence**.
-The procedure above specifies required behavior, not a claim that this pending
-implementation or a final acceptance run has passed.
+The scorer requires exactly `R1.json` through `R5.json`, complete before/after
+answers (use `E` for unknown), the sealed 24-question file, and the separate
+tool states named above. Each state records the source commit, a digest of
+`site/build.json`, mode, 40-action budget and action log. Counts in the answer
+files must match those states; all sessions must identify the same candidate.
+The seven counts are independent, not a combined 40-action allowance.
+Missing states, mismatched candidates, failed seals and any failed/open probe
+make the overall printed verdict and exit status fail. D11 and accessibility
+remain separately reported. These checks do not prove reader independence or
+real-person comprehension; retain the fresh-session evidence described above.
+Historical files without these records remain historical, not current passes.
+The optional human CSV scorer in `scripts/user_test.py` still uses recorded
+consent, eligibility and actual elapsed time, never synthesized agent fields.
 
 ## The phone tool
 

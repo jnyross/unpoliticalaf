@@ -7,6 +7,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from test_standin_evidence import write_fixture
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("standins", ROOT / "scripts" / "standins.py")
@@ -27,17 +28,35 @@ def reader(i, with_site=KEY, without=WRONG, new_right=24, actions=30):
     return {"reader": f"R{i}", "site_commit": "abc1234", "budget": 40, "actions_used": actions,
             "with_site": dict(with_site), "without_site": dict(without),
             "new_with_site": {str(q): ("B" if q <= new_right else "A") for q in range(1, 25)},
-            "new_without_site": {}}
+            "new_without_site": {str(q): "E" for q in range(1, 25)}}
 
 
 class Score(unittest.TestCase):
     def run_score(self, readers, sr=None, new=None):
         with tempfile.TemporaryDirectory() as d:
-            (Path(d) / "readers").mkdir()
+            write_fixture(Path(d))
+            (Path(d) / "new-questions.json").write_text(json.dumps(new or new_pack()))
+            si.seal(Path(d) / "new-questions.json", d)
             for r in readers:
-                (Path(d) / "readers" / f"{r['reader']}.json").write_text(json.dumps(r))
+                path = Path(d) / "readers" / f"{r['reader']}.json"
+                merged = json.loads(path.read_text())
+                merged.update(r)
+                path.write_text(json.dumps(merged))
+                state = Path(d) / "readers" / f"{r['reader']}-phone.json"
+                data = json.loads(state.read_text())
+                data.update(actions=r["actions_used"], log=["tap"] * r["actions_used"])
+                state.write_text(json.dumps(data))
             if sr:
-                (Path(d) / "readers" / "SR.json").write_text(json.dumps(sr))
+                path = Path(d) / "readers" / "SR.json"
+                merged = json.loads(path.read_text())
+                merged.update(sr)
+                path.write_text(json.dumps(merged))
+                state = Path(d) / "readers" / "SR-state.json"
+                data = json.loads(state.read_text())
+                data.update(actions=sr["actions_used"], log=["tap"] * sr["actions_used"])
+                state.write_text(json.dumps(data))
+            else:
+                (Path(d) / "readers" / "SR.json").unlink()
             return si.score(d, PACK, new or new_pack())[0]
 
     def test_all_right_passes(self):
@@ -51,11 +70,14 @@ class Score(unittest.TestCase):
 
     def test_phone_state_files_beside_the_answers_are_not_scored_as_readers(self):
         with tempfile.TemporaryDirectory() as d:
-            (Path(d) / "readers").mkdir()
+            write_fixture(Path(d))
+            (Path(d) / "new-questions.json").write_text(json.dumps(new_pack()))
+            si.seal(Path(d) / "new-questions.json", d)
             for i in range(1, 6):
-                (Path(d) / "readers" / f"R{i}.json").write_text(json.dumps(reader(i)))
-                for kind in ("phone", "new", "johns"):
-                    (Path(d) / "readers" / f"R{i}-{kind}.json").write_text(json.dumps({"actions": 12}))
+                path = Path(d) / "readers" / f"R{i}.json"
+                merged = json.loads(path.read_text())
+                merged.update(reader(i, actions=40))
+                path.write_text(json.dumps(merged))
             res = si.score(d, PACK, new_pack())[0]
         self.assertTrue(res["phone_test"])
         self.assertTrue(res["prior_knowledge"])
@@ -122,12 +144,22 @@ class Johns(unittest.TestCase):
     def readers(self, right):
         return [{"reader": f"R{i}", "johns_with_site": {"J1.1": "B" if i <= right else "A"}} for i in range(1, 6)]
 
+    def run_score(self, right, data=None):
+        with tempfile.TemporaryDirectory() as d:
+            write_fixture(Path(d))
+            readers = []
+            for update in self.readers(right):
+                row = json.loads((Path(d) / "readers" / f"{update['reader']}.json").read_text())
+                row.update(update, johns_without_site={"J1.1": "E"})
+                readers.append(row)
+            return si.score_johns(readers, data or self.DATA, audit_dir=d)
+
     def test_passes_when_four_of_five_right(self):
-        res, _ = si.score_johns(self.readers(4), self.DATA)
+        res, _ = self.run_score(4)
         self.assertTrue(res["johns_questions"], res)
 
     def test_fails_and_writes_a_gap_when_three_of_five_right(self):
-        res, _ = si.score_johns(self.readers(3), self.DATA)
+        res, _ = self.run_score(3)
         self.assertFalse(res["johns_questions"])
         self.assertIn("J1.1", res["johns_gaps"][0])
 
@@ -135,7 +167,7 @@ class Johns(unittest.TestCase):
         import copy
         data = copy.deepcopy(self.DATA)
         data["questions"][0]["probes"].append({"id": "J1.2", "question": "q2", "evidence": [], "gap": "missing"})
-        res, _ = si.score_johns(self.readers(5), data)
+        res, _ = self.run_score(5, data)
         self.assertFalse(res["johns_questions"])
         self.assertEqual(res["johns_gaps"], ["J1.2: missing"])
 

@@ -9,16 +9,16 @@ main" check shows is byte-identical to the live site) on a local port.
 
 Simulated phone reader (sees only screenshots, can only tap and scroll):
 
-    python scripts/standins.py phone start  --state R1.json [--budget 40] [--shots DIR]
-    python scripts/standins.py phone scroll --state R1.json down|up
-    python scripts/standins.py phone tap    --state R1.json N
-    python scripts/standins.py phone choose --state R1.json N "option text"
-    python scripts/standins.py phone back   --state R1.json
+    python scripts/standins.py phone start  --state R1-phone.json [--budget 40] [--shots DIR]
+    python scripts/standins.py phone scroll --state R1-phone.json down|up
+    python scripts/standins.py phone tap    --state R1-phone.json N
+    python scripts/standins.py phone choose --state R1-phone.json N "option text"
+    python scripts/standins.py phone back   --state R1-phone.json
 
 Screen-reader reader (sees only what a screen reader announces):
 
-    python scripts/standins.py sr start --state SR.json [--budget 40]
-    python scripts/standins.py sr tap|choose|back --state SR.json ...
+    python scripts/standins.py sr start --state SR-state.json [--budget 40]
+    python scripts/standins.py sr tap|choose|back --state SR-state.json ...
 
 Automated accessibility checks on every main page (no reader involved):
 
@@ -51,14 +51,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 PACK = ROOT / "docs" / "user-test" / "questions.json"
 WIDTH, HEIGHT = 360, 640
-BUDGET = 40  # actions, about 8 minutes of phone use (12 seconds each)
-SECONDS_PER_ACTION = 12
+from standin_score import (  # noqa: E402, F401 (public scoring API)
+    BUDGET, score, score_johns, validate_pack,
+)
 STEP = HEIGHT - 80  # one scroll keeps a little of the last screen in view
-
-NEW_PASS = 0.80          # new-question test: share right with the site
-JOHNS_PASS = 0.80        # John's questions: share of readers right on each probe
-UPLIFT_MIN = 20          # prior-knowledge check: extra right answers out of 60
-SR_MIN_CORRECT = 9       # screen-reader reader: same bar as one phone tester
 
 MAIN_PAGES = [
     "index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html",
@@ -240,12 +236,31 @@ def session(mode, args):
             i += 1
     path = opts["--state"]
     opt = lambda name, default: opts.get(name, default)
+    manifest = SITE / "build.json"
+    try:
+        site_commit = json.loads(manifest.read_text())["commit"]
+        build_digest = _digest(manifest)
+        if not site_commit or site_commit == "unknown":
+            raise ValueError("unidentified build")
+    except (OSError, ValueError, KeyError):
+        print("Build with an identified source commit before starting reader sessions.")
+        return 1
     if action == "start":
+        if Path(path).exists():
+            print("Refusing to overwrite an existing reader state; use a fresh session path.")
+            return 1
         st = {"reader": Path(path).stem, "mode": mode, "budget": int(opt("--budget", BUDGET)), "actions": 0,
               "url": "index.html", "ops": [], "scroll": 0, "history": [], "log": [],
-              "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")), "items": []}
+              "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")), "items": [],
+              "site_commit": site_commit, "build_digest": build_digest}
+        if st["budget"] != BUDGET:
+            print("Reader sessions require the approved 40-action budget.")
+            return 1
     else:
         st = load_state(path)
+        if (st.get("site_commit"), st.get("build_digest"), st.get("mode")) != (site_commit, build_digest, mode):
+            print("The built candidate or reader mode changed; start a fresh session.")
+            return 1
         if st["actions"] >= st["budget"]:
             print(f"Time is up: you have used all {st['budget']} actions. Write down your answers now.")
             return 1
@@ -277,11 +292,15 @@ def session(mode, args):
             if action == "choose":
                 value = rest[1] if len(rest) > 1 else ""
                 if it["kind"] != "select":
+                    st["log"].append(f"failed choose [{n}]: not a select")
+                    save_state(path, st)
                     print(f"[{n}] is not a list you can choose from. Nothing happened.")
                     return 1
                 try:
                     loc.select_option(label=value)
                 except Exception:
+                    st["log"].append(f"failed choose [{n}]: unavailable option")
+                    save_state(path, st)
                     print(f"[{n}] has no choice called {value!r}. Nothing happened.")
                     return 1
                 st["ops"].append({"op": "choose", "sel": it["sel"], "value": value,
@@ -405,135 +424,16 @@ def seal(questions, audit_dir):
 
 
 def unseal(questions, audit_dir):
-    want = (Path(audit_dir) / "new-questions.sha256").read_text(encoding="utf-8").split()[0]
-    if _digest(questions) != want:
+    try:
+        want = (Path(audit_dir) / "new-questions.sha256").read_text(encoding="utf-8").split()[0]
+        matches = _digest(questions) == want
+    except (OSError, IndexError):
+        matches = False
+    if not matches:
         print("The question file does not match the seal: it changed after the readers were briefed.")
         return 1
     print("The question file matches the seal.")
     return 0
-
-
-def validate_pack(pack):
-    bad = []
-    for q in pack.get("questions", []):
-        if q.get("answer") not in q.get("options", {}):
-            bad.append(f"Q{q.get('id')}: answer is not one of the options")
-    if not pack.get("questions"):
-        bad.append("no questions")
-    return bad
-
-
-# ------------------------------------------------------------- scoring
-
-def _correct(answers, questions):
-    return sum(1 for q in questions if str(answers.get(str(q["id"]), "")).strip().upper() == q["answer"])
-
-
-def score(audit_dir, pack=None, new_pack=None):
-    """Apply the v3 pass bars to the readers' answer files. Returns (results, lines)."""
-    from user_test import score as human_score  # same pass rules as the real test
-    audit = Path(audit_dir)
-    pack = pack or json.loads(PACK.read_text(encoding="utf-8"))
-    qs = pack["questions"]
-    readers = sorted(p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem))
-    readers = [json.loads(p.read_text(encoding="utf-8")) for p in readers]
-    lines, res = [], {}
-
-    # 1. Simulated five-person phone test, on the goal's own bar.
-    rows = []
-    for r in readers:
-        row = {"participant": r["reader"], "consent": "yes", "eligible": "yes",
-               "site_commit": r.get("site_commit", ""), "phone": "simulated 360x640",
-               "seconds_taken": str(r.get("actions_used", 10**6) * SECONDS_PER_ACTION)}
-        if r.get("actions_used", 10**6) > r.get("budget", BUDGET):
-            row["seconds_taken"] = str(10**6)
-        row.update({f"q{k}": v for k, v in r.get("with_site", {}).items()})
-        rows.append(row)
-    ok, sub = human_score(rows, pack)
-    res["phone_test"] = ok
-    lines += ["Simulated phone test (goal's bar):"] + ["  " + s for s in sub]
-
-    # 2. Prior-knowledge check: the site must add at least 20 right answers out of 60.
-    with_site = sum(_correct(r.get("with_site", {}), qs) for r in readers)
-    without = sum(_correct(r.get("without_site", {}), qs) for r in readers)
-    uplift = with_site - without
-    res["prior_knowledge"] = len(readers) == pack["pass_rules"]["participants"] and uplift >= UPLIFT_MIN
-    lines.append(f"Prior-knowledge check: {without}/{len(qs) * len(readers)} right without the site, "
-                 f"{with_site} with it, so the site added {uplift} (needs {UPLIFT_MIN}): "
-                 + ("PASS" if res["prior_knowledge"] else "FAIL"))
-
-    # 3. Same test, new questions (sealed before the run).
-    new_file = audit / "new-questions.json"
-    if new_pack is None and new_file.exists():
-        if unseal(new_file, audit) != 0:
-            new_pack = None
-            res["new_questions"] = False
-            lines.append("New questions: FAIL (the file does not match its seal)")
-        else:
-            new_pack = json.loads(new_file.read_text(encoding="utf-8"))
-    if new_pack is not None:
-        nq = new_pack["questions"]
-        got = sum(_correct(r.get("new_with_site", {}), nq) for r in readers)
-        base = sum(_correct(r.get("new_without_site", {}), nq) for r in readers)
-        possible = len(nq) * len(readers)
-        share = got / possible if possible else 0
-        res["new_questions"] = bool(readers) and share >= NEW_PASS
-        lines.append(f"New questions: {got}/{possible} right with the site ({share:.0%}, needs {NEW_PASS:.0%}); "
-                     f"{base} without it: " + ("PASS" if res["new_questions"] else "FAIL"))
-    elif "new_questions" not in res:
-        res["new_questions"] = False
-        lines.append("New questions: FAIL (no new-questions.json in the audit folder)")
-
-    # 4. Screen-reader reader.
-    sr_file = audit / "readers" / "SR.json"
-    if sr_file.exists():
-        sr = json.loads(sr_file.read_text(encoding="utf-8"))
-        got = _correct(sr.get("with_site", {}), qs)
-        missed = [q["id"] for q in qs if q["critical"] and str(sr.get("with_site", {}).get(str(q["id"]), "")).upper() != q["answer"]]
-        res["screen_reader"] = got >= SR_MIN_CORRECT and not missed and sr.get("actions_used", 10**6) <= sr.get("budget", BUDGET)
-        lines.append(f"Screen-reader reader: {got}/{len(qs)}" + (f", missed critical {missed}" if missed else "")
-                     + ": " + ("PASS" if res["screen_reader"] else "FAIL"))
-    else:
-        res["screen_reader"] = False
-        lines.append("Screen-reader reader: FAIL (no readers/SR.json)")
-
-    # 5. John's questions (docs/johns-questions/): every probe must be answered on the site,
-    # and on each one at least 80% of the readers must be right with the site.
-    jres, jlines = score_johns(readers)
-    res.update(jres)
-    lines += jlines
-
-    d11 = 5 if res["phone_test"] and res["prior_knowledge"] and res["new_questions"] else None
-    res["d11_ready_for_5"] = d11 == 5
-    lines.append("Reader stand-ins for D11 level 5: " + ("all PASS, recorded as met (simulated)" if d11 else "not all passed"))
-    return res, lines
-
-
-def score_johns(readers, data=None):
-    """Score readers on John's questions. Returns (results, lines); every failure is a gap."""
-    import johns_questions as jq
-    data = data or jq.load()
-    pk = jq.pack(data)
-    lines, gaps = ["John's questions:"], []
-    for o in pk["open"]:
-        gaps.append(f"{o['id']}: {o['gap']}")
-    for q in pk["questions"]:
-        right = sum(1 for r in readers
-                    if str(r.get("johns_with_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
-        before = sum(1 for r in readers
-                     if str(r.get("johns_without_site", {}).get(q["id"], "")).strip().upper() == q["answer"])
-        ok = bool(readers) and right / len(readers) >= JOHNS_PASS
-        lines.append(f"  {q['id']}: {right}/{len(readers)} right with the site, {before} without: "
-                     + ("PASS" if ok else "FAIL"))
-        if not ok:
-            gaps.append(f"{q['id']}: readers could not answer \"{q['question']}\" from the site "
-                        f"({right} of {len(readers)} right); see their confusion notes.")
-    lines += [f"  open, not on the site yet: {o['id']}" for o in pk["open"]]
-    passed = not gaps
-    lines.append("  " + ("PASS: the site answers every one of John's questions" if passed
-                         else f"FAIL: {len(gaps)} gaps"))
-    lines += ["  gap: " + g for g in gaps]
-    return {"johns_questions": passed, "johns_gaps": gaps}, lines
 
 
 # ------------------------------------------------------------------ main
@@ -558,7 +458,7 @@ def main(argv):
         res, lines = score(argv[2])
         print("\n".join(lines))
         Path(argv[2], "reader-scores.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
-        return 0 if res["d11_ready_for_5"] and res["screen_reader"] and res["johns_questions"] else 1
+        return 0 if res["all_reader_standins"] else 1
     print(__doc__)
     return 2
 
