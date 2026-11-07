@@ -112,8 +112,9 @@ make setup-test # add pytest and build dependencies, without browser tools
 make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
+make test-stability # same pytest suite in fresh processes with seeds 1, 2 and 3
 make verify    # build + check + test
-make setup-dev && make quality # lint, formatting, typing, dependencies, guidance and dashboard
+make setup-dev && make quality # lint, format, types, dependencies, stability, guidance, dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
 make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
 make format-check # check formatting without rewriting files (also in quality/CI)
@@ -147,6 +148,60 @@ running `python -m pytest --collect-only tests/test_household_shares.py`.
 `make setup-dev` includes the test dependencies as well as the optional browser
 tools. Production deployments still use `make setup`, without either set of tools.
 CI checks the lightweight test setup, bounded pytest collection and `make verify`.
+
+### Test timing and stability
+
+`make test` runs the canonical pytest population once through the same worker as
+`make test-stability`. Pytest's `pyproject.toml` selection includes all nested
+`tests/` (including tooling and architecture) and `quality/tests/`, not a second
+unittest-only discovery path. `make verify` keeps build + independent check +
+timed tests; `make quality` also requires the three-run stability check.
+`make test-stability` builds first so the same command works on a clean checkout.
+Canonical Make targets clear `PYTEST_ADDOPTS` to prevent hidden deselection;
+diagnostic CLI selections and deselected counts are recorded in the reports.
+
+Stability runs use fresh Python processes with `PYTHONHASHSEED=1`, `2` and `3`.
+Every original exit, collected ID, outcome and traceback remains in the report.
+Any failure, error, collection problem, unexpected success, missing test, crash,
+timeout, empty suite or report error fails the aggregate. Later passing runs
+are diagnostic evidence, never forgiveness. Stable skips and expected failures
+are recorded but not counted as passes. Three passes sample stability, not proof
+that a test can never flake.
+
+Each invocation gets a fresh ignored directory under `test-results/performance/`
+or `test-results/stability/`. Its `report.json` records per-test outcomes/pass
+rates, changing outcomes, all attempt exits/seeds/durations and commit metadata.
+`summary.md` summarizes that evidence; `run-*.log` retains complete pytest
+output. Every completed worker also writes `run-*/timings.json` (all tests,
+sorted slowest first, phase durations and environment metadata) and `summary.md`
+(ten slowest tests). Crashed workers have no fabricated complete timing report.
+An earlier invocation's files cannot be mistaken for a later run.
+
+Timing uses monotonic clocks. Per-test duration sums pytest setup/call/teardown,
+including cleanups; shared class/module fixtures are charged to the tests that
+execute them. Suite duration excludes collection; wall duration includes it.
+Compare matching IDs only on comparable Python/runners. There is no timing gate.
+
+CI publishes summaries and retains the complete `test-results-<run>-<attempt>`
+artifact for 30 days, on success or failure. If setup/build/check prevents tests
+from starting, it does not invent a completed run. Reproduce a failure with
+`PYTHONHASHSEED=<seed> .venv/bin/python -m pytest '<node ID>'`; record the ID,
+seed, original failure and run URL in the issue, fix the cause and rerun.
+For a longer probe, use
+`.venv/bin/python -m scripts.test_stability --runs 10 --timeout 900`.
+Focused diagnostic selections follow `--`, for example
+`.venv/bin/python -m scripts.test_stability -- tests/tooling/`.
+The default watchdog is 900 seconds per process, increased from the original
+300-second proposal because the preserved merged population already takes about
+11 minutes in Boat. CI bounds check/quality jobs at 60 minutes. These are
+operational timeouts, not new speed gates or permission to omit slow tests.
+
+This replaces the unittest runners proposed in PRs
+[#234](https://github.com/jnyross/unpoliticalaf/pull/234) (pinned
+`88eef9cd7e2d574b419bbe612cf82e40c82c8fe7`) and
+[#238](https://github.com/jnyross/unpoliticalaf/pull/238) (pinned
+`0f5b7acfafdbb90a6411fd07fefbe7369a37239f`), retaining their timing,
+outcome and evidence safeguards while preserving merged pytest collection.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for naming and complete check interfaces.
 Ruff is pinned to 0.14.3; strict core typing uses mypy 1.18.2 and

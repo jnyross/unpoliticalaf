@@ -14,8 +14,8 @@ class Tooling(unittest.TestCase):
         result = subprocess.run(
             ["make", "-n", "test"], cwd=ROOT, capture_output=True, text=True, check=True
         )
-        self.assertIn("-m pytest", result.stdout)
-        self.assertIn("quality/tests", result.stdout)
+        self.assertIn("-m scripts.test_stability --runs 1", result.stdout)
+        self.assertIn("quality/tests", (ROOT / "pyproject.toml").read_text())
         self.assertIn("test_*.py", (ROOT / "pyproject.toml").read_text())
 
     def test_quality_composes_all_delivered_checks(self):
