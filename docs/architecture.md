@@ -68,8 +68,11 @@ flowchart TD
    [The manifest](../sources/manifest.json) configures downloads.
    [The fetcher](../scripts/fetch_sources.py) uses standard-library HTTP requests,
    either to a fixed URL or to a link found on a publisher page. It keeps the
-   response bytes and records the resolved URL, retrieval time, content type,
-   byte count and SHA-256 in `data/fetched/receipts.json`.
+   response bytes and records the resolved URL, original `requested_url`,
+   retrieval time, content type, byte count and SHA-256 in
+   `data/fetched/receipts.json`. `make setup` supplies the format readers needed
+   for acquisition; the disabled legacy workflow would need reviewed setup
+   changes before intentional use.
    [The legacy fetch workflow](../.github/workflows/fetch-sources.yml) is
    disabled. Its definition can commit downloaded files back to the checked-out
    branch, but a source push does not currently run it. Acquisition uses an
@@ -153,8 +156,26 @@ test/browser libraries are in [requirements-dev.txt](../requirements-dev.txt).
   reading the current site or rebuilding from complete retained inputs.
   The fetcher retries requests and skips already-retained downloads by default;
   `--refresh` re-downloads them. Inspect its `FAIL` messages, final failures list
-  and receipts: individual download failures are reported but do not make the
-  current script exit nonzero. An incomplete batch can therefore be committed.
+  and receipts: any failure exits 1 and identifies the source. A mixed run reports
+  `partial`: accepted updates remain matching pairs, while failed sources keep
+  their last-good bytes and receipts. SIGINT/SIGTERM clean up staging and exit
+  130. An interrupt does not undo already accepted pairs.
+- **Invalid download:** downloads are staged on the retained filesystem. HTTP
+  status, declared length, identity encoding and format checks run before either
+  file or receipt changes. Narrow identity/coverage checks protect L522 CPIH,
+  DfE 2015 Table 6b and EHS FT1421; other sources receive format checks, not a
+  claim of semantic validation. Discovered links cannot silently change vintage.
+  Review changed data and metadata, then run `make verify` before publication.
+  For example, after setup, `./.venv/bin/python scripts/fetch_sources.py ons-l522
+  dfe-spc-2015-tables ehs-ft1421` selectively reacquires these three sources.
+  Review `git diff -- data/fetched`, including old/new hashes and retrieval times.
+- **Interrupted promotion:** refresh writers serialize on the output directory.
+  Per-source replacement rolls back Python/I/O failures and defers SIGINT/SIGTERM
+  across the two renames. POSIX cannot atomically replace two files: this does
+  not promise power-loss/SIGKILL recovery. Temporary directories are ignored,
+  not evidence of accepted data. Do not build/read sources concurrently with
+  refresh; run retained-hash checks afterward. Without a declared length, a
+  cleanly closed shorter response can only be detected by format/source checks.
 - **Changed source bytes or layout:** hash mismatches stop the build. A hash
   proves retained-byte identity, not that the correct cells were selected.
   Review the registry, receipts and reader locators together after an update,

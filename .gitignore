@@ -1,5 +1,6 @@
 # Deterministic generated output and Python caches
 /site/
+/data/fetched/.refresh-*/
 __pycache__/
 *.py[cod]
 .venv/
