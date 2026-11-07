@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -88,7 +89,7 @@ class Measurement(unittest.TestCase):
         self.assertTrue(report["cache"]["site_existed"])
         self.assertTrue(report["cache"]["builder_bytecode_existed"])
         self.assertIsNone(report["cache"]["pip_cache_hit"])
-        self.assertEqual(report["python_executable"], os.sys.executable)
+        self.assertEqual(report["python_executable"], sys.executable)
 
     def test_invalid_budgets_are_refused(self):
         for value in ("0", "-1", "nan", "inf", "not-a-number"):
@@ -148,7 +149,7 @@ class Reports(unittest.TestCase):
     def test_real_make_failure_and_overbudget_exit_nonzero(self):
         for command, budget, expected_status, expected_code in (
             ("exit 7", "90", "failed", 2),
-            (f'{os.sys.executable} -c "import time; time.sleep(0.05)"', "0.001", "over_budget", 1),
+            (f'{sys.executable} -c "import time; time.sleep(0.05)"', "0.001", "over_budget", 1),
         ):
             with self.subTest(command=command), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
@@ -162,14 +163,17 @@ class Reports(unittest.TestCase):
                     f"'--max-seconds',{budget!r}]))"
                 )
                 result = subprocess.run(
-                    [os.sys.executable, "-c", program],
+                    [sys.executable, "-c", program],
                     cwd=perf.ROOT,
                     capture_output=True,
                     text=True,
+                    # Failure fixtures must not append fake results to the real CI summary.
+                    env={**os.environ, "GITHUB_STEP_SUMMARY": str(root / "summary.md")},
                 )
                 self.assertEqual(result.returncode, expected_code, result.stdout + result.stderr)
                 report = json.loads(output.read_text())
                 self.assertEqual(report["status"], expected_status)
+                self.assertIn(expected_status, (root / "summary.md").read_text())
 
 
 if __name__ == "__main__":
