@@ -108,7 +108,8 @@ class Reports(unittest.TestCase):
         workflow = (perf.ROOT / ".github/workflows/check.yml").read_text()
         self.assertIn("run: make benchmark", workflow)
         self.assertLess(workflow.index("run: make benchmark"), workflow.index("--collect-only"))
-        self.assertIn("run: make check test", workflow)
+        # Coverage now measures build + check + the same canonical timed tests.
+        self.assertIn("run: make verify-coverage", workflow)
         self.assertIn("run: make test-stability", workflow)
         self.assertIn("run: make quality", workflow)
         self.assertIn("if-no-files-found: error", workflow)
