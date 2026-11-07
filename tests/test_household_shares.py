@@ -53,6 +53,12 @@ class HouseholdTaxShares(unittest.TestCase):
         self.assertIn("does not establish the richest fifth", page)
         self.assertIn('href="corrections.html"', page)
         self.assertIn('href="figures/etb.html', page)
+        self.assertIn("<summary>Show average income and taxes for all five fifths and everyone</summary>", page)
+        self.assertLess(page.index('<ul class="bars">'), page.index('<strong>No supported total share.</strong>'))
+        self.assertLess(
+            page.index('<strong>No supported total share.</strong>'),
+            page.index('<details class="more"><summary><span>More on All taxes, by household income'),
+        )
 
     def test_six_supported_rows_match_the_adjacent_csv(self):
         page = self.pages["who-pays.html"]

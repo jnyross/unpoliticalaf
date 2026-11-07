@@ -369,11 +369,6 @@ def who_pays_page(facts, d, num, sources):
                          ("Not established", 'the richest fifth’s share of all UK household taxes. Our former 46.0% claim is withdrawn. <a href="#richest-share">Why we cannot give that share</a>', False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 </div>''')
-    body.append('''<div class="limit"><p><strong>All household taxes: no supported total share.</strong>
-The ONS table used here does not establish the richest fifth's share of all taxes paid by UK households.
-Our former 46.0% claim is withdrawn, not replaced by another estimate.
-<a href="#richest-share">Why the averages cannot give that total</a>.
-<a href="corrections.html">Read the correction</a>.</p></div>''')
     # HMRC. The chart comes first on a phone; how it is counted follows it.
     body.append('<h2 id="income-tax">1. Income Tax, by person</h2>')
     # Show each group's share of income beside its share of tax, as HMRC does (audit 11 judge, R1).
@@ -411,20 +406,25 @@ Our former 46.0% claim is withdrawn, not replaced by another estimate.
     for q, label in QUINTS:
         rows.append([label, num(f"etb.2a.gross.{q}", "pounds"), num(f"etb.2a.direct.{q}", "pounds"), num(f"etb.2a.indirect.{q}", "pounds"), num(f"etb.2a.alltax.{q}", "pounds")])
     body.append(f'''<h3 id="richest-share">The richest fifth's share of all taxes paid</h3>
-<div class="answer"><p class="lede">This share is not established by ONS Table 2a.</p>
-<p>The table averages household amounts across people, not across households. A larger household's amount is counted for more people.
-Multiplying these person-weighted means by household counts does not give actual household-tax totals. Using person counts would count each household's tax more than once too.</p>
+<div class="limit"><p><strong>No supported total share.</strong>
+The ONS table used here does not establish the richest fifth's share of all taxes paid by UK households.
+Our former 46.0% claim is withdrawn, not replaced by another estimate.
+<a href="corrections.html">Read the correction</a>.</p></div>
+<p>ONS averages household amounts across people, not households. These person-weighted means cannot give actual household-tax totals using either household or person counts.</p>
 <p>What is supported: taxes were {num("etb.t8.gross.all.q5", "pct")} of gross household income for the highest-income fifth.
 That is a share of income, not a share of all taxes raised. See <a href="household-tax.html">Tax and income</a>.</p>
-</div>''')
+''')
+    body.append('<details><summary>Show average income and taxes for all five fifths and everyone</summary>')
     # Keep the supported table's existing CSV slug (derived from its first 60 characters).
     body.append(table("Average household income and taxes, by fifth of people, £ a year, 2023/24 (person-weighted)", ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"], rows))
-    body.append('<p class="small">These are household amounts averaged across people, not personal bills or totals for each fifth. “Everyone” uses the published All individuals column, not a household-count-weighted average of the fifths.</p>')
-    body.append(source_line(sources, ["etb", "explain-ons-etb-latest"], "Table 2a, C8:H9 (people and household counts), C48:H48 (direct taxes), C70:H70 (indirect taxes); Notes, note 3 (ranking). Bulletin glossary: Equivalisation; Mean and median income."))
+    body.append('<p class="small">Household amounts averaged across people, not personal bills or group totals. “Everyone” is ONS’s All individuals column, not a household-count-weighted average.</p>')
+    body.append('</details>')
+    body.append(source_line(sources, ["etb", "explain-ons-etb-latest"], "Table 2a C8:H9, C48:H48, C70:H70; Notes, note 3. Bulletin glossary: Equivalisation; Mean and median income."))
     body.append(FOLD)
     body.append("<p>How the fifths are made: everyone is ranked by their household's income, adjusted for household size, and split into five groups with about the same number of people in each. "
                 "For each fifth, the ONS then estimates the average income and taxes of the households those people live in. The fifths do not have the same number of households. "
                 "This includes taxes on spending, such as VAT and fuel duty, but not taxes such as Corporation Tax that are not paid directly by households.</p>")
+    body.append("<p>A larger household's amount is counted for more people in the mean. Multiplying by household counts does not recover actual tax totals; multiplying by person counts would count each household's tax more than once.</p>")
     body.append('<p class="small">Direct taxes: Income Tax, employee National Insurance, student loan repayments and Council Tax (after reductions). Indirect taxes: VAT, duties and taxes paid by businesses that are passed on in prices. Gross income includes cash benefits such as the State Pension.</p>')
     body.append(f'<div class="limit"><p><strong>Limits.</strong> These are averages for groups of people, using the income and taxes of the household each person lives in, estimated from a survey; no single household is “typical”. Indirect taxes are charged on spending: the lowest fifth paid {cav[0]} of its spending in indirect taxes, close to the other fifths ({cav[1]} to {cav[2]}). ONS warns that lump sums of deferred tax can make its direct taxes look high.</p></div>')
     body.append(source_line(sources, ["etb"], "Table 2a. Survey-based estimates for April 2023 to March 2024."))
