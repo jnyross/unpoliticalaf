@@ -123,7 +123,9 @@ def test_redirect_receipt_uses_actual_url_bytes_and_time(tmp_path, monkeypatch, 
     assert receipt["url"] == origin + "/good"
     assert receipt["bytes"] == len(body)
     assert receipt["sha256"] == hashlib.sha256(body).hexdigest()
-    assert started <= datetime.fromisoformat(receipt["retrieved"]) <= datetime.now(timezone.utc)
+    # Python 3.10's ISO parser requires an explicit UTC offset rather than Z.
+    retrieved = datetime.fromisoformat(receipt["retrieved"].replace("Z", "+00:00"))
+    assert started <= retrieved <= datetime.now(timezone.utc)
     assert requests == ["/redirect", "/good"]
 
 

@@ -12,7 +12,8 @@ permissions:
 jobs:
   metrics:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # The full build/check/494-test coverage run exceeded the former 20 minutes.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
