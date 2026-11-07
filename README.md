@@ -114,6 +114,7 @@ make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make test-stability # same pytest suite in fresh processes with seeds 1, 2 and 3
 make verify    # build + check + test
+make verify-coverage # same population under the combined 80% coverage gate
 make benchmark # time a fresh build, save JSON and enforce the 90-second budget
 make setup-dev && make quality # lint, format, types, dependencies, stability, guidance, dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
@@ -129,6 +130,25 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Coverage gate and dashboard
+
+`make coverage` (also `make verify-coverage`) measures a fresh build, independent
+source/page checks and the canonical timed pytest population, including nested
+reporter tests. The minimum is **80% combined statement-and-branch coverage**:
+covered statements plus covered branches, divided by all statements plus all
+branches. Every Python file recursively under `builder/` and `scripts/` counts,
+including unexecuted modules. There are no producer exclusions. This is combined
+verification coverage, not unit-only coverage.
+
+The dashboard in `make quality` and `make -f quality/Makefile metrics` uses this
+same measurement and gate. Each invocation retains separate ignored reports in
+`quality-reports/invocation-*/`, including phase logs, test timings, coverage
+HTML/XML/JSON, `metrics.json`, `summary.md` and `index.html`. A failed phase or
+report fails the command; an earlier success cannot fill in for it. The reporter
+rejects missing, malformed, source-mismatched or incomplete measurement data.
+Complexity and maintainability are informative, not new thresholds.
+See [quality/README.md](quality/README.md) for report interpretation.
 
 ### Build performance
 

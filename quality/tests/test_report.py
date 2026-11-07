@@ -1,6 +1,8 @@
 """Exercise actual Radon analysis, coverage joins and the exported dashboard."""
 
 import importlib.util
+from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import tempfile
@@ -32,6 +34,7 @@ class QualityReport(unittest.TestCase):
             "covered_branches": 1,
         }
         self.coverage = {
+            "meta": {"branch_coverage": True, "timestamp": datetime.now().isoformat()},
             "totals": {
                 "num_statements": 5,
                 "covered_lines": 3,
@@ -50,6 +53,21 @@ class QualityReport(unittest.TestCase):
                 },
             },
         }
+        (self.root / "quality").mkdir()
+        (self.root / "quality" / "coverage.ini").write_text("[run]\nbranch=True\n")
+        (self.root / "pyproject.toml").write_text("")
+
+    def write_measurement(self, output):
+        measurement = {
+            "schema_version": 1,
+            "started_at": datetime(2000, 1, 1, tzinfo=timezone.utc).isoformat(),
+            "source_hashes": report.source_hashes(self.root),
+            "phases": [{"name": name, "exit_code": 0} for name in ("build", "check", "tests")],
+            "exports": [{"name": name, "exit_code": 0} for name in ("gate", "html", "xml", "json")],
+            "coverage_sha256": hashlib.sha256((output / "coverage.json").read_bytes()).hexdigest(),
+        }
+        (output / "measurement.json").write_text(json.dumps(measurement))
+        return measurement
 
     def test_real_complexity_and_coverage_including_unexecuted_source(self):
         result = report.collect(self.root, self.coverage)
@@ -64,6 +82,20 @@ class QualityReport(unittest.TestCase):
 
     def test_missing_coverage_fails_instead_of_hiding_source(self):
         del self.coverage["files"]["scripts/unused.py"]
+        with self.assertRaises(KeyError):
+            report.collect(self.root, self.coverage)
+
+    def test_inconsistent_or_invalid_counts_fail(self):
+        for value in (-1, 6, "3", True):
+            with self.subTest(value=value):
+                self.coverage["totals"]["covered_lines"] = value
+                with self.assertRaises(ValueError):
+                    report.collect(self.root, self.coverage)
+
+    def test_recursive_sources_cannot_be_omitted(self):
+        nested = self.root / "builder" / "nested"
+        nested.mkdir()
+        (nested / "never_run.py").write_text("answer = 0\n")
         with self.assertRaises(KeyError):
             report.collect(self.root, self.coverage)
 
@@ -101,11 +133,58 @@ class QualityReport(unittest.TestCase):
         output = self.root / "reports"
         output.mkdir()
         (output / "coverage.json").write_text(json.dumps(self.coverage), encoding="utf-8")
+        self.write_measurement(output)
         report.main(["--root", str(self.root), "--output", str(output)])
         metrics = json.loads((output / "metrics.json").read_text())
         self.assertEqual(metrics["totals"], self.coverage["totals"])
         self.assertIn("builder/example.py", (output / "summary.md").read_text())
         self.assertIn("Code quality metrics", (output / "index.html").read_text())
+
+    def test_missing_stale_malformed_and_failed_phase_data_cannot_publish(self):
+        output = self.root / "reports"
+        output.mkdir()
+        coverage_path = output / "coverage.json"
+        for failure in (
+            "missing",
+            "malformed",
+            "source",
+            "hash",
+            "timestamp",
+            "phase",
+            "export",
+            "branch",
+        ):
+            with self.subTest(failure=failure):
+                coverage_path.write_text(json.dumps(self.coverage))
+                measurement = self.write_measurement(output)
+                if failure == "missing":
+                    (output / "measurement.json").unlink()
+                elif failure == "malformed":
+                    coverage_path.write_text("{")
+                elif failure == "source":
+                    measurement["source_hashes"] = {}
+                elif failure == "hash":
+                    measurement["coverage_sha256"] = "not-this-run"
+                elif failure == "timestamp":
+                    measurement["started_at"] = "2999-01-01T00:00:00+00:00"
+                elif failure == "phase":
+                    measurement["phases"][2]["exit_code"] = 1
+                elif failure == "export":
+                    measurement["exports"][2]["exit_code"] = 3
+                elif failure == "branch":
+                    data = {
+                        **self.coverage,
+                        "meta": {**self.coverage["meta"], "branch_coverage": False},
+                    }
+                    coverage_path.write_text(json.dumps(data))
+                    measurement["coverage_sha256"] = hashlib.sha256(
+                        coverage_path.read_bytes()
+                    ).hexdigest()
+                if failure not in ("missing", "malformed"):
+                    (output / "measurement.json").write_text(json.dumps(measurement))
+                with self.assertRaises((OSError, ValueError)):
+                    report.main(["--root", str(self.root), "--output", str(output)])
+                self.assertFalse((output / "metrics.json").exists())
 
 
 if __name__ == "__main__":

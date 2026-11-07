@@ -2,7 +2,7 @@ PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing build site benchmark check test test-stability verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev setup-typing build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -66,6 +66,12 @@ quality: lint format-check typecheck check-deps test-stability
 	$(MAKE) -f quality/Makefile metrics
 
 verify: build check test
+
+# Combined build/check/canonical pytest measurement, including nested reporters.
+coverage:
+	$(RUN_PYTHON) -m quality.measure
+
+verify-coverage: coverage
 
 # axe-core accessibility checks at phone and desktop width.
 a11y:

@@ -41,16 +41,34 @@ jobs:
       - name: Collect a unit test file without running tests
         if: ${{ !cancelled() }}
         run: .venv/bin/python -m pytest --collect-only tests/test_household_shares.py
-      # Same verify population, without building the measured site a second time.
-      - run: make check test
+      # The benchmark and coverage have distinct measurements. Coverage includes
+      # a fresh build, independent check and the canonical timed test population.
+      - run: make verify-coverage
         if: ${{ !cancelled() }}
+      - name: Retain coverage phases and dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: quality-reports/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish combined coverage summary
+        if: always()
+        run: |
+          for summary in quality-reports/invocation-*/summary.md; do
+            if [ -f "$summary" ]; then
+              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
       - name: Detect flaky tests with three fresh seeded processes
         if: ${{ !cancelled() }}
         run: make test-stability
       - name: Publish timing and stability summaries
         if: always()
         run: |
-          for summary in test-results/*/invocation-*/summary.md test-results/*/invocation-*/run-*/summary.md; do
+          for summary in test-results/*/invocation-*/summary.md test-results/*/invocation-*/run-*/summary.md quality-reports/invocation-*/test-timings/summary.md; do
             if [ -f "$summary" ]; then
               cat "$summary" >> "$GITHUB_STEP_SUMMARY"
             fi

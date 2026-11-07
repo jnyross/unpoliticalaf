@@ -1,5 +1,6 @@
 """Executable contracts for the canonical development commands."""
 
+import configparser
 import pathlib
 import subprocess
 import sys
@@ -28,9 +29,25 @@ class Tooling(unittest.TestCase):
             "mypy",
             "deptry",
             "check_agents",
-            "quality/report.py",
+            "-m quality.measure",
         ):
             self.assertIn(command, result.stdout)
+
+    def test_coverage_and_dashboard_use_one_gate_and_measurement(self):
+        for arguments in (["coverage"], ["verify-coverage"], ["-f", "quality/Makefile", "metrics"]):
+            result = subprocess.run(
+                ["make", "-n", *arguments], cwd=ROOT, capture_output=True, text=True, check=True
+            )
+            self.assertEqual(result.stdout.count("-m quality.measure"), 1)
+        config = configparser.ConfigParser()
+        config.read(ROOT / "quality" / "coverage.ini")
+        self.assertEqual(config["report"].getfloat("fail_under"), 80)
+        self.assertTrue(config["run"].getboolean("branch"))
+        self.assertEqual(config["run"]["source"].split(), ["builder", "scripts"])
+        self.assertNotIn("omit", config["run"])
+        self.assertNotIn("omit", config["report"])
+        self.assertIn("pytest==8.4.2", (ROOT / "requirements-test.txt").read_text())
+        self.assertIn("coverage==7.10.7", (ROOT / "quality/requirements.txt").read_text())
 
     def test_standalone_dashboard_setup_includes_pytest(self):
         result = subprocess.run(
