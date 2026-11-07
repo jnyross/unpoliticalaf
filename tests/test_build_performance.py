@@ -101,7 +101,11 @@ class Measurement(unittest.TestCase):
 class Reports(unittest.TestCase):
     def test_make_and_ci_preserve_the_canonical_gates_and_budget(self):
         result = subprocess.run(
-            ["make", "-n", "benchmark"], cwd=perf.ROOT, capture_output=True, text=True, check=True
+            ["make", "-n", "benchmark", "VENV=.venv"],
+            cwd=perf.ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
         )
         self.assertIn(".venv/bin/python scripts/build_performance.py", result.stdout)
         self.assertNotIn("--max-seconds", result.stdout)

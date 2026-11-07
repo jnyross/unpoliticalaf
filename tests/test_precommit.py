@@ -38,7 +38,9 @@ class HookPolicy(unittest.TestCase):
 
     def test_developer_pin_and_explicit_reinstallation(self):
         self.assertIn("pre-commit==4.3.0", (ROOT / "requirements-dev.txt").read_text())
-        result = subprocess.run(["make", "-n", "hooks"], cwd=ROOT, capture_output=True, text=True)
+        result = subprocess.run(
+            ["make", "-n", "hooks", "VENV=.venv"], cwd=ROOT, capture_output=True, text=True
+        )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn(".venv/bin/python -m pre_commit install", result.stdout)
         for target in ("setup", "setup-test", "setup-quality"):

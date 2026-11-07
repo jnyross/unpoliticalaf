@@ -1,25 +1,29 @@
 PYTHON ?= python3
-RUN_PYTHON := .venv/bin/python
+VENV ?= .venv
+RUN_PYTHON := $(VENV)/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev hooks setup-typing setup-quality complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev-tools setup-dev hooks setup-typing setup-quality complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
 	$(PYTHON) -c 'import sys; assert sys.version_info >= (3, 10), "Python 3.10+ required"'
-	$(PYTHON) -m venv .venv
+	$(PYTHON) -m venv $(VENV)
 	$(RUN_PYTHON) -m pip install -q -r requirements.txt
 
 # Unit-test tools, without the optional browser accessibility dependencies.
 setup-test: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-test.txt
 
-# Adds developer tools and the hook in Git checkouts, not Git-free CI exports.
-setup-dev: setup
+# Containers share source with the outer checkout, never its installed hooks.
+setup-dev-tools: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+
+# Adds developer tools and the hook in Git checkouts, not Git-free CI exports.
+setup-dev: setup-dev-tools
 	@if test -e .git; then $(MAKE) hooks; else echo "No Git metadata; hook installation skipped."; fi
 
-# Explicitly reinstall after recreating .venv. Never call on the agent host.
+# Explicitly reinstall after recreating the venv. Never call on the agent host.
 hooks:
 	$(RUN_PYTHON) -m pre_commit install
 
@@ -28,7 +32,7 @@ setup-typing: setup
 
 # Reuse the dashboard's canonical pinned Radon requirements.
 setup-quality:
-	$(PYTHON) -m venv .venv
+	$(PYTHON) -m venv $(VENV)
 	$(RUN_PYTHON) -m pip install -q -r quality/requirements.txt
 
 complexity:
@@ -76,7 +80,7 @@ typecheck:
 
 check-deps:
 	$(RUN_PYTHON) -m deptry .
-	cd quality && ../$(RUN_PYTHON) -m deptry .
+	cd quality && $(abspath $(RUN_PYTHON)) -m deptry .
 
 # Extend this aggregate as further tooling lands; never replace existing gates.
 quality: lint format-check typecheck check-deps complexity duplication test-stability

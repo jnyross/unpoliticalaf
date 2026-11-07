@@ -23,6 +23,10 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   Git-free exports skip hook installation. Agents must use disposable Boat
   Git metadata, never install or exercise this hook in the host checkout.
   `make hooks` reinstalls it after recreating `.venv`.
+- The [dev container](README.md#dev-container) runs `make setup-dev-tools` instead,
+  installing the same packages without altering outer hooks. Its exported `VENV`
+  points outside the workspace; Makefile checks use it automatically. Use
+  `"$VENV/bin/python"` for direct commands there, not the outer `.venv/bin/python`.
 - With Node 22, `npm ci --ignore-scripts` installs the locked developer tools.
   Run `npm run test:duplicates` for the Node regression suite, separately from pytest.
 - `make quality` runs Ruff, Black's non-mutating check, forced Python compilation,

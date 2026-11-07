@@ -83,6 +83,7 @@ The optional settings are:
 | Setting | Default when unset | When to use it |
 | --- | --- | --- |
 | `PYTHON` | `python3` | Select the interpreter used to create `.venv`, for example `make setup PYTHON=python3.12`. Later commands still use `.venv/bin/python`. |
+| `VENV` | `.venv` | Override the virtualenv for all Makefile commands, including quality. Export it or pass it on every invocation. Use a path without whitespace; the dev container sets `/opt/unpoliticalaf/venv`. |
 | `VERCEL_GIT_COMMIT_SHA` | `git rev-parse HEAD`, or `unknown` if Git metadata is unavailable | Vercel supplies this for the build's version label and `site/build.json`. Leave it unset locally so the current checkout supplies the commit. It is not a credential. |
 | `GITHUB_STEP_SUMMARY` | No summary file is written | GitHub Actions supplies a file path for `scripts/check_live.py` to append its report. Leave it unset locally; the live check still prints its result. |
 
@@ -129,6 +130,49 @@ npm run test:duplicates # real locked-tool regressions and failure cases
 make hooks     # reinstall the Git hook in a disposable Boat checkout
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+### Dev container
+
+With Docker and VS Code's Dev Containers extension installed, choose
+**Dev Containers: Reopen in Container**. The container provides Python 3.12,
+Node 22 and the pinned developer packages, locked Node tools and Playwright
+Chromium with its Linux dependencies. Initial setup needs network access, not
+API keys or deployment credentials. Development runs as non-root `vscode`;
+the editor uses pytest for both `tests/` and `quality/tests/`.
+
+The per-container named Docker volume lives at `/opt/unpoliticalaf/venv`,
+**outside the workspace**. It is never mounted onto the outer `.venv`, and no
+host virtualenv files are copied, removed or chowned. Fresh startup leaves no
+outer `.venv` mountpoint. Existing environments, including root-owned directories
+and unusable macOS Python symlinks inside `.venv`, are ignored and preserved.
+Rebuilds reuse the named volume and rerun setup. If the editing user's UID changes,
+remove the stopped container's identified `unpoliticalaf-venv-…` volume and rebuild
+to reinstall packages rather than recursively changing workspace ownership.
+Also recreate the volume after removing requirements, since pip does not uninstall
+packages that disappear from a requirements file. The locked Node install uses
+the shared checkout's `node_modules`; `npm ci` replaces that generated directory.
+
+Run `make verify`, `make quality` and `make a11y` in the container terminal.
+For direct Python commands use `"$VENV/bin/python"`, not `.venv/bin/python`.
+Preview with `"$VENV/bin/python" -m http.server 3181 --bind 127.0.0.1 --directory site`;
+stop it with Ctrl+C. Rebuild after container/dependency changes.
+
+Startup calls `make setup-dev-tools`, which installs the same developer packages
+without installing a hook into the shared outer `.git`. Existing outer hooks and
+worktree metadata stay untouched. Do not run `make hooks` or `make setup-dev`
+inside a bind-mounted container: that installs a container-specific interpreter
+path in the outer Git hook. Install outer hooks only in the matching native
+environment (agents still use disposable Boat Git metadata).
+
+Returning from this configuration to a fresh native checkout needs only the
+normal `make setup-test && make verify`. For a checkout previously opened with
+the old workspace-mounted PR #249 configuration, first stop that old container.
+If it left an **empty**, root-owned `.venv` directory, `rmdir .venv` removes only
+that empty directory (the writable checkout parent permits this without sudo);
+then run normal setup. Never recursively remove or chown an existing environment.
+To retain an incompatible nonempty environment, select a separate native one:
+`export VENV="$HOME/.cache/unpoliticalaf-native-venv"`, then run setup and all
+later Makefile commands with that export. Use `"$VENV/bin/python"` directly.
 
 Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 `pyproject.toml`); Ruff 0.14.3 owns linting, not a second formatting policy.

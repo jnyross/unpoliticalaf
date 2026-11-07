@@ -1,0 +1,40 @@
+{
+  "name": "UnpoliticalAF",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "VENV": "/opt/unpoliticalaf/venv",
+    "VIRTUAL_ENV": "/opt/unpoliticalaf/venv",
+    "PYTHON": "/usr/local/bin/python3"
+  },
+  "remoteEnv": {
+    "PATH": "/opt/unpoliticalaf/venv/bin:${containerEnv:PATH}"
+  },
+  "mounts": [
+    "source=unpoliticalaf-venv-${devcontainerId},target=/opt/unpoliticalaf/venv,type=volume,volume-nocopy"
+  ],
+  "postCreateCommand": "sudo chown vscode:vscode \"$VENV\" && make setup-dev-tools && npm ci --ignore-scripts --no-audit --no-fund && \"$VENV/bin/python\" -m playwright install --with-deps chromium",
+  "forwardPorts": [3181],
+  "portsAttributes": {
+    "3181": {
+      "label": "Static site preview",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/unpoliticalaf/venv/bin/python",
+        "python.testing.unittestEnabled": false,
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["tests", "quality/tests"]
+      }
+    }
+  }
+}
