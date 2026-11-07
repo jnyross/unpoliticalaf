@@ -179,6 +179,15 @@ The legacy `Auto-merge green PRs` workflow is disabled. Agents manage merges
 only after independent review and required checks pass on the exact candidate.
 Do not re-enable the old five-minute writer or bypass review with green CI alone.
 
+## Automated PR reviews
+
+Pull requests receive diff-scoped Python correctness and security reviews from
+Ruff and Bandit, with actionable inline findings and an explicit coverage summary.
+No paid service or review-service secret is required. These static reviews do not
+approve PRs or replace independent review and the existing checks.
+See [docs/automated-pr-review.md](docs/automated-pr-review.md) for scope, security,
+validation and rollout.
+
 ## Code quality metrics
 
 The [quality dashboard](quality/README.md) reports Python line and branch
