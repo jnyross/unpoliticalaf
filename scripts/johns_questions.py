@@ -9,6 +9,7 @@ The questions and probes live in docs/johns-questions/questions.json.
     python scripts/johns_questions.py sheet GROUP   # one topic group only (see TOPIC_GROUPS)
     python scripts/johns_questions.py groups  # the topic groups and the questions in each
 """
+
 import json
 import re
 import sys
@@ -100,19 +101,28 @@ def pack(data=None):
     for q, p in probes(data):
         if is_open(p):
             continue
-        out.append({
-            "id": p["id"],
-            "topic": f"John's question {q['id']}: {q['asked']}",
-            "question": p["question"],
-            "options": p["options"],
-            "answer": p["answer"],
-            "critical": False,
-            "why": p["why"],
-            "evidence": p["evidence"],
-        })
-    return {"title": "John's questions", "not_sure": data["not_sure"], "questions": out,
-            "open": [{"id": p["id"], "question": p["question"], "gap": p["gap"]}
-                     for _, p in probes(data) if is_open(p)]}
+        out.append(
+            {
+                "id": p["id"],
+                "topic": f"John's question {q['id']}: {q['asked']}",
+                "question": p["question"],
+                "options": p["options"],
+                "answer": p["answer"],
+                "critical": False,
+                "why": p["why"],
+                "evidence": p["evidence"],
+            }
+        )
+    return {
+        "title": "John's questions",
+        "not_sure": data["not_sure"],
+        "questions": out,
+        "open": [
+            {"id": p["id"], "question": p["question"], "gap": p["gap"]}
+            for _, p in probes(data)
+            if is_open(p)
+        ],
+    }
 
 
 # The stand-in measures John's questions one topic group at a time: each group is a fresh reader
@@ -137,8 +147,10 @@ def sheet(data=None, group=None):
     if group is not None and group not in TOPIC_GROUPS:
         raise SystemExit(f"unknown group {group!r}; see: python scripts/johns_questions.py groups")
     wanted = set(TOPIC_GROUPS[group]) if group else None
-    out = ["# John's questions: question sheet\n\n",
-           f"Answer with one letter each. If you don't know, choose E ({data['not_sure']}).\n"]
+    out = [
+        "# John's questions: question sheet\n\n",
+        f"Answer with one letter each. If you don't know, choose E ({data['not_sure']}).\n",
+    ]
     for q, p in probes(data):
         if is_open(p) or (wanted is not None and q["id"] not in wanted):
             continue
@@ -157,7 +169,9 @@ def main(argv):
         data = load()
         answered = sum(1 for _, p in probes(data) if not is_open(p))
         total = sum(1 for _ in probes(data))
-        print(f"John's questions: {answered} of {total} probes answered on the site; {len(problems)} problems")
+        print(
+            f"John's questions: {answered} of {total} probes answered on the site; {len(problems)} problems"
+        )
         return 1 if problems else 0
     if cmd == "gaps":
         for line in gaps():

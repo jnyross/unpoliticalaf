@@ -19,7 +19,7 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   builds the site, checks source data/pages and runs all tests. Build first when
   running `make test` separately, because some tests read `site/`.
 - `make setup-dev` adds browser, lint, typing and dashboard dependencies.
-- `make quality` runs Ruff, forced Python compilation, strict core typing,
+- `make quality` runs Ruff, Black's non-mutating check, forced Python compilation, strict core typing,
   dependency checks, guidance references and the existing quality dashboard.
   `make lint`, `make typecheck` and `make check-deps` also run separately.
 - `make setup-typing && make typecheck` installs just production and typing
@@ -28,6 +28,19 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   that initial migration boundary, and must run on Python 3.10 and 3.12.
 - `make a11y` additionally needs Chromium, installed with
   `.venv/bin/python -m playwright install --with-deps chromium`, and a built site.
+
+## Lint and formatting
+
+Ruff 0.14.3 checks syntax/Pyflakes; Black 25.9.0 owns formatting. Do not use
+`ruff format` as a second policy. Run `make format` to write formatting changes,
+then `make format-check` to check without rewriting files. Black targets Python
+3.10 with 100-character lines in `pyproject.toml`; Ruff uses `ruff.toml`.
+Both commands explicitly select all Python files recursively in `builder/`,
+`scripts/`, `tests/` and `quality/`, including newly added nested modules. Nested
+tool configurations do not override those root policies. Retained official
+data, `reference/` and generated `site/` are outside the selection. Formatting
+must preserve stable fact/source IDs, public URLs/fragments and upstream names.
+The existing CI quality job runs both checks, not a competing formatting job.
 
 Use `.venv/bin/python` for direct commands. CI runs these same interfaces.
 Submit through independently reviewed PRs with exact-candidate Boat/CI checks;

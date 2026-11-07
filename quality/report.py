@@ -21,23 +21,30 @@ def collect(root, coverage):
             source = path.read_text(encoding="utf-8")
             blocks = add_inner_blocks(cc_visit(source))
             functions = [
-                {"name": block.fullname, "line": block.lineno,
-                 "complexity": block.complexity, "rank": cc_rank(block.complexity)}
-                for block in blocks if not hasattr(block, "methods")
+                {
+                    "name": block.fullname,
+                    "line": block.lineno,
+                    "complexity": block.complexity,
+                    "rank": cc_rank(block.complexity),
+                }
+                for block in blocks
+                if not hasattr(block, "methods")
             ]
             score = mi_visit(source, multi=True)
-            rows.append({
-                "path": name,
-                "statements": summary["num_statements"],
-                "covered_lines": summary["covered_lines"],
-                "branches": summary["num_branches"],
-                "covered_branches": summary["covered_branches"],
-                "sloc": analyze(source).sloc,
-                "maintainability_index": round(score, 2),
-                "maintainability_rank": mi_rank(score),
-                "functions": functions,
-                "max_complexity": max((f["complexity"] for f in functions), default=0),
-            })
+            rows.append(
+                {
+                    "path": name,
+                    "statements": summary["num_statements"],
+                    "covered_lines": summary["covered_lines"],
+                    "branches": summary["num_branches"],
+                    "covered_branches": summary["covered_branches"],
+                    "sloc": analyze(source).sloc,
+                    "maintainability_index": round(score, 2),
+                    "maintainability_rank": mi_rank(score),
+                    "functions": functions,
+                    "max_complexity": max((f["complexity"] for f in functions), default=0),
+                }
+            )
     if not rows:
         raise ValueError("No Python sources found")
     return {"schema_version": 1, "totals": coverage["totals"], "files": rows}
@@ -93,20 +100,19 @@ def dashboard(report):
             f"<td>{row['maintainability_index']:.2f} ({row['maintainability_rank']})</td></tr>"
         )
     functions = [
-        (row["path"], function)
-        for row in report["files"] for function in row["functions"]
+        (row["path"], function) for row in report["files"] for function in row["functions"]
     ]
     hotspots = [
         f"<tr><th scope=\"row\">{html.escape(path)}:{f['line']} "
         f"{html.escape(f['name'])}</th><td>{f['complexity']} ({f['rank']})</td></tr>"
-        for path, f in sorted(functions, key=lambda item: (
-            -item[1]["complexity"], item[0], item[1]["line"]
-        ))[:20]
+        for path, f in sorted(
+            functions, key=lambda item: (-item[1]["complexity"], item[0], item[1]["line"])
+        )[:20]
     ]
     totals = report["totals"]
     return (
-        "<!doctype html><html lang=\"en\"><meta charset=\"utf-8\">"
-        "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+        '<!doctype html><html lang="en"><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
         "<title>Code quality metrics</title>"
         "<style>body{font:1rem system-ui;margin:2rem;max-width:100rem}"
         "table{border-collapse:collapse}th,td{border:1px solid #aaa;padding:.5rem;"
@@ -118,22 +124,24 @@ def dashboard(report):
         f"<p>Line coverage: <strong>{percentage(totals['covered_lines'], totals['num_statements'])}"
         "</strong>. Branch coverage: "
         f"<strong>{percentage(totals['covered_branches'], totals['num_branches'])}</strong>.</p>"
-        "<p><a href=\"coverage/index.html\">Explore uncovered lines and branches</a> · "
-        "<a href=\"metrics.json\">Download all metrics (JSON)</a> · "
-        "<a href=\"coverage.xml\">Coverage XML</a></p>"
+        '<p><a href="coverage/index.html">Explore uncovered lines and branches</a> · '
+        '<a href="metrics.json">Download all metrics (JSON)</a> · '
+        '<a href="coverage.xml">Coverage XML</a></p>'
         "<p>Complexity counts independent paths per function (lower is simpler). "
         "Radon maintainability index is 0–100 (higher is easier to maintain); "
         "ranks: A &gt; 19, B &gt; 9–19, C 0–9. These are monitoring signals, "
         "not proof of correctness or replacement quality gates.</p>"
         "<table><caption>Files, lowest maintainability index first</caption>"
-        "<thead><tr><th scope=\"col\">File</th><th scope=\"col\">Lines covered</th>"
-        "<th scope=\"col\">Branches covered</th><th scope=\"col\">Max complexity</th>"
-        "<th scope=\"col\">Maintainability index (rank)</th></tr></thead><tbody>"
-        + "".join(rows) + "</tbody></table>"
+        '<thead><tr><th scope="col">File</th><th scope="col">Lines covered</th>'
+        '<th scope="col">Branches covered</th><th scope="col">Max complexity</th>'
+        '<th scope="col">Maintainability index (rank)</th></tr></thead><tbody>'
+        + "".join(rows)
+        + "</tbody></table>"
         "<h2>20 most complex functions</h2><table><thead><tr>"
-        "<th scope=\"col\">Function and source line</th>"
-        "<th scope=\"col\">Complexity (rank)</th></tr></thead><tbody>"
-        + "".join(hotspots) + "</tbody></table></main></html>\n"
+        '<th scope="col">Function and source line</th>'
+        '<th scope="col">Complexity (rank)</th></tr></thead><tbody>'
+        + "".join(hotspots)
+        + "</tbody></table></main></html>\n"
     )
 
 

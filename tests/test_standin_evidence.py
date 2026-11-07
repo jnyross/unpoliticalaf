@@ -1,4 +1,5 @@
 """Fail-closed autonomous evidence, using synthetic fixtures, not real readers."""
+
 import copy
 import importlib.util
 import json
@@ -15,13 +16,31 @@ jq = __import__("johns_questions")
 
 PACK = json.loads(si.PACK.read_text())
 KEY = {str(q["id"]): q["answer"] for q in PACK["questions"]}
-NEW = {"questions": [{"id": i, "options": {"A": "yes", "B": "no"},
-                      "answer": "A"} for i in range(1, 25)]}
-DATA = {"not_sure": "unknown", "questions": [
-    {"id": ids[0], "asked": "fixture", "probes": [{"id": ids[0] + ".1", "question": "fixture",
-      "options": {"A": "yes", "B": "no"}, "answer": "A",
-      "why": "fixture", "evidence": [{"page": "fixture.html", "text": "fixture"}]}]}
-    for ids in jq.TOPIC_GROUPS.values()]}
+NEW = {
+    "questions": [
+        {"id": i, "options": {"A": "yes", "B": "no"}, "answer": "A"} for i in range(1, 25)
+    ]
+}
+DATA = {
+    "not_sure": "unknown",
+    "questions": [
+        {
+            "id": ids[0],
+            "asked": "fixture",
+            "probes": [
+                {
+                    "id": ids[0] + ".1",
+                    "question": "fixture",
+                    "options": {"A": "yes", "B": "no"},
+                    "answer": "A",
+                    "why": "fixture",
+                    "evidence": [{"page": "fixture.html", "text": "fixture"}],
+                }
+            ],
+        }
+        for ids in jq.TOPIC_GROUPS.values()
+    ],
+}
 
 
 def write_fixture(audit):
@@ -30,24 +49,37 @@ def write_fixture(audit):
     (audit / "new-questions.json").write_text(json.dumps(NEW))
     si.seal(audit / "new-questions.json", audit)
     for who in [f"R{i}" for i in range(1, 6)] + ["SR"]:
-        row = {"reader": who, "site_commit": "abc1234", "budget": 40,
-               "actions_used": 40, "with_site": KEY}
+        row = {
+            "reader": who,
+            "site_commit": "abc1234",
+            "budget": 40,
+            "actions_used": 40,
+            "with_site": KEY,
+        }
         sessions = {"state" if who == "SR" else "phone": 40}
         if who != "SR":
-            row.update(without_site={k: "E" for k in KEY},
-                       new_with_site={str(i): "A" for i in range(1, 25)},
-                       new_without_site={str(i): "E" for i in range(1, 25)},
-                       new_actions_used=40,
-                       johns_with_site={q["probes"][0]["id"]: "A" for q in DATA["questions"]},
-                       johns_without_site={q["probes"][0]["id"]: "E" for q in DATA["questions"]},
-                       johns_actions_used={g: 40 for g in jq.TOPIC_GROUPS})
+            row.update(
+                without_site={k: "E" for k in KEY},
+                new_with_site={str(i): "A" for i in range(1, 25)},
+                new_without_site={str(i): "E" for i in range(1, 25)},
+                new_actions_used=40,
+                johns_with_site={q["probes"][0]["id"]: "A" for q in DATA["questions"]},
+                johns_without_site={q["probes"][0]["id"]: "E" for q in DATA["questions"]},
+                johns_actions_used={g: 40 for g in jq.TOPIC_GROUPS},
+            )
             sessions.update(new=40, **{f"johns-{g}": 40 for g in jq.TOPIC_GROUPS})
         (readers / f"{who}.json").write_text(json.dumps(row))
         for suffix, actions in sessions.items():
             name = f"{who}-{suffix}"
-            state = {"reader": name, "site_commit": "abc1234",
-                     "build_digest": "a" * 64, "mode": "sr" if who == "SR" else "phone",
-                     "budget": 40, "actions": actions, "log": ["scroll down"] * actions}
+            state = {
+                "reader": name,
+                "site_commit": "abc1234",
+                "build_digest": "a" * 64,
+                "mode": "sr" if who == "SR" else "phone",
+                "budget": 40,
+                "actions": actions,
+                "log": ["scroll down"] * actions,
+            }
             (readers / f"{name}.json").write_text(json.dumps(state))
 
 

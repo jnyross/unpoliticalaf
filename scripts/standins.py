@@ -52,13 +52,24 @@ SITE = ROOT / "site"
 PACK = ROOT / "docs" / "user-test" / "questions.json"
 WIDTH, HEIGHT = 360, 640
 from standin_score import (  # noqa: E402, F401 (public scoring API)
-    BUDGET, score, score_johns, validate_pack,
+    BUDGET,
+    score,
+    score_johns,
+    validate_pack,
 )
+
 STEP = HEIGHT - 80  # one scroll keeps a little of the last screen in view
 
 MAIN_PAGES = [
-    "index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html",
-    "life/index.html", "glossary.html", "methods.html", "sources.html",
+    "index.html",
+    "spending.html",
+    "taxes.html",
+    "who-pays.html",
+    "household-tax.html",
+    "life/index.html",
+    "glossary.html",
+    "methods.html",
+    "sources.html",
 ]
 
 # Elements a phone user can tap, in page order.
@@ -122,6 +133,7 @@ BADGES_JS = """
 
 # ----------------------------------------------------------------- serving
 
+
 class _Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -144,6 +156,7 @@ def serve(site=SITE):
 @contextlib.contextmanager
 def browser():
     from playwright.sync_api import sync_playwright
+
     with sync_playwright() as p:
         try:
             b = p.chromium.launch()
@@ -156,6 +169,7 @@ def browser():
 
 
 # ----------------------------------------------------------- reader sessions
+
 
 def load_state(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
@@ -187,7 +201,7 @@ def _open(page, base, st):
 
 
 def _rel(url, base):
-    return url[len(base):] if url.startswith(base) else url
+    return url[len(base) :] if url.startswith(base) else url
 
 
 def _view(page, mode, st, shots):
@@ -207,7 +221,9 @@ def _view(page, mode, st, shots):
         page.screenshot(path=str(shot))
         page.evaluate("document.getElementById('__standin_badges').remove()")
         lines.append(f"Screenshot (open it to see the screen): {shot}")
-        lines.append("Numbered things you can tap on this screen (the yellow numbers in the screenshot):")
+        lines.append(
+            "Numbered things you can tap on this screen (the yellow numbers in the screenshot):"
+        )
     else:
         lines.append("What a screen reader announces on this page, in reading order:")
         lines.append(page.locator("body").aria_snapshot())
@@ -216,7 +232,11 @@ def _view(page, mode, st, shots):
         extra = ""
         if it["kind"] == "select":
             opts = it["options"]
-            shown = ", ".join(opts) if len(opts) <= 12 else f"{opts[0]} to {opts[-1]}, {len(opts)} choices"
+            shown = (
+                ", ".join(opts)
+                if len(opts) <= 12
+                else f"{opts[0]} to {opts[-1]}, {len(opts)} choices"
+            )
             extra = f" (now: {it['value']}; choices: {shown})"
         lines.append(f"  [{i}] {it['kind']}: {it['label']}{extra}")
     return "\n".join(lines)
@@ -249,24 +269,45 @@ def session(mode, args):
         if Path(path).exists():
             print("Refusing to overwrite an existing reader state; use a fresh session path.")
             return 1
-        st = {"reader": Path(path).stem, "mode": mode, "budget": int(opt("--budget", BUDGET)), "actions": 0,
-              "url": "index.html", "ops": [], "scroll": 0, "history": [], "log": [],
-              "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")), "items": [],
-              "site_commit": site_commit, "build_digest": build_digest}
+        st = {
+            "reader": Path(path).stem,
+            "mode": mode,
+            "budget": int(opt("--budget", BUDGET)),
+            "actions": 0,
+            "url": "index.html",
+            "ops": [],
+            "scroll": 0,
+            "history": [],
+            "log": [],
+            "shots": opt("--shots", str(Path(tempfile.gettempdir()) / "standin-shots")),
+            "items": [],
+            "site_commit": site_commit,
+            "build_digest": build_digest,
+        }
         if st["budget"] != BUDGET:
             print("Reader sessions require the approved 40-action budget.")
             return 1
     else:
         st = load_state(path)
-        if (st.get("site_commit"), st.get("build_digest"), st.get("mode")) != (site_commit, build_digest, mode):
+        if (st.get("site_commit"), st.get("build_digest"), st.get("mode")) != (
+            site_commit,
+            build_digest,
+            mode,
+        ):
             print("The built candidate or reader mode changed; start a fresh session.")
             return 1
         if st["actions"] >= st["budget"]:
-            print(f"Time is up: you have used all {st['budget']} actions. Write down your answers now.")
+            print(
+                f"Time is up: you have used all {st['budget']} actions. Write down your answers now."
+            )
             return 1
     with serve() as base, browser() as b:
-        ctx = b.new_context(viewport={"width": WIDTH, "height": HEIGHT}, is_mobile=True, has_touch=True,
-                            device_scale_factor=1)
+        ctx = b.new_context(
+            viewport={"width": WIDTH, "height": HEIGHT},
+            is_mobile=True,
+            has_touch=True,
+            device_scale_factor=1,
+        )
         page = ctx.new_page()
         if action != "start":
             _open(page, base, st)
@@ -277,7 +318,10 @@ def session(mode, args):
             pass
         elif action == "scroll" and mode == "phone":
             down = (rest[0] if rest else "down") == "down"
-            page.evaluate("d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})", STEP if down else -STEP)
+            page.evaluate(
+                "d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})",
+                STEP if down else -STEP,
+            )
             st["actions"] += 1
             st["log"].append(f"scroll {'down' if down else 'up'}")
         elif action in ("tap", "choose"):
@@ -303,8 +347,14 @@ def session(mode, args):
                     save_state(path, st)
                     print(f"[{n}] has no choice called {value!r}. Nothing happened.")
                     return 1
-                st["ops"].append({"op": "choose", "sel": it["sel"], "value": value,
-                                  "y": page.evaluate("window.scrollY")})
+                st["ops"].append(
+                    {
+                        "op": "choose",
+                        "sel": it["sel"],
+                        "value": value,
+                        "y": page.evaluate("window.scrollY"),
+                    }
+                )
                 st["log"].append(f"choose [{n}] {it['label']} = {value}")
             else:
                 st["log"].append(f"tap [{n}] {it['kind']}: {it['label']}")
@@ -349,6 +399,7 @@ def session(mode, args):
 
 # ------------------------------------------------- automated accessibility
 
+
 def keyboard(pages=None, max_tabs=400):
     """Tab through each page from the top. A trap is focus that stops moving, or
     that comes back to an earlier element before it leaves the page."""
@@ -357,14 +408,18 @@ def keyboard(pages=None, max_tabs=400):
         page = b.new_page(viewport={"width": WIDTH, "height": HEIGHT})
         for rel in pages or MAIN_PAGES:
             page.goto(base + rel, wait_until="load")
-            total = page.evaluate("document.querySelectorAll('a[href], button, summary, select, input, [tabindex]').length")
+            total = page.evaluate(
+                "document.querySelectorAll('a[href], button, summary, select, input, [tabindex]').length"
+            )
             seen, last, stuck = [], None, 0
             for _ in range(min(max_tabs, total + 5)):
                 page.keyboard.press("Tab")
-                key = page.evaluate("""() => { const e = document.activeElement;
+                key = page.evaluate(
+                    """() => { const e = document.activeElement;
                   if (!e || e === document.body || e === document.documentElement) return null;
                   let p = [], n = e; while (n && n.parentElement) { p.unshift([...n.parentElement.children].indexOf(n)); n = n.parentElement; }
-                  return p.join('.'); }""")
+                  return p.join('.'); }"""
+                )
                 if key is None:
                     break  # focus left the page: reached the end
                 if key == last:
@@ -376,7 +431,9 @@ def keyboard(pages=None, max_tabs=400):
                 if seen and key == seen[0]:
                     break  # wrapped round to the first element: reached the end
                 if key in seen:  # back to an earlier element without leaving the page
-                    problems.append(f"{rel}: focus loops back after {len(seen)} elements, before the end of the page")
+                    problems.append(
+                        f"{rel}: focus loops back after {len(seen)} elements, before the end of the page"
+                    )
                     break
                 seen.append(key)
                 last, stuck = key, 0
@@ -387,7 +444,9 @@ def keyboard(pages=None, max_tabs=400):
 def summaries(site=SITE):
     """Every chart on a reading page has a text summary that gives numbers, not just a title."""
     problems, n = [], 0
-    chart = re.compile(r'<svg\b[^>]*role="img"[^>]*>|<ul class="(?:bars|bars change|cmp-list)"[^>]*>')
+    chart = re.compile(
+        r'<svg\b[^>]*role="img"[^>]*>|<ul class="(?:bars|bars change|cmp-list)"[^>]*>'
+    )
     for path in sorted(site.rglob("*.html")):
         rel = path.relative_to(site).as_posix()
         if rel.startswith("figures/"):
@@ -406,6 +465,7 @@ def summaries(site=SITE):
 
 # ------------------------------------------------------------- sealing
 
+
 def _digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -419,7 +479,9 @@ def seal(questions, audit_dir):
     out = Path(audit_dir) / "new-questions.sha256"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(f"{_digest(questions)}  new-questions.json\n", encoding="utf-8")
-    print(f"Sealed {len(pack['questions'])} questions: commit {out} now, and keep the questions out of the repo until every reader has answered.")
+    print(
+        f"Sealed {len(pack['questions'])} questions: commit {out} now, and keep the questions out of the repo until every reader has answered."
+    )
     return 0
 
 
@@ -430,13 +492,16 @@ def unseal(questions, audit_dir):
     except (OSError, IndexError):
         matches = False
     if not matches:
-        print("The question file does not match the seal: it changed after the readers were briefed.")
+        print(
+            "The question file does not match the seal: it changed after the readers were briefed."
+        )
         return 1
     print("The question file matches the seal.")
     return 0
 
 
 # ------------------------------------------------------------------ main
+
 
 def main(argv):
     cmd = argv[1] if len(argv) > 1 else ""
@@ -457,7 +522,9 @@ def main(argv):
     if cmd == "score" and len(argv) == 3:
         res, lines = score(argv[2])
         print("\n".join(lines))
-        Path(argv[2], "reader-scores.json").write_text(json.dumps(res, indent=1) + "\n", encoding="utf-8")
+        Path(argv[2], "reader-scores.json").write_text(
+            json.dumps(res, indent=1) + "\n", encoding="utf-8"
+        )
         return 0 if res["all_reader_standins"] else 1
     print(__doc__)
     return 2

@@ -113,12 +113,20 @@ make build     # write the site to site/
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make verify    # build + check + test
-make setup-dev && make quality # lint, typing, dependencies, guidance and dashboard
+make setup-dev && make quality # lint, formatting, typing, dependencies, guidance and dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
+make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
+make format-check # check formatting without rewriting files (also in quality/CI)
 make typecheck # forced compilation then strict core mypy checks
 make check-deps # runtime, browser and developer dependency classification
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
+`pyproject.toml`); Ruff 0.14.3 owns linting, not a second formatting policy.
+Both select maintained Python recursively, including nested new modules, without
+touching retained official data, pinned references or generated output.
+See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
 
 ### Local unit tests
 

@@ -7,6 +7,7 @@ with a missing year or a change of definition inside it gets no average, and
 the page says why. Averages are recorded as calculated facts with their
 formula, so the checks recalculate them like every other derived figure.
 """
+
 from .data import Fact, YEARS
 from .html import FOLD, page, details_table, source_line, esc
 from . import pages_life as L
@@ -70,10 +71,19 @@ def add_range_facts(facts):
             if group and len({group(y) for y in _years(sp)}) > 1:
                 continue
             last = facts[ids[-1]]
-            facts.add(Fact(avg_id(m, sp), sum(facts[i].value for i in ids) / len(ids), last.unit,
-                           f"average of {period(sp[0])} to {period(sp[1])}", AVG_SOURCE.get(last.source, last.source),
-                           ", ".join(facts[i].locator for i in ids), "calculated",
-                           formula=f"({' + '.join(ids)}) ÷ {len(ids)}", inputs=ids))
+            facts.add(
+                Fact(
+                    avg_id(m, sp),
+                    sum(facts[i].value for i in ids) / len(ids),
+                    last.unit,
+                    f"average of {period(sp[0])} to {period(sp[1])}",
+                    AVG_SOURCE.get(last.source, last.source),
+                    ", ".join(facts[i].locator for i in ids),
+                    "calculated",
+                    formula=f"({' + '.join(ids)}) ÷ {len(ids)}",
+                    inputs=ids,
+                )
+            )
 
 
 def span_status(facts, m, a, b):
@@ -97,6 +107,7 @@ def span_reason(facts, m, sp):
 
 
 # ------------------------------------------------------------ default pairs
+
 
 def full_pair(facts, a, b):
     """True when every topic's lead figure can be compared between a and b (years or spans)."""
@@ -138,23 +149,36 @@ def pair_context(a, b, brief=False):
     two ends have in common. Said whatever the figures show."""
     notes = []
     if 2009 <= a <= 2012:
-        notes.append(f"{a} came soon after the 2008-09 recession, when the employment rate was near its lowest for these years")
+        notes.append(
+            f"{a} came soon after the 2008-09 recession, when the employment rate was near its lowest for these years"
+        )
     if b == 2019:
         notes.append(f"{b} was the last year before the pandemic")
     if not notes:
         return ""
     if brief:
-        return (" Both years fall between the 2008-09 recession and the pandemic, so this pair shows that stretch only." if len(notes) == 2
-                else " " + notes[0][:1].upper() + notes[0][1:] + ".")
-    return (" " + "; ".join(notes)[:1].upper() + "; ".join(notes)[1:] + ". So this pair shows that stretch, not the whole period: "
-            "each topic page has every year, and each comparison page gives the longer run.")
+        return (
+            " Both years fall between the 2008-09 recession and the pandemic, so this pair shows that stretch only."
+            if len(notes) == 2
+            else " " + notes[0][:1].upper() + notes[0][1:] + "."
+        )
+    return (
+        " "
+        + "; ".join(notes)[:1].upper()
+        + "; ".join(notes)[1:]
+        + ". So this pair shows that stretch, not the whole period: "
+        "each topic page has every year, and each comparison page gives the longer run."
+    )
 
 
-DEFAULT_RULE = ("Suggested comparisons are chosen by a fixed rule, not by what the figures show: the earliest and latest years "
-                "in which all five topics have a comparable lead figure, leaving out 2020 and 2021, when the pandemic disrupted travel and several surveys.")
+DEFAULT_RULE = (
+    "Suggested comparisons are chosen by a fixed rule, not by what the figures show: the earliest and latest years "
+    "in which all five topics have a comparable lead figure, leaving out 2020 and 2021, when the pandemic disrupted travel and several surveys."
+)
 
 
 # ------------------------------------------------------------------- pages
+
 
 def _bars(facts, num, m, a, b):
     fa, fb = avg_id(m, a), avg_id(m, b)
@@ -162,8 +186,10 @@ def _bars(facts, num, m, a, b):
     out = []
     for sp, f, cls in ((a, fa, "cmp-a"), (b, fb, "cmp-b")):
         w = max(0.0, 100 * L._val(facts, f) / top)
-        out.append(f'<div class="cmp-bar cmp-span"><span class="cmp-y">{short(sp)}</span><span class="cmp-track" aria-hidden="true"><span class="cmp-fill {cls}" style="width:{w:.1f}%"></span></span>'
-                   f'<span class="cmp-v">{num(f, m[4])}</span></div>')
+        out.append(
+            f'<div class="cmp-bar cmp-span"><span class="cmp-y">{short(sp)}</span><span class="cmp-track" aria-hidden="true"><span class="cmp-fill {cls}" style="width:{w:.1f}%"></span></span>'
+            f'<span class="cmp-v">{num(f, m[4])}</span></div>'
+        )
     return "".join(out)
 
 
@@ -192,11 +218,17 @@ def key_sentence(facts, num, topic, a, b):
     m = next(x for x in L.MEAS if x[0] == mkey)
     if span_status(facts, m, a, b) == "ok":
         v, ch = _change(facts, num, m, a, b)
-        verb = "went up from" if v > 0.049 else ("went down from" if v < -0.049 else "was about the same:")
+        verb = (
+            "went up from"
+            if v > 0.049
+            else ("went down from" if v < -0.049 else "was about the same:")
+        )
         sep = "and" if abs(v) < 0.05 else "to"
-        return (f"<p>{esc(subject)} {verb} an average of {num(avg_id(m, a), m[4])} in {long(a)} {sep} {num(avg_id(m, b), m[4])} in {long(b)}."
-                f"{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>" + _bars(facts, num, m, a, b)
-                + L.long_run(facts, num, m, int(b[1]), f"../../{topic}.html"))
+        return f"<p>{esc(subject)} {verb} an average of {num(avg_id(m, a), m[4])} in {long(a)} {sep} {num(avg_id(m, b), m[4])} in {long(b)}." f"{(' Change: ' + ch + '.') if abs(v) >= 0.05 else ''}</p>" + _bars(
+            facts, num, m, a, b
+        ) + L.long_run(
+            facts, num, m, int(b[1]), f"../../{topic}.html"
+        )
     means = L.not_compared_means(topic, span_status(facts, m, a, b))
     return f"<p>{esc(subject)}: <strong>not compared</strong>. {esc(_not_compared(facts, m, a, b))}{esc(means)}</p>"
 
@@ -205,12 +237,19 @@ def largest_changes(facts, num, a, b, n=3):
     titles = dict((t[0], t[1]) for t in L.TOPICS)
     ok = [m for m in L.MEAS if not m[0].endswith("cash") and span_status(facts, m, a, b) == "ok"]
     out = []
-    for style, title in (("pp", "Shares, in percentage points"), ("pct", "Money and numbers, in per cent")):
-        ranked = sorted((m for m in ok if m[5] == style), key=lambda m: -abs(_change(facts, num, m, a, b)[0]))[:n]
+    for style, title in (
+        ("pp", "Shares, in percentage points"),
+        ("pct", "Money and numbers, in per cent"),
+    ):
+        ranked = sorted(
+            (m for m in ok if m[5] == style), key=lambda m: -abs(_change(facts, num, m, a, b)[0])
+        )[:n]
         items = []
         for m in ranked:
             _, ch = _change(facts, num, m, a, b)
-            items.append(f'<li><a href="#{m[1]}">{esc(titles[m[1]])}</a>: {esc(m[2])}, {num(avg_id(m, a), m[4])} → {num(avg_id(m, b), m[4])} ({ch})</li>')
+            items.append(
+                f'<li><a href="#{m[1]}">{esc(titles[m[1]])}</a>: {esc(m[2])}, {num(avg_id(m, a), m[4])} → {num(avg_id(m, b), m[4])} ({ch})</li>'
+            )
         if items:
             out.append(f'<h3>{title}</h3><ol class="cmp-top">{"".join(items)}</ol>')
     return "".join(out)
@@ -218,12 +257,16 @@ def largest_changes(facts, num, a, b, n=3):
 
 def span_form(up, a=None, b=None):
     def opts(sel):
-        return "".join(f'<option value="{sp[0]}"{" selected" if sp == sel else ""}>{long(sp)}</option>' for sp in spans())
-    return f'''<form class="pick" action="{up}index.html#all" method="get" data-compare-spans>
+        return "".join(
+            f'<option value="{sp[0]}"{" selected" if sp == sel else ""}>{long(sp)}</option>'
+            for sp in spans()
+        )
+
+    return f"""<form class="pick" action="{up}index.html#all" method="get" data-compare-spans>
 <label>First years <select name="from">{opts(a)}</select></label>
 <label>Second years <select name="to">{opts(b)}</select></label>
 <button type="submit">Compare</button>
-<p class="small" role="status" data-span-msg></p></form>'''
+<p class="small" role="status" data-span-msg></p></form>"""
 
 
 SPAN_JS = f"""<script>
@@ -234,29 +277,48 @@ e.preventDefault();var base=f.getAttribute('action').replace(/index\\.html(#.*)?
 location.href=base+lo+'-'+(lo+n-1)+'-and-'+hi+'-'+(hi+n-1)+'.html';}});}});
 </script>"""
 
-SPAN_NOTE = ("Each figure is the average of the three yearly figures in that set of years. An average is worked out only when all three years "
-             "have a figure measured the same way. Averaging several years smooths out one-off ups and downs and some sampling noise, "
-             "but it can also hide a change that happened within those years.")
-MOE_NOTE = ("Margins of error are not shown for averages: these surveys interview some of the same people in neighbouring years, "
-            "so a margin for an average cannot be worked out from the yearly margins that are published.")
+SPAN_NOTE = (
+    "Each figure is the average of the three yearly figures in that set of years. An average is worked out only when all three years "
+    "have a figure measured the same way. Averaging several years smooths out one-off ups and downs and some sampling noise, "
+    "but it can also hide a change that happened within those years."
+)
+MOE_NOTE = (
+    "Margins of error are not shown for averages: these surveys interview some of the same people in neighbouring years, "
+    "so a margin for an average cannot be worked out from the yearly margins that are published."
+)
 
 
 def span_page(facts, d, num, sources, a, b):
     up = "../../../"
     h = f"{long(a)} compared with {long(b)}"
     body = [f"<h1>{h}</h1>"]
-    body.append('<p><a href="index.html">Choose other years</a> · <a href="../index.html">Compare two single years</a></p>')
+    body.append(
+        '<p><a href="index.html">Choose other years</a> · <a href="../index.html">Compare two single years</a></p>'
+    )
     body.append('<h2 class="brief">In brief</h2>')
-    body.append('<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved.</p>')
+    body.append(
+        '<p class="small">The same lead figure is shown for each topic on every comparison page, whichever way it moved.</p>'
+    )
     for key, title, _ in L.TOPICS:
-        body.append(f'<div class="cmp-key"><h3>{esc(title)}</h3>{key_sentence(facts, num, key, a, b)}</div>')
+        body.append(
+            f'<div class="cmp-key"><h3>{esc(title)}</h3>{key_sentence(facts, num, key, a, b)}</div>'
+        )
     body.append(f'<p class="small">{esc(SPAN_NOTE)}</p>')
     top = largest_changes(facts, num, a, b)
     if top:
         body.append(f'<h2 id="largest">Largest changes between {long(a)} and {long(b)}</h2>')
-        body.append('<p class="small">Every average on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>')
+        body.append(
+            '<p class="small">Every average on this page that can be compared, ranked by the size of its change. Shares and amounts are ranked separately, because percentage points and per cent are different measures. Cash figures are left out, because the after-inflation figures are the like-for-like ones.</p>'
+        )
         body.append(top)
-    body.append(L.timing_note(sources, up, (long(a), range(int(a[0]), int(a[1]) + 1)), (long(b), range(int(b[0]), int(b[1]) + 1))))
+    body.append(
+        L.timing_note(
+            sources,
+            up,
+            (long(a), range(int(a[0]), int(a[1]) + 1)),
+            (long(b), range(int(b[0]), int(b[1]) + 1)),
+        )
+    )
     body.append(L.CAUSE)
     for key, title, scope in L.TOPICS:
         body.append(f'<h2 id="{key}">{esc(title)}</h2>')
@@ -267,8 +329,10 @@ def span_page(facts, d, num, sources, a, b):
         cards = []
         for m in ok:
             _, ch = _change(facts, num, m, a, b)
-            cards.append(f'<li><p class="cmp-label">{esc(m[2])}</p>{_bars(facts, num, m, a, b)}'
-                         f'<p class="cmp-change">Change in the average: {ch} <span class="small">({esc(_periods(m, a, b))})</span></p></li>')
+            cards.append(
+                f'<li><p class="cmp-label">{esc(m[2])}</p>{_bars(facts, num, m, a, b)}'
+                f'<p class="cmp-change">Change in the average: {ch} <span class="small">({esc(_periods(m, a, b))})</span></p></li>'
+            )
         if cards:
             body.append(f'<ul class="cmp-list">{"".join(cards)}</ul>')
         notes = {}
@@ -276,8 +340,10 @@ def span_page(facts, d, num, sources, a, b):
             if span_status(facts, m, a, b) != "ok":
                 notes.setdefault(_not_compared(facts, m, a, b), []).append(m)
         if notes:
-            items = "".join(f'<li><p>{esc(reason)}.</p><p class="small">Not compared: {L._join_labels([m[2] for m in group])}.</p></li>'
-                            for reason, group in notes.items())
+            items = "".join(
+                f'<li><p>{esc(reason)}.</p><p class="small">Not compared: {L._join_labels([m[2] for m in group])}.</p></li>'
+                for reason, group in notes.items()
+            )
             body.append(f'<h3>Not compared</h3><ul class="cmp-notes">{items}</ul>')
         rows = []
         na = '<span class="missing">no average</span>'
@@ -290,44 +356,77 @@ def span_page(facts, d, num, sources, a, b):
                 ch = f'<span class="missing">not comparable: definition changed ({esc(m[7](a[0]))} → {esc(m[7](b[0]))})</span>'
             else:
                 ch = '<span class="missing">not compared</span>'
-            rows.append([esc(m[2]), num(fa, m[4]) if fa in facts else na, num(fb, m[4]) if fb in facts else na, ch])
-        body.append(details_table(f"Show the full {esc(title.lower())} table", f"{title}: average of {long(a)} and of {long(b)}",
-                                  ["Measure", long(a), long(b), "Change"], rows))
-        body.append(f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(L.TOPIC_LIMITS[key])}</p></details>')
+            rows.append(
+                [
+                    esc(m[2]),
+                    num(fa, m[4]) if fa in facts else na,
+                    num(fb, m[4]) if fb in facts else na,
+                    ch,
+                ]
+            )
+        body.append(
+            details_table(
+                f"Show the full {esc(title.lower())} table",
+                f"{title}: average of {long(a)} and of {long(b)}",
+                ["Measure", long(a), long(b), "Change"],
+                rows,
+            )
+        )
+        body.append(
+            f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(L.TOPIC_LIMITS[key])}</p></details>'
+        )
         ids = [s for s in L.TOPIC_SOURCES[key] if s in sources]
         ids += [AVG_SOURCE[s] for s in ids if AVG_SOURCE.get(s) in sources]
         body.append(source_line(sources, ids, up=up))
     body.append('<h2 id="other">Compare other years</h2>')
     body.append(span_form("", a, b))
-    body.append(f'<p class="small">{esc(MOE_NOTE)} Changes in percentages are shown in percentage points; changes in money and counts as a percentage of the earlier average; class sizes in pupils. '
-                f'To see margins of error, compare <a href="../{a[0]}-{b[1]}.html">{a[0]} with {b[1]}</a> or other single years.</p>')
-    return page(f"life/compare/spans/{slug(a, b)}.html", h, "\n".join(body),
-                f"Average work, pay, housing, holidays and class sizes in {long(a)} compared with {long(b)}.", scripts=SPAN_JS)
+    body.append(
+        f'<p class="small">{esc(MOE_NOTE)} Changes in percentages are shown in percentage points; changes in money and counts as a percentage of the earlier average; class sizes in pupils. '
+        f'To see margins of error, compare <a href="../{a[0]}-{b[1]}.html">{a[0]} with {b[1]}</a> or other single years.</p>'
+    )
+    return page(
+        f"life/compare/spans/{slug(a, b)}.html",
+        h,
+        "\n".join(body),
+        f"Average work, pay, housing, holidays and class sizes in {long(a)} compared with {long(b)}.",
+        scripts=SPAN_JS,
+    )
 
 
 def span_index(facts):
     a, b = default_spans(facts)
-    body = ["<h1>Compare two sets of years</h1>",
-            f'<p>Compare the average of three years with the average of three other years, for example {long(a)} with {long(b)}. '
-            'Averages smooth out one-off ups and downs in a single year.</p>',
-            span_form("", a, b),
-            '<p class="small">Without JavaScript the button opens the list of every comparison below.</p>',
-            f'<div class="answer"><p><a href="{slug(a, b)}.html">Start with {long(a)} compared with {long(b)}</a>: '
-            'the earliest and latest sets of years in which all five topics can be compared.</p>'
-            '<p class="small">This suggestion is chosen by a fixed rule, not by what the figures show: the earliest and latest sets of years in which all five topics '
-            'have a comparable lead figure, leaving out sets that include 2020 or 2021, when the pandemic disrupted travel and several surveys. '
-            'Sets of years that include 2024 or later cannot be compared for holidays abroad, because the survey changed in 2024.</p></div>',
-            f'<p class="small">{esc(SPAN_NOTE)}</p>',
-            "<h2 id='all'>All comparisons</h2>",
-            '<p class="small">Comparisons marked “all five topics” have a comparable lead figure for every topic.</p>']
+    body = [
+        "<h1>Compare two sets of years</h1>",
+        f"<p>Compare the average of three years with the average of three other years, for example {long(a)} with {long(b)}. "
+        "Averages smooth out one-off ups and downs in a single year.</p>",
+        span_form("", a, b),
+        '<p class="small">Without JavaScript the button opens the list of every comparison below.</p>',
+        f'<div class="answer"><p><a href="{slug(a, b)}.html">Start with {long(a)} compared with {long(b)}</a>: '
+        "the earliest and latest sets of years in which all five topics can be compared.</p>"
+        '<p class="small">This suggestion is chosen by a fixed rule, not by what the figures show: the earliest and latest sets of years in which all five topics '
+        "have a comparable lead figure, leaving out sets that include 2020 or 2021, when the pandemic disrupted travel and several surveys. "
+        "Sets of years that include 2024 or later cannot be compared for holidays abroad, because the survey changed in 2024.</p></div>",
+        f'<p class="small">{esc(SPAN_NOTE)}</p>',
+        "<h2 id='all'>All comparisons</h2>",
+        '<p class="small">Comparisons marked “all five topics” have a comparable lead figure for every topic.</p>',
+    ]
     for x in spans():
         links = []
         for y in spans():
             if y[0] > x[1]:
-                tag = ' <span class="small">(all five topics)</span>' if full_pair(facts, x, y) else ""
+                tag = (
+                    ' <span class="small">(all five topics)</span>'
+                    if full_pair(facts, x, y)
+                    else ""
+                )
                 links.append(f'<li><a href="{slug(x, y)}.html">{long(y)}</a>{tag}</li>')
         if links:
             body.append(f'<h3>{long(x)} with…</h3><ul class="spanlist">{"".join(links)}</ul>')
     body.append(L.CAUSE)
-    return page("life/compare/spans/index.html", "Compare two sets of years", "\n".join(body),
-                "Compare average work, pay, housing, holidays and class sizes in the UK between two sets of years.", scripts=SPAN_JS)
+    return page(
+        "life/compare/spans/index.html",
+        "Compare two sets of years",
+        "\n".join(body),
+        "Compare average work, pay, housing, holidays and class sizes in the UK between two sets of years.",
+        scripts=SPAN_JS,
+    )

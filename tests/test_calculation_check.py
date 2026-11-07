@@ -1,4 +1,5 @@
 """Independent calculation checking must never silently skip a candidate."""
+
 import ast
 import json
 import math
@@ -18,8 +19,13 @@ def source(fid="a", value=2):
 
 
 def calculated(fid="derived", value=2, formula="a", inputs=None):
-    return {"id": fid, "value": value, "status": "calculated",
-            "formula": formula, "inputs": ["a"] if inputs is None else inputs}
+    return {
+        "id": fid,
+        "value": value,
+        "status": "calculated",
+        "formula": formula,
+        "inputs": ["a"] if inputs is None else inputs,
+    }
 
 
 def validate(*records):
@@ -30,66 +36,83 @@ def validate(*records):
 
 
 def test_unknown_formula_cannot_silently_pass():
-    data = {"sources": {}, "facts": [
-        {"id": "a", "value": 2, "status": "published", "locator": ""},
-        {"id": "derived", "value": 2, "status": "calculated",
-         "formula": "unsupported(a)", "inputs": ["a"]},
-    ]}
+    data = {
+        "sources": {},
+        "facts": [
+            {"id": "a", "value": 2, "status": "published", "locator": ""},
+            {
+                "id": "derived",
+                "value": 2,
+                "status": "calculated",
+                "formula": "unsupported(a)",
+                "inputs": ["a"],
+            },
+        ],
+    }
     check.problems.clear()
     try:
         check.check_facts(data)
-        assert any("derived" in problem and "formula" in problem
-                   for problem in check.problems), check.problems
+        assert any(
+            "derived" in problem and "formula" in problem for problem in check.problems
+        ), check.problems
     finally:
         check.problems.clear()
 
 
-@pytest.mark.parametrize(("formula", "values", "expected"), [
-    ("100 × a.1 ÷ a.10", {"a.1": 5, "a.10": 20}, 25),
-    ("a + b + c", {"a": 1, "b": 2, "c": 3}, 6),
-    ("total − (a + b)", {"total": 20, "a": 1, "b": 2}, 17),
-    ("(a + b) ÷ 2", {"a": 4, "b": 8}, 6),
-    ("a × 1,000,000,000 ÷ b", {"a": 2, "b": 4}, 500000000),
-    ("100 × b.1999 to 2000 ÷ b.2025-26", {"b.1999 to 2000": 2, "b.2025-26": 4}, 50),
-    ("-a + +b", {"a": 4, "b": 8}, 4),
-    ("round(a ÷ b, -3)", {"a": 25000, "b": 10}, 2000),
-    ("round(a ÷ b, -3)", {"a": 35000, "b": 10}, 4000),
-    ("round(a, 2)", {"a": 2.126}, 2.13),
-    ("0.01 × a", {"a": 500}, 5),
-    ("a × 1e3", {"a": 2}, 2000),
-    ("1000", {}, 1000),  # an explicit, independently checked what-if assumption
-])
+@pytest.mark.parametrize(
+    ("formula", "values", "expected"),
+    [
+        ("100 × a.1 ÷ a.10", {"a.1": 5, "a.10": 20}, 25),
+        ("a + b + c", {"a": 1, "b": 2, "c": 3}, 6),
+        ("total − (a + b)", {"total": 20, "a": 1, "b": 2}, 17),
+        ("(a + b) ÷ 2", {"a": 4, "b": 8}, 6),
+        ("a × 1,000,000,000 ÷ b", {"a": 2, "b": 4}, 500000000),
+        ("100 × b.1999 to 2000 ÷ b.2025-26", {"b.1999 to 2000": 2, "b.2025-26": 4}, 50),
+        ("-a + +b", {"a": 4, "b": 8}, 4),
+        ("round(a ÷ b, -3)", {"a": 25000, "b": 10}, 2000),
+        ("round(a ÷ b, -3)", {"a": 35000, "b": 10}, 4000),
+        ("round(a, 2)", {"a": 2.126}, 2.13),
+        ("0.01 × a", {"a": 500}, 5),
+        ("a × 1e3", {"a": 2}, 2000),
+        ("1000", {}, 1000),  # an explicit, independently checked what-if assumption
+    ],
+)
 def test_supported_expression_forms(formula, values, expected):
-    counts, errors = validate(*(source(fid, value) for fid, value in values.items()),
-                             calculated(value=expected, formula=formula, inputs=list(values)))
+    counts, errors = validate(
+        *(source(fid, value) for fid, value in values.items()),
+        calculated(value=expected, formula=formula, inputs=list(values)),
+    )
     assert errors == []
     assert counts.evaluated + counts.literals == counts.candidates == 1
 
 
-@pytest.mark.parametrize(("record", "diagnostic"), [
-    (calculated(formula="unsupported(a)"), "unsupported formula"),
-    (calculated(formula=""), "empty or missing formula"),
-    (calculated(formula=None), "empty or missing formula"),
-    (calculated(formula="a + unknown"), "unsupported formula"),
-    (calculated(formula="a", inputs=[]), "unsupported formula"),
-    (calculated(formula="a", inputs=["a", "absent"]), "does not use declared inputs"),
-    (calculated(formula="absent", inputs=["absent"]), "input absent missing"),
-    (calculated(formula="a", inputs="a"), "inputs must be a list"),
-    (calculated(formula="a", inputs=[""]), "inputs must be a list"),
-    (calculated(formula="a ** 2"), "formula syntax"),
-    (calculated(formula="a // 2"), "formula syntax"),
-    (calculated(formula="a / 0"), "division by zero"),
-    (calculated(formula="a * 1e309"), "non-finite"),
-    (calculated(formula="round(a, a)"), "round places"),
-    (calculated(formula="round(a, 100)"), "round places"),
-    (calculated(formula="operand_0 + a"), "unsupported formula"),
-    (calculated(formula="a.10"), "unsupported formula"),
-    (calculated(value=999), "recalculated"),
-    (calculated(value=None), "unexplained missing"),
-    (calculated(value=math.inf), "non-finite"),
-    (calculated(value=True), "non-numeric"),
-    (calculated(value=5, formula="2 + 3", inputs=[]), "empty operands"),
-])
+@pytest.mark.parametrize(
+    ("record", "diagnostic"),
+    [
+        (calculated(formula="unsupported(a)"), "unsupported formula"),
+        (calculated(formula=""), "empty or missing formula"),
+        (calculated(formula=None), "empty or missing formula"),
+        (calculated(formula="a + unknown"), "unsupported formula"),
+        (calculated(formula="a", inputs=[]), "unsupported formula"),
+        (calculated(formula="a", inputs=["a", "absent"]), "does not use declared inputs"),
+        (calculated(formula="absent", inputs=["absent"]), "input absent missing"),
+        (calculated(formula="a", inputs="a"), "inputs must be a list"),
+        (calculated(formula="a", inputs=[""]), "inputs must be a list"),
+        (calculated(formula="a ** 2"), "formula syntax"),
+        (calculated(formula="a // 2"), "formula syntax"),
+        (calculated(formula="a / 0"), "division by zero"),
+        (calculated(formula="a * 1e309"), "non-finite"),
+        (calculated(formula="round(a, a)"), "round places"),
+        (calculated(formula="round(a, 100)"), "round places"),
+        (calculated(formula="operand_0 + a"), "unsupported formula"),
+        (calculated(formula="a.10"), "unsupported formula"),
+        (calculated(value=999), "recalculated"),
+        (calculated(value=None), "unexplained missing"),
+        (calculated(value=math.inf), "non-finite"),
+        (calculated(value=True), "non-numeric"),
+        (calculated(value=5, formula="2 + 3", inputs=[]), "empty operands"),
+    ],
+)
 def test_bad_calculations_have_meaningful_failures(record, diagnostic):
     counts, errors = validate(source(), record)
     assert counts.failed == 1
@@ -98,7 +121,8 @@ def test_bad_calculations_have_meaningful_failures(record, diagnostic):
 
 def test_missing_operands_propagate_through_independent_dependencies():
     counts, errors = validate(
-        source(value=None), source("b", 3),
+        source(value=None),
+        source("b", 3),
         calculated("next", None, "derived + b", ["derived", "b"]),
         calculated(value=None, formula="100 × a ÷ b", inputs=["a", "b"]),
     )
@@ -106,11 +130,14 @@ def test_missing_operands_propagate_through_independent_dependencies():
     assert counts.missing == counts.candidates == 2
 
 
-@pytest.mark.parametrize(("formula", "diagnostic"), [
-    ("a / 0", "division by zero"),
-    ("a ** 2", "formula syntax"),
-    ("unknown(a)", "unsupported formula"),
-])
+@pytest.mark.parametrize(
+    ("formula", "diagnostic"),
+    [
+        ("a / 0", "division by zero"),
+        ("a ** 2", "formula syntax"),
+        ("unknown(a)", "unsupported formula"),
+    ],
+)
 def test_missing_value_does_not_hide_bad_syntax_or_arithmetic(formula, diagnostic):
     counts, errors = validate(source(value=None), calculated(value=None, formula=formula))
     assert counts.failed == 1
@@ -130,15 +157,17 @@ def test_missing_status_operand_cannot_supply_a_number():
 
 
 def test_invalid_dependency_cannot_supply_its_recorded_value():
-    counts, errors = validate(source(), calculated(value=3),
-                             calculated("next", 6, "derived × 2", ["derived"]))
+    counts, errors = validate(
+        source(), calculated(value=3), calculated("next", 6, "derived × 2", ["derived"])
+    )
     assert counts.failed == 2
     assert any("next:" in error and "invalid dependency derived" in error for error in errors)
 
 
 def test_cyclic_dependencies_fail_without_recursing_forever():
-    counts, errors = validate(calculated(formula="next", inputs=["next"]),
-                             calculated("next", 2, "derived", ["derived"]))
+    counts, errors = validate(
+        calculated(formula="next", inputs=["next"]), calculated("next", 2, "derived", ["derived"])
+    )
     assert counts.failed == 2
     assert any("cyclic calculation dependency" in error for error in errors)
 
@@ -175,7 +204,10 @@ def test_direct_make_check_rejects_mutated_builds_and_clean_rerun_passes():
         ({"formula": ""}, "empty or missing formula"),
         ({"inputs": []}, "unsupported formula"),
         ({"formula": "absent", "inputs": ["absent"]}, "input absent missing"),
-        ({"formula": target["inputs"][0] + " ÷ 0", "inputs": target["inputs"][:1]}, "division by zero"),
+        (
+            {"formula": target["inputs"][0] + " ÷ 0", "inputs": target["inputs"][:1]},
+            "division by zero",
+        ),
         ({"value": None}, "unexplained missing"),
     ]
     try:
@@ -197,8 +229,10 @@ def test_direct_make_check_rejects_mutated_builds_and_clean_rerun_passes():
             assert result.returncode != 0, result.stdout + result.stderr
             for index, (_mutation, diagnostic) in enumerate(batch):
                 fid = target["id"] if len(batch) == 1 else f"regression.calculation.{index}"
-                assert any(f"{fid}: calculation/formula:" in line and diagnostic in line
-                           for line in result.stdout.splitlines()), result.stdout + result.stderr
+                assert any(
+                    f"{fid}: calculation/formula:" in line and diagnostic in line
+                    for line in result.stdout.splitlines()
+                ), (result.stdout + result.stderr)
     finally:
         facts_path.write_bytes(original)
     clean = subprocess.run(["make", "check"], cwd=ROOT, capture_output=True, text=True)

@@ -1,11 +1,14 @@
 """Exercise actual Radon analysis, coverage joins and the exported dashboard."""
+
 import importlib.util
 import json
 from pathlib import Path
 import tempfile
 import unittest
 
-spec = importlib.util.spec_from_file_location("quality_report", Path(__file__).parents[1] / "report.py")
+spec = importlib.util.spec_from_file_location(
+    "quality_report", Path(__file__).parents[1] / "report.py"
+)
 report = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(report)
 
@@ -23,18 +26,28 @@ class QualityReport(unittest.TestCase):
         )
         (self.root / "scripts" / "unused.py").write_text("answer = 42\n", encoding="utf-8")
         summary = {
-            "num_statements": 4, "covered_lines": 3,
-            "num_branches": 2, "covered_branches": 1,
+            "num_statements": 4,
+            "covered_lines": 3,
+            "num_branches": 2,
+            "covered_branches": 1,
         }
         self.coverage = {
-            "totals": {"num_statements": 5, "covered_lines": 3,
-                       "num_branches": 2, "covered_branches": 1},
+            "totals": {
+                "num_statements": 5,
+                "covered_lines": 3,
+                "num_branches": 2,
+                "covered_branches": 1,
+            },
             "files": {
                 "builder/example.py": {"summary": summary},
-                "scripts/unused.py": {"summary": {
-                    "num_statements": 1, "covered_lines": 0,
-                    "num_branches": 0, "covered_branches": 0,
-                }},
+                "scripts/unused.py": {
+                    "summary": {
+                        "num_statements": 1,
+                        "covered_lines": 0,
+                        "num_branches": 0,
+                        "covered_branches": 0,
+                    }
+                },
             },
         }
 

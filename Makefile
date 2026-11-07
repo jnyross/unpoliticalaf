@@ -1,7 +1,8 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
+PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing build site check test verify a11y fetch live lint typecheck check-deps quality
+.PHONY: setup setup-test setup-dev setup-typing build site check test verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -13,7 +14,7 @@ setup:
 setup-test: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-test.txt
 
-# Adds test, browser, typing, lint and dashboard tools.
+# Adds test, browser, typing, lint, formatting and dashboard tools.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
 
@@ -33,10 +34,18 @@ test:
 	$(RUN_PYTHON) -m pytest tests quality/tests
 
 lint:
-	$(RUN_PYTHON) -m ruff check builder scripts tests quality
+	$(RUN_PYTHON) -m ruff check --config ruff.toml $(PYTHON_SOURCES)
+
+# One recursive first-party selection; never format retained data or output.
+# Explicit configuration prevents nested tool configs from changing the policy.
+format:
+	$(RUN_PYTHON) -m black --config pyproject.toml $(PYTHON_SOURCES)
+
+format-check:
+	$(RUN_PYTHON) -m black --config pyproject.toml --check --diff $(PYTHON_SOURCES)
 
 typecheck:
-	$(RUN_PYTHON) -m compileall -q -f builder scripts tests quality
+	$(RUN_PYTHON) -m compileall -q -f $(PYTHON_SOURCES)
 	$(RUN_PYTHON) -m mypy --config-file mypy.ini
 
 check-deps:
@@ -44,7 +53,7 @@ check-deps:
 	cd quality && ../$(RUN_PYTHON) -m deptry .
 
 # Extend this aggregate as further tooling lands; never replace existing gates.
-quality: lint typecheck check-deps
+quality: lint format-check typecheck check-deps
 	$(RUN_PYTHON) scripts/check_agents.py
 	$(MAKE) -f quality/Makefile metrics
 

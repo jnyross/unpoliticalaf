@@ -2,4 +2,5 @@
 -r requirements-a11y.txt
 -r requirements-typing.txt
 ruff==0.14.3
+black==25.9.0
 deptry==0.25.1

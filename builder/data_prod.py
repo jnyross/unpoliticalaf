@@ -16,6 +16,7 @@ year. Japan has no 2021 figure. The workbook shows 0 in the index tables for it;
 Trends are rebased to 2008 = 100 from the 2019 = 100 index, which keeps each
 country's own movement and does not change any ratio between countries.
 """
+
 from .data import Fact
 from .readers import xlsx
 
@@ -23,10 +24,32 @@ FILE = "data/fetched/ons/icproductivityupdated.xlsx"
 SOURCE = "ons-icp"
 
 # Workbook column names to ISO codes, and the order they appear in the sheets.
-COUNTRIES = {"UK": "GBR", "US": "USA", "France": "FRA", "Germany": "DEU", "Italy": "ITA", "Canada": "CAN", "Japan": "JPN"}
-NAMES = {"GBR": "UK", "USA": "United States", "DEU": "Germany", "FRA": "France", "ITA": "Italy", "CAN": "Canada", "JPN": "Japan"}
+COUNTRIES = {
+    "UK": "GBR",
+    "US": "USA",
+    "France": "FRA",
+    "Germany": "DEU",
+    "Italy": "ITA",
+    "Canada": "CAN",
+    "Japan": "JPN",
+}
+NAMES = {
+    "GBR": "UK",
+    "USA": "United States",
+    "DEU": "Germany",
+    "FRA": "France",
+    "ITA": "Italy",
+    "CAN": "Canada",
+    "JPN": "Japan",
+}
 G7 = ["GBR", "CAN", "FRA", "DEU", "ITA", "JPN", "USA"]
-OTHERS = ["CAN", "FRA", "DEU", "ITA", "USA"]  # the other G7 countries with a figure in every year from 2008
+OTHERS = [
+    "CAN",
+    "FRA",
+    "DEU",
+    "ITA",
+    "USA",
+]  # the other G7 countries with a figure in every year from 2008
 BASE = 2008
 TABLES = {
     # sheet: (fact prefix, unit, index table?)
@@ -44,18 +67,33 @@ def _table(sheet):
     head_row = next(r for r in rows if r[0].value == "Year")
     cols = {c.value: c.column_letter for c in head_row[1:] if c.value in COUNTRIES}
     out = {}
-    for r in rows[head_row[0].row:]:
+    for r in rows[head_row[0].row :]:
         y = r[0].value
         if not isinstance(y, (int, float)):
             continue
         for name, letter in cols.items():
             v = ws[f"{letter}{r[0].row}"].value
-            out[(COUNTRIES[name], int(y))] = (None if v is None else float(v), f"{letter}{r[0].row}")
+            out[(COUNTRIES[name], int(y))] = (
+                None if v is None else float(v),
+                f"{letter}{r[0].row}",
+            )
     return out
 
 
 def _add(facts, fid, value, unit, period, locator, status="published", formula="", inputs=()):
-    facts.add(Fact(fid, value, unit, str(period), SOURCE, locator, status, formula=formula, inputs=list(inputs)))
+    facts.add(
+        Fact(
+            fid,
+            value,
+            unit,
+            str(period),
+            SOURCE,
+            locator,
+            status,
+            formula=formula,
+            inputs=list(inputs),
+        )
+    )
 
 
 def build(facts):
@@ -71,7 +109,11 @@ def build(facts):
             series[fid] = v
             if prefix == "prod.oph" or prefix == "prod.ohv":
                 years.add(y)
-    latest = max(y for y in years if all(f"prod.oph.{iso}.{y}" in series for iso in ["GBR", "USA", "FRA", "DEU"]))
+    latest = max(
+        y
+        for y in years
+        if all(f"prod.oph.{iso}.{y}" in series for iso in ["GBR", "USA", "FRA", "DEU"])
+    )
     out = {"latest": latest, "names": NAMES, "years": sorted(years)}
 
     # Japan has no figure for the latest year; the chart and table say so.
@@ -86,8 +128,17 @@ def build(facts):
                 continue
             v = 100 * series[fid] / series[f"prod.ohv.{iso}.{BASE}"]
             tid = f"prod.trend.{iso}.{y}"
-            _add(facts, tid, v, "index, 2008 = 100 (after inflation)", y, facts[fid].locator, "calculated",
-                 formula=f"100 × {fid} ÷ {fid.rsplit('.', 1)[0]}.{BASE}", inputs=[fid, f"prod.ohv.{iso}.{BASE}"])
+            _add(
+                facts,
+                tid,
+                v,
+                "index, 2008 = 100 (after inflation)",
+                y,
+                facts[fid].locator,
+                "calculated",
+                formula=f"100 × {fid} ÷ {fid.rsplit('.', 1)[0]}.{BASE}",
+                inputs=[fid, f"prod.ohv.{iso}.{BASE}"],
+            )
             series[tid] = v
 
     # Average of the other G7 countries, each counted equally, for the years all five have a figure.
@@ -97,33 +148,69 @@ def build(facts):
         if all(i in series for i in ids):
             trend_years.append(y)
             v = sum(series[i] for i in ids) / len(ids)
-            _add(facts, f"prod.trend.avg5.{y}", v, "index, 2008 = 100 (after inflation)", y, facts[ids[0]].locator, "calculated",
-                 formula="(" + " + ".join(ids) + f") ÷ {len(ids)}", inputs=ids)
+            _add(
+                facts,
+                f"prod.trend.avg5.{y}",
+                v,
+                "index, 2008 = 100 (after inflation)",
+                y,
+                facts[ids[0]].locator,
+                "calculated",
+                formula="(" + " + ".join(ids) + f") ÷ {len(ids)}",
+                inputs=ids,
+            )
             series[f"prod.trend.avg5.{y}"] = v
     out["trend_years"] = trend_years
     for fid in [k for k in list(series) if k.startswith("prod.trend.")]:
         y = int(fid.rsplit(".", 1)[1])
-        _add(facts, "prod.change." + fid[len("prod.trend."):], series[fid] - 100, "% change since 2008", y, facts[fid].locator,
-             "calculated", formula=f"{fid} − 100", inputs=[fid])
+        _add(
+            facts,
+            "prod.change." + fid[len("prod.trend.") :],
+            series[fid] - 100,
+            "% change since 2008",
+            y,
+            facts[fid].locator,
+            "calculated",
+            formula=f"{fid} − 100",
+            inputs=[fid],
+        )
 
     # UK output per hour over the whole ONS series, from its first year to the latest (impartiality rule: first and latest year).
-    uk_years = sorted(int(k.rsplit(".", 1)[1]) for k in series if k.startswith("prod.ohv.GBR.") and k.rsplit(".", 1)[1].isdigit())
+    uk_years = sorted(
+        int(k.rsplit(".", 1)[1])
+        for k in series
+        if k.startswith("prod.ohv.GBR.") and k.rsplit(".", 1)[1].isdigit()
+    )
     if uk_years and f"prod.ohv.GBR.{latest}" in series:
         first_uk = uk_years[0]
         out["uk_first"] = first_uk
         full = 100 * series[f"prod.ohv.GBR.{latest}"] / series[f"prod.ohv.GBR.{first_uk}"] - 100
-        _add(facts, f"prod.fullchange.GBR.{latest}", full, f"% change since {first_uk}", latest,
-             facts[f"prod.ohv.GBR.{latest}"].locator, "calculated",
-             formula=f"100 × prod.ohv.GBR.{latest} ÷ prod.ohv.GBR.{first_uk} − 100",
-             inputs=[f"prod.ohv.GBR.{latest}", f"prod.ohv.GBR.{first_uk}"])
+        _add(
+            facts,
+            f"prod.fullchange.GBR.{latest}",
+            full,
+            f"% change since {first_uk}",
+            latest,
+            facts[f"prod.ohv.GBR.{latest}"].locator,
+            "calculated",
+            formula=f"100 × prod.ohv.GBR.{latest} ÷ prod.ohv.GBR.{first_uk} − 100",
+            inputs=[f"prod.ohv.GBR.{latest}", f"prod.ohv.GBR.{first_uk}"],
+        )
 
     # How far UK output per hour is below each country, in the latest year (levels).
     uk = series.get(f"prod.oph.GBR.{latest}")
     for iso in G7:
         other = series.get(f"prod.oph.{iso}.{latest}")
         if iso != "GBR" and uk and other:
-            _add(facts, f"prod.below.{iso}.{latest}", 100 * (1 - uk / other), "% lower", latest,
-                 facts[f"prod.oph.GBR.{latest}"].locator, "calculated",
-                 formula=f"100 × (1 − prod.oph.GBR.{latest} ÷ prod.oph.{iso}.{latest})",
-                 inputs=[f"prod.oph.GBR.{latest}", f"prod.oph.{iso}.{latest}"])
+            _add(
+                facts,
+                f"prod.below.{iso}.{latest}",
+                100 * (1 - uk / other),
+                "% lower",
+                latest,
+                facts[f"prod.oph.GBR.{latest}"].locator,
+                "calculated",
+                formula=f"100 × (1 − prod.oph.GBR.{latest} ÷ prod.oph.{iso}.{latest})",
+                inputs=[f"prod.oph.GBR.{latest}", f"prod.oph.{iso}.{latest}"],
+            )
     return out

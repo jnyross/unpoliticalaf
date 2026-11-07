@@ -1,4 +1,5 @@
 """The live-site check: matches an identical copy, catches a changed file or commit."""
+
 import functools
 import hashlib
 import http.server
@@ -75,9 +76,13 @@ class BuildRecord(unittest.TestCase):
         if not record.exists():
             self.skipTest("run make build first")
         files = json.loads(record.read_text())["files"]
-        built = {p.relative_to(site).as_posix() for p in site.rglob("*") if p.is_file()} - {"build.json"}
+        built = {p.relative_to(site).as_posix() for p in site.rglob("*") if p.is_file()} - {
+            "build.json"
+        }
         self.assertEqual(set(files), built)
-        self.assertEqual(files["index.html"], hashlib.sha256((site / "index.html").read_bytes()).hexdigest())
+        self.assertEqual(
+            files["index.html"], hashlib.sha256((site / "index.html").read_bytes()).hexdigest()
+        )
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 """AGENTS.md freshness checks catch renamed, missing and escaping references."""
+
 import contextlib
 import io
 import subprocess
@@ -35,9 +36,9 @@ class AgentsReferences(unittest.TestCase):
         (self.root / "docs/product-spec.md").rename(self.root / "docs/renamed.md")
         count, problems = check_agents.check(self.root)
         self.assertEqual(count, 2)
-        self.assertEqual(problems, [
-            "AGENTS.md:1: docs/product-spec.md: referenced path does not exist"
-        ])
+        self.assertEqual(
+            problems, ["AGENTS.md:1: docs/product-spec.md: referenced path does not exist"]
+        )
 
     def test_missing_directory_fails(self):
         self.write_agents("Use `data/`.\n")
@@ -54,9 +55,7 @@ class AgentsReferences(unittest.TestCase):
         )
         count, problems = check_agents.check(self.root)
         self.assertEqual(count, 2)
-        self.assertEqual(problems, [
-            "AGENTS.md:4: docs/missing.md: referenced path does not exist"
-        ])
+        self.assertEqual(problems, ["AGENTS.md:4: docs/missing.md: referenced path does not exist"])
 
     def test_link_fragment_and_query_do_not_become_part_of_filename(self):
         self.write_agents("[Spec](docs/product-spec.md?view=1#product)\n")
@@ -72,9 +71,10 @@ class AgentsReferences(unittest.TestCase):
         for title in ('"Guide title"', "'Guide title'", "(Guide title)"):
             with self.subTest(title=title):
                 self.write_agents(f"`docs/`\n[Missing](docs/missing.md {title})\n")
-                self.assertEqual(check_agents.check(self.root), (2, [
-                    "AGENTS.md:2: docs/missing.md: referenced path does not exist"
-                ]))
+                self.assertEqual(
+                    check_agents.check(self.root),
+                    (2, ["AGENTS.md:2: docs/missing.md: referenced path does not exist"]),
+                )
 
     def test_angle_link_with_encoded_spaces(self):
         (self.root / "docs/other spec.md").write_text("# Other\n", encoding="utf-8")
@@ -83,9 +83,10 @@ class AgentsReferences(unittest.TestCase):
 
     def test_bare_filenames_are_checked(self):
         self.write_agents("Use `Makefile`, `README.md`.\n")
-        self.assertEqual(check_agents.check(self.root)[1], [
-            "AGENTS.md:1: README.md: referenced path does not exist"
-        ])
+        self.assertEqual(
+            check_agents.check(self.root)[1],
+            ["AGENTS.md:1: README.md: referenced path does not exist"],
+        )
 
     def test_all_broken_references_are_reported(self):
         self.write_agents("`missing.md`\n`absent/`\n")
@@ -128,7 +129,10 @@ class AgentsReferences(unittest.TestCase):
     def test_cli_works_from_outside_checkout(self):
         result = subprocess.run(
             [sys.executable, str(check_agents.ROOT / "scripts/check_agents.py")],
-            cwd=self.root, capture_output=True, text=True, check=False,
+            cwd=self.root,
+            capture_output=True,
+            text=True,
+            check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("repository references", result.stdout)

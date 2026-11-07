@@ -1,4 +1,5 @@
 """Margins of error: shown only where the publisher gives one, and checked honestly."""
+
 import unittest
 
 from builder import uncertainty as U
@@ -48,21 +49,39 @@ class RealData(unittest.TestCase):
         U.add_facts(cls.facts, cls.d)
 
     def test_margins_only_from_publishers_that_give_them(self):
-        allowed = {"nomis-aps-emp-places-ci", "nomis-ashe-resident-cv", "nomis-ashe-places", "ott-2009to2019", "ott-2019to2023", "ott-2024", "ott-2025", "ons-lfs-a11"}
+        allowed = {
+            "nomis-aps-emp-places-ci",
+            "nomis-ashe-resident-cv",
+            "nomis-ashe-places",
+            "ott-2009to2019",
+            "ott-2019to2023",
+            "ott-2024",
+            "ott-2025",
+            "ons-lfs-a11",
+        }
         for fid, (mid, _) in U.MARGINS.items():
             self.assertIn(self.facts[mid].source, allowed, mid)
         for prefix in ("house.", "school.", "hol.gb.", "etb.", "hmrc.", "spend.", "rec."):
             self.assertFalse([f for f in U.MARGINS if f.startswith(prefix)], prefix)
 
     def test_headline_margins_exist(self):
-        for fid in ("earn.ft.2025", "earn.real.ft.2015", "work.place.wales.2025", "hol.world.holiday.2025", "hol.cty.spain.all.2015"):
+        for fid in (
+            "earn.ft.2025",
+            "earn.real.ft.2015",
+            "work.place.wales.2025",
+            "hol.world.holiday.2025",
+            "hol.cty.spain.all.2015",
+        ):
             self.assertIn(fid, U.MARGINS)
         self.assertEqual(self.facts["moe.lfs.rate.latest"].value, 0.4)
         self.assertEqual(self.facts["moe.lfs.rate.change_year"].value, 0.6)
 
     def test_margin_follows_the_published_cv(self):
         f = self.facts
-        self.assertAlmostEqual(f["moe.earn.ft.2025"].value, f["earn.ft.2025"].value * 1.96 * f["cv.earn.ft.2025"].value / 100)
+        self.assertAlmostEqual(
+            f["moe.earn.ft.2025"].value,
+            f["earn.ft.2025"].value * 1.96 * f["cv.earn.ft.2025"].value / 100,
+        )
 
     def test_no_margin_for_ireland(self):
         # ONS's interval leaves out land-border trips that the published figure includes

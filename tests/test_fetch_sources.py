@@ -32,10 +32,16 @@ def http_origin():
             if self.path == "/page":
                 body = b'<html><title>Publisher</title><a href="/good.csv">Table</a></html>'
             else:
-                body = b"<html><title>Access denied</title></html>" if self.path == "/invalid" else b"period,value\n2025,2\n"
+                body = (
+                    b"<html><title>Access denied</title></html>"
+                    if self.path == "/invalid"
+                    else b"period,value\n2025,2\n"
+                )
             self.send_response(200)
             self.send_header("Content-Type", "text/html" if self.path == "/invalid" else "text/csv")
-            self.send_header("Content-Length", str(len(body) + (100 if self.path == "/truncated" else 0)))
+            self.send_header(
+                "Content-Length", str(len(body) + (100 if self.path == "/truncated" else 0))
+            )
             self.end_headers()
             if self.path == "/timeout":
                 threading.Event().wait(0.3)
@@ -71,8 +77,11 @@ def retained_sources(tmp_path, monkeypatch, origin, routes):
         body = b"period,value\n2025,1\n"
         (out / name).write_bytes(body)
         receipts[source_id] = {
-            "url": origin + route, "file": name, "bytes": len(body),
-            "sha256": hashlib.sha256(body).hexdigest(), "retrieved": "2026-01-01T00:00:00Z",
+            "url": origin + route,
+            "file": name,
+            "bytes": len(body),
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "retrieved": "2026-01-01T00:00:00Z",
             "content_type": "text/csv",
         }
         sources.append({"id": source_id, "url": origin + route, "file": name})
@@ -97,9 +106,13 @@ def test_real_http_failure_preserves_last_good_pair(tmp_path, monkeypatch, http_
     print(f"observed {requests}; retained pair unchanged for {route}")
 
 
-def test_real_http_mixed_result_is_nonzero_and_keeps_matching_pairs(tmp_path, monkeypatch, http_origin, capsys):
+def test_real_http_mixed_result_is_nonzero_and_keeps_matching_pairs(
+    tmp_path, monkeypatch, http_origin, capsys
+):
     origin, requests = http_origin
-    out, before = retained_sources(tmp_path, monkeypatch, origin, {"good": "/good", "bad": "/invalid"})
+    out, before = retained_sources(
+        tmp_path, monkeypatch, origin, {"good": "/good", "bad": "/invalid"}
+    )
     assert fetch_sources.main({"good", "bad"}, refresh=True) == 1
     after = json.loads((out / "receipts.json").read_text())
     assert after["bad"] == before["bad"]
@@ -184,7 +197,9 @@ def test_concurrent_writer_cannot_enter(tmp_path, monkeypatch, http_origin):
 
 
 @pytest.mark.parametrize("route,terminate", [("/invalid", False), ("/interrupt", True)])
-def test_actual_cli_exits_nonzero_and_keeps_last_good(tmp_path, monkeypatch, http_origin, route, terminate):
+def test_actual_cli_exits_nonzero_and_keeps_last_good(
+    tmp_path, monkeypatch, http_origin, route, terminate
+):
     origin, requests = http_origin
     out, _ = retained_sources(tmp_path, monkeypatch, origin, {"failed": route})
     scripts = tmp_path / "scripts"
@@ -193,8 +208,12 @@ def test_actual_cli_exits_nonzero_and_keeps_last_good(tmp_path, monkeypatch, htt
     for name in ("fetch_sources.py", "source_validation.py"):
         shutil.copyfile(os.path.join(original, name), scripts / name)
     before = {p.name: p.read_bytes() for p in out.iterdir()}
-    process = subprocess.Popen([sys.executable, str(scripts / "fetch_sources.py"), "failed"],
-                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    process = subprocess.Popen(
+        [sys.executable, str(scripts / "fetch_sources.py"), "failed"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
     try:
         if terminate:
             # Wait for the server-observed request, not a guessed download delay.
@@ -207,7 +226,9 @@ def test_actual_cli_exits_nonzero_and_keeps_last_good(tmp_path, monkeypatch, htt
         output, _ = process.communicate(timeout=20)
         assert process.returncode == (130 if terminate else 1), output
         assert {p.name: p.read_bytes() for p in out.iterdir()} == before
-        print(f"CLI route={route} exit={process.returncode} requests={requests}; pair unchanged; {output}")
+        print(
+            f"CLI route={route} exit={process.returncode} requests={requests}; pair unchanged; {output}"
+        )
     finally:
         if process.poll() is None:
             process.kill()
@@ -232,8 +253,9 @@ def test_sigterm_during_staged_validation_cleans_up(tmp_path, monkeypatch, http_
         "fetch.validate_source=validate\n"
         "raise SystemExit(fetch.main({'good'}))\n"
     )
-    process = subprocess.Popen([sys.executable, "-c", code], stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT, text=True)
+    process = subprocess.Popen(
+        [sys.executable, "-c", code], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True
+    )
     try:
         for _ in range(200):
             if marker.exists():
@@ -252,7 +274,9 @@ def test_sigterm_during_staged_validation_cleans_up(tmp_path, monkeypatch, http_
             process.wait()
 
 
-def test_sigterm_during_commit_is_deferred_until_pair_matches(tmp_path, monkeypatch, http_origin, capsys):
+def test_sigterm_during_commit_is_deferred_until_pair_matches(
+    tmp_path, monkeypatch, http_origin, capsys
+):
     origin, _ = http_origin
     out, _ = retained_sources(tmp_path, monkeypatch, origin, {"good": "/good"})
     replace = os.replace
@@ -272,14 +296,19 @@ def test_sigterm_during_commit_is_deferred_until_pair_matches(tmp_path, monkeypa
 
 
 @pytest.mark.parametrize("changed_link", [False, True])
-def test_discovery_preserves_suffix_and_rejects_new_vintage(tmp_path, monkeypatch, http_origin, changed_link):
+def test_discovery_preserves_suffix_and_rejects_new_vintage(
+    tmp_path, monkeypatch, http_origin, changed_link
+):
     origin, requests = http_origin
     out, receipts = retained_sources(tmp_path, monkeypatch, origin, {"found": "/good.csv"})
     if changed_link:
         receipts["found"]["url"] = origin + "/old.csv"
     (out / "receipts.json").write_text(json.dumps(receipts))
-    manifest = {"sources": [{"id": "found", "page": origin + "/page",
-                              "find": r"/good\.csv", "file": "found"}]}
+    manifest = {
+        "sources": [
+            {"id": "found", "page": origin + "/page", "find": r"/good\.csv", "file": "found"}
+        ]
+    }
     (tmp_path / "sources/manifest.json").write_text(json.dumps(manifest))
     before = {p.name: p.read_bytes() for p in out.iterdir()}
     assert fetch_sources.main({"found"}) == (1 if changed_link else 0)

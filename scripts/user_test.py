@@ -6,6 +6,7 @@ The questions, answers and evidence live in docs/user-test/questions.json.
     python scripts/user_test.py check           # every answer is still on the built site
     python scripts/user_test.py score FILE.csv  # apply the pass rules to recorded answers
 """
+
 import csv
 import html
 import json
@@ -103,9 +104,13 @@ def render_marking(pack):
         f"One copy per participant. Mark each answer against the answer key: 1 for the right letter, 0 for a wrong letter, "
         f"E ({pack['not_sure']}), a blank, or anything written after the {minutes}-minute mark.\n\n"
     )
-    out.append("Participant code: ______  Site version (commit): ______  Phone and browser: ______\n\n")
+    out.append(
+        "Participant code: ______  Site version (commit): ______  Phone and browser: ______\n\n"
+    )
     out.append("Consent note signed or recorded: yes / no  Time taken (mm:ss): ______\n\n")
-    out.append("| Q | Critical | Letter given | Right letter | Mark (1 or 0) |\n|---|---|---|---|---|\n")
+    out.append(
+        "| Q | Critical | Letter given | Right letter | Mark (1 or 0) |\n|---|---|---|---|---|\n"
+    )
     for q in pack["questions"]:
         out.append(f"| {q['id']} | {'Yes' if q['critical'] else ''} | | {q['answer']} | |\n")
     out.append(f"\nTotal correct: ____ / {n}\n\n")
@@ -114,7 +119,9 @@ def render_marking(pack):
     out.append(f"- [ ] critical questions {', '.join(map(str, crit))} all correct\n")
     out.append(f"- [ ] finished within {minutes} minutes\n")
     out.append("\n## Group result\n\n")
-    out.append("| Participant | Site version | Correct | All critical right | Within time | Passes |\n|---|---|---|---|---|---|\n")
+    out.append(
+        "| Participant | Site version | Correct | All critical right | Within time | Passes |\n|---|---|---|---|---|---|\n"
+    )
     for i in range(1, rules["participants"] + 1):
         out.append(f"| P{i} | | / {n} | | | |\n")
     out.append(f"| **Total** | | / {n * rules['participants']} | | | |\n\n")
@@ -161,7 +168,11 @@ def score(rows, pack=None):
     for r in rows:
         who = r.get("participant", "?")
         correct = sum(1 for q in qs if r.get(f"q{q['id']}", "").strip().upper() == q["answer"])
-        missed_crit = [q["id"] for q in qs if q["critical"] and r.get(f"q{q['id']}", "").strip().upper() != q["answer"]]
+        missed_crit = [
+            q["id"]
+            for q in qs
+            if q["critical"] and r.get(f"q{q['id']}", "").strip().upper() != q["answer"]
+        ]
         try:
             secs = float(r.get("seconds_taken", ""))
         except ValueError:
@@ -202,7 +213,9 @@ def main(argv):
         problems = check()
         for p in problems:
             print(p)
-        print("Answer key matches the built site." if not problems else f"{len(problems)} problem(s).")
+        print(
+            "Answer key matches the built site." if not problems else f"{len(problems)} problem(s)."
+        )
         return 1 if problems else 0
     if cmd == "score" and len(argv) == 3:
         with open(argv[2], newline="", encoding="utf-8") as f:

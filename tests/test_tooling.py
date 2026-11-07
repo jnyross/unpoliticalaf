@@ -1,4 +1,5 @@
 """Executable contracts for the canonical development commands."""
+
 import pathlib
 import subprocess
 import sys
@@ -21,13 +22,23 @@ class Tooling(unittest.TestCase):
         result = subprocess.run(
             ["make", "-n", "quality"], cwd=ROOT, capture_output=True, text=True, check=True
         )
-        for command in ("ruff", "compileall", "mypy", "deptry", "check_agents", "quality/report.py"):
+        for command in (
+            "ruff",
+            "compileall",
+            "mypy",
+            "deptry",
+            "check_agents",
+            "quality/report.py",
+        ):
             self.assertIn(command, result.stdout)
 
     def test_standalone_dashboard_setup_includes_pytest(self):
         result = subprocess.run(
             ["make", "-n", "-f", "quality/Makefile", "setup"],
-            cwd=ROOT, capture_output=True, text=True, check=True
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
         )
         self.assertIn("-r requirements-test.txt", result.stdout)
 
@@ -39,12 +50,16 @@ class Tooling(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = pathlib.Path(directory) / "bad.py"
             path.write_text("def invalid(:\n")
-            result = subprocess.run([sys.executable, "-m", "compileall", "-q", "-f", directory],
-                                    capture_output=True, text=True)
+            result = subprocess.run(
+                [sys.executable, "-m", "compileall", "-q", "-f", directory],
+                capture_output=True,
+                text=True,
+            )
             self.assertNotEqual(result.returncode, 0)
 
     def test_guidance_checker_rejects_broken_link(self):
         from scripts.check_agents import check
+
         with tempfile.TemporaryDirectory() as directory:
             root = pathlib.Path(directory)
             (root / "AGENTS.md").write_text("[Missing](missing.md)\n")

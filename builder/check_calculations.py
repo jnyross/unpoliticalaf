@@ -108,8 +108,13 @@ def _arithmetic(node: ast.expr, values: Mapping[str, float | None]) -> float | N
         left = _arithmetic(node.left, values)
         right = _arithmetic(node.right, values)
         return _binary(node.op, left, right)
-    if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
-            and node.func.id == "round" and len(node.args) == 2 and not node.keywords):
+    if (
+        isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "round"
+        and len(node.args) == 2
+        and not node.keywords
+    ):
         places = _round_places(node.args[1])
         value = _arithmetic(node.args[0], values)
         return None if value is None else _number(round(value, places))
@@ -127,7 +132,8 @@ def _check_result(result: float | None, recorded: object) -> None:
 
 
 def check_calculations(
-    facts: Mapping[str, Mapping[str, Any]], fail: Callable[[str], None],
+    facts: Mapping[str, Mapping[str, Any]],
+    fail: Callable[[str], None],
 ) -> CalculationCounts:
     """Account for every candidate, following independently recomputed dependencies."""
     counts = CalculationCounts()
@@ -159,7 +165,9 @@ def check_calculations(
             expression = _expression(formula, inputs)
             if not inputs and not isinstance(expression.body, ast.Constant):
                 raise ValueError("empty operands require an explicit numeric literal assumption")
-            values = {f"operand_{index}": resolve(i) for index, i in enumerate(dict.fromkeys(inputs))}
+            values = {
+                f"operand_{index}": resolve(i) for index, i in enumerate(dict.fromkeys(inputs))
+            }
             result = _arithmetic(expression.body, values)
             _check_result(result, fact["value"])
             resolved[fid] = result

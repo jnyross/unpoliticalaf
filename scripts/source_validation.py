@@ -17,7 +17,9 @@ import openpyxl
 import xlrd
 from pypdf import PdfReader
 
-ERROR_PAGE = re.compile(r"access denied|captcha|service unavailable|page not found|just a moment", re.I)
+ERROR_PAGE = re.compile(
+    r"access denied|captcha|service unavailable|page not found|just a moment", re.I
+)
 TABLE_NS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 TEXT_NS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 OFFICE_NS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"
@@ -29,8 +31,12 @@ def csv_records(path):
 
 def validate_l522(rows, previous):
     metadata = {row[0]: row[1] for row in rows if len(row) == 2}
-    required = {"Title": "CPIH INDEX 00: ALL ITEMS 2015=100", "CDID": "L522",
-                "Source dataset ID": "MM23", "Unit": "Index, base year = 100"}
+    required = {
+        "Title": "CPIH INDEX 00: ALL ITEMS 2015=100",
+        "CDID": "L522",
+        "Source dataset ID": "MM23",
+        "Unit": "Index, base year = 100",
+    }
     if any(metadata.get(key) != value for key, value in required.items()):
         raise ValueError("L522 identity/base/unit changed")
     periods = {}
@@ -44,8 +50,11 @@ def validate_l522(rows, previous):
             periods[row[0]] = value
     required_periods = {"2015", "2025 APR", "2026 APR"}
     if previous:
-        required_periods.update(row[0] for row in csv_records(previous)
-                                if row and re.fullmatch(r"\d{4}( Q[1-4]| [A-Z]{3})?", row[0]))
+        required_periods.update(
+            row[0]
+            for row in csv_records(previous)
+            if row and re.fullmatch(r"\d{4}( Q[1-4]| [A-Z]{3})?", row[0])
+        )
     if not required_periods <= periods.keys():
         raise ValueError("L522 required period coverage lost")
     if periods["2015"] != 100:
@@ -56,11 +65,21 @@ def validate_school(path, previous):
     workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
     try:
         rows = list(workbook["Table 6b"].values)
-        texts = {(i, j): value for i, row in enumerate(rows) for j, value in enumerate(row)
-                 if isinstance(value, str) and value.strip()}
+        texts = {
+            (i, j): value
+            for i, row in enumerate(rows)
+            for j, value in enumerate(row)
+            if isinstance(value, str) and value.strip()
+        }
         combined = " ".join(texts.values())
-        for label in ("STATE-FUNDED PRIMARY", "STATE-FUNDED SECONDARY", "Average class size",
-                      "Percentage of pupils in classes with", "31-35 pupils", "36 or more pupils"):
+        for label in (
+            "STATE-FUNDED PRIMARY",
+            "STATE-FUNDED SECONDARY",
+            "Average class size",
+            "Percentage of pupils in classes with",
+            "31-35 pupils",
+            "36 or more pupils",
+        ):
             if label not in combined:
                 raise ValueError("Table 6b missing " + label)
         if not any(2006 in row and 2015 in row for row in rows):
@@ -69,8 +88,12 @@ def validate_school(path, previous):
             old_workbook = openpyxl.load_workbook(previous, read_only=True, data_only=True)
             try:
                 old_rows = list(old_workbook["Table 6b"].values)
-                old_texts = {(i, j): value for i, row in enumerate(old_rows)
-                             for j, value in enumerate(row) if isinstance(value, str) and value.strip()}
+                old_texts = {
+                    (i, j): value
+                    for i, row in enumerate(old_rows)
+                    for j, value in enumerate(row)
+                    if isinstance(value, str) and value.strip()
+                }
                 if old_texts != texts:
                     raise ValueError("Table 6b labels/layout changed; review new vintage")
                 for i, row in enumerate(old_rows):
@@ -98,9 +121,14 @@ def validate_overcrowding(root, previous):
     for label in ("1995-96", "2021-22", "three year", "percentages", "owner", "social", "private"):
         if label not in combined:
             raise ValueError("FT1421 missing " + label)
-    values = [float(node.attrib[f"{{{OFFICE_NS}}}value"]) for node in table.iter()
-              if f"{{{OFFICE_NS}}}value" in node.attrib]
-    if len(values) < 27 * 4 or any(not math.isfinite(value) or not 0 <= value <= 100 for value in values):
+    values = [
+        float(node.attrib[f"{{{OFFICE_NS}}}value"])
+        for node in table.iter()
+        if f"{{{OFFICE_NS}}}value" in node.attrib
+    ]
+    if len(values) < 27 * 4 or any(
+        not math.isfinite(value) or not 0 <= value <= 100 for value in values
+    ):
         raise ValueError("invalid FT1421 percentage coverage")
     if previous:
         with zipfile.ZipFile(previous) as archive:
@@ -139,7 +167,11 @@ def validate_source(source_id, path, content_type, previous=None):
             validate_l522(rows, previous)
     elif suffix == ".json":
         value = json.loads(body)
-        if not isinstance(value, (dict, list)) or not value or (isinstance(value, dict) and "error" in value):
+        if (
+            not isinstance(value, (dict, list))
+            or not value
+            or (isinstance(value, dict) and "error" in value)
+        ):
             raise ValueError("invalid JSON dataset/error response")
     elif suffix in {".xlsx", ".ods"}:
         with zipfile.ZipFile(path) as archive:

@@ -28,12 +28,21 @@ PHONE = {"width": 360, "height": 640}
 DESKTOP = {"width": 1100, "height": 800}
 
 # Thresholds. A failure is a gap to fix, not a score.
-ANSWER_WITHIN_PX = 1280    # the first answer starts within two phone screens
-PROSE_MIN_PX = 16          # paragraphs and list items (the 17px body text, as GOV.UK does at 16px)
-OTHER_MIN_PX = 13          # table cells, labels, captions and source lines
-CHART_MIN_PX = 12          # chart labels as drawn on a phone, after the SVG scale
+ANSWER_WITHIN_PX = 1280  # the first answer starts within two phone screens
+PROSE_MIN_PX = 16  # paragraphs and list items (the 17px body text, as GOV.UK does at 16px)
+OTHER_MIN_PX = 13  # table cells, labels, captions and source lines
+CHART_MIN_PX = 12  # chart labels as drawn on a phone, after the SVG scale
 GENERIC_LINKS = ["here", "click here", "more", "read more", "link", "this", "view", "go", "details"]
-GENERIC_SUMMARIES = ["more", "show", "details", "expand", "open", "read more", "more info", "more information"]
+GENERIC_SUMMARIES = [
+    "more",
+    "show",
+    "details",
+    "expand",
+    "open",
+    "read more",
+    "more info",
+    "more information",
+]
 
 # Measures one page at the current viewport. `k` holds the thresholds above.
 PAGE_JS = """(k) => {
@@ -151,29 +160,46 @@ READOUT_JS = """() => {
 
 
 def pages_to_check(all_pages):
-    pages = [p for p in sorted(SITE.rglob("*.html"))
-             if not set(p.relative_to(SITE).parts) & {"figures", "csv"}]
+    pages = [
+        p
+        for p in sorted(SITE.rglob("*.html"))
+        if not set(p.relative_to(SITE).parts) & {"figures", "csv"}
+    ]
     if all_pages:
         return pages
     rng = random.Random(2026)  # fixed, so a repeat run checks the same pages
     compare = [p for p in pages if "compare" in p.parts and "spans" not in p.parts]
     spans = [p for p in pages if "spans" in p.parts]
     rest = [p for p in pages if p not in compare and p not in spans]
-    return rest + rng.sample(compare, min(20, len(compare))) + rng.sample(spans, min(10, len(spans)))
+    return (
+        rest + rng.sample(compare, min(20, len(compare))) + rng.sample(spans, min(10, len(spans)))
+    )
 
 
 def measure(paths):
     from playwright.sync_api import sync_playwright
+
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None
-    consts = {"generic_links": GENERIC_LINKS, "generic_summaries": GENERIC_SUMMARIES, "prose_min": PROSE_MIN_PX,
-              "other_min": OTHER_MIN_PX, "chart_min": CHART_MIN_PX}
+    consts = {
+        "generic_links": GENERIC_LINKS,
+        "generic_summaries": GENERIC_SUMMARIES,
+        "prose_min": PROSE_MIN_PX,
+        "other_min": OTHER_MIN_PX,
+        "chart_min": CHART_MIN_PX,
+    }
     results = []
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(executable_path=exe, args=["--no-sandbox"]) if exe else pw.chromium.launch()
+        browser = (
+            pw.chromium.launch(executable_path=exe, args=["--no-sandbox"])
+            if exe
+            else pw.chromium.launch()
+        )
         for path in paths:
             row = {"page": path.relative_to(SITE).as_posix()}
             if 'http-equiv="refresh"' in path.read_text(encoding="utf-8", errors="ignore")[:4000]:
-                row["redirect"] = True  # a page that only forwards to another; the target is checked itself
+                row["redirect"] = (
+                    True  # a page that only forwards to another; the target is checked itself
+                )
                 results.append(row)
                 continue
             try:
@@ -183,14 +209,19 @@ def measure(paths):
                     page.goto(path.as_uri(), wait_until="load", timeout=60000)
                     row[name] = page.evaluate(PAGE_JS, consts)
                     if name == "phone" and page.evaluate(TAP_JS):
-                        page.wait_for_timeout(400)  # let any smooth scroll finish before reading the position
+                        page.wait_for_timeout(
+                            400
+                        )  # let any smooth scroll finish before reading the position
                         spot = page.evaluate(SPOT_JS)
                         before = page.evaluate(READOUT_JS) or ""
                         page.mouse.click(spot["x"], spot["y"])
                         page.wait_for_timeout(300)
                         after = page.evaluate(READOUT_JS) or ""
-                        row["tap"] = {"before": before, "after": after,
-                                      "changed": after != before and any(ch.isdigit() for ch in after)}
+                        row["tap"] = {
+                            "before": before,
+                            "after": after,
+                            "changed": after != before and any(ch.isdigit() for ch in after),
+                        }
                     ctx.close()
                 # U3: the h1 and the answer show with JavaScript off.
                 ctx = browser.new_context(viewport=PHONE, java_script_enabled=False)
@@ -198,8 +229,10 @@ def measure(paths):
                 page.goto(path.as_uri(), wait_until="load", timeout=60000)
                 h1 = page.locator("main h1").first
                 ans = page.locator(".answer").first
-                row["nojs"] = {"h1": h1.count() > 0 and bool((h1.text_content() or "").strip()),
-                               "answer": ans.count() == 0 or bool((ans.text_content() or "").strip())}
+                row["nojs"] = {
+                    "h1": h1.count() > 0 and bool((h1.text_content() or "").strip()),
+                    "answer": ans.count() == 0 or bool((ans.text_content() or "").strip()),
+                }
                 ctx.close()
             except Exception as e:  # noqa: BLE001
                 row["error"] = f"{e.__class__.__name__}: {str(e)[:200]}"
@@ -217,59 +250,169 @@ def evaluate(results):
     ref_nav = rows[0]["phone"]["nav"] if rows else None
 
     def add(name, standard, failing, total):
-        checks[name] = {"standard": standard, "failing": len(failing), "checked": total,
-                        "examples": [f"{r['page']}: {why}" for r, why in failing[:6]]}
+        checks[name] = {
+            "standard": standard,
+            "failing": len(failing),
+            "checked": total,
+            "examples": [f"{r['page']}: {why}" for r, why in failing[:6]],
+        }
 
-    add("E0 pages load and measure", "every page loads", [(r, r["error"]) for r in results if "error" in r], len(results))
+    add(
+        "E0 pages load and measure",
+        "every page loads",
+        [(r, r["error"]) for r in results if "error" in r],
+        len(results),
+    )
     ph = lambda r: r["phone"]
-    add("C1 one h1, near the top", "one h1, within 200px of the top at 360px",
-        [(r, f"{ph(r)['h1_count']} h1s, top {ph(r)['h1_top']}px") for r in rows
-         if ph(r)["h1_count"] != 1 or (ph(r)["h1_top"] or 0) > 200], n)
-    add("C2 heading levels never skip", "no heading skips a level",
-        [(r, "; ".join(ph(r)["heading_skips"][:2])) for r in rows if ph(r)["heading_skips"]], n)
+    add(
+        "C1 one h1, near the top",
+        "one h1, within 200px of the top at 360px",
+        [
+            (r, f"{ph(r)['h1_count']} h1s, top {ph(r)['h1_top']}px")
+            for r in rows
+            if ph(r)["h1_count"] != 1 or (ph(r)["h1_top"] or 0) > 200
+        ],
+        n,
+    )
+    add(
+        "C2 heading levels never skip",
+        "no heading skips a level",
+        [(r, "; ".join(ph(r)["heading_skips"][:2])) for r in rows if ph(r)["heading_skips"]],
+        n,
+    )
     # Reference pages (methods, sources, corrections, comparison spans) have no answer block and are not checked here.
     answered = [r for r in rows if ph(r)["answer_top"] is not None]
-    add("C3 answer near the top", f"on pages with an answer block, the answer starts within {ANSWER_WITHIN_PX}px at 360px",
-        [(r, f"answer starts at {ph(r)['answer_top']}px") for r in answered
-         if ph(r)["answer_top"] > ANSWER_WITHIN_PX], len(answered))
-    add("C4 link text says where it goes", "no link reads only 'here', 'more' or similar",
-        [(r, ", ".join(ph(r)["generic_links"])) for r in rows if ph(r)["generic_links"]], n)
-    add("K1 same main navigation", "every page has the same main navigation",
-        [(r, "different navigation") for r in rows if ph(r)["nav"] != ref_nav], n)
-    add("K2 footer and home link", "every page has a footer and a link home",
-        [(r, "no footer" if not ph(r)["footer"] else "no home link") for r in rows
-         if not ph(r)["footer"] or not ph(r)["home_link"]], n)
-    add("F1 disclosures say what they open and show a marker", "every closed section has a specific label and a visible marker",
-        [(r, "; ".join(ph(r)["generic_summaries"] + ph(r)["summary_no_marker"])) for r in rows
-         if ph(r)["generic_summaries"] or ph(r)["summary_no_marker"]], n)
+    add(
+        "C3 answer near the top",
+        f"on pages with an answer block, the answer starts within {ANSWER_WITHIN_PX}px at 360px",
+        [
+            (r, f"answer starts at {ph(r)['answer_top']}px")
+            for r in answered
+            if ph(r)["answer_top"] > ANSWER_WITHIN_PX
+        ],
+        len(answered),
+    )
+    add(
+        "C4 link text says where it goes",
+        "no link reads only 'here', 'more' or similar",
+        [(r, ", ".join(ph(r)["generic_links"])) for r in rows if ph(r)["generic_links"]],
+        n,
+    )
+    add(
+        "K1 same main navigation",
+        "every page has the same main navigation",
+        [(r, "different navigation") for r in rows if ph(r)["nav"] != ref_nav],
+        n,
+    )
+    add(
+        "K2 footer and home link",
+        "every page has a footer and a link home",
+        [
+            (r, "no footer" if not ph(r)["footer"] else "no home link")
+            for r in rows
+            if not ph(r)["footer"] or not ph(r)["home_link"]
+        ],
+        n,
+    )
+    add(
+        "F1 disclosures say what they open and show a marker",
+        "every closed section has a specific label and a visible marker",
+        [
+            (r, "; ".join(ph(r)["generic_summaries"] + ph(r)["summary_no_marker"]))
+            for r in rows
+            if ph(r)["generic_summaries"] or ph(r)["summary_no_marker"]
+        ],
+        n,
+    )
     tapped = [r for r in rows if r.get("tap")]
-    add("F2 a tap on a chart updates its readout", "a tap on the first chart shows its values",
-        [(r, f"readout stayed '{r['tap']['after'][:60]}'") for r in tapped if not r["tap"]["changed"]], len(tapped))
-    add("A1 every field has a label", "every select and input has a label",
-        [(r, f"{ph(r)['unlabelled_fields']} unlabelled fields") for r in rows if ph(r)["unlabelled_fields"]], n)
-    add("A2 no sideways scrolling at 360px", "no horizontal page scroll at 360px",
-        [(r, "page is wider than the screen") for r in rows if ph(r)["overflow_x"]], n)
-    add("A3 prose at least 16px", f"paragraphs and list items are at least {PROSE_MIN_PX}px at 360px",
-        [(r, "; ".join(ph(r)["prose_small"][:2])) for r in rows if ph(r)["prose_small"]], n)
-    add("A3b table, label and caption text at least 13px", f"table cells, labels and captions are at least {OTHER_MIN_PX}px",
-        [(r, "; ".join(ph(r)["other_small"][:2])) for r in rows if ph(r)["other_small"]], n)
-    add("A4 chart labels at least 12px as drawn", f"chart text is at least {CHART_MIN_PX}px as drawn at 360px",
-        [(r, f"smallest {ph(r)['chart_text_min_px']}px, {ph(r)['chart_text_small']} labels under") for r in rows
-         if ph(r)["chart_text_small"]], n)
-    add("U1 long pages have a way back to the top", "pages taller than two screens have a back-to-top link",
-        [(r, "no back-to-top link") for r in rows if ph(r)["long_page"] and not ph(r)["backtop"]], n)
-    add("U2 forms work without JavaScript", "every form has a labelled control, a submit button and uses GET",
-        [(r, "a form lacks a button, a label, or uses POST") for r in rows
-         if any(not f["submit"] or not f["labelled"] or f["method"] != "get" for f in ph(r)["forms"])], n)
-    add("U3 the answer works without JavaScript", "the h1 and the answer show with scripts off",
-        [(r, f"h1 {r['nojs']['h1']}, answer {r['nojs']['answer']}") for r in rows
-         if not (r["nojs"]["h1"] and r["nojs"]["answer"])], n)
+    add(
+        "F2 a tap on a chart updates its readout",
+        "a tap on the first chart shows its values",
+        [
+            (r, f"readout stayed '{r['tap']['after'][:60]}'")
+            for r in tapped
+            if not r["tap"]["changed"]
+        ],
+        len(tapped),
+    )
+    add(
+        "A1 every field has a label",
+        "every select and input has a label",
+        [
+            (r, f"{ph(r)['unlabelled_fields']} unlabelled fields")
+            for r in rows
+            if ph(r)["unlabelled_fields"]
+        ],
+        n,
+    )
+    add(
+        "A2 no sideways scrolling at 360px",
+        "no horizontal page scroll at 360px",
+        [(r, "page is wider than the screen") for r in rows if ph(r)["overflow_x"]],
+        n,
+    )
+    add(
+        "A3 prose at least 16px",
+        f"paragraphs and list items are at least {PROSE_MIN_PX}px at 360px",
+        [(r, "; ".join(ph(r)["prose_small"][:2])) for r in rows if ph(r)["prose_small"]],
+        n,
+    )
+    add(
+        "A3b table, label and caption text at least 13px",
+        f"table cells, labels and captions are at least {OTHER_MIN_PX}px",
+        [(r, "; ".join(ph(r)["other_small"][:2])) for r in rows if ph(r)["other_small"]],
+        n,
+    )
+    add(
+        "A4 chart labels at least 12px as drawn",
+        f"chart text is at least {CHART_MIN_PX}px as drawn at 360px",
+        [
+            (
+                r,
+                f"smallest {ph(r)['chart_text_min_px']}px, {ph(r)['chart_text_small']} labels under",
+            )
+            for r in rows
+            if ph(r)["chart_text_small"]
+        ],
+        n,
+    )
+    add(
+        "U1 long pages have a way back to the top",
+        "pages taller than two screens have a back-to-top link",
+        [(r, "no back-to-top link") for r in rows if ph(r)["long_page"] and not ph(r)["backtop"]],
+        n,
+    )
+    add(
+        "U2 forms work without JavaScript",
+        "every form has a labelled control, a submit button and uses GET",
+        [
+            (r, "a form lacks a button, a label, or uses POST")
+            for r in rows
+            if any(
+                not f["submit"] or not f["labelled"] or f["method"] != "get" for f in ph(r)["forms"]
+            )
+        ],
+        n,
+    )
+    add(
+        "U3 the answer works without JavaScript",
+        "the h1 and the answer show with scripts off",
+        [
+            (r, f"h1 {r['nojs']['h1']}, answer {r['nojs']['answer']}")
+            for r in rows
+            if not (r["nojs"]["h1"] and r["nojs"]["answer"])
+        ],
+        n,
+    )
     return checks
 
 
 def report(checks):
     lines = ["| Check | Standard | Pages failing | Pages checked |", "|---|---|---|---|"]
-    lines += [f"| {name} | {c['standard']} | {c['failing']} | {c['checked']} |" for name, c in checks.items()]
+    lines += [
+        f"| {name} | {c['standard']} | {c['failing']} | {c['checked']} |"
+        for name, c in checks.items()
+    ]
     lines.append("")
     for name, c in checks.items():
         if c["examples"]:
@@ -284,7 +427,9 @@ def main():
     results = measure(paths)
     checks = evaluate(results)
     if "--json" in sys.argv:
-        Path(sys.argv[sys.argv.index("--json") + 1]).write_text(json.dumps({"checks": checks, "results": results}, indent=1))
+        Path(sys.argv[sys.argv.index("--json") + 1]).write_text(
+            json.dumps({"checks": checks, "results": results}, indent=1)
+        )
     print(f"Checked {len(paths)} pages at 360 x 640 and 1100 x 800.\n")
     print(report(checks))
     return 1 if any(c["failing"] for c in checks.values()) else 0

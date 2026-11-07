@@ -32,17 +32,41 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 
-OURS = ["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html",
-        "life/index.html", "life/earnings.html", "life/compare/2010-2025.html", "life/2015.html",
-        "methods.html"]
+OURS = [
+    "index.html",
+    "spending.html",
+    "taxes.html",
+    "who-pays.html",
+    "household-tax.html",
+    "life/index.html",
+    "life/earnings.html",
+    "life/compare/2010-2025.html",
+    "life/2015.html",
+    "methods.html",
+]
 
 BENCHMARKS = [
     ("GOV.UK", "https://www.gov.uk/income-tax-rates"),
-    ("GOV.UK", "https://www.gov.uk/government/statistics/public-spending-statistics-release-july-2025"),
-    ("GOV.UK", "https://www.gov.uk/government/publications/how-public-spending-was-calculated-in-your-tax-summary"),
-    ("ONS", "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025"),
-    ("ONS", "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024"),
-    ("ONS", "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/bulletins/housingaffordabilityinenglandandwales/2025"),
+    (
+        "GOV.UK",
+        "https://www.gov.uk/government/statistics/public-spending-statistics-release-july-2025",
+    ),
+    (
+        "GOV.UK",
+        "https://www.gov.uk/government/publications/how-public-spending-was-calculated-in-your-tax-summary",
+    ),
+    (
+        "ONS",
+        "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025",
+    ),
+    (
+        "ONS",
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/incomeandwealth/bulletins/theeffectsoftaxesandbenefitsonhouseholdincome/2024",
+    ),
+    (
+        "ONS",
+        "https://www.ons.gov.uk/peoplepopulationandcommunity/housing/bulletins/housingaffordabilityinenglandandwales/2025",
+    ),
 ]
 
 # Describes the element that has focus now.
@@ -94,7 +118,12 @@ def walk_keyboard(page, limit=600):
         info = page.evaluate(FOCUS_JS)
         if info is None:
             break
-        key = (info["tag"], info["text"], info["href"], round(info["top"] + page.evaluate("scrollY")))
+        key = (
+            info["tag"],
+            info["text"],
+            info["href"],
+            round(info["top"] + page.evaluate("scrollY")),
+        )
         if seen_top is None:
             seen_top = key
         elif key == seen_top:
@@ -106,20 +135,33 @@ def walk_keyboard(page, limit=600):
         page.keyboard.press("Tab")
     no_style = [s for s in stops if not s["styled"]]
     first_main = next((i + 1 for i, s in enumerate(stops) if s["inMain"]), None)
-    skip = stops[0] if stops and "skip" in (stops[0]["text"].lower() + str(stops[0]["cls"]).lower()) else None
+    skip = (
+        stops[0]
+        if stops and "skip" in (stops[0]["text"].lower() + str(stops[0]["cls"]).lower())
+        else None
+    )
     skip_works = None
     if skip:
-        page.evaluate("window.scrollTo(0,0); document.activeElement && document.activeElement.blur()")
+        page.evaluate(
+            "window.scrollTo(0,0); document.activeElement && document.activeElement.blur()"
+        )
         page.keyboard.press("Tab")
         page.keyboard.press("Enter")
         page.keyboard.press("Tab")
         after = page.evaluate(FOCUS_JS)
         skip_works = bool(after and after["inMain"])
     hidden = [s for s in stops if not s["visible"]]
-    return {"stops": len(stops), "skip_first": bool(skip), "skip_works": skip_works,
-            "presses_to_main": first_main, "no_focus_style": len(no_style), "sampled": len(stops),
-            "no_focus_examples": [f"{s['tag']} '{s['text'][:40]}'" for s in no_style[:5]],
-            "hidden_stops": len(hidden), "hidden_examples": [f"{s['tag']} '{s['text'][:40]}'" for s in hidden[:5]]}
+    return {
+        "stops": len(stops),
+        "skip_first": bool(skip),
+        "skip_works": skip_works,
+        "presses_to_main": first_main,
+        "no_focus_style": len(no_style),
+        "sampled": len(stops),
+        "no_focus_examples": [f"{s['tag']} '{s['text'][:40]}'" for s in no_style[:5]],
+        "hidden_stops": len(hidden),
+        "hidden_examples": [f"{s['tag']} '{s['text'][:40]}'" for s in hidden[:5]],
+    }
 
 
 def charts(page):
@@ -131,10 +173,21 @@ def charts(page):
         except Exception as e:  # noqa: BLE001
             snap = f"(no snapshot: {e.__class__.__name__})"
         lines = [l for l in snap.splitlines() if l.strip()]
-        tag = loc.evaluate("e => e.tagName.toLowerCase() + (e.getAttribute('role') ? '[role=' + e.getAttribute('role') + ']' : '')")
-        has_table = loc.evaluate("""e => { const f = e.closest('figure, section, div') || e.parentElement;
-            let n = f; for (let k = 0; k < 4 && n; k++, n = n.parentElement) { if (n.querySelector('table')) return true; } return false; }""")
-        out.append({"element": tag, "tree_lines": len(lines), "tree": "\n".join(lines[:12]), "table_nearby": has_table})
+        tag = loc.evaluate(
+            "e => e.tagName.toLowerCase() + (e.getAttribute('role') ? '[role=' + e.getAttribute('role') + ']' : '')"
+        )
+        has_table = loc.evaluate(
+            """e => { const f = e.closest('figure, section, div') || e.parentElement;
+            let n = f; for (let k = 0; k < 4 && n; k++, n = n.parentElement) { if (n.querySelector('table')) return true; } return false; }"""
+        )
+        out.append(
+            {
+                "element": tag,
+                "tree_lines": len(lines),
+                "tree": "\n".join(lines[:12]),
+                "table_nearby": has_table,
+            }
+        )
     return out
 
 
@@ -142,27 +195,48 @@ def targets(page):
     ts = page.evaluate(TARGETS_JS)
     small = [t for t in ts if (t["w"] < 24 or t["h"] < 24) and not t["inline"] and not t["spaced"]]
     under44 = [t for t in ts if (t["w"] < 44 or t["h"] < 44) and not t["inline"]]
-    return {"targets": len(ts), "inline_links": sum(t["inline"] for t in ts),
-            "fail_2_5_8": len(small), "fail_examples": [f"{t['tag']} '{t['text'][:30]}' {t['w']}x{t['h']}" for t in small[:6]],
-            "under_44": len(under44), "under_44_examples": [f"{t['tag']} '{t['text'][:30]}' {t['w']}x{t['h']}" for t in under44[:6]]}
+    return {
+        "targets": len(ts),
+        "inline_links": sum(t["inline"] for t in ts),
+        "fail_2_5_8": len(small),
+        "fail_examples": [f"{t['tag']} '{t['text'][:30]}' {t['w']}x{t['h']}" for t in small[:6]],
+        "under_44": len(under44),
+        "under_44_examples": [
+            f"{t['tag']} '{t['text'][:30]}' {t['w']}x{t['h']}" for t in under44[:6]
+        ],
+    }
 
 
 def measure(urls):
     from playwright.sync_api import sync_playwright
+
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None
     results = []
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(executable_path=exe, args=["--no-sandbox"]) if exe else pw.chromium.launch()
-        ctx = browser.new_context(viewport={"width": 360, "height": 640}, device_scale_factor=2, has_touch=False,
-                                  user_agent="Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Mobile Safari/537.36")
+        browser = (
+            pw.chromium.launch(executable_path=exe, args=["--no-sandbox"])
+            if exe
+            else pw.chromium.launch()
+        )
+        ctx = browser.new_context(
+            viewport={"width": 360, "height": 640},
+            device_scale_factor=2,
+            has_touch=False,
+            user_agent="Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0 Mobile Safari/537.36",
+        )
         for who, url in urls:
             page = ctx.new_page()
             try:
                 page.goto(url, wait_until="load", timeout=60000)
                 page.wait_for_timeout(1500)
                 # Dismiss cookie banners so they do not change the keyboard path.
-                for sel in ["button:has-text('Accept additional cookies')", "button:has-text('Reject additional cookies')",
-                            "button:has-text('Accept all cookies')", "button:has-text('Reject')", ".ons-js-reject-cookies"]:
+                for sel in [
+                    "button:has-text('Accept additional cookies')",
+                    "button:has-text('Reject additional cookies')",
+                    "button:has-text('Accept all cookies')",
+                    "button:has-text('Reject')",
+                    ".ons-js-reject-cookies",
+                ]:
                     b = page.locator(sel).first
                     if b.count() and b.is_visible():
                         b.click()
@@ -183,16 +257,20 @@ def measure(urls):
 
 
 def report(results):
-    lines = ["| Site | Page | Tab stops | Skip link first / works | Presses to main | No focus style | Hidden stops | Targets failing 2.5.8 | Under 44px (not in text) |",
-             "|---|---|---|---|---|---|---|---|---|"]
+    lines = [
+        "| Site | Page | Tab stops | Skip link first / works | Presses to main | No focus style | Hidden stops | Targets failing 2.5.8 | Under 44px (not in text) |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
     for r in results:
         name = r["url"].rstrip("/").split("/")[-1] or r["url"]
         if "error" in r:
             lines.append(f"| {r['who']} | {name} | error: {r['error']} |||||||")
             continue
         k, t = r["keyboard"], r["tap"]
-        lines.append(f"| {r['who']} | {name} | {k['stops']} | {'yes' if k['skip_first'] else 'no'} / {k['skip_works']} | {k['presses_to_main']} | "
-                     f"{k['no_focus_style']} of {k['sampled']} | {k['hidden_stops']} | {t['fail_2_5_8']} of {t['targets']} | {t['under_44']} |")
+        lines.append(
+            f"| {r['who']} | {name} | {k['stops']} | {'yes' if k['skip_first'] else 'no'} / {k['skip_works']} | {k['presses_to_main']} | "
+            f"{k['no_focus_style']} of {k['sampled']} | {k['hidden_stops']} | {t['fail_2_5_8']} of {t['targets']} | {t['under_44']} |"
+        )
     lines.append("")
     for r in results:
         if "error" in r:
@@ -208,7 +286,9 @@ def report(results):
         if t["under_44_examples"]:
             lines.append("- Under 44px: " + "; ".join(t["under_44_examples"]))
         for i, c in enumerate(r["charts"]):
-            lines.append(f"- Chart {i + 1}: `{c['element']}`, {c['tree_lines']} lines in the accessibility tree, table nearby: {c['table_nearby']}")
+            lines.append(
+                f"- Chart {i + 1}: `{c['element']}`, {c['tree_lines']} lines in the accessibility tree, table nearby: {c['table_nearby']}"
+            )
             lines.append("\n```\n" + c["tree"] + "\n```")
         lines.append("")
     return "\n".join(lines)
@@ -234,11 +314,17 @@ def main():
             if not (k["skip_first"] and k["skip_works"]):
                 bad.append(f"{name}: the first Tab stop is not a working skip link")
             if k["no_focus_style"]:
-                bad.append(f"{name}: {k['no_focus_style']} Tab stops show no focus style: {k['no_focus_examples']}")
+                bad.append(
+                    f"{name}: {k['no_focus_style']} Tab stops show no focus style: {k['no_focus_examples']}"
+                )
             if k["hidden_stops"]:
-                bad.append(f"{name}: {k['hidden_stops']} Tab stops are hidden: {k['hidden_examples']}")
+                bad.append(
+                    f"{name}: {k['hidden_stops']} Tab stops are hidden: {k['hidden_examples']}"
+                )
             if t["fail_2_5_8"]:
-                bad.append(f"{name}: {t['fail_2_5_8']} tap targets under 24px: {t['fail_examples']}")
+                bad.append(
+                    f"{name}: {t['fail_2_5_8']} tap targets under 24px: {t['fail_examples']}"
+                )
         for b in bad:
             print("FAIL", b, file=sys.stderr)
         return 1 if bad else 0
