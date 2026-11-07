@@ -116,13 +116,16 @@ make test-stability # same pytest suite in fresh processes with seeds 1, 2 and 3
 make verify    # build + check + test
 make verify-coverage # same population under the combined 80% coverage gate
 make benchmark # time a fresh build, save JSON and enforce the 90-second budget
-make setup-dev && make quality # lint, format, types, dependencies, stability, guidance, dashboard
+npm ci --ignore-scripts # install locked Node 22 developer tools
+make setup-dev && make quality # lint, format, types, dependencies, complexity, duplication, stability, dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
 make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
 make format-check # check formatting without rewriting files (also in quality/CI)
 make typecheck # forced compilation then strict core mypy checks
 make check-deps # runtime, browser and developer dependency classification
 make setup-quality && make complexity # new-function ceiling 20 and legacy ratchet
+make duplication # same gate as npm run check:duplicates (Node 22)
+npm run test:duplicates # real locked-tool regressions and failure cases
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -131,6 +134,34 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Duplicate code
+
+PR #246's pinned jscpd 4.0.5 scans Python recursively in `builder/`, `scripts/`
+and `tests/`, including nested modules and large fiscal readers/checkers.
+`npm ci --ignore-scripts` installs the exact lockfile under Node 22.
+`make duplication` (also in `make quality`) and `npm run check:duplicates`
+run the same gate. `npm run test:duplicates` exercises the real tool and negative cases.
+
+The reviewed `.jscpd.json` keeps weak mode (comments/whitespace do not match),
+minimum five-line/50-token clones, a five-line file minimum, maximum 100,000
+lines and 5 MiB per file, and a **0.5% duplicated-line budget**. The denominator
+is jscpd's total Python token-span lines, not physical lines or token percentage.
+Its numerator counts each detected clone's line span once, as jscpd defines it.
+Tokenless and shorter files do not contribute. The wrapper checks the scanned
+population and line totals, rejects oversized files and suppressions, and enforces
+the raw ratio so rounding cannot hide excess duplication. Missing/invalid config,
+missing directories, empty scans, tool failures and absent/stale reports fail.
+
+Generated `site/`, official `data/`, pinned `reference/`, dependencies and reports
+are outside the maintained-source population; the separate `quality/` dashboard
+was not part of #246's selection. No maintained file or block is individually
+excluded. The original PR's 0.30% across 72 files is historical, not today's
+baseline. Read current counts and matches from `reports/duplication/jscpd-report.json`.
+The `Duplicate code` CI job retains that report even after detection fails.
+Review and reuse ordinary shared logic rather than increasing the budget or
+hiding matches. **Do not merge independent fiscal readers/checkers to pass.**
+Node remains developer-only here; Python production setup/build are unchanged.
 
 ### Complexity gate
 

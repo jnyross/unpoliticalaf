@@ -11,6 +11,8 @@ __pycache__/
 htmlcov/
 /quality-reports/
 /test-results/
+node_modules/
+/reports/duplication/
 # Local runtime, private configuration, credentials and working notes
 .codeaf/
 .senior-dev/

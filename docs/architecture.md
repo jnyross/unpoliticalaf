@@ -146,7 +146,9 @@ agent-managed merges, not the paused old controller or direct-main pushes.
 Vercel's Git
 integration is managed outside the application. No publisher or deployment
 credentials are embedded in generated pages. There is no separate frontend
-package build: [package.json](../package.json) wraps the Make commands.
+package build: [package.json](../package.json) wraps the Make commands and the
+locked Node 22 duplication gate/regressions. jscpd is developer-only; production
+installation and rendering remain Python-only.
 Build libraries are pinned in [requirements.txt](../requirements.txt);
 test/browser libraries are in [requirements-dev.txt](../requirements-dev.txt).
 

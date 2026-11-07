@@ -1,0 +1,12 @@
+{
+  "path": ["builder", "scripts", "tests"],
+  "format": ["python"],
+  "minLines": 5,
+  "minTokens": 50,
+  "maxLines": 100000,
+  "maxSize": "5mb",
+  "mode": "weak",
+  "threshold": 0.5,
+  "reporters": ["console", "json"],
+  "output": "reports/duplication"
+}

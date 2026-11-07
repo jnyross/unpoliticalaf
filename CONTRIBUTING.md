@@ -19,9 +19,12 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   builds the site, checks source data/pages and runs all tests. Build first when
   running `make test` separately, because some tests read `site/`.
 - `make setup-dev` adds browser, lint, typing and dashboard dependencies.
+- With Node 22, `npm ci --ignore-scripts` installs the locked developer tools.
+  Run `npm run test:duplicates` for the Node regression suite, separately from pytest.
 - `make quality` runs Ruff, Black's non-mutating check, forced Python compilation,
-  strict core typing, dependency checks, guidance references and the existing
-  quality dashboard.
+  strict core typing, dependency checks, complexity, duplication, seeded stability,
+  guidance references and the existing quality dashboard. It requires the locked
+  Node tools as well as `make setup-dev`.
   `make lint`, `make typecheck` and `make check-deps` also run separately.
 - `make setup-typing && make typecheck` installs just production and typing
   packages. The strict boundary is listed in `mypy.ini`; extend it without
@@ -42,6 +45,18 @@ tool configurations do not override those root policies. Retained official
 data, `reference/` and generated `site/` are outside the selection. Formatting
 must preserve stable fact/source IDs, public URLs/fragments and upstream names.
 The existing CI quality job runs both checks, not a competing formatting job.
+
+## Duplicate code
+
+`make duplication` and `npm run check:duplicates` enforce the same jscpd 4.0.5
+gate. The original Python selection is `builder/`, `scripts/`, `tests/`, recursively,
+not generated output, retained publisher data or the separate dashboard.
+Keep `.jscpd.json`'s five-line/50-token weak-mode rules and 0.5% line budget.
+The wrapper rejects incomplete scans/tool errors and checks the raw line ratio;
+console matches and `reports/duplication/jscpd-report.json` identify the population.
+Do not add suppressions, enlarge the denominator with data, raise the budget or
+merge deliberately independent fiscal readers/checkers to get a pass.
+See [README.md](README.md#duplicate-code) for the exact denominator and file rules.
 
 Use `.venv/bin/python` for direct commands. CI runs these same interfaces.
 Submit through independently reviewed PRs with exact-candidate Boat/CI checks;

@@ -2,7 +2,7 @@ PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing setup-quality complexity build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev setup-typing setup-quality complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -29,6 +29,10 @@ setup-quality:
 complexity:
 	$(RUN_PYTHON) -m unittest discover -s tests/quality -v
 	$(RUN_PYTHON) scripts/check_complexity.py
+
+# Install the locked Node 22 developer tools with npm ci --ignore-scripts first.
+duplication:
+	npm run check:duplicates
 
 build: site
 
@@ -70,7 +74,7 @@ check-deps:
 	cd quality && ../$(RUN_PYTHON) -m deptry .
 
 # Extend this aggregate as further tooling lands; never replace existing gates.
-quality: lint format-check typecheck check-deps complexity test-stability
+quality: lint format-check typecheck check-deps complexity duplication test-stability
 	$(RUN_PYTHON) scripts/check_agents.py
 	$(MAKE) -f quality/Makefile metrics
 

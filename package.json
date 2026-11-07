@@ -11,6 +11,11 @@
     "quality": "make quality",
     "build": "make build",
     "check": "make check",
+    "check:duplicates": "node scripts/check_duplicates.cjs",
+    "test:duplicates": "node --test tests/duplication.test.cjs",
     "verify": "make verify"
+  },
+  "devDependencies": {
+    "jscpd": "4.0.5"
   }
 }
