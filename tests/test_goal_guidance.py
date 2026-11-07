@@ -43,6 +43,27 @@ class GoalGuidance(unittest.TestCase):
         self.assertIn("reuse/source boundaries remain applicable", text)
         self.assertIn("except where explicitly superseded", text)
 
+    def test_scorer_guidance_retains_current_evidence_limits(self):
+        for path in ("docs/goal-rubric.md", "docs/standins/README.md"):
+            with self.subTest(path=path):
+                text = " ".join(active_text(path).split())
+                for required in (
+                    "actual states/actions",
+                    "Missing states, mismatched candidates, failed seals",
+                    "any failed/open probe",
+                    "D11 and accessibility remain separately reported",
+                    "do not prove reader independence or real-person comprehension",
+                    "Historical files without these records remain historical, not current passes",
+                ):
+                    self.assertIn(required, text)
+                for obsolete in (
+                    "still fills human consent",
+                    "converts actions to synthetic seconds",
+                    "not acceptance evidence",
+                    "subject to the current implementation limitation",
+                ):
+                    self.assertNotIn(obsolete, text.replace("**", ""))
+
     def test_delivery_is_public_independent_pr_not_controller(self):
         text = active_text("AGENTS.md")
         for required in ("public", "pull requests", "independent", "Boat", "CI"):

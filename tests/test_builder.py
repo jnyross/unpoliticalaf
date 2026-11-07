@@ -660,6 +660,15 @@ class Glossary(unittest.TestCase):
     def wrap(self, main):
         return f'<html><body><nav>VAT</nav><main id="main" class="wrap">{main}</main><footer><p>VAT</p></footer></body></html>'
 
+    def test_fifths_describes_approximate_people_not_household_counts(self):
+        from builder.glossary import glossary_page
+        html = glossary_page()
+        definition = re.search(r'<dt id="fifths">.*?</dt>\s*<dd>(.*?)</dd>', html, re.S).group(1)
+        self.assertIn("five groups with about the same number of people", definition)
+        self.assertIn("fifths hold about the same number of people, not of households", definition)
+        self.assertNotIn("equal numbers", definition)
+        self.assertNotIn("with the same number", definition)
+
     def test_first_use_in_text_is_linked_once(self):
         from builder.glossary import link_terms
         out = link_terms(self.wrap("<p>VAT is a tax. VAT again.</p>"), "taxes.html")

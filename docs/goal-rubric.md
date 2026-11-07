@@ -210,14 +210,17 @@ human-speed result; independent scoring must state this simulation limit.
   three critical questions right), the new-question test passed (at least 80%)
   and the prior-knowledge check passed (at least 20 of 60 higher with the
   site). `python scripts/standins.py score AUDIT_DIR` is the scoring entry
-  point, subject to the current implementation limitation below. A
+  point, with the evidence requirements and limits below. A
   real five-person phone test, if run, replaces this in either direction.
 
-**Current scorer limitation.** The existing scorer still fills human consent
-and eligibility internally and converts actions to synthetic seconds. Until
-the separate autonomous-scorer correction removes that adapter and verifies
-grouped budgets and the complete probe verdict, its output is **not acceptance
-evidence**. This guidance does not claim the correction has run or passed.
+**Current scorer limitations.** The simulation scorer uses actual states/actions,
+not synthesized human consent, eligibility or elapsed seconds. Missing states,
+mismatched candidates, failed seals and any failed/open probe make the overall
+printed verdict and exit status fail. D11 and accessibility remain separately
+reported. These checks do not prove reader independence or real-person
+comprehension; retain the fresh-session evidence described in the
+[stand-in procedure](standins/README.md). Historical files without these records
+remain historical, not current passes.
 
 ## Target
 
