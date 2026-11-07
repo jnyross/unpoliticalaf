@@ -30,6 +30,7 @@ CORRECTIONS = [
                   ("data/facts.json", "Facts download")],
         "was": "Some calculation records used shortened names or words instead of complete arithmetic. In the high-earner what-if, the formula for the share of a group named a rounded headcount, although the share was calculated from the unrounded headcount. Stated numbers of leavers had no formula.",
         "now": "The records give complete arithmetic and inputs, including the unrounded headcount calculation for the share. Stated leaver counts are explicit assumptions, not observed source values. All calculated records are independently checked, including sums, averages and rounding; unsupported formulas fail the check. The displayed numerical values have not changed.",
+        "pr": 259,
     },
     {
         "date": "6 November 2026",
@@ -37,6 +38,7 @@ CORRECTIONS = [
                   ("figures/etb.html", "ONS figure records"), ("data/facts.json", "Facts download")],
         "was": "The site claimed the richest fifth paid 46.0% of all taxes paid by UK households. It multiplied ONS Table 2a's person-weighted household tax means by household counts, then added the results. Those means average household amounts across people, not households. This calculation does not establish actual household-tax totals or shares.",
         "now": "The unsupported totals and all five shares are withdrawn from the page, chart, table, figure records and current data downloads (etb.2a.hhtax.* and etb.2a.taxshare.*). A prominent limitation replaces the headline; no replacement percentage is claimed. Supported household amounts and tax-to-income ratios remain, with their person-analysis population explained. All five fifths and All individuals were reopened, including counts, tax means and ranking notes. The current J4.3 question evidence now tests this limitation; its former wording is preserved as withdrawn history.",
+        "pr": 259,
     },
     {
         "date": "4 November 2026",

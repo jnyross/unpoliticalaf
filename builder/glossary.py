@@ -126,8 +126,8 @@ GROUPS = [
          "A couple needs more than a single person to have the same standard of living, but not twice as much.",
          ["equivalised", "adjusted for household size"]),
         ("fifths", "Fifths (quintiles)",
-         "Everyone is lined up from lowest to highest income and split into five groups with the same number of people in each. "
-         "The “lowest-income fifth” is the bottom 20% of people. On this site the fifths hold equal numbers of people, not of households.",
+         "Everyone is lined up from lowest to highest income and split into five groups with about the same number of people in each. "
+         "The “lowest-income fifth” is the bottom 20% of people. On this site the fifths hold about the same number of people, not of households.",
          ["fifths", "fifth of people", "quintiles"]),
         ("top-1", "Top 1% of taxpayers",
          "If everyone who owes Income Tax were lined up by income, the top 1% are the highest-income one in every hundred. People who owe no Income Tax are not counted.",
