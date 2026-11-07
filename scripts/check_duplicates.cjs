@@ -74,6 +74,11 @@ function checkDuplicates(root, run = spawnSync) {
     assert.equal(process.versions.node.split('.')[0], '22', 'Project tooling requires Node 22');
     const config = JSON.parse(fs.readFileSync(path.join(root, '.jscpd.json'), 'utf8'));
     assert.deepEqual(config, POLICY, 'Duplication settings differ from the reviewed policy');
+    const manifestPath = path.join(root, 'package.json');
+    if (fs.existsSync(manifestPath)) {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      assert.ok(!Object.hasOwn(manifest, 'jscpd'), 'Secondary package.json jscpd config is forbidden');
+    }
     const expectedFiles = collectSources(root);
     const result = run(process.execPath, [
       path.resolve(__dirname, '../node_modules/jscpd/bin/jscpd'),

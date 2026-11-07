@@ -164,6 +164,19 @@ test('missing directory, oversized source and ignore markers fail closed', (cont
   assert.equal(checkDuplicates(root), 2);
 });
 
+test('secondary package configuration cannot hide blocks without changing file selection', (context) => {
+  const root = fixture(context);
+  for (const settings of [{ ignorePattern: ['.*'] }, { skipComments: true }, null]) {
+    fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ jscpd: settings }));
+    let invoked = false;
+    assert.equal(checkDuplicates(root, () => {
+      invoked = true;
+      return { status: 0 };
+    }), 2);
+    assert.equal(invoked, false);
+  }
+});
+
 test('empty source population fails instead of reporting a clean scan', (context) => {
   const root = fixture(context);
   fs.unlinkSync(path.join(root, 'builder', 'original.py'));
