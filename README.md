@@ -114,6 +114,7 @@ make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make test-stability # same pytest suite in fresh processes with seeds 1, 2 and 3
 make verify    # build + check + test
+make benchmark # time a fresh build, save JSON and enforce the 90-second budget
 make setup-dev && make quality # lint, format, types, dependencies, stability, guidance, dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
 make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
@@ -128,6 +129,40 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Build performance
+
+`make benchmark` times the real `make build` in a fresh process. The fixed CI
+budget is **90 seconds**: exactly 90 passes, longer fails, and a failed build
+always fails even if fast. Setup, independent `make check` and tests are outside
+the timing; the build's source hash and quote checks remain inside it.
+The budget retains #237's baseline of about 44 seconds in
+[CI run 41928181052](https://github.com/jnyross/unpoliticalaf/actions/runs/41928181052)
+on 4 November 2026. No new speedup is required.
+
+Measurements stay outside deterministic output in `.cache/build-performance.json`.
+The report records wall-clock duration, original build exit, Python executable/
+version, platform, named CI commit/run identity and cache context. It observes
+whether `site/` and builder bytecode existed before the run; pip cache-hit is
+unknown outside configured CI. OS filesystem caches are not flushed or assumed
+cold. The glossary cache starts empty in every new build process.
+CI appends a summary and retains the JSON for 30 days, including failures.
+Compare like runner/Python/cache contexts rather than treating unlike runs as
+a measured optimization.
+
+CI caches only pip downloads keyed by all applicable requirement files. It still
+installs dependencies and rebuilds from retained sources. Glossary linking caches
+only immutable regex match spans for at most 4,096 prose strings in one process.
+Page paths, link limits and already-linked terms remain page-specific. No new
+source/fact, page or on-disk build cache is introduced, and no generated output is
+restored. Existing source readers still run inside each fresh build process.
+Independent checks and the complete test/stability populations remain enabled.
+
+Investigate a regression before proposing a budget change:
+`.venv/bin/python -m cProfile -o .cache/build.prof -m builder.build`, then
+`.venv/bin/python -m pstats .cache/build.prof` (create `.cache/` first).
+For a different local machine only, the runner accepts `--max-seconds 120`;
+neither Make nor CI overrides the approved 90-second default.
 
 ### Local unit tests
 

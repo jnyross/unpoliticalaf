@@ -7,6 +7,7 @@ figures, tables, charts and summaries are never changed.
 """
 
 import re
+from functools import lru_cache
 
 from .html import page, esc, jump
 
@@ -594,15 +595,29 @@ def link_terms(html, path, limit=12):
     return head + "".join(out) + tail
 
 
+@lru_cache(maxsize=4096)
+def _term_matches(text):
+    """Reuse regex scans of repeated prose, never page-specific link state.
+
+    Only immutable text spans live in this bounded, process-local cache.
+    """
+    matches = []
+    for anchor, pattern in PATTERNS:
+        spans = tuple(match.span() for match in pattern.finditer(text))
+        if spans:
+            matches.append((anchor, spans))
+    return tuple(matches)
+
+
 def _link_text(text, done, up, limit):
     taken = []  # (start, end, anchor) already linked in this piece of text
-    for anchor, pat in PATTERNS:
+    for anchor, spans in _term_matches(text):
         if anchor in done or len(done) >= limit:
             continue
-        for m in pat.finditer(text):
-            if any(m.start() < e and s < m.end() for s, e, _ in taken):
+        for start, end in spans:
+            if any(start < e and s < end for s, e, _ in taken):
                 continue
-            taken.append((m.start(), m.end(), anchor))
+            taken.append((start, end, anchor))
             done.add(anchor)
             break
     if not taken:

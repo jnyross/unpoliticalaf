@@ -2,7 +2,7 @@ PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing build site check test test-stability verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev setup-typing build site benchmark check test test-stability verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -25,6 +25,10 @@ build: site
 
 site:
 	$(RUN_PYTHON) -m builder.build
+
+# Real fresh-process build; measurements never enter deterministic site output.
+benchmark:
+	$(RUN_PYTHON) scripts/build_performance.py
 
 # Re-reads every figure from its source file and checks every page.
 check:
