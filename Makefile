@@ -2,7 +2,7 @@ PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing setup-quality complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev hooks setup-typing setup-quality complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -14,9 +14,14 @@ setup:
 setup-test: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-test.txt
 
-# Adds test, browser, typing, lint, formatting and dashboard tools.
+# Adds developer tools and the hook in Git checkouts, not Git-free CI exports.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+	@if test -e .git; then $(MAKE) hooks; else echo "No Git metadata; hook installation skipped."; fi
+
+# Explicitly reinstall after recreating .venv. Never call on the agent host.
+hooks:
+	$(RUN_PYTHON) -m pre_commit install
 
 setup-typing: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-typing.txt

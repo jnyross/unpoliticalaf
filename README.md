@@ -126,6 +126,7 @@ make check-deps # runtime, browser and developer dependency classification
 make setup-quality && make complexity # new-function ceiling 20 and legacy ratchet
 make duplication # same gate as npm run check:duplicates (Node 22)
 npm run test:duplicates # real locked-tool regressions and failure cases
+make hooks     # reinstall the Git hook in a disposable Boat checkout
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -134,6 +135,35 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Pre-commit verification
+
+`make setup-dev` installs pinned `pre-commit` 4.3.0 and registers the hook when
+the working directory has `.git` metadata. Git-free CI/source exports still
+install all developer tools, but do not install a hook in any parent checkout.
+Production `make setup` and `make setup-test` remain hook-free. `make hooks`
+reinstalls the hook after recreating `.venv`.
+
+Every commit runs full `make verify` once, including documentation-only, data
+and deletion-only changes. The local hook passes no filenames or path filters:
+it builds the site, independently checks retained sources and pages, then runs
+the canonical pytest population. Any failure blocks the commit. Browser
+accessibility and `make quality` remain separate checks; style hooks do not
+replace verification or introduce a competing Black/Ruff policy.
+
+Agents install and exercise hooks **only in disposable Boat Git metadata**,
+never in the host checkout. Do not transfer host `.git` or credentials. Inside
+that disposable checkout, run the same hook manually with:
+
+```sh
+.venv/bin/python -m pre_commit run --all-files --verbose
+```
+
+`pre-commit` temporarily stashes unstaged tracked edits, checks the staged
+version and restores the edits. Stage every required new file too. Fix failures,
+review any automatic edits, restage the intended repairs, and rerun normally.
+Do not skip hooks or bypass failed checks. Generated `site/` stays ignored.
+Green hooks are not independent fiscal, accessibility or delivery approval.
 
 ### Duplicate code
 
