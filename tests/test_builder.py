@@ -871,6 +871,17 @@ class Trace(unittest.TestCase):
     def test_corrections_link_to_their_change(self):
         out = self.trace.corrections_page()
         self.assertIn("/pull/71", out)
+
+    def test_baseline_corrections_link_to_merged_pr(self):
+        baseline_dates = {"6 November 2026", "7 November 2026"}
+        corrections = [c for c in self.trace.CORRECTIONS if c["date"] in baseline_dates]
+        self.assertEqual(len(corrections), 2)
+        for correction in corrections:
+            self.assertEqual(correction["pr"], 259)
+        out = self.trace.corrections_page()
+        self.assertEqual(out.count('href="https://github.com/jnyross/unpoliticalaf/pull/259"'), 2)
+
+
 class Explanations(unittest.TestCase):
     """Quoted explanations must match their source and always say who said them."""
 
