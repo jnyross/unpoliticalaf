@@ -105,6 +105,29 @@ class HouseholdTaxShares(unittest.TestCase):
 
 
 class Table2aSourcePopulation(unittest.TestCase):
+    def print_source_notes(self, wb):
+        for name in wb.sheetnames:
+            if "note" in name.lower():
+                for row in wb[name].iter_rows():
+                    line = " ".join(str(c.value) for c in row if c.value is not None)
+                    if any(word in line.lower() for word in ("individual", "rank", "weight")):
+                        print(name, row[0].coordinate, line)
+
+    def assert_fact_locators_match_source(self, ws):
+        facts = Facts()
+        who_pays(facts)
+        for col, group in zip(range(3, 9), ("q1", "q2", "q3", "q4", "q5", "all")):
+            for row, measure in (
+                (8, "people"),
+                (9, "households"),
+                (48, "direct"),
+                (70, "indirect"),
+            ):
+                fact = facts[f"etb.2a.{measure}.{group}"]
+                self.assertEqual(fact.value, ws.cell(row, col).value)
+                self.assertEqual(fact.locator, f"Table 2a!{ws.cell(row, col).coordinate}")
+                self.assertEqual(fact.period, "2023/24")
+
     def test_independent_six_column_reopening(self):
         path = ROOT / "data/payers/raw/ons-etb-fye2024.xlsx"
         self.assertEqual(
@@ -116,12 +139,7 @@ class Table2aSourcePopulation(unittest.TestCase):
             ws = wb["Table 2a"]
             for row in (1, 3, 4, 8, 9, 48, 70):
                 print("Table 2a", row, [ws.cell(row, col).value for col in range(1, 9)])
-            for name in wb.sheetnames:
-                if "note" in name.lower():
-                    for row in wb[name].iter_rows():
-                        line = " ".join(str(c.value) for c in row if c.value is not None)
-                        if any(word in line.lower() for word in ("individual", "rank", "weight")):
-                            print(name, row[0].coordinate, line)
+            self.print_source_notes(wb)
             expected = {
                 8: [13405, 13449, 13427, 13426, 13429, 67135],
                 9: [5875, 5902, 5559, 5298, 5806, 28440],
@@ -144,19 +162,7 @@ class Table2aSourcePopulation(unittest.TestCase):
                 "The mean measure of income divides the total income of individuals by the number of individuals.",
                 bulletin,
             )
-            facts = Facts()
-            who_pays(facts)
-            for col, group in zip(range(3, 9), ("q1", "q2", "q3", "q4", "q5", "all")):
-                for row, measure in (
-                    (8, "people"),
-                    (9, "households"),
-                    (48, "direct"),
-                    (70, "indirect"),
-                ):
-                    fact = facts[f"etb.2a.{measure}.{group}"]
-                    self.assertEqual(fact.value, ws.cell(row, col).value)
-                    self.assertEqual(fact.locator, f"Table 2a!{ws.cell(row, col).coordinate}")
-                    self.assertEqual(fact.period, "2023/24")
+            self.assert_fact_locators_match_source(ws)
             self.assertEqual(
                 [ws.cell(48, col).value for col in range(3, 9)],
                 [3696, 6308, 10482, 17012, 41215, 15743],

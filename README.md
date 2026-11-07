@@ -122,6 +122,7 @@ make format    # Black writes maintained Python in builder/, scripts/, tests/, q
 make format-check # check formatting without rewriting files (also in quality/CI)
 make typecheck # forced compilation then strict core mypy checks
 make check-deps # runtime, browser and developer dependency classification
+make setup-quality && make complexity # new-function ceiling 20 and legacy ratchet
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
 
@@ -130,6 +131,29 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Complexity gate
+
+`make complexity`, also part of `make quality` and its CI job, uses Radon 6.0.1
+from the dashboard's canonical `quality/requirements.txt`. It recursively selects
+every Python file in `builder/`, `scripts/` and `tests/`, including nested tests,
+methods, async functions and closures. This preserves PR #248's population;
+`quality/` reporting code remains outside that gate. The dashboard's informative
+complexity/maintainability measurements are preserved, not substituted for the gate.
+
+New functions must score **20 or lower**. `complexity-baseline.json` started with
+PR #248's 52 existing over-limit functions (base `b8e6ab5`, PR head `b8b9629`).
+Each exception belongs only to its exact path and lexical function name; it is
+not a shared allowance. Existing exceptions are measured, not excluded, and
+cannot increase. Improvements require lowering the ceiling to the measured
+score; remove an entry when it reaches 20 or disappears. Renames get the default
+ceiling, not the old exception.
+
+Do not raise ceilings or add entries to hide a failing implementation. Split
+logic into focused helpers instead. There is no baseline-regeneration command;
+downward-only changes need source review. Missing/malformed baselines, empty
+source directories and analyzer failures fail closed. Production dependencies
+and `make verify` are unchanged.
 
 ### Coverage gate and dashboard
 

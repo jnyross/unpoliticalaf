@@ -145,6 +145,69 @@ def promote(staged, path, receipts, receipt, source_id):
         raise KeyboardInterrupt
 
 
+def _checked_previous_path(previous):
+    """Check the retained pair even when the caller will skip reacquisition."""
+    old_path = retained_path(previous["file"]) if previous else None
+    if previous:
+        old_body = old_path.read_bytes()
+        if (
+            len(old_body) != previous["bytes"]
+            or hashlib.sha256(old_body).hexdigest() != previous["sha256"]
+        ):
+            raise ValueError("retained file/receipt mismatch; review before refreshing")
+    return old_path
+
+
+def _resolve_download(source, previous):
+    """Resolve a publisher link without silently accepting a different vintage."""
+    url = source.get("url")
+    name = source["file"]
+    if "find" in source:
+        page, page_response = get(source["page"])
+        match = re.search(source["find"], page.decode("utf-8"))
+        if not match:
+            raise ValueError("no link matching " + source["find"])
+        url = urllib.parse.urljoin(page_response["url"], match.group(0).replace("&amp;", "&"))
+        parsed = urllib.parse.urlparse(url)
+        inner = urllib.parse.parse_qs(parsed.query).get("uri", [""])[0]
+        name += Path(parsed.path).suffix or Path(inner).suffix or ".bin"
+        if previous and url != previous.get("requested_url", previous["url"]):
+            raise ValueError("discovered URL changed vintage; review and pin the manifest first")
+    return url, name
+
+
+def _checked_download_path(name, source_id, previous, old_path, receipts):
+    """Reject migrations, shared filenames and unreceipted overwrites."""
+    path = retained_path(name)
+    if previous and path != old_path:
+        raise ValueError("retained filename changed; review migration first")
+    owners = [key for key, value in receipts.items() if value["file"] == name and key != source_id]
+    if owners:
+        raise ValueError("retained filename belongs to another source: " + ", ".join(owners))
+    if not previous and path.exists():
+        raise ValueError("unreceipted existing file; refusing to overwrite")
+    return path
+
+
+def _download_and_promote(source_id, url, name, path, old_path, receipts):
+    """Validate staged bytes before promoting the file/receipt pair."""
+    body, response = get(url)
+    with tempfile.TemporaryDirectory(prefix=".refresh-", dir=OUT) as directory:
+        staged = Path(directory) / ("download" + path.suffix)
+        staged.write_bytes(body)
+        validate_source(source_id, staged, response["content_type"], old_path)
+        receipt = {
+            "url": response["url"],
+            "file": name,
+            "bytes": len(body),
+            "content_type": response["content_type"],
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "retrieved": response["retrieved"],
+            "requested_url": url,
+        }
+        promote(staged, path, receipts, receipt, source_id)
+
+
 def refresh_sources(manifest, receipts, only, refresh):
     failures = []
     accepted = 0
@@ -155,62 +218,14 @@ def refresh_sources(manifest, receipts, only, refresh):
             continue
         try:
             previous = receipts.get(source_id)
-            old_path = retained_path(previous["file"]) if previous else None
-            if previous:
-                old_body = old_path.read_bytes()
-                if (
-                    len(old_body) != previous["bytes"]
-                    or hashlib.sha256(old_body).hexdigest() != previous["sha256"]
-                ):
-                    raise ValueError("retained file/receipt mismatch; review before refreshing")
+            old_path = _checked_previous_path(previous)
             if previous and not refresh and not only:
                 skipped += 1
                 continue
             time.sleep(3)  # be polite to official publishers
-            url = source.get("url")
-            name = source["file"]
-            if "find" in source:
-                page, page_response = get(source["page"])
-                match = re.search(source["find"], page.decode("utf-8"))
-                if not match:
-                    raise ValueError("no link matching " + source["find"])
-                url = urllib.parse.urljoin(
-                    page_response["url"], match.group(0).replace("&amp;", "&")
-                )
-                parsed = urllib.parse.urlparse(url)
-                inner = urllib.parse.parse_qs(parsed.query).get("uri", [""])[0]
-                name += Path(parsed.path).suffix or Path(inner).suffix or ".bin"
-                if previous and url != previous.get("requested_url", previous["url"]):
-                    raise ValueError(
-                        "discovered URL changed vintage; review and pin the manifest first"
-                    )
-            path = retained_path(name)
-            if previous and path != old_path:
-                raise ValueError("retained filename changed; review migration first")
-            owners = [
-                key for key, value in receipts.items() if value["file"] == name and key != source_id
-            ]
-            if owners:
-                raise ValueError(
-                    "retained filename belongs to another source: " + ", ".join(owners)
-                )
-            if not previous and path.exists():
-                raise ValueError("unreceipted existing file; refusing to overwrite")
-            body, response = get(url)
-            with tempfile.TemporaryDirectory(prefix=".refresh-", dir=OUT) as directory:
-                staged = Path(directory) / ("download" + path.suffix)
-                staged.write_bytes(body)
-                validate_source(source_id, staged, response["content_type"], old_path)
-                receipt = {
-                    "url": response["url"],
-                    "file": name,
-                    "bytes": len(body),
-                    "content_type": response["content_type"],
-                    "sha256": hashlib.sha256(body).hexdigest(),
-                    "retrieved": response["retrieved"],
-                    "requested_url": url,
-                }
-                promote(staged, path, receipts, receipt, source_id)
+            url, name = _resolve_download(source, previous)
+            path = _checked_download_path(name, source_id, previous, old_path, receipts)
+            _download_and_promote(source_id, url, name, path, old_path, receipts)
             accepted += 1
         except KeyboardInterrupt:
             if receipts.get(source_id) is not previous:

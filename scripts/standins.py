@@ -242,6 +242,99 @@ def _view(page, mode, st, shots):
     return "\n".join(lines)
 
 
+def _choose(page, st, path, item, number, rest):
+    """Apply a choice, persisting charged failures exactly like other attempts."""
+    loc = page.locator(item["sel"]).first
+    value = rest[1] if len(rest) > 1 else ""
+    if item["kind"] != "select":
+        st["log"].append(f"failed choose [{number}]: not a select")
+        save_state(path, st)
+        print(f"[{number}] is not a list you can choose from. Nothing happened.")
+        return 1
+    try:
+        loc.select_option(label=value)
+    except Exception:
+        st["log"].append(f"failed choose [{number}]: unavailable option")
+        save_state(path, st)
+        print(f"[{number}] has no choice called {value!r}. Nothing happened.")
+        return 1
+    st["ops"].append(
+        {
+            "op": "choose",
+            "sel": item["sel"],
+            "value": value,
+            "y": page.evaluate("window.scrollY"),
+        }
+    )
+    st["log"].append(f"choose [{number}] {item['label']} = {value}")
+    return 0
+
+
+def _tap(page, base, st, item, number, before):
+    """Track navigation and only replay taps which actually clicked."""
+    loc = page.locator(item["sel"]).first
+    st["log"].append(f"tap [{number}] {item['kind']}: {item['label']}")
+    y_before = page.evaluate("window.scrollY")
+    try:
+        loc.click(timeout=3000)
+        clicked = True
+    except Exception:
+        clicked = False  # not replayed later, so the session cannot get stuck on it
+    with contextlib.suppress(Exception):
+        page.wait_for_load_state("load", timeout=1500)
+    page.wait_for_load_state("load")
+    now = _rel(page.url, base)
+    if _same_page(now, before):
+        if now == before and clicked:
+            st["ops"].append({"op": "tap", "sel": item["sel"], "y": y_before})
+        st["url"] = now
+        return ""
+    st["history"].append({"url": before, "ops": st["ops"], "scroll": st["scroll"]})
+    st["url"], st["ops"] = now, []
+    return "(new page)"
+
+
+def _session_action(page, base, st, path, mode, action, rest):
+    """Return an exit status and navigation note without saving successful views."""
+    note = ""
+    if action == "start":
+        pass
+    elif action == "scroll" and mode == "phone":
+        down = (rest[0] if rest else "down") == "down"
+        page.evaluate(
+            "d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})",
+            STEP if down else -STEP,
+        )
+        st["actions"] += 1
+        st["log"].append(f"scroll {'down' if down else 'up'}")
+    elif action in ("tap", "choose"):
+        number = int(rest[0])
+        if not 1 <= number <= len(st["items"]):
+            print(f"There is no [{number}] in the last view. Nothing happened.")
+            return 1, note
+        item = st["items"][number - 1]
+        st["actions"] += 1
+        before = st["url"]
+        if action == "choose":
+            if _choose(page, st, path, item, number, rest):
+                return 1, note
+        else:
+            note = _tap(page, base, st, item, number, before)
+    elif action == "back":
+        st["actions"] += 1
+        st["log"].append("back")
+        if st["history"]:
+            prev = st["history"].pop()
+            st.update(url=prev["url"], ops=prev["ops"], scroll=prev["scroll"])
+            _open(page, base, st)
+        else:
+            note = "(nothing to go back to)"
+    else:
+        print(__doc__)
+        return 2, note
+    return 0, note
+
+
 def session(mode, args):
     if not args or "--state" not in args:
         print(__doc__)
@@ -313,81 +406,9 @@ def session(mode, args):
             _open(page, base, st)
         else:
             page.goto(base + st["url"], wait_until="load")
-        note = ""
-        if action == "start":
-            pass
-        elif action == "scroll" and mode == "phone":
-            down = (rest[0] if rest else "down") == "down"
-            page.evaluate(
-                "d => window.scrollTo({top: window.scrollY + d, behavior: 'instant'})",
-                STEP if down else -STEP,
-            )
-            st["actions"] += 1
-            st["log"].append(f"scroll {'down' if down else 'up'}")
-        elif action in ("tap", "choose"):
-            n = int(rest[0])
-            if not 1 <= n <= len(st["items"]):
-                print(f"There is no [{n}] in the last view. Nothing happened.")
-                return 1
-            it = st["items"][n - 1]
-            st["actions"] += 1
-            before = st["url"]
-            loc = page.locator(it["sel"]).first
-            if action == "choose":
-                value = rest[1] if len(rest) > 1 else ""
-                if it["kind"] != "select":
-                    st["log"].append(f"failed choose [{n}]: not a select")
-                    save_state(path, st)
-                    print(f"[{n}] is not a list you can choose from. Nothing happened.")
-                    return 1
-                try:
-                    loc.select_option(label=value)
-                except Exception:
-                    st["log"].append(f"failed choose [{n}]: unavailable option")
-                    save_state(path, st)
-                    print(f"[{n}] has no choice called {value!r}. Nothing happened.")
-                    return 1
-                st["ops"].append(
-                    {
-                        "op": "choose",
-                        "sel": it["sel"],
-                        "value": value,
-                        "y": page.evaluate("window.scrollY"),
-                    }
-                )
-                st["log"].append(f"choose [{n}] {it['label']} = {value}")
-            else:
-                st["log"].append(f"tap [{n}] {it['kind']}: {it['label']}")
-                y_before = page.evaluate("window.scrollY")
-                try:
-                    loc.click(timeout=3000)
-                    clicked = True
-                except Exception:
-                    clicked = False  # not replayed later, so the session cannot get stuck on it
-                with contextlib.suppress(Exception):
-                    page.wait_for_load_state("load", timeout=1500)
-                page.wait_for_load_state("load")
-                now = _rel(page.url, base)
-                if _same_page(now, before):
-                    if now == before and clicked:
-                        st["ops"].append({"op": "tap", "sel": it["sel"], "y": y_before})
-                    st["url"] = now
-                else:
-                    st["history"].append({"url": before, "ops": st["ops"], "scroll": st["scroll"]})
-                    st["url"], st["ops"] = now, []
-                    note = "(new page)"
-        elif action == "back":
-            st["actions"] += 1
-            st["log"].append("back")
-            if st["history"]:
-                prev = st["history"].pop()
-                st.update(url=prev["url"], ops=prev["ops"], scroll=prev["scroll"])
-                _open(page, base, st)
-            else:
-                note = "(nothing to go back to)"
-        else:
-            print(__doc__)
-            return 2
+        status, note = _session_action(page, base, st, path, mode, action, rest)
+        if status:
+            return status
         out = _view(page, mode, st, st["shots"])
         ctx.close()
     save_state(path, st)

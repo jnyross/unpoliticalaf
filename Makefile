@@ -2,7 +2,7 @@ PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev setup-typing build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev setup-typing setup-quality complexity build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -20,6 +20,15 @@ setup-dev: setup
 
 setup-typing: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-typing.txt
+
+# Reuse the dashboard's canonical pinned Radon requirements.
+setup-quality:
+	$(PYTHON) -m venv .venv
+	$(RUN_PYTHON) -m pip install -q -r quality/requirements.txt
+
+complexity:
+	$(RUN_PYTHON) -m unittest discover -s tests/quality -v
+	$(RUN_PYTHON) scripts/check_complexity.py
 
 build: site
 
@@ -61,7 +70,7 @@ check-deps:
 	cd quality && ../$(RUN_PYTHON) -m deptry .
 
 # Extend this aggregate as further tooling lands; never replace existing gates.
-quality: lint format-check typecheck check-deps test-stability
+quality: lint format-check typecheck check-deps complexity test-stability
 	$(RUN_PYTHON) scripts/check_agents.py
 	$(MAKE) -f quality/Makefile metrics
 

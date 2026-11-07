@@ -116,12 +116,8 @@ def sealed_pack(audit, supplied=None):
     return pack
 
 
-def score_johns(readers, data=None, audit_dir=None, identity=None):
-    """Every retained probe and every independent grouped session must pass."""
-    data = data if data is not None else jq.load()
-    pk = jq.pack(data)
-    lines, gaps = ["John's questions:"], []
-    valid = reader_set(readers) and audit_dir is not None
+def _johns_population(data, pk):
+    """Return the independent groups and whether they cover the answered probes."""
     groups = {
         group: [p for q, p in jq.probes(data) if q["id"] in ids and not jq.is_open(p)]
         for group, ids in jq.TOPIC_GROUPS.items()
@@ -129,35 +125,47 @@ def score_johns(readers, data=None, audit_dir=None, identity=None):
     all_ids = [p["id"] for _, p in jq.probes(data)]
     grouped_ids = [p["id"] for group in groups.values() for p in group]
     answered_ids = [q["id"] for q in pk["questions"]]
-    if (
+    valid = not (
         len(set(all_ids)) != len(all_ids)
         or sorted(grouped_ids) != sorted(answered_ids)
         or not all_ids
+    )
+    return groups, valid
+
+
+def _johns_reader_gaps(reader, groups, questions, audit_dir, identity):
+    counts = reader.get("johns_actions_used", {})
+    if not isinstance(counts, dict) or set(counts) != set(groups):
+        return [f"{reader['reader']}: missing seven grouped action counts"]
+    gaps = []
+    if not all(
+        complete(reader.get(field), questions)
+        for field in ("johns_with_site", "johns_without_site")
     ):
+        gaps.append(f"{reader['reader']}: incomplete John's answers")
+    for group in groups:
+        if not session_valid(audit_dir, reader, f"johns-{group}", counts[group], "phone", identity):
+            gaps.append(f"{reader['reader']}/{group}: missing, mixed or invalid action state")
+    return gaps
+
+
+def score_johns(readers, data=None, audit_dir=None, identity=None):
+    """Every retained probe and every independent grouped session must pass."""
+    data = data if data is not None else jq.load()
+    pk = jq.pack(data)
+    lines, gaps = ["John's questions:"], []
+    valid = reader_set(readers) and audit_dir is not None
+    groups, population_valid = _johns_population(data, pk)
+    if not population_valid:
         valid = False
         gaps.append("invalid or incomplete probe/group population")
     if valid:
         identity = identity or build_identity(audit_dir, readers)
         for reader in readers:
-            counts = reader.get("johns_actions_used", {})
-            if not isinstance(counts, dict) or set(counts) != set(groups):
+            reader_gaps = _johns_reader_gaps(reader, groups, pk["questions"], audit_dir, identity)
+            if reader_gaps:
                 valid = False
-                gaps.append(f"{reader['reader']}: missing seven grouped action counts")
-                continue
-            if not all(
-                complete(reader.get(field), pk["questions"])
-                for field in ("johns_with_site", "johns_without_site")
-            ):
-                valid = False
-                gaps.append(f"{reader['reader']}: incomplete John's answers")
-            for group in groups:
-                if not session_valid(
-                    audit_dir, reader, f"johns-{group}", counts[group], "phone", identity
-                ):
-                    valid = False
-                    gaps.append(
-                        f"{reader['reader']}/{group}: missing, mixed or invalid action state"
-                    )
+                gaps += reader_gaps
     else:
         gaps.append("requires five complete same-candidate readers and grouped states")
     gaps += [f"{q['id']}: {q['gap']}" for q in pk["open"]]
@@ -176,28 +184,20 @@ def score_johns(readers, data=None, audit_dir=None, identity=None):
     return {"johns_questions": not gaps, "johns_gaps": gaps}, lines
 
 
-def score(audit_dir, pack=None, new_pack=None):
-    audit = Path(audit_dir)
-    pack = pack or read_record(
-        Path(__file__).resolve().parent.parent / "docs/user-test/questions.json"
+def _fixed_reader_passes(reader, questions, rules):
+    return correct(reader.get("with_site", {}), questions) >= rules["min_correct_each"] and all(
+        correct(reader.get("with_site", {}), [q]) for q in questions if q["critical"]
     )
-    questions, rules = pack["questions"], pack["pass_rules"]
-    paths = sorted(p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem))
-    readers = [read_record(path) for path in paths]
-    valid = reader_set(readers) and all(
-        path.stem == r.get("reader") for path, r in zip(paths, readers)
-    )
-    identity = build_identity(audit, readers) if valid else None
+
+
+def _score_fixed(audit, readers, questions, rules, valid, identity):
+    """Score the fixed phone questions and their prior-knowledge uplift."""
     fixed_complete = valid and all(complete(r.get("with_site"), questions) for r in readers)
     fixed_states = valid and all(
         session_valid(audit, r, "phone", r.get("actions_used"), "phone", identity) for r in readers
     )
     total = sum(correct(r.get("with_site", {}), questions) for r in readers)
-    each = all(
-        correct(r.get("with_site", {}), questions) >= rules["min_correct_each"]
-        and all(correct(r.get("with_site", {}), [q]) for q in questions if q["critical"])
-        for r in readers
-    )
+    each = all(_fixed_reader_passes(r, questions, rules) for r in readers)
     res = {
         "phone_test": bool(
             fixed_complete and fixed_states and each and total >= rules["min_correct_total"]
@@ -216,6 +216,10 @@ def score(audit_dir, pack=None, new_pack=None):
         f"Prior knowledge: uplift {total - before}/60 (needs 20): "
         + ("PASS" if res["prior_knowledge"] else "FAIL")
     )
+    return res, lines
+
+
+def _score_new(audit, readers, new_pack, valid, identity):
     new = sealed_pack(audit, new_pack)
     new_ok, got = False, 0
     if new is not None:
@@ -234,14 +238,13 @@ def score(audit_dir, pack=None, new_pack=None):
             )
             and got / (24 * 5) >= NEW_PASS
         )
-    res["new_questions"] = bool(new_ok)
-    lines.append(
-        f"New questions: {got}/120 (needs 80%, valid seal and separate 40-action states): "
-        + ("PASS" if new_ok else "FAIL")
-    )
+    return bool(new_ok), got
+
+
+def _score_screen_reader(audit, questions, identity):
     sr = read_record(audit / "readers/SR.json")
     sr_answers = sr.get("with_site", {})
-    res["screen_reader"] = bool(
+    return bool(
         sr.get("reader") == "SR"
         and complete(sr_answers, questions)
         and session_valid(audit, sr, "state", sr.get("actions_used"), "sr", identity)
@@ -249,6 +252,28 @@ def score(audit_dir, pack=None, new_pack=None):
         and all(correct(sr_answers, [q]) for q in questions if q["critical"])
         and not sr.get("blockers")
     )
+
+
+def score(audit_dir, pack=None, new_pack=None):
+    audit = Path(audit_dir)
+    pack = pack or read_record(
+        Path(__file__).resolve().parent.parent / "docs/user-test/questions.json"
+    )
+    questions, rules = pack["questions"], pack["pass_rules"]
+    paths = sorted(p for p in (audit / "readers").glob("R*.json") if re.fullmatch(r"R\d+", p.stem))
+    readers = [read_record(path) for path in paths]
+    valid = reader_set(readers) and all(
+        path.stem == r.get("reader") for path, r in zip(paths, readers)
+    )
+    identity = build_identity(audit, readers) if valid else None
+    res, lines = _score_fixed(audit, readers, questions, rules, valid, identity)
+    new_ok, got = _score_new(audit, readers, new_pack, valid, identity)
+    res["new_questions"] = new_ok
+    lines.append(
+        f"New questions: {got}/120 (needs 80%, valid seal and separate 40-action states): "
+        + ("PASS" if new_ok else "FAIL")
+    )
+    res["screen_reader"] = _score_screen_reader(audit, questions, identity)
     lines.append(
         "Agent accessibility-tree stand-in: " + ("PASS" if res["screen_reader"] else "FAIL")
     )

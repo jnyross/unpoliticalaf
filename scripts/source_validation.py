@@ -61,16 +61,38 @@ def validate_l522(rows, previous):
         raise ValueError("L522 annual base index is not 100")
 
 
+def _school_texts(rows):
+    return {
+        (i, j): value
+        for i, row in enumerate(rows)
+        for j, value in enumerate(row)
+        if isinstance(value, str) and value.strip()
+    }
+
+
+def _validate_school_coverage(rows, texts, previous):
+    """Compare labels and every previously numeric cell before accepting revisions."""
+    old_workbook = openpyxl.load_workbook(previous, read_only=True, data_only=True)
+    try:
+        old_rows = list(old_workbook["Table 6b"].values)
+        old_texts = _school_texts(old_rows)
+        if old_texts != texts:
+            raise ValueError("Table 6b labels/layout changed; review new vintage")
+        for i, row in enumerate(old_rows):
+            for j, value in enumerate(row):
+                if isinstance(value, (int, float)):
+                    current = rows[i][j]
+                    if not isinstance(current, (int, float)) or not math.isfinite(current):
+                        raise ValueError("Table 6b numeric coverage lost")
+    finally:
+        old_workbook.close()
+
+
 def validate_school(path, previous):
     workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
     try:
         rows = list(workbook["Table 6b"].values)
-        texts = {
-            (i, j): value
-            for i, row in enumerate(rows)
-            for j, value in enumerate(row)
-            if isinstance(value, str) and value.strip()
-        }
+        texts = _school_texts(rows)
         combined = " ".join(texts.values())
         for label in (
             "STATE-FUNDED PRIMARY",
@@ -85,25 +107,7 @@ def validate_school(path, previous):
         if not any(2006 in row and 2015 in row for row in rows):
             raise ValueError("Table 6b vintage/year columns changed")
         if previous:
-            old_workbook = openpyxl.load_workbook(previous, read_only=True, data_only=True)
-            try:
-                old_rows = list(old_workbook["Table 6b"].values)
-                old_texts = {
-                    (i, j): value
-                    for i, row in enumerate(old_rows)
-                    for j, value in enumerate(row)
-                    if isinstance(value, str) and value.strip()
-                }
-                if old_texts != texts:
-                    raise ValueError("Table 6b labels/layout changed; review new vintage")
-                for i, row in enumerate(old_rows):
-                    for j, value in enumerate(row):
-                        if isinstance(value, (int, float)):
-                            current = rows[i][j]
-                            if not isinstance(current, (int, float)) or not math.isfinite(current):
-                                raise ValueError("Table 6b numeric coverage lost")
-            finally:
-                old_workbook.close()
+            _validate_school_coverage(rows, texts, previous)
     finally:
         workbook.close()
 
@@ -148,6 +152,56 @@ def validate_overcrowding(root, previous):
                     raise ValueError("FT1421 numeric coverage lost")
 
 
+def _validate_csv_source(source_id, path, previous):
+    rows = csv_records(path)
+    if len(rows) < 2 or len(rows[0]) < 2 or not any(len(row) >= 2 for row in rows[1:]):
+        raise ValueError("invalid CSV records")
+    if previous and rows[0] != csv_records(previous)[0]:
+        raise ValueError("CSV header/identity changed")
+    if source_id == "ons-l522":
+        validate_l522(rows, previous)
+
+
+def _validate_json_source(body):
+    value = json.loads(body)
+    if (
+        not isinstance(value, (dict, list))
+        or not value
+        or (isinstance(value, dict) and "error" in value)
+    ):
+        raise ValueError("invalid JSON dataset/error response")
+
+
+def _validate_xlsx_source(source_id, path, previous):
+    workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    try:
+        if not workbook.sheetnames:
+            raise ValueError("XLSX has no sheets")
+        for sheet in workbook:
+            for _ in sheet.values:
+                pass
+    finally:
+        workbook.close()
+    if source_id == "dfe-spc-2015-tables":
+        validate_school(path, previous)
+
+
+def _validate_spreadsheet_source(source_id, path, suffix, previous):
+    with zipfile.ZipFile(path) as archive:
+        if archive.testzip():
+            raise ValueError("corrupt spreadsheet archive")
+        if suffix == ".ods":
+            if archive.read("mimetype") != b"application/vnd.oasis.opendocument.spreadsheet":
+                raise ValueError("not an ODS spreadsheet")
+            root = ET.fromstring(archive.read("content.xml"))
+            if root.find(f".//{{{TABLE_NS}}}table") is None:
+                raise ValueError("ODS has no sheets")
+            if source_id == "ehs-ft1421":
+                validate_overcrowding(root, previous)
+    if suffix == ".xlsx":
+        _validate_xlsx_source(source_id, path, previous)
+
+
 def validate_source(source_id, path, content_type, previous=None):
     body = path.read_bytes()
     if not body:
@@ -158,45 +212,11 @@ def validate_source(source_id, path, content_type, previous=None):
     if suffix != ".html" and (is_html or "text/html" in content_type.lower()):
         raise ValueError("HTML/error response instead of source format")
     if suffix == ".csv":
-        rows = csv_records(path)
-        if len(rows) < 2 or len(rows[0]) < 2 or not any(len(row) >= 2 for row in rows[1:]):
-            raise ValueError("invalid CSV records")
-        if previous and rows[0] != csv_records(previous)[0]:
-            raise ValueError("CSV header/identity changed")
-        if source_id == "ons-l522":
-            validate_l522(rows, previous)
+        _validate_csv_source(source_id, path, previous)
     elif suffix == ".json":
-        value = json.loads(body)
-        if (
-            not isinstance(value, (dict, list))
-            or not value
-            or (isinstance(value, dict) and "error" in value)
-        ):
-            raise ValueError("invalid JSON dataset/error response")
+        _validate_json_source(body)
     elif suffix in {".xlsx", ".ods"}:
-        with zipfile.ZipFile(path) as archive:
-            if archive.testzip():
-                raise ValueError("corrupt spreadsheet archive")
-            if suffix == ".ods":
-                if archive.read("mimetype") != b"application/vnd.oasis.opendocument.spreadsheet":
-                    raise ValueError("not an ODS spreadsheet")
-                root = ET.fromstring(archive.read("content.xml"))
-                if root.find(f".//{{{TABLE_NS}}}table") is None:
-                    raise ValueError("ODS has no sheets")
-                if source_id == "ehs-ft1421":
-                    validate_overcrowding(root, previous)
-        if suffix == ".xlsx":
-            workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
-            try:
-                if not workbook.sheetnames:
-                    raise ValueError("XLSX has no sheets")
-                for sheet in workbook:
-                    for _ in sheet.values:
-                        pass
-            finally:
-                workbook.close()
-            if source_id == "dfe-spc-2015-tables":
-                validate_school(path, previous)
+        _validate_spreadsheet_source(source_id, path, suffix, previous)
     elif suffix == ".xls":
         workbook = xlrd.open_workbook(path)
         try:

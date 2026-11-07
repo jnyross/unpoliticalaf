@@ -68,6 +68,12 @@ shows complexity hotspots to make existing maintenance debt visible, rather
 than hiding it behind an average.
 
 These measurements monitor the codebase; they do not assert a historical trend
-before runs exist, impose complexity/maintainability thresholds, or replace the existing
+before runs exist, impose their own complexity/maintainability thresholds, or replace the existing
 correctness and accessibility checks. Production dependencies, deterministic
 site output and deployment commands are unchanged.
+
+The separate `make complexity` gate, included in `make quality`, enforces the
+new-function ceiling of 20 and the reviewed legacy baseline for all Python under
+`builder/`, `scripts/` and `tests/`. Its scope is deliberately different from this
+dashboard's `builder/` and `scripts/` measurements. See the root README's
+complexity policy.

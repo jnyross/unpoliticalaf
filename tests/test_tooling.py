@@ -30,8 +30,25 @@ class Tooling(unittest.TestCase):
             "deptry",
             "check_agents",
             "-m quality.measure",
+            "scripts/check_complexity.py",
         ):
             self.assertIn(command, result.stdout)
+
+    def test_complexity_reuses_dashboard_pin_and_original_source_population(self):
+        from scripts import check_complexity
+
+        self.assertEqual(check_complexity.SOURCE_DIRS, ("builder", "scripts", "tests"))
+        self.assertEqual(check_complexity.MAX_COMPLEXITY, 20)
+        result = subprocess.run(
+            ["make", "-n", "setup-quality", "complexity"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        self.assertIn("-r quality/requirements.txt", result.stdout)
+        self.assertIn("unittest discover -s tests/quality", result.stdout)
+        self.assertIn("radon==6.0.1", (ROOT / "quality/requirements.txt").read_text())
 
     def test_coverage_and_dashboard_use_one_gate_and_measurement(self):
         for arguments in (["coverage"], ["verify-coverage"], ["-f", "quality/Makefile", "metrics"]):
