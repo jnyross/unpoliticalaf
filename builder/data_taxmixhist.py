@@ -69,11 +69,12 @@ def build(facts):
         ids = [f"thist.cash.{k}.{y}" for k, _, _ in GROUPS]
         facts.add(Fact(f"thist.cash.other.{y}", rest, "£bn", y, SOURCE_AMOUNTS, total.locator, "calculated",
                        note="All receipts minus the six named groups: business rates, oil and gas taxes, stamp duties, Capital Gains Tax, Inheritance Tax, the TV licence fee, other taxes, and non-tax receipts such as interest and dividends.",
-                       formula=f"thist.cash.total.{y} − sum of the six named groups", inputs=[total.id] + ids))
+                       formula=f"{total.id} − (" + " + ".join(ids) + ")", inputs=[total.id] + ids))
         gtot = facts[f"thist.gdp.total.{y}"]
+        gdp_ids = [f"thist.gdp.{k}.{y}" for k, _, _ in GROUPS]
         facts.add(Fact(f"thist.gdp.other.{y}", gtot.value - sum(facts[f"thist.gdp.{k}.{y}"].value for k, _, _ in GROUPS), "% of GDP", y, SOURCE,
-                       gtot.locator, "calculated", formula=f"thist.gdp.total.{y} − sum of the six named groups",
-                       inputs=[gtot.id] + [f"thist.gdp.{k}.{y}" for k, _, _ in GROUPS]))
+                       gtot.locator, "calculated", formula=f"{gtot.id} − (" + " + ".join(gdp_ids) + ")",
+                       inputs=[gtot.id] + gdp_ids))
         for key, _ in out["groups"]:
             c = facts[f"thist.cash.{key}.{y}"]
             facts.add(Fact(f"thist.share.{key}.{y}", 100 * c.value / total.value, "% of all public sector receipts", y, SOURCE_SHARES, c.locator, "calculated",

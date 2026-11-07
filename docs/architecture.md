@@ -18,7 +18,7 @@ flowchart TD
     manifest["sources/manifest.json"]
 
     subgraph acquisition["Source acquisition, only when requested"]
-        fetch["scripts/fetch_sources.py on GitHub Actions"]
+        fetch["scripts/fetch_sources.py, legacy GitHub writer disabled"]
         transcription["Manual transcription checked against retained PDF"]
     end
 
@@ -31,11 +31,11 @@ flowchart TD
 
     manifest --> fetch
     publishers -->|"HTTPS downloads"| fetch
-    fetch -->|"commit source bytes and receipts"| fetched
+    fetch -->|"legacy workflow commit route, disabled"| fetched
     fetched -->|"NATO PDF"| transcription --> transcribed
 
     subgraph build["Build time, local checks or Vercel"]
-        setup["make setup: pinned Python libraries"]
+        setup["make setup: pinned Python libraries; setup-test adds test tools"]
         registry["sources.py: registry and hash checks"]
         facts["readers.py, data.py and data_*.py: Facts"]
         render["build.py, pages_*.py, html.py, trace.py"]
@@ -50,6 +50,7 @@ flowchart TD
     transcribed --> registry
     code --> render
     registry --> facts --> render --> output
+    setup -.->|"setup-test required"| verify
     retained -.-> verify
     fetched -.-> verify
     transcribed -.-> verify
@@ -67,12 +68,16 @@ flowchart TD
    [The manifest](../sources/manifest.json) configures downloads.
    [The fetcher](../scripts/fetch_sources.py) uses standard-library HTTP requests,
    either to a fixed URL or to a link found on a publisher page. It keeps the
-   response bytes and records the resolved URL, retrieval time, content type,
-   byte count and SHA-256 in `data/fetched/receipts.json`.
-   [The fetch workflow](../.github/workflows/fetch-sources.yml) runs on pushes
-   changing the manifest, fetcher or workflow, or by manual dispatch. It commits
-   downloaded files back to the checked-out branch. It is not a scheduled
-   refresh service.
+   response bytes and records the resolved URL, original `requested_url`,
+   retrieval time, content type, byte count and SHA-256 in
+   `data/fetched/receipts.json`. `make setup` supplies the format readers needed
+   for acquisition; the disabled legacy workflow would need reviewed setup
+   changes before intentional use.
+   [The legacy fetch workflow](../.github/workflows/fetch-sources.yml) is
+   disabled. Its definition can commit downloaded files back to the checked-out
+   branch, but a source push does not currently run it. Acquisition uses an
+   explicit reviewed run; intentional workflow activation needs review and must
+   not enable dormant schedules or a competing source writer.
 2. **Verify and read retained inputs.**
    [The source registry](../builder/sources.py) combines explicit entries with
    downloaded-file receipts. `verify_hashes()` runs before rendering.
@@ -130,12 +135,15 @@ downloaded by that manifest. Receipts record the URLs actually retrieved.
 | Eurostat (`ec.europa.eu`), OECD (`sdmx.oecd.org`), IMF (`www.imf.org`) | Eurostat dissemination JSON, OECD SDMX CSV and IMF DataMapper JSON for international comparisons | Fetcher during acquisition |
 | NATO (`www.nato.int`), NHS Digital (`digital.nhs.uk`), Bank of England (`www.bankofengland.co.uk`) | Defence reports, NHS workforce files and mortgage-rate CSV | Fetcher during acquisition |
 | Parliament (`api.parliament.uk`), document archive (`dera.ioe.ac.uk`), data catalogue (`www.data.gov.uk`) | Historical policy records, archived reports and source discovery | Fetcher during acquisition; not every manifest entry is rendered |
-| GitHub / GitHub Actions | Git source and PR checks; fetch workflow writes retained files; live workflow compares the deployed build | Development, acquisition and verification, not page rendering |
+| GitHub / GitHub Actions | Public Git source, independent PR review and CI; disabled legacy fetch writer; live workflow compares the deployed build | Development, explicit acquisition and verification, not page rendering |
 | Python package index and package-download hosts | Install pinned `openpyxl`, `pypdf`, `xlrd`; development requirements add Playwright and axe tooling | `make setup` / `make setup-dev`; browser tests also download Chromium |
 | Vercel (`unpoliticalaf.vercel.app`) | Build and static HTTPS hosting; serves HTML, CSV and JSON files | Production page requests and live checks |
 
 Publisher URLs are public reads; the fetcher has no API-key configuration.
-GitHub's fetch workflow uses its workflow token to commit files. Vercel's Git
+GitHub's disabled legacy fetch workflow defines workflow-token commits; do not
+activate it without independent review. Current delivery uses reviewed PRs and
+agent-managed merges, not the paused old controller or direct-main pushes.
+Vercel's Git
 integration is managed outside the application. No publisher or deployment
 credentials are embedded in generated pages. There is no separate frontend
 package build: [package.json](../package.json) wraps the Make commands.
@@ -148,8 +156,26 @@ test/browser libraries are in [requirements-dev.txt](../requirements-dev.txt).
   reading the current site or rebuilding from complete retained inputs.
   The fetcher retries requests and skips already-retained downloads by default;
   `--refresh` re-downloads them. Inspect its `FAIL` messages, final failures list
-  and receipts: individual download failures are reported but do not make the
-  current script exit nonzero. An incomplete batch can therefore be committed.
+  and receipts: any failure exits 1 and identifies the source. A mixed run reports
+  `partial`: accepted updates remain matching pairs, while failed sources keep
+  their last-good bytes and receipts. SIGINT/SIGTERM clean up staging and exit
+  130. An interrupt does not undo already accepted pairs.
+- **Invalid download:** downloads are staged on the retained filesystem. HTTP
+  status, declared length, identity encoding and format checks run before either
+  file or receipt changes. Narrow identity/coverage checks protect L522 CPIH,
+  DfE 2015 Table 6b and EHS FT1421; other sources receive format checks, not a
+  claim of semantic validation. Discovered links cannot silently change vintage.
+  Review changed data and metadata, then run `make verify` before publication.
+  For example, after setup, `./.venv/bin/python scripts/fetch_sources.py ons-l522
+  dfe-spc-2015-tables ehs-ft1421` selectively reacquires these three sources.
+  Review `git diff -- data/fetched`, including old/new hashes and retrieval times.
+- **Interrupted promotion:** refresh writers serialize on the output directory.
+  Per-source replacement rolls back Python/I/O failures and defers SIGINT/SIGTERM
+  across the two renames. POSIX cannot atomically replace two files: this does
+  not promise power-loss/SIGKILL recovery. Temporary directories are ignored,
+  not evidence of accepted data. Do not build/read sources concurrently with
+  refresh; run retained-hash checks afterward. Without a declared length, a
+  cleanly closed shorter response can only be detected by format/source checks.
 - **Changed source bytes or layout:** hash mismatches stop the build. A hash
   proves retained-byte identity, not that the correct cells were selected.
   Review the registry, receipts and reader locators together after an update,

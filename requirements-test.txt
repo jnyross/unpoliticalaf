@@ -1,2 +1,3 @@
 -r requirements.txt
+-r quality/requirements.txt
 pytest==8.4.2

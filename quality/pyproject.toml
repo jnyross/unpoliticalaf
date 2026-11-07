@@ -1,0 +1,7 @@
+[tool.deptry]
+requirements_files = ["requirements.txt"]
+
+[tool.deptry.per_rule_ignores]
+# coverage is invoked via CLI; these are pinned Radon/coverage support packages,
+# not direct imports. Radon itself must remain imported by report.py.
+DEP002 = ["coverage", "mando", "colorama", "six"]

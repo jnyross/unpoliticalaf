@@ -1,23 +1,27 @@
 # Autonomous delivery
 
-The full mandate and 9.5/10 acceptance target are in `docs/product-spec.md`; the operating rules are in
-`AGENTS.md`. GitHub is the sole live ticket ledger. The existing factory handles
-one eligible ticket at a time, respecting `Blocked by: #N` dependencies, with
-independent review, Boat checks and verified publication to the canonical site.
+John's decisions on 5 November 2026 control `docs/product-spec.md` and
+`AGENTS.md`. The acceptance goal is `docs/goal-rubric.md`: >=49/55, every
+dimension >=4, D11=5, every recorded John's probe passing and no unresolved
+material finding, on the same live candidate. Old 31/32 and frozen-v2 96/100
+targets are historical, not alternative completion routes.
 
-Delivery order: qualified factory; verified spending port; provenance and fiscal
-data; taxes and history; impartial party proposals; accessibility and accountability;
-safe source refresh and monitoring; final live qualification. Preserve the user's
-authorisation for full implementation and controller-owned direct-main deployment.
+GitHub issues and PRs hold the live backlog. Public source and independently
+reviewed PR delivery are authorised: credential-free Boat checks, CI on the
+exact candidate, agent-managed merge and real Vercel/live-byte verification.
+One writer owns each overlapping path. Do not self-approve or push direct-main.
+Keep the old controller, claims, bindings and schedules paused and preserved.
+Provider, billing and credentials stay unchanged; do not enable dormant writers.
 
-The current placeholder is not the finished product. A ticket is complete only
-with its required candidate, review, checks and deployment evidence. Missing human
-acceptance, a public-source decision or an elapsed year is recorded in its explicit
-human-gate issue and never replaced by a model's assurance.
+All acceptance testing is agent-run. No recruitment, consent, real-phone study,
+outside-human or actual screen-reader gate remains. Report an accepted pass as
+"met (simulated)", never as real people or proof of newcomer comprehension.
+Preserve pinned references, dated assessments, unperformed human evidence and
+unobserved freshness history without inventing a pass.
 
 After every completed wave, independently assess the deployed commit against the
-unchanged 32-point rubric. Record evidence and score, normalize to ten, then queue
+current eleven-dimension rubric. Record evidence and scores, then queue
 or update concrete deficit tickets. Repeat build, review, deploy and reassessment
-until at least 31/32 is observed. Keep the product epic active below that target;
-surface human dependencies rather than silently ending the loop or repeating
-non-actionable runs.
+until the complete current goal is observed on one live candidate. Keep the
+product epic active below that target. Report actual failed or unrun checks,
+not human dependencies that John has already removed.

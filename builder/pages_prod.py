@@ -6,7 +6,6 @@ so they compare the size of economies per hour worked, not what anyone earns.
 Trends are after inflation (volume indexes), rebased to 2008 = 100.
 """
 from .html import FOLD, page, table, details_table, bars, line_chart, switch, source_line, esc
-from . import findings as F
 
 UK = "GBR"
 G7 = ["GBR", "USA", "DEU", "FRA", "ITA", "CAN", "JPN"]

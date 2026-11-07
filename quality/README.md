@@ -2,7 +2,7 @@
 
 The **Code quality metrics** GitHub Actions workflow runs on every pull request
 and push to `main`, and can also be run manually. It needs no service token or
-external quality platform. Source and reports stay in this private repository's
+external quality platform. Source and reports stay in this repository's
 Actions runs.
 
 Open the workflow's run summary for line/branch coverage, maximum function
@@ -21,7 +21,7 @@ From the repository root, with Python 3.10+:
 make -f quality/Makefile setup metrics
 ```
 
-This uses the existing production setup, installs pinned development-only
+This uses the existing test setup (including pytest), installs pinned development-only
 coverage.py and Radon tools, tests the reporter, then runs the unchanged build,
 independent source/page checks and unit tests under branch coverage. It fails if
 any of those checks fail. It writes ignored output to `quality-reports/`:

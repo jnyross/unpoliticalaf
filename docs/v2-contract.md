@@ -1,5 +1,31 @@
 # Frozen v2 product and evidence contract
 
+## Current supersession — 5 November 2026
+
+John's approved [product specification](product-spec.md) and
+[current goal rubric](goal-rubric.md) control: >=49/55, every dimension >=4,
+D11=5, every recorded probe passing and no unresolved material finding on the
+same live candidate. All acceptance is agent-run, labelled "met (simulated)"
+with simulation limits, never proof of real newcomer comprehension.
+
+Public source and independently reviewed PR delivery, credential-free Boat,
+CI, agent-managed merges and exact-candidate live verification supersede
+controller-only/direct-main/private rules. The old controller, claims,
+bindings and schedules remain paused and preserved; provider, billing and
+credentials stay unchanged. No dormant schedule is authorised.
+
+The frozen text below is a historical record. Its 96/100 target, G6 delivery,
+G7 study, human consent/recruitment/real-phone/outside-human or actual
+screen-reader gates and protected-AGENTS restriction are no longer active.
+Neither are its docs-ticket-only path allowlist, source-byte budget or
+dependency freeze. Outcome/scope, actual-period anchors, method boundaries and
+fiscal integrity rules remain applicable where consistent with the current
+specification/rubric, including truthful extensions of annual coverage.
+Current accessibility uses the rubric and recorded T128 trade-off, not a new
+global 44px gate. Pinned originals, hashes and dated results remain untouched.
+
+## Historical frozen contract — 31 October 2026
+
 This document records the parent-supplied frozen v2 contract authorised on
 31 October 2026. Read it with the controlling v2 section of
 [the product specification](product-spec.md). It summarises the complete frozen

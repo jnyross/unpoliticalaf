@@ -22,6 +22,23 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "7 November 2026",
+        "pages": [("high-earners.html", "High earners and Income Tax"),
+                  ("figures/hmrc-spi-2324-tables.html", "Income Tax figure records"),
+                  ("productivity.html", "Productivity"), ("tax-history.html", "Tax history"),
+                  ("taxes.html", "Taxes"), ("household-tax.html", "Household tax"),
+                  ("data/facts.json", "Facts download")],
+        "was": "Some calculation records used shortened names or words instead of complete arithmetic. In the high-earner what-if, the formula for the share of a group named a rounded headcount, although the share was calculated from the unrounded headcount. Stated numbers of leavers had no formula.",
+        "now": "The records give complete arithmetic and inputs, including the unrounded headcount calculation for the share. Stated leaver counts are explicit assumptions, not observed source values. All calculated records are independently checked, including sums, averages and rounding; unsupported formulas fail the check. The displayed numerical values have not changed.",
+    },
+    {
+        "date": "6 November 2026",
+        "pages": [("who-pays.html#richest-share", "Who pays?"),
+                  ("figures/etb.html", "ONS figure records"), ("data/facts.json", "Facts download")],
+        "was": "The site claimed the richest fifth paid 46.0% of all taxes paid by UK households. It multiplied ONS Table 2a's person-weighted household tax means by household counts, then added the results. Those means average household amounts across people, not households. This calculation does not establish actual household-tax totals or shares.",
+        "now": "The unsupported totals and all five shares are withdrawn from the page, chart, table, figure records and current data downloads (etb.2a.hhtax.* and etb.2a.taxshare.*). A prominent limitation replaces the headline; no replacement percentage is claimed. Supported household amounts and tax-to-income ratios remain, with their person-analysis population explained. All five fifths and All individuals were reopened, including counts, tax means and ranking notes. The current J4.3 question evidence now tests this limitation; its former wording is preserved as withdrawn history.",
+    },
+    {
         "date": "4 November 2026",
         "pages": [("methods.html", "Methods"), ("spending.html", "Where does public money go?"), ("spending-areas.html", "Spending on each area, every year"),
                   ("international.html", "How do UK taxes and spending compare with other countries?")],
@@ -283,11 +300,13 @@ def corrections_page():
     items = []
     for c in CORRECTIONS:
         where_ = ", ".join(f'<a href="{href}">{esc(t)}</a>' for href, t in c["pages"])
+        change = (f'<a href="{REPO}/pull/{c["pr"]}">Change {c["pr"]} in the public repository</a>'
+                  if "pr" in c else f'<a href="{REPO}/commits/main/builder/pages_money.py">Correction code history in the public repository</a>')
         items.append(f'''<section class="correction"><h2>{esc(c["date"])}</h2>
 <dl><dt>Page</dt><dd>{where_}</dd>
 <dt>What was wrong</dt><dd>{esc(c["was"])}</dd>
 <dt>What it says now</dt><dd>{esc(c["now"])}</dd>
-<dt>Change</dt><dd><a href="{REPO}/pull/{c["pr"]}">Change {c["pr"]} in the public repository</a></dd></dl></section>''')
+<dt>Change</dt><dd>{change}</dd></dl></section>''')
     body = f'''<h1>Corrections</h1>
 <p>When we find a mistake in a figure, a label or an explanation, we fix it and record it here: what it said, what it says now, and the change that fixed it. Every change to the site is also public in the <a href="{REPO}/commits/main">code repository</a>.</p>
 <p>If you think something is wrong, <a href="{REPO}/issues/new">tell us on GitHub</a>.</p>

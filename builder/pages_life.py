@@ -11,11 +11,11 @@ import re
 
 from .data import YEARS, EARLY_YEARS, NATIONS, REGIONS, AGE_SERIES
 from . import explain
-from .html import FOLD, NOFOLD, before_toc, jump, page, table, details_table, line_chart, small_multiples, source_line, spark, fmt, esc
+from .html import FOLD, NOFOLD, before_toc, jump, page, table, details_table, line_chart, small_multiples, source_line, spark, esc
 from . import uncertainty as U
 from . import findings as F
 from .pages_nations import housing_nations_block, schools_nations_block
-from .pages_life_extra import spread_block, afford_block, industry_block, industry_page, afford_page, jobs_people_block
+from .pages_life_extra import spread_block, afford_block, industry_block, industry_page as industry_page, afford_page as afford_page, jobs_people_block
 
 FIRST, LAST = YEARS[0], YEARS[-1]
 RECENT = 2022  # the first year after the pandemic years (2020 and 2021), for a recent comparison beside the default pair
@@ -817,7 +817,6 @@ def largest_changes(facts, num, a, b, n=3):
 
 
 def compare_page(facts, d, num, sources, a, b):
-    titles = dict((t[0], t[1]) for t in TOPICS)
     body = [f"<h1>{a} compared with {b}</h1>"]
     body.append(f'<p><a href="../{a}.html">Everyday life in {a}</a> · <a href="../{b}.html">Everyday life in {b}</a> · <a href="index.html">Choose two other years</a></p>')
     # Summary first: the same lead measure for every topic, then the biggest changes by a fixed rule.
@@ -899,7 +898,7 @@ def compare_page(facts, d, num, sources, a, b):
                     body.append(f'<p class="small">{a} counts {desc[hol_basis(a)]} and {b} {desc[hol_basis(b)]}, so the numbers are listed side by side but not compared.</p>')
         body.append(f'<details class="limit"><summary>Limits of the {esc(title.lower())} figures</summary><p>{esc(TOPIC_LIMITS[key])}</p></details>')
         body.append(source_line(sources, [s for s in TOPIC_SOURCES[key] if s in sources], up="../../"))
-    body.append(f'<h2 id="other">Compare other years</h2>')
+    body.append('<h2 id="other">Compare other years</h2>')
     body.append(compare_form("../", a, b))
     return page(f"life/compare/{a}-{b}.html", f"{a} compared with {b}", "\n".join(body), f"How work, pay, housing, holidays and class sizes differed between {a} and {b}.", scripts=COMPARE_JS)
 
@@ -1088,7 +1087,6 @@ def _earnings(facts, d, num, sources):
 def _housing(facts, d, num, sources):
     """(answer box, detail parts) for the housing topic."""
     body = []
-    y = LAST
     hy = max(yy for yy in YEARS if _val(facts, f"house.private.{yy}") is not None)
     answer = (f'<div class="answer"><p>{headline(facts, num, "housing", hy)} In {FIRST}-{str(FIRST + 1)[2:]}, {num(f"house.private.{FIRST}", "pct0")} rented privately.</p></div>')
     body.append(U.topic_line(num, "housing", LAST))
@@ -1131,7 +1129,6 @@ def _top_holiday_countries(facts, d, num):
 def _holidays(facts, d, num, sources):
     """(answer box, detail parts) for the holidays topic."""
     body = []
-    y = LAST
     names = d["countries"]["names"]
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
     # The most visited countries get their own short paragraph near the top, with a link
@@ -1182,13 +1179,13 @@ def _infant_limit(facts, num, d):
 def _schools(facts, d, num, sources):
     """(answer box, detail parts) for the schools topic."""
     body = []
-    y = LAST
     # England's January census can be a year newer than the explorer's range: show it here
     newer = [y for y in (LAST + 1,) if _val(facts, f"school.primary.{y}") is not None and _val(facts, f"school.secondary.{y}") is not None]
     sy = YEARS + newer
     latest = (f' The January {newer[-1]} census ({newer[-1] - 1}/{str(newer[-1])[2:]} school year) found {num(f"school.primary.{newer[-1]}", "dp1")} and '
               f'{num(f"school.secondary.{newer[-1]}", "dp1")}. It is not on the year pages, which stop at {LAST}, the latest year that most topics have.') if newer else ""
-    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {FIRST_YEAR["schools"]} the figures were {num(f"school.primary.{FIRST_YEAR['schools']}", "dp1")} and {num(f"school.secondary.{FIRST_YEAR['schools']}", "dp1")}.{latest}</p>'
+    first = FIRST_YEAR["schools"]
+    answer = (f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
               f'{_infant_limit(facts, num, d)}</div>')
     body.append(U.topic_line(num, "schools", LAST))
     body.append(line_chart("Average class size in England", [str(y) for y in sy],
@@ -1288,7 +1285,7 @@ def topic_page(facts, d, num, sources, key):
     rest = detail[first_chart + 2:]
     # On work the note sits straight under the answer, before the long chart, so a phone
     # reader sees it on the first screen (audit 14 gap 1).
-    body = [f'<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
+    body = ['<p class="small"><a href="index.html">Everyday life, year by year</a></p>', f'<h1 id="key-answer">{esc(question)}</h1>', answer,
             WORK_CAUSE if key == "work" else "",
             f"<h2 id='trend'>{esc(TREND_HEADINGS[key])} since {first}</h2>", before_toc(topic_nav(key) + f'<p class="more-link"><a href="#years">Pick a year, or compare two years of {esc(title.lower())}</a></p>' + ("" if key == "work" else CAUSE))]
     body.extend(long_shown + [FOLD] + long_folded)
@@ -1297,7 +1294,7 @@ def topic_page(facts, d, num, sources, key):
     # and class-size pickers). It moves here, so the page's length does not change. The comparison
     # comes before the year finder, so the numbers a screen-reader or voice-control reader already
     # knows (audit 14 gap 8) stay the same when the finder's links appear.
-    body.append(f"<h2 id='years'>Find or compare years</h2>")
+    body.append("<h2 id='years'>Find or compare years</h2>")
     body.append(NOFOLD + compare_form("", anchor=key))
     # One year's figure for this topic, found without JavaScript (audit 13 gap 3).
     body.append(year_finder(facts, num, key))
@@ -1363,7 +1360,7 @@ def hub_quick(facts, d, num):
     names = d["countries"]["names"]
     firsts = {top_countries(facts, d, y, 1)[0] for y in d["countries"]["all"] if top_countries(facts, d, y, 1)}
     items = ['<strong>Change is not cause:</strong> these figures show what changed, not why.',
-             f'<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More on large classes</a>']
+             '<strong>Infant classes in England</strong> are limited by law to 30 pupils, with some exceptions. <a href="schools.html#schools-large">More on large classes</a>']
     if len(firsts) == 1:
         c = esc(names[firsts.pop()])
         ys = d["countries"]["all"]
@@ -1478,7 +1475,7 @@ def places_block(facts, num, topic):
     if prev:
         out.append(f'<p class="small">Pay is compared only between years when the survey coded jobs the same way: {a} to {b}, and separately {prev[0]} to {prev[1]}. It is not compared across the coding changes in 2011 and 2021.</p>')
     out.append(f'<p class="small">The margin of error is the 95% range published by ONS for the {b} figure. Smaller places have smaller samples and wider margins, so a difference between two places that is smaller than their margins could be sampling noise. {U.how_sure_link("../")}</p>')
-    out.append(details_table(f"Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
+    out.append(details_table("Show every year by nation and region", what, ["Year"] + [esc(n) for _, n in places],
                              [[str(y)] + [num(fid(k, y), kind) for k, _ in places] for y in ys]))
     out.append('<p class="small">The nine English regions together make up England.</p>')
     # The answer names the highest and lowest places; the panels wait in the fold on a phone.
@@ -1546,8 +1543,8 @@ def housing_regions_block(facts, num):
                             summary_note=f"One panel for each place, on the same scale. The table above gives every region's figures for {a} and {b}, and the table below gives every year."))
     out.append(details_table("Show private renting by region for every year", "Homes rented privately, % of homes, 31 March each year",
                              ["Year"] + [esc(n) for _, n in places], [[str(y)] + [num(f"house.reg.private.{k}.{y}", "pct") for k, _ in places] for y in ys]))
-    out.append(f'<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
-               f'Private renting is estimated from the Labour Force Survey and smoothed; figures from 2024 are provisional. Wales, Scotland and Northern Ireland are shown below.</p>')
+    out.append('<p class="small">Social rent adds homes rented from councils and from housing associations (our calculation). Owner occupied includes shared ownership. '
+               'Private renting is estimated from the Labour Force Survey and smoothed; figures from 2024 are provisional. Wales, Scotland and Northern Ireland are shown below.</p>')
     return out
 
 
@@ -1565,7 +1562,7 @@ def housing_costs_block(facts, num, d):
                              ("Social rent", lambda y: f"house.real.rent.social.{y}", "c")],
                             f"£ a week (mean), survey year starting in the year shown, in {b} prices (CPIH)", ymin=0, kind="pounds", num=num, point_label=sy,
                             finding=F.pair("After inflation, average private rent", "the average mortgage payment")))
-    out.append(details_table("Show housing costs for every year", f"Average (mean) weekly rent before housing support and mortgage payment, England",
+    out.append(details_table("Show housing costs for every year", "Average (mean) weekly rent before housing support and mortgage payment, England",
                              ["Survey year", "Private rent (cash)", f"Private rent ({b} prices)", "Social rent (cash)", f"Social rent ({b} prices)",
                               "Mortgage (cash)", f"Mortgage ({b} prices)"],
                              [[sy(y), num(f"house.rent.private.{y}", "pounds"), num(f"house.real.rent.private.{y}", "pounds"), num(f"house.rent.social.{y}", "pounds"),

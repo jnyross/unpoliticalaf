@@ -123,14 +123,14 @@ def defence_page(facts, d, num, sources):
         items.append((name, f"intl.fn.GF02.{a}.{fy}", "" if a == UK else "alt"))
     items.append((f"<strong>{esc(names[AVG])}</strong> (not a country)", f"intl.fn.GF02.{AVG}.{fy}", ""))
     maxval = facts[f"intl.fn.GF02.{top}.{fy}"].value * 1.1
-    body.append(f'<h2 id="peers">How does UK defence spending compare with other G7 countries?</h2>')
+    body.append('<h2 id="peers">How does UK defence spending compare with other G7 countries?</h2>')
     body.append(f'''<div class="answer"><p>In {fy}, UK defence spending was {num(f"intl.fn.GF02.{UK}.{fy}", "pct")} of GDP on the OECD's measure, the {_ordinal_word(place)} of the {len(have)} G7 countries with a figure.{"" if top == UK else f" The highest was {_the(names[top])}, at {num(f'intl.fn.GF02.{top}.{fy}', 'pct')}."}</p></div>''')
     body.append(bars(items, "pct", num, maxval=maxval,
                      caption=f"Government spending on defence, % of GDP, {fy}. OECD figures, calendar years. The UK has a darker bar."))
     missing = [names[a] for a in G7 if a not in have]
     if missing:
         body.append(f"<p>{esc(', '.join(missing))}: the OECD table has no defence figure for {'this country' if len(missing) == 1 else 'these countries'}, so {'it is' if len(missing) == 1 else 'they are'} not shown. A missing figure is not the same as zero.</p>")
-    body.append(f"<p>France's and Germany's figures are provisional. The OECD measure is the COFOG defence function, so it is close to the PESA figure above but not the same year or the same source. NATO publishes its own figures on a wider definition, which are set out in <a href=\"#nato\">the NATO section</a>.</p>")
+    body.append("<p>France's and Germany's figures are provisional. The OECD measure is the COFOG defence function, so it is close to the PESA figure above but not the same year or the same source. NATO publishes its own figures on a wider definition, which are set out in <a href=\"#nato\">the NATO section</a>.</p>")
     body.append(FOLD)
     body.append(source_line(sources, ["oecd-gov-cofog"], "The OECD average is an unweighted average of its member countries, not a country."))
     body.append('<h2 id="nato">What does NATO\'s own figure show for the UK?</h2>')
@@ -150,7 +150,7 @@ def defence_page(facts, d, num, sources):
                 f"Interest on government debt is counted inside general public services, and is shown in <a href=\"borrowing.html#interest\">debt interest beside other countries</a>.</p>")
     body.append(bars(items, "per100dp1", num, maxval=facts[f"spend.per100.social.{latest}"].value * 1.05,
                      caption=f"Spending by purpose, £ per £100 of spending on services, {latest}. Defence has a darker bar."))
-    body.append(f'<p class="small">Shares are of total spending on services. The full breakdown is on <a href="spending-areas.html">spending areas</a>, and the totals are on the <a href="spending.html">main spending page</a>.</p>')
+    body.append('<p class="small">Shares are of total spending on services. The full breakdown is on <a href="spending-areas.html">spending areas</a>, and the totals are on the <a href="spending.html">main spending page</a>.</p>')
 
     # ------------------------------------------------------------- cost
     body.append('<h2 id="cost">What would extra defence spending cost?</h2>')

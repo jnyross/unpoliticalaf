@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUN_PYTHON := .venv/bin/python
 
-.PHONY: setup setup-test setup-dev build site check test verify a11y fetch live
+.PHONY: setup setup-test setup-dev setup-typing build site check test verify a11y fetch live lint typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -13,9 +13,12 @@ setup:
 setup-test: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-test.txt
 
-# Adds test tools and the browser accessibility tools used by `make a11y`.
+# Adds test, browser, typing, lint and dashboard tools.
 setup-dev: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-dev.txt
+
+setup-typing: setup
+	$(RUN_PYTHON) -m pip install -q -r requirements-typing.txt
 
 build: site
 
@@ -27,7 +30,23 @@ check:
 	$(RUN_PYTHON) -m builder.check
 
 test:
-	$(RUN_PYTHON) -m unittest discover -s tests -v
+	$(RUN_PYTHON) -m pytest tests quality/tests
+
+lint:
+	$(RUN_PYTHON) -m ruff check builder scripts tests quality
+
+typecheck:
+	$(RUN_PYTHON) -m compileall -q -f builder scripts tests quality
+	$(RUN_PYTHON) -m mypy --config-file mypy.ini
+
+check-deps:
+	$(RUN_PYTHON) -m deptry .
+	cd quality && ../$(RUN_PYTHON) -m deptry .
+
+# Extend this aggregate as further tooling lands; never replace existing gates.
+quality: lint typecheck check-deps
+	$(RUN_PYTHON) scripts/check_agents.py
+	$(MAKE) -f quality/Makefile metrics
 
 verify: build check test
 

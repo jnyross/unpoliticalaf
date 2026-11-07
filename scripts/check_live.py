@@ -118,7 +118,7 @@ def main(argv=None):
     problems = [err] if err else compare(base, local, live)
     n = len(local["files"])
     if problems:
-        lines = [f"## Live site does not match the latest build", "",
+        lines = ["## Live site does not match the latest build", "",
                  f"Checked {base} against commit `{local['commit']}`.", ""]
         lines += [f"- {p}" for p in problems[:50]]
         if len(problems) > 50:

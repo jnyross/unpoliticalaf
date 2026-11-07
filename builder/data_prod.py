@@ -98,11 +98,11 @@ def build(facts):
             trend_years.append(y)
             v = sum(series[i] for i in ids) / len(ids)
             _add(facts, f"prod.trend.avg5.{y}", v, "index, 2008 = 100 (after inflation)", y, facts[ids[0]].locator, "calculated",
-                 formula="mean of " + ", ".join(ids), inputs=ids)
+                 formula="(" + " + ".join(ids) + f") ÷ {len(ids)}", inputs=ids)
             series[f"prod.trend.avg5.{y}"] = v
     out["trend_years"] = trend_years
     for fid in [k for k in list(series) if k.startswith("prod.trend.")]:
-        iso_or_avg, y = fid.split(".")[2], int(fid.rsplit(".", 1)[1])
+        y = int(fid.rsplit(".", 1)[1])
         _add(facts, "prod.change." + fid[len("prod.trend."):], series[fid] - 100, "% change since 2008", y, facts[fid].locator,
              "calculated", formula=f"{fid} − 100", inputs=[fid])
 

@@ -5,7 +5,7 @@ Usage: python -m builder.check [--axe]
 1. Every source file still matches its recorded SHA-256 hash.
 2. Every published figure is re-read from its file, sheet and cell (or line or
    row) and compared with the recorded value.
-3. Every calculated figure whose formula is plain arithmetic is recalculated.
+3. Every calculated figure is recalculated or independently validated missing.
 4. Every number shown on every page matches its recorded value, formatted.
 5. Every change shown on a comparison page is recalculated.
 6. Every internal link and #anchor resolves.
@@ -25,6 +25,8 @@ import sys
 from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
+
+from .check_calculations import check_calculations
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
@@ -171,33 +173,19 @@ def close(a, b, tol=1e-9):
 def check_facts(data):
     sources = data["sources"]
     facts = {f["id"]: f for f in data["facts"]}
+    if len(facts) != len(data["facts"]):
+        fail("duplicate fact IDs in candidate facts.json")
     for s in sources.values():
         digest = hashlib.sha256((ROOT / s["file"]).read_bytes()).hexdigest()
         if digest != s["sha256"]:
             fail(f"hash changed: {s['file']}")
-    checked = recalculated = 0
+    counts = check_calculations(facts, fail)
+    print(f"Calculated facts: {counts.candidates:,} candidates; {counts.evaluated:,} recalculated; "
+          f"{counts.missing:,} validated missing; {counts.literals:,} literal assumptions validated; "
+          f"{counts.failed:,} failed.")
+    checked = 0
     for f in facts.values():
         if f["status"] in ("calculated",):
-            ids = f["inputs"]
-            for i in ids:
-                if i not in facts:
-                    fail(f"{f['id']}: input {i} missing")
-            expr = f["formula"]
-            if not ids or not expr:
-                continue
-            for i in sorted(ids, key=len, reverse=True):
-                expr = expr.replace(i, f"V[{ids.index(i)}]")
-            expr = expr.replace("×", "*").replace("÷", "/").replace("−", "-")
-            if re.fullmatch(r"[\sV\[\]\d\.\+\-\*/\(\)]+", expr):
-                vals = [facts[i]["value"] for i in ids]
-                if None in vals:
-                    if f["value"] is not None:
-                        fail(f"{f['id']}: value given although an input is missing")
-                    continue
-                got = eval(expr, {"__builtins__": {}}, {"V": vals})  # arithmetic only, checked by the pattern above
-                if not close(got, f["value"], 1e-9):
-                    fail(f"{f['id']}: recalculated {got} != recorded {f['value']}")
-                recalculated += 1
             continue
         if f["status"] == "missing" or f["locator"] in ("", "not published"):
             continue
@@ -210,7 +198,7 @@ def check_facts(data):
         if not close(want, f["value"], 1e-9):
             fail(f"{f['id']}: source {src['file']} {f['locator']} = {raw!r}, recorded {f['value']!r}")
         checked += 1
-    return facts, checked, recalculated
+    return facts, checked, counts.evaluated
 
 
 # ---------------------------------------------------------------- pages
@@ -470,7 +458,7 @@ def run_axe(paths):
         from playwright.sync_api import sync_playwright
         from axe_playwright_python.sync_playwright import Axe
     except ImportError:
-        fail("--axe needs playwright and axe-playwright-python (make setup)")
+        fail("--axe needs playwright and axe-playwright-python (make setup-dev)")
         return
     import os
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None

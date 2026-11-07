@@ -174,7 +174,6 @@ def receipts(facts):
     head = rows[3]
     cols = {str(v).strip(): j for j, v in enumerate(head) if v}
     year_rows = {str(r[1]): i for i, r in enumerate(rows) if len(r) > 1 and r[1] and re.fullmatch(r"\d{4}-\d{2}", str(r[1]))}
-    note = " ".join(str(r[1] or r[0] or "") for r in rows[39:43])
     # Forecast years start from 2026-27 in this vintage (sheet note row 41).
     forecast_from = "2026-27"
     out = {"years": list(year_rows), "groups": [], "forecast_from": forecast_from}
@@ -312,16 +311,23 @@ def who_pays(facts):
                 return i
         raise KeyError(label)
     out["etb"] = {}
+    etb_mean_note = ("Household amount, person-weighted mean across individuals in UK private households, "
+                     "ranked by equivalised household disposable income (Notes, note 3). "
+                     "Not a personal bill or a mean across households; multiplying by household or person counts "
+                     "does not establish once-per-household tax totals. All uses the published All individuals column.")
     for key, label in (("gross", "Gross income"), ("direct", "Total direct taxes"), ("indirect", "Total indirect taxes"), ("disposable", "Disposable income"),
-                       ("original", "Total original income"), ("benefits_cash", "Total cash benefits"), ("households", "Number of households in the population (thousands)")):
+                       ("original", "Total original income"), ("benefits_cash", "Total cash benefits"),
+                       ("people", "Number of individuals in the population (thousands)"),
+                       ("households", "Number of households in the population (thousands)")):
         i = etb_row(label)
         for q, j in qcols.items():
-            unit = "thousands of households" if key == "households" else "£ a year per household"
-            facts.add(Fact(f"etb.2a.{key}.{q}", num(rows[i][j]), unit, "2023/24", "etb", f"Table 2a!{ref(i, j)}", "outturn"))
+            unit = {"households": "thousands of households", "people": "thousands of people"}.get(key, "£ a year per household")
+            note = "" if key in ("households", "people") else etb_mean_note
+            facts.add(Fact(f"etb.2a.{key}.{q}", num(rows[i][j]), unit, "2023/24", "etb", f"Table 2a!{ref(i, j)}", "outturn", note=note))
     for q in qcols:
         d, ind = facts[f"etb.2a.direct.{q}"], facts[f"etb.2a.indirect.{q}"]
         facts.add(Fact(f"etb.2a.alltax.{q}", d.value + ind.value, "£ a year per household", "2023/24", "etb", f"{d.locator} + {ind.locator}",
-                       "calculated", formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
+                       "calculated", note=etb_mean_note, formula=f"{d.id} + {ind.id}", inputs=[d.id, ind.id]))
     # ETB Tables 3a (non-retired) and 4a (retired): same layout as Table 2a, but the
     # fifths are ranked within each group, so they do not line up with Table 2a's fifths.
     # "Retired" means living in a retired household (ONS note 12).

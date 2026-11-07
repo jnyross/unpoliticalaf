@@ -181,7 +181,7 @@
       "asked": "Are rish people really not paying enough tax?",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04 (question 4 of his list of ten)",
-      "reading": "\"Enough\" is a value judgment, so the site gives the measured facts and does not say what is enough. The facts are: the share of Income Tax and of all taxes paid by top income groups, the share of income that each fifth of people pays in tax (including National Insurance, VAT and other taxes on spending), how the top rates compare with other countries, and what the main proposals (for example, a wealth tax or aligning Capital Gains Tax with Income Tax) are estimated to raise. Each is shown with its year, population and source.",
+      "reading": "\"Enough\" is a value judgment, so the site gives the measured facts and does not say what is enough. The original intent includes the share of Income Tax and of all taxes paid by top income groups, the share of income that each fifth of people pays in tax (including National Insurance, VAT and other taxes on spending), how the top rates compare with other countries, and what the main proposals (for example, a wealth tax or aligning Capital Gains Tax with Income Tax) are estimated to raise. Where the retained official evidence cannot establish the requested measure, the site states that limitation rather than inventing a figure. The richest fifth's share of all household taxes is not established by ONS Table 2a; the former derived share was withdrawn on 6 November 2026.",
       "probes": [
         {
           "id": "J4.1",
@@ -221,23 +221,31 @@
         },
         {
           "id": "J4.3",
-          "question": "What does the 46.0% figure for the richest fifth of people in 2023/24 measure?",
+          "question": "Does the site establish the richest fifth's share of all taxes paid by UK households in 2023/24?",
           "options": {
-            "A": "The share of their income that they paid in tax",
-            "B": "The share of all taxes paid by UK households that the richest fifth paid",
-            "C": "The tax rate on the top income band",
-            "D": "The share of all government revenue, including borrowing"
+            "A": "Yes: it is the same as their tax-to-income ratio",
+            "B": "No: ONS Table 2a does not establish that share; the former 46.0% claim is withdrawn",
+            "C": "Yes: multiplying household tax means by person counts gives the total",
+            "D": "Yes: it is their share of all government revenue, including borrowing"
           },
           "answer": "B",
-          "why": "Who pays page: the richest fifth paid 46.0% of all taxes paid by UK households. The page says this is a share of the total, not the share of income that goes on tax (36.2%), and covers household taxes, not all government revenue.",
+          "why": "Who pays states that the person-weighted household means in ONS Table 2a do not establish the richest fifth's share of all household taxes. Multiplying by household counts or person counts cannot recover once-per-household tax totals. The supported 36.2% of gross household income is a different measure, not a replacement share of total taxes.",
+          "history": [
+            {
+              "withdrawn": "2026-11-06",
+              "question": "What does the 46.0% figure for the richest fifth of people in 2023/24 measure?",
+              "answer": "The share of all taxes paid by UK households that the richest fifth paid",
+              "reason": "Unsupported person-analysis mean × household-count aggregation; answer and evidence withdrawn. The original all-tax-share intent remains, now answered with the sourced limitation."
+            }
+          ],
           "evidence": [
             {
               "page": "who-pays.html",
-              "text": "In 2023/24 the richest fifth of people paid 46.0% of all taxes paid by UK households."
+              "text": "The ONS table used here does not establish the richest fifth's share of all taxes paid by UK households."
             },
             {
               "page": "who-pays.html",
-              "text": "A share of the total, not the share of income that goes on tax"
+              "text": "Our former 46.0% claim is withdrawn, not replaced by another estimate."
             }
           ]
         },

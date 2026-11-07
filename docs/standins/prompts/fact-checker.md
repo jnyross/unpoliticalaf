@@ -23,5 +23,10 @@ Do not read the code in `builder/` or any review of the site.
 4. Record each problem as **material** (a reader would come away believing
    something false) or **minor**, with the evidence.
 
-The auditor then runs the "Accuracy check" workflow on your ids, which
-downloads each source again from the publisher and compares it with the page.
+The auditor then performs a reviewed intentional accuracy-check run on your ids,
+downloading sources again from publishers and comparing them with this exact
+candidate. The source-writing workflow stays disabled unless its exact
+implementation is independently reviewed for intentional activation; no dormant
+schedule or evidence push to main is authorised. Save results on the non-deploying
+evidence branch with the audited source SHA. Thirty claims are a sample, not
+proof that every headline was checked.
