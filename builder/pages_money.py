@@ -365,7 +365,8 @@ def who_pays_page(facts, d, num, sources):
     body = ["<h1>Who pays?</h1>"]
     cav = fifth_indirect_caveat(facts, num)
     body.append(keyfigs([(num(f"hmrc.share.top1.{y}", "pct"), f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}", True),
-                         (num("etb.2a.alltax.q1", "pounds"), f'household taxes a year, averaged across people in the lowest-income fifth: {num("etb.t8.gross.all.q1", "pct")} of gross household income, 2023/24. Not a personal bill', False)]))
+                         (num("etb.2a.alltax.q1", "pounds"), f'household taxes a year, averaged across people in the lowest-income fifth: {num("etb.t8.gross.all.q1", "pct")} of gross household income, 2023/24. Not a personal bill', False),
+                         ("Not established", 'the richest fifth’s share of all UK household taxes. Our former 46.0% claim is withdrawn. <a href="#richest-share">Why we cannot give that share</a>', False)]))
     body.append(f'''<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
 </div>''')
     body.append('''<div class="limit"><p><strong>All household taxes: no supported total share.</strong>

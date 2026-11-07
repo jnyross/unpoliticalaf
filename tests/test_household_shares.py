@@ -46,6 +46,9 @@ class HouseholdTaxShares(unittest.TestCase):
                 self.assertNotIn("46.0%", csv_text, path)
                 self.assertNotIn("44.93", csv_text, path)
         page = self.pages["who-pays.html"]
+        key_figures = re.search(r'<ul class="keyfigs">(.*?)</ul>', page, re.S).group(1)
+        self.assertIn("Not established", key_figures)
+        self.assertIn("claim is withdrawn", key_figures)
         self.assertIn('id="richest-share"', page)  # preserve the public fragment
         self.assertIn("does not establish the richest fifth", page)
         self.assertIn('href="corrections.html"', page)
