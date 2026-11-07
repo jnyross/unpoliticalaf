@@ -86,6 +86,7 @@ The optional settings are:
 | `VENV` | `.venv` | Override the virtualenv for all Makefile commands, including quality. Export it or pass it on every invocation. Use a path without whitespace; the dev container sets `/opt/unpoliticalaf/venv`. |
 | `VERCEL_GIT_COMMIT_SHA` | `git rev-parse HEAD`, or `unknown` if Git metadata is unavailable | Vercel supplies this for the build's version label and `site/build.json`. Leave it unset locally so the current checkout supplies the commit. It is not a credential. |
 | `GITHUB_STEP_SUMMARY` | No summary file is written | GitHub Actions supplies a file path for `scripts/check_live.py` to append its report. Leave it unset locally; the live check still prints its result. |
+| `LOG_LEVEL` | `INFO` | Filter build/check/source-fetch JSON diagnostics on stderr. Accepts `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` (case-insensitive). Invalid settings fail before the job starts. Does not change reports or served bytes. |
 
 Setup needs network access to install packages. Once installed, `make verify`
 uses the official source files already retained in the repository and needs no
@@ -102,6 +103,43 @@ After `make build`, preview inside Boat at `http://127.0.0.1:3181`:
 
 Deployment and automation credentials belong in their hosting or CI settings,
 not in this checkout. Do not commit secrets or local `.env` files.
+
+## Job diagnostics
+
+`python -m builder.build`, `python -m builder.check` (including `--axe`) and
+`python scripts/fetch_sources.py` retain their human stdout reports and exit
+codes. Fetch reports retain the parseable JSON suffix after `ok   SOURCE_ID `;
+these commands have no JSON-only or CSV stdout mode. Generated JSON/CSV files
+are unchanged. Argparse help/usage and existing fetch interruption/configuration
+messages keep their original streams. Shared logging does not affect other
+report-producing commands or configure Python's root logger.
+
+Dependency-free `builder/logging.py` adds JSON lines on **stderr**, never in
+`site/`: UTC `timestamp`, `level`, `logger`, stable `event`, typed `context`, and
+an optional exception stack (locations/messages, no locals or source lines).
+Events cover build totals/missing figures, check totals/problems (first 200),
+fetch acceptance/retries/failures and command/configuration failures.
+Text `SystemExit` failures also retain their plain stderr explanation at every
+level, with the same redaction safety net. Unexpected crashes emit a terminal
+`CRITICAL` record so filtering cannot hide their explanation.
+
+```sh
+.venv/bin/python -m builder.check >check-report.txt 2>check-diagnostics.jsonl
+LOG_LEVEL=WARNING .venv/bin/python -m builder.build
+```
+
+Use `get_logger("component")` with stable event names and
+`extra={"context": {...}}`; configure only at the CLI boundary with `run_logged`.
+Diagnostics redact credential-named nested fields, password/secret/token/API-key
+assignments, Bearer/Basic credentials, email addresses, and HTTP(S) URL userinfo,
+queries and fragments. Fetch's URL/error reports and checker problem reports
+are not diagnostics: they remain verbatim, including official public URL queries,
+without changing retained source bytes or receipts. Do not feed private URLs or
+credentials to report-producing commands.
+This is a safety net, not permission to log arbitrary private text or secrets:
+unlabelled sensitive strings cannot be identified reliably. Keep credentials
+and private data out of diagnostic inputs. Broken sinks/formatters drop records
+rather than changing a command's result or dumping raw logging internals.
 
 ## Commands
 

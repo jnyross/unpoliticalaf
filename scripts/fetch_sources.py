@@ -29,6 +29,11 @@ else:
     from source_validation import validate_source
 
 ROOT = Path(__file__).resolve().parent.parent
+if not __package__:
+    sys.path.insert(0, str(ROOT))
+from builder.logging import get_logger, run_logged
+
+logger = get_logger("fetch_sources")
 OUT = ROOT / "data" / "fetched"
 UA = {
     "User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"
@@ -61,7 +66,18 @@ def get(url):
         except Exception as error:
             if attempt == ATTEMPTS - 1:
                 raise
-            time.sleep(30 * (attempt + 1) if "429" in str(error) else 2**attempt)
+            delay = 30 * (attempt + 1) if "429" in str(error) else 2**attempt
+            logger.warning(
+                "source.retry",
+                extra={
+                    "context": {
+                        "attempt": attempt + 1,
+                        "delay_seconds": delay,
+                        "error_type": type(error).__name__,
+                    }
+                },
+            )
+            time.sleep(delay)
 
 
 def retained_path(name):
@@ -130,6 +146,17 @@ def promote(staged, path, receipts, receipt, source_id):
                 ),
                 flush=True,
             )
+            logger.info(
+                "source.downloaded",
+                extra={
+                    "context": {
+                        "source_id": source_id,
+                        "bytes": receipt["bytes"],
+                        "file": receipt["file"],
+                        "sha256": receipt["sha256"],
+                    }
+                },
+            )
         except OSError as error:
             print(
                 "Accepted",
@@ -138,6 +165,7 @@ def promote(staged, path, receipts, receipt, source_id):
                 error,
                 file=sys.stderr,
             )
+            logger.exception("source.report_failed", extra={"context": {"source_id": source_id}})
     finally:
         for signum, handler in handlers.items():
             signal.signal(signum, handler)
@@ -236,9 +264,21 @@ def refresh_sources(manifest, receipts, only, refresh):
         except Exception as error:
             failures.append(source_id)
             print("FAIL", source_id, error, flush=True)
+            logger.exception("source.failed", extra={"context": {"source_id": source_id}})
     outcome = "partial" if failures and accepted else "failed" if failures else "success"
     print(
         f"{outcome}: accepted={accepted} skipped={skipped} failed={len(failures)}; failures: {failures}"
+    )
+    log_summary = logger.error if failures else logger.info
+    log_summary(
+        "fetch.completed",
+        extra={
+            "context": {
+                "accepted": accepted,
+                "skipped": skipped,
+                "failures": failures,
+            }
+        },
     )
     return 1 if failures else 0
 
@@ -267,9 +307,11 @@ def _run(only, refresh):
             os.close(lock)
     except KeyboardInterrupt:
         print("FAIL interrupted; completed sources remain accepted", file=sys.stderr)
+        logger.warning("fetch.interrupted")
         return 130
     except Exception as error:
         print("FAIL refresh:", error, file=sys.stderr)
+        logger.exception("fetch.failed")
         return 1
 
 
@@ -278,6 +320,7 @@ def _terminate(signum, frame):
 
 
 def main(only=None, refresh=False):
+    logger.info("fetch.started", extra={"context": {"refresh": refresh}})
     previous_handler = signal.signal(signal.SIGTERM, _terminate)
     try:
         return _run(only, refresh)
@@ -292,4 +335,4 @@ if __name__ == "__main__":
     )
     parser.add_argument("sources", nargs="*", help="source IDs; selected IDs are always reacquired")
     args = parser.parse_args()
-    sys.exit(main(set(args.sources) or None, refresh=args.refresh))
+    sys.exit(run_logged(lambda: main(set(args.sources) or None, refresh=args.refresh), logger))

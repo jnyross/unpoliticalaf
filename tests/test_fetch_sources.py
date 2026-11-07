@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import pytest
 
 from scripts import fetch_sources
+from builder.logging import run_logged
 
 
 @pytest.fixture
@@ -55,11 +56,11 @@ def http_origin():
         def log_message(self, *args):
             pass
 
-    server = ThreadingHTTPServer(("127.0.0.1", 3181), Handler)
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     thread = threading.Thread(target=server.serve_forever)
     thread.start()
     try:
-        yield "http://127.0.0.1:3181", requests
+        yield f"http://127.0.0.1:{server.server_port}", requests
     finally:
         server.shutdown()
         server.server_close()
@@ -202,17 +203,14 @@ def test_actual_cli_exits_nonzero_and_keeps_last_good(
 ):
     origin, requests = http_origin
     out, _ = retained_sources(tmp_path, monkeypatch, origin, {"failed": route})
-    scripts = tmp_path / "scripts"
-    scripts.mkdir()
-    original = os.path.dirname(fetch_sources.__file__)
-    for name in ("fetch_sources.py", "source_validation.py"):
-        shutil.copyfile(os.path.join(original, name), scripts / name)
+    script = copy_fetch_cli(tmp_path)
     before = {p.name: p.read_bytes() for p in out.iterdir()}
     process = subprocess.Popen(
-        [sys.executable, str(scripts / "fetch_sources.py"), "failed"],
+        [sys.executable, str(script), "failed"],
         stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        stderr=subprocess.PIPE,
         text=True,
+        env=dict(os.environ, LOG_LEVEL="INFO"),
     )
     try:
         if terminate:
@@ -223,8 +221,19 @@ def test_actual_cli_exits_nonzero_and_keeps_last_good(
                 threading.Event().wait(0.05)
             assert requests == [route]
             process.send_signal(signal.SIGTERM)
-        output, _ = process.communicate(timeout=20)
-        assert process.returncode == (130 if terminate else 1), output
+        output, errors = process.communicate(timeout=20)
+        assert process.returncode == (130 if terminate else 1), (output, errors)
+        assert output.startswith(
+            "FAIL interrupted while refreshing failed\n" if terminate else "FAIL failed "
+        )
+        if terminate:
+            assert "FAIL interrupted; completed sources remain accepted\n" in errors
+        else:
+            assert output.endswith("failed: accepted=0 skipped=0 failed=1; failures: ['failed']\n")
+        entries = [json.loads(line) for line in errors.splitlines() if line.startswith("{")]
+        assert entries[0]["event"] == "fetch.started"
+        assert entries[-1]["event"] == "command.failed"
+        assert not any(line.startswith("{") for line in output.splitlines())
         assert {p.name: p.read_bytes() for p in out.iterdir()} == before
         print(
             f"CLI route={route} exit={process.returncode} requests={requests}; pair unchanged; {output}"
@@ -233,6 +242,54 @@ def test_actual_cli_exits_nonzero_and_keeps_last_good(
         if process.poll() is None:
             process.kill()
             process.wait()
+
+
+def copy_fetch_cli(root):
+    scripts = root / "scripts"
+    scripts.mkdir()
+    original = os.path.dirname(fetch_sources.__file__)
+    for name in ("fetch_sources.py", "source_validation.py"):
+        shutil.copyfile(os.path.join(original, name), scripts / name)
+    builder = root / "builder"
+    builder.mkdir()
+    (builder / "__init__.py").touch()
+    shutil.copyfile(os.path.join(original, "../builder/logging.py"), builder / "logging.py")
+    return scripts / "fetch_sources.py"
+
+
+def test_actual_cli_success_keeps_public_query_report_and_stderr_json(
+    tmp_path, monkeypatch, http_origin
+):
+    origin, requests = http_origin
+    route = "/good?format=csv&uri=release"
+    out, before = retained_sources(tmp_path, monkeypatch, origin, {"good": route})
+    script = copy_fetch_cli(tmp_path)
+    result = subprocess.run(
+        [sys.executable, str(script), "good"],
+        capture_output=True,
+        text=True,
+        env=dict(os.environ, LOG_LEVEL="INFO"),
+        timeout=20,
+    )
+    assert result.returncode == 0, result.stderr
+    report, summary = result.stdout.splitlines()
+    accepted = json.loads(report.removeprefix("ok   good "))
+    receipt = json.loads((out / "receipts.json").read_text())["good"]
+    assert accepted == {
+        "old_sha256": before["good"]["sha256"],
+        "new_sha256": receipt["sha256"],
+        "bytes": receipt["bytes"],
+        "url": origin + route,
+        "retrieved": receipt["retrieved"],
+    }
+    assert summary == "success: accepted=1 skipped=0 failed=0; failures: []"
+    entries = [json.loads(line) for line in result.stderr.splitlines()]
+    assert [entry["event"] for entry in entries] == [
+        "fetch.started",
+        "source.downloaded",
+        "fetch.completed",
+    ]
+    assert requests == [route]
 
 
 def test_sigterm_during_staged_validation_cleans_up(tmp_path, monkeypatch, http_origin):
@@ -357,3 +414,82 @@ def test_new_source_receipt_failure_removes_uncommitted_file(tmp_path, monkeypat
     assert fetch_sources.main({"new"}) == 1
     assert not (out / "new.csv").exists()
     assert (out / "receipts.json").read_bytes() == before
+
+
+@pytest.mark.parametrize("level", ["INFO", "CRITICAL"])
+@pytest.mark.parametrize(
+    "routes",
+    [
+        {"good": "/good?format=csv&uri=release"},
+        {"bad": "/invalid"},
+        {"good": "/good", "bad": "/error"},
+    ],
+)
+def test_logged_real_http_keeps_reports_json_suffix_and_failure_status(
+    tmp_path, monkeypatch, http_origin, capsys, level, routes
+):
+    import logging
+    from builder.logging import LOGGER_NAME
+
+    origin, requests = http_origin
+    out, before = retained_sources(tmp_path, monkeypatch, origin, routes)
+    monkeypatch.setenv("LOG_LEVEL", level)
+    app = logging.getLogger(LOGGER_NAME)
+    saved = app.handlers[:], app.level, app.propagate
+    try:
+        result = run_logged(lambda: fetch_sources.main(set(routes)), fetch_sources.logger)
+        captured = capsys.readouterr()
+        lines = captured.out.splitlines()
+        expected_failures = ["bad"] if "bad" in routes else []
+        assert result == bool(expected_failures)
+        accepted = int("good" in routes)
+        outcome = (
+            "partial"
+            if accepted and expected_failures
+            else "failed" if expected_failures else "success"
+        )
+        assert lines[-1] == (
+            f"{outcome}: accepted={accepted} skipped=0 failed={len(expected_failures)}; "
+            f"failures: {expected_failures}"
+        )
+        receipts = json.loads((out / "receipts.json").read_text())
+        if accepted:
+            assert lines[0].startswith("ok   good ")
+            report = json.loads(lines[0].removeprefix("ok   good "))
+            assert report == {
+                "old_sha256": before["good"]["sha256"],
+                "new_sha256": receipts["good"]["sha256"],
+                "bytes": receipts["good"]["bytes"],
+                "url": origin + routes["good"],
+                "retrieved": receipts["good"]["retrieved"],
+            }
+        if expected_failures:
+            assert lines[accepted].startswith("FAIL bad ")
+            assert receipts["bad"] == before["bad"]
+            assert (out / "bad.csv").read_bytes() == b"period,value\n2025,1\n"
+        assert_fetch_diagnostics(captured.err, level, bool(accepted), bool(expected_failures))
+        assert requests == list(routes.values())
+        # The retained/no-refresh mode still prints its original exact summary.
+        if not expected_failures:
+            assert run_logged(fetch_sources.main, fetch_sources.logger) == 0
+            assert (
+                capsys.readouterr().out == "success: accepted=0 skipped=1 failed=0; failures: []\n"
+            )
+    finally:
+        for handler in app.handlers[:]:
+            app.removeHandler(handler)
+            handler.close()
+        app.handlers[:], saved_level, app.propagate = saved
+        app.setLevel(saved_level)
+
+
+def assert_fetch_diagnostics(errors, level, accepted, failed):
+    entries = [json.loads(line) for line in errors.splitlines()]
+    if level == "INFO":
+        events = [entry["event"] for entry in entries]
+        assert "fetch.started" in events
+        assert "fetch.completed" in events
+        assert ("source.failed" in events) == failed
+        assert ("source.downloaded" in events) == accepted
+    else:
+        assert entries == []

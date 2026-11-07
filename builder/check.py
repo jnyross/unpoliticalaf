@@ -28,9 +28,11 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from .check_calculations import check_calculations
+from .logging import get_logger, run_logged
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
+logger = get_logger("check")
 
 # Words that judge rather than describe. Matched as whole words in visible text.
 LOADED = [
@@ -904,6 +906,7 @@ def check_explanations():
 
 
 def main():
+    logger.info("check.started")
     data = json.loads((SITE / "data/facts.json").read_text(encoding="utf-8"))
     facts, checked, recalculated = check_facts(data)
     years, pairs = check_structure()
@@ -976,14 +979,44 @@ def main():
     print(f"Checked that {n_trends} trend headings name every big rise and fall of their line.")
     print(f"Checked that {n_axes} line charts whose scale starts above zero say so.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
+    logger.info(
+        "check.completed",
+        extra={
+            "context": {
+                "source_figures": checked,
+                "recalculated": recalculated,
+                "shown": shown,
+                "pages": n_pages,
+                "year_pages": years,
+                "comparison_pages": pairs,
+                "csv_downloads": n_csv,
+                "findings": n_findings,
+                "trends": n_trends,
+                "axis_notes": n_axes,
+                "quotes": n_quotes,
+                "problems": len(problems),
+            }
+        },
+    )
     if problems:
         print(f"\n{len(problems)} problems:")
         for p in problems[:200]:
             print(" -", p)
+            logger.error("check.problem", extra={"context": {"detail": p}})
+        logger.error(
+            "check.failed",
+            extra={
+                "context": {
+                    "problems": len(problems),
+                    "reported": min(len(problems), 200),
+                }
+            },
+        )
         return 1
     print("All checks passed.")
+    logger.info("check.passed")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_logged(main, logger))
