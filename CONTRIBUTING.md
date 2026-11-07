@@ -19,8 +19,9 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   builds the site, checks source data/pages and runs all tests. Build first when
   running `make test` separately, because some tests read `site/`.
 - `make setup-dev` adds browser, lint, typing and dashboard dependencies.
-- `make quality` runs Ruff, Black's non-mutating check, forced Python compilation, strict core typing,
-  dependency checks, guidance references and the existing quality dashboard.
+- `make quality` runs Ruff, Black's non-mutating check, forced Python compilation,
+  strict core typing, dependency checks, guidance references and the existing
+  quality dashboard.
   `make lint`, `make typecheck` and `make check-deps` also run separately.
 - `make setup-typing && make typecheck` installs just production and typing
   packages. The strict boundary is listed in `mypy.ini`; extend it without
