@@ -232,7 +232,8 @@ def taxes_page(facts, d, num, sources):
     groups = rc["groups"]
     big3 = sum(facts[f"rec.{k}.{y}"].value for k in ("income_tax", "nics", "vat"))
     derive(facts, f"rec.big3share.{y}", 100 * big3 / facts[f"rec.taxes.{y}"].value, "% of all taxes", y, "obr",
-           [f"rec.income_tax.{y}", f"rec.nics.{y}", f"rec.vat.{y}", f"rec.taxes.{y}"], f"100 × (rec.income_tax + rec.nics + rec.vat) ÷ rec.taxes, {y}")
+           [f"rec.income_tax.{y}", f"rec.nics.{y}", f"rec.vat.{y}", f"rec.taxes.{y}"],
+           f"100 × (rec.income_tax.{y} + rec.nics.{y} + rec.vat.{y}) ÷ rec.taxes.{y}")
     pop = f"pop.uk.{y[:4]}"
     tpp = per_person(facts, f"rec.taxes.{y}", pop, "rec.perperson.taxes", y, "obr")
     bpp = per_person(facts, f"agg.psnb.{y}", pop, "agg.perperson.psnb", y, "obr")
@@ -440,7 +441,7 @@ That is a share of income, not a share of all taxes raised. See <a href="househo
 def household_tax_page(facts, d, num, sources, rates):
     y = "2025-26"  # latest outturn year in the OBR databank
     derive(facts, f"rec.incomesharetaxes.{y}", 100 * facts[f"rec.income_tax.{y}"].value / facts[f"rec.taxes.{y}"].value, "%", y, "obr",
-           [f"rec.income_tax.{y}", f"rec.taxes.{y}"], "100 × Income Tax ÷ all taxes")
+           [f"rec.income_tax.{y}", f"rec.taxes.{y}"], f"100 × rec.income_tax.{y} ÷ rec.taxes.{y}")
     body = ["<h1>How much of household income goes on tax?</h1>"]
     body.append(keyfigs([(num("etb.t8.gross.all.all", "pct"), "of gross household income went on tax, on average across everyone, 2023/24. An average, not anyone's tax rate", True),
                          (num("etb.t8.gross.direct.all", "pct"), "in direct taxes, such as Income Tax", False),

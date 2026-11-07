@@ -74,7 +74,7 @@ def build(facts):
         for key, base, label in (("n", "spi.band.all.n", "% of all taxpayers"), ("tax", "spi.band.all.tax", "% of all Income Tax"),
                                  ("inc", "spi.band.all.inc", "% of all taxpayers' income")):
             facts.add(Fact(f"spi.{g}.sh_{key}", 100 * facts[f"spi.{g}.{key}"].value / facts[base].value, label, Y, SRC,
-                           facts[f"spi.{g}.{key}"].locator, "calculated", formula=f"100 × {g} {key} ÷ {base}", inputs=[f"spi.{g}.{key}", base]))
+                           facts[f"spi.{g}.{key}"].locator, "calculated", formula=f"100 × spi.{g}.{key} ÷ {base}", inputs=[f"spi.{g}.{key}", base]))
 
     # Each band's average Income Tax, for the table on the page.
     for lo in BANDS:
@@ -88,7 +88,7 @@ def build(facts):
     receipts = facts[RECEIPTS]
     income_tax = facts[INCOME_TAX_TOTAL]
     yard = facts.add(Fact("wif.yard.bn", 0.01 * receipts.value, "£bn", receipts.period, receipts.source, receipts.locator, "calculated",
-                          formula=f"1% × {RECEIPTS}", inputs=[RECEIPTS], note="One per cent of public sector current receipts, 2023-24."))
+                          formula=f"0.01 × {RECEIPTS}", inputs=[RECEIPTS], note="One per cent of public sector current receipts, 2023-24."))
     for g, scenarios in SCENARIOS.items():
         avg = facts[f"spi.{g}.avgtax"]
         n_group = facts[f"spi.{g}.n"]
@@ -97,8 +97,8 @@ def build(facts):
                 pf = facts.add(Fact(f"wif.{g}.{key}.n", n_group.value * 1000, "people", Y, SRC, n_group.locator, "calculated",
                                     formula=f"{n_group.id} × 1,000", inputs=[n_group.id]))
             else:
-                pf = facts.add(Fact(f"wif.{g}.{key}.n", float(n_people), "people", Y, SRC, avg.locator, "calculated",
-                                    note="A stated number of leavers, for the what-if."))
+                pf = facts.add(Fact(f"wif.{g}.{key}.n", float(n_people), "people", Y, SRC, "", "calculated",
+                                    formula=str(n_people), note="A stated number of leavers, for the what-if. Not an observed source value."))
             bn = facts.add(Fact(f"wif.{g}.{key}.bn", pf.value * avg.value / 1e9, "£bn", Y, SRC, avg.locator, "calculated",
                                 formula=f"{pf.id} × {avg.id} ÷ 1,000,000,000", inputs=[pf.id, avg.id],
                                 note="Mechanical: the leavers' average Income Tax, before any change by anyone else."))
@@ -109,7 +109,9 @@ def build(facts):
         # Leavers from each group that would equal one per cent of receipts.
         people = yard.value * 1e9 / avg.value
         pf = facts.add(Fact(f"wif.yard.{g}.n", round(people, -3), "people", Y, SRC, avg.locator, "calculated",
-                            formula=f"{yard.id} × 1,000,000,000 ÷ {avg.id}, rounded to the nearest 1,000", inputs=[yard.id, avg.id]))
+                            formula=f"round({yard.id} × 1,000,000,000 ÷ {avg.id}, -3)", inputs=[yard.id, avg.id],
+                            note="Rounded to the nearest 1,000 people (ties to even)."))
         facts.add(Fact(f"wif.yard.{g}.share", 100 * people / (n_group.value * 1000), "% of the group", Y, SRC, pf.locator, "calculated",
-                       formula=f"100 × {pf.id} ÷ ({n_group.id} × 1,000)", inputs=[pf.id, n_group.id]))
+                       formula=f"100 × ({yard.id} × 1,000,000,000 ÷ {avg.id}) ÷ ({n_group.id} × 1,000)",
+                       inputs=[yard.id, avg.id, n_group.id], note="Share uses the unrounded mechanical headcount."))
     return {"groups": GROUP_LABELS, "bands": BANDS}

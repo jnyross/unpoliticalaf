@@ -22,6 +22,16 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "7 November 2026",
+        "pages": [("high-earners.html", "High earners and Income Tax"),
+                  ("figures/hmrc-spi-2324-tables.html", "Income Tax figure records"),
+                  ("productivity.html", "Productivity"), ("tax-history.html", "Tax history"),
+                  ("taxes.html", "Taxes"), ("household-tax.html", "Household tax"),
+                  ("data/facts.json", "Facts download")],
+        "was": "Some calculation records used shortened names or words instead of complete arithmetic. In the high-earner what-if, the formula for the share of a group named a rounded headcount, although the share was calculated from the unrounded headcount. Stated numbers of leavers had no formula.",
+        "now": "The records give complete arithmetic and inputs, including the unrounded headcount calculation for the share. Stated leaver counts are explicit assumptions, not observed source values. All calculated records are independently checked, including sums, averages and rounding; unsupported formulas fail the check. The displayed numerical values have not changed.",
+    },
+    {
         "date": "6 November 2026",
         "pages": [("who-pays.html#richest-share", "Who pays?"),
                   ("figures/etb.html", "ONS figure records"), ("data/facts.json", "Facts download")],
