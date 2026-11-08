@@ -50,7 +50,7 @@ class ReleaseEvidence(unittest.TestCase):
         self.receipt = {
             "id": 42,
             "sha": COMMIT,
-            "environment": "production",
+            "environment": deploy.ENVIRONMENT,
             "task": "deploy",
             "creator": dict(ACTIONS_CREATOR),
             "payload": {
@@ -89,7 +89,7 @@ class ReleaseEvidence(unittest.TestCase):
             return self.comparison
         if path.startswith("deployments?"):
             self.assertIn(f"sha={COMMIT}", path)
-            self.assertIn("environment=production", path)
+            self.assertIn(f"environment={deploy.ENVIRONMENT}&", path)
             self.assertIn("task=deploy", path)
             return self.receipts
         if path == "deployments/42/statuses?per_page=100&page=1":

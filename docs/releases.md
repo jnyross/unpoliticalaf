@@ -63,7 +63,11 @@ timeout; CLI failures report only the exception type, never raw API output.
 Intended local GitHub configuration and ordinary GitHub credentials are retained.
 Only a reviewed gate may call it after independent exact-candidate/production
 checks and a real live-byte comparison, serialized per SHA. Neither a manifest
-nor a run-shaped URL independently proves those checks happened. The release
+nor a run-shaped URL independently proves those checks happened. The `contents: write`
+release job pins every action to a reviewed commit SHA, checks out without
+persisted credentials and installs Python packages only with
+`make setup-release`: hash-checked wheels from `requirements-release.txt`,
+which must cover exactly the `requirements-test.txt` pins. The release
 automation remains disabled until explicitly reviewed activation; packaging and
 this documentation do not authorize a release, schedule, tag or API write.
 

@@ -55,9 +55,15 @@ is accepted.
 
 ## Receipt identity and recovery
 
-The deployment uses `environment: production`, `task: deploy`, the exact SHA,
-`production_environment: true`, `transient_environment: false`,
-`auto_merge: false` and no requested status-context override. Its payload is:
+The deployment uses `environment: verified-site-receipts`, `task: deploy`, the
+exact SHA, `production_environment: false`, `transient_environment: false`,
+`auto_merge: false` and no requested status-context override. Each success
+status sets `auto_inactive: false`. GitHub environment names are
+case-insensitive and Vercel's GitHub integration may record `Production` or
+`Preview` deployments, so receipts use their own environment and never mark any
+other deployment inactive. The receipt jobs declare no workflow `environment:`,
+so Actions adds no deployment record of its own. Records in any other
+environment are never receipts. Its payload is:
 
 | Field | Evidence |
 | --- | --- |
@@ -101,6 +107,9 @@ allowlists API paths, removes foreign-host/debug environment overrides, uses a
 60-second subprocess timeout, and never prints raw command output or tokens
 on failure. Use only the existing workflow token and its intentionally
 reviewed permissions: contents/statuses/actions read and deployments write.
+The writing job installs only the hash-checked wheel closure in
+`requirements-release.txt` (`make setup-release`), and its actions are pinned
+to reviewed commit SHAs.
 No Vercel API write, new credential, provider or endpoint configuration is
 needed. A local read-only report may use the existing authenticated `gh` CLI.
 

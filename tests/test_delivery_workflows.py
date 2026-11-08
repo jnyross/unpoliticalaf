@@ -48,7 +48,7 @@ class DeliveryWorkflows(unittest.TestCase):
             'fromJSON(\'["push","workflow_dispatch"]\')',
             "ref: ${{ github.event.workflow_run.head_sha }}",
             "VERCEL_GIT_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}",
-            "make setup-test",
+            "make setup-release",
             "make production-verify",
             ".venv/bin/python scripts/release_evidence.py",
             ".venv/bin/python scripts/package_release.py",
@@ -56,6 +56,7 @@ class DeliveryWorkflows(unittest.TestCase):
             "cancel-in-progress: false",
         ):
             self.assertIn(text, workflow)
+        self.assertNotIn("make setup-test", workflow)
         self.assertNotIn("download-artifact", workflow)
         self.assertNotIn("schedule:", workflow)
         self.assertLess(workflow.index("release_evidence.py"), workflow.index("publish_release.sh"))

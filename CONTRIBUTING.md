@@ -35,7 +35,8 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
 - `make quality` runs Ruff, Black's non-mutating check, forced Python compilation,
   strict core typing, dependency checks, complexity, duplication, seeded stability,
   guidance references and the existing quality dashboard. It requires the locked
-  Node tools as well as `make setup-dev`.
+  Node tools as well as `make setup-dev`. `make quality-checks` is the static
+  part alone; CI runs it next to separate stability and coverage jobs.
   `make lint`, `make typecheck` and `make check-deps` also run separately.
 - `make setup-typing && make typecheck` installs just production and typing
   packages. The strict boundary is listed in `mypy.ini`; extend it without

@@ -8,6 +8,9 @@ on:
 permissions:
   contents: read
 
+# The full suites run once each, in parallel jobs. The required "check" and
+# "quality" aggregates accept only their successful results, so no gate,
+# seed or population is dropped by running it outside the aggregate job.
 jobs:
   delivery:
     runs-on: ubuntu-latest
@@ -26,6 +29,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -33,19 +38,98 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
 
-  check:
+  stability:
+    name: Seeded stability
     runs-on: ubuntu-latest
-    needs: flag_configurations
-    if: always()
-    # The merged full population takes ~11 minutes per process, not the old small suite.
+    # Three fresh full-population processes take about 25 minutes in CI.
     timeout-minutes: 60
     steps:
-      - name: Require every flag configuration to pass
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # The development set keeps the larger population formerly run by quality.
+      - run: make setup-dev
+      - name: Detect flaky tests with three fresh seeded processes
+        run: make test-stability
+      - name: Publish timing and stability summaries
+        if: always()
+        run: |
+          for summary in test-results/*/invocation-*/summary.md test-results/*/invocation-*/run-*/summary.md; do
+            if [ -f "$summary" ]; then
+              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+      - name: Retain original test outcomes and timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/
+          retention-days: 30
+          if-no-files-found: warn
+
+  coverage:
+    name: Combined coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-dev
+      # Coverage includes a fresh build, independent check and the canonical
+      # timed test population; it is the measurement in make quality's dashboard.
+      - run: make verify-coverage
+      - name: Retain coverage phases and dashboard
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-coverage-${{ github.run_id }}-${{ github.run_attempt }}
+          path: quality-reports/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish combined coverage and timing summaries
+        if: always()
+        run: |
+          for summary in quality-reports/invocation-*/summary.md quality-reports/invocation-*/test-timings/summary.md; do
+            if [ -f "$summary" ]; then
+              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
+
+  check:
+    runs-on: ubuntu-latest
+    needs: [flag_configurations, stability, coverage]
+    if: always()
+    timeout-minutes: 60
+    steps:
+      - name: Require every flag configuration, seeded stability and coverage to pass
         id: flags
         env:
           RESULT: ${{ needs.flag_configurations.result }}
-        run: test "$RESULT" = success
+          STABILITY: ${{ needs.stability.result }}
+          COVERAGE: ${{ needs.coverage.result }}
+        run: test "$RESULT" = success && test "$STABILITY" = success && test "$COVERAGE" = success
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         id: python
         with:
@@ -73,46 +157,6 @@ jobs:
       - name: Collect a unit test file without running tests
         if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
         run: .venv/bin/python -m pytest --collect-only tests/test_household_shares.py
-      # The benchmark and coverage have distinct measurements. Coverage includes
-      # a fresh build, independent check and the canonical timed test population.
-      - run: make verify-coverage
-        if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
-      - name: Retain coverage phases and dashboard
-        if: ${{ always() && steps.flags.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: verification-coverage-${{ github.run_id }}-${{ github.run_attempt }}
-          path: quality-reports/
-          include-hidden-files: true
-          if-no-files-found: error
-          retention-days: 30
-      - name: Publish combined coverage summary
-        if: ${{ always() && steps.flags.outcome == 'success' }}
-        run: |
-          for summary in quality-reports/invocation-*/summary.md; do
-            if [ -f "$summary" ]; then
-              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-      - name: Detect flaky tests with three fresh seeded processes
-        if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
-        run: make test-stability
-      - name: Publish timing and stability summaries
-        if: ${{ always() && steps.flags.outcome == 'success' }}
-        run: |
-          for summary in test-results/*/invocation-*/summary.md test-results/*/invocation-*/run-*/summary.md quality-reports/invocation-*/test-timings/summary.md; do
-            if [ -f "$summary" ]; then
-              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
-            fi
-          done
-      - name: Retain original test outcomes and timings
-        if: ${{ always() && steps.flags.outcome == 'success' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-${{ github.run_id }}-${{ github.run_attempt }}
-          path: test-results/
-          retention-days: 30
-          if-no-files-found: warn
 
   duplicates:
     name: Duplicate code
@@ -120,6 +164,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -141,6 +187,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -160,9 +208,15 @@ jobs:
 
   quality:
     runs-on: ubuntu-latest
+    # make quality = quality-checks + test-stability + the coverage dashboard.
+    # The suites come from the shared jobs above instead of running twice.
+    needs: [stability, coverage]
+    if: always()
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -172,7 +226,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: make setup-dev
-      - run: make quality
+      - run: make quality-checks
+      - run: make -f quality/Makefile tooling-tests
+      - name: Require the shared seeded stability and coverage runs to pass
+        if: always()
+        env:
+          STABILITY: ${{ needs.stability.result }}
+          COVERAGE: ${{ needs.coverage.result }}
+        run: test "$STABILITY" = success && test "$COVERAGE" = success
 
   compatibility:
     runs-on: ubuntu-latest
@@ -181,6 +242,8 @@ jobs:
         python: ["3.10", "3.12"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
@@ -193,6 +256,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -218,6 +283,8 @@ jobs:
           - rollout: production
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

@@ -400,7 +400,7 @@ class Workflow(unittest.TestCase):
     def test_stable_check_accepts_only_successful_matrix_result(self):
         text = (ROOT / ".github/workflows/check.yml").read_text()
         check_job = text.split("  check:\n", 1)[1].split("\n  duplicates:", 1)[0]
-        self.assertIn("needs: flag_configurations", check_job)
+        self.assertRegex(check_job, r"needs: \[flag_configurations[,\]]")
         self.assertIn("if: always()", check_job)
         self.assertIn("RESULT: ${{ needs.flag_configurations.result }}", check_job)
         command = next(
@@ -408,9 +408,13 @@ class Workflow(unittest.TestCase):
             for line in check_job.splitlines()
             if line.strip().startswith('run: test "$RESULT"')
         )
+        # The other aggregated jobs pass, so only the matrix result decides here.
+        passing = {"STABILITY": "success", "COVERAGE": "success"}
         for result in ("success", "failure", "cancelled", "skipped", ""):
             with self.subTest(result=result):
-                checked = subprocess.run(["sh", "-c", command], env=dict(os.environ, RESULT=result))
+                checked = subprocess.run(
+                    ["sh", "-c", command], env=dict(os.environ, **passing, RESULT=result)
+                )
                 self.assertEqual(checked.returncode == 0, result == "success")
 
 

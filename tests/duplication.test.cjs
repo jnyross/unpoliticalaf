@@ -208,7 +208,8 @@ test('canonical command and aggregate propagate failures without suppressions', 
   const manifest = require('../package.json');
   assert.equal(manifest.scripts['check:duplicates'], 'node scripts/check_duplicates.cjs');
   const makefile = fs.readFileSync(path.join(ROOT, 'Makefile'), 'utf8');
-  assert.match(makefile, /^quality:.*\bduplication\b/m);
+  assert.match(makefile, /^quality: quality-checks\b/m);
+  assert.match(makefile, /^quality-checks:.*\bduplication\b/m);
   assert.match(makefile, /^duplication:\n\tnpm run check:duplicates/m);
   const workflow = fs.readFileSync(path.join(ROOT, '.github/workflows/check.yml'), 'utf8');
   assert.match(workflow, /name: Duplicate code/);
