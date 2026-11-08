@@ -1,0 +1,3 @@
+# Separate from build dependencies; no PR-supplied configuration is loaded.
+ruff==0.14.3
+bandit==1.8.6

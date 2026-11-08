@@ -44,15 +44,26 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 OUT = ROOT / "docs" / "accuracy-check"
 SEED = 20261102  # the date the sample was drawn; changing it draws a new sample
-N_RANDOM = 40    # figures drawn from every figure shown on the site
+N_RANDOM = 40  # figures drawn from every figure shown on the site
 N_HEADLINE = 10  # extra figures drawn from the headline pages
-HEADLINE_PAGES = ["index.html", "spending.html", "taxes.html", "who-pays.html", "household-tax.html"]
-UA = {"User-Agent": "Mozilla/5.0 (Unpolitical accuracy check; +https://github.com/jnyross/unpoliticalaf)"}
+HEADLINE_PAGES = [
+    "index.html",
+    "spending.html",
+    "taxes.html",
+    "who-pays.html",
+    "household-tax.html",
+]
+UA = {
+    "User-Agent": "Mozilla/5.0 (Unpolitical accuracy check; +https://github.com/jnyross/unpoliticalaf)"
+}
 
-DATA_RE = re.compile(r'<data value="([^"]*)" data-fact="([^"]+)" data-kind="([^"]+)">([^<]*)</data>')
+DATA_RE = re.compile(
+    r'<data value="([^"]*)" data-fact="([^"]+)" data-kind="([^"]+)">([^<]*)</data>'
+)
 
 
 # --------------------------------------------------------------------- sample
+
 
 def shown_figures():
     """Every figure a reader can see: (page, fact id, kind, text)."""
@@ -74,7 +85,12 @@ def leaves(facts, fid, out=None):
         for i in f["inputs"]:
             leaves(facts, i, out)
     elif f["id"] not in [x["id"] for x in out]:
-        out.append({k: f[k] for k in ("id", "value", "unit", "period", "source", "locator", "scale", "status")})
+        out.append(
+            {
+                k: f[k]
+                for k in ("id", "value", "unit", "period", "source", "locator", "scale", "status")
+            }
+        )
     return out
 
 
@@ -97,8 +113,15 @@ def sample(ids=None, out=None):
         picked, picked_h = list(dict.fromkeys(ids)), []
     else:
         picked = rng.sample(population, N_RANDOM)
-        headline = sorted({fid for fid, uses in shown.items() if fid in population and fid not in picked
-                           and any(p in HEADLINE_PAGES for p, _, _ in uses)})
+        headline = sorted(
+            {
+                fid
+                for fid, uses in shown.items()
+                if fid in population
+                and fid not in picked
+                and any(p in HEADLINE_PAGES for p, _, _ in uses)
+            }
+        )
         picked_h = rng.sample(headline, N_HEADLINE)
     items = []
     for n, fid in enumerate(picked + picked_h, 1):
@@ -110,25 +133,59 @@ def sample(ids=None, out=None):
         while todo:  # every calculation between the figure and its cells
             g = facts[todo.pop()]
             if g["formula"] and g["inputs"] and g["id"] not in calc:
-                calc[g["id"]] = {"formula": g["formula"], "inputs": g["inputs"], "value": g["value"]}
+                calc[g["id"]] = {
+                    "formula": g["formula"],
+                    "inputs": g["inputs"],
+                    "value": g["value"],
+                }
                 todo.extend(g["inputs"])
         for c in cells:
             s = sources[c["source"]]
-            rec = next((r for r in receipts.values() if "data/fetched/" + r["file"] == s["file"]), None)
+            rec = next(
+                (r for r in receipts.values() if "data/fetched/" + r["file"] == s["file"]), None
+            )
             c["url"] = rec["url"] if rec else s["url"]
             c["file"] = s["file"]
             c["sha256"] = s.get("sha256") or (rec or {}).get("sha256")
             c["publisher"] = s["publisher"]
             c["title"] = s["title"]
-        items.append({"n": n, "group": "chosen" if ids else ("random" if n <= N_RANDOM else "headline"), "id": fid, "page": page,
-                      "pages": len(uses), "kind": kind, "text": text, "value": f["value"], "unit": f["unit"],
-                      "period": f["period"], "status": f["status"], "formula": f["formula"], "calc": calc, "cells": cells})
+        items.append(
+            {
+                "n": n,
+                "group": "chosen" if ids else ("random" if n <= N_RANDOM else "headline"),
+                "id": fid,
+                "page": page,
+                "pages": len(uses),
+                "kind": kind,
+                "text": text,
+                "value": f["value"],
+                "unit": f["unit"],
+                "period": f["period"],
+                "status": f["status"],
+                "formula": f["formula"],
+                "calc": calc,
+                "cells": cells,
+            }
+        )
     out.mkdir(parents=True, exist_ok=True)
-    meta = {"seed": None if ids else SEED, "population": len(population), "headline_population": len(headline),
-            "commit": json.loads((SITE / "build.json").read_text()).get("commit") if (SITE / "build.json").exists() else None}
-    (out / "sample.json").write_text(json.dumps({"meta": meta, "items": items}, indent=1, ensure_ascii=False) + "\n")
-    print(f"chose {len(items)} of {len(population)} figures shown" if ids else
-          f"sampled {len(items)} of {len(population)} figures shown ({len(headline)} on headline pages)")
+    meta = {
+        "seed": None if ids else SEED,
+        "population": len(population),
+        "headline_population": len(headline),
+        "commit": (
+            json.loads((SITE / "build.json").read_text()).get("commit")
+            if (SITE / "build.json").exists()
+            else None
+        ),
+    }
+    (out / "sample.json").write_text(
+        json.dumps({"meta": meta, "items": items}, indent=1, ensure_ascii=False) + "\n"
+    )
+    print(
+        f"chose {len(items)} of {len(population)} figures shown"
+        if ids
+        else f"sampled {len(items)} of {len(population)} figures shown ({len(headline)} on headline pages)"
+    )
 
 
 # ---------------------------------------------------------------- page check
@@ -145,11 +202,12 @@ def page_matches(item):
     shown = float(m.group(0))
     places = len(m.group(1) or "")
     v = item["value"] * MULT.get(item["kind"], 1)
-    ok = abs(abs(v) - abs(shown)) <= 0.5 * 10 ** -places + 1e-9
+    ok = abs(abs(v) - abs(shown)) <= 0.5 * 10**-places + 1e-9
     return ok, f"{v:.6g} shown as {item['text']!r}"
 
 
 # --------------------------------------------------------------------- check
+
 
 def get(url):
     for attempt in range(4):
@@ -159,7 +217,7 @@ def get(url):
         except Exception:
             if attempt == 3:
                 raise
-            time.sleep(5 * 2 ** attempt)
+            time.sleep(5 * 2**attempt)
 
 
 def col_index(letters):
@@ -177,9 +235,11 @@ def split_ref(locator):
 
 def ods_rows(body, sheet):
     """Rows of one sheet of an OpenDocument spreadsheet, repeats expanded."""
-    ns = {"table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
-          "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
-          "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0"}
+    ns = {
+        "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
+        "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
+        "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
+    }
     T, O = "{%s}" % ns["table"], "{%s}" % ns["office"]
     root = ElementTree.fromstring(zipfile.ZipFile(io.BytesIO(body)).read("content.xml"))
     for t in root.iter(T + "table"):
@@ -207,13 +267,17 @@ def read_cell(body, file, locator, retained=None):
     ext = file.rsplit(".", 1)[-1]
     if ext == "xlsx":
         import openpyxl
+
         sheet, r, c = split_ref(locator)
         ws = openpyxl.load_workbook(io.BytesIO(body), data_only=True, read_only=True)[sheet]
-        for row in ws.iter_rows(min_row=r + 1, max_row=r + 1, min_col=c + 1, max_col=c + 1, values_only=True):
+        for row in ws.iter_rows(
+            min_row=r + 1, max_row=r + 1, min_col=c + 1, max_col=c + 1, values_only=True
+        ):
             return row[0]
         return None
     if ext == "xls":
         import xlrd
+
         sheet, r, c = split_ref(locator)
         return xlrd.open_workbook(file_contents=body).sheet_by_name(sheet).cell_value(r, c)
     if ext == "ods":
@@ -229,7 +293,19 @@ def read_cell(body, file, locator, retained=None):
             old = list(csv.reader(io.StringIO(retained.decode("utf-8-sig")))) if retained else rows
             want = old[int(m.group(1)) - 1]
             ohead = old[0]
-            keys = [h for h in ohead if h not in ("OBS_VALUE", "Data values", "OBS_STATUS", "OBS_STATUS_NAME", "RECORD_OFFSET", "RECORD_COUNT")]
+            keys = [
+                h
+                for h in ohead
+                if h
+                not in (
+                    "OBS_VALUE",
+                    "Data values",
+                    "OBS_STATUS",
+                    "OBS_STATUS_NAME",
+                    "RECORD_OFFSET",
+                    "RECORD_COUNT",
+                )
+            ]
             label = {h: want[ohead.index(h)] for h in keys if h in head}
             hits = [r for r in rows[1:] if all(r[head.index(h)] == v for h, v in label.items())]
             if len(hits) != 1:
@@ -259,10 +335,11 @@ def read_cell(body, file, locator, retained=None):
             return series[m.group(3)]
     if ext == "pdf":
         from pypdf import PdfReader
+
         m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)
         text = PdfReader(io.BytesIO(body)).pages[int(m.group(1)) - 1].extract_text()
-        after = text[text.index(m.group(2)) + len(m.group(2)):]
-        line = after[after.index(m.group(3)) + len(m.group(3)):].split("\n", 1)[0]
+        after = text[text.index(m.group(2)) + len(m.group(2)) :]
+        line = after[after.index(m.group(3)) + len(m.group(3)) :].split("\n", 1)[0]
         return re.findall(r"-?[\d,]+(?:\.\d+)?", line)[int(m.group(4)) - 1].replace(",", "")
     raise ValueError(f"no reader for {file} at {locator}")
 
@@ -287,9 +364,15 @@ def evaluate(formula, values, inputs=()):
     label = re.search(r",\s*(\d{4}-\d{2})$", expr)
     if label:
         period = label.group(1)
-        expr = expr[:label.start()]
-        values = {**values, **{fid[:-len(period) - 1]: v for fid, v in values.items()
-                               if fid.endswith("." + period)}}
+        expr = expr[: label.start()]
+        values = {
+            **values,
+            **{
+                fid[: -len(period) - 1]: v
+                for fid, v in values.items()
+                if fid.endswith("." + period)
+            },
+        }
     m = re.fullmatch(r"(\S+) − sum of the (?:\w+ )?named \w+", formula)
     if m:  # 'total − sum of the named groups': the first input less all the others
         expr = " − ".join([m.group(1)] + [i for i in inputs if i != m.group(1)])
@@ -316,7 +399,11 @@ def check(local=False, out=None):
                 time.sleep(2)  # be polite to the publishers' servers
             try:
                 body = (ROOT / item_file(plan, url)).read_bytes() if local else get(url)
-                downloads[url] = {"body": body, "sha256": hashlib.sha256(body).hexdigest(), "error": None}
+                downloads[url] = {
+                    "body": body,
+                    "sha256": hashlib.sha256(body).hexdigest(),
+                    "error": None,
+                }
             except Exception as e:
                 downloads[url] = {"body": None, "sha256": None, "error": str(e)[:200]}
             print("got " if downloads[url]["body"] else "FAIL", url[:110])
@@ -325,11 +412,20 @@ def check(local=False, out=None):
         cells = []
         for c in item["cells"]:
             d = downloads[c["url"]]
-            row = {"id": c["id"], "url": c["url"], "locator": c["locator"], "recorded": c["value"],
-                   "same_file": d["sha256"] == c["sha256"], "fresh": None, "error": d["error"]}
+            row = {
+                "id": c["id"],
+                "url": c["url"],
+                "locator": c["locator"],
+                "recorded": c["value"],
+                "same_file": d["sha256"] == c["sha256"],
+                "fresh": None,
+                "error": d["error"],
+            }
             if d["body"] is not None and c["locator"] not in ("", "not published"):
                 try:
-                    retained = (ROOT / c["file"]).read_bytes() if (ROOT / c["file"]).exists() else None
+                    retained = (
+                        (ROOT / c["file"]).read_bytes() if (ROOT / c["file"]).exists() else None
+                    )
                     raw = as_float(read_cell(d["body"], c["file"], c["locator"], retained))
                     row["fresh"] = None if raw is None else raw * c["scale"]
                 except Exception as e:
@@ -351,12 +447,30 @@ def check(local=False, out=None):
             fresh_ok, _ = page_matches({**item, "value": fresh_value})
         else:
             fresh_ok = None
-        results.append({"n": item["n"], "id": item["id"], "page": item["page"], "text": item["text"],
-                        "value": item["value"], "fresh_value": fresh_value, "page_rounds_from_value": page_ok,
-                        "page_matches_fresh_source": fresh_ok, "note": page_note, "cells": cells})
-    meta = {"checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "seed": plan["meta"]["seed"],
-            "downloads": {u: {"sha256": d["sha256"], "error": d["error"]} for u, d in downloads.items()}}
-    (out / "results.json").write_text(json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False) + "\n")
+        results.append(
+            {
+                "n": item["n"],
+                "id": item["id"],
+                "page": item["page"],
+                "text": item["text"],
+                "value": item["value"],
+                "fresh_value": fresh_value,
+                "page_rounds_from_value": page_ok,
+                "page_matches_fresh_source": fresh_ok,
+                "note": page_note,
+                "cells": cells,
+            }
+        )
+    meta = {
+        "checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "seed": plan["meta"]["seed"],
+        "downloads": {
+            u: {"sha256": d["sha256"], "error": d["error"]} for u, d in downloads.items()
+        },
+    }
+    (out / "results.json").write_text(
+        json.dumps({"meta": meta, "results": results}, indent=1, ensure_ascii=False) + "\n"
+    )
     good = sum(1 for r in results if r["page_matches_fresh_source"])
     where = "the repository's copies" if local else "the publishers' files downloaded today"
     print(f"{good} of {len(results)} figures match {where}")
@@ -382,7 +496,11 @@ if __name__ == "__main__":
     out = ROOT / opt("--dir") if opt("--dir") else None
     if cmd == "sample":
         ids_file = opt("--ids")
-        ids = [x.strip() for x in ids_file.read_text().splitlines() if x.strip()] if ids_file else None
+        ids = (
+            [x.strip() for x in ids_file.read_text().splitlines() if x.strip()]
+            if ids_file
+            else None
+        )
         sample(ids, out)
     else:
         check(local="--local" in args, out=out)

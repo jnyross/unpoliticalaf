@@ -2,6 +2,10 @@
   "name": "unpoliticalaf",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "description": "Independent, sourced guide to UK public money and everyday life, built from official statistics.",
   "scripts": {
     "setup": "make setup",
@@ -11,6 +15,15 @@
     "quality": "make quality",
     "build": "make build",
     "check": "make check",
+    "check:duplicates": "node scripts/check_duplicates.cjs",
+    "test:duplicates": "node --test tests/duplication.test.cjs",
+    "test": "node --test tests/test_tracing.mjs",
     "verify": "make verify"
+  },
+  "dependencies": {
+    "@vercel/functions": "3.10.6"
+  },
+  "devDependencies": {
+    "jscpd": "4.0.5"
   }
 }

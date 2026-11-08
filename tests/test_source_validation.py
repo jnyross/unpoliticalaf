@@ -20,32 +20,38 @@ def test_retained_format_corpus(source_id):
     validate_source(source_id, path, receipt["content_type"], path)
 
 
-@pytest.mark.parametrize("name,source_id", [
-    ("ons/l522.csv", "ons-l522"),
-    ("dfe/spc-2015-national-tables.xlsx", "dfe-spc-2015-tables"),
-    ("ehs/FT1421_Trends_in_overcrowding_by_tenure.ods", "ehs-ft1421"),
-    ("dwp/spa-timetable.pdf", "dwp-spa-timetable"),
-    ("gov/income-tax-rates.html", "gov-income-tax-rates"),
-    ("nomis/ashe-sex-codes.json", "nomis-ashe-sex-codes"),
-])
+@pytest.mark.parametrize(
+    "name,source_id",
+    [
+        ("ons/l522.csv", "ons-l522"),
+        ("dfe/spc-2015-national-tables.xlsx", "dfe-spc-2015-tables"),
+        ("ehs/FT1421_Trends_in_overcrowding_by_tenure.ods", "ehs-ft1421"),
+        ("dwp/spa-timetable.pdf", "dwp-spa-timetable"),
+        ("gov/income-tax-rates.html", "gov-income-tax-rates"),
+        ("nomis/ashe-sex-codes.json", "nomis-ashe-sex-codes"),
+    ],
+)
 def test_retained_source_formats_and_affected_contracts(name, source_id):
     path = ROOT / "data/fetched" / name
     validate_source(source_id, path, "application/octet-stream", path)
 
 
-@pytest.mark.parametrize("suffix,body", [
-    (".csv", b"<html><title>Access denied</title></html>"),
-    (".csv", b"server failure"),
-    (".csv", b""),
-    (".csv", b'a,b\n"unterminated'),
-    (".xlsx", b"PK-not-a-workbook"),
-    (".ods", b"not a spreadsheet"),
-    (".json", b'{"error":"service unavailable"}'),
-    (".json", b"invalid"),
-    (".pdf", b"%PDF-not-a-real-document"),
-    (".html", b"<html><title>Access denied</title></html>"),
-    (".bin", b"opaque download"),
-])
+@pytest.mark.parametrize(
+    "suffix,body",
+    [
+        (".csv", b"<html><title>Access denied</title></html>"),
+        (".csv", b"server failure"),
+        (".csv", b""),
+        (".csv", b'a,b\n"unterminated'),
+        (".xlsx", b"PK-not-a-workbook"),
+        (".ods", b"not a spreadsheet"),
+        (".json", b'{"error":"service unavailable"}'),
+        (".json", b"invalid"),
+        (".pdf", b"%PDF-not-a-real-document"),
+        (".html", b"<html><title>Access denied</title></html>"),
+        (".bin", b"opaque download"),
+    ],
+)
 def test_invalid_200_formats_are_rejected(tmp_path, suffix, body):
     staged = tmp_path / ("download" + suffix)
     staged.write_bytes(body)
@@ -53,13 +59,16 @@ def test_invalid_200_formats_are_rejected(tmp_path, suffix, body):
         validate_source("test", staged, "application/octet-stream")
 
 
-@pytest.mark.parametrize("old,new", [
-    ("L522", "OTHER"),
-    ("2015=100", "2025=100"),
-    ('"2026 APR","141.8"', '"2026 APR","NaN"'),
-    ('"2026 APR","141.8"', '"2026 APR",""'),
-    ('"2026 APR","141.8"', ""),
-])
+@pytest.mark.parametrize(
+    "old,new",
+    [
+        ("L522", "OTHER"),
+        ("2015=100", "2025=100"),
+        ('"2026 APR","141.8"', '"2026 APR","NaN"'),
+        ('"2026 APR","141.8"', '"2026 APR",""'),
+        ('"2026 APR","141.8"', ""),
+    ],
+)
 def test_l522_wrong_identity_base_missing_and_invalid_periods_fail(tmp_path, old, new):
     previous = ROOT / "data/fetched/ons/l522.csv"
     text = previous.read_text()

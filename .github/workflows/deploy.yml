@@ -1,0 +1,86 @@
+name: Verify and record production deployment
+
+# Vercel remains the only deployer. No schedule is introduced.
+# Receipt writes stay opt-in until reviewed qualification enables the variable.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    concurrency:
+      group: production-live-check
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup
+      - run: make production-build
+        env:
+          VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
+      - name: Compare every production byte
+        run: .venv/bin/python scripts/check_live.py --wait 1500
+      - name: Retain live-site metrics, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-site-metrics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .metrics/*.prom
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: warn
+
+  record:
+    needs: live
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      vars.REVIEWED_PRODUCTION_DELIVERY == 'true' &&
+      contains(fromJSON('["push","workflow_dispatch"]'), github.event_name)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: read
+      statuses: read
+      deployments: write
+    concurrency:
+      group: production-deployment-receipts
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup
+      - run: make production-build
+        env:
+          VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
+      - name: Verify provider and bytes, then retain a receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .venv/bin/python scripts/record_deployment.py --wait 1500
+      - name: Retain receipt verification metrics, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: receipt-metrics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .metrics/*.prom
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: warn

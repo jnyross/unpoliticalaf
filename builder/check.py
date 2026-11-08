@@ -16,6 +16,7 @@ Usage: python -m builder.check [--axe]
 9. Every quoted explanation appears word for word in its source file and is
    shown on at least one page.
 """
+
 import csv
 import hashlib
 import io
@@ -27,14 +28,43 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 from .check_calculations import check_calculations
+from .logging import get_logger, run_logged
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
+logger = get_logger("check")
 
 # Words that judge rather than describe. Matched as whole words in visible text.
-LOADED = ["shocking", "staggering", "soared", "soaring", "plummeted", "plunged", "massive", "huge", "crisis", "waste", "wasted",
-          "burden", "fair share", "unfair", "sadly", "unfortunately", "good news", "bad news", "only just", "skyrocket", "skyrocketed",
-          "slashed", "splurge", "handout", "handouts", "scrounger", "typical family", "average family"]
+LOADED = [
+    "shocking",
+    "staggering",
+    "soared",
+    "soaring",
+    "plummeted",
+    "plunged",
+    "massive",
+    "huge",
+    "crisis",
+    "waste",
+    "wasted",
+    "burden",
+    "fair share",
+    "unfair",
+    "sadly",
+    "unfortunately",
+    "good news",
+    "bad news",
+    "only just",
+    "skyrocket",
+    "skyrocketed",
+    "slashed",
+    "splurge",
+    "handout",
+    "handouts",
+    "scrounger",
+    "typical family",
+    "average family",
+]
 
 # Loaded terms the site may name, only in curly quotation marks, in order to explain them.
 NAMED_TERMS = ["“tax burden”"]
@@ -55,25 +85,51 @@ _wb = {}
 def workbook(path):
     if path not in _wb:
         import openpyxl
+
         _wb[path] = openpyxl.load_workbook(ROOT / path, data_only=True, read_only=False)
     return _wb[path]
 
 
-def cell_value(src_file, locator):
-    """Return the raw value at a locator, read independently of the builder."""
+def _csv_rows(cached):
+    """Replay parsed rows, extending lazily so row locators still stop early."""
+    # Reader errors abort check_facts, which discards this invocation's cache.
+    rows, unread = cached
+    yield from rows
+    for row in unread:
+        rows.append(row)
+        yield row
+
+
+def _cached_source(path, source_cache, read_source):
+    """Reuse parsing only when the caller supplies its invocation-local cache."""
+    if source_cache is None:
+        return read_source()
+    if path not in source_cache:
+        source_cache[path] = read_source()
+    return source_cache[path]
+
+
+def cell_value(src_file, locator, source_cache=None):
+    """Read independently, optionally reusing parsing within one check_facts call."""
+    path = ROOT / src_file
     if src_file.endswith(".xlsx"):
         sheet, ref = locator.rsplit("!", 1)
         return workbook(src_file)[sheet][ref].value
     if src_file.endswith(".xls"):
         import xlrd  # legacy Excel: read with xlrd, not the builder's code path
+
         sheet, ref = locator.rsplit("!", 1)
         m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
         col = 0
         for ch in m.group(1):
             col = col * 26 + ord(ch) - 64
-        return xlrd.open_workbook(str(ROOT / src_file)).sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
+        book = _cached_source(path, source_cache, lambda: xlrd.open_workbook(str(path)))
+        return book.sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
-        from .readers import ods  # ODS has no second reader available; the builder's reader expands repeats in full
+        from .readers import (
+            ods,
+        )  # ODS has no second reader available; the builder's reader expands repeats in full
+
         sheet, ref = locator.rsplit("!", 1)
         m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
         col = 0
@@ -83,22 +139,33 @@ def cell_value(src_file, locator):
         r = rows[int(m.group(2)) - 1]
         return r[col - 1] if col - 1 < len(r) else None
     if src_file.endswith(".csv"):
-        text = (ROOT / src_file).read_text(encoding="utf-8-sig")
+        cached = _cached_source(
+            path,
+            source_cache,
+            lambda: ([], csv.reader(io.StringIO(path.read_text(encoding="utf-8-sig")))),
+        )
+        rows = _csv_rows(cached)
         m = re.search(r" line (\d+)$", locator)
         if m:
-            lines = list(csv.reader(io.StringIO(text)))
+            lines = list(rows)
             head = lines[0]
-            series = re.match(r"(\w+) line ", locator)  # e.g. "CFMZ6JM line 2": the column is named by its series code
-            key = series.group(1) if series and series.group(1) in head else ("OBS_VALUE" if "OBS_VALUE" in head else "Data values")
+            series = re.match(
+                r"(\w+) line ", locator
+            )  # e.g. "CFMZ6JM line 2": the column is named by its series code
+            key = (
+                series.group(1)
+                if series and series.group(1) in head
+                else ("OBS_VALUE" if "OBS_VALUE" in head else "Data values")
+            )
             return lines[int(m.group(1)) - 1][head.index(key)]
         m = re.fullmatch(r"CDID (\w+) row '(.+)'", locator)
         if m:  # a time-series file with one column per series, found by its CDID row
-            rows = list(csv.reader(io.StringIO(text)))
+            rows = list(rows)
             col = next(r for r in rows if r and r[0] == "CDID").index(m.group(1))
             return next((r[col] for r in rows if r and r[0] == m.group(2)), None)
         m = re.fullmatch(r"\w+ row '(.+)'", locator)
         if m:
-            for row in csv.reader(io.StringIO(text)):
+            for row in rows:
                 if row and row[0] == m.group(1):
                     return row[1]
             return None
@@ -118,36 +185,56 @@ def cell_value(src_file, locator):
     if src_file.endswith(".pdf"):
         # Read the page text afresh and find the anchor, the line and the nth number on it
         from pypdf import PdfReader
+
         # A stated sentence: "page N 'text'" gives the last £ amount in the quoted text, after checking the text is there.
         m = re.fullmatch(r"page (\d+) '(.+)'", locator)
         if m:
-            text = re.sub(r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text())
+            text = re.sub(
+                r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text()
+            )
             if m.group(2) not in text:
                 raise ValueError(f"{src_file} page {m.group(1)} no longer says '{m.group(2)}'")
             return re.findall(r"£([\d,]+)", m.group(2))[-1].replace(",", "")
         # A stated age: "page N row 'birth dates' 'age'" gives the age in months, after checking the row is there.
         m = re.fullmatch(r"page (\d+) row '(.+?)' '(.+)'", locator)
         if m:
-            text = re.sub(r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text())
+            text = re.sub(
+                r"\s+", " ", PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text()
+            )
             if f"{m.group(2)} {m.group(3)}" not in text:
-                raise ValueError(f"{src_file} page {m.group(1)} no longer has the row '{m.group(2)}' '{m.group(3)}'")
-            age = re.fullmatch(r"(\d+)th birthday|(\d+) years and (\d+) months(?: \(\d\))?", m.group(3))
+                raise ValueError(
+                    f"{src_file} page {m.group(1)} no longer has the row '{m.group(2)}' '{m.group(3)}'"
+                )
+            age = re.fullmatch(
+                r"(\d+)th birthday|(\d+) years and (\d+) months(?: \(\d\))?", m.group(3)
+            )
             if age.group(1):
                 return str(int(age.group(1)) * 12)
             return str(int(age.group(2)) * 12 + int(age.group(3)))
         m = re.fullmatch(r"p(\d+) after '(.+)' line '(.+)' number (\d+)", locator)
         text = PdfReader(ROOT / src_file).pages[int(m.group(1)) - 1].extract_text()
-        after = text[text.index(m.group(2)) + len(m.group(2)):]
-        line = after[after.index(m.group(3)) + len(m.group(3)):].split("\n", 1)[0]
+        after = text[text.index(m.group(2)) + len(m.group(2)) :]
+        line = after[after.index(m.group(3)) + len(m.group(3)) :].split("\n", 1)[0]
         return re.findall(r"-?[\d,]+(?:\.\d+)?", line)[int(m.group(4)) - 1].replace(",", "")
     if src_file.endswith(".html"):
         # ONS bulletin text: the first number after a sentence that appears once in the page
         import html as _html
+
         m = re.fullmatch(r"after '(.+)' number (\d+)", locator)
         raw = (ROOT / src_file).read_text(encoding="utf-8", errors="replace")
-        text = re.sub(r"\s+", " ", _html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>|<style.*?</style>", "", raw, flags=re.S))))
+        text = re.sub(
+            r"\s+",
+            " ",
+            _html.unescape(
+                re.sub(
+                    r"<[^>]+>",
+                    " ",
+                    re.sub(r"<script.*?</script>|<style.*?</style>", "", raw, flags=re.S),
+                )
+            ),
+        )
         assert text.count(m.group(1)) == 1, m.group(1)
-        tail = text[text.index(m.group(1)) + len(m.group(1)):]
+        tail = text[text.index(m.group(1)) + len(m.group(1)) :]
         return re.findall(r"\d[\d,]*", tail)[int(m.group(2)) - 1].replace(",", "")
     raise ValueError(f"cannot read {src_file} at {locator}")
 
@@ -180,34 +267,49 @@ def check_facts(data):
         if digest != s["sha256"]:
             fail(f"hash changed: {s['file']}")
     counts = check_calculations(facts, fail)
-    print(f"Calculated facts: {counts.candidates:,} candidates; {counts.evaluated:,} recalculated; "
-          f"{counts.missing:,} validated missing; {counts.literals:,} literal assumptions validated; "
-          f"{counts.failed:,} failed.")
+    print(
+        f"Calculated facts: {counts.candidates:,} candidates; {counts.evaluated:,} recalculated; "
+        f"{counts.missing:,} validated missing; {counts.literals:,} literal assumptions validated; "
+        f"{counts.failed:,} failed."
+    )
     checked = 0
+    # Reuse independent parsing only within this invocation, never checked
+    # values or verdicts. A later check must reopen changed source bytes.
+    source_cache = {}
     for f in facts.values():
         if f["status"] in ("calculated",):
             continue
         if f["status"] == "missing" or f["locator"] in ("", "not published"):
             continue
         src = sources[f["source"]]
-        raw = cell_value(src["file"], f["locator"])
+        raw = cell_value(src["file"], f["locator"], source_cache)
         rawn = as_number(raw)
         want = None if rawn is None else rawn * f.get("scale", 1)
         if f["source"] == "dfe_api" and want is not None:
             want = round(want, 1)
         if not close(want, f["value"], 1e-9):
-            fail(f"{f['id']}: source {src['file']} {f['locator']} = {raw!r}, recorded {f['value']!r}")
+            fail(
+                f"{f['id']}: source {src['file']} {f['locator']} = {raw!r}, recorded {f['value']!r}"
+            )
         checked += 1
     return facts, checked, counts.evaluated
 
 
 # ---------------------------------------------------------------- pages
 
+
 class PageParser(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.datas, self.links, self.ids, self.text = [], [], set(), []
-        self.stack, self.h1, self.headings, self.svgs, self.tables, self.captions = [], 0, [], [], 0, 0
+        self.stack, self.h1, self.headings, self.svgs, self.tables, self.captions = (
+            [],
+            0,
+            [],
+            [],
+            0,
+            0,
+        )
         self.lang = None
         self._data = None
         self._script = False
@@ -260,6 +362,7 @@ class PageParser(HTMLParser):
 def check_pages(facts):
     sys.path.insert(0, str(ROOT))
     from builder.html import fmt
+
     pages = sorted(SITE.rglob("*.html"))
     shown = 0
     ids_cache = {}
@@ -294,7 +397,9 @@ def check_pages(facts):
                 style = attrs["data-change"]
                 v = (b - a) if style in ("pp", "abs") else 100 * (b / a - 1)
                 if not close(v, float(attrs["value"]), 1e-9):
-                    fail(f"{rel}: change {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}")
+                    fail(
+                        f"{rel}: change {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}"
+                    )
                 shown += 1
             elif "data-margin" in attrs:
                 # Combined margin of error for a change: √(a² + b²), each margin in the figure's own units
@@ -302,10 +407,12 @@ def check_pages(facts):
                 ma, mb = facts[attrs["data-ma"]]["value"], facts[attrs["data-mb"]]["value"]
                 ma = va * ma / 100 if attrs["data-ka"] == "pm_pct" else ma
                 mb = vb * mb / 100 if attrs["data-kb"] == "pm_pct" else mb
-                v = (ma ** 2 + mb ** 2) ** 0.5
+                v = (ma**2 + mb**2) ** 0.5
                 v = 100 * v / va if attrs["data-margin"] == "pct" else v
                 if not close(v, float(attrs["value"]), 1e-9):
-                    fail(f"{rel}: combined margin {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}")
+                    fail(
+                        f"{rel}: combined margin {attrs['data-from']}→{attrs['data-to']} is {attrs['value']}, recalculated {v}"
+                    )
                 shown += 1
         for href in pp.links:
             if re.match(r"^(https?:|mailto:)", href):
@@ -343,20 +450,25 @@ DL_RE = re.compile(r'<p class="dl"><a href="([^"]+\.csv)" download>')
 def check_downloads():
     """Every table and chart on a reading page has a CSV download beside it, and each file holds its rows."""
     import csv as _csv
+
     files = 0
     for p in sorted(SITE.rglob("*.html")):
         rel = p.relative_to(SITE).as_posix()
         if rel.startswith("figures/"):
             continue
         html = p.read_text(encoding="utf-8")
-        main = html[html.find("<main"):html.find("</main>")]
+        main = html[html.find("<main") : html.find("</main>")]
         links = DL_RE.findall(main)
-        charts = len(re.findall(r"<figure\b", main)) + len(re.findall(r'(?<!aria-hidden="true">)<ul class="(?:bars|bars change)">', main))
+        charts = len(re.findall(r"<figure\b", main)) + len(
+            re.findall(r'(?<!aria-hidden="true">)<ul class="(?:bars|bars change)">', main)
+        )
         tables = main.count("<table")
         # The rest of a long comparison list folded away ("cont") is covered by the download under its first part.
         lists = len(re.findall(r'<ul class="cmp-list">', main))
         if len(links) != charts + tables + lists:
-            fail(f"{rel}: {charts} charts, {lists} lists and {tables} tables but {len(links)} CSV downloads")
+            fail(
+                f"{rel}: {charts} charts, {lists} lists and {tables} tables but {len(links)} CSV downloads"
+            )
         for href in links:
             f = (p.parent / href).resolve()
             if not f.exists():
@@ -369,7 +481,31 @@ def check_downloads():
 
 
 def check_structure():
-    want = ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "self-employed-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/compare/index.html"]
+    want = [
+        "index.html",
+        "spending.html",
+        "spending-history.html",
+        "taxes.html",
+        "tax-history.html",
+        "who-pays.html",
+        "household-tax.html",
+        "self-employed-tax.html",
+        "methods.html",
+        "sources.html",
+        "spending-areas.html",
+        "who-pays-households.html",
+        "international.html",
+        "productivity.html",
+        "borrowing.html",
+        "defence.html",
+        "life/index.html",
+        "life/work.html",
+        "life/earnings.html",
+        "life/housing.html",
+        "life/holidays.html",
+        "life/schools.html",
+        "life/compare/index.html",
+    ]
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
@@ -395,24 +531,60 @@ def check_structure():
 
 # Pages whose first chart must start high enough on a 360 x 640 phone that at
 # least CHART_SHOWN pixels of it are visible within the first two screens.
-CHART_EARLY = ["spending.html", "taxes.html", "tax-history.html", "international.html", "productivity.html", "borrowing.html", "defence.html", "who-pays.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html",
-               "life/holidays.html", "life/schools.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html"]
+CHART_EARLY = [
+    "spending.html",
+    "taxes.html",
+    "tax-history.html",
+    "international.html",
+    "productivity.html",
+    "borrowing.html",
+    "defence.html",
+    "who-pays.html",
+    "life/index.html",
+    "life/work.html",
+    "life/earnings.html",
+    "life/housing.html",
+    "life/holidays.html",
+    "life/schools.html",
+    "life/1985.html",
+    "life/2008.html",
+    "life/2015.html",
+    "life/2021.html",
+]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
 # Pages that must stay short on a 360px phone with every "More on ..." section closed,
 # in phone screens of 640px (goal audits 6 and 7: about 8 screens, Sources split).
 # DEFAULT_COMPARE stands for the comparison the life hub starts with, which moves with the data.
 DEFAULT_COMPARE = "default comparison"
 # The life hub gets 8.8 like the topic pages: its "Jump to" bar (audit 9 gap 7) costs about a quarter of a screen.
-MAX_SCREENS = {"spending.html": 8.5, "who-pays.html": 8.5, "household-tax.html": 8.5, "life/index.html": 8.8,
-               "taxes.html": 8.8, "life/work.html": 8.8, "life/earnings.html": 8.8, "life/housing.html": 8.8,
-               "life/holidays.html": 8.8, "life/schools.html": 8.8, "life/generations.html": 8.8, DEFAULT_COMPARE: 8.8,
-               "methods.html": 9.5, "sources.html": 4, "self-employed-tax.html": 8.5}
+MAX_SCREENS = {
+    "spending.html": 8.5,
+    "who-pays.html": 8.5,
+    "household-tax.html": 8.5,
+    "life/index.html": 8.8,
+    "taxes.html": 8.8,
+    "life/work.html": 8.8,
+    "life/earnings.html": 8.8,
+    "life/housing.html": 8.8,
+    "life/holidays.html": 8.8,
+    "life/schools.html": 8.8,
+    "life/generations.html": 8.8,
+    DEFAULT_COMPARE: 8.8,
+    "methods.html": 9.5,
+    "sources.html": 4,
+    "self-employed-tax.html": 8.5,
+}
 
 
 def default_compare():
     """The comparison page the life hub links first ("Start with ...")."""
-    m = re.search(r'Start with <a href="(compare/\d+-\d+\.html)"', (SITE / "life/index.html").read_text(encoding="utf-8"))
+    m = re.search(
+        r'Start with <a href="(compare/\d+-\d+\.html)"',
+        (SITE / "life/index.html").read_text(encoding="utf-8"),
+    )
     return "life/" + m.group(1) if m else None
+
+
 FIRST_CHART_JS = """() => {
   const els = [...document.querySelectorAll('main figure, main ul.bars, main ul.cmp-list, main svg[role=img]')]
     .filter(e => e.offsetParent !== null && e.getBoundingClientRect().height > 30);
@@ -461,9 +633,14 @@ def run_axe(paths):
         fail("--axe needs playwright and axe-playwright-python (make setup-dev)")
         return
     import os
+
     exe = "/opt/pw-browsers/chromium" if os.path.exists("/opt/pw-browsers/chromium") else None
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(executable_path=exe, args=["--no-sandbox"]) if exe else pw.chromium.launch()
+        browser = (
+            pw.chromium.launch(executable_path=exe, args=["--no-sandbox"])
+            if exe
+            else pw.chromium.launch()
+        )
         for width in (360, 1100):
             page = browser.new_page(viewport={"width": width, "height": 800})
             for path in paths:
@@ -471,7 +648,9 @@ def run_axe(paths):
                 if width == 360 and path in CHART_EARLY:
                     top = page.evaluate(FIRST_CHART_JS)
                     if top is None or top > 2 * PHONE_SCREEN - CHART_SHOWN:
-                        fail(f"{path}: first chart starts at {top}px, not within the first two phone screens")
+                        fail(
+                            f"{path}: first chart starts at {top}px, not within the first two phone screens"
+                        )
                 limit = MAX_SCREENS.get(DEFAULT_COMPARE if path == default_compare() else path)
                 if width == 360 and limit:
                     screens = page.evaluate("document.documentElement.scrollHeight") / PHONE_SCREEN
@@ -481,7 +660,9 @@ def run_axe(paths):
                     # WCAG 2.2 2.5.8: targets at least 24 x 24 px, unless inside a sentence or well spaced
                     for t in page.evaluate(TARGETS_JS):
                         if (t["w"] < 24 or t["h"] < 24) and not t["inline"] and not t["spaced"]:
-                            fail(f"{path}: tap target '{t['text'][:40]}' is {t['w']}x{t['h']}px, under 24x24 (WCAG 2.5.8)")
+                            fail(
+                                f"{path}: tap target '{t['text'][:40]}' is {t['w']}x{t['h']}px, under 24x24 (WCAG 2.5.8)"
+                            )
                 # Open every folded section, so tables and source lists are checked too
                 page.evaluate("document.querySelectorAll('details').forEach(d => d.open = true)")
                 if page.evaluate("document.documentElement.scrollWidth") > width + 1:
@@ -496,7 +677,10 @@ def run_axe(paths):
 
 
 # Words a chart heading may not use: they judge or suggest a cause rather than state what changed.
-LOADED_TITLE = re.compile(r"\b(soar|surge|plunge|plummet|slump|skyrocket|crisis|boom|collapse|thanks to|because|due to|caused|record)\w*", re.I)
+LOADED_TITLE = re.compile(
+    r"\b(soar|surge|plunge|plummet|slump|skyrocket|crisis|boom|collapse|thanks to|because|due to|caused|record)\w*",
+    re.I,
+)
 
 
 def check_findings():
@@ -546,19 +730,21 @@ def big_turns(vals):
         j = k
         while j + 1 < len(pts) - 1 and vals[pts[j + 1]] == vals[pts[k]]:
             j += 1  # a flat top or bottom counts once
-        run = pts[k:j + 1]
+        run = pts[k : j + 1]
         v = vals[run[0]]
         for sign, kind in ((1, "peak"), (-1, "low")):
+
             def base(side):
-                seq = pts[:k][::-1] if side < 0 else pts[j + 1:]
+                seq = pts[:k][::-1] if side < 0 else pts[j + 1 :]
                 b = v
                 for i in seq:
                     if (vals[i] - v) * sign > 0:
                         break
                     b = min(b, vals[i]) if sign > 0 else max(b, vals[i])
                 return b
+
             left, right = base(-1), base(1)
-            if not pts[:k] or not pts[j + 1:]:
+            if not pts[:k] or not pts[j + 1 :]:
                 continue
             prom = (v - max(left, right)) if sign > 0 else (min(left, right) - v)
             if prom >= BIG_MOVE * span - 1e-9:
@@ -585,14 +771,22 @@ def turn_back_at_end(vals):
     last = tail[-1]
     way = 1 if vals[last] >= vals[start] else -1
     # the latest point the line ends that far back from, with no later point past it
-    back = [k for k in tail[1:-1] if (vals[k] - vals[last]) * way >= TAIL_MOVE * span - 1e-9
-            and all((vals[k] - vals[j]) * way >= 0 for j in tail if j > k)]
+    back = [
+        k
+        for k in tail[1:-1]
+        if (vals[k] - vals[last]) * way >= TAIL_MOVE * span - 1e-9
+        and all((vals[k] - vals[j]) * way >= 0 for j in tail if j > k)
+    ]
     if not back:
         return None
     n = tail.index(back[-1])
     while n > 1 and (vals[tail[n - 1]] - vals[tail[n]]) * way >= 0:
         n -= 1  # back up to the top (or bottom) of that peak (or low)
-    run = [i for i in tail[n:] if vals[i] == vals[tail[n]] and all(vals[j] == vals[i] for j in tail[n:] if j <= i)]
+    run = [
+        i
+        for i in tail[n:]
+        if vals[i] == vals[tail[n]] and all(vals[j] == vals[i] for j in tail[n:] if j <= i)
+    ]
     return run, "peak" if way > 0 else "low"
 
 
@@ -607,8 +801,14 @@ def crosses_break(title, lines, rows, breaks):
         si, a, b = (int(x) for x in part.split(":"))
         vals = [_value(r[si + 1]) for r in rows]
         for k in breaks:
-            if a < k < b and any(v is not None for v in vals[a:k]) and any(v is not None for v in vals[k:b]):
-                out.append(f"describes years either side of the break at {labels[k]}, so it compares figures that are not comparable")
+            if (
+                a < k < b
+                and any(v is not None for v in vals[a:k])
+                and any(v is not None for v in vals[k:b])
+            ):
+                out.append(
+                    f"describes years either side of the break at {labels[k]}, so it compares figures that are not comparable"
+                )
         last = max((i for i, v in enumerate(vals) if v is not None), default=-1)
         for m in re.finditer(r"the (\S+) level", title):
             if m.group(1) not in labels:
@@ -616,8 +816,10 @@ def crosses_break(title, lines, rows, breaks):
             ref = labels.index(m.group(1))
             for k in breaks:
                 if ref < k <= last:
-                    out.append(f"compares with the {m.group(1)} level, but the line goes on past the break at {labels[k]}, "
-                               "so readers will set later figures against it; name the year the comparable run ends instead")
+                    out.append(
+                        f"compares with the {m.group(1)} level, but the line goes on past the break at {labels[k]}, "
+                        "so readers will set later figures against it; name the year the comparable run ends instead"
+                    )
     return sorted(set(out))
 
 
@@ -630,7 +832,9 @@ def check_trend_titles():
             continue
         html = path.read_text(encoding="utf-8")
         for fig in re.finditer(r"<figure>(.*?)</figure>", html, re.S):
-            t = re.search(r'<p class="ctitle"[^>]*data-lines="([^"]*)"[^>]*>(.*?)</p>', fig.group(1))
+            t = re.search(
+                r'<p class="ctitle"[^>]*data-lines="([^"]*)"[^>]*>(.*?)</p>', fig.group(1)
+            )
             if not t:
                 continue
             n += 1
@@ -650,17 +854,35 @@ def check_trend_titles():
                 vals = [_value(r[si + 1]) for r in rows[a:b]]
                 labels = [str(r[0]).replace(" (calendar year)", "") for r in rows[a:b]]
                 for run, kind in big_turns(vals):
-                    named = any(re.search(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title) for i in run)
+                    named = any(
+                        re.search(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title)
+                        for i in run
+                    )
                     if not named or "rose" not in title or "fell" not in title:
-                        fail(f"{rel}: heading “{title}” leaves out the {kind} in {labels[run[-1]]}, a move of at least {BIG_MOVE:.0%} of the line's range")
+                        fail(
+                            f"{rel}: heading “{title}” leaves out the {kind} in {labels[run[-1]]}, a move of at least {BIG_MOVE:.0%} of the line's range"
+                        )
                 end = turn_back_at_end(vals)
                 if end:
                     run, kind = end
                     verb = "fell" if kind == "peak" else "rose"
-                    at = [m.end() for i in run for m in re.finditer(r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title)]
-                    if not at or not any(re.search(r"\b" + verb + r"\b", title[k:].split(";")[0].split(", while ")[0]) for k in at):
-                        fail(f"{rel}: heading “{title}” does not say the line {verb} after its {kind} in {labels[run[0]]}: "
-                             f"its latest figure is at least {TAIL_MOVE:.0%} of the line's range back from it")
+                    at = [
+                        m.end()
+                        for i in run
+                        for m in re.finditer(
+                            r"(?<![\w/-])" + re.escape(labels[i]) + r"(?![\w/-])", title
+                        )
+                    ]
+                    if not at or not any(
+                        re.search(
+                            r"\b" + verb + r"\b", title[k:].split(";")[0].split(", while ")[0]
+                        )
+                        for k in at
+                    ):
+                        fail(
+                            f"{rel}: heading “{title}” does not say the line {verb} after its {kind} in {labels[run[0]]}: "
+                            f"its latest figure is at least {TAIL_MOVE:.0%} of the line's range back from it"
+                        )
     return n
 
 
@@ -668,6 +890,7 @@ def check_axis_notes():
     """Every line chart whose scale starts above zero says so under the chart."""
     sys.path.insert(0, str(ROOT))
     from builder.html import ZERO_NOTE
+
     n = 0
     for path in SITE.rglob("*.html"):
         if path.parts[len(SITE.parts)] == "figures":
@@ -687,7 +910,9 @@ def check_axis_notes():
             want = ZERO_NOTE.format(t.group(1))
             if not cap or want not in html_unescape(cap.group(1)):
                 title = re.search(r'<p class="ctitle"[^>]*>(.*?)</p>', body)
-                fail(f"{path.relative_to(SITE)}: chart “{html_unescape(title.group(1)) if title else '?'}” starts its scale at {t.group(1)} but its caption does not say “{want}”")
+                fail(
+                    f"{path.relative_to(SITE)}: chart “{html_unescape(title.group(1)) if title else '?'}” starts its scale at {t.group(1)} but its caption does not say “{want}”"
+                )
     return n
 
 
@@ -695,6 +920,7 @@ def check_explanations():
     sys.path.insert(0, str(ROOT))
     from builder.explain import EXPLANATIONS, missing_quotes, norm
     from builder.sources import all_sources
+
     for p in missing_quotes(all_sources()):
         fail(p)
     shown = " ".join(norm(t) for _, t in QUOTED_PAGES)
@@ -705,6 +931,7 @@ def check_explanations():
 
 
 def main():
+    logger.info("check.started")
     data = json.loads((SITE / "data/facts.json").read_text(encoding="utf-8"))
     facts, checked, recalculated = check_facts(data)
     years, pairs = check_structure()
@@ -718,25 +945,103 @@ def main():
         dc = default_compare()
         if dc is None:
             fail("life/index.html: no 'Start with' comparison link")
-        run_axe(([dc] if dc else []) + ["index.html", "spending.html", "spending-history.html", "taxes.html", "tax-history.html", "who-pays.html", "household-tax.html", "self-employed-tax.html", "methods.html", "sources.html", "spending-areas.html", "who-pays-households.html", "international.html", "productivity.html", "borrowing.html", "defence.html",
-                 "glossary.html", "questions.html", "corrections.html", "uncertainty.html", "figures/pesa4.html", "life/index.html", "life/work.html", "life/earnings.html", "life/housing.html", "life/holidays.html", "life/schools.html", "life/jobs-by-industry.html", "life/house-prices.html", "life/generations.html", "life/1985.html", "life/2008.html", "life/2015.html", "life/2021.html", "life/compare/2010-2025.html",
-                 "life/compare/2019-2024.html", "life/compare/1985-2025.html", "life/compare/2002-2025.html", "life/compare/index.html", "life/compare/spans/index.html",
-                 "life/compare/spans/2009-2011-and-2017-2019.html", "life/compare/spans/2011-2013-and-2022-2024.html", "figures/etb.html"])
-    print(f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures.")
-    print(f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages).")
+        run_axe(
+            ([dc] if dc else [])
+            + [
+                "index.html",
+                "spending.html",
+                "spending-history.html",
+                "taxes.html",
+                "tax-history.html",
+                "who-pays.html",
+                "household-tax.html",
+                "self-employed-tax.html",
+                "methods.html",
+                "sources.html",
+                "spending-areas.html",
+                "who-pays-households.html",
+                "international.html",
+                "productivity.html",
+                "borrowing.html",
+                "defence.html",
+                "glossary.html",
+                "questions.html",
+                "corrections.html",
+                "uncertainty.html",
+                "figures/pesa4.html",
+                "life/index.html",
+                "life/work.html",
+                "life/earnings.html",
+                "life/housing.html",
+                "life/holidays.html",
+                "life/schools.html",
+                "life/jobs-by-industry.html",
+                "life/house-prices.html",
+                "life/generations.html",
+                "life/1985.html",
+                "life/2008.html",
+                "life/2015.html",
+                "life/2021.html",
+                "life/compare/2010-2025.html",
+                "life/compare/2019-2024.html",
+                "life/compare/1985-2025.html",
+                "life/compare/2002-2025.html",
+                "life/compare/index.html",
+                "life/compare/spans/index.html",
+                "life/compare/spans/2009-2011-and-2017-2019.html",
+                "life/compare/spans/2011-2013-and-2022-2024.html",
+                "figures/etb.html",
+            ]
+        )
+    print(
+        f"Re-read {checked:,} figures from source files; recalculated {recalculated:,} derived figures."
+    )
+    print(
+        f"Checked {shown:,} numbers on {n_pages} pages ({years} year pages, {pairs} comparison pages)."
+    )
     print(f"Checked {n_csv:,} CSV downloads beside the charts and tables.")
     print(f"Checked that {n_findings} chart headings state their finding in neutral words.")
     print(f"Checked that {n_trends} trend headings name every big rise and fall of their line.")
     print(f"Checked that {n_axes} line charts whose scale starts above zero say so.")
     print(f"Matched {n_quotes} quoted explanations word for word against their sources.")
+    logger.info(
+        "check.completed",
+        extra={
+            "context": {
+                "source_figures": checked,
+                "recalculated": recalculated,
+                "shown": shown,
+                "pages": n_pages,
+                "year_pages": years,
+                "comparison_pages": pairs,
+                "csv_downloads": n_csv,
+                "findings": n_findings,
+                "trends": n_trends,
+                "axis_notes": n_axes,
+                "quotes": n_quotes,
+                "problems": len(problems),
+            }
+        },
+    )
     if problems:
         print(f"\n{len(problems)} problems:")
         for p in problems[:200]:
             print(" -", p)
+            logger.error("check.problem", extra={"context": {"detail": p}})
+        logger.error(
+            "check.failed",
+            extra={
+                "context": {
+                    "problems": len(problems),
+                    "reported": min(len(problems), 200),
+                }
+            },
+        )
         return 1
     print("All checks passed.")
+    logger.info("check.passed")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_logged(main, logger))

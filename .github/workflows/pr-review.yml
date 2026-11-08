@@ -1,0 +1,51 @@
+name: Automated code and security review
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number
+        required: true
+        type: string
+      expected_head_sha:
+        description: Exact reviewed event head (40 lowercase hex characters)
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pr-review-${{ github.repository }}-${{ inputs.pr_number }}
+  cancel-in-progress: false
+
+jobs:
+  review:
+    # HELD: qualification must independently review and intentionally remove false.
+    if: ${{ false && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      # This privileged workflow must NEVER check out or execute the PR head.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Build trusted static analyzer image without credentials
+        run: |
+          mkdir "$RUNNER_TEMP/review-build"
+          cp requirements-review.txt "$RUNNER_TEMP/review-build/"
+          docker build --file config/review-analyzers.Dockerfile --iidfile "$RUNNER_TEMP/review-image-id" "$RUNNER_TEMP/review-build"
+      - name: Generate a commit-bound PR review
+        # The token-holding parent loads stdlib ONLY, not analyzer site packages.
+        run: |
+          export REVIEW_ANALYZER_IMAGE="$(cat "$RUNNER_TEMP/review-image-id")"
+          python -I -S scripts/review_pr.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+          EXPECTED_HEAD_SHA: ${{ inputs.expected_head_sha }}

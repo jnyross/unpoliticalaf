@@ -1,4 +1,5 @@
 """Real tool failures, isolated from the retained source and generated site."""
+
 import importlib.util
 from pathlib import Path
 import subprocess
@@ -14,15 +15,17 @@ class ToolFailures(unittest.TestCase):
     def run_tool(self, module, arguments, cwd):
         if importlib.util.find_spec(module) is None:
             self.skipTest(f"{module} is a development tool; run make setup-dev")
-        return subprocess.run([sys.executable, "-m", module, *arguments],
-                              cwd=cwd, capture_output=True, text=True)
+        return subprocess.run(
+            [sys.executable, "-m", module, *arguments], cwd=cwd, capture_output=True, text=True
+        )
 
     def test_ruff_rejects_unused_import_and_undefined_name(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "bad.py"
             path.write_text("import os\nprint(undefined_name)\n")
-            result = self.run_tool("ruff", ["check", "--config", str(ROOT / "ruff.toml"),
-                                           str(path)], directory)
+            result = self.run_tool(
+                "ruff", ["check", "--config", str(ROOT / "ruff.toml"), str(path)], directory
+            )
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("F401", result.stdout)
             self.assertIn("F821", result.stdout)
@@ -40,11 +43,19 @@ class ToolFailures(unittest.TestCase):
                 "    raw('not a number')\n"
                 "    return 'not an int'\n"
             )
-            result = self.run_tool("mypy", ["--config-file", str(ROOT / "mypy.ini"),
-                                          "--no-incremental", str(path)], ROOT)
+            result = self.run_tool(
+                "mypy",
+                ["--config-file", str(ROOT / "mypy.ini"), "--no-incremental", str(path)],
+                ROOT,
+            )
             self.assertNotEqual(result.returncode, 0)
-            for code in ("no-untyped-def", "typeddict-item", "unknown-key",
-                         "arg-type", "return-value"):
+            for code in (
+                "no-untyped-def",
+                "typeddict-item",
+                "unknown-key",
+                "arg-type",
+                "return-value",
+            ):
                 self.assertIn(code, result.stdout)
 
     def test_deptry_rejects_missing_transitive_unused_and_runtime_dev_imports(self):
@@ -75,8 +86,11 @@ class ToolFailures(unittest.TestCase):
             nested.mkdir()
             for name in ("test_included.py", "testexcluded.py", "excluded_test.py"):
                 (nested / name).write_text("def test_probe():\n    pass\n")
-            result = self.run_tool("pytest", ["--collect-only", "-q", "-c",
-                                            str(ROOT / "pyproject.toml"), str(root)], root)
+            result = self.run_tool(
+                "pytest",
+                ["--collect-only", "-q", "-c", str(ROOT / "pyproject.toml"), str(root)],
+                root,
+            )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertIn("test_included.py", result.stdout)
             self.assertNotIn("testexcluded.py", result.stdout)
@@ -86,9 +100,16 @@ class ToolFailures(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "quality").mkdir()
-            for path in ("pyproject.toml", "requirements.txt", "requirements-dev.txt",
-                         "requirements-test.txt", "requirements-a11y.txt",
-                         "requirements-typing.txt", "quality/requirements.txt"):
+            for path in (
+                "pyproject.toml",
+                "requirements.txt",
+                "requirements-dev.txt",
+                "requirements-test.txt",
+                "requirements-a11y.txt",
+                "requirements-typing.txt",
+                "requirements-architecture.txt",
+                "quality/requirements.txt",
+            ):
                 shutil.copyfile(ROOT / path, root / path)
             (root / "app.py").write_text("import pytest\n")
             result = self.run_tool("deptry", ["."], root)

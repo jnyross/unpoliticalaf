@@ -8,6 +8,7 @@ The ranking measure is the effect on the level of GDP after about ten years, as 
 percentage of GDP. Budget effects are shown separately, because only some
 options have one. An option with no comparable figure is listed without a rank.
 """
+
 from .html import page
 
 # Ranked on the 10-year GDP level (% of GDP).
@@ -89,50 +90,90 @@ BUDGET = [
     },
 ]
 
-BUDGET.insert(1, {
-    "name": "Replacing council tax and stamp duty with a revenue-neutral property levy",
-    "effect": "About 0% of GDP: the levy is designed to raise the same revenue as the two taxes it replaces.",
-    "conversion": "None: revenue neutrality is the design assumption, so the budget effect is zero by construction.",
-    "source": "Resolution Foundation, Home economics (2026): a levy of 0.7% of a property's value, with rebates for low-income households.",
-    "growth": "Not quantified in GDP terms. The source says the current stamp duty stops about 100,000 house purchases a year, which it argues holds back growth, but it gives no GDP figure.",
-    "confidence": "Medium to low: a policy design from one think tank; the revenue-neutral levy is an assumption of the design.",
-})
-BUDGET.insert(2, {
-    "name": "Abolishing stamp duty on main homes (not revenue-neutral)",
-    "effect": "Costs about 0.5% of GDP a year: the Resolution Foundation puts the revenue loss at £15 billion.",
-    "conversion": "£15 billion ÷ GDP of about £3 trillion ≈ 0.5% of GDP a year. GDP is a rounded assumption. The figure is before any change in house sales, which the source says would rise.",
-    "source": "Resolution Foundation, Home economics (2026), press release.",
-    "growth": "Not quantified in GDP terms.",
-    "confidence": "Medium: the revenue loss is a costing from one think tank; the timing of the change is not set.",
-})
+BUDGET.insert(
+    1,
+    {
+        "name": "Replacing council tax and stamp duty with a revenue-neutral property levy",
+        "effect": "About 0% of GDP: the levy is designed to raise the same revenue as the two taxes it replaces.",
+        "conversion": "None: revenue neutrality is the design assumption, so the budget effect is zero by construction.",
+        "source": "Resolution Foundation, Home economics (2026): a levy of 0.7% of a property's value, with rebates for low-income households.",
+        "growth": "Not quantified in GDP terms. The source says the current stamp duty stops about 100,000 house purchases a year, which it argues holds back growth, but it gives no GDP figure.",
+        "confidence": "Medium to low: a policy design from one think tank; the revenue-neutral levy is an assumption of the design.",
+    },
+)
+BUDGET.insert(
+    2,
+    {
+        "name": "Abolishing stamp duty on main homes (not revenue-neutral)",
+        "effect": "Costs about 0.5% of GDP a year: the Resolution Foundation puts the revenue loss at £15 billion.",
+        "conversion": "£15 billion ÷ GDP of about £3 trillion ≈ 0.5% of GDP a year. GDP is a rounded assumption. The figure is before any change in house sales, which the source says would rise.",
+        "source": "Resolution Foundation, Home economics (2026), press release.",
+        "growth": "Not quantified in GDP terms.",
+        "confidence": "Medium: the revenue loss is a costing from one think tank; the timing of the change is not set.",
+    },
+)
 
 # Options without a comparable figure on either basis.
 NOT_RANKED = [
-    ("Faster electricity grid connection and energy reform",
-     "The only figure found is an industry plan, not a model estimate. The ENA and BEAMA plan (October 2026) says £181 billion of electricity network investment could add £58 billion of gross value added to the UK economy by 2035, with 210,000 jobs. Conversion: £58 billion ÷ GDP of about £3 trillion ≈ 1.9% of GDP by 2035. That is gross output from the investment and does not net off what would happen without it, and the plan is written by the industries that would be paid for the work. It is therefore not comparable with the OECD and Resolution Foundation figures, and it stays unranked. The OECD survey recommends faster grid connection reform but gives no quantified effect."),
+    (
+        "Faster electricity grid connection and energy reform",
+        "The only figure found is an industry plan, not a model estimate. The ENA and BEAMA plan (October 2026) says £181 billion of electricity network investment could add £58 billion of gross value added to the UK economy by 2035, with 210,000 jobs. Conversion: £58 billion ÷ GDP of about £3 trillion ≈ 1.9% of GDP by 2035. That is gross output from the investment and does not net off what would happen without it, and the plan is written by the industries that would be paid for the work. It is therefore not comparable with the OECD and Resolution Foundation figures, and it stays unranked. The OECD survey recommends faster grid connection reform but gives no quantified effect.",
+    ),
 ]
 
 SOURCES = [
-    ("OECD Economic Surveys: United Kingdom 2026, Table 1.1", "https://www.oecd.org/en/publications/oecd-economic-surveys-united-kingdom-2026_aa997c6e-en/full-report/strengthening-growth-while-ensuring-fiscal-sustainability_81c7c25f.html"),
-    ("Resolution Foundation, The growth mindset (2024)", "https://www.resolutionfoundation.org/app/uploads/2024/09/Growth-Mindset.pdf"),
-    ("OBR, Net migration forecast and its impact on the economy", "https://obr.uk/box/net-migration-forecast-and-its-impact-on-the-economy/"),
-    ("OBR, Fiscal risks and sustainability, July 2023", "https://obr.uk/docs/dlm_uploads/Fiscal_risks_and_sustainability_report_July_2023.pdf"),
-    ("CBI, Potential impact of childcare reform (draft)", "https://www.cbi.org.uk/media/iqzlrkfd/childcare-gdp-static-dynamic-estimates.pdf"),
-    ("IFS, What do you need to know about the triple lock?", "https://ifs.org.uk/articles/what-do-you-need-know-about-triple-lock"),
-    ("Tax Expenditures in the United Kingdom: an International Perspective (2025)", "https://www.taxexpenditures.org/2025/12/15/tax-expenditures-in-the-united-kingdom-an-international-perspective/"),
-    ("Resolution Foundation, Home economics (2026) and its press release", "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/"),
-    ("ENA and BEAMA, electricity network investment plan (October 2026), as reported by edie", "https://www.edie.net/electricity-network-investment-could-unlock-58bn-for-uk-economy-industry-plan-finds/"),
-    ("Resolution Foundation, Broken housing taxes (press release)", "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/"),
+    (
+        "OECD Economic Surveys: United Kingdom 2026, Table 1.1",
+        "https://www.oecd.org/en/publications/oecd-economic-surveys-united-kingdom-2026_aa997c6e-en/full-report/strengthening-growth-while-ensuring-fiscal-sustainability_81c7c25f.html",
+    ),
+    (
+        "Resolution Foundation, The growth mindset (2024)",
+        "https://www.resolutionfoundation.org/app/uploads/2024/09/Growth-Mindset.pdf",
+    ),
+    (
+        "OBR, Net migration forecast and its impact on the economy",
+        "https://obr.uk/box/net-migration-forecast-and-its-impact-on-the-economy/",
+    ),
+    (
+        "OBR, Fiscal risks and sustainability, July 2023",
+        "https://obr.uk/docs/dlm_uploads/Fiscal_risks_and_sustainability_report_July_2023.pdf",
+    ),
+    (
+        "CBI, Potential impact of childcare reform (draft)",
+        "https://www.cbi.org.uk/media/iqzlrkfd/childcare-gdp-static-dynamic-estimates.pdf",
+    ),
+    (
+        "IFS, What do you need to know about the triple lock?",
+        "https://ifs.org.uk/articles/what-do-you-need-know-about-triple-lock",
+    ),
+    (
+        "Tax Expenditures in the United Kingdom: an International Perspective (2025)",
+        "https://www.taxexpenditures.org/2025/12/15/tax-expenditures-in-the-united-kingdom-an-international-perspective/",
+    ),
+    (
+        "Resolution Foundation, Home economics (2026) and its press release",
+        "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/",
+    ),
+    (
+        "ENA and BEAMA, electricity network investment plan (October 2026), as reported by edie",
+        "https://www.edie.net/electricity-network-investment-could-unlock-58bn-for-uk-economy-industry-plan-finds/",
+    ),
+    (
+        "Resolution Foundation, Broken housing taxes (press release)",
+        "https://www.resolutionfoundation.org/press-releases/broken-housing-taxes-mean-londoners-are-under-paying-by-3-1-billion-with-the-rest-of-england-over-paying-in-return/",
+    ),
 ]
 
 
 def _ranked_item(r):
-    return (f"<li><h3>{r['name']}</h3>"
-            f"<p><strong>Estimate:</strong> {r['effect']}</p>"
-            f"<p><strong>Per person:</strong> {r['per_person']}</p>"
-            f"<p><strong>Source:</strong> {r['source']} Wording in the source: {r['row']}.</p>"
-            f"<p><strong>Conversion and assumptions:</strong> {r['conversion']}</p>"
-            f"<p><strong>Confidence:</strong> {r['confidence']}</p></li>")
+    return (
+        f"<li><h3>{r['name']}</h3>"
+        f"<p><strong>Estimate:</strong> {r['effect']}</p>"
+        f"<p><strong>Per person:</strong> {r['per_person']}</p>"
+        f"<p><strong>Source:</strong> {r['source']} Wording in the source: {r['row']}.</p>"
+        f"<p><strong>Conversion and assumptions:</strong> {r['conversion']}</p>"
+        f"<p><strong>Confidence:</strong> {r['confidence']}</p></li>"
+    )
 
 
 def options_page():
@@ -144,7 +185,8 @@ def options_page():
         f"<p><strong>Conversion and assumptions:</strong> {b['conversion']}</p>"
         f"<p><strong>Source:</strong> {b['source']}</p>"
         f"<p><strong>Confidence:</strong> {b['confidence']}</p></li>"
-        for b in BUDGET)
+        for b in BUDGET
+    )
     not_ranked = "".join(f"<li><h3>{name}</h3><p>{why}</p></li>" for name, why in NOT_RANKED)
     sources = "".join(f'<li><a href="{url}">{title}</a></li>' for title, url in SOURCES)
     body = f"""
@@ -166,5 +208,9 @@ def options_page():
 <h2>Sources</h2>
 <ul>{sources}</ul>
 """
-    return page("economy-options.html", "Ways to improve the UK economy: ten options", body,
-                description="Ten options for improving the UK economy, ranked on one published measure, with conversions, sources and confidence.")
+    return page(
+        "economy-options.html",
+        "Ways to improve the UK economy: ten options",
+        body,
+        description="Ten options for improving the UK economy, ranked on one published measure, with conversions, sources and confidence.",
+    )

@@ -1,4 +1,5 @@
 """Fast checks of the rules the site promises. Run with: make test"""
+
 import re
 import unittest
 
@@ -35,17 +36,28 @@ class Formatting(unittest.TestCase):
 
 class Charts(unittest.TestCase):
     def test_gap_breaks_the_line(self):
-        svg = line_chart("t", ["2018", "2019", "2020", "2021"], [("a", [1, 2, None, 4], "a")], "units")
+        svg = line_chart(
+            "t", ["2018", "2019", "2020", "2021"], [("a", [1, 2, None, 4], "a")], "units"
+        )
         # Two separate pieces: a path for 2018-2019 and a single point for 2021. Nothing is drawn through 2020.
         self.assertEqual(svg.count("<path"), 1)
         self.assertEqual(svg.count("<circle"), 1)
 
     def test_definition_break_splits_the_line(self):
-        svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1, 2, 3, 4], "a")], "u", breaks=[(2, "New method")], split_breaks=True)
+        svg = line_chart(
+            "t",
+            ["1", "2", "3", "4"],
+            [("a", [1, 2, 3, 4], "a")],
+            "u",
+            breaks=[(2, "New method")],
+            split_breaks=True,
+        )
         self.assertEqual(svg.count("<path"), 2)
 
     def test_axis_labels_are_not_rounded_away(self):
-        svg = line_chart("t", ["2018", "2019", "2020"], [("a", [0.5, 6, 9.4], "a")], "units", ymin=0)
+        svg = line_chart(
+            "t", ["2018", "2019", "2020"], [("a", [0.5, 6, 9.4], "a")], "units", ymin=0
+        )
         labels = re.findall(r'text-anchor="end">([0-9.,]+)</text>', svg)
         self.assertIn("2.5", labels)
         self.assertIn("7.5", labels)
@@ -53,17 +65,25 @@ class Charts(unittest.TestCase):
     def test_caption_says_when_scale_starts_above_zero(self):
         raised = line_chart("t", ["2018", "2019", "2020"], [("a", [61, 64, 66], "a")], "Per cent")
         self.assertIn("Per cent. The scale starts at 60, not at zero.", raised)
-        self.assertNotIn("not at zero", line_chart("t", ["2018", "2019"], [("a", [61, 66], "a")], "Per cent", ymin=0))
-        panels = small_multiples("t", ["2018", "2019"], [("x", [600, 700]), ("y", [650, 720])], "£ a week", "pounds")
+        self.assertNotIn(
+            "not at zero",
+            line_chart("t", ["2018", "2019"], [("a", [61, 66], "a")], "Per cent", ymin=0),
+        )
+        panels = small_multiples(
+            "t", ["2018", "2019"], [("x", [600, 700]), ("y", [650, 720])], "£ a week", "pounds"
+        )
         self.assertIn("The scale starts at 600, not at zero.", panels)
 
     def test_2020_holidays_are_part_year_not_the_year_figure(self):
         from builder import data
+
         facts = Facts()
         data.holidays(facts)
         self.assertIsNone(facts["hol.world.holiday.2020"].value)
         self.assertEqual(facts["hol.world.holiday.2020.part"].period, "January to mid-March 2020")
-        self.assertIsNotNone(facts["hol.world.all.2020"].value)  # the all-visits total covers the whole year
+        self.assertIsNotNone(
+            facts["hol.world.all.2020"].value
+        )  # the all-visits total covers the whole year
         self.assertNotIn("hol.holshare.2020", facts)
 
     def test_room_counts_not_compared_across_definition_change(self):
@@ -71,30 +91,60 @@ class Charts(unittest.TestCase):
         self.assertEqual(pages_life.rooms_basis(2011), pages_life.rooms_basis(2024))
 
     def test_summary_reads_first_latest_high_low_and_gaps(self):
-        svg = line_chart("t", ["2018", "2019", "2020", "2021", "2022"], [("a", [5.0, 9.0, None, 2.0, 4.0], "a")], "u", kind="pct")
+        svg = line_chart(
+            "t",
+            ["2018", "2019", "2020", "2021", "2022"],
+            [("a", [5.0, 9.0, None, 2.0, 4.0], "a")],
+            "u",
+            kind="pct",
+        )
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
         # 2021 to 2022 is a turn back up at the end, so it is named rather than folded into the fall
-        self.assertIn("From 5.0% in 2018, rose to a high of 9.0% in 2019, fell to a low of 2.0% in 2021, then rose to 4.0% in 2022", text)
+        self.assertIn(
+            "From 5.0% in 2018, rose to a high of 9.0% in 2019, fell to a low of 2.0% in 2021, then rose to 4.0% in 2022",
+            text,
+        )
         self.assertIn("No figure for 2020", text)
 
     def test_summary_names_a_dip_inside_the_last_move(self):
         # The line rose to 52.3, dipped to 43.4 and rose a little to 44.3: the dip is named, not skipped.
         from builder import findings as F
+
         labels = ["2019", "2020", "2021", "2022", "2023"]
         vals = [39.1, 52.3, 43.4, 44.1, 44.3]
         text = F.sentence(labels, vals, lambda i: f"{vals[i]:.1f}%", extremes=False)
-        self.assertEqual(text, "Rose from 39.1% in 2019 to a high of 52.3% in 2020, then fell to 43.4% in 2021, then rose again to 44.3% in 2023.")
+        self.assertEqual(
+            text,
+            "Rose from 39.1% in 2019 to a high of 52.3% in 2020, then fell to 43.4% in 2021, then rose again to 44.3% in 2023.",
+        )
 
     def test_summary_does_not_compare_across_a_definition_break(self):
-        svg = line_chart("t", ["1", "2", "3", "4", "5", "6"], [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")], "u",
-                         breaks=[(3, "New method")], kind="dp1")
+        svg = line_chart(
+            "t",
+            ["1", "2", "3", "4", "5", "6"],
+            [("a", [1.0, 9.0, 2.0, 3.0, 0.5, 4.0], "a")],
+            "u",
+            breaks=[(3, "New method")],
+            kind="dp1",
+        )
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
-        self.assertIn("1 to 3: rose from 1.0 in 1 to a high of 9.0 in 2, then fell to 2.0 in 3", text)
-        self.assertIn("4 to 6: fell from 3.0 in 4 to a low of 0.5 in 5, then rose to 4.0 in 6", text)
+        self.assertIn(
+            "1 to 3: rose from 1.0 in 1 to a high of 9.0 in 2, then fell to 2.0 in 3", text
+        )
+        self.assertIn(
+            "4 to 6: fell from 3.0 in 4 to a low of 0.5 in 5, then rose to 4.0 in 6", text
+        )
         self.assertNotIn("9.0 in 1", text)
 
     def test_summary_keeps_forecasts_apart(self):
-        svg = line_chart("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 99.0], "a")], "u", forecast_from=3, kind="dp1")
+        svg = line_chart(
+            "t",
+            ["1", "2", "3", "4"],
+            [("a", [1.0, 2.0, 3.0, 99.0], "a")],
+            "u",
+            forecast_from=3,
+            kind="dp1",
+        )
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
         self.assertIn("Rose from 1.0 in 1 to 3.0 in 3", text)
         self.assertIn("Forecast for 4: 99.0", text)
@@ -104,13 +154,28 @@ class Charts(unittest.TestCase):
         facts = Facts()
         for i, v in enumerate([1.0, 2.0, 3.0]):
             facts.add(Fact(f"x.{i}", v, "%", str(i), "s", f"A{i + 1}"))
-        svg = line_chart("t", ["0", "1", "2"], [("a", [1.0, 2.0, 3.0], "a")], "u", kind="pct", num=Num(facts), ids=[["x.0", "x.1", "x.2"]])
+        svg = line_chart(
+            "t",
+            ["0", "1", "2"],
+            [("a", [1.0, 2.0, 3.0], "a")],
+            "u",
+            kind="pct",
+            num=Num(facts),
+            ids=[["x.0", "x.1", "x.2"]],
+        )
         summary = svg.split('class="csum"')[1]
         self.assertIn('data-fact="x.0"', summary)
         self.assertIn('data-fact="x.2"', summary)
 
     def test_events_do_not_split_the_summary(self):
-        svg = line_chart("t", ["1", "2", "3"], [("a", [1.0, 5.0, 2.0], "a")], "u", events=[(1, "Covid")], kind="dp1")
+        svg = line_chart(
+            "t",
+            ["1", "2", "3"],
+            [("a", [1.0, 5.0, 2.0], "a")],
+            "u",
+            events=[(1, "Covid")],
+            kind="dp1",
+        )
         text = re.sub(r"<[^>]+>", "", svg.split('class="csum"')[1])
         self.assertIn("Rose from 1.0 in 1 to a high of 5.0 in 2, then fell to 2.0 in 3", text)
         self.assertIn("not what it caused", text)
@@ -124,107 +189,298 @@ class Charts(unittest.TestCase):
 class ChartMarks(unittest.TestCase):
     def test_axis_labels_hidden_inside_chart_images(self):
         from builder.html import hide_chart_marks
-        out = hide_chart_marks('<svg role="img" aria-label="x"><text>0</text></svg><svg><text>a</text></svg>')
-        self.assertEqual(out, '<svg role="img" aria-label="x"><g aria-hidden="true"><text>0</text></g></svg><svg><text>a</text></svg>')
+
+        out = hide_chart_marks(
+            '<svg role="img" aria-label="x"><text>0</text></svg><svg><text>a</text></svg>'
+        )
+        self.assertEqual(
+            out,
+            '<svg role="img" aria-label="x"><g aria-hidden="true"><text>0</text></g></svg><svg><text>a</text></svg>',
+        )
         self.assertEqual(hide_chart_marks(out), out)  # running twice changes nothing
 
 
 class Findings(unittest.TestCase):
     """Chart titles state the finding, worked out from the chart's own values."""
+
     L = ["2008", "2009", "2010", "2011", "2012", "2013"]
 
     def test_shapes(self):
         from builder.findings import phrase
+
         self.assertEqual(phrase(self.L, [1, 2, 3, 4, 5, 6]), "rose between 2008 and 2013")
         self.assertEqual(phrase(self.L, [6, 5, 4, 3, 2, 1]), "fell between 2008 and 2013")
-        self.assertEqual(phrase(self.L, [5, 5.05, 4.97, 5, 5.04, 5.01]), "changed little between 2008 and 2013")
-        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.02]), "rose until 2010, then fell back to about the 2008 level")
+        self.assertEqual(
+            phrase(self.L, [5, 5.05, 4.97, 5, 5.04, 5.01]), "changed little between 2008 and 2013"
+        )
+        self.assertEqual(
+            phrase(self.L, [1, 3, 9, 4, 3, 1.02]),
+            "rose until 2010, then fell back to about the 2008 level",
+        )
         # "about" needs the last figure within 5% of that level too, not only near it on the chart's range
-        self.assertEqual(phrase(self.L, [1, 3, 9, 4, 3, 1.1]), "rose until 2010, then fell back part of the way")
-        self.assertEqual(phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way")
+        self.assertEqual(
+            phrase(self.L, [1, 3, 9, 4, 3, 1.1]), "rose until 2010, then fell back part of the way"
+        )
+        self.assertEqual(
+            phrase(self.L, [5, 4, 1, 2, 3, 4]), "fell until 2010, then rose back part of the way"
+        )
         self.assertEqual(phrase(self.L, [4, 4, 4, 4, 4, 4]), "stayed the same from 2008 to 2013")
 
     def test_smaller_moves_are_named_at_printed_precision(self):
         from builder.findings import smaller_moves_text
+
         years = [str(y) for y in range(2000, 2008)]
         # A rise with two small falls: named, because the printed figures show them
-        self.assertEqual(smaller_moves_text(years, [10, 12, 11, 13, 14, 13, 15, 16], unit=1), "; smaller moves: fell in 2002 and 2005")
+        self.assertEqual(
+            smaller_moves_text(years, [10, 12, 11, 13, 14, 13, 15, 16], unit=1),
+            "; smaller moves: fell in 2002 and 2005",
+        )
         # A move too small to show when printed (54.4 to 53.6 both print as 54) is not named
-        self.assertEqual(smaller_moves_text(years, [54.4, 53.6, 55.2, 56.0, 57.1, 58.0, 58.4, 59.0], unit=1), "")
+        self.assertEqual(
+            smaller_moves_text(years, [54.4, 53.6, 55.2, 56.0, 57.1, 58.0, 58.4, 59.0], unit=1), ""
+        )
         # A straight rise has nothing to name
-        self.assertEqual(smaller_moves_text(years, [5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4], unit=1), "")
+        self.assertEqual(
+            smaller_moves_text(years, [5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4], unit=1), ""
+        )
 
     def test_every_big_rise_and_fall_is_named(self):
         from builder.findings import phrase, sentence
+
         years = [str(y) for y in range(2009, 2024)]
         # Holiday visits abroad, millions: up to 2019, down in 2020, back up by 2023
-        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, 4.4, 8.9, 45.6, 55.5]
-        self.assertEqual(phrase(years, hol), "rose until 2019, fell in 2020, then rose back part of the way")
-        self.assertEqual(sentence(years, hol, lambda i: str(hol[i])),
-                         "From 41.2 in 2009, rose to a high of 58.7 in 2019, fell to a low of 4.4 in 2020, then rose to 55.5 in 2023.")
+        hol = [
+            41.2,
+            41.4,
+            42.7,
+            41.7,
+            43.1,
+            45.0,
+            48.5,
+            50.8,
+            54.4,
+            57.3,
+            58.7,
+            4.4,
+            8.9,
+            45.6,
+            55.5,
+        ]
+        self.assertEqual(
+            phrase(years, hol), "rose until 2019, fell in 2020, then rose back part of the way"
+        )
+        self.assertEqual(
+            sentence(years, hol, lambda i: str(hol[i])),
+            "From 41.2 in 2009, rose to a high of 58.7 in 2019, fell to a low of 4.4 in 2020, then rose to 55.5 in 2023.",
+        )
         # Spending as a share of GDP: a ten-year fall before the 2020-21 rise. The small
         # rise from 43.0 to 46.0 comes before the fall, so the fall is measured from 46.0.
-        gdp = [43.0, 46.0, 45.5, 44.4, 43.8, 42.2, 41.6, 40.8, 40.0, 39.7, 39.1, 39.1, 52.3, 43.4, 44.1]
+        gdp = [
+            43.0,
+            46.0,
+            45.5,
+            44.4,
+            43.8,
+            42.2,
+            41.6,
+            40.8,
+            40.0,
+            39.7,
+            39.1,
+            39.1,
+            52.3,
+            43.4,
+            44.1,
+        ]
         # The line bottomed in 2022 and rose a little by 2023: the title says so, not "fell back part of the way".
-        self.assertEqual(phrase(years, gdp), "fell until 2019, held level until 2020, rose in 2021, then fell until 2022, then rose again by 2023")
+        self.assertEqual(
+            phrase(years, gdp),
+            "fell until 2019, held level until 2020, rose in 2021, then fell until 2022, then rose again by 2023",
+        )
         # A rise after the last fall under 5% of the range (0.6 of 13.2) stays folded into the fall, as before.
         small = [39.1, 52.3, 43.4, 43.8, 43.7, 43.9, 44.0]
         self.assertEqual(phrase(years[:7], small), "rose in 2010, then fell back part of the way")
 
     def test_check_finds_a_title_that_leaves_out_a_turn(self):
         from builder.check import big_turns
-        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, 4.4, 8.9, 45.6, 55.5]
+
+        hol = [
+            41.2,
+            41.4,
+            42.7,
+            41.7,
+            43.1,
+            45.0,
+            48.5,
+            50.8,
+            54.4,
+            57.3,
+            58.7,
+            4.4,
+            8.9,
+            45.6,
+            55.5,
+        ]
         self.assertEqual(big_turns(hol), [([10], "peak"), ([11], "low")])
         self.assertEqual(big_turns([39.1, 39.1, 38.9, 39.0]), [])  # within 2%: changed little
-        self.assertEqual(big_turns([5, 1, 1, 5]), [([1, 2], "low")])  # a low held two years is one turn
+        self.assertEqual(
+            big_turns([5, 1, 1, 5]), [([1, 2], "low")]
+        )  # a low held two years is one turn
         self.assertEqual(big_turns([1, 2, 3, None, 5]), [])
 
     def test_a_held_peak_is_not_called_a_fall(self):
         from builder.findings import phrase, sentence
+
         # English primary class sizes (audit 11): 27.1 in every year from 2016 to 2019.
         years = [str(y) for y in range(2006, 2027)]
-        v = [26.3, 26.2, 26.2, 26.2, 26.4, 26.6, 26.8, 26.8, 26.9, 27.0, 27.1, 27.1, 27.1, 27.1, 27.0, 26.6, 26.6, 26.7, 26.6, 26.4, 26.1]
-        self.assertEqual(phrase(years, v), "rose until 2016, held level until 2019, then fell below the 2006 level")
-        self.assertEqual(sentence(years, v, lambda i: str(v[i])),
-                         "Rose from 26.3 in 2006 to a high of 27.1 in 2016, stayed at 27.1 until 2019, then fell to 26.1 in 2026.")
+        v = [
+            26.3,
+            26.2,
+            26.2,
+            26.2,
+            26.4,
+            26.6,
+            26.8,
+            26.8,
+            26.9,
+            27.0,
+            27.1,
+            27.1,
+            27.1,
+            27.1,
+            27.0,
+            26.6,
+            26.6,
+            26.7,
+            26.6,
+            26.4,
+            26.1,
+        ]
+        self.assertEqual(
+            phrase(years, v),
+            "rose until 2016, held level until 2019, then fell below the 2006 level",
+        )
+        self.assertEqual(
+            sentence(years, v, lambda i: str(v[i])),
+            "Rose from 26.3 in 2006 to a high of 27.1 in 2016, stayed at 27.1 until 2019, then fell to 26.1 in 2026.",
+        )
 
     def test_a_smaller_turn_back_at_the_end_is_named(self):
         from builder.findings import phrase, sentence
+
         # Primary pupils in classes of more than 30 (audit 10): highest since 2008 in
         # January 2025, then 0.7 points lower in January 2026. The title must not end "then rose".
         years = [f"January {y}" for y in range(2006, 2027)]
-        v = [15.2, 14.4, 13.5, 12.3, 11.7, 11.4, 11.4, 11.7, 12.5, 12.6, 12.8, 12.7, 12.8, 13.0, 13.06, 11.55, 11.86, 12.63, 13.14, 13.31, 12.65]
-        self.assertEqual(phrase(years, v), "fell until January 2011, held level until January 2012, rose until January 2020, fell in January 2021, "
-                                           "rose until January 2025, then fell in January 2026")
-        self.assertTrue(sentence(years, v, lambda i: str(v[i])).endswith("rose to a high of 13.31 in January 2025, then fell to 12.65 in January 2026."))
+        v = [
+            15.2,
+            14.4,
+            13.5,
+            12.3,
+            11.7,
+            11.4,
+            11.4,
+            11.7,
+            12.5,
+            12.6,
+            12.8,
+            12.7,
+            12.8,
+            13.0,
+            13.06,
+            11.55,
+            11.86,
+            12.63,
+            13.14,
+            13.31,
+            12.65,
+        ]
+        self.assertEqual(
+            phrase(years, v),
+            "fell until January 2011, held level until January 2012, rose until January 2020, fell in January 2021, "
+            "rose until January 2025, then fell in January 2026",
+        )
+        self.assertTrue(
+            sentence(years, v, lambda i: str(v[i])).endswith(
+                "rose to a high of 13.31 in January 2025, then fell to 12.65 in January 2026."
+            )
+        )
         # A line that rose overall but ends well below its peak
-        self.assertEqual(phrase(self.L, [1, 2, 3, 6, 5.5, 5]), "rose until 2011, then fell between 2011 and 2013")
+        self.assertEqual(
+            phrase(self.L, [1, 2, 3, 6, 5.5, 5]), "rose until 2011, then fell between 2011 and 2013"
+        )
         # A small dip at the end (under 15% of the range) is still folded into the rise
         self.assertEqual(phrase(self.L, [1, 2, 3, 4, 6, 5.5]), "rose between 2008 and 2013")
 
     def test_check_finds_a_title_that_hides_a_turn_at_the_end(self):
         from builder.check import turn_back_at_end
-        v = [15.2, 14.4, 13.5, 12.3, 11.7, 11.4, 11.4, 11.7, 12.5, 12.6, 12.8, 12.7, 12.8, 13.0, 13.1, 11.5, 11.9, 12.6, 13.1, 13.3, 12.6]
+
+        v = [
+            15.2,
+            14.4,
+            13.5,
+            12.3,
+            11.7,
+            11.4,
+            11.4,
+            11.7,
+            12.5,
+            12.6,
+            12.8,
+            12.7,
+            12.8,
+            13.0,
+            13.1,
+            11.5,
+            11.9,
+            12.6,
+            13.1,
+            13.3,
+            12.6,
+        ]
         self.assertEqual(turn_back_at_end(v), ([19], "peak"))
         self.assertIsNone(turn_back_at_end(v[:-1]))  # ends at its high
         self.assertIsNone(turn_back_at_end([1, 2, 3, 4, 6, 5.5]))  # too small to name
-        self.assertEqual(turn_back_at_end([5, 1, 1, 5, 5, 4]), ([3, 4], "peak"))  # a high held two years
+        self.assertEqual(
+            turn_back_at_end([5, 1, 1, 5, 5, 4]), ([3, 4], "peak")
+        )  # a high held two years
 
     def test_missing_years_are_skipped_not_zero(self):
         from builder.findings import phrase
+
         self.assertEqual(phrase(self.L, [None, 2, None, 4, 5, None]), "rose between 2009 and 2012")
 
     def test_title_and_subtitle(self):
         from builder import findings as F
-        svg = line_chart("Things, 2008 to 2013", self.L, [("a", [1, 2, 3, 4, 5, 6], "a")], "u", kind="dp1", finding=F.trend("Things"))
-        self.assertIn('<p class="ctitle" aria-hidden="true" data-lines="0:0:6">Things rose between 2008 and 2013</p>', svg)
+
+        svg = line_chart(
+            "Things, 2008 to 2013",
+            self.L,
+            [("a", [1, 2, 3, 4, 5, 6], "a")],
+            "u",
+            kind="dp1",
+            finding=F.trend("Things"),
+        )
+        self.assertIn(
+            '<p class="ctitle" aria-hidden="true" data-lines="0:0:6">Things rose between 2008 and 2013</p>',
+            svg,
+        )
         self.assertIn('<p class="csub" aria-hidden="true">Things, 2008 to 2013</p>', svg)
         self.assertIn('aria-label="Things rose between 2008 and 2013. Things, 2008 to 2013.', svg)
 
     def test_title_does_not_reach_across_a_split_break_or_into_forecasts(self):
         from builder import findings as F
-        svg = line_chart("t", self.L, [("a", [9, 8, 1, 2, 3, 99], "a")], "u", kind="dp1", breaks=[(2, "New method")], split_breaks=True,
-                         forecast_from=5, finding=F.trend("A"))
+
+        svg = line_chart(
+            "t",
+            self.L,
+            [("a", [9, 8, 1, 2, 3, 99], "a")],
+            "u",
+            kind="dp1",
+            breaks=[(2, "New method")],
+            split_breaks=True,
+            forecast_from=5,
+            finding=F.trend("A"),
+        )
         self.assertIn(">A rose between 2010 and 2012<", svg)
 
     def test_title_stops_at_a_break_without_comparing_across_it(self):
@@ -232,57 +488,154 @@ class Findings(unittest.TestCase):
         # the 2024 method change led readers to compare 2025 with 2019.
         from builder import findings as F
         from builder.check import crosses_break
+
         years = [str(y) for y in range(2009, 2026)]
-        hol = [41.2, 41.4, 42.7, 41.7, 43.1, 45.0, 48.5, 50.8, 54.4, 57.3, 58.7, None, 8.9, 45.6, 58.0, 56.0, 58.4]
+        hol = [
+            41.2,
+            41.4,
+            42.7,
+            41.7,
+            43.1,
+            45.0,
+            48.5,
+            50.8,
+            54.4,
+            57.3,
+            58.7,
+            None,
+            8.9,
+            45.6,
+            58.0,
+            56.0,
+            58.4,
+        ]
         brk = [(years.index("2024"), "New method"), (years.index("2025"), "Fully new method")]
-        svg = line_chart("t", years, [("a", hol, "a")], "u", kind="dp1", breaks=brk, split_breaks=True,
-                         finding=F.trend("Visits", which="first", after="; later years use a new method and are not compared"))
+        svg = line_chart(
+            "t",
+            years,
+            [("a", hol, "a")],
+            "u",
+            kind="dp1",
+            breaks=brk,
+            split_breaks=True,
+            finding=F.trend(
+                "Visits", which="first", after="; later years use a new method and are not compared"
+            ),
+        )
         title = re.search(r'class="ctitle"[^>]*>([^<]*)<', svg).group(1)
-        self.assertEqual(title, "Visits rose until 2019, fell in 2021, then rose until 2023; later years use a new method and are not compared")
+        self.assertEqual(
+            title,
+            "Visits rose until 2019, fell in 2021, then rose until 2023; later years use a new method and are not compared",
+        )
         self.assertIn('data-breaks="15 16"', svg)
         rows = [[y, "no figure" if v is None else f"{v} million"] for y, v in zip(years, hol)]
         self.assertEqual(crosses_break(title, "0:0:15", rows, [15, 16]), [])
-        bad = crosses_break("Visits rose until 2019, fell in 2021, then rose back to about the 2019 level", "0:0:15", rows, [15, 16])
+        bad = crosses_break(
+            "Visits rose until 2019, fell in 2021, then rose back to about the 2019 level",
+            "0:0:15",
+            rows,
+            [15, 16],
+        )
         self.assertEqual(len(bad), 2)  # 2019 is set against figures past both breaks
-        self.assertTrue(crosses_break("Visits rose between 2022 and 2025", "0:13:17", rows, [15, 16]))
+        self.assertTrue(
+            crosses_break("Visits rose between 2022 and 2025", "0:13:17", rows, [15, 16])
+        )
         # A line that ends before the break may still compare with an earlier level
-        self.assertEqual(crosses_break("Visits rose back to about the 2019 level", "0:0:15", rows[:15], [15, 16]), [])
+        self.assertEqual(
+            crosses_break(
+                "Visits rose back to about the 2019 level", "0:0:15", rows[:15], [15, 16]
+            ),
+            [],
+        )
 
     def test_gap_and_leader(self):
         from builder import findings as F
+
         series = [("Men", [5, 6, 7]), ("Women", [3, 4, 6])]
         st = [(0, 3)]
-        self.assertEqual(F.gap("Men's rate", "women's")(self.L, series, st), "Men's rate was higher than women's in every year from 2008 to 2010")
-        self.assertEqual(F.leader("{name} was highest {span}")(self.L, series, st), "Men was highest in every year from 2008 to 2010")
-        close = F.leader("{name} was highest {span}", close=1.5, close_template="{name} and {lsecond} were close {span}")
+        self.assertEqual(
+            F.gap("Men's rate", "women's")(self.L, series, st),
+            "Men's rate was higher than women's in every year from 2008 to 2010",
+        )
+        self.assertEqual(
+            F.leader("{name} was highest {span}")(self.L, series, st),
+            "Men was highest in every year from 2008 to 2010",
+        )
+        close = F.leader(
+            "{name} was highest {span}",
+            close=1.5,
+            close_template="{name} and {lsecond} were close {span}",
+        )
         self.assertEqual(close(self.L, series, st), "Men and women were close in 2010")
-        self.assertEqual(close(self.L, [("Men", [5, 6, 9]), ("Women", [3, 4, 6])], st), "Men was highest in every year from 2008 to 2010")
+        self.assertEqual(
+            close(self.L, [("Men", [5, 6, 9]), ("Women", [3, 4, 6])], st),
+            "Men was highest in every year from 2008 to 2010",
+        )
 
     def test_overview_leaves_out_groups_with_their_own_break(self):
-        fig = small_multiples("t", ["1", "2", "3", "4"], [("North", [1.0, 2.0, 3.0, 4.0]), ("South", [4.0, 5.0, 3.0, 2.0]), ("East", [9.0, 9.0, 2.0, 3.0])],
-                              "u", "dp1", summary_note="The table gives every figure.", group_breaks={2: [(2, "it was counted differently from 3")]})
+        fig = small_multiples(
+            "t",
+            ["1", "2", "3", "4"],
+            [
+                ("North", [1.0, 2.0, 3.0, 4.0]),
+                ("South", [4.0, 5.0, 3.0, 2.0]),
+                ("East", [9.0, 9.0, 2.0, 3.0]),
+            ],
+            "u",
+            "dp1",
+            summary_note="The table gives every figure.",
+            group_breaks={2: [(2, "it was counted differently from 3")]},
+        )
         text = re.sub(r"<[^>]+>", "", fig)
-        self.assertIn("Comparing 1 with 4, 1 of the 2 shown was higher and 1 of the 2 shown was lower.", text)
-        self.assertIn("East is left out, because it was counted differently from 3; it is compared only from 3: 2.0 to 3.0.", text)
+        self.assertIn(
+            "Comparing 1 with 4, 1 of the 2 shown was higher and 1 of the 2 shown was lower.", text
+        )
+        self.assertIn(
+            "East is left out, because it was counted differently from 3; it is compared only from 3: 2.0 to 3.0.",
+            text,
+        )
         self.assertNotIn("9.0 to 3.0", text)
         east = re.search(r'<path id="sm\d+s2" d="([^"]+)"', fig).group(1)
         self.assertEqual(east.count("M"), 2)  # the line breaks at its own change
 
     def test_overview_reads_from_the_last_break(self):
-        fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0])], "u", "dp1",
-                              summary_note="The table gives every figure.", breaks=[(1, "New method")])
+        fig = small_multiples(
+            "t",
+            ["1", "2", "3"],
+            [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0])],
+            "u",
+            "dp1",
+            summary_note="The table gives every figure.",
+            breaks=[(1, "New method")],
+        )
         self.assertIn("Comparing 2 with 3", re.sub(r"<[^>]+>", "", fig))
 
     def test_overview_counts_groups(self):
-        fig = small_multiples("t", ["1", "2", "3"], [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0]), ("East", [7.0, 8.0, 9.0])], "u", "dp1",
-                              summary_note="The table gives every figure.")
+        fig = small_multiples(
+            "t",
+            ["1", "2", "3"],
+            [("North", [1.0, 2.0, 4.0]), ("South", [4.0, 5.0, 3.0]), ("East", [7.0, 8.0, 9.0])],
+            "u",
+            "dp1",
+            summary_note="The table gives every figure.",
+        )
         text = re.sub(r"<[^>]+>", "", fig)
-        self.assertIn("Comparing 1 with 3, 2 of the 3 shown were higher and 1 of the 3 shown was lower.", text)
-        self.assertIn("The largest rise was North (1.0 to 4.0); the largest fall was South (4.0 to 3.0).", text)
+        self.assertIn(
+            "Comparing 1 with 3, 2 of the 3 shown were higher and 1 of the 3 shown was lower.", text
+        )
+        self.assertIn(
+            "The largest rise was North (1.0 to 4.0); the largest fall was South (4.0 to 3.0).",
+            text,
+        )
 
 
 class SmallMultiples(unittest.TestCase):
-    SERIES = [("North", [1.0, 2.0, 3.0]), ("South", [4.0, None, 6.0]), ("East", [7.0, 8.0, 9.0]), ("West", [None, None, None])]
+    SERIES = [
+        ("North", [1.0, 2.0, 3.0]),
+        ("South", [4.0, None, 6.0]),
+        ("East", [7.0, 8.0, 9.0]),
+        ("West", [None, None, None]),
+    ]
 
     def test_one_labelled_panel_per_group(self):
         fig = small_multiples("t", ["1", "2", "3"], self.SERIES, "u", "dp1")
@@ -306,8 +659,15 @@ class SmallMultiples(unittest.TestCase):
         self.assertIn("No figure for 2", fig)
 
     def test_definition_break_splits_lines_and_summary(self):
-        fig = small_multiples("t", ["1", "2", "3", "4"], [("a", [1.0, 2.0, 3.0, 4.0]), ("b", [1.0, 1.0, 1.0, 1.0])], "u", "dp1",
-                              breaks=[(2, "New method")], split_breaks=True)
+        fig = small_multiples(
+            "t",
+            ["1", "2", "3", "4"],
+            [("a", [1.0, 2.0, 3.0, 4.0]), ("b", [1.0, 1.0, 1.0, 1.0])],
+            "u",
+            "dp1",
+            breaks=[(2, "New method")],
+            split_breaks=True,
+        )
         a = re.search(r'<path id="sm\d+s0" d="([^"]+)"', fig).group(1)
         self.assertEqual(a.count("M"), 2)
         self.assertIn("values either side are not compared", fig)
@@ -348,11 +708,47 @@ class ComparisonPage(unittest.TestCase):
         self.facts = f
         self.num = Num(f)
         pages_life.MEAS[:] = [
-            ("work.rate", "work", "Employment rate", lambda y: f"work.rate.{y}", "pct", "pp", str, None),
-            ("work.occ.prof", "work", "Share of workers in: Professional", lambda y: f"occ.{pages_life.occ_scheme(y)}.{y}", "pct", "pp", str, pages_life.occ_scheme),
+            (
+                "work.rate",
+                "work",
+                "Employment rate",
+                lambda y: f"work.rate.{y}",
+                "pct",
+                "pp",
+                str,
+                None,
+            ),
+            (
+                "work.occ.prof",
+                "work",
+                "Share of workers in: Professional",
+                lambda y: f"occ.{pages_life.occ_scheme(y)}.{y}",
+                "pct",
+                "pp",
+                str,
+                pages_life.occ_scheme,
+            ),
             ("earn.ft", "earnings", "Pay", lambda y: f"pay.{y}", "pounds", "pct", str, None),
-            ("earn.ftcash", "earnings", "Pay in cash", lambda y: f"paycash.{y}", "pounds", "pct", str, None),
-            ("house.private", "housing", "Renting privately", lambda y: f"house.private.{y}", "pct", "pp", str, None),
+            (
+                "earn.ftcash",
+                "earnings",
+                "Pay in cash",
+                lambda y: f"paycash.{y}",
+                "pounds",
+                "pct",
+                str,
+                None,
+            ),
+            (
+                "house.private",
+                "housing",
+                "Renting privately",
+                lambda y: f"house.private.{y}",
+                "pct",
+                "pp",
+                str,
+                None,
+            ),
         ]
 
     def tearDown(self):
@@ -363,8 +759,12 @@ class ComparisonPage(unittest.TestCase):
 
     def test_status(self):
         self.assertEqual(pages_life._status(self.facts, self.m("work.rate"), 2010, 2025), "ok")
-        self.assertEqual(pages_life._status(self.facts, self.m("work.occ.prof"), 2019, 2025), "break")
-        self.assertEqual(pages_life._status(self.facts, self.m("house.private"), 2010, 2025), "missing")
+        self.assertEqual(
+            pages_life._status(self.facts, self.m("work.occ.prof"), 2019, 2025), "break"
+        )
+        self.assertEqual(
+            pages_life._status(self.facts, self.m("house.private"), 2010, 2025), "missing"
+        )
 
     def test_largest_changes_leave_out_breaks_gaps_and_cash(self):
         out = pages_life.largest_changes(self.facts, self.num, 2019, 2025)
@@ -388,7 +788,10 @@ class ComparisonPage(unittest.TestCase):
         out = pages_life.key_sentence(self.facts, self.num, "housing", 2010, 2025)
         self.assertIn("there is no figure for 2025", out)
         self.assertIn("No change can be worked out", out)
-        pages_life.KEY_MEASURES["work"], saved = ("work.occ.prof", "Professional share"), pages_life.KEY_MEASURES["work"]
+        pages_life.KEY_MEASURES["work"], saved = (
+            "work.occ.prof",
+            "Professional share",
+        ), pages_life.KEY_MEASURES["work"]
         try:
             out = pages_life.key_sentence(self.facts, self.num, "work", 2019, 2025)
         finally:
@@ -397,10 +800,14 @@ class ComparisonPage(unittest.TestCase):
         self.assertIn("new way of measuring", out)
 
     def test_break_reason_is_one_sentence_naming_the_change(self):
-        self.assertEqual(pages_life.short_break(pages_life.earn_basis, 2015, 2025),
-                         "The pay survey changed how it codes jobs in 2021, so pay in 2015 and 2025 was measured differently.")
-        self.assertEqual(pages_life.short_break(pages_life.earn_basis, 2003, 2012),
-                         "The pay survey changed its method in 2004 and 2006 and how it codes jobs in 2011, so pay in 2003 and 2012 was measured differently.")
+        self.assertEqual(
+            pages_life.short_break(pages_life.earn_basis, 2015, 2025),
+            "The pay survey changed how it codes jobs in 2021, so pay in 2015 and 2025 was measured differently.",
+        )
+        self.assertEqual(
+            pages_life.short_break(pages_life.earn_basis, 2003, 2012),
+            "The pay survey changed its method in 2004 and 2006 and how it codes jobs in 2011, so pay in 2003 and 2012 was measured differently.",
+        )
         self.assertIn("2024 mixes", pages_life.short_break(pages_life.hol_basis, 2024, 2025))
 
     def test_single_year_page_can_compare(self):
@@ -411,7 +818,10 @@ class ComparisonPage(unittest.TestCase):
         self.assertIn('href="compare/2014-2015.html"', form)
 
     def test_definition_change_is_explained_and_not_calculated(self):
-        pages_life.KEY_MEASURES["work"], saved = ("work.occ.prof", "Professional share"), pages_life.KEY_MEASURES["work"]
+        pages_life.KEY_MEASURES["work"], saved = (
+            "work.occ.prof",
+            "Professional share",
+        ), pages_life.KEY_MEASURES["work"]
         try:
             out = pages_life.key_sentence(self.facts, self.num, "work", 2019, 2025)
         finally:
@@ -469,8 +879,26 @@ class SpanComparisons(unittest.TestCase):
         pages_life.MEAS[:] = [
             ("work.rate", "work", "Employment rate", lambda y: f"rate.{y}", "pct", "pp", str, None),
             ("work.gap", "work", "Has a gap", lambda y: f"gap.{y}", "pct", "pp", str, None),
-            ("work.occ.prof", "work", "Professional", lambda y: f"occ.{y}", "pct", "pp", str, pages_life.occ_scheme),
-            ("house.crowd.all", "housing", "Overcrowded", lambda y: f"rate.{y}", "pct", "pp", str, None),
+            (
+                "work.occ.prof",
+                "work",
+                "Professional",
+                lambda y: f"occ.{y}",
+                "pct",
+                "pp",
+                str,
+                pages_life.occ_scheme,
+            ),
+            (
+                "house.crowd.all",
+                "housing",
+                "Overcrowded",
+                lambda y: f"rate.{y}",
+                "pct",
+                "pp",
+                str,
+                None,
+            ),
         ]
         pages_ranges.add_range_facts(f)
         self.num = Num(f)
@@ -492,15 +920,29 @@ class SpanComparisons(unittest.TestCase):
         self.assertNotIn("avg.work.gap.2015-2017", self.facts)
         self.assertIn("avg.work.gap.2017-2019", self.facts)
         self.assertNotIn("avg.work.occ.prof.2019-2021", self.facts)  # SOC changed in 2021
-        self.assertNotIn("avg.house.crowd.all.2009-2011", self.facts)  # already a three-year average
+        self.assertNotIn(
+            "avg.house.crowd.all.2009-2011", self.facts
+        )  # already a three-year average
         out = pages_ranges._not_compared(self.facts, self.m("work.gap"), (2015, 2017), (2019, 2021))
         self.assertIn("no figure for 2016", out)
-        out = pages_ranges._not_compared(self.facts, self.m("work.occ.prof"), (2019, 2021), (2022, 2024))
+        out = pages_ranges._not_compared(
+            self.facts, self.m("work.occ.prof"), (2019, 2021), (2022, 2024)
+        )
         self.assertIn("definition changed within 2019 to 2021", out)
 
     def test_spans_either_side_of_a_change_are_not_compared(self):
-        self.assertEqual(pages_ranges.span_status(self.facts, self.m("work.occ.prof"), (2011, 2013), (2022, 2024)), "break")
-        self.assertEqual(pages_ranges.span_status(self.facts, self.m("work.occ.prof"), (2011, 2013), (2016, 2018)), "ok")
+        self.assertEqual(
+            pages_ranges.span_status(
+                self.facts, self.m("work.occ.prof"), (2011, 2013), (2022, 2024)
+            ),
+            "break",
+        )
+        self.assertEqual(
+            pages_ranges.span_status(
+                self.facts, self.m("work.occ.prof"), (2011, 2013), (2016, 2018)
+            ),
+            "ok",
+        )
 
     def test_change_between_averages(self):
         out = pages_ranges.key_sentence(self.facts, self.num, "work", (2009, 2011), (2017, 2019))
@@ -530,7 +972,16 @@ class DefaultComparison(unittest.TestCase):
             ("work.rate", "work", "W", lambda y: f"w.{y}", "pct", "pp", str, None),
             ("earn.ft", "earnings", "E", lambda y: f"e.{y}", "pct", "pp", str, None),
             ("house.private", "housing", "H", lambda y: f"h.{y}", "pct", "pp", str, None),
-            ("hol.per100", "holidays", "V", lambda y: f"v.{y}", "int", "pct", str, pages_life.hol_basis),
+            (
+                "hol.per100",
+                "holidays",
+                "V",
+                lambda y: f"v.{y}",
+                "int",
+                "pct",
+                str,
+                pages_life.hol_basis,
+            ),
             ("school.primary", "schools", "S", lambda y: f"s.{y}", "dp1", "abs", str, None),
         ]
         pages_ranges.add_range_facts(f)
@@ -555,6 +1006,7 @@ class Rates(unittest.TestCase):
     def test_worked_example_from_saved_pages(self):
         from builder.rates import read_rates
         from builder.sources import all_sources
+
         r = read_rates(all_sources())
         ill = r["illustration"]
         self.assertEqual(ill["allowance"], 12570)
@@ -566,14 +1018,23 @@ class Rates(unittest.TestCase):
 class Sources(unittest.TestCase):
     def test_hashes_match(self):
         from builder.sources import all_sources, verify_hashes
-        self.assertEqual(verify_hashes(all_sources()), [])
 
+        self.assertEqual(verify_hashes(all_sources()), [])
 
 
 class Holidays(unittest.TestCase):
     def test_only_single_countries_are_ranked(self):
         from builder.data import _country_rows
-        rows = [["Spain", 5], ["Rest of Europe", 9], ["Total World", 99], ["- of which EU", 50], ["Other Asia", 3], ["USA", 4], ["Fly/cruise (stay onboard)", 1]]
+
+        rows = [
+            ["Spain", 5],
+            ["Rest of Europe", 9],
+            ["Total World", 99],
+            ["- of which EU", 50],
+            ["Other Asia", 3],
+            ["USA", 4],
+            ["Fly/cruise (stay onboard)", 1],
+        ]
         self.assertEqual([n for n, _ in _country_rows(rows, 0, 0, [1])], ["Spain", "United States"])
 
     def test_survey_change_blocks_comparison(self):
@@ -588,6 +1049,7 @@ class WhoPaysAndTaxMix(unittest.TestCase):
     def setUpClass(cls):
         import warnings
         from builder.data import build_all
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -598,15 +1060,23 @@ class WhoPaysAndTaxMix(unittest.TestCase):
 
     def test_tax_shares_add_up_to_all_taxes(self):
         from builder.pages_money_extra import tax_mix_section
+
         num = Num(self.facts)
-        tax_mix_section(self.facts, self.d, num, {"obr": {"publisher": "OBR", "title": "t", "page": "", "id": "obr"}})
+        tax_mix_section(
+            self.facts,
+            self.d,
+            num,
+            {"obr": {"publisher": "OBR", "title": "t", "page": "", "id": "obr"}},
+        )
         rc = self.d["receipts"]
         keys = [k for k, _ in rc["groups"]] + ["othertax"]
         outturn = [y for y in rc["years"] if y < rc["forecast_from"]]
         for y in (outturn[0], outturn[-1]):
             total = sum(self.facts[f"rec.share.{k}.{y}"].value for k in keys)
             self.assertAlmostEqual(total, 100, places=6, msg=y)
-        self.assertFalse(any(f.startswith("rec.share.") and f.endswith(rc["forecast_from"]) for f in self.facts))
+        self.assertFalse(
+            any(f.startswith("rec.share.") and f.endswith(rc["forecast_from"]) for f in self.facts)
+        )
 
     def test_household_types_and_benefits_series(self):
         w = self.d["who_types"]
@@ -627,6 +1097,7 @@ class IncomeTaxByAge(unittest.TestCase):
     def setUpClass(cls):
         import warnings
         from builder.data import build_all
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -639,7 +1110,9 @@ class IncomeTaxByAge(unittest.TestCase):
         published = f["spi.age.n.all.all"].value * f["spi.age.meantax.all.all"].value / 1e6
         self.assertLess(abs(f["spi.age.tottax.sum.all"].value - published) / published, 0.005)
         for m in ("n", "tax", "inc"):
-            self.assertAlmostEqual(sum(f[f"spi.age.share{m}.{a}"].value for a in ages), 100, places=6)
+            self.assertAlmostEqual(
+                sum(f[f"spi.age.share{m}.{a}"].value for a in ages), 100, places=6
+            )
 
     def test_men_and_women_add_up(self):
         f = self.facts
@@ -652,8 +1125,12 @@ class IncomeTaxByAge(unittest.TestCase):
         ages = [k for k, _ in self.d["who_age"]["ages"]]
         top_tax = max(ages, key=lambda a: f[f"spi.age.meantax.{a}.all"].value)
         top_inc = sorted(ages, key=lambda a: f[f"spi.age.meaninc.{a}.all"].value)[-2:]
-        self.assertIn(top_tax, top_inc)  # "groups that owed the most tax per taxpayer also had the highest incomes"
-        self.assertLess(f[f"spi.age.medtax.{top_tax}.all"].value, f[f"spi.age.meantax.{top_tax}.all"].value)
+        self.assertIn(
+            top_tax, top_inc
+        )  # "groups that owed the most tax per taxpayer also had the highest incomes"
+        self.assertLess(
+            f[f"spi.age.medtax.{top_tax}.all"].value, f[f"spi.age.meantax.{top_tax}.all"].value
+        )
 
 
 class Glossary(unittest.TestCase):
@@ -662,6 +1139,7 @@ class Glossary(unittest.TestCase):
 
     def test_fifths_describes_approximate_people_not_household_counts(self):
         from builder.glossary import glossary_page
+
         html = glossary_page()
         definition = re.search(r'<dt id="fifths">.*?</dt>\s*<dd>(.*?)</dd>', html, re.S).group(1)
         self.assertIn("five groups with about the same number of people", definition)
@@ -671,35 +1149,51 @@ class Glossary(unittest.TestCase):
 
     def test_first_use_in_text_is_linked_once(self):
         from builder.glossary import link_terms
+
         out = link_terms(self.wrap("<p>VAT is a tax. VAT again.</p>"), "taxes.html")
         self.assertEqual(out.count('href="glossary.html#vat"'), 1)
         self.assertIn('<a class="term" href="glossary.html#vat">VAT</a> is a tax. VAT again.', out)
 
     def test_headings_links_figures_and_tables_are_left_alone(self):
         from builder.glossary import link_terms
-        main = ('<h2 id="x">VAT</h2><p><a href="a.html">VAT</a> <data value="1" data-fact="f" data-kind="int">GDP</data></p>'
-                "<table><caption>VAT</caption><tr><td>VAT</td></tr></table><p><strong>VAT</strong></p>")
+
+        main = (
+            '<h2 id="x">VAT</h2><p><a href="a.html">VAT</a> <data value="1" data-fact="f" data-kind="int">GDP</data></p>'
+            "<table><caption>VAT</caption><tr><td>VAT</td></tr></table><p><strong>VAT</strong></p>"
+        )
         out = link_terms(self.wrap(main), "taxes.html")
         self.assertNotIn('class="term"', out)
 
     def test_links_work_from_subfolders_and_skip_the_glossary(self):
         from builder.glossary import link_terms
-        self.assertIn('href="../../glossary.html#median"', link_terms(self.wrap("<p>The median rose.</p>"), "life/compare/2010-2025.html"))
-        self.assertNotIn('class="term"', link_terms(self.wrap("<p>The median rose.</p>"), "glossary.html"))
+
+        self.assertIn(
+            'href="../../glossary.html#median"',
+            link_terms(self.wrap("<p>The median rose.</p>"), "life/compare/2010-2025.html"),
+        )
+        self.assertNotIn(
+            'class="term"', link_terms(self.wrap("<p>The median rose.</p>"), "glossary.html")
+        )
 
     def test_longer_phrase_wins_and_case_matters_for_names(self):
         from builder.glossary import link_terms
-        out = link_terms(self.wrap("<p>Taxes took 30% of gross household income. The vat was full.</p>"), "x.html")
+
+        out = link_terms(
+            self.wrap("<p>Taxes took 30% of gross household income. The vat was full.</p>"),
+            "x.html",
+        )
         self.assertIn('glossary.html#gross-income">gross household income</a>', out)
         self.assertNotIn("#vat", out)
 
     def test_text_hidden_from_screen_readers_is_left_alone(self):
         from builder.glossary import link_terms
+
         out = link_terms(self.wrap('<div aria-hidden="true"><p>VAT</p></div><p>VAT</p>'), "x.html")
         self.assertIn('<div aria-hidden="true"><p>VAT</p></div><p><a class="term"', out)
 
     def test_every_term_has_an_anchor_and_words(self):
         from builder.glossary import GROUPS
+
         anchors = [a for _, _, terms in GROUPS for a, _, _, _ in terms]
         self.assertEqual(len(anchors), len(set(anchors)))
         for _, _, terms in GROUPS:
@@ -708,10 +1202,13 @@ class Glossary(unittest.TestCase):
 
     def test_glossary_lists_every_word_a_to_z(self):
         from builder.glossary import GROUPS, glossary_page
+
         html = glossary_page()
         az = re.search(r'<ul class="az">(.*?)</ul>', html, re.S).group(1)
         anchors = re.findall(r'href="#([^"]+)"', az)
-        self.assertEqual(sorted(anchors), sorted(a for _, _, terms in GROUPS for a, _, _, _ in terms))
+        self.assertEqual(
+            sorted(anchors), sorted(a for _, _, terms in GROUPS for a, _, _, _ in terms)
+        )
         for gid, _, _ in GROUPS:
             self.assertIn(f'href="#{gid}"', html)
 
@@ -722,7 +1219,10 @@ class FindingThings(unittest.TestCase):
 
     def test_life_hub_jumps_to_each_topic_and_a_year(self):
         from builder.html import jump
-        nav = jump("Jump to", [(f"#{k}", t) for k, t, _ in pages_life.TOPICS], pages_life.year_jump(""))
+
+        nav = jump(
+            "Jump to", [(f"#{k}", t) for k, t, _ in pages_life.TOPICS], pages_life.year_jump("")
+        )
         for k, _, _ in pages_life.TOPICS:
             self.assertIn(f'href="#{k}"', nav)
         # Without JavaScript the year form lands on the list of years.
@@ -734,8 +1234,11 @@ class FindingThings(unittest.TestCase):
 class Folding(unittest.TestCase):
     def test_answer_stays_in_view_and_detail_folds(self):
         from builder.html import fold
-        body = ('<h1>Q</h1><h2 id="a">Work</h2><p>Intro</p><div class="answer"><p>75%</p><div>x</div></div>'
-                '<figure>chart</figure><table></table>')
+
+        body = (
+            '<h1>Q</h1><h2 id="a">Work</h2><p>Intro</p><div class="answer"><p>75%</p><div>x</div></div>'
+            "<figure>chart</figure><table></table>"
+        )
         out = fold(body)
         lead, rest = out.split('<details class="more">')
         self.assertIn('<div class="answer"><p>75%</p><div>x</div></div>', lead)
@@ -748,8 +1251,11 @@ class Folding(unittest.TestCase):
 
     def test_chart_inside_a_disclosure_stays_folded(self):
         from builder.html import fold
-        body = ('<h2 id="a">Work</h2><div class="answer"><p>x</p></div>'
-                '<details><summary>s</summary><figure>inner</figure></details><p class="small">Cap</p><ul class="bars"><li>b</li></ul><table></table>')
+
+        body = (
+            '<h2 id="a">Work</h2><div class="answer"><p>x</p></div>'
+            '<details><summary>s</summary><figure>inner</figure></details><p class="small">Cap</p><ul class="bars"><li>b</li></ul><table></table>'
+        )
         lead, rest = fold(body).split('<details class="more">')
         self.assertIn('<p class="small">Cap</p>', lead)
         self.assertIn('<ul class="bars"><li>b</li></ul>', lead)
@@ -757,6 +1263,7 @@ class Folding(unittest.TestCase):
 
     def test_long_comparison_list_keeps_first_rows(self):
         from builder.html import fold, KEEP_ROWS
+
         rows = "".join(f"<li>r{i}</li>" for i in range(KEEP_ROWS + 3))
         body = f'<h2 id="a">Work</h2><div class="answer"><p>x</p></div><ul class="cmp-list">{rows}</ul><table></table>'
         lead, rest = fold(body).split('<details class="more">')
@@ -767,22 +1274,33 @@ class Folding(unittest.TestCase):
     def test_csv_download_beside_table_chart_and_list(self):
         from builder import downloads
         from builder.html import line_chart
+
         downloads.FILES.clear()
         chart = line_chart("Pay", ["2020", "2021"], [("Median", [500.0, None], "a")], "£ a week")
-        body = ('<h2 id="a">Pay</h2>' + chart
-                + '<div class="tablewrap" tabindex="0"><table><caption>Pay, £</caption><thead><tr><th scope="col">Year</th><th scope="col">Pay</th></tr></thead>'
-                  '<tbody><tr><th scope="row">2020</th><td><data value="500.0">£500</data></td></tr></tbody></table></div>'
-                + '<ul class="bars"><li><div class="lab"><span>A, B</span><span>1%</span></div></li></ul>')
+        body = (
+            '<h2 id="a">Pay</h2>'
+            + chart
+            + '<div class="tablewrap" tabindex="0"><table><caption>Pay, £</caption><thead><tr><th scope="col">Year</th><th scope="col">Pay</th></tr></thead>'
+            '<tbody><tr><th scope="row">2020</th><td><data value="500.0">£500</data></td></tr></tbody></table></div>'
+            + '<ul class="bars"><li><div class="lab"><span>A, B</span><span>1%</span></div></li></ul>'
+        )
         out = downloads.add_links(body, "life/pay.html")
         self.assertEqual(out.count('<p class="dl">'), 3)
         self.assertNotIn("<!--csv:", out)
         self.assertIn('href="../csv/life/pay/pay.csv" download', out)
-        self.assertEqual(downloads.FILES["csv/life/pay/pay.csv"], "\ufeffPeriod,Median\r\n2020,500\r\n2021,\r\n")
-        self.assertEqual(downloads.FILES["csv/life/pay/pay-2.csv"], "\ufeffYear,Pay\r\n2020,£500\r\n")
-        self.assertEqual(downloads.FILES["csv/life/pay/pay-3.csv"], '\ufeffGroup,Value\r\n"A, B",1%\r\n')
+        self.assertEqual(
+            downloads.FILES["csv/life/pay/pay.csv"], "\ufeffPeriod,Median\r\n2020,500\r\n2021,\r\n"
+        )
+        self.assertEqual(
+            downloads.FILES["csv/life/pay/pay-2.csv"], "\ufeffYear,Pay\r\n2020,£500\r\n"
+        )
+        self.assertEqual(
+            downloads.FILES["csv/life/pay/pay-3.csv"], '\ufeffGroup,Value\r\n"A, B",1%\r\n'
+        )
 
     def test_folded_chart_keeps_its_download(self):
         from builder.html import fold, KEEP_ROWS
+
         rows = "".join(f"<li>r{i}</li>" for i in range(KEEP_ROWS + 3))
         dl = '<p class="dl"><a href="x.csv" download>Download this data (CSV)</a></p>'
         body = f'<h2 id="a">Work</h2><div class="answer"><p>x</p></div><ul class="cmp-list">{rows}</ul>{dl}<table></table>'
@@ -792,19 +1310,23 @@ class Folding(unittest.TestCase):
 
     def test_spark_leaves_gaps_and_breaks(self):
         from builder.html import spark
+
         pts = [(2008, None), (2009, 1.0), (2010, 2.0), (2011, 3.0), (2012, 4.0)]
         svg = spark(pts, "label", highlight=2010, group=lambda y: y >= 2011)
         self.assertIn('role="img"', svg)
-        self.assertEqual(svg.count('class="gap"'), 1)   # 2008 has no figure
-        self.assertEqual(svg.count('class="brk"'), 1)   # definition change between 2010 and 2011
-        self.assertEqual(svg.count("<polyline"), 2)     # never joined across the break
+        self.assertEqual(svg.count('class="gap"'), 1)  # 2008 has no figure
+        self.assertEqual(svg.count('class="brk"'), 1)  # definition change between 2010 and 2011
+        self.assertEqual(svg.count("<polyline"), 2)  # never joined across the break
         self.assertEqual(svg.count('class="hi"'), 1)
 
     def test_marker_and_unmarked_sections(self):
         from builder.html import fold, FOLD, NOFOLD
-        body = (f'<h2 id="a">1. Bars</h2><ul class="bars"></ul>{FOLD}<table></table>'
-                '<h2 id="b">Open</h2><p>All of it</p>'
-                f'<h2 id="c">Kept</h2><div class="answer"><p>x</p></div>{NOFOLD}<table></table>')
+
+        body = (
+            f'<h2 id="a">1. Bars</h2><ul class="bars"></ul>{FOLD}<table></table>'
+            '<h2 id="b">Open</h2><p>All of it</p>'
+            f'<h2 id="c">Kept</h2><div class="answer"><p>x</p></div>{NOFOLD}<table></table>'
+        )
         out = fold(body)
         self.assertEqual(out.count('<details class="more">'), 1)
         self.assertIn("More on Bars", out)
@@ -812,8 +1334,11 @@ class Folding(unittest.TestCase):
 
     def test_contents_can_follow_the_first_chart(self):
         from builder.html import fold, toc, before_toc, FOLD
-        body = (f'<h1>Q</h1><div class="answer"><p>a</p></div><h2 id="a">One</h2><ul class="bars"></ul>{before_toc("<p>Scale</p>")}{FOLD}<table></table>'
-                '<h2 id="b">Two</h2><p>x</p><h2 id="c">Three</h2><p>y</p>')
+
+        body = (
+            f'<h1>Q</h1><div class="answer"><p>a</p></div><h2 id="a">One</h2><ul class="bars"></ul>{before_toc("<p>Scale</p>")}{FOLD}<table></table>'
+            '<h2 id="b">Two</h2><p>x</p><h2 id="c">Three</h2><p>y</p>'
+        )
         out = toc(fold(body), after_first=True)
         # The chart comes before the contents list, and the note sits between them, outside the fold.
         self.assertLess(out.index('class="bars"'), out.index('class="toc"'))
@@ -833,14 +1358,36 @@ if __name__ == "__main__":
 class Trace(unittest.TestCase):
     def setUp(self):
         from builder import trace
+
         self.trace = trace
         self.facts = Facts()
         self.facts.add(Fact("a.2020", 10.0, "£bn", "2020-21", "s1", "4_2!B23"))
         self.facts.add(Fact("b.1999 to 2000", 5.0, "%", "1999-00", "s2", "T1!C4"))
-        self.facts.add(Fact("c.2020", 2.0, "ratio", "2020-21", "s1", "", status="calculated",
-                            formula="a.2020 ÷ b.1999 to 2000", inputs=["a.2020", "b.1999 to 2000"]))
-        src = dict(publisher="P", title="T", geography="UK", population="All", published="2025", page="https://example.org", file="data/x.xlsx", licence="OGL",
-                   retrieved="2026-01-01", sha256="0" * 64)
+        self.facts.add(
+            Fact(
+                "c.2020",
+                2.0,
+                "ratio",
+                "2020-21",
+                "s1",
+                "",
+                status="calculated",
+                formula="a.2020 ÷ b.1999 to 2000",
+                inputs=["a.2020", "b.1999 to 2000"],
+            )
+        )
+        src = dict(
+            publisher="P",
+            title="T",
+            geography="UK",
+            population="All",
+            published="2025",
+            page="https://example.org",
+            file="data/x.xlsx",
+            licence="OGL",
+            retrieved="2026-01-01",
+            sha256="0" * 64,
+        )
         self.sources = {"s1": src, "s2": dict(src, title="T2"), "s3": dict(src, title="Unused")}
 
     def test_anchor_is_safe(self):
@@ -866,7 +1413,10 @@ class Trace(unittest.TestCase):
         self.assertIn('data-up="../"', out)
         self.assertIn('"a.2020"', out)
         self.assertNotIn('"c.2020"', out)
-        self.assertEqual(self.trace.add_trace("<body></body>", "x.html", self.facts, self.sources), "<body></body>")
+        self.assertEqual(
+            self.trace.add_trace("<body></body>", "x.html", self.facts, self.sources),
+            "<body></body>",
+        )
 
     def test_corrections_link_to_their_change(self):
         out = self.trace.corrections_page()
@@ -888,6 +1438,7 @@ class Explanations(unittest.TestCase):
     def setUp(self):
         from builder.sources import all_sources
         from builder import explain
+
         self.explain, self.sources = explain, all_sources()
 
     def test_every_quote_is_in_its_source(self):
@@ -925,6 +1476,7 @@ class HouseholdTaxHistory(unittest.TestCase):
     def setUpClass(cls):
         import warnings
         from builder.data import build_all
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -936,22 +1488,43 @@ class HouseholdTaxHistory(unittest.TestCase):
         self.assertEqual(t["people"][-1], "2023/24")
 
     def test_published_2023_24_matches_table_8(self):
-        self.assertEqual(self.facts["etbp.all.2023-24.all"].value, self.facts["etb.t8.gross.all.all"].value)
+        self.assertEqual(
+            self.facts["etbp.all.2023-24.all"].value, self.facts["etb.t8.gross.all.all"].value
+        )
 
     def test_wording_about_fifths_matches_the_data(self):
         f, t = self.facts, self.d["tax_history"]
         from builder.data_taxhist import key
-        below = [p for p in t["households"] if f[f"etbh.pall.{key(p)}.q1"].value < f[f"etbh.pall.{key(p)}.q5"].value]
+
+        below = [
+            p
+            for p in t["households"]
+            if f[f"etbh.pall.{key(p)}.q1"].value < f[f"etbh.pall.{key(p)}.q5"].value
+        ]
         self.assertEqual(below, [str(y) for y in range(1977, 1988)])
         for p in t["people"][1:]:
-            self.assertLess(abs(f[f"etbp.all.{key(p)}.q1"].value - f[f"etbp.all.{key(p)}.q5"].value), 5, p)
+            self.assertLess(
+                abs(f[f"etbp.all.{key(p)}.q1"].value - f[f"etbp.all.{key(p)}.q5"].value), 5, p
+            )
 
     def test_methods_are_not_joined_on_the_page(self):
         from builder.pages_money_extra import tax_history_section
+
         src = {"publisher": "ONS", "title": "t", "page": "", "id": "x"}
-        ids = ["etb-hist-quintile-all", "etb-hist-quintile-all-2", "etb-fye2018", "etb-fye2019", "etb-fye2020",
-               "etb-fye2021", "etb-fye2022", "etb-fye2023", "etb"]
-        html = tax_history_section(self.facts, self.d, Num(self.facts), {i: dict(src, id=i) for i in ids})
+        ids = [
+            "etb-hist-quintile-all",
+            "etb-hist-quintile-all-2",
+            "etb-fye2018",
+            "etb-fye2019",
+            "etb-fye2020",
+            "etb-fye2021",
+            "etb-fye2022",
+            "etb-fye2023",
+            "etb",
+        ]
+        html = tax_history_section(
+            self.facts, self.d, Num(self.facts), {i: dict(src, id=i) for i in ids}
+        )
         self.assertIn("The line breaks at 2018/19", html)
         self.assertIn("People, no top-income adjustment", html)
 
@@ -963,6 +1536,7 @@ class BeforeTwoThousandEight(unittest.TestCase):
     def setUpClass(cls):
         import warnings
         from builder.data import build_all
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -970,13 +1544,18 @@ class BeforeTwoThousandEight(unittest.TestCase):
 
     def test_series_start_where_the_sources_do(self):
         from builder import pages_history as H
+
         f = self.facts
         self.assertEqual(f["work.rate.1971"].value, 72.0)  # LF24 row '1971 Q2'
         self.assertNotIn("work.ptshare.1991", f)  # part-time figures start in 1992
         self.assertIn("work.ptshare.1992", f)
-        self.assertNotIn("house.lfs.private.1982", f)  # no tenure figure between 1981 and 1984: nothing filled in
+        self.assertNotIn(
+            "house.lfs.private.1982", f
+        )  # no tenure figure between 1981 and 1984: nothing filled in
         self.assertIn("house.lfs.private.1984", f)
-        self.assertNotIn("hol.ips.all.2024", f)  # the long travel series stops before the 2024 method change
+        self.assertNotIn(
+            "hol.ips.all.2024", f
+        )  # the long travel series stops before the 2024 method change
         self.assertIn("earn.real.ft.2002", f)
         self.assertNotIn("earn.real.ft.2001", f)
         self.assertIn("school.primary.2006", f)
@@ -985,11 +1564,15 @@ class BeforeTwoThousandEight(unittest.TestCase):
 
     def test_tenure_surveys_are_not_compared(self):
         from builder import pages_history as H
+
         m = next(m for m in H.LONG if m[0] == "house.lfs.private")
-        self.assertEqual(H.latest_comparable(self.facts, m, 1995), 2008)  # the last Labour Force Survey year, not the English Housing Survey
+        self.assertEqual(
+            H.latest_comparable(self.facts, m, 1995), 2008
+        )  # the last Labour Force Survey year, not the English Housing Survey
 
     def test_pay_is_compared_only_within_one_survey_method(self):
         from builder import pages_history as H
+
         m = next(m for m in H.LONG if m[0] == "earn.ft")
         self.assertEqual(H.latest_comparable(self.facts, m, 2002), 2003)
         self.assertEqual(H.latest_comparable(self.facts, m, 2004), 2005)
@@ -999,24 +1582,38 @@ class BeforeTwoThousandEight(unittest.TestCase):
         self.assertEqual(H.latest_comparable(self.facts, m, 2021), pages_life.LAST)
 
     def test_pay_is_not_compared_across_the_coding_changes(self):
-        for key in ("earn.ft", "earn.ftcash", "earn.men", "earn.women", "earn.pt", "earn.spread", "earn.place.scotland"):
+        for key in (
+            "earn.ft",
+            "earn.ftcash",
+            "earn.men",
+            "earn.women",
+            "earn.pt",
+            "earn.spread",
+            "earn.place.scotland",
+        ):
             m = next(m for m in pages_life.MEAS if m[0] == key)
             self.assertEqual(pages_life._status(self.facts, m, 2009, 2023), "break", key)
             self.assertEqual(pages_life._status(self.facts, m, 2010, 2011), "break", key)
             self.assertEqual(pages_life._status(self.facts, m, 2011, 2019), "ok", key)
         from builder.html import Num
         from builder import uncertainty as U
+
         if not U.MARGINS:
             U.add_facts(self.facts, self.d)
         answer, body = pages_life._earnings(self.facts, self.d, Num(self.facts), {})
         # Every tagged change on the earnings page compares two years on the same basis (the 2008 to
         # 2014 words are two changes inside their own stretches, never one change across the 2011 break).
         import re
+
         page = answer + "".join(body)
-        pairs = re.findall(r'data-from="earn\.real\.ft\.(\d+)" data-to="earn\.real\.ft\.(\d+)"', page)
+        pairs = re.findall(
+            r'data-from="earn\.real\.ft\.(\d+)" data-to="earn\.real\.ft\.(\d+)"', page
+        )
         self.assertTrue(pairs)
         for a_, b_ in pairs:
-            self.assertEqual(pages_life.earn_basis(int(a_)), pages_life.earn_basis(int(b_)), (a_, b_))
+            self.assertEqual(
+                pages_life.earn_basis(int(a_)), pages_life.earn_basis(int(b_)), (a_, b_)
+            )
         self.assertIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2010"', page)
         self.assertIn('data-from="earn.real.ft.2011" data-to="earn.real.ft.2014"', page)
         self.assertNotIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2014"', page)
@@ -1028,6 +1625,7 @@ class BeforeTwoThousandEight(unittest.TestCase):
     def test_early_year_page_shows_gaps_and_links_to_comparisons(self):
         from builder import pages_history as H
         from builder.html import Num
+
         num = Num(self.facts)
         html = H.early_year_page(self.facts, self.d, num, {}, 1975)
         self.assertIn("Not available: the earnings figures used here start in 2002", html)
@@ -1044,6 +1642,7 @@ class EarlyComparisons(unittest.TestCase):
         import warnings
         from builder.data import build_all
         from builder.html import Num
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -1052,11 +1651,13 @@ class EarlyComparisons(unittest.TestCase):
 
     def page(self, a, b):
         from builder import pages_early_compare as E
+
         return E.compare_page(self.facts, self.d, self.num, {}, a, b)
 
     def test_every_pair_with_an_earlier_year(self):
         from builder import pages_early_compare as E
         from builder.data import EARLY_YEARS, YEARS
+
         n, m = len(EARLY_YEARS), len(YEARS)
         self.assertEqual(len(E.pairs()), n * (n - 1) // 2 + n * m)
         self.assertIn((1971, 1972), E.pairs())
@@ -1065,21 +1666,36 @@ class EarlyComparisons(unittest.TestCase):
     def test_changes_only_between_years_measured_the_same_way(self):
         html = self.page(2002, 2025)
         self.assertIn('data-from="work.rate.2002" data-to="work.rate.2025"', html)
-        self.assertNotIn('data-from="earn.real.ft.2002"', html)  # pay survey methods changed in 2004 and 2006
-        self.assertIn("not comparable: definition changed (before 2004 method → 2021 onwards, SOC2020 job coding)", html)
-        self.assertIn('<a href="2011-2020.html#earnings">2011 and 2020</a>', html)  # nearest pair for pay, inside one job-coding period
+        self.assertNotIn(
+            'data-from="earn.real.ft.2002"', html
+        )  # pay survey methods changed in 2004 and 2006
+        self.assertIn(
+            "not comparable: definition changed (before 2004 method → 2021 onwards, SOC2020 job coding)",
+            html,
+        )
+        self.assertIn(
+            '<a href="2011-2020.html#earnings">2011 and 2020</a>', html
+        )  # nearest pair for pay, inside one job-coding period
 
     def test_tenure_surveys_are_not_joined(self):
         html = self.page(1995, 2010)
         self.assertNotIn('data-from="house.lfs.private.1995" data-to="house.private.2010"', html)
         self.assertIn("the Labour Force Survey tenure figures end in 2008", html)
-        self.assertIn('data-from="house.lfs.private.1995" data-to="house.lfs.private.2008"', self.page(1995, 2008))
+        self.assertIn(
+            'data-from="house.lfs.private.1995" data-to="house.lfs.private.2008"',
+            self.page(1995, 2008),
+        )
 
     def test_missing_years_are_explained_not_filled(self):
         html = self.page(1985, 2025)
-        self.assertIn("No figure for 1985: before 1992 tenure was measured only in 1981, 1984, 1988 and 1991", html)
+        self.assertIn(
+            "No figure for 1985: before 1992 tenure was measured only in 1981, 1984, 1988 and 1991",
+            html,
+        )
         self.assertIn("No figure for 2025: this series of visits abroad stops at 2023", html)
-        self.assertIn("Not available: no earnings figure for 1985, because these figures start in 2002", html)
+        self.assertIn(
+            "Not available: no earnings figure for 1985, because these figures start in 2002", html
+        )
         self.assertIn('<a href="1985-2023.html#holidays">1985 and 2023</a>', html)
 
     def test_compare_form_offers_every_year(self):
@@ -1098,7 +1714,9 @@ class EarlyComparisons(unittest.TestCase):
         grid = pages_life.year_grid([(y, f'<a href="x{y}">{y}</a>') for y in (2013, 2014, 2015)])
         # 2013 starts in the fourth column, so 2015 always starts a row.
         self.assertTrue(grid.startswith('<ul class="yearnav yeargrid"><li class="c4">'))
-        self.assertEqual(pages_life.year_grid([(2015, "a")]), '<ul class="yearnav yeargrid"><li>a</li></ul>')
+        self.assertEqual(
+            pages_life.year_grid([(2015, "a")]), '<ul class="yearnav yeargrid"><li>a</li></ul>'
+        )
 
 
 class MoneyViews(unittest.TestCase):
@@ -1108,6 +1726,7 @@ class MoneyViews(unittest.TestCase):
     def setUpClass(cls):
         import warnings
         from builder.data import build_all
+
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
@@ -1119,6 +1738,7 @@ class MoneyViews(unittest.TestCase):
         from builder import pages_taxmixhist
         from builder.html import Num
         from builder.sources import SOURCES
+
         html = pages_taxmixhist.tax_history_page(self.facts, self.d, Num(self.facts), SOURCES)
         self.assertNotIn("thist.sharechange.income_tax.1948-49", html)
         self.assertIn("thist.sharechange.income_tax.1999-00.2022-23", html)
@@ -1128,14 +1748,29 @@ class MoneyViews(unittest.TestCase):
         from builder import pages_money
         from builder.html import Num
         from builder.sources import SOURCES
-        text = self._text(pages_money.spending_areas_page(self.facts, self.d, Num(self.facts), SOURCES))
-        self.assertIn("Education is left out, because student loans were removed from education from 2011-12", text)
+
+        text = self._text(
+            pages_money.spending_areas_page(self.facts, self.d, Num(self.facts), SOURCES)
+        )
+        self.assertIn(
+            "Education is left out, because student loans were removed from education from 2011-12",
+            text,
+        )
         self.assertIn("Economic affairs is left out", text)
         self.assertNotIn("largest fall was Education", text)
 
     def test_switch_works_without_javascript(self):
         from builder.html import switch
-        out = switch("Show amounts as", [("Cash", "n1", "<p>a</p>"), ("After inflation", "n2", "<p>b</p>"), ("Share of GDP", "n3", "<p>c</p>")], default=1)
+
+        out = switch(
+            "Show amounts as",
+            [
+                ("Cash", "n1", "<p>a</p>"),
+                ("After inflation", "n2", "<p>b</p>"),
+                ("Share of GDP", "n3", "<p>c</p>"),
+            ],
+            default=1,
+        )
         self.assertNotIn("<script", out)
         self.assertEqual(out.count('type="radio"'), 3)
         self.assertEqual(out.count(" checked"), 1)
@@ -1148,14 +1783,24 @@ class MoneyViews(unittest.TestCase):
         f = self.facts
         self.assertEqual(f["agg.deflator.2025-26"].value, 100)
         y = "2010-11"
-        self.assertAlmostEqual(f[f"rec.real.vat.{y}"].value, f[f"rec.vat.{y}"].value * 100 / f[f"agg.deflator.{y}"].value)
-        self.assertAlmostEqual(f[f"agg.real.receipts.{y}"].value, f[f"agg.receipts.{y}"].value * 100 / f[f"agg.deflator.{y}"].value)
+        self.assertAlmostEqual(
+            f[f"rec.real.vat.{y}"].value,
+            f[f"rec.vat.{y}"].value * 100 / f[f"agg.deflator.{y}"].value,
+        )
+        self.assertAlmostEqual(
+            f[f"agg.real.receipts.{y}"].value,
+            f[f"agg.receipts.{y}"].value * 100 / f[f"agg.deflator.{y}"].value,
+        )
 
     def test_tax_shares_of_gdp_match_the_obr_for_all_receipts(self):
         # Our share of GDP for single taxes divides by the same GDP the OBR uses for its receipts share.
         f = self.facts
         for y in ("2008-09", "2025-26"):
-            self.assertAlmostEqual(100 * f[f"agg.receipts.{y}"].value / f[f"agg.gdpcash.{y}"].value, f[f"gdp.receipts.{y}"].value, places=6)
+            self.assertAlmostEqual(
+                100 * f[f"agg.receipts.{y}"].value / f[f"agg.gdpcash.{y}"].value,
+                f[f"gdp.receipts.{y}"].value,
+                places=6,
+            )
 
     def test_no_real_terms_before_the_deflator_starts(self):
         f = self.facts
@@ -1170,7 +1815,9 @@ class MoneyViews(unittest.TestCase):
 
     def test_long_history_gaps_stay_missing(self):
         f = self.facts
-        self.assertIsNone(f["hist.gdp.health.1942-43"].value)  # no figures during the Second World War
+        self.assertIsNone(
+            f["hist.gdp.health.1942-43"].value
+        )  # no figures during the Second World War
         self.assertIsNone(f["hist.gdp.social.1950-51"].value)  # social security starts in 1955-56
         self.assertIsNotNone(f["hist.gdp.defence.1942-43"].value)
 
@@ -1181,13 +1828,17 @@ class International(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         from builder import data_intl
+
         cls.facts = Facts()
         cls.it = data_intl.build(cls.facts)
 
     def test_every_member_shown_or_named(self):
         it = self.it
         self.assertEqual(len(it["members"]), 38)
-        for prefix, year, missing in (("intl.tax", it["tax_year"], it["tax_missing"]), ("intl.spend", it["spend_year"], it["spend_missing"])):
+        for prefix, year, missing in (
+            ("intl.tax", it["tax_year"], it["tax_missing"]),
+            ("intl.spend", it["spend_year"], it["spend_missing"]),
+        ):
             for a in it["members"]:
                 f = self.facts.get(f"{prefix}.{a}.{year}")
                 has = f is not None and f.value is not None
@@ -1195,8 +1846,12 @@ class International(unittest.TestCase):
 
     def test_uk_and_average_have_the_years_used(self):
         it = self.it
-        for fid in (f"intl.tax.GBR.{it['tax_year']}", f"intl.tax.OECD_REP.{it['tax_year']}",
-                    f"intl.spend.GBR.{it['spend_year']}", f"intl.spend.OECD_REP.{it['spend_year']}"):
+        for fid in (
+            f"intl.tax.GBR.{it['tax_year']}",
+            f"intl.tax.OECD_REP.{it['tax_year']}",
+            f"intl.spend.GBR.{it['spend_year']}",
+            f"intl.spend.OECD_REP.{it['spend_year']}",
+        ):
             self.assertIsNotNone(self.facts[fid].value)
         # Shares of GDP for a whole country: above zero, well below 100.
         for f in self.facts.values():

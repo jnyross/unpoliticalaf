@@ -1,4 +1,5 @@
 """Regression tests for the shared modules migrated to strict typing."""
+
 import csv
 import io
 import json
@@ -48,8 +49,7 @@ class Readers(unittest.TestCase):
         xml = (
             '<document xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" '
             'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" '
-            'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0">'
-            + table + "</document>"
+            'xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0">' + table + "</document>"
         )
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -68,10 +68,10 @@ class Readers(unittest.TestCase):
             '<table:table-row table:number-rows-repeated="2">'
             '<table:table-cell office:value-type="float" office:value="12.5"/>'
             '<table:table-cell table:number-columns-repeated="2"/>'
-            '<table:table-cell><text:p>not available</text:p></table:table-cell>'
-            '</table:table-row>'
+            "<table:table-cell><text:p>not available</text:p></table:table-cell>"
+            "</table:table-row>"
             '<table:table-row table:number-rows-repeated="100"><table:table-cell/></table:table-row>'
-            '</table:table>'
+            "</table:table>"
         )
         self.assertEqual(result, {"Figures": [[12.5, None, None, "not available"]] * 2})
 
@@ -80,7 +80,7 @@ class Readers(unittest.TestCase):
             self.read_ods(
                 '<table:table table:name="Figures"><table:table-row>'
                 '<table:table-cell office:value-type="float"/>'
-                '</table:table-row></table:table>'
+                "</table:table-row></table:table>"
             )
         with self.assertRaisesRegex(ValueError, "no name"):
             self.read_ods("<table:table/>")
@@ -96,16 +96,23 @@ class Readers(unittest.TestCase):
             with patch.object(readers, "ROOT", root):
                 metadata, periods = readers.ons_series("ons.csv")
                 self.assertEqual(metadata, {"Title": "Employment rate"})
-                self.assertEqual(periods, {"2024": 75.5, "2025": None, "2025 Q1": None, "2025 JAN": None})
+                self.assertEqual(
+                    periods, {"2024": 75.5, "2025": None, "2025 Q1": None, "2025 JAN": None}
+                )
                 self.assertEqual(readers.csv_rows("rows.csv")[1], {"Year": "2026", "Estimate": ""})
 
     def test_pdf_locator_selects_the_requested_number(self) -> None:
         with patch.object(readers, "pdf_pages", return_value=["Heading\nVisits 1,234.5 -6.2\n"]):
-            self.assertEqual(readers.pdf_number("figures.pdf", "p1 after 'Heading' line 'Visits' number 2"), -6.2)
+            self.assertEqual(
+                readers.pdf_number("figures.pdf", "p1 after 'Heading' line 'Visits' number 2"), -6.2
+            )
 
     def test_pdf_rejects_invalid_or_zero_based_locators(self) -> None:
-        for locator in ("not a locator", "p0 after 'Heading' line 'Visits' number 1",
-                        "p1 after 'Heading' line 'Visits' number 0"):
+        for locator in (
+            "not a locator",
+            "p0 after 'Heading' line 'Visits' number 1",
+            "p1 after 'Heading' line 'Visits' number 0",
+        ):
             with self.subTest(locator=locator), self.assertRaises(ValueError):
                 readers.pdf_number("unused.pdf", locator)
 
@@ -146,17 +153,24 @@ class Downloads(unittest.TestCase):
         downloads.FILES.clear()
 
     def test_chart_json_keeps_numbers_and_missing_values(self) -> None:
-        comment = downloads.chart_data(["Amount"], [["2025", 12.5], ["2026", None], ["2027", "no figure"]])
-        self.assertEqual(downloads.figure_rows(comment),
-                         [["Period", "Amount"], ["2025", 12.5], ["2026", None], ["2027", ""]])
+        comment = downloads.chart_data(
+            ["Amount"], [["2025", 12.5], ["2026", None], ["2027", "no figure"]]
+        )
+        self.assertEqual(
+            downloads.figure_rows(comment),
+            [["Period", "Amount"], ["2025", 12.5], ["2026", None], ["2027", ""]],
+        )
         self.assertEqual(downloads.raw(None), "")
         self.assertEqual(downloads.raw(12.5000000001), "12.5")
         self.assertIsNone(downloads.figure_rows("<p>No data attached</p>"))
 
     def test_malformed_chart_data_is_rejected_at_the_json_boundary(self) -> None:
         payloads: list[object] = [
-            [], {"names": "Amount", "rows": []}, {"names": [1], "rows": []},
-            {"names": [], "rows": None}, {"names": [], "rows": [[]]},
+            [],
+            {"names": "Amount", "rows": []},
+            {"names": [1], "rows": []},
+            {"names": [], "rows": None},
+            {"names": [], "rows": [[]]},
             {"names": [], "rows": [["2025", {}]]},
         ]
         for payload in payloads:
@@ -165,26 +179,30 @@ class Downloads(unittest.TestCase):
 
     def test_chart_comment_does_not_close_early(self) -> None:
         comment = downloads.chart_data(["A--B"], [["2025", 1.0]])
-        self.assertNotIn("--", comment[len("<!--csv:"):-len("-->")])
+        self.assertNotIn("--", comment[len("<!--csv:") : -len("-->")])
         self.assertEqual(downloads.figure_rows(comment), [["Period", "A--B"], ["2025", 1.0]])
 
     def test_download_links_keep_page_order_and_unique_relative_paths(self) -> None:
         table = (
             '<div class="tablewrap"><table><caption>Tax</caption>'
-            '<tr><th>Year</th><th>Amount</th></tr>'
-            '<tr><td>2025</td><td>£12.5</td></tr></table></div>'
+            "<tr><th>Year</th><th>Amount</th></tr>"
+            "<tr><td>2025</td><td>£12.5</td></tr></table></div>"
         )
         html = downloads.add_links(table + table, "life/tax.html")
         self.assertIn('href="../csv/life/tax/tax.csv"', html)
         self.assertIn('href="../csv/life/tax/tax-2.csv"', html)
         exported = downloads.FILES["csv/life/tax/tax.csv"]
         self.assertTrue(exported.startswith("\ufeff"))
-        self.assertEqual(list(csv.reader(io.StringIO(exported.lstrip("\ufeff")))),
-                         [["Year", "Amount"], ["2025", "£12.5"]])
+        self.assertEqual(
+            list(csv.reader(io.StringIO(exported.lstrip("\ufeff")))),
+            [["Year", "Amount"], ["2025", "£12.5"]],
+        )
 
     def test_missing_comparison_label_stays_empty(self) -> None:
-        self.assertEqual(downloads.list_rows("cmp-list", "<li><p>Missing label</p></li>"),
-                         [["Measure", "Change"], ["", ""]])
+        self.assertEqual(
+            downloads.list_rows("cmp-list", "<li><p>Missing label</p></li>"),
+            [["Measure", "Change"], ["", ""]],
+        )
 
 
 class BuildVersion(unittest.TestCase):

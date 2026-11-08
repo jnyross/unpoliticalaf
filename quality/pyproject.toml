@@ -1,5 +1,6 @@
 [tool.deptry]
 requirements_files = ["requirements.txt"]
+known_first_party = ["quality"]
 
 [tool.deptry.per_rule_ignores]
 # coverage is invoked via CLI; these are pinned Radon/coverage support packages,

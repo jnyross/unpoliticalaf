@@ -1,4 +1,5 @@
 """Protect the approved autonomous goal without rewriting historical evidence."""
+
 import unittest
 from pathlib import Path
 
@@ -15,9 +16,15 @@ def active_text(path):
 class GoalGuidance(unittest.TestCase):
     def test_active_entry_points_select_current_goal(self):
         for path in (
-            "AGENTS.md", "START.md", "AUTONOMOUS-BRIEF.md", "README.md",
-            "docs/product-spec.md", "docs/v2-contract.md", "docs/HANDOFF.md",
-            "docs/goal-scorecard.md", "docs/user-test/README.md",
+            "AGENTS.md",
+            "START.md",
+            "AUTONOMOUS-BRIEF.md",
+            "README.md",
+            "docs/product-spec.md",
+            "docs/v2-contract.md",
+            "docs/HANDOFF.md",
+            "docs/goal-scorecard.md",
+            "docs/user-test/README.md",
             "docs/standins/README.md",
         ):
             with self.subTest(path=path):

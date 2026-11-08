@@ -2,6 +2,8 @@
 
 Usage: python -m builder.build
 """
+
+import argparse
 import hashlib
 import json
 import shutil
@@ -9,15 +11,41 @@ import sys
 from collections import Counter
 
 from .data import build_all, YEARS, EARLY_YEARS
-from .html import Num, page
+from .html import Num, page, apply_feature_flags
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
-from . import pages_money_extra, pages_generations, pages_manifesto, version
-from . import pages_options, downloads, pages_money, pages_top_earners, pages_spendhist, pages_welfare, pages_taxmixhist, pages_life, pages_history, pages_early_compare, pages_home, pages_ranges, pages_intl, pages_prod, pages_borrow, pages_debt, pages_defence, pages_leaving, pages_immigration, pages_questions, glossary, trace, uncertainty
+from .logging import get_logger, run_logged
+from . import pages_money_extra, pages_generations, pages_manifesto, version, feature_flags
+from . import (
+    pages_options,
+    downloads,
+    pages_money,
+    pages_top_earners,
+    pages_spendhist,
+    pages_welfare,
+    pages_taxmixhist,
+    pages_life,
+    pages_history,
+    pages_early_compare,
+    pages_home,
+    pages_ranges,
+    pages_intl,
+    pages_prod,
+    pages_borrow,
+    pages_debt,
+    pages_defence,
+    pages_leaving,
+    pages_immigration,
+    pages_questions,
+    glossary,
+    trace,
+    uncertainty,
+)
 
 OUT = ROOT / "site"
+logger = get_logger("build")
 # The product spec requires every page to be under 500,000 bytes. Reading pages
 # (everything except the figure records) have a tighter limit so they stay quick
 # on a phone; a page that grows past it should be split, as the life explorer was.
@@ -25,7 +53,8 @@ MAX_PAGE_BYTES = 400_000
 MAX_READING_PAGE_BYTES = 260_000
 
 
-def render():
+def render(settings=None):
+    settings = feature_flags.resolve() if settings is None else feature_flags.snapshot(settings)
     sources = all_sources()
     problems = verify_hashes(sources)
     if problems:
@@ -64,7 +93,9 @@ def render():
     pages["high-earners.html"] = pages_top_earners.high_earners_page(facts, d, num, sources)
     pages["household-tax.html"] = pages_money.household_tax_page(facts, d, num, sources, rates)
     pages["questions.html"] = pages_questions.questions_page()
-    pages["self-employed-tax.html"] = pages_money.self_employed_tax_page(facts, d, num, sources, rates)
+    pages["self-employed-tax.html"] = pages_money.self_employed_tax_page(
+        facts, d, num, sources, rates
+    )
     pages["index.html"] = pages_home.home_page(facts, d, num, sources)
     pages["life/index.html"] = pages_life.life_index(facts, d, num, sources)
     for key, _, _ in pages_life.TOPICS:
@@ -80,16 +111,28 @@ def render():
     for a in YEARS:
         for b in YEARS:
             if a < b:
-                pages[f"life/compare/{a}-{b}.html"] = pages_life.compare_page(facts, d, num, sources, a, b)
+                pages[f"life/compare/{a}-{b}.html"] = pages_life.compare_page(
+                    facts, d, num, sources, a, b
+                )
     for a, b in pages_early_compare.pairs():
-        pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(facts, d, num, sources, a, b)
+        pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(
+            facts, d, num, sources, a, b
+        )
     pages["life/compare/index.html"] = pages_life.compare_index(sources)
     for a, b in pages_ranges.span_pairs():
-        pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(facts, d, num, sources, a, b)
+        pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(
+            facts, d, num, sources, a, b
+        )
     pages["life/compare/spans/index.html"] = pages_ranges.span_index(facts)
     # The old single life page moved to life/index.html; keep the address working.
-    moved = page("life.html", "Everyday life, year by year", '<h1>This page has moved</h1><p><a href="life/index.html">Go to Everyday life, year by year</a>.</p>')
-    pages["life.html"] = moved.replace("<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1)
+    moved = page(
+        "life.html",
+        "Everyday life, year by year",
+        '<h1>This page has moved</h1><p><a href="life/index.html">Go to Everyday life, year by year</a>.</p>',
+    )
+    pages["life.html"] = moved.replace(
+        "<head>", '<head>\n<meta http-equiv="refresh" content="0; url=life/index.html">', 1
+    )
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
     pages["sources.html"] = pages_home.sources_page(sources, used)
@@ -99,13 +142,13 @@ def render():
     pages.update(trace.figure_pages(facts, sources, num.used))
     pages = {path: glossary.link_terms(html, path) for path, html in pages.items()}
     pages = {path: trace.add_trace(html, path, facts, sources) for path, html in pages.items()}
-    return facts, sources, pages, num
+    return facts, sources, apply_feature_flags(pages, settings), num
 
 
 BUILD_RECORD = "build.json"
 
 
-def write_build_record():
+def write_build_record(settings):
     """Write site/build.json: the commit built and a SHA-256 for every file served.
 
     scripts/check_live.py compares this with the live site to show whether the
@@ -116,12 +159,23 @@ def write_build_record():
         rel = p.relative_to(OUT).as_posix()
         if p.is_file() and rel != BUILD_RECORD:
             files[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-    record = {"commit": version.commit(), "files": files}
+    record = {
+        "commit": version.commit(),
+        "feature_flags": dict(feature_flags.snapshot(settings)),
+        "files": files,
+    }
     (OUT / BUILD_RECORD).write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
 
 
-def main():
-    facts, sources, pages, num = render()
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--production", action="store_true", help="use the reviewed production flag configuration"
+    )
+    args = parser.parse_args(argv)
+    settings = feature_flags.production() if args.production else feature_flags.resolve()
+    logger.info("build.started")
+    facts, sources, pages, num = render(settings)
     if OUT.exists():
         shutil.rmtree(OUT)
     for path, html in pages.items():
@@ -137,14 +191,42 @@ def main():
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text, encoding="utf-8", newline="")
     (OUT / "data").mkdir(exist_ok=True)
-    (OUT / "data/facts.json").write_text(json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1), encoding="utf-8")
+    (OUT / "data/facts.json").write_text(
+        json.dumps({"sources": sources, "facts": facts.to_json()}, ensure_ascii=False, indent=1),
+        encoding="utf-8",
+    )
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
-    write_build_record()
-    print(f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/")
+    write_build_record(settings)
+    print(
+        f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/"
+    )
+    logger.info(
+        "build.completed",
+        extra={
+            "context": {
+                "pages": len(pages),
+                "csv_downloads": len(downloads.FILES),
+                "facts": len(facts),
+                "shown": len(num.used),
+                "output": str(OUT.relative_to(ROOT)),
+            }
+        },
+    )
     if num.absent:
-        print(f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}")
+        print(
+            f"{len(num.absent)} requested figures do not exist and are shown as 'not available', e.g. {sorted(num.absent)[:8]}"
+        )
+        logger.warning(
+            "build.figures_unavailable",
+            extra={
+                "context": {
+                    "count": len(num.absent),
+                    "examples": sorted(num.absent)[:8],
+                }
+            },
+        )
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run_logged(main, logger))

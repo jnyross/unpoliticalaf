@@ -4,6 +4,9 @@ Follow [AGENTS.md](AGENTS.md), including its naming rules and stable public IDs.
 Agent installs and project execution belong in credential-free Boat, not on the
 host. No secret, `.env`, database or hosting account is needed.
 
+Use the checked-in [verification skill](.claude/skills/verify-static-site/SKILL.md)
+for focused/full checks, source diagnosis, UI checks and exact-candidate PR evidence.
+
 ## Test naming and discovery
 
 Name tests `test_<subject>.py` and methods `test_<behaviour>`. Keep helpers out
@@ -19,8 +22,20 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
   builds the site, checks source data/pages and runs all tests. Build first when
   running `make test` separately, because some tests read `site/`.
 - `make setup-dev` adds browser, lint, typing and dashboard dependencies.
-- `make quality` runs Ruff, forced Python compilation, strict core typing,
-  dependency checks, guidance references and the existing quality dashboard.
+  It also installs the pinned full-verification hook when `.git` is present;
+  Git-free exports skip hook installation. Agents must use disposable Boat
+  Git metadata, never install or exercise this hook in the host checkout.
+  `make hooks` reinstalls it after recreating `.venv`.
+- The [dev container](README.md#dev-container) runs `make setup-dev-tools` instead,
+  installing the same packages without altering outer hooks. Its exported `VENV`
+  points outside the workspace; Makefile checks use it automatically. Use
+  `"$VENV/bin/python"` for direct commands there, not the outer `.venv/bin/python`.
+- With Node 22, `npm ci --ignore-scripts` installs the locked developer tools.
+  Run `npm run test:duplicates` for the Node regression suite, separately from pytest.
+- `make quality` runs Ruff, Black's non-mutating check, forced Python compilation,
+  strict core typing, dependency checks, complexity, duplication, seeded stability,
+  guidance references and the existing quality dashboard. It requires the locked
+  Node tools as well as `make setup-dev`.
   `make lint`, `make typecheck` and `make check-deps` also run separately.
 - `make setup-typing && make typecheck` installs just production and typing
   packages. The strict boundary is listed in `mypy.ini`; extend it without
@@ -29,6 +44,44 @@ of that filename pattern. `make test` uses pytest to collect both `tests/`
 - `make a11y` additionally needs Chromium, installed with
   `.venv/bin/python -m playwright install --with-deps chromium`, and a built site.
 
+## Lint and formatting
+
+Ruff 0.14.3 checks syntax/Pyflakes; Black 25.9.0 owns formatting. Do not use
+`ruff format` as a second policy. Run `make format` to write formatting changes,
+then `make format-check` to check without rewriting files. Black targets Python
+3.10 with 100-character lines in `pyproject.toml`; Ruff uses `ruff.toml`.
+Both commands explicitly select all Python files recursively in `builder/`,
+`scripts/`, `tests/` and `quality/`, including newly added nested modules. Nested
+tool configurations do not override those root policies. Retained official
+data, `reference/` and generated `site/` are outside the selection. Formatting
+must preserve stable fact/source IDs, public URLs/fragments and upstream names.
+The existing CI quality job runs both checks, not a competing formatting job.
+
+## Duplicate code
+
+`make duplication` and `npm run check:duplicates` enforce the same jscpd 4.0.5
+gate. The original Python selection is `builder/`, `scripts/`, `tests/`, recursively,
+not generated output, retained publisher data or the separate dashboard.
+Keep `.jscpd.json`'s five-line/50-token weak-mode rules and 0.5% line budget.
+The wrapper rejects incomplete scans/tool errors and checks the raw line ratio;
+console matches and `reports/duplication/jscpd-report.json` identify the population.
+Do not add suppressions, enlarge the denominator with data, raise the budget or
+merge deliberately independent fiscal readers/checkers to get a pass.
+See [README.md](README.md#duplicate-code) for the exact denominator and file rules.
+
 Use `.venv/bin/python` for direct commands. CI runs these same interfaces.
 Submit through independently reviewed PRs with exact-candidate Boat/CI checks;
 green tooling is not independent fiscal or accessibility approval.
+
+## Commit checks and recovery
+
+The one checked-in hook runs full `make verify` for every commit, even for
+documentation-only and deletion-only changes. It never replaces verification
+with filename-selected lint or formatting. In disposable Boat Git metadata,
+`.venv/bin/python -m pre_commit run --all-files --verbose` runs it manually.
+`make quality` and browser accessibility remain separate gates.
+
+Keep required new files staged. Unstaged tracked edits are temporarily stashed
+and restored, so an unstaged repair cannot fix a broken staged change. Repair
+the failure, inspect automatic edits if any, restage the intended changes and
+rerun normally. Never use hook bypasses to turn a failure into a commit.

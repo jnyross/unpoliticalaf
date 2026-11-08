@@ -1,4 +1,5 @@
 """Person-analysis household means cannot establish once-per-household tax totals."""
+
 import csv
 import hashlib
 import io
@@ -22,9 +23,7 @@ class HouseholdTaxShares(unittest.TestCase):
         cls.facts, _, cls.pages, _ = render()
 
     def test_person_ranked_means_are_not_household_totals(self):
-        self.assertEqual(
-            [fid for fid in self.facts if fid.startswith(WITHDRAWN_PREFIXES)], []
-        )
+        self.assertEqual([fid for fid in self.facts if fid.startswith(WITHDRAWN_PREFIXES)], [])
         for fact in self.facts.values():
             self.assertFalse(any(i.startswith(WITHDRAWN_PREFIXES) for i in fact.inputs))
 
@@ -53,23 +52,33 @@ class HouseholdTaxShares(unittest.TestCase):
         self.assertIn("does not establish the richest fifth", page)
         self.assertIn('href="corrections.html"', page)
         self.assertIn('href="figures/etb.html', page)
-        self.assertIn("<summary>Show average income and taxes for all five fifths and everyone</summary>", page)
-        self.assertLess(page.index('<ul class="bars">'), page.index('<strong>No supported total share.</strong>'))
+        self.assertIn(
+            "<summary>Show average income and taxes for all five fifths and everyone</summary>",
+            page,
+        )
         self.assertLess(
-            page.index('<strong>No supported total share.</strong>'),
-            page.index('<details class="more"><summary><span>More on All taxes, by household income'),
+            page.index('<ul class="bars">'),
+            page.index("<strong>No supported total share.</strong>"),
+        )
+        self.assertLess(
+            page.index("<strong>No supported total share.</strong>"),
+            page.index(
+                '<details class="more"><summary><span>More on All taxes, by household income'
+            ),
         )
 
     def test_six_supported_rows_match_the_adjacent_csv(self):
         page = self.pages["who-pays.html"]
         hrefs = re.findall(r'href="(csv/who-pays/[^"]+)"', page)
         tables = [
-            list(csv.reader(io.StringIO(downloads.FILES[href].lstrip("\ufeff"))))
-            for href in hrefs
+            list(csv.reader(io.StringIO(downloads.FILES[href].lstrip("\ufeff")))) for href in hrefs
         ]
-        rows = next(rows for rows in tables if rows[0] == [
-            "Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"
-        ])
+        rows = next(
+            rows
+            for rows in tables
+            if rows[0]
+            == ["Fifth of people", "Gross income", "Direct taxes", "Indirect taxes", "All taxes"]
+        )
         self.assertEqual(len(rows), 7)
         for row, group in zip(rows[1:], ("q1", "q2", "q3", "q4", "q5", "all")):
             for shown, measure in zip(row[1:], ("gross", "direct", "indirect", "alltax")):
@@ -96,6 +105,29 @@ class HouseholdTaxShares(unittest.TestCase):
 
 
 class Table2aSourcePopulation(unittest.TestCase):
+    def print_source_notes(self, wb):
+        for name in wb.sheetnames:
+            if "note" in name.lower():
+                for row in wb[name].iter_rows():
+                    line = " ".join(str(c.value) for c in row if c.value is not None)
+                    if any(word in line.lower() for word in ("individual", "rank", "weight")):
+                        print(name, row[0].coordinate, line)
+
+    def assert_fact_locators_match_source(self, ws):
+        facts = Facts()
+        who_pays(facts)
+        for col, group in zip(range(3, 9), ("q1", "q2", "q3", "q4", "q5", "all")):
+            for row, measure in (
+                (8, "people"),
+                (9, "households"),
+                (48, "direct"),
+                (70, "indirect"),
+            ):
+                fact = facts[f"etb.2a.{measure}.{group}"]
+                self.assertEqual(fact.value, ws.cell(row, col).value)
+                self.assertEqual(fact.locator, f"Table 2a!{ws.cell(row, col).coordinate}")
+                self.assertEqual(fact.period, "2023/24")
+
     def test_independent_six_column_reopening(self):
         path = ROOT / "data/payers/raw/ons-etb-fye2024.xlsx"
         self.assertEqual(
@@ -107,12 +139,7 @@ class Table2aSourcePopulation(unittest.TestCase):
             ws = wb["Table 2a"]
             for row in (1, 3, 4, 8, 9, 48, 70):
                 print("Table 2a", row, [ws.cell(row, col).value for col in range(1, 9)])
-            for name in wb.sheetnames:
-                if "note" in name.lower():
-                    for row in wb[name].iter_rows():
-                        line = " ".join(str(c.value) for c in row if c.value is not None)
-                        if any(word in line.lower() for word in ("individual", "rank", "weight")):
-                            print(name, row[0].coordinate, line)
+            self.print_source_notes(wb)
             expected = {
                 8: [13405, 13449, 13427, 13426, 13429, 67135],
                 9: [5875, 5902, 5559, 5298, 5806, 28440],
@@ -131,15 +158,11 @@ class Table2aSourcePopulation(unittest.TestCase):
             )
             self.assertIn("ranking individuals by equivalised household disposable income", note)
             bulletin = (ROOT / "data/fetched/explain/ons-etb-latest.html").read_text()
-            self.assertIn("The mean measure of income divides the total income of individuals by the number of individuals.", bulletin)
-            facts = Facts()
-            who_pays(facts)
-            for col, group in zip(range(3, 9), ("q1", "q2", "q3", "q4", "q5", "all")):
-                for row, measure in ((8, "people"), (9, "households"), (48, "direct"), (70, "indirect")):
-                    fact = facts[f"etb.2a.{measure}.{group}"]
-                    self.assertEqual(fact.value, ws.cell(row, col).value)
-                    self.assertEqual(fact.locator, f"Table 2a!{ws.cell(row, col).coordinate}")
-                    self.assertEqual(fact.period, "2023/24")
+            self.assertIn(
+                "The mean measure of income divides the total income of individuals by the number of individuals.",
+                bulletin,
+            )
+            self.assert_fact_locators_match_source(ws)
             self.assertEqual(
                 [ws.cell(48, col).value for col in range(3, 9)],
                 [3696, 6308, 10482, 17012, 41215, 15743],
@@ -157,9 +180,16 @@ class Table2aSourcePopulation(unittest.TestCase):
                 household_weighted = sum(m * h for m, h in zip(means, households)) / sum(households)
                 people = expected[8][:5]
                 person_weighted = sum(m * p for m, p in zip(means, people)) / sum(people)
-                print("Row", row, "published All individuals", expected[row][5],
-                      "household-weighted (unsupported)", household_weighted,
-                      "person-weighted", person_weighted)
+                print(
+                    "Row",
+                    row,
+                    "published All individuals",
+                    expected[row][5],
+                    "household-weighted (unsupported)",
+                    household_weighted,
+                    "person-weighted",
+                    person_weighted,
+                )
                 # Pound-rounded means and thousand-rounded population counts
                 # cannot reproduce an all-population mean to the penny.
                 self.assertAlmostEqual(person_weighted, expected[row][5], delta=1.5)

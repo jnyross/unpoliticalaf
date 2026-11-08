@@ -49,7 +49,9 @@ def turn_back(vals, pts, way, size):
     last = pts[-1]
     best = None
     for n, k in enumerate(pts[:-1]):
-        if (vals[k] - vals[last]) * way >= size - 1e-9 and all((vals[k] - vals[j]) * way >= 0 for j in pts[n + 1:]):
+        if (vals[k] - vals[last]) * way >= size - 1e-9 and all(
+            (vals[k] - vals[j]) * way >= 0 for j in pts[n + 1 :]
+        ):
             best = n
     if best is None:
         return None
@@ -119,13 +121,24 @@ def shape(vals, a=0, b=None):
     hi = max(pts, key=lambda i: (vals[i], -i))
     lo = min(pts, key=lambda i: (vals[i], i))
     span = vals[hi] - vals[lo]
-    out = {"f": f, "l": l, "hi": hi, "lo": lo, "most": False, "flat": True, "net": vl - vf, "legs": []}
+    out = {
+        "f": f,
+        "l": l,
+        "hi": hi,
+        "lo": lo,
+        "most": False,
+        "flat": True,
+        "net": vl - vf,
+        "legs": [],
+    }
     if span <= 0:
         out["kind"] = "same"
         return out
     net = vl - vf
     level = max(abs(vf), abs(vl), abs(vals[hi]))
-    if span < 0.02 * level:  # every year within 2% of each other: no rise, fall or turn worth naming
+    if (
+        span < 0.02 * level
+    ):  # every year within 2% of each other: no rise, fall or turn worth naming
         out["kind"] = "flat"
         return out
     flat = abs(net) <= FLAT * span or abs(net) <= 0.01 * max(abs(vf), abs(vl))
@@ -221,11 +234,20 @@ def phrase(labels, vals, a=0, b=None, short=False, upto=False):
     if w < 0 and not upto and low_i < e0 and vals[e0] - vals[low_i] >= FOLD_RISE * span:
         # the line fell to a low and has risen a little since: say so, rather than "fell back part of the way"
         last = f"then fell until {labels[low_i]}, then rose again by {labels[e0]}"
-    elif max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1)) < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9:
+    elif (
+        max((vals[i] - vals[s0]) * w for i in measured(vals, s0, e0 + 1))
+        < TURN * (vals[s["hi"]] - vals[s["lo"]]) - 1e-9
+    ):
         # a smaller turn back at the end (see TAIL): say when, not how far
-        last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" between {labels[s0]} and {labels[e0]}"
+        last += (
+            f" in {labels[e0]}"
+            if len(measured(vals, s0, e0 + 1)) == 2
+            else f" between {labels[s0]} and {labels[e0]}"
+        )
     elif upto:
-        last += f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" until {labels[e0]}"
+        last += (
+            f" in {labels[e0]}" if len(measured(vals, s0, e0 + 1)) == 2 else f" until {labels[e0]}"
+        )
     elif not short:
         last += _back(vals, labels, lg, s)
     return ", ".join(words + [last])
@@ -298,7 +320,9 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
         if run is not None:
             # "in most years" would pass over this stretch, so name it instead
             a0, b0 = run
-            text += f", with little change from {labels[a0]} ({show(a0)}) to {labels[b0]} ({show(b0)})"
+            text += (
+                f", with little change from {labels[a0]} ({show(a0)}) to {labels[b0]} ({show(b0)})"
+            )
         elif s["most"]:
             text += f", {ing} in most years"
         text += "."
@@ -315,13 +339,17 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
                     parts.append(f"then {verb} to {show(e0)} in {labels[e0]}")
                 else:
                     # the line turned inside its last move and has moved back since: say so
-                    parts.append(f"then {verb} to {_turn_mark(vals, t, w, lo, hi)}{show(t)} in {labels[t]}, "
-                                 f"then {'rose' if w < 0 else 'fell'} again to {show(e0)} in {labels[e0]}")
+                    parts.append(
+                        f"then {verb} to {_turn_mark(vals, t, w, lo, hi)}{show(t)} in {labels[t]}, "
+                        f"then {'rose' if w < 0 else 'fell'} again to {show(e0)} in {labels[e0]}"
+                    )
             else:
                 # "a high" only when no later point in the stretch passes it, so an earlier, lower peak is not read as the high
                 later = [vals[i] for i in measured(vals, e0 + 1, b)]
                 if not any((v - vals[e0]) * w > 0 for v in later):
-                    parts.append(f"{verb} to a {'high' if w > 0 else 'low'} of {show(e0)} in {labels[e0]}")
+                    parts.append(
+                        f"{verb} to a {'high' if w > 0 else 'low'} of {show(e0)} in {labels[e0]}"
+                    )
                 else:
                     parts.append(f"{verb} to {show(e0)} in {labels[e0]}")
                 said.add(e0)
@@ -343,12 +371,16 @@ def sentence(labels, vals, show, a=0, b=None, extremes=True):
             # name that turn, as the title does, rather than skip it.
             t = _inner_turn(vals, e0, l, lg[1][2], vals[hi] - vals[lo])
             if t is None:
-                text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
-                        f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}.")
+                text = (
+                    f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
+                    f"{hold}then {'fell' if w0 > 0 else 'rose'} to {show(l)} in {labels[l]}."
+                )
             else:
-                text = (f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
-                        f"{hold}then {'fell' if w0 > 0 else 'rose'} to {_turn_mark(vals, t, lg[1][2], lo, hi)}{show(t)} in {labels[t]}, "
-                        f"then {'rose' if w0 > 0 else 'fell'} again to {show(l)} in {labels[l]}.")
+                text = (
+                    f"{'Rose' if w0 > 0 else 'Fell'} from {show(f)} in {labels[f]} to {mark}{show(e0)} in {labels[e0]}, "
+                    f"{hold}then {'fell' if w0 > 0 else 'rose'} to {_turn_mark(vals, t, lg[1][2], lo, hi)}{show(t)} in {labels[t]}, "
+                    f"then {'rose' if w0 > 0 else 'fell'} again to {show(l)} in {labels[l]}."
+                )
     if extremes and len(pts) >= 3:
         extra = []
         if hi not in said:
@@ -385,12 +417,18 @@ def overview(labels, series, a, b, show, group_breaks=None, pct=False):
     if f is None or f == l:
         return ""
     group_breaks = group_breaks or {}
-    crossed = {si: max(i for i, _ in br if f < i <= l) for si, br in group_breaks.items() if any(f < i <= l for i, _ in br)}
+    crossed = {
+        si: max(i for i, _ in br if f < i <= l)
+        for si, br in group_breaks.items()
+        if any(f < i <= l for i, _ in br)
+    }
+
     def shown(si, i):
         # The figure as the reader sees it, so a change that rounds away is not called a rise or fall.
         text = re.sub(r"<[^>]+>", "", show(si, i)).replace(",", "").replace("£", "")
         m = re.search(r"-?\d+(?:\.\d+)?", text)
         return float(m.group(0)) if m else series[si][1][i]
+
     def raw_change(si):
         """Unrounded change over the stretch: a per cent change when pct, else the difference of the figures shown."""
         vals = series[si][1]
@@ -398,8 +436,14 @@ def overview(labels, series, a, b, show, group_breaks=None, pct=False):
             return 100 * (vals[l] / vals[f] - 1)
         return shown(si, l) - shown(si, f)
 
-    moved = [(round(raw_change(si), 0 if pct else 6), si) for si, (_, vals) in enumerate(series)
-             if si not in crossed and vals[f] is not None and vals[l] is not None and (not pct or vals[f] != 0)]
+    moved = [
+        (round(raw_change(si), 0 if pct else 6), si)
+        for si, (_, vals) in enumerate(series)
+        if si not in crossed
+        and vals[f] is not None
+        and vals[l] is not None
+        and (not pct or vals[f] != 0)
+    ]
     if len(moved) < 2:
         return ""
     n = len(moved)
@@ -411,10 +455,19 @@ def overview(labels, series, a, b, show, group_breaks=None, pct=False):
         if len(xs) == n:
             return f"all {n} shown were {word}"
         return f"{len(xs)} of the {n} shown {'was' if len(xs) == 1 else 'were'} {word}"
-    parts = [tally(xs, w) for xs, w in ((up, "higher"), (down, "lower"), (same, "the same when rounded")) if xs]
+
+    parts = [
+        tally(xs, w)
+        for xs, w in ((up, "higher"), (down, "lower"), (same, "the same when rounded"))
+        if xs
+    ]
     if not up and not down:
         return f"Comparing {labels[f]} with {labels[l]}, every group was the same."
-    text = f"Comparing {labels[f]} with {labels[l]}, " + (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0]) + "."
+    text = (
+        f"Comparing {labels[f]} with {labels[l]}, "
+        + (", ".join(parts[:-1]) + " and " + parts[-1] if len(parts) > 1 else parts[0])
+        + "."
+    )
 
     def said(ms, word):
         # Ties on the figures shown are named together, not as one "largest".
@@ -423,14 +476,23 @@ def overview(labels, series, a, b, show, group_breaks=None, pct=False):
         # Within a tie on the rounded figures, the unrounded data still have an order: put it first and say so.
         raw = {si: raw_change(si) for _, si in tied}
         tied.sort(key=lambda m: -abs(raw[m[1]]))
-        names = [f"{series[si][0]} ({show(si, f)} to {show(si, l)}{f', {m:+.0f}%' if pct else ''})" for m, si in tied]
+        names = [
+            f"{series[si][0]} ({show(si, f)} to {show(si, l)}{f', {m:+.0f}%' if pct else ''})"
+            for m, si in tied
+        ]
         if len(names) == 1:
             return f"the largest {word} was {names[0]}"
-        text = f"the largest {word}s, equal on the figures shown, were " + ", ".join(names[:-1]) + " and " + names[-1]
+        text = (
+            f"the largest {word}s, equal on the figures shown, were "
+            + ", ".join(names[:-1])
+            + " and "
+            + names[-1]
+        )
         lead = [abs(raw[si]) for _, si in tied]
         if lead[0] > lead[1] + 1e-9:
             text += f", and before rounding {series[tied[0][1]][0]}'s {word} was the larger"
         return text
+
     if up and down:
         rise, fall = said(up, "rise"), said(down, "fall")
         text += f" {rise[:1].upper() + rise[1:]}; {fall}."
@@ -444,8 +506,14 @@ def overview(labels, series, a, b, show, group_breaks=None, pct=False):
         reason = next(t for k, t in group_breaks[si] if k == i)
         vals = series[si][1]
         since = next((k for k in range(i, l + 1) if vals[k] is not None), None)
-        text += f" {series[si][0]} is left out, because {reason}; it is compared only from {labels[i]}"
-        text += f": {show(si, since)} to {show(si, l)}." if since is not None and since < l and vals[l] is not None else "."
+        text += (
+            f" {series[si][0]} is left out, because {reason}; it is compared only from {labels[i]}"
+        )
+        text += (
+            f": {show(si, since)} to {show(si, l)}."
+            if since is not None and since < l and vals[l] is not None
+            else "."
+        )
     return text
 
 
@@ -460,6 +528,7 @@ def lower_first(text):
 # The chart writes these beside its heading, so builder/check.py can confirm the
 # heading names every big rise and fall of those lines.
 
+
 def describes(rule, lines):
     rule.lines = lines
     return rule
@@ -468,6 +537,7 @@ def describes(rule, lines):
 def lines_of(rule, stretches):
     """The (series index, a, b) runs a title rule describes, or [] for other rules."""
     return list(getattr(rule, "lines", lambda st: [])(stretches))
+
 
 def _stretch(stretches, which):
     if which == "last":
@@ -543,6 +613,7 @@ def trend(subject, si=0, which="last", after="", dips=False):
     after: words added at the end, such as why later years are not compared.
     dips: also name the smaller moves against the big ones (see smaller_moves_text). Give
     the printed unit (1, or 0.1) so only moves that show in the table are named."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         vals = series[si][1]
@@ -550,11 +621,13 @@ def trend(subject, si=0, which="last", after="", dips=False):
         p = phrase(labels, vals, a, b, upto=upto)
         extra = smaller_moves_text(labels, vals, a, b, unit=_unit(dips)) if dips else ""
         return f"{subject} {p}{extra}{after}" if p else ""
+
     return describes(rule, lambda st: [(si, *_stretch(st, which))])
 
 
 def gap(first_name, second_name, si=0, sj=1, which="all"):
     """Compares two lines year by year: 'X was higher than Y in every year from A to B'."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         x, y = series[si][1], series[sj][1]
@@ -568,6 +641,7 @@ def gap(first_name, second_name, si=0, sj=1, which="all"):
         if not above:
             return f"{first_name} was lower than {second_name} in every year {span}"
         return f"{first_name} was higher than {second_name} in {len(above)} of the {len(shared)} years {span}"
+
     return rule
 
 
@@ -578,6 +652,7 @@ def leader(template, which="all", skip=(), close=None, close_template=None):
     close: when the top line leads the next by less than this in the latest year, use
     close_template instead (it also takes {second} and {lsecond}) and name both, so a
     gap within survey noise is not called "the largest"."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         shown = [(si, v) for si, (nm, v) in enumerate(series) if nm not in skip]
@@ -590,15 +665,25 @@ def leader(template, which="all", skip=(), close=None, close_template=None):
             return ""
         last_i, last_top = tops[-1]
         same = len(tops) > 1 and all(t == last_top for _, t in tops)
-        span = f"in every year from {labels[tops[0][0]]} to {labels[last_i]}" if same else f"in {labels[last_i]}"
+        span = (
+            f"in every year from {labels[tops[0][0]]} to {labels[last_i]}"
+            if same
+            else f"in {labels[last_i]}"
+        )
         name = series[last_top][0]
         if close is not None:
             ranked = sorted(((series[si][1][last_i], si) for si, _ in shown), reverse=True)
             if ranked[0][0] - ranked[1][0] < close:
                 second = series[ranked[1][1]][0]
-                return close_template.format(name=name, lname=lower_first(name), second=second,
-                                             lsecond=lower_first(second), span=f"in {labels[last_i]}")
+                return close_template.format(
+                    name=name,
+                    lname=lower_first(name),
+                    second=second,
+                    lsecond=lower_first(second),
+                    span=f"in {labels[last_i]}",
+                )
         return template.format(name=name, lname=lower_first(name), span=span)
+
     return rule
 
 
@@ -606,6 +691,7 @@ def moves(names=None, which="last"):
     """'From A to B, the share owning outright rose most and the share with a mortgage
     fell most': the groups whose figure rose and fell most between the first and last
     year of a stretch. names maps a group's name to the words used for it."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         f, l = _common(series, a, b, True), _common(series, a, b, False)
@@ -624,11 +710,13 @@ def moves(names=None, which="last"):
         if not parts:
             return ""
         return f"From {labels[f]} to {labels[l]}, " + " and ".join(parts)
+
     return rule
 
 
 def count(subject, noun, which="last"):
     """'{subject} was higher in 2025 than in 2008 in 9 of the 12 {noun}'."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         f, l = _common(series, a, b, True), _common(series, a, b, False)
@@ -647,6 +735,7 @@ def count(subject, noun, which="last"):
         if up >= down:
             return f"{subject} was higher {when} in {up} of the {len(ch)} {noun}"
         return f"{subject} was lower {when} in {down} of the {len(ch)} {noun}"
+
     return rule
 
 
@@ -654,6 +743,7 @@ def narrowing(what, unit_fmt, si=0, sj=1, which="all"):
     """'The gap between X and Y narrowed from 12 to 6 points between A and B': the
     difference between two lines in their first and last shared years.
     unit_fmt formats a difference, for example lambda d: f"{d:.1f} points"."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         x, y = series[si][1], series[sj][1]
@@ -668,6 +758,7 @@ def narrowing(what, unit_fmt, si=0, sj=1, which="all"):
             return f"{what} was about the same in {labels[f]} and {labels[l]}, at {unit_fmt(g2)}"
         word = "narrowed" if g2 < g1 else "widened"
         return f"{what} {word} from {unit_fmt(g1)} in {labels[f]} to {unit_fmt(g2)} in {labels[l]}"
+
     return rule
 
 
@@ -676,11 +767,14 @@ def pair(subject_a, subject_b, si=0, sj=1, which="all", together=None, dips=Fals
     lines' movements over the same years, with the years named once. together: a
     template with {phrase}, used when both lines moved the same way over the same years.
     dips: also name line si's smaller moves against its big ones, after the sentence."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         if dips:
             text = rule_base(labels, series, stretches)
-            extra = smaller_moves_text(labels, series[si][1], a, b, subject=subject_a.lower(), unit=_unit(dips))
+            extra = smaller_moves_text(
+                labels, series[si][1], a, b, subject=subject_a.lower(), unit=_unit(dips)
+            )
             return f"{text}{extra}" if text and extra else text
         return rule_base(labels, series, stretches)
 
@@ -698,12 +792,14 @@ def pair(subject_a, subject_b, si=0, sj=1, which="all", together=None, dips=Fals
             pb = pb[: -len(tail)]
         joiner = "; " if pa.split()[0] == pb.split()[0] else ", while "
         return f"{subject_a} {pa}{joiner}{subject_b} {pb}"
+
     return describes(rule, lambda st: [(si, *_stretch(st, which)), (sj, *_stretch(st, which))])
 
 
 def within(template, fmt_value, si=0, which="all"):
     """'Income Tax raised between 22% and 29% of receipts in every year from A to B':
     the range one line stayed within. template takes {lo}, {hi}, {first}, {last}."""
+
     def rule(labels, series, stretches):
         a, b = _stretch(stretches, which)
         vals = series[si][1]
@@ -711,15 +807,20 @@ def within(template, fmt_value, si=0, which="all"):
         if not pts:
             return ""
         lo, hi = min(vals[i] for i in pts), max(vals[i] for i in pts)
-        return template.format(lo=fmt_value(lo), hi=fmt_value(hi), first=labels[pts[0]], last=labels[pts[-1]])
+        return template.format(
+            lo=fmt_value(lo), hi=fmt_value(hi), first=labels[pts[0]], last=labels[pts[-1]]
+        )
+
     return rule
 
 
 def both(*rules, sep="; "):
     """Joins two findings into one title. The later ones should start in lower case."""
+
     def rule(labels, series, stretches):
         parts = [r(labels, series, stretches) for r in rules]
         return sep.join(p for p in parts if p)
+
     return describes(rule, lambda st: [x for r in rules for x in lines_of(r, st)])
 
 
@@ -747,6 +848,8 @@ def place(points, y, group=None):
     if higher == 0:
         if level == n:
             return f", level with every other year {which}"
-        return f", not higher than in any of the other {n} years {which}, level with {level} of them"
+        return (
+            f", not higher than in any of the other {n} years {which}, level with {level} of them"
+        )
     tie = "" if level == 0 else f", level with {level} other year{'s' if level != 1 else ''}"
     return f", higher than in {higher} of the other {n} years {which}{tie}"

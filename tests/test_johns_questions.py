@@ -1,4 +1,5 @@
 """Checks of John's questions in docs/johns-questions/. Run with: make test"""
+
 import copy
 import importlib.util
 import sys
@@ -7,7 +8,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-spec = importlib.util.spec_from_file_location("johns_questions", ROOT / "scripts" / "johns_questions.py")
+spec = importlib.util.spec_from_file_location(
+    "johns_questions", ROOT / "scripts" / "johns_questions.py"
+)
 jq = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(jq)
 

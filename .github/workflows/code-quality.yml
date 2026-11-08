@@ -24,13 +24,19 @@ jobs:
       - name: Verify and measure Python quality
         run: make -f quality/Makefile metrics
       - name: Publish metrics in the run summary
-        if: ${{ !cancelled() && hashFiles('quality-reports/summary.md') != '' }}
-        run: cat quality-reports/summary.md >> "$GITHUB_STEP_SUMMARY"
+        if: always()
+        run: |
+          for summary in quality-reports/invocation-*/summary.md; do
+            if [ -f "$summary" ]; then
+              cat "$summary" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
       - name: Retain dashboard and machine-readable reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: code-quality-metrics
           path: quality-reports/
+          include-hidden-files: true
           retention-days: 30
           if-no-files-found: error

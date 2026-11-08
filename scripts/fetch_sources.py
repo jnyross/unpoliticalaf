@@ -29,8 +29,15 @@ else:
     from source_validation import validate_source
 
 ROOT = Path(__file__).resolve().parent.parent
+if not __package__:
+    sys.path.insert(0, str(ROOT))
+from builder.logging import get_logger, run_logged
+
+logger = get_logger("fetch_sources")
 OUT = ROOT / "data" / "fetched"
-UA = {"User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"}
+UA = {
+    "User-Agent": "Mozilla/5.0 (Unpolitical source fetcher; +https://github.com/jnyross/unpoliticalaf)"
+}
 REQUEST_TIMEOUT = 90
 ATTEMPTS = 4
 
@@ -59,14 +66,27 @@ def get(url):
         except Exception as error:
             if attempt == ATTEMPTS - 1:
                 raise
-            time.sleep(30 * (attempt + 1) if "429" in str(error) else 2 ** attempt)
+            delay = 30 * (attempt + 1) if "429" in str(error) else 2**attempt
+            logger.warning(
+                "source.retry",
+                extra={
+                    "context": {
+                        "attempt": attempt + 1,
+                        "delay_seconds": delay,
+                        "error_type": type(error).__name__,
+                    }
+                },
+            )
+            time.sleep(delay)
 
 
 def retained_path(name):
     path = OUT / name
     if not name or Path(name).is_absolute() or ".." in Path(name).parts:
         raise ValueError("unsafe retained filename")
-    if path.resolve() == (OUT / "receipts.json").resolve() or not path.resolve().is_relative_to(OUT.resolve()):
+    if path.resolve() == (OUT / "receipts.json").resolve() or not path.resolve().is_relative_to(
+        OUT.resolve()
+    ):
         raise ValueError("unsafe retained filename")
     if any(parent.is_symlink() for parent in [path, *path.parents] if parent != OUT.parent):
         raise ValueError("symlink in retained path")
@@ -97,8 +117,7 @@ def promote(staged, path, receipts, receipt, source_id):
         nonlocal interrupted
         interrupted = True
 
-    handlers = {signum: signal.getsignal(signum)
-                for signum in (signal.SIGINT, signal.SIGTERM)}
+    handlers = {signum: signal.getsignal(signum) for signum in (signal.SIGINT, signal.SIGTERM)}
     try:
         for signum in handlers:
             signal.signal(signum, defer_interrupt)
@@ -113,18 +132,108 @@ def promote(staged, path, receipts, receipt, source_id):
             raise
         receipts[source_id] = receipt
         try:
-            print("ok  ", source_id, json.dumps({
-                "old_sha256": receipts_before["sha256"] if receipts_before else None,
-                "new_sha256": receipt["sha256"], "bytes": receipt["bytes"],
-                "url": receipt["url"], "retrieved": receipt["retrieved"],
-            }), flush=True)
+            print(
+                "ok  ",
+                source_id,
+                json.dumps(
+                    {
+                        "old_sha256": receipts_before["sha256"] if receipts_before else None,
+                        "new_sha256": receipt["sha256"],
+                        "bytes": receipt["bytes"],
+                        "url": receipt["url"],
+                        "retrieved": receipt["retrieved"],
+                    }
+                ),
+                flush=True,
+            )
+            logger.info(
+                "source.downloaded",
+                extra={
+                    "context": {
+                        "source_id": source_id,
+                        "bytes": receipt["bytes"],
+                        "file": receipt["file"],
+                        "sha256": receipt["sha256"],
+                    }
+                },
+            )
         except OSError as error:
-            print("Accepted", source_id, "but could not write acquisition log:", error, file=sys.stderr)
+            print(
+                "Accepted",
+                source_id,
+                "but could not write acquisition log:",
+                error,
+                file=sys.stderr,
+            )
+            logger.exception("source.report_failed", extra={"context": {"source_id": source_id}})
     finally:
         for signum, handler in handlers.items():
             signal.signal(signum, handler)
     if interrupted:
         raise KeyboardInterrupt
+
+
+def _checked_previous_path(previous):
+    """Check the retained pair even when the caller will skip reacquisition."""
+    old_path = retained_path(previous["file"]) if previous else None
+    if previous:
+        old_body = old_path.read_bytes()
+        if (
+            len(old_body) != previous["bytes"]
+            or hashlib.sha256(old_body).hexdigest() != previous["sha256"]
+        ):
+            raise ValueError("retained file/receipt mismatch; review before refreshing")
+    return old_path
+
+
+def _resolve_download(source, previous):
+    """Resolve a publisher link without silently accepting a different vintage."""
+    url = source.get("url")
+    name = source["file"]
+    if "find" in source:
+        page, page_response = get(source["page"])
+        match = re.search(source["find"], page.decode("utf-8"))
+        if not match:
+            raise ValueError("no link matching " + source["find"])
+        url = urllib.parse.urljoin(page_response["url"], match.group(0).replace("&amp;", "&"))
+        parsed = urllib.parse.urlparse(url)
+        inner = urllib.parse.parse_qs(parsed.query).get("uri", [""])[0]
+        name += Path(parsed.path).suffix or Path(inner).suffix or ".bin"
+        if previous and url != previous.get("requested_url", previous["url"]):
+            raise ValueError("discovered URL changed vintage; review and pin the manifest first")
+    return url, name
+
+
+def _checked_download_path(name, source_id, previous, old_path, receipts):
+    """Reject migrations, shared filenames and unreceipted overwrites."""
+    path = retained_path(name)
+    if previous and path != old_path:
+        raise ValueError("retained filename changed; review migration first")
+    owners = [key for key, value in receipts.items() if value["file"] == name and key != source_id]
+    if owners:
+        raise ValueError("retained filename belongs to another source: " + ", ".join(owners))
+    if not previous and path.exists():
+        raise ValueError("unreceipted existing file; refusing to overwrite")
+    return path
+
+
+def _download_and_promote(source_id, url, name, path, old_path, receipts):
+    """Validate staged bytes before promoting the file/receipt pair."""
+    body, response = get(url)
+    with tempfile.TemporaryDirectory(prefix=".refresh-", dir=OUT) as directory:
+        staged = Path(directory) / ("download" + path.suffix)
+        staged.write_bytes(body)
+        validate_source(source_id, staged, response["content_type"], old_path)
+        receipt = {
+            "url": response["url"],
+            "file": name,
+            "bytes": len(body),
+            "content_type": response["content_type"],
+            "sha256": hashlib.sha256(body).hexdigest(),
+            "retrieved": response["retrieved"],
+            "requested_url": url,
+        }
+        promote(staged, path, receipts, receipt, source_id)
 
 
 def refresh_sources(manifest, receipts, only, refresh):
@@ -137,48 +246,14 @@ def refresh_sources(manifest, receipts, only, refresh):
             continue
         try:
             previous = receipts.get(source_id)
-            old_path = retained_path(previous["file"]) if previous else None
-            if previous:
-                old_body = old_path.read_bytes()
-                if len(old_body) != previous["bytes"] or hashlib.sha256(old_body).hexdigest() != previous["sha256"]:
-                    raise ValueError("retained file/receipt mismatch; review before refreshing")
+            old_path = _checked_previous_path(previous)
             if previous and not refresh and not only:
                 skipped += 1
                 continue
             time.sleep(3)  # be polite to official publishers
-            url = source.get("url")
-            name = source["file"]
-            if "find" in source:
-                page, page_response = get(source["page"])
-                match = re.search(source["find"], page.decode("utf-8"))
-                if not match:
-                    raise ValueError("no link matching " + source["find"])
-                url = urllib.parse.urljoin(page_response["url"], match.group(0).replace("&amp;", "&"))
-                parsed = urllib.parse.urlparse(url)
-                inner = urllib.parse.parse_qs(parsed.query).get("uri", [""])[0]
-                name += Path(parsed.path).suffix or Path(inner).suffix or ".bin"
-                if previous and url != previous.get("requested_url", previous["url"]):
-                    raise ValueError("discovered URL changed vintage; review and pin the manifest first")
-            path = retained_path(name)
-            if previous and path != old_path:
-                raise ValueError("retained filename changed; review migration first")
-            owners = [key for key, value in receipts.items() if value["file"] == name and key != source_id]
-            if owners:
-                raise ValueError("retained filename belongs to another source: " + ", ".join(owners))
-            if not previous and path.exists():
-                raise ValueError("unreceipted existing file; refusing to overwrite")
-            body, response = get(url)
-            with tempfile.TemporaryDirectory(prefix=".refresh-", dir=OUT) as directory:
-                staged = Path(directory) / ("download" + path.suffix)
-                staged.write_bytes(body)
-                validate_source(source_id, staged, response["content_type"], old_path)
-                receipt = {
-                    "url": response["url"], "file": name, "bytes": len(body),
-                    "content_type": response["content_type"],
-                    "sha256": hashlib.sha256(body).hexdigest(),
-                    "retrieved": response["retrieved"], "requested_url": url,
-                }
-                promote(staged, path, receipts, receipt, source_id)
+            url, name = _resolve_download(source, previous)
+            path = _checked_download_path(name, source_id, previous, old_path, receipts)
+            _download_and_promote(source_id, url, name, path, old_path, receipts)
             accepted += 1
         except KeyboardInterrupt:
             if receipts.get(source_id) is not previous:
@@ -189,8 +264,22 @@ def refresh_sources(manifest, receipts, only, refresh):
         except Exception as error:
             failures.append(source_id)
             print("FAIL", source_id, error, flush=True)
+            logger.exception("source.failed", extra={"context": {"source_id": source_id}})
     outcome = "partial" if failures and accepted else "failed" if failures else "success"
-    print(f"{outcome}: accepted={accepted} skipped={skipped} failed={len(failures)}; failures: {failures}")
+    print(
+        f"{outcome}: accepted={accepted} skipped={skipped} failed={len(failures)}; failures: {failures}"
+    )
+    log_summary = logger.error if failures else logger.info
+    log_summary(
+        "fetch.completed",
+        extra={
+            "context": {
+                "accepted": accepted,
+                "skipped": skipped,
+                "failures": failures,
+            }
+        },
+    )
     return 1 if failures else 0
 
 
@@ -218,9 +307,11 @@ def _run(only, refresh):
             os.close(lock)
     except KeyboardInterrupt:
         print("FAIL interrupted; completed sources remain accepted", file=sys.stderr)
+        logger.warning("fetch.interrupted")
         return 130
     except Exception as error:
         print("FAIL refresh:", error, file=sys.stderr)
+        logger.exception("fetch.failed")
         return 1
 
 
@@ -229,6 +320,7 @@ def _terminate(signum, frame):
 
 
 def main(only=None, refresh=False):
+    logger.info("fetch.started", extra={"context": {"refresh": refresh}})
     previous_handler = signal.signal(signal.SIGTERM, _terminate)
     try:
         return _run(only, refresh)
@@ -238,7 +330,9 @@ def main(only=None, refresh=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--refresh", action="store_true", help="also reacquire existing retained sources")
+    parser.add_argument(
+        "--refresh", action="store_true", help="also reacquire existing retained sources"
+    )
     parser.add_argument("sources", nargs="*", help="source IDs; selected IDs are always reacquired")
     args = parser.parse_args()
-    sys.exit(main(set(args.sources) or None, refresh=args.refresh))
+    sys.exit(run_logged(lambda: main(set(args.sources) or None, refresh=args.refresh), logger))

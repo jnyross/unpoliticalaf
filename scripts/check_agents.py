@@ -4,6 +4,7 @@ Checks literal paths in inline code, inline Markdown links and link definitions.
 Absolute operator paths and external URLs are outside this checkout's scope.
 This is a reference-integrity check, not an assessment of policy or product prose.
 """
+
 import re
 import sys
 from pathlib import Path
@@ -12,8 +13,7 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parent.parent
 CODE = re.compile(r"`([^`\n]+)`")
 LINK = re.compile(
-    r"\[[^\]\n]*\]\((<[^>\n]+>|[^\s)]+)"
-    r"""(?:\s+(?:"[^"\n]*"|'[^'\n]*'|\([^)\n]*\)))?\s*\)"""
+    r"\[[^\]\n]*\]\((<[^>\n]+>|[^\s)]+)" r"""(?:\s+(?:"[^"\n]*"|'[^'\n]*'|\([^)\n]*\)))?\s*\)"""
 )
 DEFINITION = re.compile(r"^\s{0,3}\[[^\]]+\]:\s*(<[^>]+>|\S+)")
 
