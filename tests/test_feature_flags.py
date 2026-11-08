@@ -389,7 +389,8 @@ class Workflow(unittest.TestCase):
             "make benchmark",
             "make verify-coverage",
             "make test-stability",
-            "make quality",
+            "make quality-checks",
+            "make -f quality/Makefile tooling-tests",
             "make architecture",
             "make production-verify",
         ):

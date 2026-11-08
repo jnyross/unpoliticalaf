@@ -67,7 +67,9 @@ nor a run-shaped URL independently proves those checks happened. The `contents: 
 release job pins every action to a reviewed commit SHA, checks out without
 persisted credentials and installs Python packages only with
 `make setup-release`: hash-checked wheels from `requirements-release.txt`,
-which must cover exactly the `requirements-test.txt` pins. The release
+which must include every `requirements-test.txt` pin at the same version. The
+lock is resolved for Python 3.12, which the target enforces. The venv's own
+bundled pip comes from the pinned setup-python interpreter, not the lock. The release
 automation remains disabled until explicitly reviewed activation; packaging and
 this documentation do not authorize a release, schedule, tag or API write.
 

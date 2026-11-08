@@ -115,7 +115,8 @@ class Reports(unittest.TestCase):
         # Coverage now measures build + check + the same canonical timed tests.
         self.assertIn("run: make verify-coverage", workflow)
         self.assertIn("run: make test-stability", workflow)
-        self.assertIn("run: make quality", workflow)
+        self.assertIn("run: make quality-checks", workflow)
+        self.assertIn("run: make -f quality/Makefile tooling-tests", workflow)
         self.assertIn("if-no-files-found: error", workflow)
         self.assertIn("include-hidden-files: true", workflow)
         self.assertNotIn("--max-seconds", workflow)

@@ -63,7 +63,10 @@ case-insensitive and Vercel's GitHub integration may record `Production` or
 `Preview` deployments, so receipts use their own environment and never mark any
 other deployment inactive. The receipt jobs declare no workflow `environment:`,
 so Actions adds no deployment record of its own. Records in any other
-environment are never receipts. Its payload is:
+environment are never receipts. The first receipt makes GitHub create the
+`verified-site-receipts` environment with no protection rules; that is
+expected, and adding rules there would be a separate reviewed activation
+decision. Its payload is:
 
 | Field | Evidence |
 | --- | --- |
@@ -109,7 +112,9 @@ on failure. Use only the existing workflow token and its intentionally
 reviewed permissions: contents/statuses/actions read and deployments write.
 The writing job installs only the hash-checked wheel closure in
 `requirements-release.txt` (`make setup-release`), and its actions are pinned
-to reviewed commit SHAs.
+to reviewed commit SHAs. `live.yml` calls `deploy.yml` with deployments write
+for that job, so the read-only `live` job narrows its own token to contents
+read before its ordinary unhashed `make setup`.
 No Vercel API write, new credential, provider or endpoint configuration is
 needed. A local read-only report may use the existing authenticated `gh` CLI.
 

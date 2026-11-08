@@ -18,7 +18,7 @@ setup-test: setup
 # Privileged jobs: the setup-test closure from hash-checked wheels only, nothing
 # resolved at install time. Regenerate requirements-release.txt when pins change.
 setup-release:
-	$(PYTHON) -c 'import sys; assert sys.version_info >= (3, 10), "Python 3.10+ required"'
+	$(PYTHON) -c 'import sys; assert sys.version_info[:2] == (3, 12), "The lock is resolved for Python 3.12"'
 	$(PYTHON) -m venv $(VENV)
 	$(RUN_PYTHON) -m pip install -q --require-hashes --only-binary=:all: -r requirements-release.txt
 	$(RUN_PYTHON) -m pip check

@@ -47,6 +47,21 @@ def job_section(text, job):
     return match.group(1)
 
 
+def make_dry_run(*arguments):
+    # An outer make (make test) exports MAKELEVEL, which adds directory banners.
+    environment = {
+        k: v for k, v in os.environ.items() if k not in {"MAKEFLAGS", "MAKELEVEL", "MFLAGS"}
+    }
+    return subprocess.run(
+        ["make", "--no-print-directory", "-n", *arguments],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+        env=environment,
+    ).stdout
+
+
 def run_lines(text):
     return [
         line.strip().removeprefix("- ").removeprefix("run: ")
@@ -109,6 +124,13 @@ class Credentials(unittest.TestCase):
                 checked += 1
                 with self.subTest(workflow=path.name, step=line.strip()):
                     self.assertRegex(body, r"(?m)^\s+persist-credentials: false$")
+            if path.name not in PUSHING_WORKFLOWS:
+                # Catches checkouts written in a form step_blocks does not parse.
+                with self.subTest(workflow=path.name):
+                    self.assertEqual(
+                        len(re.findall(r"uses: actions/checkout@", text)),
+                        len(re.findall(r"(?m)^\s+persist-credentials: false$", text)),
+                    )
         self.assertGreater(checked, 15)
 
     def test_credential_exceptions_are_only_preserved_pushing_writers(self):
@@ -162,19 +184,15 @@ class HashLockedInstall(unittest.TestCase):
                     self.assertRegex(digest, r"^sha256:[0-9a-f]{64}$")
 
     def test_setup_release_requires_hashes_and_wheels(self):
-        result = subprocess.run(
-            ["make", "-n", "setup-release", "VENV=/tmp/release-venv"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        installs = [line for line in result.stdout.splitlines() if "pip install" in line]
-        self.assertEqual(len(installs), 1, result.stdout)
+        stdout = make_dry_run("setup-release", "VENV=/tmp/release-venv")
+        installs = [line for line in stdout.splitlines() if "pip install" in line]
+        self.assertEqual(len(installs), 1, stdout)
         for flag in ("--require-hashes", "--only-binary=:all:", "-r requirements-release.txt"):
             self.assertIn(flag, installs[0])
         self.assertNotIn("--no-deps", installs[0])
-        self.assertIn("/tmp/release-venv/bin/python -m pip check", result.stdout)
+        self.assertIn("/tmp/release-venv/bin/python -m pip check", stdout)
+        # The lock has no 3.10 backports such as tomli or exceptiongroup.
+        self.assertIn("sys.version_info[:2] == (3, 12)", stdout)
 
     def test_write_jobs_install_only_the_hash_locked_closure(self):
         release = (WORKFLOWS / "release.yml").read_text(encoding="utf-8")
@@ -184,8 +202,27 @@ class HashLockedInstall(unittest.TestCase):
                 commands = run_lines(text)
                 setups = [c for c in commands if c.startswith("make setup")]
                 self.assertEqual(setups, ["make setup-release"])
-                self.assertFalse([c for c in commands if "pip " in c])
+                self.assertNotIn("pip ", text)
                 self.assertNotIn("cache: pip", text)
+
+    def test_called_receipt_workflow_scopes_write_tokens_to_locked_jobs(self):
+        # live.yml calls deploy.yml with deployments: write, so every called job
+        # must narrow its own token; only hash-locked jobs may keep a write scope.
+        caller = (WORKFLOWS / "live.yml").read_text(encoding="utf-8")
+        self.assertIn("deployments: write", caller)
+        self.assertIn("uses: ./.github/workflows/deploy.yml", caller)
+        text = (WORKFLOWS / "deploy.yml").read_text(encoding="utf-8")
+        jobs = re.findall(r"(?m)^  ([\w-]+):\n", text.split("\njobs:\n", 1)[1])
+        self.assertEqual(jobs, ["live", "record"])
+        for job in jobs:
+            section = job_section(text, job)
+            header = section.split("    steps:", 1)[0]
+            with self.subTest(job=job):
+                self.assertRegex(header, r"(?m)^    permissions:\n      contents: read$")
+                if re.search(r"(?m)^      [\w-]+: write$", header):
+                    self.assertIn("run: make setup-release", section)
+                else:
+                    self.assertNotIn("setup-release", section)
 
 
 class ReceiptEnvironment(unittest.TestCase):
@@ -231,7 +268,8 @@ class SplitPipeline(unittest.TestCase):
             ("quality", ("stability", "coverage")),
         ):
             section = job_section(self.text, job)
-            self.assertIn("if: always()", section)
+            # A skipped required job would count as passing, so the job itself must run.
+            self.assertRegex(section.split("    steps:", 1)[0], r"(?m)^    if: always\(\)$")
             self.assertNotIn("continue-on-error", section)
             declared = re.search(r"needs: \[([^\]]+)\]", section)
             self.assertIsNotNone(declared, job)
@@ -276,23 +314,9 @@ class SplitPipeline(unittest.TestCase):
                 "architecture",
             ],
         )
-        metrics = subprocess.run(
-            ["make", "-n", "-f", "quality/Makefile", "metrics"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout
-        coverage = subprocess.run(
-            ["make", "-n", "verify-coverage"], cwd=ROOT, capture_output=True, text=True, check=True
-        ).stdout
-        tooling = subprocess.run(
-            ["make", "-n", "-f", "quality/Makefile", "tooling-tests"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout
+        metrics = make_dry_run("-f", "quality/Makefile", "metrics")
+        coverage = make_dry_run("verify-coverage")
+        tooling = make_dry_run("-f", "quality/Makefile", "tooling-tests")
         # metrics = tooling-tests + the same single measurement as verify-coverage.
         self.assertEqual(metrics.splitlines(), tooling.splitlines() + coverage.splitlines())
 
