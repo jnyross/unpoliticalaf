@@ -90,8 +90,21 @@ def workbook(path):
     return _wb[path]
 
 
-def cell_value(src_file, locator):
-    """Return the raw value at a locator, read independently of the builder."""
+def _csv_rows(cached):
+    """Replay parsed rows, extending lazily so row locators still stop early."""
+    # Reader errors abort check_facts, which discards this invocation's cache.
+    rows, unread = cached
+    yield from rows
+    for row in unread:
+        rows.append(row)
+        yield row
+
+
+def cell_value(src_file, locator, source_cache=None):
+    """Read independently, optionally reusing parsing within one check_facts call."""
+    if source_cache is None:
+        source_cache = {}
+    path = ROOT / src_file
     if src_file.endswith(".xlsx"):
         sheet, ref = locator.rsplit("!", 1)
         return workbook(src_file)[sheet][ref].value
@@ -103,11 +116,9 @@ def cell_value(src_file, locator):
         col = 0
         for ch in m.group(1):
             col = col * 26 + ord(ch) - 64
-        return (
-            xlrd.open_workbook(str(ROOT / src_file))
-            .sheet_by_name(sheet)
-            .cell_value(int(m.group(2)) - 1, col - 1)
-        )
+        if path not in source_cache:
+            source_cache[path] = xlrd.open_workbook(str(path))
+        return source_cache[path].sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
         from .readers import (
             ods,
@@ -122,10 +133,13 @@ def cell_value(src_file, locator):
         r = rows[int(m.group(2)) - 1]
         return r[col - 1] if col - 1 < len(r) else None
     if src_file.endswith(".csv"):
-        text = (ROOT / src_file).read_text(encoding="utf-8-sig")
+        if path not in source_cache:
+            text = path.read_text(encoding="utf-8-sig")
+            source_cache[path] = ([], csv.reader(io.StringIO(text)))
+        rows = _csv_rows(source_cache[path])
         m = re.search(r" line (\d+)$", locator)
         if m:
-            lines = list(csv.reader(io.StringIO(text)))
+            lines = list(rows)
             head = lines[0]
             series = re.match(
                 r"(\w+) line ", locator
@@ -138,12 +152,12 @@ def cell_value(src_file, locator):
             return lines[int(m.group(1)) - 1][head.index(key)]
         m = re.fullmatch(r"CDID (\w+) row '(.+)'", locator)
         if m:  # a time-series file with one column per series, found by its CDID row
-            rows = list(csv.reader(io.StringIO(text)))
+            rows = list(rows)
             col = next(r for r in rows if r and r[0] == "CDID").index(m.group(1))
             return next((r[col] for r in rows if r and r[0] == m.group(2)), None)
         m = re.fullmatch(r"\w+ row '(.+)'", locator)
         if m:
-            for row in csv.reader(io.StringIO(text)):
+            for row in rows:
                 if row and row[0] == m.group(1):
                     return row[1]
             return None
@@ -251,13 +265,16 @@ def check_facts(data):
         f"{counts.failed:,} failed."
     )
     checked = 0
+    # Reuse independent parsing only within this invocation, never checked
+    # values or verdicts. A later check must reopen changed source bytes.
+    source_cache = {}
     for f in facts.values():
         if f["status"] in ("calculated",):
             continue
         if f["status"] == "missing" or f["locator"] in ("", "not published"):
             continue
         src = sources[f["source"]]
-        raw = cell_value(src["file"], f["locator"])
+        raw = cell_value(src["file"], f["locator"], source_cache)
         rawn = as_number(raw)
         want = None if rawn is None else rawn * f.get("scale", 1)
         if f["source"] == "dfe_api" and want is not None:
