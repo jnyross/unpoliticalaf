@@ -113,6 +113,15 @@ Claude Code can invoke `/verify-static-site`; other agents read the checked-in
 file directly. It requires credential-free Boat, independent agent review and
 honest failure reporting, not host execution or a product-acceptance shortcut.
 
+## Automated PR reviews (held)
+
+The integrated Ruff/Bandit review pipeline is **disabled**, including manual
+dispatch, until independently reviewed intentional qualification. It preserves
+trusted-base tools, credential-free analyzer subprocesses, literal bounded
+diagnostics and serialized publication-time checks. Bot reviews use `COMMENT`,
+never approval, and cannot replace independent agent review or existing checks.
+See [docs/automated-pr-review.md](docs/automated-pr-review.md) for limits and rollout.
+
 ## Job diagnostics
 
 `python -m builder.build`, `python -m builder.check` (including `--axe`) and
