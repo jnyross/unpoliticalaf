@@ -1,5 +1,6 @@
 # Deterministic generated output and Python caches
 /site/
+/.metrics/
 /data/fetched/.refresh-*/
 __pycache__/
 *.py[cod]

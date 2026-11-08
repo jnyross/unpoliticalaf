@@ -136,7 +136,9 @@ class ProductionConfiguration(unittest.TestCase):
         for target in ("production-build", "live"):
             command = subprocess.check_output(["make", "-n", target], cwd=root, text=True)
             self.assertIn("-m builder.build --production", command)
-        live = (root / ".github/workflows/live.yml").read_text()
+        legacy = (root / ".github/workflows/live.yml").read_text()
+        self.assertIn("uses: ./.github/workflows/deploy.yml", legacy)
+        live = (root / ".github/workflows/deploy.yml").read_text()
         self.assertIn("- run: make production-build", live)
         self.assertNotIn("- run: make build\n", live)
 

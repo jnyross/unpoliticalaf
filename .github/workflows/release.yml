@@ -1,0 +1,60 @@
+name: Release verified site
+
+# Dormant writer until independent qualification intentionally enables it.
+# Never accept PR events, schedules or artifacts from an upstream workflow.
+on:
+  workflow_run:
+    workflows: ["Verify and record production deployment", "Live site matches main"]
+    branches: [main]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-release-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: >-
+      vars.REVIEWED_PRODUCTION_DELIVERY == 'true' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      contains(fromJSON('["push","workflow_dispatch"]'), github.event.workflow_run.event)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      actions: read
+      deployments: read
+    env:
+      VERCEL_GIT_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-test
+      - run: make production-verify
+      - name: Require durable exact-build deployment evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+          LIVE_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: .venv/bin/python scripts/release_evidence.py --commit "$COMMIT" --run-id "$LIVE_RUN_ID" --site site
+      - name: Package the complete production build
+        env:
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: .venv/bin/python scripts/package_release.py --commit "$COMMIT" --output "$RUNNER_TEMP/release"
+      - name: Publish or resume the exact site release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT: ${{ github.event.workflow_run.head_sha }}
+          LIVE_RUN: ${{ github.event.workflow_run.html_url }}
+          PYTHON: .venv/bin/python
+        run: bash scripts/publish_release.sh

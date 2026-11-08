@@ -98,6 +98,8 @@ class LiveCheck(unittest.TestCase):
         os.environ.pop(feature_flags.ENV_VAR, None)
         self.live = tempfile.TemporaryDirectory()
         self.local = tempfile.TemporaryDirectory()
+        self.metrics_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.metrics_dir.cleanup)
         handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=self.live.name)
         handler.log_message = lambda *a: None
         self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -112,7 +114,16 @@ class LiveCheck(unittest.TestCase):
         self.local.cleanup()
 
     def run_check(self):
-        return check_live.main(["--url", self.url, "--site", self.local.name])
+        return check_live.main(
+            [
+                "--url",
+                self.url,
+                "--site",
+                self.local.name,
+                "--metrics-file",
+                str(Path(self.metrics_dir.name) / "live.prom"),
+            ]
+        )
 
     def test_identical_copy_passes(self):
         make_site(self.live.name)

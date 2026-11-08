@@ -216,8 +216,10 @@ test/browser libraries are in [requirements-dev.txt](../requirements-dev.txt).
   Git HEAD. `site/build.json` records that commit and hashes every generated file
   except itself. `make live` builds locally and
   [compares the live commit, file list and served bytes](../scripts/check_live.py).
-  [The live workflow](../.github/workflows/live.yml) runs on main pushes, daily,
-  or by manual dispatch. Run live comparisons against the intended deployed
+  [The canonical deployment verifier](../.github/workflows/deploy.yml) runs on
+  main pushes or manual dispatch; `live.yml` is a compatibility delegate.
+  Daily checks are paused, and receipt/release writes remain opt-in pending
+  reviewed qualification. Run live comparisons against the intended deployed
   commit, not an unmerged branch.
 - **Hosting outage:** prevents fetching the site, but there is no application
   database or worker to recover. The repository and retained inputs are the

@@ -27,12 +27,13 @@ a reviewed PR to roll out or roll back a feature.
 All production entry points read that same local file:
 
 - Vercel's `buildCommand` runs `make production-build`.
-- `.github/workflows/live.yml` rebuilds with `make production-build`.
+- `.github/workflows/deploy.yml` rebuilds with `make production-build`;
+  `live.yml` delegates to that canonical workflow.
 - `make live` also depends on `production-build` before comparing served files.
 
 Deployment verification, metrics collection and release packaging must reuse
 `production-build`, never rebuild from remote flags or ordinary local defaults.
-Those integrations are delivered separately; this change does not activate them.
+Receipt and archive writes remain gated pending reviewed final qualification.
 Run the live verifier with `.venv/bin/python` so later metrics imports use the
 same installed production dependencies.
 
