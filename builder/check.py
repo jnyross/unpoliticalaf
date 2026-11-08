@@ -100,10 +100,17 @@ def _csv_rows(cached):
         yield row
 
 
+def _cached_source(path, source_cache, read_source):
+    """Reuse parsing only when the caller supplies its invocation-local cache."""
+    if source_cache is None:
+        return read_source()
+    if path not in source_cache:
+        source_cache[path] = read_source()
+    return source_cache[path]
+
+
 def cell_value(src_file, locator, source_cache=None):
     """Read independently, optionally reusing parsing within one check_facts call."""
-    if source_cache is None:
-        source_cache = {}
     path = ROOT / src_file
     if src_file.endswith(".xlsx"):
         sheet, ref = locator.rsplit("!", 1)
@@ -116,9 +123,8 @@ def cell_value(src_file, locator, source_cache=None):
         col = 0
         for ch in m.group(1):
             col = col * 26 + ord(ch) - 64
-        if path not in source_cache:
-            source_cache[path] = xlrd.open_workbook(str(path))
-        return source_cache[path].sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
+        book = _cached_source(path, source_cache, lambda: xlrd.open_workbook(str(path)))
+        return book.sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
         from .readers import (
             ods,
@@ -133,10 +139,12 @@ def cell_value(src_file, locator, source_cache=None):
         r = rows[int(m.group(2)) - 1]
         return r[col - 1] if col - 1 < len(r) else None
     if src_file.endswith(".csv"):
-        if path not in source_cache:
-            text = path.read_text(encoding="utf-8-sig")
-            source_cache[path] = ([], csv.reader(io.StringIO(text)))
-        rows = _csv_rows(source_cache[path])
+        cached = _cached_source(
+            path,
+            source_cache,
+            lambda: ([], csv.reader(io.StringIO(path.read_text(encoding="utf-8-sig")))),
+        )
+        rows = _csv_rows(cached)
         m = re.search(r" line (\d+)$", locator)
         if m:
             lines = list(rows)
