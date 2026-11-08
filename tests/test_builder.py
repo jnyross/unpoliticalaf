@@ -1147,6 +1147,17 @@ class Glossary(unittest.TestCase):
         self.assertNotIn("equal numbers", definition)
         self.assertNotIn("with the same number", definition)
 
+    def test_fifths_separates_older_household_ranked_tax_history(self):
+        from builder.glossary import glossary_page
+
+        html = glossary_page()
+        definition = re.search(r'<dt id="fifths">.*?</dt>\s*<dd>(.*?)</dd>', html, re.S).group(1)
+        self.assertIn("current fifths hold about the same number of people", definition)
+        self.assertIn("older tables, up to 2017/18, the ONS ranked households", definition)
+        self.assertIn("2017/18 is also shown on the current method", definition)
+        self.assertIn("about the same number of households", definition)
+        self.assertIn('href="household-tax.html#over-time"', definition)
+
     def test_first_use_in_text_is_linked_once(self):
         from builder.glossary import link_terms
 
@@ -1507,7 +1518,7 @@ class HouseholdTaxHistory(unittest.TestCase):
                 abs(f[f"etbp.all.{key(p)}.q1"].value - f[f"etbp.all.{key(p)}.q5"].value), 5, p
             )
 
-    def test_methods_are_not_joined_on_the_page(self):
+    def _section(self):
         from builder.pages_money_extra import tax_history_section
 
         src = {"publisher": "ONS", "title": "t", "page": "", "id": "x"}
@@ -1522,11 +1533,22 @@ class HouseholdTaxHistory(unittest.TestCase):
             "etb-fye2023",
             "etb",
         ]
-        html = tax_history_section(
+        return tax_history_section(
             self.facts, self.d, Num(self.facts), {i: dict(src, id=i) for i in ids}
         )
+
+    def test_methods_are_not_joined_on_the_page(self):
+        html = self._section()
         self.assertIn("The line breaks at 2018/19", html)
         self.assertIn("People, no top-income adjustment", html)
+
+    def test_both_methods_describe_approximately_equal_fifths(self):
+        html = self._section()
+        # Retained ONS counts per fifth are close but not identical (e.g. 1440/1439 sample
+        # households in 1977; 13,405k to 13,449k people in 2023/24).
+        self.assertNotIn("equal numbers of", html)
+        self.assertIn("fifths with about the same number of households in each", html)
+        self.assertIn("fifths with about the same number of people in each", html)
 
 
 class BeforeTwoThousandEight(unittest.TestCase):
