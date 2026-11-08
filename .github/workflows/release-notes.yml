@@ -14,6 +14,9 @@ concurrency:
 
 jobs:
   release:
+    # Dormant until reviewed delivery activation, like the site release writer.
+    # Without the variable a pushed version tag skips this job and publishes nothing.
+    if: vars.REVIEWED_PRODUCTION_DELIVERY == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:

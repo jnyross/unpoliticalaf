@@ -64,6 +64,8 @@ class DeliveryWorkflows(unittest.TestCase):
     def test_version_notes_use_separate_reviewed_helper(self):
         workflow = (WORKFLOWS / "release-notes.yml").read_text()
         self.assertIn('tags: ["v[0-9]*"]', workflow)
+        # A stray version tag publishes nothing before reviewed delivery activation.
+        self.assertIn("    if: vars.REVIEWED_PRODUCTION_DELIVERY == 'true'\n", workflow)
         self.assertIn('require("./scripts/release_notes.cjs")', workflow)
         self.assertIn("persist-credentials: false", workflow)
         self.assertNotIn("site-", workflow)

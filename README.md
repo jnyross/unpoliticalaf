@@ -591,9 +591,11 @@ Run it locally with `make -f quality/Makefile setup metrics`.
 
 ## Release notes
 
-Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
-with generated notes, contributor credits and a full comparison link. Pull
-requests are grouped by optional labels; unlabelled contributions are included.
+Once reviewed delivery activation sets `REVIEWED_PRODUCTION_DELIVERY`, pushing a
+version tag such as `v1.0.0` publishes a GitHub release with generated notes,
+contributor credits and a full comparison link. Until then a version tag
+publishes nothing. Pull requests are grouped by optional labels; unlabelled
+contributions are included.
 See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
 This is separate from the site's deployments from `main`.
 

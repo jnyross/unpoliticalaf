@@ -31,9 +31,10 @@ the prior snapshot may remain. Always check completion time for staleness.
 
 The canonical `deploy.yml` retains live and receipt-check snapshots separately,
 with `if: always()`, run/attempt-specific artifact names and 14-day retention.
-Receipt and release writers require `REVIEWED_PRODUCTION_DELIVERY` to equal
-`true`; this integration does not set it. Legacy `live.yml` delegates instead
-of duplicating checks. No daily schedule is activated.
+Receipt, site release and version-notes writers require
+`REVIEWED_PRODUCTION_DELIVERY` to equal `true`; this integration does not set
+it. Legacy `live.yml` delegates instead of duplicating checks. No daily schedule
+is activated.
 
 An existing Node Exporter textfile collector can read an operator-selected path.
 That optional configuration is not performed here. Example PromQL:

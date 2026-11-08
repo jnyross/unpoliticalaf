@@ -160,7 +160,8 @@ Synthetic fixtures are not production receipts. Exact-candidate CI and actual
 provider/API observation belong to reviewed qualification. No successful
 production receipt or deployment frequency is claimed by this document.
 
-The canonical writer in `deploy.yml` and downstream site archive workflow are
-gated by `vars.REVIEWED_PRODUCTION_DELIVERY == 'true'`. This integration does not
+The canonical writer in `deploy.yml`, the downstream site archive workflow and the
+version release-notes workflow are gated by
+`vars.REVIEWED_PRODUCTION_DELIVERY == 'true'`. This integration does not
 set that variable or authorize its activation. The legacy `live.yml` dispatch
 delegates to the same verifier; no daily schedule is introduced or restored.
