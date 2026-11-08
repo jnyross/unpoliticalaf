@@ -1,7 +1,7 @@
 """Check that the live site is exactly the latest build.
 
 Usage:
-    make build && python3 scripts/check_live.py [--url URL] [--wait SECONDS]
+    make production-build && .venv/bin/python scripts/check_live.py [--url URL] [--wait SECONDS]
 
 It compares three things:
 1. the commit in the live build.json with the commit of the local build;
@@ -24,6 +24,9 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from builder import feature_flags
+
 DEFAULT_URL = "https://unpoliticalaf.vercel.app/"
 RECORD = "build.json"
 
@@ -62,11 +65,22 @@ def live_record(base):
 def compare(base, local, live):
     """Return a list of problems, empty if live matches local."""
     problems = []
+    if not isinstance(live, dict):
+        return ["Live build record is not an object."]
     lc, vc = local["commit"], live.get("commit")
     if lc != vc:
         problems.append(f"Live site is commit {vc}, latest build is {lc}.")
         return problems
+    try:
+        remote_settings = feature_flags.snapshot(live.get("feature_flags", {}))
+    except (TypeError, ValueError):
+        problems.append("Live feature flags are missing or invalid.")
+    else:
+        if dict(remote_settings) != local["feature_flags"]:
+            problems.append("Live feature flags differ from the independently rebuilt local build.")
     lf, vf = local["files"], live.get("files", {})
+    if not isinstance(vf, dict):
+        return problems + ["Live file manifest is not an object."]
     for path in sorted(set(lf) - set(vf)):
         problems.append(f"Missing from live build record: {path}")
     for path in sorted(set(vf) - set(lf)):
@@ -112,9 +126,18 @@ def main(argv=None):
     base = args.url if args.url.endswith("/") else args.url + "/"
     path = Path(args.site) / RECORD
     if not path.exists():
-        print(f"{path} not found: run `make build` first.")
+        print(f"{path} not found: run `make production-build` first.")
         return 2
-    local = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        local = json.loads(path.read_text(encoding="utf-8"))
+        settings = feature_flags.snapshot(local["feature_flags"])
+        if settings != feature_flags.production():
+            raise ValueError("Local flags do not match the reviewed production configuration")
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        print(
+            f"Cannot verify production flags ({type(error).__name__}); run `make production-build`."
+        )
+        return 2
     if local["commit"] == "unknown":
         print("The local build does not know its commit; build from a git checkout.")
         return 2
@@ -122,13 +145,11 @@ def main(argv=None):
     deadline = time.time() + args.wait
     while True:
         live, err = live_record(base)
-        if live and live.get("commit") == local["commit"]:
+        if isinstance(live, dict) and live.get("commit") == local["commit"]:
             break
         if time.time() >= deadline:
             break
-        print(
-            f"Waiting for {base} to serve {local['commit'][:7]} (now: {err or live.get('commit', '?')[:7]})"
-        )
+        print(f"Waiting for {base} to serve {local['commit'][:7]}.")
         time.sleep(30)
 
     problems = [err] if err else compare(base, local, live)

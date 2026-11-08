@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "make setup",
-  "buildCommand": "make build",
+  "buildCommand": "make production-build",
   "outputDirectory": "site",
   "git": {
     "deploymentEnabled": {

@@ -75,6 +75,15 @@ This runs build, independent check and the canonical timed pytest population.
 Run full verification for data, calculation, rendering and cross-module changes;
 a focused pass or `make test` alone is not a substitute.
 
+For a production candidate use `make production-verify` (production build,
+independent check and tests). `make production-build` reads the complete reviewed
+`config/feature-flags.production.json`, rejecting `UNPOLITICAL_FEATURE_FLAGS`
+even when empty. Preserve the resulting `build.json` flag snapshot with the
+candidate SHA. `make live` rebuilds using that same file; never select expected
+flags or hashes from a remote manifest. Local defaults/overrides remain useful
+experiments, not substitutes for production verification. See the
+[flag guide](../../../docs/feature-flags.md).
+
 The full current quality gate additionally needs developer and locked Node tools:
 
 ```sh

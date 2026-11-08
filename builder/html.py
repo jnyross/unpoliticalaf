@@ -11,10 +11,31 @@ import math
 import re
 from decimal import Decimal, ROUND_HALF_UP
 from html import escape
-from . import version, downloads
+from . import version, downloads, feature_flags
 from . import findings as F
 
 SITE = "Unpolitical"
+
+
+def apply_feature_flags(pages, settings):
+    """Remove only optional enhancements using the build's explicit snapshot.
+
+    This pure helper performs no environment/file reads. Unflagged navigation,
+    static charts and the chart metadata needed by independent checks remain.
+    """
+    settings = feature_flags.snapshot(settings)
+    disabled = []
+    if not settings["chart_interactions"]:
+        disabled.append(CHART_JS)
+    if not settings["sticky_navigation"]:
+        disabled.append(BACKTOP_JS)
+    result = {}
+    for path, text in pages.items():
+        for script in disabled:
+            text = text.replace(script, "")
+        result[path] = text
+    return result
+
 
 CSS = """
 :root{--ink:#16191d;--ink2:#3a4148;--muted:#5a6168;--line:#dcdfe3;--line2:#eceef0;--soft:#f4f5f7;--soft2:#fafbfb;--bar:#3a4552;--bar2:#a3abb3;--link:#1d4f7a;--focus:#1a5fb4;--warn:#fbf6e8;--warnline:#a07800;--bg:#fff;--r:10px}

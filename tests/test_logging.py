@@ -218,7 +218,7 @@ def test_build_preserves_exact_reports_downloads_and_served_bytes(tmp_path, diag
         for name, value in {
             "ROOT": tmp_path,
             "OUT": tmp_path / "site",
-            "render": lambda: (facts, {}, {"index.html": "site"}, num),
+            "render": lambda settings: (facts, {}, {"index.html": "site"}, num),
         }.items():
             stack.enter_context(patch.object(build, name, value))
         stack.enter_context(patch.object(build.downloads, "FILES", {"data/a.csv": "a,b\n1,2\n"}))
@@ -226,7 +226,7 @@ def test_build_preserves_exact_reports_downloads_and_served_bytes(tmp_path, diag
         snapshots = []
         for level in ("INFO", "CRITICAL"):
             stack.enter_context(patch.dict(os.environ, LOG_LEVEL=level))
-            assert run_captured(build.main, get_logger("build"), diagnostics) == 0
+            assert run_captured(lambda: build.main([]), get_logger("build"), diagnostics) == 0
             assert capsys.readouterr().out == (
                 "Built 1 pages, 1 CSV downloads, 3 facts (1 shown) into site/\n"
                 "1 requested figures do not exist and are shown as 'not available', e.g. ['missing']\n"

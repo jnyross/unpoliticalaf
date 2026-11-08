@@ -87,6 +87,7 @@ The optional settings are:
 | `VERCEL_GIT_COMMIT_SHA` | `git rev-parse HEAD`, or `unknown` if Git metadata is unavailable | Vercel supplies this for the build's version label and `site/build.json`. Leave it unset locally so the current checkout supplies the commit. It is not a credential. |
 | `GITHUB_STEP_SUMMARY` | No summary file is written | GitHub Actions supplies a file path for `scripts/check_live.py` to append its report. Leave it unset locally; the live check still prints its result. |
 | `LOG_LEVEL` | `INFO` | Filter build/check/source-fetch JSON diagnostics on stderr. Accepts `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL` (case-insensitive). Invalid settings fail before the job starts. Does not change reports or served bytes. |
+| `UNPOLITICAL_FEATURE_FLAGS` | Registered local defaults | Optional local JSON boolean overrides for chart interactions and sticky navigation. Production builds reject this variable even when empty and use the complete reviewed `config/feature-flags.production.json` instead. See [feature flags](docs/feature-flags.md). |
 
 Setup needs network access to install packages. Once installed, `make verify`
 uses the official source files already retained in the repository and needs no
@@ -157,6 +158,8 @@ Python 3.10 or later.
 make setup     # create .venv and install production build dependencies
 make setup-test # add pytest and build dependencies, without browser tools
 make build     # write the site to site/
+make production-build # use the complete reviewed production flag configuration
+make production-verify # production build + independent check + tests
 make check     # re-read every figure from its source file and check every page
 make test      # fast unit tests
 make test-stability # same pytest suite in fresh processes with seeds 1, 2 and 3
@@ -486,7 +489,7 @@ warm-cache false passes. Dependency checks use deptry 0.25.1; browser packages
 live in `requirements-a11y.txt` and CLI/stub/dashboard tools are development-only.
 The existing dashboard remains descriptive, with no lowered thresholds.
 
-Vercel: install `make setup`, build `make build`, output directory `site`, all set
+Vercel: install `make setup`, build `make production-build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
@@ -507,9 +510,9 @@ This reference check does not certify acceptance-policy alignment.
 independent review checks the full active-versus-historical meaning. John's
 approved current target is in `docs/product-spec.md` and `docs/goal-rubric.md`.
 
-Each build writes `site/build.json` (the commit and a SHA-256 for every file) and
+Each build writes `site/build.json` (the commit, immutable feature flags and a SHA-256 for every file) and
 shows the short commit as "Site version" in every page footer. `make live` builds
-locally and checks that https://unpoliticalaf.vercel.app/ serves exactly that
+locally with `config/feature-flags.production.json` and checks that https://unpoliticalaf.vercel.app/ serves exactly that
 build. The `Live site matches main` workflow runs this after every push to `main`
 and daily, and fails if the live site is behind or differs.
 

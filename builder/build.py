@@ -3,6 +3,7 @@
 Usage: python -m builder.build
 """
 
+import argparse
 import hashlib
 import json
 import shutil
@@ -10,13 +11,13 @@ import sys
 from collections import Counter
 
 from .data import build_all, YEARS, EARLY_YEARS
-from .html import Num, page
+from .html import Num, page, apply_feature_flags
 from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
 from .logging import get_logger, run_logged
-from . import pages_money_extra, pages_generations, pages_manifesto, version
+from . import pages_money_extra, pages_generations, pages_manifesto, version, feature_flags
 from . import (
     pages_options,
     downloads,
@@ -52,7 +53,8 @@ MAX_PAGE_BYTES = 400_000
 MAX_READING_PAGE_BYTES = 260_000
 
 
-def render():
+def render(settings=None):
+    settings = feature_flags.resolve() if settings is None else feature_flags.snapshot(settings)
     sources = all_sources()
     problems = verify_hashes(sources)
     if problems:
@@ -140,13 +142,13 @@ def render():
     pages.update(trace.figure_pages(facts, sources, num.used))
     pages = {path: glossary.link_terms(html, path) for path, html in pages.items()}
     pages = {path: trace.add_trace(html, path, facts, sources) for path, html in pages.items()}
-    return facts, sources, pages, num
+    return facts, sources, apply_feature_flags(pages, settings), num
 
 
 BUILD_RECORD = "build.json"
 
 
-def write_build_record():
+def write_build_record(settings):
     """Write site/build.json: the commit built and a SHA-256 for every file served.
 
     scripts/check_live.py compares this with the live site to show whether the
@@ -157,13 +159,23 @@ def write_build_record():
         rel = p.relative_to(OUT).as_posix()
         if p.is_file() and rel != BUILD_RECORD:
             files[rel] = hashlib.sha256(p.read_bytes()).hexdigest()
-    record = {"commit": version.commit(), "files": files}
+    record = {
+        "commit": version.commit(),
+        "feature_flags": dict(feature_flags.snapshot(settings)),
+        "files": files,
+    }
     (OUT / BUILD_RECORD).write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--production", action="store_true", help="use the reviewed production flag configuration"
+    )
+    args = parser.parse_args(argv)
+    settings = feature_flags.production() if args.production else feature_flags.resolve()
     logger.info("build.started")
-    facts, sources, pages, num = render()
+    facts, sources, pages, num = render(settings)
     if OUT.exists():
         shutil.rmtree(OUT)
     for path, html in pages.items():
@@ -184,7 +196,7 @@ def main():
         encoding="utf-8",
     )
     shutil.copy(ROOT / "assets/icon.svg", OUT / "icon.svg")
-    write_build_record()
+    write_build_record(settings)
     print(
         f"Built {len(pages)} pages, {len(downloads.FILES):,} CSV downloads, {len(facts):,} facts ({len(num.used):,} shown) into {OUT.relative_to(ROOT)}/"
     )

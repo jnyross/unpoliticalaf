@@ -11,9 +11,16 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    needs: flag_configurations
+    if: always()
     # The merged full population takes ~11 minutes per process, not the old small suite.
     timeout-minutes: 60
     steps:
+      - name: Require every flag configuration to pass
+        id: flags
+        env:
+          RESULT: ${{ needs.flag_configurations.result }}
+        run: test "$RESULT" = success
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         id: python
@@ -31,7 +38,7 @@ jobs:
           BUILD_PIP_CACHE_HIT: ${{ steps.python.outputs.cache-hit }}
         run: make benchmark
       - name: Retain build performance metrics
-        if: always()
+        if: ${{ always() && steps.flags.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: build-performance-${{ github.run_id }}-${{ github.run_attempt }}
@@ -40,14 +47,14 @@ jobs:
           if-no-files-found: error
           retention-days: 30
       - name: Collect a unit test file without running tests
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
         run: .venv/bin/python -m pytest --collect-only tests/test_household_shares.py
       # The benchmark and coverage have distinct measurements. Coverage includes
       # a fresh build, independent check and the canonical timed test population.
       - run: make verify-coverage
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
       - name: Retain coverage phases and dashboard
-        if: always()
+        if: ${{ always() && steps.flags.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: verification-coverage-${{ github.run_id }}-${{ github.run_attempt }}
@@ -56,7 +63,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
       - name: Publish combined coverage summary
-        if: always()
+        if: ${{ always() && steps.flags.outcome == 'success' }}
         run: |
           for summary in quality-reports/invocation-*/summary.md; do
             if [ -f "$summary" ]; then
@@ -64,10 +71,10 @@ jobs:
             fi
           done
       - name: Detect flaky tests with three fresh seeded processes
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.flags.outcome == 'success' }}
         run: make test-stability
       - name: Publish timing and stability summaries
-        if: always()
+        if: ${{ always() && steps.flags.outcome == 'success' }}
         run: |
           for summary in test-results/*/invocation-*/summary.md test-results/*/invocation-*/run-*/summary.md quality-reports/invocation-*/test-timings/summary.md; do
             if [ -f "$summary" ]; then
@@ -75,7 +82,7 @@ jobs:
             fi
           done
       - name: Retain original test outcomes and timings
-        if: always()
+        if: ${{ always() && steps.flags.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ github.run_id }}-${{ github.run_attempt }}
@@ -167,3 +174,35 @@ jobs:
           python-version: "3.12"
       - run: make setup-test
       - run: make architecture
+
+  flag_configurations:
+    name: Build and check (${{ matrix.rollout }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rollout: both-enhancements
+            flags: '{"chart_interactions":true,"sticky_navigation":true}'
+          - rollout: charts-only
+            flags: '{"chart_interactions":true,"sticky_navigation":false}'
+          - rollout: sticky-only
+            flags: '{"chart_interactions":false,"sticky_navigation":true}'
+          - rollout: static-fallbacks
+            flags: '{"chart_interactions":false,"sticky_navigation":false}'
+          - rollout: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-test
+      - name: Verify independent local flag combination
+        if: matrix.rollout != 'production'
+        env:
+          UNPOLITICAL_FEATURE_FLAGS: ${{ matrix.flags }}
+        run: make verify
+      - name: Verify reviewed production configuration
+        if: matrix.rollout == 'production'
+        run: make production-verify
