@@ -104,6 +104,14 @@ After `make build`, preview inside Boat at `http://127.0.0.1:3181`:
 Deployment and automation credentials belong in their hosting or CI settings,
 not in this checkout. Do not commit secrets or local `.env` files.
 
+## Agent verification skill
+
+Read [`verify-static-site`](.claude/skills/verify-static-site/SKILL.md) for focused,
+full verification/quality, source and UI checks with exact-candidate evidence.
+Claude Code can invoke `/verify-static-site`; other agents read the checked-in
+file directly. It requires credential-free Boat, independent agent review and
+honest failure reporting, not host execution or a product-acceptance shortcut.
+
 ## Job diagnostics
 
 `python -m builder.build`, `python -m builder.check` (including `--axe`) and

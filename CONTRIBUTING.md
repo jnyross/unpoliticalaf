@@ -4,6 +4,9 @@ Follow [AGENTS.md](AGENTS.md), including its naming rules and stable public IDs.
 Agent installs and project execution belong in credential-free Boat, not on the
 host. No secret, `.env`, database or hosting account is needed.
 
+Use the checked-in [verification skill](.claude/skills/verify-static-site/SKILL.md)
+for focused/full checks, source diagnosis, UI checks and exact-candidate PR evidence.
+
 ## Test naming and discovery
 
 Name tests `test_<subject>.py` and methods `test_<behaviour>`. Keep helpers out
