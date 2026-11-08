@@ -163,6 +163,7 @@ make format-check # check formatting without rewriting files (also in quality/CI
 make typecheck # forced compilation then strict core mypy checks
 make check-deps # runtime, browser and developer dependency classification
 make setup-quality && make complexity # new-function ceiling 20 and legacy ratchet
+make setup-test && make architecture # five import contracts and nested regressions
 make duplication # same gate as npm run check:duplicates (Node 22)
 npm run test:duplicates # real locked-tool regressions and failure cases
 make hooks     # reinstall the Git hook in a disposable Boat checkout
@@ -217,6 +218,50 @@ Black 25.9.0 owns formatting (Python 3.10 target, 100-character lines in
 Both select maintained Python recursively, including nested new modules, without
 touching retained official data, pinned references or generated output.
 See [CONTRIBUTING.md](CONTRIBUTING.md#lint-and-formatting) for the policy.
+
+### Enforced module boundaries
+
+PR [#253](https://github.com/jnyross/unpoliticalaf/pull/253), pinned at
+`6d4e426`, supplies five contracts in [`.importlinter`](.importlinter).
+`make architecture`, the dedicated PR/main CI job and `make quality` run the
+real import-linter 2.15 analyzer without caching. Analyzer/configuration/syntax
+errors fail, as do broken contracts and unused permissions. `make setup-test`
+includes the canonical architecture requirement so all nested
+`tests/architecture/` regressions also run in the normal pytest population.
+`make setup-architecture && make architecture` is the browser-free setup/check
+path, reusing the canonical test requirements rather than another pytest pin.
+
+The graph selects Python modules recursively in **`builder` and `scripts`**,
+including package initializers and function-local imports. Tests, generated
+output, retained data and reference snapshots are not application graph roots.
+This is static import analysis, not runtime isolation of dynamic imports.
+
+- Builder modules cannot import operational scripts.
+- Builder modules, including nested modules and the root initializer, cannot
+  import build orchestration.
+- Producers cannot import either `check` or the checker-owned
+  `check_calculations`. Only `check -> check_calculations` is permitted.
+- `check`, `check_calculations` and `scripts.accuracy_check` cannot import
+  producers or pages. `check` retains four shared APIs: formatting (`html`),
+  quote verification (`explain`), source metadata (`sources`) and ODS decoding
+  (`readers`). It also imports its own calculation checker and non-fiscal
+  logging. The calculation checker and accuracy audit share no producer code.
+- Nine reusable foundations (readers, sources, rates, version, logging, findings,
+  downloads, HTML and quote helpers) use only explicitly listed downward edges.
+  Logging remains standard-library-only; version resolves its own root rather
+  than importing readers. Shared helpers cannot bridge checkers to producers.
+
+The retained `optional-forbidden` adapter in `scripts/import_contracts.py`
+allows only `html -> feature_flags` when that exact configuration module exists.
+The configuration module then joins the constrained foundations. Wildcard
+permissions, upward dependencies and present-but-unused permissions fail.
+This preserves the separately landing feature-flag PR without broad ignores.
+
+Fiscal values and arithmetic are still reopened/recomputed independently.
+Shared formatting and ODS decoding are explicit existing limits: checker
+self-consistency alone does not prove those helpers correct. Regression tests
+cover formatting/readers separately. Move genuinely shared non-fiscal code down,
+or pass data from callers; do not whitelist fiscal formula implementations.
 
 ### Pre-commit verification
 

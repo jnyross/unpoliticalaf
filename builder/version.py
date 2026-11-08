@@ -3,8 +3,9 @@
 import functools
 import os
 import subprocess
+from pathlib import Path
 
-from .readers import ROOT
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @functools.lru_cache(maxsize=None)

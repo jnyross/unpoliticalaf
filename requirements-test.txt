@@ -1,3 +1,4 @@
 -r requirements.txt
 -r quality/requirements.txt
+-r requirements-architecture.txt
 pytest==8.4.2

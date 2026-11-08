@@ -11,6 +11,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 class Tooling(unittest.TestCase):
+    def test_version_keeps_the_same_repository_root_without_importing_readers(self):
+        from builder import readers, version
+
+        self.assertEqual(version.ROOT, readers.ROOT)
+
     def test_test_command_collects_nested_quality_tests(self):
         result = subprocess.run(
             ["make", "-n", "test"], cwd=ROOT, capture_output=True, text=True, check=True
@@ -31,8 +36,26 @@ class Tooling(unittest.TestCase):
             "check_agents",
             "-m quality.measure",
             "scripts/check_complexity.py",
+            "lint-imports --config .importlinter --no-cache",
+            "-m pytest tests/architecture",
         ):
             self.assertIn(command, result.stdout)
+
+    def test_architecture_reuses_pin_and_virtualenv_and_precedes_regressions(self):
+        self.assertIn(
+            "-r requirements-architecture.txt", (ROOT / "requirements-test.txt").read_text()
+        )
+        self.assertIn("import-linter==2.15", (ROOT / "requirements-architecture.txt").read_text())
+        result = subprocess.run(
+            ["make", "-n", "architecture", "VENV=/tmp/architecture-venv"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        self.assertIn("/tmp/architecture-venv/bin/lint-imports", result.stdout)
+        self.assertIn("/tmp/architecture-venv/bin/python", result.stdout)
+        self.assertLess(result.stdout.index("lint-imports"), result.stdout.index("-m pytest"))
 
     def test_complexity_reuses_dashboard_pin_and_original_source_population(self):
         from scripts import check_complexity

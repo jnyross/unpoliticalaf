@@ -118,6 +118,32 @@ flowchart TD
    let readers visit publishers, but those sites are not needed to render an
    already-built page.
 
+## Static import contracts
+
+`make architecture` and `make quality` enforce the five contracts in
+[`.importlinter`](../.importlinter), selecting `builder` and `scripts` recursively.
+The PR/main architecture job runs the same analyzer and
+`tests/architecture/` regressions, also included in canonical pytest discovery.
+Nested modules, initializers and function-local imports are checked; syntax,
+configuration and analyzer failures are not an empty successful graph.
+
+Builder code cannot depend on operational scripts or import orchestration.
+Producers cannot reuse `check` or `check_calculations`; both checker modules
+and the accuracy audit cannot import producers. Six exact direct imports from
+`check` remain: its checker-owned `check_calculations`, dependency-free non-fiscal
+`logging`, and existing `html`, `explain`, `sources`, `readers` APIs. The latter
+share formatting, quote verification, registry metadata and ODS decoding, not
+fiscal formula implementations. Independent source interpretation still needs
+review; a shared formatter/decoder is not independent evidence of its correctness.
+
+All nine shared helpers are constrained foundations with explicit downward
+edges. Logging cannot import producer code. Version resolves its own repository
+root; there is no version-to-readers permission. Optional `html -> feature_flags`
+is exact, activates only when present and also constrains the flag module.
+Stale permissions fail. Dynamic runtime imports are outside static analysis.
+See the [boundary guide](../README.md#enforced-module-boundaries) before changing
+these exceptions.
+
 ## External service dependencies
 
 All publisher dependencies below are **source-acquisition dependencies**, not

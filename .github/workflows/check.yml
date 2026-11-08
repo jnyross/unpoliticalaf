@@ -23,6 +23,7 @@ jobs:
           cache-dependency-path: |
             requirements.txt
             requirements-test.txt
+            requirements-architecture.txt
             quality/requirements.txt
       - run: make setup-test
       - name: Measure build and enforce the 90-second budget
@@ -119,6 +120,7 @@ jobs:
             requirements-dev.txt
             requirements-a11y.txt
             requirements-typing.txt
+            requirements-architecture.txt
             quality/requirements.txt
       - run: make setup-dev
       - run: .venv/bin/python -m playwright install --with-deps chromium
@@ -154,3 +156,14 @@ jobs:
       - run: make setup-test setup-typing
       - run: make typecheck
       - run: make verify
+
+  architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: make setup-test
+      - run: make architecture
