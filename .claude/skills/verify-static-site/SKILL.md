@@ -94,8 +94,9 @@ npm run test:duplicates
 ```
 
 `make quality` composes Ruff, non-mutating Black, compilation/strict core typing,
-dependency checks, complexity, duplication, architecture, seeded stability,
-guidance references and the measured coverage/dashboard gate. It does not replace
+dependency checks, complexity, duplication, the Node request-tracing tests
+(`make tracing`) and release-notes tests (`make delivery`), architecture,
+seeded stability, guidance references and the measured coverage/dashboard gate. It does not replace
 `make verify` or browser checks. `make lint`, `make format-check`,
 `make typecheck`, `make check-deps` and `make architecture` can diagnose failures.
 Keep every original seeded failure; a successful retry cannot erase it.

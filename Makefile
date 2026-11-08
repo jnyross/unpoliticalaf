@@ -5,7 +5,7 @@ PYTHON_SOURCES := builder scripts tests quality
 
 .PHONY: setup setup-test setup-dev-tools setup-dev hooks setup-typing setup-quality setup-architecture architecture complexity duplication tracing delivery build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
-# Production install: only what the build needs (used by Vercel).
+# Production install (used by Vercel): build libraries plus the live-check metrics client.
 setup:
 	$(PYTHON) -c 'import sys; assert sys.version_info >= (3, 10), "Python 3.10+ required"'
 	$(PYTHON) -m venv $(VENV)
