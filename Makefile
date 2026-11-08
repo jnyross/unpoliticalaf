@@ -3,7 +3,7 @@ VENV ?= .venv
 RUN_PYTHON := $(VENV)/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev-tools setup-dev hooks setup-typing setup-quality setup-architecture architecture complexity duplication build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-dev-tools setup-dev hooks setup-typing setup-quality setup-architecture architecture complexity duplication tracing build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
 
 # Production install: only what the build needs (used by Vercel).
 setup:
@@ -51,6 +51,9 @@ complexity:
 duplication:
 	npm run check:duplicates
 
+tracing:
+	npm test
+
 build: site
 
 site:
@@ -97,7 +100,7 @@ check-deps:
 	cd quality && $(abspath $(RUN_PYTHON)) -m deptry .
 
 # Extend this aggregate as further tooling lands; never replace existing gates.
-quality: lint format-check typecheck check-deps complexity duplication architecture test-stability
+quality: lint format-check typecheck check-deps complexity duplication tracing architecture test-stability
 	$(RUN_PYTHON) scripts/check_agents.py
 	$(MAKE) -f quality/Makefile metrics
 

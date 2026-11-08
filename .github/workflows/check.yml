@@ -9,6 +9,18 @@ permissions:
   contents: read
 
 jobs:
+  tracing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
+
   check:
     runs-on: ubuntu-latest
     needs: flag_configurations

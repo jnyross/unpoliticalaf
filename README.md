@@ -167,7 +167,7 @@ make verify    # build + check + test
 make verify-coverage # same population under the combined 80% coverage gate
 make benchmark # time a fresh build, save JSON and enforce the 90-second budget
 npm ci --ignore-scripts # install locked Node 22 developer tools
-make setup-dev && make quality # lint, format, types, dependencies, complexity, duplication, stability, dashboard
+make setup-dev && make quality # lint, format, types, dependencies, complexity, duplication, tracing, stability, dashboard
 make lint      # Ruff syntax/Pyflakes across all first-party Python
 make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
 make format-check # check formatting without rewriting files (also in quality/CI)
@@ -177,9 +177,54 @@ make setup-quality && make complexity # new-function ceiling 20 and legacy ratch
 make setup-test && make architecture # five import contracts and nested regressions
 make duplication # same gate as npm run check:duplicates (Node 22)
 npm run test:duplicates # real locked-tool regressions and failure cases
+npm test       # real Vercel helper and privacy-bounded tracing regressions (Node 22)
 make hooks     # reinstall the Git hook in a disposable Boat checkout
 make setup-dev && make a11y   # axe accessibility checks at 360px and 1100px
 ```
+
+## Request tracing
+
+Vercel installs `npm ci --ignore-scripts --omit=dev && make setup`, builds with
+`make production-build` and serves `site/`. The single lockfile includes the
+production `@vercel/functions` helper and the separate jscpd developer tool.
+Node 22 is pinned in `package.json`; Python build/verify commands and the
+reviewed production flags stay unchanged. Only `main` deploys.
+
+`middleware.js` uses Vercel's supported `proxy.entrypoint` configuration on all
+paths, before the static cache, including pages, data, assets and missing paths.
+It continues normal delivery with a null body, without fetching, rewriting,
+setting cookies or changing cache policy. It adds per-request compute under
+the existing plan, not a new service, backend, subscription or plan change.
+Usage/latency and actual platform cache behavior remain deployment observations.
+
+- `X-Request-ID` is forwarded and returned. Accept only lowercase UUID-v4 or
+  nonzero 32-character lowercase hexadecimal IDs; replace other input with a
+  fresh UUID. Free-text names, phone numbers, duplicate values and oversized
+  strings are not accepted. This intentionally narrows PR #247's free-text IDs.
+- Valid lowercase W3C version-00 `traceparent` keeps its nonzero trace ID and
+  records the incoming nonzero span as parent. Every request gets a fresh span.
+  Propagate only the defined sampled flag bit; reset invalid/duplicate/unsupported
+  context to a fresh unsampled trace. Return the same context sent downstream.
+  Response `traceparent` is an explicit debugging convention, not W3C
+  `traceresponse` support.
+- Discard `baggage` and `tracestate`. Never mutate or consume the input request.
+  Other request headers, including conditional/cache headers, remain downstream
+  inputs. The SDK's `x-middleware-*` headers are internal continuation instructions,
+  not public headers; Vercel must consume them before responding to clients.
+- One JSON `request.received` event contains only `event`, `request_id`,
+  `trace_id`, `span_id`, `parent_span_id`. No visitor URL/path/query, cookie,
+  authorization, IP, referrer, user agent, body, final status or duration is logged.
+  Context is untrusted correlation, not identity or authentication. Even opaque
+  IDs can encode data; clients must never put personal data or credentials in IDs.
+
+`npm ci --ignore-scripts && npm test` exercises the real locked SDK locally;
+`make quality` includes it and CI has a separate tracing job. Python static-file
+servers do not run this middleware. No live tracing/cache success is claimed by
+these tests. After reviewed deployment, qualification must inspect page/data/asset/
+missing-path and repeated requests, valid/invalid correlation, unchanged bodies,
+status/cache/cookies, and absence of leaked `x-middleware-*` instructions or
+credentials. Where existing log access permits, match response IDs to events.
+No monitoring backend or privileged activation is part of this implementation.
 
 ### Dev container
 
@@ -489,7 +534,8 @@ warm-cache false passes. Dependency checks use deptry 0.25.1; browser packages
 live in `requirements-a11y.txt` and CLI/stub/dashboard tools are development-only.
 The existing dashboard remains descriptive, with no lowered thresholds.
 
-Vercel: install `make setup`, build `make production-build`, output directory `site`, all set
+Vercel: install `npm ci --ignore-scripts --omit=dev && make setup`, build
+`make production-build`, output directory `site`, all set
 in `vercel.json`. Only `main` deploys; other branches make no Vercel deployment,
 so they don't use up the free plan's 100 deployments a day. Pull requests are
 checked by GitHub Actions instead.
