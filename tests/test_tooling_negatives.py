@@ -107,6 +107,7 @@ class ToolFailures(unittest.TestCase):
                 "requirements-test.txt",
                 "requirements-a11y.txt",
                 "requirements-typing.txt",
+                "requirements-architecture.txt",
                 "quality/requirements.txt",
             ):
                 shutil.copyfile(ROOT / path, root / path)
