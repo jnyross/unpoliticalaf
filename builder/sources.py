@@ -15,6 +15,8 @@ OGL = "Open Government Licence v3.0"
 OECD_TERMS = "Creative Commons Attribution 4.0 International (CC BY 4.0), OECD"
 IMF_TERMS = "IMF data, copyright International Monetary Fund; may be reproduced with attribution under the IMF terms of use"
 GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
+SFC_TERMS = "Copyright Skills for Care. Its website terms allow material to be reproduced with acknowledgment for education and training purposes, not for sale or profit"
+PREFIX_TERMS = {"gbts-": GBTS_TERMS, "oecd-": OECD_TERMS, "imf-": IMF_TERMS, "sfc-": SFC_TERMS}
 
 
 def _fetched(source_id):
@@ -905,6 +907,36 @@ FETCHED = {
         "United Kingdom",
         "Non-domiciled and deemed domiciled taxpayers who file Self Assessment returns",
     ),
+    "nhs-hchs-workforce-aug26": (
+        "NHS England",
+        "NHS Workforce Statistics, August 2026: staff in NHS trusts and other core organisations, data tables (Table 14, staff by nationality group; published 29 October 2026)",
+        "England",
+        "Staff directly employed by NHS trusts and other core organisations (hospital and community health services), as headcount and full time equivalent",
+    ),
+    "nhs-hchs-dqa-aug26": (
+        "NHS England",
+        "NHS Workforce Statistics, August 2026: data quality annex (published 29 October 2026)",
+        "England",
+        "NHS hospital and community health services staff, with notes on staff counted elsewhere, such as primary care",
+    ),
+    "sfc-asc-appendix-2026": (
+        "Skills for Care",
+        "The state of the adult social care sector and workforce in England 2026: statistical appendix (Table 4.7.1, nationality by sector; estimates for 2025/26, published 14 October 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients, not counting NHS-employed roles",
+    ),
+    "sfc-state-2026": (
+        "Skills for Care",
+        "The state of the adult social care sector and workforce in England 2026 (report, published 14 October 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients, not counting NHS-employed roles",
+    ),
+    "sfc-method-jun26": (
+        "Skills for Care",
+        "Methodology for estimating the size and characteristics of the adult social care workforce in England (June 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients",
+    ),
 }
 
 
@@ -947,14 +979,8 @@ def all_sources():
             retrieved=r["retrieved"][:10],
             geography=geography,
             population=population,
-            licence=(
-                GBTS_TERMS
-                if key.startswith("gbts-")
-                else (
-                    OECD_TERMS
-                    if key.startswith("oecd-")
-                    else IMF_TERMS if key.startswith("imf-") else OGL
-                )
+            licence=next(
+                (terms for prefix, terms in PREFIX_TERMS.items() if key.startswith(prefix)), OGL
             ),
         )
     for alias, (key, title, geography, population) in FETCHED_ALIASES.items():

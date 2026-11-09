@@ -439,7 +439,28 @@
         {
           "id": "J2.5",
           "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
-          "gap": "NHS and adult social care nationality figures are published as spreadsheet data, and the site has not yet taken them. Both sectors are needed."
+          "options": {
+            "A": "NHS: about 22% of staff with a recorded nationality (31 August 2026). Adult social care: about 33% of filled posts with a known nationality (2025/26). They are separate figures that cannot be added together",
+            "B": "About 55% of NHS and adult social care staff taken together",
+            "C": "NHS: about 33% of staff. Adult social care: about 22% of filled posts",
+            "D": "The official figures do not give a share for either sector"
+          },
+          "answer": "A",
+          "why": "Immigration page, NHS and adult social care staff section: NHS England counts 335,634 of the 1,520,081 people with a recorded nationality in NHS trusts and other core organisations on 31 August 2026 as not UK nationals (22.1%; 15,688 people with no recorded nationality are left out). Skills for Care estimates that 33% of adult social care filled posts with a known nationality were held by people who are not British in 2025/26. The two producers count different things on different dates.",
+          "evidence": [
+            {
+              "page": "immigration.html",
+              "text": "22.1% of staff with a recorded nationality were not UK nationals (335,634 of 1,520,081 people)"
+            },
+            {
+              "page": "immigration.html",
+              "text": "33% of filled posts with a known nationality were held by people who are not British"
+            },
+            {
+              "page": "immigration.html",
+              "text": "so the two figures cannot be added together into one share for both sectors"
+            }
+          ]
         },
         {
           "id": "J2.6",

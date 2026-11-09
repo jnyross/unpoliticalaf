@@ -636,6 +636,24 @@
   "sha256": "efd05e4a7e715b361617390016356df04af83ea6febecb9475ce173bf2cffb75",
   "retrieved": "2026-11-04T13:30:25Z"
  },
+ "nhs-hchs-dqa-aug26": {
+  "url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx",
+  "file": "nhs/nhs-hchs-workforce-statistics-data-quality-annex-august-2026.xlsx",
+  "bytes": 173245,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "b7b66efff2e769bd0208ee364088af94d52c2cde9792fc05d0757ff836dfe240",
+  "retrieved": "2026-11-09T02:59:17Z",
+  "requested_url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx"
+ },
+ "nhs-hchs-workforce-aug26": {
+  "url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx",
+  "file": "nhs/nhs-hchs-workforce-statistics-trusts-and-core-organisations-data-tables-august-2026.xlsx",
+  "bytes": 8540990,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "303f2915eb85dc964dfb9e0643e7dc354ebd32d8abab54f51e6eaa3ff5448351",
+  "retrieved": "2026-11-09T02:53:07Z",
+  "requested_url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx"
+ },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
   "file": "nations/ni-school-enrolments-2025-26-page.html",
@@ -1188,6 +1206,33 @@
   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
   "sha256": "b69149bdf5a5496cc9a79b109d2011ca7f8813c10f47eddd896fc5564002548b",
   "retrieved": "2026-11-02T15:17:34Z"
+ },
+ "sfc-asc-appendix-2026": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+  "file": "sfc/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+  "bytes": 1196112,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "e1dc74d7325d52a52255fbdb9d3d1c86843bc4325feeca05fc296d5d143fee6c",
+  "retrieved": "2026-11-09T02:53:13Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx"
+ },
+ "sfc-method-jun26": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+  "file": "sfc/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+  "bytes": 2146934,
+  "content_type": "application/pdf",
+  "sha256": "ede8ddcaeb6edfd3bd25f947246261f974f0dadf1e7d03e3a5e9b1d55cac5820",
+  "retrieved": "2026-11-09T02:53:20Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf"
+ },
+ "sfc-state-2026": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+  "file": "sfc/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+  "bytes": 2646019,
+  "content_type": "application/pdf",
+  "sha256": "82fcdeab5de1575f1bafa533a6ea5651c30727adac2147fe7e3e036464a3edad",
+  "retrieved": "2026-11-09T02:53:17Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf"
  },
  "wales-dwelling-stock": {
   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",

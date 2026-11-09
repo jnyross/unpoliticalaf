@@ -2597,6 +2597,9 @@ def build_all():
     from . import data_fiscal_margin
 
     data_fiscal_margin.build(facts)
+    from . import data_nationality
+
+    data_nationality.build(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)
     return facts, d

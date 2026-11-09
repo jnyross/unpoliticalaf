@@ -687,9 +687,29 @@
    "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
   },
   {
-   "id": "nhs-staff-nationality-jun25",
-   "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
-   "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
+   "id": "nhs-hchs-workforce-aug26",
+   "url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx",
+   "file": "nhs/nhs-hchs-workforce-statistics-trusts-and-core-organisations-data-tables-august-2026.xlsx"
+  },
+  {
+   "id": "nhs-hchs-dqa-aug26",
+   "url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx",
+   "file": "nhs/nhs-hchs-workforce-statistics-data-quality-annex-august-2026.xlsx"
+  },
+  {
+   "id": "sfc-asc-appendix-2026",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+   "file": "sfc/ASC-Workforce-Statistical-Appendix-2026.xlsx"
+  },
+  {
+   "id": "sfc-state-2026",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+   "file": "sfc/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf"
+  },
+  {
+   "id": "sfc-method-jun26",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+   "file": "sfc/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf"
   },
   {
    "id": "ons-mye-uk-mid2025",

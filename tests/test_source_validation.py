@@ -170,3 +170,72 @@ def test_ashe_table1_pack_contract_rejects_incompatible_zip(tmp_path, mutation):
                 output.writestr(name, body)
     with pytest.raises((ValueError, zipfile.BadZipFile)):
         validate_source("ashe-2026-table1-provisional", staged, "application/zip", previous)
+
+
+def _copy_sheet(source, sheet, columns, target, change):
+    """Write one retained sheet to a small workbook, apply a change and return its path."""
+    workbook = openpyxl.load_workbook(source, read_only=True, data_only=True)
+    rows = [
+        list(r) for r in workbook[sheet].iter_rows(min_row=1, max_col=columns, values_only=True)
+    ]
+    workbook.close()
+    if change:
+        change(rows)
+    output = openpyxl.Workbook()
+    output.active.title = sheet
+    for row in rows:
+        output.active.append(row)
+    output.save(target)
+    return target
+
+
+NHS_TABLES = ROOT / "data/fetched" / RECEIPTS["nhs-hchs-workforce-aug26"]["file"]
+SFC_APPENDIX = ROOT / "data/fetched" / RECEIPTS["sfc-asc-appendix-2026"]["file"]
+
+
+def _set_cell(row, col, value):
+    def change(rows):
+        rows[row - 1][col] = value
+
+    return change
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        None,
+        _set_cell(458, 2, "Not known"),
+        _set_cell(2, 0, "Staff in NHS trusts, core organisations and GP practices, England"),
+        _set_cell(233, 0, "2026-07-31"),
+        _set_cell(240, 4, "*"),
+    ],
+    ids=["unchanged-copy", "unknown-label", "scope", "month", "suppressed"],
+)
+def test_nhs_nationality_contract(tmp_path, change):
+    staged = _copy_sheet(NHS_TABLES, "14", 5, tmp_path / "nhs.xlsx", change)
+    if change is None:
+        validate_source("nhs-hchs-workforce-aug26", staged, "application/octet-stream")
+        return
+    with pytest.raises(ValueError, match="NHS Table 14"):
+        validate_source("nhs-hchs-workforce-aug26", staged, "application/octet-stream")
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        None,
+        _set_cell(27, 1, "Source: Skills for Care's workforce estimates, 2024/25"),
+        _set_cell(29, 5, "Personal assistants"),
+        _set_cell(35, 1, "Not British"),
+        _set_cell(33, 2, 27),
+        _set_cell(30, 3, "*"),
+    ],
+    ids=["unchanged-copy", "period", "sector", "row-label", "count-as-share", "suppressed"],
+)
+def test_sfc_nationality_contract(tmp_path, change):
+    staged = _copy_sheet(SFC_APPENDIX, "4.7", 6, tmp_path / "sfc.xlsx", change)
+    if change is None:
+        validate_source("sfc-asc-appendix-2026", staged, "application/octet-stream")
+        return
+    with pytest.raises(ValueError, match="Skills for Care Table 4.7.1"):
+        validate_source("sfc-asc-appendix-2026", staged, "application/octet-stream")

@@ -172,6 +172,84 @@ def _validate_json_source(body):
         raise ValueError("invalid JSON dataset/error response")
 
 
+NHS_NATIONALITY_GROUPS = {
+    ("All nationality groups", "All nationalities"),
+    ("United Kingdom", "All nationalities"),
+    ("European Union", "All nationalities"),
+    ("European Economic Area", "All nationalities"),
+    ("Rest of World", "All nationalities"),
+    ("Unknown", "Unknown"),
+}
+# The published table repeats "British" just above "Non-British".
+SFC_NATIONALITY_ROWS = [
+    "Total filled posts",
+    "British",
+    "EU (non British)",
+    "Non-EU",
+    "British",
+    "Non-British",
+]
+
+
+def _sheet_values(path, sheet, columns):
+    workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    try:
+        if sheet not in workbook.sheetnames:
+            raise ValueError(f"missing sheet {sheet}")
+        return [
+            list(row)
+            for row in workbook[sheet].iter_rows(
+                min_row=1, min_col=1, max_col=columns, values_only=True
+            )
+        ]
+    finally:
+        workbook.close()
+
+
+def validate_nhs_nationality(path):
+    """NHS Table 14: one month, core-organisation scope and every group total for both measures."""
+    rows = _sheet_values(path, "14", 5)
+    if "staff by nationality group" not in str(rows[0][0]):
+        raise ValueError("NHS Table 14 title changed")
+    if rows[1][0] != "Staff in NHS trusts and other core organisations, England":
+        raise ValueError("NHS Table 14 scope changed")
+    found = {}
+    months = set()
+    for month, measure, group, nationality, value in rows[6:]:
+        if (group, nationality) in NHS_NATIONALITY_GROUPS and measure in ("FTE", "Headcount"):
+            if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+                raise ValueError("NHS Table 14 group total is not a count")
+            found[(measure, group)] = value
+            months.add(month)
+    if len(found) != 2 * len(NHS_NATIONALITY_GROUPS) or len(months) != 1:
+        raise ValueError("NHS Table 14 group totals or data month changed")
+
+
+def validate_sfc_nationality(path):
+    """Skills for Care Table 4.7.1: labelled filled posts and whole-per-cent shares by sector."""
+    rows = _sheet_values(path, "4.7", 6)
+    top = next(
+        (i for i, row in enumerate(rows) if "Table 4.7.1. Nationality by sector" in row), None
+    )
+    if top is None or rows[top + 1][1] != "Source: Skills for Care's workforce estimates, 2025/26":
+        raise ValueError("Skills for Care Table 4.7.1 missing or period changed")
+    if rows[top + 3][2:6] != [
+        "All sectors",
+        "Local authority",
+        "Independent",
+        "Direct payment recipients",
+    ]:
+        raise ValueError("Skills for Care Table 4.7.1 sector columns changed")
+    block = rows[top + 4 : top + 10]
+    if [row[1] for row in block] != SFC_NATIONALITY_ROWS:
+        raise ValueError("Skills for Care Table 4.7.1 rows changed")
+    for row in block:
+        for value in row[2:6]:
+            limit = math.inf if row[1] == "Total filled posts" else 1
+            if not isinstance(value, (int, float)) or not 0 <= value <= limit:
+                raise ValueError("Skills for Care Table 4.7.1 value is not valid")
+
+
 def _validate_xlsx_source(source_id, path, previous):
     workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
     try:
@@ -184,6 +262,10 @@ def _validate_xlsx_source(source_id, path, previous):
         workbook.close()
     if source_id == "dfe-spc-2015-tables":
         validate_school(path, previous)
+    elif source_id == "nhs-hchs-workforce-aug26":
+        validate_nhs_nationality(path)
+    elif source_id == "sfc-asc-appendix-2026":
+        validate_sfc_nationality(path)
 
 
 def _validate_spreadsheet_source(source_id, path, suffix, previous):
