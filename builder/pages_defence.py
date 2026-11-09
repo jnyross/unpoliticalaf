@@ -61,6 +61,23 @@ def _moved(now, then):
     return "the same as", "change"
 
 
+def _real_size(facts, real, real_base, real_change, pair_year, latest):
+    """The size of the after-inflation change, shown without a sign whichever way it went."""
+    if facts[real].value >= facts[real_base].value:
+        return real_change
+    return derive(
+        facts,
+        f"defence.realfall.{pair_year}",
+        (1 - facts[real].value / facts[real_base].value) * 100,
+        "%",
+        latest,
+        "pesa4",
+        [real, real_base],
+        f"(1 − {real} ÷ {real_base}) × 100",
+        note="Fall in spending after inflation, 2025-26 prices.",
+    )
+
+
 def defence_page(facts, d, num, sources):
     sp, it, borrow = d["spending"], d["intl"], d["borrow"]
     latest = sp["latest"]  # 2025-26, outturn
@@ -215,19 +232,7 @@ def defence_page(facts, d, num, sources):
     cash_base = f"spend.cash.defence.{pair}"
     cash_moved, _ = _moved(facts[cash].value, facts[cash_base].value)
     _, real_moved = _moved(facts[real].value, facts[real_base].value)
-    real_size = real_change
-    if real_moved == "fall":
-        real_size = derive(
-            facts,
-            f"defence.realfall.{pair_year}",
-            (1 - facts[real].value / facts[real_base].value) * 100,
-            "%",
-            latest,
-            "pesa4",
-            [real, real_base],
-            f"(1 − {real} ÷ {real_base}) × 100",
-            note="Fall in spending after inflation, 2025-26 prices.",
-        )
+    real_size = _real_size(facts, real, real_base, real_change, pair_year, latest)
     body.append(
         f"<p>Defence spending was {num(cash, 'bn')} in {latest}, {cash_moved} {num(cash_base, 'bn')} in {pair}. "
         f"After inflation the {real_moved} was {num(real_size, 'pct')}, from {num(real_base, 'bn')} to {num(real, 'bn')} at 2025-26 prices. "

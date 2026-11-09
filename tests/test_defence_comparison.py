@@ -163,6 +163,25 @@ def test_headline_words_follow_the_direction_of_the_change():
     assert pages_defence._moved(50.0, 50.0) == ("the same as", "change")
 
 
+def test_a_fall_after_inflation_is_shown_as_an_unsigned_size():
+    from builder.data import Fact, Facts
+
+    facts = Facts()
+    for fid, value in (("spend.real.defence.2025-26", 45.0), ("spend.real.defence.2015-16", 50.0)):
+        facts.add(Fact(fid, value, "£bn", fid[-7:], "pesa4", "4_3!X10", "outturn"))
+    size = pages_defence._real_size(
+        facts,
+        "spend.real.defence.2025-26",
+        "spend.real.defence.2015-16",
+        "defence.realchange.2015",
+        2015,
+        "2025-26",
+    )
+    assert size == "defence.realfall.2015"
+    assert facts[size].value == pytest.approx(10.0)
+    assert facts[size].status == "calculated"
+
+
 def test_headline_keeps_the_fixed_ten_year_window(built):
     _, d, html = built
     assert d["spending"]["latest"] == "2025-26"
