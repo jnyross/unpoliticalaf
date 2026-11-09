@@ -414,6 +414,12 @@ FETCHED = {
         "United Kingdom",
         "Employee jobs on adult rates whose pay was not affected by absence",
     ),
+    "ons-single-year-life-tables-uk": (
+        "Office for National Statistics",
+        "Single-year life tables, United Kingdom, 1980 to 2024 (period expectation of life; published 10 December 2025)",
+        "United Kingdom",
+        "Males and females, by exact age; single-year tables are not accredited official statistics",
+    ),
     "dwp-spa-timetable": (
         "Department for Work and Pensions (GOV.UK)",
         "State Pension age timetables (DWP PDF, tables 1 to 5)",

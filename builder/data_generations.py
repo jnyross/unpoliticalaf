@@ -19,6 +19,9 @@ FEE_FILE = "data/fetched/parl/CBP-10155.pdf"
 HANSARD_SOURCE = "parl-hansard-1998-tuition-fees"
 HANSARD_FILE = "data/fetched/parl/hansard-1998-12-07-tuition-fees.html"
 CPI_FILE = "data/fetched/ons/l522.csv"
+LIFE_SOURCE = "ons-single-year-life-tables-uk"
+LIFE_FILE = "data/fetched/ons/single-year-life-tables-uk.xlsx"
+LIFE_YEARS = (1994, 2024)
 
 
 def _pages(path):
@@ -100,8 +103,74 @@ def build_fees(facts):
     )
 
 
+def _life_age_row(sheet, year):
+    if "United Kingdom" not in str(sheet["A1"].value) or str(year) not in str(sheet["A1"].value):
+        raise SystemExit(f"ONS life table geography/period changed on sheet {year}")
+    if (sheet["A5"].value, sheet["H5"].value) != ("Males", "Females"):
+        raise SystemExit(f"ONS life table sex headings changed on sheet {year}")
+    rows = list(sheet.values)
+    header = next((row for row in rows if row and row[0] == "age"), None)
+    if not header or header[5] != "ex" or header[7] != "age" or header[12] != "ex":
+        raise SystemExit(f"ONS life table header layout changed on sheet {year}")
+    row_no = next((i for i, row in enumerate(rows, 1) if row[0] == 30 and row[7] == 30), None)
+    if row_no is None:
+        raise SystemExit(f"ONS life table has no age 30 row on sheet {year}")
+    return row_no
+
+
+def build_life(facts):
+    """Reuse PR #225 (efe7a5b): UK single-year period ex at exact age 30, not a forecast."""
+    import openpyxl
+    from openpyxl.utils import get_column_letter
+
+    wb = openpyxl.load_workbook(ROOT / LIFE_FILE, data_only=True)
+    try:
+        for year in LIFE_YEARS:
+            sheet = wb[str(year)]
+            row_no = _life_age_row(sheet, year)
+            for sex, col in (("male", 6), ("female", 13)):
+                cell = f"{get_column_letter(col)}{row_no}"
+                value = sheet[cell].value
+                if (
+                    isinstance(value, bool)
+                    or not isinstance(value, (int, float))
+                    or not 0 < value < 100
+                ):
+                    raise SystemExit(f"ONS life table missing/invalid ex at {year}!{cell}")
+                facts.add(
+                    Fact(
+                        f"life.ex30.{sex}.{year}",
+                        value,
+                        "remaining years at exact age 30",
+                        f"{year} (period life table)",
+                        LIFE_SOURCE,
+                        f"{year}!{cell}",
+                        note=f"UK {sex}s. Observed period mortality rates held fixed for life, not a cohort forecast or a personal prediction. Single-year tables are more volatile than three-year tables and are not accredited official statistics.",
+                    )
+                )
+    finally:
+        wb.close()
+    for sex in ("male", "female"):
+        first, last = (f"life.ex30.{sex}.{year}" for year in LIFE_YEARS)
+        facts.add(
+            Fact(
+                f"life.ex30.{sex}.change",
+                facts[last].value - facts[first].value,
+                "years",
+                "1994 to 2024 (period life tables)",
+                LIFE_SOURCE,
+                "",
+                "calculated",
+                formula=f"{last} - {first}",
+                inputs=[last, first],
+                note="UK; difference in remaining period years at exact age 30, not a gain promised to a person.",
+            )
+        )
+
+
 def build(facts):
     build_fees(facts)
+    build_life(facts)
     pages = _pages(SPA_FILE)
     # Born 6 October 1954 to 5 April 1960: State Pension age is reached on the 66th birthday.
     p_66 = _page_of(pages, "6 October 1954 – 5 April 1960 66th birthday")

@@ -872,6 +872,11 @@
    "file": "ons/red02oct2026.xlsx"
   },
   {
+   "id": "ons-single-year-life-tables-uk",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+   "file": "ons/single-year-life-tables-uk.xlsx"
+  },
+  {
    "id": "ons-emp07",
    "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
    "file": "ons/emp07aug2026.xls"

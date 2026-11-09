@@ -297,7 +297,7 @@ def test_cannot_yet_list_drops_pay_and_job_security(site_pages):
     assert "Job security" not in section
 
 
-@pytest.mark.parametrize("pid", ["J12.7", "J12.12"])
+@pytest.mark.parametrize("pid", ["J12.7", "J12.10", "J12.12"])
 def test_probes_are_closed_with_page_evidence(site_pages, pid):
     probe = _probe(pid)
     assert "gap" not in probe

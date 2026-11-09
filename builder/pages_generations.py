@@ -16,6 +16,7 @@ from . import findings as F
 from .pages_life import CAUSE, groups_chart
 from .pages_life_extra import _chart
 from .pages_age_pay import WORK_FIRST, pay_answer, pay_section, security_section
+from .pages_life_expectancy import life_section
 
 PAGE = "life/generations.html"
 AFFORD_FIRST = (
@@ -52,7 +53,7 @@ def _answer(facts, num):
         f'where the household’s main person was aged 25 to 34, {num(f"own.hrp.25-34.{OWN_AGE_THEN}", "pct0")} owned in {OWN_AGE_THEN} and {num(f"own.hrp.25-34.{OWN_LAST}", "pct0")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}, from two different surveys. '
         f"University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. "
         f"State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. "
-        f"{pay_answer(num)}Tax and life expectancy are not compared yet.</p></div>"
+        f'{pay_answer(num)}<a href="#same-age">Life expectancy at 30 is under Same age below</a>. Tax is not compared yet.</p></div>'
     )
 
 
@@ -96,7 +97,7 @@ def page_body(facts, d, num, sources):
         "<li>Pensions, and what income people can expect when they stop work.</li>"
         "<li>The public services children use, such as school classes.</li>"
         "<li>How long people live.</li></ul>",
-        "<h2 id='same-age'>Same age, different years: work, pay and job security</h2>",
+        "<h2 id='same-age'>Same age: work, pay, job security and life expectancy</h2>",
         _same_age_chart(facts, num),
         FOLD,
         table(
@@ -110,6 +111,7 @@ def page_body(facts, d, num, sources):
         '<a href="work.html#work-age">Employment by age, every year</a>.</p>',
         security_section(num, sources),
         pay_section(num, sources),
+        life_section(num, sources),
         "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
         "<p>The house price and earnings figures are for everyone, not for people of one age, so they show the position of the whole market. Home ownership around the age of 30 is further down this section.</p>",
         _afford_chart(facts, num),
@@ -220,7 +222,6 @@ def page_body(facts, d, num, sources):
         "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
         "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
         "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
-        "<li><strong>Life expectancy at 30</strong>: national life tables, by year.</li>"
         "</ul>",
         CAUSE,
         "<h2 id='about'>About these figures</h2>",

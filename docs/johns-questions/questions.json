@@ -992,7 +992,28 @@
         {
           "id": "J12.10",
           "question": "How long can a 30 year old now expect to live, compared with 30 years ago?",
-          "gap": "The site has no life expectancy figures by age. Needs ONS national life tables for two or more years, with the age-30 figure."
+          "options": {
+            "A": "Fewer remaining years for both sexes than in 1994",
+            "B": "In the UK 2024 period table, 50.3 remaining years for men aged 30 and 53.9 for women, about 4.9 and 3.7 more than in 1994; not a personal forecast",
+            "C": "A promise that every 30-year-old will live to age 100",
+            "D": "The site has no life expectancy figures"
+          },
+          "answer": "B",
+          "why": "ONS UK single-year period life tables, published 10 December 2025: age-30 ex in 1994/2024 is 45.38/50.26 for males and 50.18/53.87 for females, differences 4.88/3.69 years before rounding. These assume each year's age-specific death rates stay fixed for life, not a cohort forecast or personal promise. 2024 is the latest year here, not 2026. Reuses PR #225's source and age-30 extraction (efe7a5b), independently reopened for this integration.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "in 2024, period life expectancy at exact age 30 was 50.3 more years for men and 53.9 for women"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "Compared with 1994, that is 4.9 more years for men and 3.7 for women"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "Period figures, not a forecast for a person"
+            }
+          ]
         },
         {
           "id": "J12.11",
