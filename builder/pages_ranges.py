@@ -209,7 +209,8 @@ def _not_compared(facts, m, a, b):
         return L.BREAK_REASONS[m[7]]
     for sp in (a, b):
         if avg_id(m, sp) not in facts or not ranged(m):
-            return f"No average for {long(sp)}, because {span_reason(facts, m, sp)}"
+            reason = f"No average for {long(sp)}, because {span_reason(facts, m, sp)}"
+            return reason if reason.endswith(".") else reason + "."
     return ""
 
 
@@ -341,7 +342,7 @@ def span_page(facts, d, num, sources, a, b):
                 notes.setdefault(_not_compared(facts, m, a, b), []).append(m)
         if notes:
             items = "".join(
-                f'<li><p>{esc(reason)}.</p><p class="small">Not compared: {L._join_labels([m[2] for m in group])}.</p></li>'
+                f'<li><p>{esc(reason)}</p><p class="small">Not compared: {L._join_labels([m[2] for m in group])}.</p></li>'
                 for reason, group in notes.items()
             )
             body.append(f'<h3>Not compared</h3><ul class="cmp-notes">{items}</ul>')

@@ -248,6 +248,9 @@ class Latest(unittest.TestCase):
         self.assertIn("<h1>2008 to 2010 compared with 2024 to 2026</h1>", html)
         self.assertIn('data-to="avg.work.rate.2024-2026"', html)
         self.assertNotRegex(html, r'data-(to|fact)="avg\.(house|hol)\.[^"]*\.2024-2026"')
+        text = _text(html)
+        self.assertIn("the English Housing Survey for 2025-26 is not yet published.", text)
+        self.assertNotRegex(text, r"\.\s*\.")
 
     def test_topic_answers_use_each_topics_latest_published_year(self):
         for key in ("work", "earnings", "housing", "holidays", "schools"):

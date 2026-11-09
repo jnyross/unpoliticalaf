@@ -35,7 +35,6 @@
   "builder/pages_history.py:early_spark": 21,
   "builder/pages_intl.py:international_page": 30,
   "builder/pages_life.py:compare_page": 42,
-  "builder/pages_life.py:headline": 24,
   "builder/pages_life.py:places_block": 33,
   "builder/pages_life.py:year_spark": 26,
   "builder/pages_life_extra.py:holiday_afford_block": 21,

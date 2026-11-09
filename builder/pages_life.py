@@ -978,6 +978,48 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
     return f'<dl class="stats">{"".join(rows)}</dl>'
 
 
+def _occ_sentence(facts, num, y, latest):
+    """The largest group of jobs in year y, or why there is no figure. With latest,
+    the newest earlier year stands in and the sentence names it."""
+    oy = _latest_upto(facts, _occ_prof, y) if latest else y
+    if oy is None or _val(facts, _occ_prof(oy)) is None:
+        if y < 2011:
+            return f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
+        return f"There are no job-type figures for {y}: {missing_reason('work.occ.prof', y)}."
+    sc = occ_scheme(oy)
+    shares = {
+        c: v
+        for c in OCC_NAMES[sc]
+        if c != "0" and (v := _val(facts, f"work.occshare.{sc}.{c}.{oy}")) is not None
+    }
+    top = max(shares, key=shares.get)
+    return (
+        f"Over all of {oy}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: "
+        f"{num(f'work.occshare.{sc}.{top}.{oy}', 'pct')} of workers."
+    )
+
+
+def _nation_classes(facts, num, y, latest):
+    """Wales's and Scotland's class sizes for year y, or with latest their newest earlier year."""
+
+    def year_of(fid):
+        return (
+            _latest_upto(facts, fid, y)
+            if latest
+            else (y if _val(facts, fid(y)) is not None else None)
+        )
+
+    s = ""
+    wy = year_of(lambda yr: f"school.wales.infant.{yr}")
+    if wy is not None:
+        when = "" if wy == y else f" in January {wy}"
+        s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{wy}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{wy}', 'dp1')}{when}."
+    ty = year_of(lambda yr: f"school.scotland.primary.{yr}")
+    if ty is not None:
+        s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{ty}', 'dp1')} pupils at the September {ty} census."
+    return s
+
+
 def headline(facts, num, topic, y, gb=True, latest=False):
     """One or two plain sentences answering 'what was it like in year y?'.
 
@@ -993,26 +1035,7 @@ def headline(facts, num, topic, y, gb=True, latest=False):
             s.append(
                 f"In April to June {y}, {num(f'work.rate.{y}', 'pct')} of people aged 16 to 64 were in work ({num(f'work.men.{y}', 'pct')} of men and {num(f'work.women.{y}', 'pct')} of women)."
             )
-        oy = _latest_upto(facts, _occ_prof, y) if latest else y
-        sc = occ_scheme(oy) if oy else None
-        if oy and has(_occ_prof(oy)):
-            shares = {
-                c: facts[f"work.occshare.{sc}.{c}.{oy}"].value
-                for c in OCC_NAMES[sc]
-                if c != "0" and has(f"work.occshare.{sc}.{c}.{oy}")
-            }
-            top = max(shares, key=shares.get)
-            s.append(
-                f"Over all of {oy}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{oy}', 'pct')} of workers."
-            )
-        elif y < 2011:
-            s.append(
-                f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
-            )
-        else:
-            s.append(
-                f"There are no job-type figures for {y}: {missing_reason('work.occ.prof', y)}."
-            )
+        s.append(_occ_sentence(facts, num, y, latest))
         return " ".join(s)
     if topic == "earnings":
         if not has(f"earn.real.ft.{y}"):
@@ -1055,14 +1078,7 @@ def headline(facts, num, topic, y, gb=True, latest=False):
             f"In January {y}, the average class in an English state primary school had {num(f'school.primary.{y}', 'dp1')} pupils; "
             f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}."
         )
-        wy = _latest_upto(facts, lambda yr: f"school.wales.infant.{yr}", y) if latest else y
-        if wy and has(f"school.wales.infant.{wy}"):
-            when = "" if wy == y else f" in January {wy}"
-            s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{wy}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{wy}', 'dp1')}{when}."
-        ty = _latest_upto(facts, lambda yr: f"school.scotland.primary.{yr}", y) if latest else y
-        if ty and has(f"school.scotland.primary.{ty}"):
-            s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{ty}', 'dp1')} pupils at the September {ty} census."
-        return s
+        return s + _nation_classes(facts, num, y, latest)
     return ""
 
 
@@ -1397,6 +1413,27 @@ def near_sentence(
     )
 
 
+# Measures whose newer years are not yet published or not yet in the tables used here:
+# (measure key prefixes, last year with figures, reason). The first match applies.
+NOT_YET_PUBLISHED = (
+    (("house.crowd.",), 2022, "the latest published overcrowding average ends in 2022-23"),
+    (("house.",), 2024, "the English Housing Survey for {sy} is not yet published"),
+    (("nat.house.",), 2025, "figures for {sy} are not yet published"),
+    (
+        ("work.place.", "work.occ."),
+        2025,
+        "the Annual Population Survey for January to December {y} is not yet published",
+    ),
+    (("earn.place.",), 2025, "pay by nation for April {y} is not yet in the tables used here"),
+    (
+        ("school.wales.", "school.scotland"),
+        2025,
+        "the January {y} census for this nation is not yet in the tables used here",
+    ),
+    (("hol.",), 2025, "travel figures for {y} are not yet published"),
+)
+
+
 def missing_reason(mkey, y):
     """Why a measure has no figure for year y, in plain words."""
     if mkey.startswith("work.occ.") and y < 2011:
@@ -1409,20 +1446,9 @@ def missing_reason(mkey, y):
             if y < 2012
             else f"Northern Ireland’s figures for {sy(y)} are not yet published"
         )
-    if mkey.startswith("house.crowd.") and y > 2022:
-        return "the latest published overcrowding average ends in 2022-23"
-    if mkey.startswith("house.") and y > 2024:
-        return f"the English Housing Survey for {sy(y)} is not yet published"
-    if mkey.startswith("nat.house.") and y > 2025:
-        return f"figures for {sy(y)} are not yet published"
-    if mkey.startswith(("work.place.", "work.occ.")) and y > 2025:
-        return f"the Annual Population Survey for January to December {y} is not yet published"
-    if mkey.startswith("earn.place.") and y > 2025:
-        return f"pay by nation for April {y} is not yet in the tables used here"
-    if mkey.startswith(("school.wales.", "school.scotland")) and y > 2025:
-        return f"the January {y} census for this nation is not yet in the tables used here"
-    if mkey.startswith("hol.") and y > 2025:
-        return f"travel figures for {y} are not yet published"
+    for prefixes, last, reason in NOT_YET_PUBLISHED:
+        if mkey.startswith(prefixes) and y > last:
+            return reason.format(y=y, sy=sy(y))
     if mkey.startswith("hol.gb"):
         if y in (2020, 2021):
             return "the Great Britain Tourism Survey has no full-year figures for 2020 and 2021"
