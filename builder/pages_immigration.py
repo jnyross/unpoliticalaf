@@ -36,7 +36,7 @@ def _staff_nationality(num, sources):
         ),
     ]
     care_rows = [
-        ("Filled posts (estimate)", *care("posts", "int")),
+        ("Filled posts", *care("posts", "int")),
         ("British", *care("british", "pct0")),
         ("EU (not British)", *care("eu", "pct0")),
         ("Outside the EU", *care("noneu", "pct0")),
@@ -80,13 +80,7 @@ def _staff_nationality(num, sources):
         "(direct payment recipients).</p>",
         table(
             "Adult social care filled posts by nationality, 2025/26",
-            [
-                "Nationality",
-                "All sectors",
-                "Local authorities",
-                "Independent employers",
-                "Direct payment recipients",
-            ],
+            ["Nationality", "All", "Local authority", "Independent", "Direct payments"],
             care_rows,
         ),
         "<h3>Who publishes these figures</h3>",
