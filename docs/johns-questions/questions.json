@@ -797,7 +797,7 @@
       "asked": "did our parents have it easier than this generation?",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04",
-      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where the site has no figures for a measure at the same age, the probe stays open until the figure is added from an official source.",
+      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where the site has no figures for a measure at the same age, the probe stays open until the figure is added from an official source. Where the nearest official figure covers a different group, such as households in a ten-year age band rather than people aged exactly 30, the answer says so.",
       "probes": [
         {
           "id": "J12.1",
@@ -892,7 +892,28 @@
         {
           "id": "J12.6",
           "question": "Were people aged 30 more or less likely to own their home in the 1990s than people aged 30 now?",
-          "gap": "The site holds owner occupation by age from 2008-09 (English Housing Survey table FC2101). The 1981 and 1991 rows in the same file have no source written on the sheet, so they are not used. Needs a documented official source for owning or renting by age in the 1990s."
+          "options": {
+            "A": "More likely in the early 1990s: about 67% of households whose head was aged 25 to 34 owned in 1991, against about 48% of households whose reference person was aged 25 to 34 in 2024-25. The site has no figure for people aged exactly 30",
+            "B": "Less likely in the early 1990s: about 48% in 1991 against about 67% in 2024-25",
+            "C": "About the same, close to half in both years",
+            "D": "The site shows that exactly 30% of 30-year-olds owned their home in both years"
+          },
+          "answer": "A",
+          "why": "Generations page: the nearest measure is households grouped by the age of one person, aged 25 to 34. 67% owned in 1991 (Labour Force Survey, grouped by the head of household, as published in Annex Table 1.4 of the English Housing Survey 2008-09 report) and 48% in 2024-25 (English Housing Survey Annex Table 1.4, by household reference person). These are households in a ten-year age group in England, not people aged exactly 30, and the two surveys pick the household's main person differently.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "In 1991, 67% of households whose head was aged 25 to 34 owned their home"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "In 2024-25, 48% of households whose reference person was aged 25 to 34 did"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "Not people aged exactly 30"
+            }
+          ]
         },
         {
           "id": "J12.7",
@@ -1307,7 +1328,7 @@
       "asked": "how much harder is it to buy a house now than it was in the past",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04 (ticket T128)",
-      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25), the average age of recent first-time buyers (2003-04 to 2024-25), home ownership by age (2008-09 to 2021-22), mortgage payments as a share of gross household income (2010-11 to 2024-25), and the average rate on new mortgages (January 2016 to September 2026). Not yet measured on the site: take-home pay (the mortgage share is before tax), mortgage payments before 2010-11 as a share of income, mortgage rates before 2016, and home ownership by age before 2008-09. Those stay open probes until the sources are added.",
+      "reading": "Read as how much the cost of buying a home has risen compared with earnings and with household budgets, over the longest series the site can check. Measured here: house prices against earnings from 1997 (England and Wales), a 10% deposit as years of median full-time pay before tax, average mortgage payments for owners with a mortgage in England after inflation (2008-09 to 2024-25), the average age of recent first-time buyers (2003-04 to 2024-25), home ownership by age of the household reference person (1991 from the Labour Force Survey beside 2008-09 to 2024-25 from the English Housing Survey, with the difference stated), mortgage payments as a share of gross household income (2010-11 to 2024-25), the quoted two-year fixed mortgage rate (January 2008 onwards) and, separately, the average rate on new mortgages (January 2016 onwards). Not measured, and stated as limits: take-home pay (the mortgage share is before tax and no official table gives a take-home share), and mortgage payments as a share of income before 2010-11.",
       "probes": [
         {
           "id": "J11.1",
@@ -1410,29 +1431,96 @@
         {
           "id": "J11.6",
           "question": "How has home ownership changed for people of each age since the 1990s?",
-          "gap": "The site shows home ownership by age from 2008-09 to 2021-22 (see J11.9), but not back to the 1990s: the earlier rows in the same source are not yet documented well enough to compare."
+          "options": {
+            "A": "It rose for every age group",
+            "B": "Among households whose reference person was aged 25 to 34 or 35 to 44 it fell between 1991 and 2024-25, and where they were 65 or over it rose; 1991 comes from a different survey",
+            "C": "It fell for every age group, including 65 and over",
+            "D": "It stayed about the same for every age group"
+          },
+          "answer": "B",
+          "why": "House prices page: by age of the household reference person, owning fell from 67% in 1991 to 48% in 2024-25 for ages 25 to 34 and from 78% to 56% for ages 35 to 44, and rose from 58% to 79% for 65 and over (England). 1991 is from the Labour Force Survey by head of household (English Housing Survey 2008-09 Annex Table 1.4); 2008-09 and 2024-25 are from the English Housing Survey (2024-25 Annex Table 1.4). These are households, not all people of that age.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "owned their home in 1991, 51% in 2008-09 and 48% in 2024-25"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "25 to 34 66.5% 51.5% 47.7%"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "Households, not people, and age groups, not single ages"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "1991 comes from another survey"
+            }
+          ]
         },
         {
           "id": "J11.7",
           "question": "What share of take-home pay goes on a mortgage payment for households with a mortgage, now and in 2008-09?",
-          "gap": "The site shows mortgage payments as a share of gross household income from 2010-11 (see J11.10). It cannot show take-home pay, which is not in the source, or 2008-09, which the table does not give."
+          "options": {
+            "A": "About a third of take-home pay in both years",
+            "B": "The site does not give a take-home share or a 2008-09 share: the official table gives payments as a share of gross household income, 18% in 2010-11 and 19% in 2024-25",
+            "C": "About 10% of take-home pay in 2008-09 and 19% now",
+            "D": "Exactly the same share of take-home pay in both years"
+          },
+          "answer": "B",
+          "why": "House prices page: English Housing Survey Annex Table 2.5 gives mortgage payments as a share of gross household income (before tax, including housing support), 18% in 2010-11 and 19% in 2024-25. It does not give take-home pay, and the site does not estimate it. For 2008-09 the survey gives only the average weekly payment, not a share of income.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "Take-home pay and 2008-09 are not shown"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "The site does not work out a take-home share itself"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "took 18% of gross household income in 2010-11 and 19% in 2024-25"
+            }
+          ]
         },
         {
           "id": "J11.8",
           "question": "How have mortgage interest rates changed since 2008?",
-          "gap": "The site shows the average rate on new mortgages from January 2016 (see J11.11). It has no mortgage rate series back to 2008 yet."
+          "options": {
+            "A": "They rose steadily every year from 2008",
+            "B": "The quoted two-year fixed rate at 75% loan to value was 5.97% in January 2008, fell to 1.20% in September 2021, and was 5.39% in October 2026",
+            "C": "They stayed close to 5% throughout",
+            "D": "They fell from about 10% to under 1%"
+          },
+          "answer": "B",
+          "why": "House prices page: Bank of England series IUMBV34, the quoted rate on a two-year fixed mortgage at 75% loan to value, was 5.97% in January 2008, highest at 6.60% in June 2008, lowest at 1.20% in September 2021, and 5.39% in October 2026. It is a quoted rate for one type of mortgage, the Bank changed its method from January 2016, and it is kept apart from the effective rate on new mortgages (CFMZ6JM), which starts in January 2016.",
+          "evidence": [
+            {
+              "page": "life/house-prices.html",
+              "text": "was 5.97% in January 2008 and 5.39% in October 2026"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "It was lowest at 1.20% in September 2021 and highest at 6.60% in June 2008"
+            },
+            {
+              "page": "life/house-prices.html",
+              "text": "the two are not joined"
+            }
+          ]
         },
         {
           "id": "J11.9",
-          "question": "Between 2008-09 and 2021-22, how did home ownership change for people aged 25 to 34, and for people aged 75 and over?",
+          "question": "Between 2008-09 and 2021-22, how did home ownership change for households whose reference person was aged 25 to 34, and aged 75 and over?",
           "options": {
             "A": "It rose for both age groups",
-            "B": "It fell for people aged 25 to 34 and rose for people aged 75 and over",
+            "B": "It fell where the reference person was aged 25 to 34 and rose where they were 75 or over",
             "C": "It fell for both age groups",
             "D": "It stayed about the same for both age groups"
           },
           "answer": "B",
-          "why": "House prices page: the share of people aged 25 to 34 who owned their home fell from 51% in 2008-09 to 41% in 2021-22; for people aged 75 and over it rose from 72% to 80%. English Housing Survey live table FC2101.",
+          "why": "House prices page: among households whose reference person was aged 25 to 34, the share owning their home fell from 51% in 2008-09 to 41% in 2021-22; where the reference person was 75 or over it rose from 72% to 80%. English Housing Survey live table FC2101, which groups households by the age of the household reference person, not all people of that age.",
           "evidence": [
             {
               "page": "life/house-prices.html",
@@ -1440,7 +1528,7 @@
             },
             {
               "page": "life/house-prices.html",
-              "text": "For people aged 75 and over it rose, from 72% to 80%"
+              "text": "Where the reference person was aged 75 or over it rose, from 72% to 80%"
             }
           ]
         },

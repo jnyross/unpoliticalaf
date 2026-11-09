@@ -790,6 +790,46 @@
    "id": "oecd-pit-top-rates",
    "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_PIT@DF_PIT_TOP_EARN_THRESH,/all?startPeriod=2000&format=csvfilewithlabels",
    "file": "oecd/pit-top-rates.csv"
+  },
+  {
+   "id": "ehs-0809-annex-ch1",
+   "url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls",
+   "file": "ehs/2008-09-household-report-ch1-annex.xls"
+  },
+  {
+   "id": "ehs-0809-report",
+   "url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf",
+   "file": "ehs/2008-09-household-report.pdf"
+  },
+  {
+   "id": "ons-lfs-guide-household",
+   "url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf",
+   "file": "ons/lfs-user-guide-vol8-household-2003.pdf"
+  },
+  {
+   "id": "boe-quoted-2yr-75ltv",
+   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/quoted-rate-2yr-fixed-75ltv.csv"
+  },
+  {
+   "id": "boe-quoted-rates-notes",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G",
+   "file": "boe/iadb-IUMBV34-metadata.xml"
+  },
+  {
+   "id": "boe-effective-rates-notes",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G",
+   "file": "boe/iadb-CFMZ6JM-metadata.xml"
+  },
+  {
+   "id": "boe-rate-series-titles",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/iadb-IUMBV34-CFMZ6JM-titles-2016-01.csv"
+  },
+  {
+   "id": "boe-form-er-definitions",
+   "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf",
+   "file": "boe/def_er2016.pdf"
   }
  ]
 }

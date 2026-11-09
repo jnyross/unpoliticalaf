@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<Envelope xmlns="http://www.gesmes.org/xml/2002-08-01">
+
+ 				<Cube xmlns="https://web.prod.iadb.ext.az.cloud.bankofengland.co.uk/website/agg_series" SCODE="IUMBV34"  DESC='Monthly interest rate of UK monetary financial institutions (excl. Central Bank) sterling 2 year (75% LTV) fixed rate mortgage to households (in percent) not seasonally adjusted' COUNTRY='' CONCAT='NOT_AVAILABLE '>
+ 		  
+	 					 	<Cube  FREQ_NAME='Monthly' FREQ_CODE='M' FREQ_ORD='7'/>
+				  	  <SERIES_COM>Following a regular QR review, the methodology used to calculate these series has changed from January 2008. For consistency, these changes have been applied historically, dating back to January 2005. See article &amp;quot;Changes to quoted household interest rates series&amp;quot; in the February 2008 issue of this publication.</SERIES_COM><SERIES_COM>Following a regular QR review, the methodology used to calculate these series has changed from January 2016.  See article &amp;quot;Forthcoming improvements to interest rate statistics&amp;quot; in the August 2016 issue of this publication.</SERIES_COM>
+	 					 	<Cube  CAT_NAME='SEASONAL ADJUSTMENT' CAT_VAL='U' VAL_DESC='Not seasonally adjusted' CAT_ORD='1'/>
+	 				  
+	 					 	<Cube  CAT_NAME='TYPE' CAT_VAL='R' VAL_DESC='Interest rate' CAT_ORD='2'/>
+	 				  
+	 					 	<Cube  CAT_NAME='OUTPUT IN' CAT_VAL='%' VAL_DESC='Percent' CAT_ORD='3'/>
+	 				  
+	 					 	<Cube  CAT_NAME='SECTOR' CAT_VAL='BKBS' VAL_DESC='UK resident monetary financial institutions (excl. Central Bank)' CAT_ORD='4'/>
+	 				  
+	 					 	<Cube  CAT_NAME='OF SECTOR' CAT_VAL='HH' VAL_DESC='Households' CAT_ORD='5'/>
+	 				  
+	 					 	<Cube  CAT_NAME='INSTRUMENT CURRENCY' CAT_VAL='£' VAL_DESC='Sterling' CAT_ORD='6'/>
+	 				  
+	 					 	<Cube  CAT_NAME='INSTRUMENTS' CAT_VAL='FR2Y75' VAL_DESC='Fixed rate mortgage, 2 year' CAT_ORD='7'/>
+	 				  
+					 	<Cube  FIRST_OBS='1995-01-31' LAST_OBS='2026-10-31'/>
+				  </Cube>
+</Envelope>

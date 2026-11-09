@@ -23,6 +23,7 @@ ERROR_PAGE = re.compile(
 TABLE_NS = "urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 TEXT_NS = "urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 OFFICE_NS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+GESMES_NS = "http://www.gesmes.org/xml/2002-08-01"
 
 
 def csv_records(path):
@@ -160,6 +161,15 @@ def _validate_csv_source(source_id, path, previous):
         raise ValueError("CSV header/identity changed")
     if source_id == "ons-l522":
         validate_l522(rows, previous)
+
+
+def _validate_xml_source(body):
+    """Bank of England Database XML: a gesmes envelope naming at least one series."""
+    root = ET.fromstring(body)
+    if root.tag != f"{{{GESMES_NS}}}Envelope":
+        raise ValueError("XML is not a gesmes data envelope")
+    if not [node for node in root.iter() if node.get("SCODE")]:
+        raise ValueError("XML envelope names no series")
 
 
 def _validate_json_source(body):
@@ -358,6 +368,8 @@ def validate_source(source_id, path, content_type, previous=None):
         _validate_csv_source(source_id, path, previous)
     elif suffix == ".json":
         _validate_json_source(body)
+    elif suffix == ".xml":
+        _validate_xml_source(body)
     elif suffix in {".xlsx", ".ods"}:
         _validate_spreadsheet_source(source_id, path, suffix, previous)
     elif suffix == ".zip":

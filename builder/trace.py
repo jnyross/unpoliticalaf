@@ -23,6 +23,15 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "9 November 2026",
+        "pages": [
+            ("life/house-prices.html#owners-by-age", "House prices and earnings"),
+            ("data/facts.json", "Facts download"),
+        ],
+        "was": "The house prices page described home ownership by age as the share of people aged 25 to 34, 35 to 44 or 75 and over who owned their home. The English Housing Survey figures are for households, grouped by the age of the household reference person, not for everyone of that age.",
+        "now": "The page and the figure notes say these are households grouped by the age of the household reference person. The percentages themselves have not changed. The page now also shows 1991 figures from the Labour Force Survey, with the difference in how that survey picked the household's main person stated beside them.",
+    },
+    {
         "date": "8 November 2026",
         "pages": [
             ("index.html", "Home"),

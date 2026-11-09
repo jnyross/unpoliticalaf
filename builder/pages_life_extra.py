@@ -6,7 +6,7 @@ topic_page() turns into its own section.
 
 from .html import FOLD, NOFOLD, details_table, esc, line_chart, table
 from .data import ASHE_TABLE1, EARN_LAST
-from .data_buyers import AGE_GROUPS
+from .data_buyers import AGE_GROUPS, HRP_GROUPS
 from . import findings as F
 
 
@@ -194,26 +194,18 @@ def buyers_blocks(facts, d, num):
             [[f"{y}-{str(y + 1)[2:]}", num(f"ftb.age.{y}", "dp1")] for y in ages],
         ),
         '<p class="small">Before 2008-09 the figures come from the Survey of English Housing, and from 2008-09 from the English Housing Survey; the two are not joined. The sample is small (under 500 recent first-time buyers in most years). The figures are averages, not the age of a typical buyer, and one year can differ from the next by a year or more.</p>',
-        "<h2 id='owners-by-age'>Home ownership by age</h2>",
-        f'<div class="answer"><p>Between {y0}-{str(y0 + 1)[2:]} and {y1}-{str(y1 + 1)[2:]}, the share of people aged 25 to 34 who owned their home fell from {num(f"own.25-34.{y0}", "pct0")} to {num(f"own.25-34.{y1}", "pct0")}, '
-        f'and for people aged 35 to 44 it fell from {num(f"own.35-44.{y0}", "pct0")} to {num(f"own.35-44.{y1}", "pct0")}. For people aged 75 and over it rose, from {num(f"own.75+.{y0}", "pct0")} to {num(f"own.75+.{y1}", "pct0")}.</p></div>',
-        details_table(
-            "Show home ownership for every age group and year",
-            "Percentage of each age group who are owner occupiers, England",
-            ["Survey year"] + AGE_GROUPS,
-            [
-                [f"{y}-{str(y + 1)[2:]}"] + [num(f"own.{g}.{y}", "pct") for g in AGE_GROUPS]
-                for y in own
-            ],
-        ),
-        '<p class="small">These are the English Housing Survey figures for each age group, so they cover England only. Ownership is for the whole age group, not for people who have just bought. The table begins in 2008-09 here; earlier rows in the same source are not used.</p>',
+        *_owners_by_age(num, b, y0, y1),
         "<h2 id='mortgage-share'>Mortgage payments and household income</h2>",
         f'<div class="answer"><p>For owner occupiers who make mortgage payments, the payment took {num(f"mortshare.{s0}", "pct0")} of gross household income in {s0}-{str(s0 + 1)[2:]} and {num(f"mortshare.{s1}", "pct0")} in {s1}-{str(s1 + 1)[2:]}. '
         f"The income is the whole household’s, before tax, including housing support. The table does not give take-home pay, and it starts in {s0}-{str(s0 + 1)[2:]}, so it does not show 2008-09.</p></div>",
+        '<div class="limit"><p><strong>Take-home pay and 2008-09 are not shown.</strong> The English Housing Survey publishes mortgage payments as a share of gross household income only. '
+        "The site does not work out a take-home share itself, because that would need each household’s tax and National Insurance, which the table does not give. "
+        f'For 2008-09 the tables held here give the average payment, {num("house.mortpay.2008", "pounds")} a week (cash), but not as a share of income, so the payment cannot be compared with income for that year.</p></div>',
         '<p class="small">Gross household income is before tax and National Insurance, so a payment that is a fifth of it takes more than a fifth of take-home pay. The source is the English Housing Survey, for England.</p>',
-        "<h2 id='rates'>Mortgage interest rates</h2>",
-        f'<div class="answer"><p>The average rate on new mortgages rose from {num(f"rate.new.{rate_first}", "pct2")} in {_month(rate_first)} to {num(f"rate.new.{rate_last}", "pct2")} in {_month(rate_last)}. '
-        f'It was lowest at {num(f"rate.new.{trough}", "pct2")} in {_month(trough)} and highest at {num(f"rate.new.{peak}", "pct2")} in {_month(peak)}.</p></div>',
+        *_quoted_block(facts, num, b["quoted_months"]),
+        "<h3 id='rates-effective'>Effective rate on new mortgages, since January 2016</h3>",
+        f'<p>The average rate on new mortgages rose from {num(f"rate.new.{rate_first}", "pct2")} in {_month(rate_first)} to {num(f"rate.new.{rate_last}", "pct2")} in {_month(rate_last)}. '
+        f'It was lowest at {num(f"rate.new.{trough}", "pct2")} in {_month(trough)} and highest at {num(f"rate.new.{peak}", "pct2")} in {_month(peak)}.</p>',
         FOLD,
         details_table(
             "Show the average rate on new mortgages for every month",
@@ -221,9 +213,92 @@ def buyers_blocks(facts, d, num):
             ["Month", "Rate"],
             [[_month(m), num(f"rate.new.{m}", "pct2")] for m in rates],
         ),
-        '<p class="small">This is the average rate on mortgages taken out in each month, across all new mortgages to individuals. It is not the rate any one buyer gets, and it does not show the monthly payment, which also depends on the loan size and term. The series starts in January 2016 here, so the site cannot yet compare with 2008.</p>',
+        '<p class="small">This is the weighted average interest rate on new sterling mortgages from UK lenders (what the Bank calls UK resident monetary financial institutions, excluding the Bank of England) to individuals and individual trusts in each month, so larger amounts of lending count for more. '
+        "The Bank calls these loans secured on dwellings, which include buy-to-let mortgages to individuals. "
+        "Under the Bank’s 2016 reporting definitions for these rates, new business includes new loans and existing loans whose terms were changed or renegotiated in the month, but not mortgages that moved automatically onto the lender’s standard variable rate when a fixed period ended. "
+        "It is not the rate any one buyer gets, and it does not show the monthly payment, which also depends on the loan size and term. "
+        "The Bank’s figures for this series start in January 2016. It is not joined to the quoted rate above, which measures something different.</p>",
     ]
     return out
+
+
+def _owners_by_age(num, b, y0, y1):
+    """Home ownership by age of the household reference person: 1991 (Labour Force Survey) against
+    2008-09 and 2024-25 (English Housing Survey), then FC2101's every year from 2008-09."""
+    then, mid, now = b["hrp_years"]
+
+    def yr(y):
+        return str(y) if y == then else f"{y}-{str(y + 1)[2:]}"
+
+    return [
+        "<h2 id='owners-by-age'>Home ownership by age since 1991</h2>",
+        f'<div class="answer"><p>Among households whose reference person (in {then}, head of household) was aged 25 to 34, {num(f"own.hrp.25-34.{then}", "pct0")} owned their home in {then}, '
+        f'{num(f"own.hrp.25-34.{mid}", "pct0")} in {yr(mid)} and {num(f"own.hrp.25-34.{now}", "pct0")} in {yr(now)}. '
+        f'Where the reference person was aged 35 to 44 it fell from {num(f"own.hrp.35-44.{then}", "pct0")} to {num(f"own.hrp.35-44.{now}", "pct0")}, '
+        f'and where they were 65 or over it rose, from {num(f"own.hrp.65+.{then}", "pct0")} to {num(f"own.hrp.65+.{now}", "pct0")}. '
+        f"The {then} figures come from a different survey, which picked the household’s main person slightly differently.</p></div>",
+        '<div class="limit"><p><strong>Households, not people, and age groups, not single ages.</strong> Each figure is the share of households that own their home, grouped by the age of one person: '
+        "the household reference person, the person in whose name the home is owned or rented (where two people share that, the one with the higher income). "
+        "It is not the share of all people of that age who own a home, and the ten-year groups cannot give a figure for people aged exactly 30.</p>"
+        f"<p><strong>{then} comes from another survey.</strong> The {then} figures are from the Labour Force Survey, and {yr(mid)} and {yr(now)} from the English Housing Survey. "
+        "Until spring 2001 the Labour Force Survey grouped households by the head of household, who in a couple was the man. "
+        "ONS says the two definitions pick a different person in around 10% of households, and that household reference people tend to be slightly younger. "
+        f"So {then} is the nearest earlier measure, not exactly the same one, and small differences should not be read as change.</p></div>",
+        table(
+            f"Households owning their home, by age of the household’s main person, England, {then}, {yr(mid)} and {yr(now)}",
+            [
+                "Age group",
+                f"{then} (Labour Force Survey, head of household)",
+                f"{yr(mid)} (English Housing Survey, household reference person)",
+                f"{yr(now)} (English Housing Survey, household reference person)",
+            ],
+            [
+                [g.replace("-", " to ").replace("65+", "65 or over")]
+                + [num(f"own.hrp.{g}.{y}", "pct") for y in (then, mid, now)]
+                for g in HRP_GROUPS
+            ],
+        ),
+        f'<p class="small">The {then} figures are from Annex Table 1.4 of the English Housing Survey 2008-09 household report, which names the Labour Force Survey as their source. '
+        f"The English Housing Survey table FC2101 repeats the same {then} figures, for the age groups both tables share, without naming a source. "
+        f"The {yr(mid)} and {yr(now)} figures are from Annex Table 1.4 of the English Housing Survey 2024-25 headline report.</p>",
+        "<h3 id='owners-by-age-yearly'>Every year from 2008-09</h3>",
+        f"<p>Between {yr(y0)} and {yr(y1)}, among households whose reference person was aged 25 to 34, the share owning their home fell from {num(f'own.25-34.{y0}', 'pct0')} to {num(f'own.25-34.{y1}', 'pct0')}, "
+        f"and where they were aged 35 to 44 it fell from {num(f'own.35-44.{y0}', 'pct0')} to {num(f'own.35-44.{y1}', 'pct0')}. Where the reference person was aged 75 or over it rose, from {num(f'own.75+.{y0}', 'pct0')} to {num(f'own.75+.{y1}', 'pct0')}.</p>",
+        details_table(
+            "Show home ownership for every age group and year",
+            "Percentage of households in each age group of the household reference person who are owner occupiers, England",
+            ["Survey year"] + AGE_GROUPS,
+            [[yr(y)] + [num(f"own.{g}.{y}", "pct") for g in AGE_GROUPS] for y in b["own_years"]],
+        ),
+        '<p class="small">These are English Housing Survey figures (table FC2101), so they cover England only, in age groups that differ from the table above for people over 44. Ownership is for whole households, not for people who have just bought.</p>',
+    ]
+
+
+def _quoted_block(facts, num, months):
+    """IUMBV34 from January 2008: a quoted rate, shown apart from the effective rate."""
+    first, last = months[0], months[-1]
+    low = min(months, key=lambda m: (_v(facts, f"rate.quoted.{m}"), m))
+    high = max(months, key=lambda m: (_v(facts, f"rate.quoted.{m}"), m))
+    return [
+        "<h2 id='rates'>Mortgage interest rates since 2008</h2>",
+        f'<div class="answer"><p>The Bank of England’s quoted rate on a two-year fixed mortgage borrowing 75% of the home’s value was {num(f"rate.quoted.{first}", "pct2")} in {_month(first)} and {num(f"rate.quoted.{last}", "pct2")} in {_month(last)}. '
+        f'It was lowest at {num(f"rate.quoted.{low}", "pct2")} in {_month(low)} and highest at {num(f"rate.quoted.{high}", "pct2")} in {_month(high)}. '
+        "This is the quoted rate for one type of mortgage, and the Bank changed how it calculates it from January 2016. "
+        "The Bank of England’s effective rate on new mortgages, below, is a different measure and starts in 2016; the two are not joined.</p></div>",
+        "<h3 id='rates-quoted'>Quoted rate: two-year fixed, 75% loan to value, since January 2008</h3>",
+        FOLD,
+        details_table(
+            "Show the quoted two-year fixed rate for every month",
+            "Quoted rate on a two-year fixed mortgage at 75% loan to value, monthly (Bank of England series IUMBV34)",
+            ["Month", "Rate"],
+            [[_month(m), num(f"rate.quoted.{m}", "pct2")] for m in months],
+        ),
+        '<p class="small">This is the Bank of England’s monthly quoted interest rate on a sterling two-year fixed-rate mortgage to households at 75% loan to value, from UK lenders (what the Bank calls UK resident monetary financial institutions, excluding the Bank of England). It is not seasonally adjusted. '
+        "It is a different series from the effective rate below, a weighted average of the rates on new mortgage business that lenders report each month. "
+        "This series is for 75% loan to value only. "
+        "The Bank says it changed the method used to calculate the series from January 2008, applying the change back to January 2005, and changed it again from January 2016. "
+        "Read changes across those months with care.</p>",
+    ]
 
 
 def _month(key):
@@ -274,7 +349,7 @@ def _afford_answer(facts, num, d, short=False):
             if short
             else f'It differs a lot by place: {num(f"afford.ratio.{hi}.{last}", "times2")} in {esc(_the(names[hi]))} and {num(f"afford.ratio.{lo}.{last}", "times2")} in {esc(_the(names[lo]))}. '
             f'Mortgage payments took {num("mortshare.2010", "pct0")} of gross household income in 2010-11 and {num("mortshare.2024", "pct0")} in 2024-25. '
-            f'Owning among people aged 25 to 34 fell from {num("own.25-34.2008", "pct0")} in 2008-09 to {num("own.25-34.2021", "pct0")} in 2021-22; for people aged 75 and over it rose, from {num("own.75+.2008", "pct0")} to {num("own.75+.2021", "pct0")}. '
+            f'Among households whose reference person was aged 25 to 34, owning fell from {num("own.25-34.2008", "pct0")} in 2008-09 to {num("own.25-34.2021", "pct0")} in 2021-22; where the reference person was 75 or over it rose, from {num("own.75+.2008", "pct0")} to {num("own.75+.2021", "pct0")}. '
             f'A 10% deposit on the middle-priced home is {num(f"afford.deposit.ew.{last}", "dp2")} years of median full-time pay before tax. '
             f'After inflation, the average mortgage payment for owners with a mortgage in England rose by about {round(100 * (_v(facts, "house.real.mortpay.2024") / _v(facts, "house.real.mortpay.2008") - 1))}% from 2008-09 to 2024-25. '
             f"Mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer would pay each week."
@@ -317,7 +392,7 @@ def _harder_block(facts, num, d):
         f"(in {mp_now}-{str(mp_now + 1)[2:]} prices), an increase of {rise:.0f}%.</li></ul>"
         f"<p>The price measures and the payment measure tell different stories, and each leaves something out. House prices and deposits are for the middle home sold, not for first-time buyers. "
         f"Mortgage payments are for loans already taken out, at different times and rates, so they do not show what a new buyer pays, and they rose much less than prices. "
-        f"Below: the age of first-time buyers, home ownership by age, mortgage payments as a share of household income, and mortgage interest rates. Mortgage rates start in 2016 and household income here is before tax, not take-home pay.</p></div>",
+        f"Below: the age of first-time buyers, home ownership by age, mortgage payments as a share of household income, and mortgage interest rates. The quoted mortgage rate starts in 2008 and the effective rate on new mortgages in 2016, and household income here is before tax, not take-home pay.</p></div>",
     ]
 
 
@@ -410,7 +485,28 @@ def afford_page(facts, d, num, sources):
         f'The ratio does not include mortgage interest rates, deposits or rents, so it is not a measure of monthly housing costs: see <a href="housing.html#housing-costs">what housing costs</a>. '
         f"ONS publishes the ratio rounded to two decimal places and revises these figures each year.</p></div>"
     )
-    body.append(source_line(sources, ["ons-affordability", "ehs-fa2501", "ehs-fa2555"], up="../"))
+    body.append(
+        source_line(
+            sources,
+            [
+                "ons-affordability",
+                "ehs-fa2501",
+                "ehs-fa2555",
+                "ehs-fc2101",
+                "ehs-0809-annex-ch1",
+                "ehs-annex-ch1",
+                "ehs-0809-report",
+                "ons-lfs-guide-household",
+                "boe-quoted-2yr-75ltv",
+                "boe-quoted-rates-notes",
+                "boe-mortgage-rates",
+                "boe-effective-rates-notes",
+                "boe-form-er-definitions",
+                "boe-rate-series-titles",
+            ],
+            up="../",
+        )
+    )
     return page(
         AFFORD_PAGE,
         f"House prices and earnings since {first}",

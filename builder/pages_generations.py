@@ -5,9 +5,10 @@ says plainly what it cannot yet measure. It gives no overall verdict: "easier"
 depends on which things are counted, and the measures move in different directions.
 
 Every figure comes from a fact already in the build. Where two figures come from
-different surveys or definitions they are not joined: home ownership is shown only
-for the English Housing Survey years, and house prices against earnings only from
-1999, the first year measured the same way.
+different surveys or definitions they are not joined: home ownership for all households
+is shown only for the English Housing Survey years, home ownership by age sets the 1991
+Labour Force Survey beside the English Housing Survey with the difference stated, and
+house prices against earnings start in 1999, the first year measured the same way.
 """
 
 from .html import page, source_line, table, FOLD
@@ -21,6 +22,8 @@ AFFORD_FIRST = (
     1999  # 1997 and 1998 earnings are weekly pay scaled up; not compared with later years
 )
 OWN_FIRST, OWN_LAST = 2008, 2024  # English Housing Survey: 2008-09 to 2024-25 (survey years)
+OWN_AGE_THEN = 1991  # Labour Force Survey, by age of the head of household
+OWN_AGE_GROUPS = [("25-34", "25 to 34"), ("35-44", "35 to 44")]
 SCHOOL_FIRST = 2006  # first January class-size census in the explorer
 AGES = [("18_24", "18 to 24"), ("25_34", "25 to 34"), ("35_49", "35 to 49")]
 # The later year of each pair is fixed rather than the explorer's newest year: John's recorded
@@ -45,7 +48,8 @@ def _answer(facts, num):
         f'Aged 25 to 34, a larger share were in work in {w_last} ({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}); '
         f'aged 18 to 24, {num(f"work.age.18_24.{w_last}", "pct")} against {num(f"work.age.18_24.{w_first}", "pct")}. '
         f'The middle-priced home in England and Wales has gone from {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{af}", "times2")} in {af}. '
-        f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
+        f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}; '
+        f'where the household’s main person was aged 25 to 34, {num(f"own.hrp.25-34.{OWN_AGE_THEN}", "pct0")} owned in {OWN_AGE_THEN} and {num(f"own.hrp.25-34.{OWN_LAST}", "pct0")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}, from two different surveys. '
         f"University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. "
         f"State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. "
         f"Pay, tax and life expectancy are not compared yet.</p></div>"
@@ -105,7 +109,7 @@ def page_body(facts, d, num, sources):
         'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
         '<a href="work.html#work-age">Employment by age, every year</a>.</p>',
         "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
-        "<p>These figures are for everyone, not for people of one age, so they show the position of the whole market rather than of people at 30.</p>",
+        "<p>The house price and earnings figures are for everyone, not for people of one age, so they show the position of the whole market. Home ownership around the age of 30 is further down this section.</p>",
         _afford_chart(facts, num),
         FOLD,
         table(
@@ -130,9 +134,34 @@ def page_body(facts, d, num, sources):
             ],
             _owner_rows(facts, num),
         ),
-        f"<p>This is the share of all households, not of people at a given age, so it does not show whether people at 30 own their home more or less often than before. "
-        f"Owning is not compared with earlier years here, because the English Housing Survey began in {OWN_FIRST}. "
+        f"<p>This is the share of all households, not of people at a given age. The English Housing Survey began in {OWN_FIRST}, so this row is not compared with earlier years. "
         f'<a href="housing.html">Owning and renting, every year</a>.</p>',
+        "<h3 id='owning-at-30'>Owning a home around the age of 30</h3>",
+        f'<p>The nearest measure is the age group 25 to 34. In {OWN_AGE_THEN}, {num(f"own.hrp.25-34.{OWN_AGE_THEN}", "pct0")} of households whose head was aged 25 to 34 owned their home. '
+        f'In {OWN_LAST}-{str(OWN_LAST + 1)[2:]}, {num(f"own.hrp.25-34.{OWN_LAST}", "pct0")} of households whose reference person was aged 25 to 34 did. '
+        f"On this measure, owning was less common in this age group in {OWN_LAST}-{str(OWN_LAST + 1)[2:]} than in {OWN_AGE_THEN}.</p>",
+        '<div class="limit"><p><strong>Not people aged exactly 30.</strong> These are households, grouped by the age of one person in each, in a ten-year age group. '
+        "They are not the share of all 30-year-olds who own a home, which no official table here gives. "
+        f"The {OWN_AGE_THEN} figure is from the Labour Force Survey, which grouped households by the head of household (in a couple, the man); "
+        "the later figure is from the English Housing Survey, which uses the household reference person (the person in whose name the home is owned or rented; where two people share that, the one with the higher income). "
+        "ONS says the two pick a different person in around 10% of households, and that reference people tend to be slightly younger. England only.</p></div>",
+        table(
+            f"Households owning their home, by age of the household’s main person, England, {OWN_AGE_THEN} and {OWN_LAST}-{str(OWN_LAST + 1)[2:]}",
+            [
+                "Age group",
+                f"{OWN_AGE_THEN} (Labour Force Survey, head of household)",
+                f"{OWN_LAST}-{str(OWN_LAST + 1)[2:]} (English Housing Survey, household reference person)",
+            ],
+            [
+                [
+                    label,
+                    num(f"own.hrp.{g}.{OWN_AGE_THEN}", "pct"),
+                    num(f"own.hrp.{g}.{OWN_LAST}", "pct"),
+                ]
+                for g, label in OWN_AGE_GROUPS
+            ],
+        ),
+        '<p><a href="house-prices.html#owners-by-age">Home ownership by age, every age group</a>.</p>',
         "<h2 id='schools'>Public services: school classes</h2>",
         table(
             f"Average primary class size, England, January {SCHOOL_FIRST} and {LAST}",
@@ -186,7 +215,6 @@ def page_body(facts, d, num, sources):
         "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
         "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
         "<ul>"
-        "<li><strong>Home ownership at a given age</strong>: owning or renting by the age of the household’s main person, across the 1990s to now (English Housing Survey and Labour Force Survey tables by age).</li>"
         "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
         "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
         "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
@@ -199,7 +227,7 @@ def page_body(facts, d, num, sources):
         FOLD,
         '<div class="limit"><p>Employment rates are for the UK, from the quarterly Labour Force Survey, April to June, seasonally adjusted. '
         "House prices and earnings are for England and Wales. Class sizes are for state-funded primary schools in England. "
-        "Home ownership is from the English Housing Survey, which covers England only. "
+        "Home ownership is from the English Housing Survey, which covers England only; the 1991 figures by age are from the Labour Force Survey, as published in the English Housing Survey 2008-09 report. "
         "Each measure is compared only with its own earlier figures, and changes are not calculated across any break in the survey or the definition.</p></div>",
         source_line(
             sources,
@@ -209,6 +237,9 @@ def page_body(facts, d, num, sources):
                 "ons-ybuj",
                 "ons-affordability",
                 "ehs-ft1101",
+                "ehs-0809-annex-ch1",
+                "ehs-annex-ch1",
+                "ons-lfs-guide-household",
                 "dfe-spc-2015-tables",
                 "dfe_api",
             ],

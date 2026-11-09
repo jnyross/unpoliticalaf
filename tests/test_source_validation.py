@@ -49,6 +49,10 @@ def test_retained_source_formats_and_affected_contracts(name, source_id):
         (".json", b"invalid"),
         (".pdf", b"%PDF-not-a-real-document"),
         (".html", b"<html><title>Access denied</title></html>"),
+        (".xml", b"<html><title>Access denied</title></html>"),
+        (".xml", b"<Envelope xmlns='http://www.gesmes.org/xml/2002-08-01'><Cube/></Envelope>"),
+        (".xml", b"<?xml version='1.0'?><Other SCODE='IUMBV34'/>"),
+        (".xml", b"<Envelope"),
         (".bin", b"opaque download"),
     ],
 )

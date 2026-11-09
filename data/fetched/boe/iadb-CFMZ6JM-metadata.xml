@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<Envelope xmlns="http://www.gesmes.org/xml/2002-08-01">
+
+ 				<Cube xmlns="https://web.prod.iadb.ext.az.cloud.bankofengland.co.uk/website/agg_series" SCODE="CFMZ6JM"  DESC='Monthly average of UK resident banks&apos; sterling weighted average interest rate, loans secured on dwellings, new advances to Individuals and individual trusts (in percent) not seasonally adjusted' COUNTRY='' CONCAT='Average # UK resident monetary financial institutions (excl. Central Bank) # Sterling # Weighted average interest rate - loans secured on dwellings # Individuals and individual trusts # Percent # Not seasonally adjusted '>
+ 		  
+	 					 	<Cube  FREQ_NAME='Monthly' FREQ_CODE='M' FREQ_ORD='7'/>
+				  	  
+	 					 	<Cube  CAT_NAME='SEASONAL ADJUSTMENT' CAT_VAL='U' VAL_DESC='Not seasonally adjusted' CAT_ORD='1'/>
+	 				  
+	 					 	<Cube  CAT_NAME='TYPE' CAT_VAL='V' VAL_DESC='Average' CAT_ORD='2'/>
+	 				  
+	 					 	<Cube  CAT_NAME='OUTPUT IN' CAT_VAL='%' VAL_DESC='Percent' CAT_ORD='3'/>
+	 				  
+	 					 	<Cube  CAT_NAME='SECTOR' CAT_VAL='BKBS' VAL_DESC='UK resident monetary financial institutions (excl. Central Bank)' CAT_ORD='4'/>
+	 				  
+	 					 	<Cube  CAT_NAME='OF SECTOR' CAT_VAL='IL' VAL_DESC='Individuals and individual trusts' CAT_ORD='5'/>
+	 				  
+	 					 	<Cube  CAT_NAME='INSTRUMENT CURRENCY' CAT_VAL='£' VAL_DESC='Sterling' CAT_ORD='6'/>
+	 				  
+	 					 	<Cube  CAT_NAME='INSTRUMENTS' CAT_VAL='WOLANP' VAL_DESC='Weighted average interest rate - loans secured on dwellings' CAT_ORD='7'/>
+	 				  
+					 	<Cube  FIRST_OBS='2016-01-31' LAST_OBS='2026-09-30'/>
+				  </Cube>
+</Envelope>

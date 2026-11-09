@@ -42,6 +42,24 @@
   "retrieved": "2026-11-08T23:34:03Z",
   "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip"
  },
+ "boe-effective-rates-notes": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G",
+  "file": "boe/iadb-CFMZ6JM-metadata.xml",
+  "bytes": 1639,
+  "content_type": "text/xml",
+  "sha256": "78e058f0e8ca0359e2512a0f4b182109aacb821f8497ba74852c50d55fbe6c82",
+  "retrieved": "2026-11-09T07:10:56Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G"
+ },
+ "boe-form-er-definitions": {
+  "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf",
+  "file": "boe/def_er2016.pdf",
+  "bytes": 578994,
+  "content_type": "application/pdf",
+  "sha256": "0bda88f38f027579f1bc6f45942328b7896ccad95ee69b110f9ee29836551e6a",
+  "retrieved": "2026-11-09T07:11:03Z",
+  "requested_url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf"
+ },
  "boe-mortgage-rates": {
   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
   "file": "boe/mortgage-rates-new-lending.csv",
@@ -49,6 +67,33 @@
   "content_type": "application/csv",
   "sha256": "20b1a82eeb111d81d722a112b6f270753d5658301704673ef952822bb83cea2b",
   "retrieved": "2026-11-04T13:30:12Z"
+ },
+ "boe-quoted-2yr-75ltv": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-FromShowColumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/quoted-rate-2yr-fixed-75ltv.csv",
+  "bytes": 4048,
+  "content_type": "application/csv",
+  "sha256": "2e16c3237cbb42c19e96794fe377e744771e1ec025d848a4468ce562e776ec92",
+  "retrieved": "2026-11-09T05:39:50Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N"
+ },
+ "boe-quoted-rates-notes": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G",
+  "file": "boe/iadb-IUMBV34-metadata.xml",
+  "bytes": 1983,
+  "content_type": "text/xml",
+  "sha256": "033b1dcaecefc1aa1697212ff78b429c30f3da8aaab36b911da487c06a6c259d",
+  "retrieved": "2026-11-09T07:10:52Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G"
+ },
+ "boe-rate-series-titles": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/iadb-IUMBV34-CFMZ6JM-titles-2016-01.csv",
+  "bytes": 485,
+  "content_type": "application/csv",
+  "sha256": "183c58219b1eb8335df9abef804aef3f537534821f8093471e08ccb69c674c08",
+  "retrieved": "2026-11-09T07:11:00Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N"
  },
  "data-gov-life-tables-historic": {
   "url": "https://www.data.gov.uk/dataset/historic_and_projected_data_from_the_period_and_cohort_life_tables",
@@ -106,6 +151,24 @@
   "content_type": "application/pdf",
   "sha256": "493afc7aa63961f0f0dba2bccf53bf1bd9aec20b1a29ee89f3b169d740a40385",
   "retrieved": "2026-11-04T13:32:50Z"
+ },
+ "ehs-0809-annex-ch1": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls",
+  "file": "ehs/2008-09-household-report-ch1-annex.xls",
+  "bytes": 181760,
+  "content_type": "application/vnd.ms-excel",
+  "sha256": "4616fd96efb91e6740b675f9137546b75f6e774f15114539986eea488b450f38",
+  "retrieved": "2026-11-09T05:39:36Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls"
+ },
+ "ehs-0809-report": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf",
+  "file": "ehs/2008-09-household-report.pdf",
+  "bytes": 3172357,
+  "content_type": "application/pdf",
+  "sha256": "375aa0ead9c51109ee9d4854fc25f1839bac3ea69352042c9ddb0c011f53a3b6",
+  "retrieved": "2026-11-09T05:39:40Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf"
  },
  "ehs-annex-ch1": {
   "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
@@ -1030,6 +1093,15 @@
   "content_type": "text/html; charset=UTF-8",
   "sha256": "498868a2a2209acbc64c4f8cf59f72af6364f65f69f724be01a5e969978bb2fb",
   "retrieved": "2026-11-02T11:12:32Z"
+ },
+ "ons-lfs-guide-household": {
+  "url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf",
+  "file": "ons/lfs-user-guide-vol8-household-2003.pdf",
+  "bytes": 391731,
+  "content_type": "application/pdf;charset=utf-8",
+  "sha256": "63a25bcad0d7e6ed2e1aeb7f74350b38cc4663c1278865ba8b0687916bf86aa1",
+  "retrieved": "2026-11-09T05:39:43Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf"
  },
  "ons-life-tables-2024-related": {
   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/bulletins/pastandprojecteddatafromtheperiodandcohortlifetables/2024baseduk1981to2074/relateddata",
