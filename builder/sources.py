@@ -931,6 +931,12 @@ FETCHED = {
         "England",
         "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients, not counting NHS-employed roles",
     ),
+    "sfc-terms": (
+        "Skills for Care",
+        "Terms and conditions of the Skills for Care website, including reuse of its material",
+        "England",
+        "Material published by Skills for Care",
+    ),
     "sfc-method-jun26": (
         "Skills for Care",
         "Methodology for estimating the size and characteristics of the adult social care workforce in England (June 2026)",

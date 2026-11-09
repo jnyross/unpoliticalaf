@@ -20,6 +20,7 @@ NEW_SOURCES = {
     "sfc-state-2026",
     "sfc-method-jun26",
     "nhs-hchs-dqa-aug26",
+    "sfc-terms",
 }
 RECEIPTS_DIR = ROOT / "data/fetched"
 
@@ -128,6 +129,10 @@ def _set(rows, ref_row, col, value):
         (2, 0, "Staff in NHS trusts, core organisations and GP practices, England", "scope"),
         (240, 4, "*", "is not a count"),
         (1, 0, "Table 15: HCHS staff by gender", "title"),
+        (6, 2, "Nationality grouping", "header row not found"),
+        (14, 4, 71869.91154 + 5, "FTE groups do not add up"),
+        (240, 4, 78817 + 2000, "Headcount groups do not add up"),
+        (458, 4, 15688 - 400, "Headcount groups do not add up"),
     ],
 )
 def test_nhs_layout_changes_stop_the_build(nhs_rows, row, col, value, message):
@@ -149,6 +154,7 @@ def test_nhs_repeated_group_total_stops_the_build(nhs_rows):
         (27, 1, "Source: Skills for Care's workforce estimates, 2024/25", "period"),
         (29, 5, "Personal assistants", "no Direct payment recipients column"),
         (31, 2, 1.67, "not valid"),
+        (29, 2, "All", "heading row not found"),
     ],
 )
 def test_care_layout_changes_stop_the_build(asc_rows, row, col, value, message):
@@ -178,6 +184,16 @@ def test_care_shares_agree_with_the_reports_own_counts(facts):
         ("sfc-method-jun26", 46, "Unknown values are left as null."),
         (
             "sfc-method-jun26",
+            46,
+            "For local authority data, where variables are unlikely to change year-on-year, e.g. nationality, average age, gender or ethnicity, we use the previous year’s data as a proxy.",
+        ),
+        (
+            "sfc-state-2026",
+            13,
+            "The number of filled posts working for direct payment recipients was calculated from a survey of Individual employers and their personal assistants",
+        ),
+        (
+            "sfc-method-jun26",
             56,
             "for the independent sector, we exclude missing and erroneous data at the point of analysis.",
         ),
@@ -205,12 +221,36 @@ def test_page_method_statements_are_in_the_retained_publications(source, page, p
 def test_nhs_notes_back_the_page_method_statements():
     rows = nat.sheet_rows(nat.NHS_FILE, "Notes and definitions", 3)
     notes = {int(r[0]): r[2] for r in rows if str(r[0]).isdigit()}
-    assert notes[11].startswith("Nationality is a self-reported value")
+    assert notes[11].startswith(
+        "Nationality is a self-reported value, with some individuals choosing not to specify it."
+    )
     assert "staff working in more than one role" in notes[1]
     assert "directly employed in NHS trusts and other core organisations" in notes[3]
     title = nat.sheet_rows(nat.NHS_FILE, "Title sheet", 1)
     assert ["Publication date: 29 October 2026"] in title
     assert ["Published by NHS England part of the Government Statistical Service"] in title
+    assert not any("ccredited" in str(r[0]) for r in title)
+
+
+def test_nhs_eea_group_is_the_four_published_nationalities(nhs_rows):
+    members = [r[3] for r in nhs_rows if r[1] == "Headcount" and r[2] == "European Economic Area"]
+    assert members == ["All nationalities", "Icelandic", "Liechtenstein", "Norwegian", "Swiss"]
+
+
+def test_care_licence_wording_is_in_the_retained_terms_page():
+    from builder.sources import SFC_TERMS
+
+    raw = (RECEIPTS_DIR / RECEIPTS["sfc-terms"]["file"]).read_text(encoding="utf-8")
+    text = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw))
+    assert (
+        "Material from this website may be freely reproduced with acknowledgment for education "
+        "and training purposes, but may not be used for sale or profit" in text
+    )
+    assert (
+        "All copyright to Skills for Care publications and their contents is vested in Skills for Care"
+        in text
+    )
+    assert SFC_TERMS.startswith("Copyright Skills for Care.")
 
 
 @pytest.mark.parametrize(
@@ -265,6 +305,10 @@ def test_immigration_page_keeps_sectors_dates_and_units_apart():
         "cannot be added together",
         "official statistics producer",
         "accredited",
+        "GP workforce statistics",
+        "The NHS tables do not say whether they are accredited official statistics",
+        "Icelandic, Liechtenstein, Norwegian and Swiss",
+        "previous year's data as a proxy for nationality",
     ):
         assert phrase in text, phrase
     for word in ("citizen", "migrant", "born abroad", "foreign-born"):

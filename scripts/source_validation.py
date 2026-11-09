@@ -219,6 +219,8 @@ def validate_nhs_nationality(path):
         if (group, nationality) in NHS_NATIONALITY_GROUPS and measure in ("FTE", "Headcount"):
             if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
                 raise ValueError("NHS Table 14 group total is not a count")
+            if (measure, group) in found:
+                raise ValueError("NHS Table 14 repeats a group total")
             found[(measure, group)] = value
             months.add(month)
     if len(found) != 2 * len(NHS_NATIONALITY_GROUPS) or len(months) != 1:

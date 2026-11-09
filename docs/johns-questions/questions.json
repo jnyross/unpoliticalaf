@@ -446,11 +446,11 @@
             "D": "The official figures do not give a share for either sector"
           },
           "answer": "A",
-          "why": "Immigration page, NHS and adult social care staff section: NHS England counts 335,634 of the 1,520,081 people with a recorded nationality in NHS trusts and other core organisations on 31 August 2026 as not UK nationals (22.1%; 15,688 people with no recorded nationality are left out). Skills for Care estimates that 33% of adult social care filled posts with a known nationality were held by people who are not British in 2025/26. The two producers count different things on different dates.",
+          "why": "Immigration page, NHS and adult social care staff section: NHS England's tables show that in NHS trusts and other core organisations on 31 August 2026, 335,634 of the 1,520,081 headcount in the recorded nationality groups were not UK nationals (22.1%; 15,688 people with no recorded nationality are left out). Skills for Care estimates that 33% of adult social care filled posts with a known nationality were held by people who are not British in 2025/26. The two producers count different things on different dates.",
           "evidence": [
             {
               "page": "immigration.html",
-              "text": "22.1% of staff with a recorded nationality were not UK nationals (335,634 of 1,520,081 people)"
+              "text": "22.1% of staff with a recorded nationality were not UK nationals (335,634 of 1,520,081 headcount, adding up the recorded nationality groups)"
             },
             {
               "page": "immigration.html",

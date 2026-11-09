@@ -93,10 +93,15 @@ def nhs_cells(rows):
     if rows[1][0] != NHS_SCOPE:
         raise ValueError("NHS Table 14 scope changed")
     head = next(
-        i
-        for i, r in enumerate(rows)
-        if r[:4] == ["Data \nmonth", "Data type", "Nationality group", "Nationality"]
+        (
+            i
+            for i, r in enumerate(rows)
+            if r[:4] == ["Data \nmonth", "Data type", "Nationality group", "Nationality"]
+        ),
+        None,
     )
+    if head is None or NHS_ALL_COLUMN not in rows[head]:
+        raise ValueError("NHS Table 14 header row not found")
     j = rows[head].index(NHS_ALL_COLUMN)
     out = {}
     for i in range(head + 1, len(rows)):
@@ -115,6 +120,15 @@ def nhs_cells(rows):
     missing = [(m, k) for m in NHS_MEASURES for k, _, _ in NHS_GROUPS if (m, k) not in out]
     if missing:
         raise ValueError(f"NHS Table 14 is missing group totals {missing}")
+    for m, (label, _) in NHS_MEASURES.items():
+        groups = sum(out[(m, k)][2] for k in NHS_KNOWN + ("unknown",))
+        total = out[(m, "all")][2]
+        # FTE adds up exactly. NHS England's note 1 says headcount totals are unlikely to
+        # equal the sum of components because some staff work in more than one role:
+        # the groups exceeded the total by 304 of 1.5 million in August 2026.
+        slack = 0.01 if m == "fte" else 0.001 * total
+        if not -0.01 <= groups - total <= slack:
+            raise ValueError(f"NHS Table 14 {label} groups do not add up to the total")
     return out
 
 
@@ -126,7 +140,9 @@ def asc_cells(rows):
     lab = rows[top].index(ASC_TABLE)
     if rows[top + 1][lab] != ASC_SOURCE_LINE:
         raise ValueError("Skills for Care Table 4.7.1 period changed")
-    head = next(i for i in range(top + 2, top + 6) if "All sectors" in rows[i])
+    head = next((i for i in range(top + 2, top + 6) if "All sectors" in rows[i]), None)
+    if head is None:
+        raise ValueError("Skills for Care Table 4.7.1 heading row not found")
     cols = {}
     for key, label in ASC_SECTORS:
         if label not in rows[head]:
@@ -185,7 +201,11 @@ def _nhs_facts(facts, rows):
                 NHS_SOURCE,
                 "calculated",
                 "calculated",
-                note=f"{label} with a recorded nationality: United Kingdom, EU, other EEA and rest of world groups (Unknown left out)",
+                note=(
+                    f"{label} with a recorded nationality: sum of the United Kingdom, EU, other EEA "
+                    "and rest of world groups (Unknown left out). This is a sum of group counts, "
+                    "not the published total"
+                ),
                 formula=" + ".join(known),
                 inputs=known,
             )

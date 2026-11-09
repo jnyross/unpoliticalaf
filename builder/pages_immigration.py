@@ -26,7 +26,7 @@ def _staff_nationality(num, sources):
     nhs_rows = [
         ("United Kingdom", *nhs("uk")),
         ("European Union", *nhs("eu")),
-        ("Other European Economic Area", *nhs("eea")),
+        ("Icelandic, Liechtenstein, Norwegian and Swiss", *nhs("eea")),
         ("Rest of the world", *nhs("row")),
         ("Not recorded", *nhs("unknown")),
         ("All staff (published total)", *nhs("all")),
@@ -48,16 +48,18 @@ def _staff_nationality(num, sources):
         "so the two figures cannot be added together into one share for both sectors.</p>",
         '<div class="answer"><p><strong>NHS, 31 August 2026:</strong> '
         f"{num('nhs.nat.hc.nonuk.share.aug2026', 'pct')} of staff with a recorded nationality were not UK nationals "
-        f"({num('nhs.nat.hc.nonuk.aug2026', 'int')} of {num('nhs.nat.hc.known.aug2026', 'int')} people). "
+        f"({num('nhs.nat.hc.nonuk.aug2026', 'int')} of {num('nhs.nat.hc.known.aug2026', 'int')} headcount, adding up the recorded nationality groups). "
         "<strong>Adult social care, 2025/26:</strong> "
         f"{num('asc.nat.nonbritish.all.2025-26', 'pct0')} of filled posts with a known nationality were held by people "
         "who are not British.</p></div>",
         "<p>Nationality is not the same as country of birth. These figures do not show whether or when anyone moved to the UK.</p>",
         "<h3>NHS hospital and community health services, 31 August 2026</h3>",
         "<p>NHS England counts staff directly employed by NHS trusts and other core organisations in England. "
-        "GP practices and other primary care staff are counted in separate NHS workforce statistics, so they are not in these figures. "
+        "Staff of GP practices are counted in NHS England's separate GP workforce statistics, so they are not in these figures, "
+        "and nor are other primary care staff such as dental and pharmacy staff. "
         "Headcount counts people. Full time equivalent counts contracted hours, so someone working half time counts as 0.5.</p>",
-        f"<p>Counted as full time equivalent, the share was {num('nhs.nat.fte.nonuk.share.aug2026', 'pct')}.</p>",
+        "<p>Counted as full time equivalent, the share of staff with a recorded nationality who were not UK nationals "
+        f"was {num('nhs.nat.fte.nonuk.share.aug2026', 'pct')}.</p>",
         "<p>Staff report their own nationality, and some choose not to. "
         f"{num('nhs.nat.hc.unknown.aug2026', 'int')} people ({num('nhs.nat.hc.unknown.share.aug2026', 'pct')} of all staff) "
         "had no recorded nationality. They are left out of the share: they are not counted as UK or non-UK nationals, "
@@ -70,12 +72,14 @@ def _staff_nationality(num, sources):
         '<p class="small">The published headcount total is slightly lower than the sum of the groups, because some '
         "staff work in more than one role. The share uses the sum of the four recorded groups.</p>",
         "<h3>Adult social care, 2025/26</h3>",
-        "<p>Skills for Care estimates the adult social care workforce from employer records. The figures are "
+        "<p>Skills for Care estimates the adult social care workforce mainly from employer records in its Adult Social Care "
+        "Workforce Data Set, and for direct payment recipients from a survey. The figures are "
         "filled posts, not people: one person can hold more than one post. They cover local authorities, independent "
         "employers and people who employ their own care staff with direct payments. Since 2024/25 they have not "
         "included adult social care roles employed by the NHS.</p>",
         "<p>The estimates are rounded, and the shares are published to the whole per cent. Posts with no recorded "
-        "nationality are left out of the shares before Skills for Care works them out, and it does not publish how many there are. "
+        "nationality are left out of the shares before Skills for Care works them out, and the table does not show how many there are. "
+        "For local authorities, Skills for Care's method uses the previous year's data as a proxy for nationality. "
         "The data are for September 2025 (local authorities), March 2026 (independent employers) and February 2026 "
         "(direct payment recipients).</p>",
         table(
@@ -85,6 +89,7 @@ def _staff_nationality(num, sources):
         ),
         "<h3>Who publishes these figures</h3>",
         "<p>NHS England publishes the NHS figures as part of the Government Statistical Service. "
+        "The NHS tables do not say whether they are accredited official statistics. "
         "Skills for Care is a charity that became an official statistics producer in 2023. Its report on staff employed by "
         "local authority adult social services departments has been accredited official statistics since February 2025. "
         "The report these nationality estimates come from does not say they are accredited.</p>",

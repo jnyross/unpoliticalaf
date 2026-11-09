@@ -208,8 +208,9 @@ def _set_cell(row, col, value):
         _set_cell(2, 0, "Staff in NHS trusts, core organisations and GP practices, England"),
         _set_cell(233, 0, "2026-07-31"),
         _set_cell(240, 4, "*"),
+        lambda rows: rows.append(list(rows[457])),
     ],
-    ids=["unchanged-copy", "unknown-label", "scope", "month", "suppressed"],
+    ids=["unchanged-copy", "unknown-label", "scope", "month", "suppressed", "repeated-total"],
 )
 def test_nhs_nationality_contract(tmp_path, change):
     staged = _copy_sheet(NHS_TABLES, "14", 5, tmp_path / "nhs.xlsx", change)

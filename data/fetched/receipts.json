@@ -1234,6 +1234,15 @@
   "retrieved": "2026-11-09T02:53:17Z",
   "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf"
  },
+ "sfc-terms": {
+  "url": "https://www.skillsforcare.org.uk/Privacy-and-legal/Terms-and-conditions.aspx",
+  "file": "sfc/skills-for-care-terms-and-conditions.html",
+  "bytes": 158503,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "ae3136d5cb73d5d7f36efad74dd52c13c961bbb7e23dc6a3394a8c564d9324e3",
+  "retrieved": "2026-11-09T03:38:00Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Privacy-and-legal/Terms-and-conditions.aspx"
+ },
  "wales-dwelling-stock": {
   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",
   "file": "nations/wales-dwelling-stock-by-tenure.csv",
