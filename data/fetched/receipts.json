@@ -15,6 +15,33 @@
   "sha256": "b5848e0ecfeecc88237730a42242781e04a4e19d834526e5bd3f2849cd3465d9",
   "retrieved": "2026-11-02T08:58:35Z"
  },
+ "ashe-2025-table1-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip",
+  "file": "ons/ashetable12025revised.zip",
+  "bytes": 634797,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "688dcfe4c07dd7e6235c5dad8683107b2e83fcc1ae959d3ed1703317d19867ae",
+  "retrieved": "2026-11-08T23:34:07Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip"
+ },
+ "ashe-2026-fig2": {
+  "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv",
+  "file": "ons/ashe-2026-fig2.csv",
+  "bytes": 1114,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "a72ae9c92c19c035471a34d94a4386ec85c9948c3d45fd773b8825c837b9d4c5",
+  "retrieved": "2026-11-08T23:34:00Z",
+  "requested_url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv"
+ },
+ "ashe-2026-table1-provisional": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip",
+  "file": "ons/ashetable12026provisional.zip",
+  "bytes": 635627,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "b0143def67e3863a34421608608f63b77b7eebd8fbbd5f2109d6811eb184351d",
+  "retrieved": "2026-11-08T23:34:03Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip"
+ },
  "boe-mortgage-rates": {
   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
   "file": "boe/mortgage-rates-new-lending.csv",

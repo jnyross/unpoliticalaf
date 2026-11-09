@@ -1,4 +1,4 @@
-"""Download format checks and narrow contracts for the three refreshed sources.
+"""Download format checks and narrow contracts for refreshed sources.
 
 These checks are not a substitute for the independent retained-source checker
 or review of a new vintage. They deliberately reject unsupported formats rather
@@ -202,6 +202,65 @@ def _validate_spreadsheet_source(source_id, path, suffix, previous):
         _validate_xlsx_source(source_id, path, previous)
 
 
+# ASHE Table 1 packs: one sheet per work-pattern and sex combination (Nomis SEX codes 1 to 9).
+ASHE_TABLE1_SHEETS = (
+    "All",
+    "Male",
+    "Female",
+    "Full-Time",
+    "Part-Time",
+    "Male Full-Time",
+    "Male Part-Time",
+    "Female Full-Time",
+    "Female Part-Time",
+)
+
+
+def validate_ashe_table1(archive):
+    """Gross weekly pay (1.1a) and its CVs (1.1b): every combination's UK median at D6."""
+    for table in ("Table 1.1a", "Table 1.1b"):
+        names = [
+            n
+            for n in archive.namelist()
+            if table in n and "Weekly pay - Gross" in n and n.endswith(".xlsx")
+        ]
+        if len(names) != 1:
+            raise ValueError(f"ASHE {table} weekly gross pay workbook missing or ambiguous")
+        workbook = openpyxl.load_workbook(io.BytesIO(archive.read(names[0])), data_only=True)
+        try:
+            for sheet in ASHE_TABLE1_SHEETS:
+                if sheet not in workbook.sheetnames:
+                    raise ValueError(f"ASHE {table} missing sheet {sheet}")
+                ws = workbook[sheet]
+                if ws["A6"].value != "All Employees" or ws["D5"].value != "Median":
+                    raise ValueError(f"ASHE {table} {sheet} layout changed")
+                if not isinstance(ws["D6"].value, (int, float)):
+                    raise ValueError(f"ASHE {table} {sheet} UK median is not a number")
+        finally:
+            workbook.close()
+
+
+def _validate_zip_source(source_id, path):
+    """A publisher's pack of workbooks: every workbook must open with at least one sheet."""
+    with zipfile.ZipFile(path) as archive:
+        if archive.testzip():
+            raise ValueError("corrupt zip archive")
+        names = [n for n in archive.namelist() if n.lower().endswith(".xlsx")]
+        if not names:
+            raise ValueError("zip archive holds no workbooks")
+        for name in names:
+            workbook = openpyxl.load_workbook(
+                io.BytesIO(archive.read(name)), read_only=True, data_only=True
+            )
+            try:
+                if not workbook.sheetnames:
+                    raise ValueError(f"{name} has no sheets")
+            finally:
+                workbook.close()
+        if source_id.startswith("ashe-") and "-table1-" in source_id:
+            validate_ashe_table1(archive)
+
+
 def validate_source(source_id, path, content_type, previous=None):
     body = path.read_bytes()
     if not body:
@@ -217,6 +276,8 @@ def validate_source(source_id, path, content_type, previous=None):
         _validate_json_source(body)
     elif suffix in {".xlsx", ".ods"}:
         _validate_spreadsheet_source(source_id, path, suffix, previous)
+    elif suffix == ".zip":
+        _validate_zip_source(source_id, path)
     elif suffix == ".xls":
         workbook = xlrd.open_workbook(path)
         try:

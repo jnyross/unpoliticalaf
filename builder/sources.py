@@ -394,6 +394,24 @@ FETCHED = {
         "United Kingdom",
         "Employee jobs",
     ),
+    "ashe-2026-fig2": (
+        "Office for National Statistics",
+        "Employee earnings in the UK: 2026, Figure 2 data (annual change in median weekly pay, in cash and after CPIH inflation; 2026 provisional)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
+    "ashe-2026-table1-provisional": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 1, 2026 provisional: all employees (zip of workbooks; Table 1.1a gross weekly pay and Table 1.1b its coefficients of variation)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
+    "ashe-2025-table1-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 1, 2025 revised: all employees (zip of workbooks; Table 1.1a gross weekly pay and Table 1.1b its coefficients of variation)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
     "dwp-spa-timetable": (
         "Department for Work and Pensions (GOV.UK)",
         "State Pension age timetables (DWP PDF, tables 1 to 5)",

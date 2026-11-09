@@ -9,8 +9,8 @@ margins the publishers themselves give and never makes one up:
   only, for the UK employment rate and for its change over a year.
 - Annual Population Survey (employment rate by nation and region): Nomis
   gives each figure's margin in percentage points ("Confidence").
-- Annual Survey of Hours and Earnings: Nomis gives each figure's coefficient
-  of variation (CV). Following the ONS guide, the margin of error is
+- Annual Survey of Hours and Earnings: Nomis, and ONS's Table 1 packs for
+  the years read from them, give each figure's coefficient of variation (CV). Following the ONS guide, the margin of error is
   1.96 × standard error = 1.96 × CV ÷ 100 × estimate (our calculation).
 - International Passenger Survey (trips abroad): ONS gives 95% intervals for
   visits by country (a relative interval up to 2023) and, from 2024, for
@@ -23,6 +23,7 @@ figures are shown without one.
 import re
 
 from .data import Fact, NATIONS, REGIONS, YEARS, num as cellnum, _geo_key, _slug, COUNTRY_RENAME
+from .data import ASHE_COMBINATIONS, ASHE_TABLE1, EARN_GROUPS, ashe_table1_cell
 from .readers import ROOT, csv_rows, ref
 import openpyxl
 
@@ -33,7 +34,7 @@ MARGINS = {}
 # Extra details for the page.
 INFO = {}
 
-ASHE_GROUPS = {"8": "ft", "9": "pt", "1": "ft_men", "3": "ft_women"}
+ASHE_GROUPS = EARN_GROUPS
 
 
 def _rows(path, sheet):
@@ -169,7 +170,7 @@ def ashe(facts):
         if not g:
             continue
         y = int(r["DATE_NAME"])
-        if y not in YEARS:
+        if y not in YEARS or y in ASHE_TABLE1:
             continue
         if r["MEASURES_NAME"] == "Value":
             vals[(g, y)] = cellnum(r["OBS_VALUE"])
@@ -196,6 +197,26 @@ def ashe(facts):
         )
         _calc_moe(facts, base, cv, f"moe.{base}")
         _calc_moe(facts, f"earn.real.{g}.{y}", cv, f"moe.earn.real.{g}.{y}")
+    # Years read from ONS's Table 1 packs take their CVs from the same pack (Table 1.1b).
+    for y, (sid, _, _, _, status) in sorted(ASHE_TABLE1.items()):
+        for code, g in ASHE_GROUPS.items():
+            base = f"earn.{g}.{y}"
+            value, locator = ashe_table1_cell(y, code, cv=True)
+            cv = f"cv.{base}"
+            facts.add(
+                Fact(
+                    cv,
+                    value,
+                    "% (coefficient of variation)",
+                    f"April {y}",
+                    sid,
+                    locator,
+                    status,
+                    note=ASHE_COMBINATIONS[code][0] + ", median gross weekly pay",
+                )
+            )
+            _calc_moe(facts, base, cv, f"moe.{base}")
+            _calc_moe(facts, f"earn.real.{g}.{y}", cv, f"moe.earn.real.{g}.{y}")
     rows = csv_rows("data/fetched/nomis/ashe-resident-nations-regions-ft-median-weekly.csv")
     for line, r in enumerate(rows, start=2):
         if r["MEASURES_NAME"] != "Confidence" or r["SEX_NAME"] != "Full Time Workers":
@@ -483,8 +504,13 @@ def topic_line(num, topic, last, up="../"):
         if rng:
             s += f" Rates for each nation and region in {last} have margins {rng}."
     elif topic == "earnings":
-        places = [f"earn.place.{k}.{last}" for k, _ in NATIONS[1:]] + [
-            f"earn.place.{k}.{last}" for k, _, _ in REGIONS
+        # Figures by place can end at an earlier April than the UK figures.
+        py = next(
+            (y for y in range(last, last - 3, -1) if f"earn.place.{NATIONS[1][0]}.{y}" in MARGINS),
+            last,
+        )
+        places = [f"earn.place.{k}.{py}" for k, _ in NATIONS[1:]] + [
+            f"earn.place.{k}.{py}" for k, _, _ in REGIONS
         ]
         rng = _range(num, places, "pm_pounds")
         s = (
@@ -492,7 +518,10 @@ def topic_line(num, topic, last, up="../"):
             f"{num(MARGINS[f'earn.ft.{last}'][0], 'pm_pounds')} a week."
         )
         if rng:
-            s += f" Figures for each nation and region are less precise, with margins {rng} a week."
+            where = (
+                "each nation and region" if py == last else f"each nation and region in April {py}"
+            )
+            s += f" Figures for {where} are less precise, with margins {rng} a week."
     elif topic == "housing":
         s = "These are survey estimates; the English Housing Survey tables used here publish no margins of error and leave out figures from very small samples."
     elif topic == "holidays":

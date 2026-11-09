@@ -47,6 +47,21 @@
    "file": "ons/ashe-2025-fig2.csv"
   },
   {
+   "id": "ashe-2026-fig2",
+   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv",
+   "file": "ons/ashe-2026-fig2.csv"
+  },
+  {
+   "id": "ashe-2026-table1-provisional",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip",
+   "file": "ons/ashetable12026provisional.zip"
+  },
+  {
+   "id": "ashe-2025-table1-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip",
+   "file": "ons/ashetable12025revised.zip"
+  },
+  {
    "id": "nomis-ashe-resident",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
    "file": "nomis/ashe-resident-uk-median-weekly.csv"

@@ -5,6 +5,7 @@ topic_page() turns into its own section.
 """
 
 from .html import FOLD, NOFOLD, details_table, esc, line_chart, table
+from .data import ASHE_TABLE1, EARN_LAST
 from .data_buyers import AGE_GROUPS
 from . import findings as F
 
@@ -81,6 +82,17 @@ def spread_block(facts, num, d, first):
         f"<p>After allowing for rising prices, pay at the bottom-tenth line was {rise(lo_ch)} in {ref}, and pay at the top-tenth line was {rise(hi_ch)} in {ref}. "
         f"These figures show what changed, not why.</p></div>"
     )
+    table1 = sorted(y for y in ASHE_TABLE1 if y in years)
+    if table1:
+        editions = ", ".join(f"{y} {ASHE_TABLE1[y][4]}" for y in reversed(table1))
+        out.append(
+            f'<p class="small">From April {table1[0]} the figures come from ONS\'s Table 1 files ({editions}).</p>'
+        )
+    if last < EARN_LAST:
+        out.append(
+            f'<p class="small">These figures end in April {last}, the latest April in the table used here. '
+            f"The table has no figures for April {EARN_LAST} yet, so none are shown.</p>"
+        )
     cyears = [y for y in years if y >= 2006]
     out.append(
         _chart(

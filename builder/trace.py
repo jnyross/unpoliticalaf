@@ -23,6 +23,20 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "8 November 2026",
+        "pages": [
+            ("index.html", "Home"),
+            ("life/index.html", "Everyday life, year by year"),
+            ("life/earnings.html", "Earnings after inflation"),
+            ("life/2025.html", "Everyday life in 2025"),
+            ("life/compare/2024-2025.html", "2024 compared with 2025"),
+            ("methods.html", "Methods"),
+            ("data/facts.json", "Facts download"),
+        ],
+        "was": "The 4 November 2026 correction said ONS's 2026 release kept April 2025 pay unchanged. It did not: in October 2026 ONS published revised April 2025 estimates and provisional April 2026 estimates. The earnings pages still showed the earlier provisional April 2025 figures, labelled as published rather than provisional, and stopped at April 2025.",
+        "now": "UK pay for April 2025 uses ONS's revised estimates and April 2026 uses its provisional estimates, both read from ONS's ASHE Table 1 files, and each is labelled with its status. Every pay figure after inflation is in April 2026 prices. The earnings page gives ONS's own published change for the latest year beside the change worked out from ONS's weekly figures. The pay spread also uses the Table 1 files for April 2025 and 2026. Figures by place end at April 2025, ONS's provisional estimates, because the Nomis table they come from has no April 2026 figures yet.",
+    },
+    {
         "date": "7 November 2026",
         "pages": [
             ("high-earners.html", "High earners and Income Tax"),
@@ -265,6 +279,7 @@ STATUS = {
     "projection": "Projection by the publisher",
     "calculated": "Calculated by Unpolitical from published figures",
     "provisional": "Provisional: the publisher may revise it",
+    "revised": "Revised: the publisher has replaced its provisional estimate",
     "missing": "Not published for this period",
 }
 

@@ -52,6 +52,8 @@ class RealData(unittest.TestCase):
         allowed = {
             "nomis-aps-emp-places-ci",
             "nomis-ashe-resident-cv",
+            "ashe-2025-table1-revised",
+            "ashe-2026-table1-provisional",
             "nomis-ashe-places",
             "ott-2009to2019",
             "ott-2019to2023",
@@ -67,6 +69,7 @@ class RealData(unittest.TestCase):
     def test_headline_margins_exist(self):
         for fid in (
             "earn.ft.2025",
+            "earn.ft.2026",
             "earn.real.ft.2015",
             "work.place.wales.2025",
             "hol.world.holiday.2025",

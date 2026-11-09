@@ -2,6 +2,7 @@
 
 import re
 
+from .data import EARN_BASE_YEAR
 from .html import page, esc, bars, jump
 
 
@@ -84,7 +85,7 @@ def home_page(facts, d, num, sources):
     # Each card's small chart shows the topic's longest series (audit 11 gap 3).
     sparks = {
         "work": mini(long_spark(facts, num, "work", Lw, caption=False)),
-        "earnings": mini(long_spark(facts, num, "earnings", L, caption=False)),
+        "earnings": mini(long_spark(facts, num, "earnings", eb, caption=False)),
         "housing": mini(long_spark(facts, num, "housing", 2024, caption=False)),
         "holidays": mini(long_spark(facts, num, "holidays", caption=False)),
         "schools": mini(long_spark(facts, num, "schools", Ls, caption=False)),
@@ -168,7 +169,7 @@ def home_page(facts, d, num, sources):
 <p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
 <a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages stop at {L}.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. ONS has since published April 2026 pay, which this series does not yet include. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {eb} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {EARN_BASE_YEAR} prices. Compared from {ea}, when the survey last changed how it codes jobs. The April {eb} figure is ONS's provisional estimate. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, the last years of the comparable series.</p>{sparks["holidays"]}</a>
 <a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages stop at {L}.</p>{sparks["schools"]}</a>
@@ -208,7 +209,7 @@ def methods_page(facts, sources, used_counts):
         '<h2 id="calculations">Calculations</h2><ul>'
         "<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is part of general public services and is shown on the same basis; the spending page also gives it per £100 of total managed expenditure.</li>"
         "<li><strong>Real terms (spending)</strong>: HM Treasury’s own 2025-26 prices (PESA Table 4.3).</li>"
-        "<li><strong>Pay after inflation</strong>: cash pay × (CPIH in April 2025 ÷ CPIH in April of that year), using ONS series L522.</li>"
+        f"<li><strong>Pay after inflation</strong>: cash pay × (CPIH in April {EARN_BASE_YEAR} ÷ CPIH in April of that year), using ONS series L522. Every pay figure after inflation on the site is in April {EARN_BASE_YEAR} prices.</li>"
         "<li><strong>Changes in percentages</strong> are shown in percentage points; changes in money and counts as a percentage of the earlier figure.</li>"
         "<li><strong>Non-tax receipts</strong>: total current receipts minus taxes (OBR).</li>"
         "<li><strong>Families with children renting privately</strong>: private-renting families ÷ all families, adding couples, single lone parents and previously married lone parents (EHS FT1241).</li>"

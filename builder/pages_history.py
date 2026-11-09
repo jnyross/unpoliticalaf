@@ -8,13 +8,14 @@ own survey, and changes are only calculated within a stretch measured the same w
 Years with no published figure stay empty.
 """
 
-from .data import YEARS, EARLY_YEARS, AGE_SERIES
+from .data import YEARS, EARLY_YEARS, AGE_SERIES, EARN_BASE_YEAR, EARN_LAST
 from .html import page, table, details_table, line_chart, source_line, spark, esc, _join
 from . import pages_life as L
 from . import findings as F
 
 LAST = YEARS[-1]
 ALL = EARLY_YEARS + YEARS
+EARN_ALL = EARLY_YEARS + list(range(YEARS[0], EARN_LAST + 1))  # pay has its own newest April
 
 # The first year each topic's longer series reaches.
 FIRST_YEAR = L.FIRST_YEAR
@@ -126,7 +127,7 @@ LONG = (
         (
             "earn.ft",
             "earnings",
-            "Median weekly pay, full-time employees (April 2025 prices)",
+            f"Median weekly pay, full-time employees (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft.{y}",
             "pounds",
             "pct",
@@ -148,7 +149,7 @@ LONG = (
         (
             "earn.men",
             "earnings",
-            "Full-time men (April 2025 prices)",
+            f"Full-time men (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft_men.{y}",
             "pounds",
             "pct",
@@ -159,7 +160,7 @@ LONG = (
         (
             "earn.women",
             "earnings",
-            "Full-time women (April 2025 prices)",
+            f"Full-time women (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft_women.{y}",
             "pounds",
             "pct",
@@ -170,7 +171,7 @@ LONG = (
         (
             "earn.pt",
             "earnings",
-            "Part-time employees (April 2025 prices)",
+            f"Part-time employees (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.pt.{y}",
             "pounds",
             "pct",
@@ -403,7 +404,7 @@ def chart(facts, num, topic):
             ),
         )
     if topic == "earnings":
-        years = [y for y in ALL if y >= first]
+        years = [y for y in EARN_ALL if y >= first]
         items = [
             ("Men", lambda y: f"earn.real.ft_men.{y}", "a"),
             ("Women", lambda y: f"earn.real.ft_women.{y}", "b"),
@@ -423,7 +424,7 @@ def chart(facts, num, topic):
             "Median full-time weekly pay since 2002, after inflation",
             years,
             items,
-            "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs), United Kingdom. The lines break at each change to the survey's method (2004 and 2006) and each time it changed the codes it uses to sort jobs into types (2011 and 2021)",
+            f"£ a week before tax, April each year, in April {EARN_BASE_YEAR} prices (adjusted with CPIH, the official consumer prices index that includes housing costs), United Kingdom. The lines break at each change to the survey's method (2004 and 2006) and each time it changed the codes it uses to sort jobs into types (2011 and 2021)",
             "pounds",
             breaks=breaks,
             split=True,
@@ -576,7 +577,7 @@ def table_for(facts, num, topic):
                 cell(f"earn.real.ft_women.{y}", "pounds"),
                 cell(f"earn.real.pt.{y}", "pounds"),
             ]
-            for y in ALL
+            for y in EARN_ALL
             if y >= first
         ]
         return details_table(
@@ -586,7 +587,7 @@ def table_for(facts, num, topic):
                 "Year",
                 "Survey method",
                 "Full-time (cash)",
-                "Full-time (2025 prices)",
+                f"Full-time ({EARN_BASE_YEAR} prices)",
                 "Full-time men",
                 "Full-time women",
                 "Part-time",
@@ -666,14 +667,14 @@ def answer(facts, num, topic):
         )
     if topic == "earnings":
         runs = L.same_basis_runs(
-            facts, lambda y: f"earn.real.ft.{y}", [y for y in ALL if y >= 2006], earn_method
+            facts, lambda y: f"earn.real.ft.{y}", [y for y in EARN_ALL if y >= 2006], earn_method
         )
         parts = [
             f"from April {a} to April {b} by {L.change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')}"
             for a, b in runs
         ]
         return (
-            f"In April 2002 the middle full-time employee earned {num('earn.ft.2002', 'pounds')} a week, which is {num('earn.real.ft.2002', 'pounds')} in April 2025 prices. "
+            f"In April 2002 the middle full-time employee earned {num('earn.ft.2002', 'pounds')} a week, which is {num('earn.real.ft.2002', 'pounds')} in April {EARN_BASE_YEAR} prices. "
             f"Because the survey's methods changed in 2004 and 2006, that figure is shown for the record but not compared with later years. "
             f"The survey also changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. After inflation, full-time pay changed "
             + _join(parts)

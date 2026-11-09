@@ -1639,7 +1639,7 @@ class BeforeTwoThousandEight(unittest.TestCase):
         self.assertIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2010"', page)
         self.assertIn('data-from="earn.real.ft.2011" data-to="earn.real.ft.2014"', page)
         self.assertNotIn('data-from="earn.real.ft.2008" data-to="earn.real.ft.2014"', page)
-        self.assertIn("about the same as in April 2021", answer)
+        self.assertIn("pay in April 2026 was 4% more than in April 2021", answer)
         places = "".join(pages_life.places_block(self.facts, Num(self.facts), "earnings"))
         self.assertIn("Change, 2021 to", places)
         self.assertIn("Change, 2011 to 2020", places)
@@ -1654,6 +1654,255 @@ class BeforeTwoThousandEight(unittest.TestCase):
         self.assertIn('data-fact="work.rate.1975"', html)
         self.assertIn(f'href="compare/1975-{pages_life.LAST}.html"', html)
         self.assertIn('<option value="1975" selected>', html)
+
+
+class AprilPay2026(unittest.TestCase):
+    """ONS's revised April 2025 and provisional April 2026 pay, read from its Table 1 packs."""
+
+    # Independently read from ONS's ASHE Table 1.1a and 1.1b packs (UK, all employees, median, D6).
+    PAY = {
+        2025: {
+            "1": 817,
+            "2": 256.4,
+            "3": 709.7,
+            "4": 288,
+            "5": 740.5,
+            "6": 555.6,
+            "7": 641.7,
+            "8": 766.6,
+            "9": 279.9,
+        },
+        2026: {
+            "1": 862.4,
+            "2": 259.1,
+            "3": 750.6,
+            "4": 299,
+            "5": 774.4,
+            "6": 584.4,
+            "7": 673.1,
+            "8": 811.2,
+            "9": 288.1,
+        },
+    }
+    CV = {
+        2025: {"1": 0.3, "3": 0.3, "8": 0.1, "9": 0.5},
+        2026: {"1": 0.1, "3": 0.3, "8": 0.2, "9": 0.4},
+    }
+    SHEETS = {
+        "1": "Male Full-Time",
+        "2": "Male Part-Time",
+        "3": "Female Full-Time",
+        "4": "Female Part-Time",
+        "5": "Male",
+        "6": "Female",
+        "7": "All",
+        "8": "Full-Time",
+        "9": "Part-Time",
+    }
+    FILES = {
+        2025: ("ashetable12025revised.zip", "Total Table 1.1a   Weekly pay - Gross 2025.xlsx"),
+        2026: ("ashetable12026provisional.zip", "PROV - Table 1.1a   Weekly pay - Gross 2026.xlsx"),
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        import warnings
+        from builder.data import build_all
+        from builder import uncertainty as U
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            cls.facts, cls.d = build_all()
+        pages_life.init(cls.d)
+        U.add_facts(cls.facts, cls.d)  # margins are module-wide: point them at these facts
+
+    def test_retained_packs_match_their_receipts(self):
+        import hashlib
+        import json
+        from builder.readers import ROOT
+
+        receipts = json.loads((ROOT / "data/fetched/receipts.json").read_text())
+        for sid, digest in (
+            (
+                "ashe-2025-table1-revised",
+                "688dcfe4c07dd7e6235c5dad8683107b2e83fcc1ae959d3ed1703317d19867ae",
+            ),
+            (
+                "ashe-2026-table1-provisional",
+                "b0143def67e3863a34421608608f63b77b7eebd8fbbd5f2109d6811eb184351d",
+            ),
+            ("ashe-2026-fig2", "a72ae9c92c19c035471a34d94a4386ec85c9948c3d45fd773b8825c837b9d4c5"),
+        ):
+            body = (ROOT / "data/fetched" / receipts[sid]["file"]).read_bytes()
+            self.assertEqual(receipts[sid]["sha256"], digest, sid)
+            self.assertEqual(hashlib.sha256(body).hexdigest(), digest, sid)
+
+    def test_every_combination_reopens_at_its_own_sheet_and_cell(self):
+        import io
+        import zipfile
+        import openpyxl
+        from builder.readers import ROOT
+
+        for y, (name, member) in self.FILES.items():
+            with zipfile.ZipFile(ROOT / "data/fetched/ons" / name) as archive:
+                wb = openpyxl.load_workbook(io.BytesIO(archive.read(member)), data_only=True)
+            for code, sheet in self.SHEETS.items():
+                ws = wb[sheet]
+                self.assertIn("United Kingdom", ws["A1"].value)
+                self.assertTrue(ws["A1"].value.rstrip().endswith(str(y)), (y, sheet))
+                self.assertEqual(ws["D5"].value, "Median")
+                self.assertEqual(ws["A6"].value, "All Employees")
+                self.assertEqual(ws["D6"].value, self.PAY[y][code], (y, sheet))
+
+    def test_shown_groups_use_the_retained_2025_and_2026_values(self):
+        groups = {"8": "ft", "9": "pt", "1": "ft_men", "3": "ft_women"}
+        sids = {2025: "ashe-2025-table1-revised", 2026: "ashe-2026-table1-provisional"}
+        for y, values in self.PAY.items():
+            for code, g in groups.items():
+                f = self.facts[f"earn.{g}.{y}"]
+                self.assertEqual(f.value, values[code], f.id)
+                self.assertEqual(f.source, sids[y], f.id)
+                self.assertEqual(f.locator, f"{self.FILES[y][1]}::{self.SHEETS[code]}!D6")
+            for code, cv in self.CV[y].items():
+                f = self.facts[f"cv.earn.{groups[code]}.{y}"]
+                self.assertEqual(f.value, cv, f.id)
+                self.assertIn("Table 1.1b", f.locator)
+
+    def test_independent_checker_reads_the_zip_locators(self):
+        from builder.check import cell_value
+        from builder.sources import all_sources
+
+        sources = all_sources()
+        for y in (2025, 2026):
+            for g in ("ft", "pt", "ft_men", "ft_women"):
+                f = self.facts[f"earn.{g}.{y}"]
+                self.assertEqual(cell_value(sources[f.source]["file"], f.locator), f.value, f.id)
+
+    def test_status_follows_each_edition(self):
+        f = self.facts
+        self.assertEqual(f["earn.ft.2026"].status, "provisional")
+        self.assertEqual(f["earn.ft.2025"].status, "revised")
+        self.assertEqual(f["earn.ft.2024"].status, "published")
+        self.assertEqual(f["earn.ft.2024"].source, "nomis-ashe-resident")
+        self.assertEqual(f["earn.real.ft.2026"].status, "calculated")
+        # Places end at the provisional April 2025 of their own Nomis table.
+        self.assertEqual(f["earn.place.scotland.2025"].status, "provisional")
+        self.assertEqual(f["spread.p10.2025"].status, "revised")
+
+    def test_every_real_pay_figure_is_in_april_2026_prices(self):
+        f = self.facts
+        self.assertEqual(f["cpih.apr.2026"].value, 141.8)
+        self.assertEqual(f["cpih.apr.2025"].value, 137.7)
+        real = [
+            k
+            for k in f
+            if k.startswith(("earn.real.", "earn.place.real.", "spread.real.", "spread.gap.real."))
+        ]
+        self.assertGreater(len(real), 100)
+        for k in real:
+            self.assertEqual(f[k].unit, "£ a week, April 2026 prices", k)
+            if not k.startswith("spread.gap."):
+                self.assertIn("cpih.apr.2026", f[k].inputs, k)
+        # Independent arithmetic: cash × 141.8 ÷ April CPIH of that year.
+        self.assertAlmostEqual(f["earn.real.ft.2025"].value, 766.6 * 141.8 / 137.7)
+        self.assertAlmostEqual(f["earn.real.ft.2026"].value, 811.2)
+        self.assertEqual(self.d["earnings"]["base_year"], 2026)
+        self.assertEqual(self.d["earn_places"]["base_year"], 2026)
+        self.assertEqual(self.d["life_extra"]["spread"]["base_year"], 2026)
+
+    def test_unpublished_place_figures_stay_missing(self):
+        for k in ("earn.place.scotland.2026", "earn.place.uk.2026", "earn.place.wales.2026"):
+            self.assertNotIn(k, self.facts)
+        from builder.html import Num
+
+        places = "".join(pages_life.places_block(self.facts, Num(self.facts), "earnings"))
+        self.assertIn("Figures by place end in April 2025", places)
+        self.assertIn("has no April 2026 figures yet", places)
+
+    def test_pay_spread_reads_table1_for_2025_and_2026(self):
+        from builder.check import cell_value
+        from builder.html import Num
+        from builder.pages_life_extra import spread_block
+        from builder.sources import all_sources
+
+        # Independently read from Table 1.1a, Full-Time sheet, row 6: H = 10th, Q = 90th percentile.
+        expected = {
+            2025: {"p10": (493.4, "H6"), "p50": (766.6, "D6"), "p90": (1488.4, "Q6")},
+            2026: {"p10": (519.1, "H6"), "p50": (811.2, "D6"), "p90": (1595.1, "Q6")},
+        }
+        sources = all_sources()
+        for y, points in expected.items():
+            for key, (value, cell) in points.items():
+                f = self.facts[f"spread.{key}.{y}"]
+                self.assertEqual(f.value, value, f.id)
+                self.assertEqual(f.locator, f"{self.FILES[y][1]}::Full-Time!{cell}", f.id)
+                self.assertEqual(cell_value(sources[f.source]["file"], f.locator), value, f.id)
+                self.assertEqual(f.status, {2025: "revised", 2026: "provisional"}[y], f.id)
+        self.assertAlmostEqual(self.facts["spread.ratio.2026"].value, 1595.1 / 519.1)
+        self.assertAlmostEqual(self.facts["spread.real.p10.2025"].value, 493.4 * 141.8 / 137.7)
+        # Earlier years stay on the Nomis resident analysis.
+        self.assertEqual(self.facts["spread.p10.2024"].source, "nomis-ashe-percentiles")
+        self.assertEqual(self.facts["spread.p10.2024"].value, 468.4)
+        self.assertEqual(self.facts["spread.p10.2024"].status, "published")
+        self.assertEqual(self.d["life_extra"]["spread"]["years"][-1], 2026)
+        spread = "".join(spread_block(self.facts, Num(self.facts), self.d, 2021))
+        self.assertIn("In April 2026, the lowest-paid tenth", spread)
+        self.assertIn("ONS's Table 1 files (2026 provisional, 2025 revised)", spread)
+        self.assertNotIn("These figures end in April", spread)
+
+    def test_earnings_page_lists_every_source_it_uses(self):
+        ids = pages_life.TOPIC_SOURCES["earnings"]
+        for sid in ("ashe-2025-table1-revised", "ashe-2026-table1-provisional", "ashe-2026-fig2"):
+            self.assertIn(sid, ids)
+        used = {
+            self.facts[k].source
+            for k in self.facts
+            if k.startswith(("earn.", "spread.")) and not k.startswith("earn.place.")
+        }
+        self.assertLessEqual(used - {"calculated"}, set(ids))
+        self.assertNotIn("does not yet include", pages_life.TOPIC_LIMITS["earnings"])
+        self.assertIn(
+            "April 2026 provisional, April 2025 revised", pages_life.TOPIC_LIMITS["earnings"]
+        )
+
+    def test_published_and_derived_growth_are_both_shown_not_merged(self):
+        from builder.html import Num
+
+        f = self.facts
+        self.assertEqual(f["earn.ons.change.ft.real.2026"].value, 2.7)
+        self.assertEqual(f["earn.ons.change.ft.nominal.2026"].value, 5.8)
+        derived = 100 * (f["earn.real.ft.2026"].value / f["earn.real.ft.2025"].value - 1)
+        self.assertEqual(round(derived, 1), 2.8)
+        answer, body = pages_life._earnings(f, self.d, Num(f), {})
+        html = answer + "".join(body)
+        self.assertIn('data-fact="earn.ons.change.ft.real.2026"', html)
+        self.assertIn(">+2.8%</data>", html)
+        self.assertIn("so the two can differ slightly", html)
+        self.assertIn("April 2026 figures are ONS's first (provisional) estimates", html)
+        self.assertIn("April 2025 figures are ONS's revised estimates", html)
+        # The published rate sits after the first chart, so the answer stays short on a phone.
+        self.assertNotIn("earn.ons.change", answer)
+
+    def test_pages_name_one_price_base(self):
+        from builder.html import Num
+        from builder import pages_history as H
+        from builder.pages_home import methods_page
+
+        f = self.facts
+        num = Num(f)
+        answer, body = pages_life._earnings(f, self.d, num, {})
+        html = answer + "".join(body)
+        long = (
+            H.chart(f, num, "earnings")
+            + H.table_for(f, num, "earnings")
+            + H.answer(f, num, "earnings")
+        )
+        for text in (html, methods_page(f, {}, {}), long):
+            self.assertNotIn("April 2025 prices", text)
+            self.assertNotIn("2025 prices)", text)
+        self.assertIn("in April 2026 prices", html)
+        self.assertIn('data-fact="earn.real.ft_women.2026"', html)
+        self.assertIn('data-fact="earn.real.pt.2026"', long)
 
 
 class EarlyComparisons(unittest.TestCase):

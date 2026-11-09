@@ -134,3 +134,39 @@ def test_csv_schema_change_fails_but_compatible_value_update_passes(tmp_path):
     shutil.copyfile(previous, staged)
     staged.write_text(staged.read_text().replace("2025,1", "2025,2"))
     validate_source("test", staged, "text/csv", previous)
+
+
+@pytest.mark.parametrize(
+    "mutation", ["corrupt", "no-workbooks", "missing-sheet", "label", "median"]
+)
+def test_ashe_table1_pack_contract_rejects_incompatible_zip(tmp_path, mutation):
+    import io
+    import zipfile
+
+    previous = ROOT / "data/fetched/ons/ashetable12026provisional.zip"
+    staged = tmp_path / "ashe.zip"
+    if mutation == "corrupt":
+        staged.write_bytes(previous.read_bytes()[:4096])
+    elif mutation == "no-workbooks":
+        with zipfile.ZipFile(staged, "w") as output:
+            output.writestr("readme.txt", "no tables")
+    else:
+        member = "PROV - Table 1.1a   Weekly pay - Gross 2026.xlsx"
+        with zipfile.ZipFile(previous) as original, zipfile.ZipFile(staged, "w") as output:
+            for name in original.namelist():
+                body = original.read(name)
+                if name == member:
+                    workbook = openpyxl.load_workbook(io.BytesIO(body))
+                    sheet = workbook["Female Part-Time"]
+                    if mutation == "missing-sheet":
+                        sheet.title = "Renamed"
+                    elif mutation == "label":
+                        sheet["A6"] = "Something else"
+                    else:
+                        sheet["D6"] = "x"
+                    buffer = io.BytesIO()
+                    workbook.save(buffer)
+                    body = buffer.getvalue()
+                output.writestr(name, body)
+    with pytest.raises((ValueError, zipfile.BadZipFile)):
+        validate_source("ashe-2026-table1-provisional", staged, "application/zip", previous)

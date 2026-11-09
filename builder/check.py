@@ -80,6 +80,7 @@ def fail(msg):
 # ---------------------------------------------------------------- source cells
 
 _wb = {}
+_zip_wb = {}  # (zip file, member) -> workbook
 
 
 def workbook(path):
@@ -88,6 +89,23 @@ def workbook(path):
 
         _wb[path] = openpyxl.load_workbook(ROOT / path, data_only=True, read_only=False)
     return _wb[path]
+
+
+def _worksheet(src_file, sheet):
+    """A worksheet by name. In a publisher's zip pack the name is "member::sheet", and the
+    member workbook is reopened from the archive."""
+    if not src_file.endswith(".zip"):
+        return workbook(src_file)[sheet]
+    member, name = sheet.split("::", 1)
+    if (src_file, member) not in _zip_wb:
+        import openpyxl
+        import zipfile
+
+        with zipfile.ZipFile(ROOT / src_file) as archive:
+            _zip_wb[(src_file, member)] = openpyxl.load_workbook(
+                io.BytesIO(archive.read(member)), data_only=True, read_only=False
+            )
+    return _zip_wb[(src_file, member)][name]
 
 
 def _csv_rows(cached):
@@ -112,9 +130,9 @@ def _cached_source(path, source_cache, read_source):
 def cell_value(src_file, locator, source_cache=None):
     """Read independently, optionally reusing parsing within one check_facts call."""
     path = ROOT / src_file
-    if src_file.endswith(".xlsx"):
+    if src_file.endswith((".xlsx", ".zip")):
         sheet, ref = locator.rsplit("!", 1)
-        return workbook(src_file)[sheet][ref].value
+        return _worksheet(src_file, sheet)[ref].value
     if src_file.endswith(".xls"):
         import xlrd  # legacy Excel: read with xlrd, not the builder's code path
 
