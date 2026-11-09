@@ -177,6 +177,8 @@ class Latest(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()
+        # This fixture refills the shared margin table from its own facts; later tests rely on
+        # that state, so leave it in place.
         uncertainty.add_facts(cls.facts, cls.d)
         pages_life.init(cls.d)
         pages_ranges.add_range_facts(cls.facts)

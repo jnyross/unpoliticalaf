@@ -9,7 +9,7 @@ import pytest
 from pypdf import PdfReader
 
 from builder import data_buyers as buyers
-from builder import pages_generations
+from builder import pages_generations, uncertainty
 from builder.build import render
 from builder.check import as_number, cell_value
 from builder.data import Facts
@@ -80,7 +80,17 @@ def _series_metadata(source_id):
 
 @pytest.fixture(scope="module")
 def site_pages():
-    _, _, pages, _ = render()
+    # render() refills the shared margin table from its own facts; later tests rely on its
+    # earlier state, so put it back.
+    saved_margins = dict(uncertainty.MARGINS)
+    saved_info = dict(uncertainty.INFO)
+    try:
+        _, _, pages, _ = render()
+    finally:
+        uncertainty.MARGINS.clear()
+        uncertainty.MARGINS.update(saved_margins)
+        uncertainty.INFO.clear()
+        uncertainty.INFO.update(saved_info)
     return pages
 
 

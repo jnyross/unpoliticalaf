@@ -9,7 +9,7 @@ import unittest
 
 import openpyxl
 
-from builder import downloads
+from builder import downloads, uncertainty
 from builder.build import render
 from builder.data import Facts, who_pays
 from builder.readers import ROOT
@@ -20,7 +20,17 @@ WITHDRAWN_PREFIXES = ("etb.2a.hhtax.", "etb.2a.taxshare.")
 class HouseholdTaxShares(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.facts, _, cls.pages, _ = render()
+        # render() refills the shared margin table from its own facts; later tests rely on its
+        # earlier state, so put it back.
+        saved_margins = dict(uncertainty.MARGINS)
+        saved_info = dict(uncertainty.INFO)
+        try:
+            cls.facts, _, cls.pages, _ = render()
+        finally:
+            uncertainty.MARGINS.clear()
+            uncertainty.MARGINS.update(saved_margins)
+            uncertainty.INFO.clear()
+            uncertainty.INFO.update(saved_info)
 
     def test_person_ranked_means_are_not_household_totals(self):
         self.assertEqual([fid for fid in self.facts if fid.startswith(WITHDRAWN_PREFIXES)], [])

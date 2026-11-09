@@ -1,6 +1,7 @@
 """Margins of error: shown only where the publisher gives one, and checked honestly."""
 
 import unittest
+from unittest.mock import patch
 
 from builder import uncertainty as U
 from builder.data import Fact, Facts, build_all
@@ -45,6 +46,10 @@ class ChangeCheck(unittest.TestCase):
 class RealData(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        for state in (U.MARGINS, U.INFO):
+            preserved_state = patch.dict(state)
+            preserved_state.start()
+            cls.addClassCleanup(preserved_state.stop)
         cls.facts, cls.d = build_all()
         U.add_facts(cls.facts, cls.d)
 

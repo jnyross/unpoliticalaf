@@ -2,6 +2,7 @@
 
 import re
 import unittest
+from unittest.mock import patch
 
 from builder.data import Fact, Facts
 from builder.html import fmt, line_chart, small_multiples, Num
@@ -1621,6 +1622,10 @@ class BeforeTwoThousandEight(unittest.TestCase):
         from builder import uncertainty as U
 
         if not U.MARGINS:
+            for state in (U.MARGINS, U.INFO):
+                preserved_state = patch.dict(state)
+                preserved_state.start()
+                self.addCleanup(preserved_state.stop)
             U.add_facts(self.facts, self.d)
         answer, body = pages_life._earnings(self.facts, self.d, Num(self.facts), {})
         # Every tagged change on the earnings page compares two years on the same basis (the 2008 to
@@ -1710,6 +1715,10 @@ class AprilPay2026(unittest.TestCase):
         from builder.data import build_all
         from builder import uncertainty as U
 
+        for state in (U.MARGINS, U.INFO):
+            preserved_state = patch.dict(state)
+            preserved_state.start()
+            cls.addClassCleanup(preserved_state.stop)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             cls.facts, cls.d = build_all()

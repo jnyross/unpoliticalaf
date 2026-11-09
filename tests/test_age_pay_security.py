@@ -56,12 +56,15 @@ def built():
 def site_pages():
     # render() refills the shared margin table from its own facts; later tests rely on its
     # earlier state, so put it back.
-    saved = dict(uncertainty.MARGINS)
+    saved_margins = dict(uncertainty.MARGINS)
+    saved_info = dict(uncertainty.INFO)
     try:
         _, _, pages, _ = render()
     finally:
         uncertainty.MARGINS.clear()
-        uncertainty.MARGINS.update(saved)
+        uncertainty.MARGINS.update(saved_margins)
+        uncertainty.INFO.clear()
+        uncertainty.INFO.update(saved_info)
     return pages
 
 
