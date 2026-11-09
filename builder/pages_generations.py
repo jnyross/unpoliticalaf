@@ -10,7 +10,6 @@ for the English Housing Survey years, and house prices against earnings only fro
 1999, the first year measured the same way.
 """
 
-from .data import YEARS
 from .html import page, source_line, table, FOLD
 from . import findings as F
 from .pages_life import CAUSE, groups_chart
@@ -24,16 +23,28 @@ AFFORD_FIRST = (
 OWN_FIRST, OWN_LAST = 2008, 2024  # English Housing Survey: 2008-09 to 2024-25 (survey years)
 SCHOOL_FIRST = 2006  # first January class-size census in the explorer
 AGES = [("18_24", "18 to 24"), ("25_34", "25 to 34"), ("35_49", "35 to 49")]
-LAST = YEARS[-1]
+# The later year of each pair is fixed rather than the explorer's newest year: John's recorded
+# J12 probes ask about 2025, and newer survey years are on the topic and year pages.
+LAST = 2025
+
+
+def _afford_last(facts):
+    """The newest year with a house price to earnings ratio: house prices can lag the explorer's last year."""
+    return max(
+        y
+        for y in range(AFFORD_FIRST, LAST + 1)
+        if f"afford.ratio.ew.{y}" in facts and facts[f"afford.ratio.ew.{y}"].value is not None
+    )
 
 
 def _answer(facts, num):
     w_first, w_last = WORK_FIRST, LAST
+    af = _afford_last(facts)
     return (
         f'<div class="answer"><p>No single answer: “easier” depends on what is measured. '
         f'Aged 25 to 34, a larger share were in work in {w_last} ({num(f"work.age.25_34.{w_last}", "pct")}) than in {w_first} ({num(f"work.age.25_34.{w_first}", "pct")}); '
         f'aged 18 to 24, {num(f"work.age.18_24.{w_last}", "pct")} against {num(f"work.age.18_24.{w_first}", "pct")}. '
-        f'The middle-priced home in England and Wales has gone from {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{LAST}", "times2")} in {LAST}. '
+        f'The middle-priced home in England and Wales has gone from {num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2")} a year’s earnings to {num(f"afford.ratio.ew.{af}", "times2")} in {af}. '
         f'Owning in England: {num(f"house.owners.{OWN_FIRST}", "pct")} of households in {OWN_FIRST}-{str(OWN_FIRST + 1)[2:]}, {num(f"house.owners.{OWN_LAST}", "pct")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}. '
         f"University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. "
         f"State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. "
@@ -98,13 +109,13 @@ def page_body(facts, d, num, sources):
         _afford_chart(facts, num),
         FOLD,
         table(
-            f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {LAST}",
-            ["Measure", str(AFFORD_FIRST), str(LAST)],
+            f"Median house price ÷ median full-time earnings, England and Wales, {AFFORD_FIRST} and {_afford_last(facts)}",
+            ["Measure", str(AFFORD_FIRST), str(_afford_last(facts))],
             [
                 [
                     "Times a year’s earnings",
                     num(f"afford.ratio.ew.{AFFORD_FIRST}", "times2"),
-                    num(f"afford.ratio.ew.{LAST}", "times2"),
+                    num(f"afford.ratio.ew.{_afford_last(facts)}", "times2"),
                 ]
             ],
         ),
@@ -228,7 +239,7 @@ def _same_age_chart(facts, num):
 
 
 def _afford_chart(facts, num):
-    years = list(range(AFFORD_FIRST, LAST + 1))
+    years = list(range(AFFORD_FIRST, _afford_last(facts) + 1))
     return _chart(
         facts,
         num,

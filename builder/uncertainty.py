@@ -493,8 +493,13 @@ def topic_line(num, topic, last, up="../"):
     """One short paragraph under a topic's answer: how sure the figures are."""
     link = how_sure_link(up)
     if topic == "work":
-        places = [f"work.place.{k}.{last}" for k, _ in NATIONS[1:]] + [
-            f"work.place.{k}.{last}" for k, _, _ in REGIONS
+        # Rates by place cover a calendar year, so they can end a year before the UK rate.
+        wy = next(
+            (y for y in range(last, last - 3, -1) if f"work.place.{NATIONS[1][0]}.{y}" in MARGINS),
+            last,
+        )
+        places = [f"work.place.{k}.{wy}" for k, _ in NATIONS[1:]] + [
+            f"work.place.{k}.{wy}" for k, _, _ in REGIONS
         ]
         rng = _range(num, places, "pm_pp")
         s = (
@@ -502,7 +507,7 @@ def topic_line(num, topic, last, up="../"):
             f"{num('moe.lfs.rate.latest', 'pm_pp')}, and {num('moe.lfs.rate.change_year', 'pm_pp')} on its change over a year, so a smaller change could be sampling noise."
         )
         if rng:
-            s += f" Rates for each nation and region in {last} have margins {rng}."
+            s += f" Rates for each nation and region in {wy} have margins {rng}."
     elif topic == "earnings":
         # Figures by place can end at an earlier April than the UK figures.
         py = next(
@@ -582,6 +587,22 @@ def check_sentence(facts, num, a_id, b_id, style, labels=("earlier", "later"), u
     return (
         f'<p class="small sure-check">Margins of error: {esc_(labels[0])} {pm(num, a_id, "moe-in").strip()}, {esc_(labels[1])} {pm(num, b_id, "moe-in").strip()}. '
         f'The change is {verdict}. <a href="{up}{PAGE}#compare">How this is checked</a></p>'
+    )
+
+
+def place_year(facts):
+    """The newest year with figures by nation, region and country visited. These come
+    from annual surveys that can end a year before the explorer's last year."""
+
+    def has(fid):
+        return fid in facts and facts[fid].value is not None
+
+    return max(
+        y
+        for y in YEARS
+        if has(f"work.place.wales.{y}")
+        and has(f"earn.place.wales.{y}")
+        and has(f"hol.world.holiday.{y}")
     )
 
 

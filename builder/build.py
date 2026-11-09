@@ -118,7 +118,7 @@ def render(settings=None):
         pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(
             facts, d, num, sources, a, b
         )
-    pages["life/compare/index.html"] = pages_life.compare_index(sources)
+    pages["life/compare/index.html"] = pages_life.compare_index(sources, facts)
     for a, b in pages_ranges.span_pairs():
         pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(
             facts, d, num, sources, a, b
@@ -136,7 +136,9 @@ def render(settings=None):
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
     pages["sources.html"] = pages_home.sources_page(sources, used)
-    pages["uncertainty.html"] = uncertainty.uncertainty_page(facts, d, num, sources, YEARS[-1])
+    pages["uncertainty.html"] = uncertainty.uncertainty_page(
+        facts, d, num, sources, uncertainty.place_year(facts)
+    )
     pages["glossary.html"] = glossary.glossary_page()
     pages["corrections.html"] = trace.corrections_page()
     pages.update(trace.figure_pages(facts, sources, num.used))

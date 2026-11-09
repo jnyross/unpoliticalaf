@@ -15,7 +15,7 @@ from typing import Optional
 
 from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows, pdf_number, zip_sheet
 
-YEARS = list(range(2008, 2026))  # year explorer range (calendar years)
+YEARS = list(range(2008, 2027))  # year explorer range (calendar years)
 # Years before the explorer's full range. Only some series reach back this far;
 # their figures are read by history() and shown on the topic pages and the
 # earlier-year pages, each with its own survey and break.

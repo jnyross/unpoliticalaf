@@ -744,6 +744,21 @@ def _val(facts, fid):
     return None if f is None else f.value
 
 
+def _occ_prof(y):
+    return f"work.occshare.{occ_scheme(y)}.2000000.{y}"
+
+
+def _latest_upto(facts, fid, y):
+    """The newest year up to y with a figure for fid(year), or None."""
+    return next((yr for yr in range(y, YEARS[0] - 1, -1) if _val(facts, fid(yr)) is not None), None)
+
+
+def latest_year(facts, fid):
+    """The newest explorer year with a figure for fid(year). Topics publish on their own
+    timetables, so a topic's latest figure can be older than the explorer's last year."""
+    return next(y for y in reversed(YEARS) if _val(facts, fid(y)) is not None)
+
+
 def change_cell(facts, num, a_id, b_id, style, kind):
     a, b = _val(facts, a_id), _val(facts, b_id)
     if a is None or b is None:
@@ -963,8 +978,11 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
     return f'<dl class="stats">{"".join(rows)}</dl>'
 
 
-def headline(facts, num, topic, y, gb=True):
-    """One or two plain sentences answering 'what was it like in year y?'."""
+def headline(facts, num, topic, y, gb=True, latest=False):
+    """One or two plain sentences answering 'what was it like in year y?'.
+
+    With latest (topic pages and the hub), a part with no figure for year y comes
+    from that part's own newest earlier year, which the sentence names."""
 
     def has(fid):
         return fid in facts and facts[fid].value is not None
@@ -975,20 +993,25 @@ def headline(facts, num, topic, y, gb=True):
             s.append(
                 f"In April to June {y}, {num(f'work.rate.{y}', 'pct')} of people aged 16 to 64 were in work ({num(f'work.men.{y}', 'pct')} of men and {num(f'work.women.{y}', 'pct')} of women)."
             )
-        sc = occ_scheme(y)
-        if has(f"work.occshare.{sc}.2000000.{y}"):
+        oy = _latest_upto(facts, _occ_prof, y) if latest else y
+        sc = occ_scheme(oy) if oy else None
+        if oy and has(_occ_prof(oy)):
             shares = {
-                c: facts[f"work.occshare.{sc}.{c}.{y}"].value
+                c: facts[f"work.occshare.{sc}.{c}.{oy}"].value
                 for c in OCC_NAMES[sc]
-                if c != "0" and has(f"work.occshare.{sc}.{c}.{y}")
+                if c != "0" and has(f"work.occshare.{sc}.{c}.{oy}")
             }
             top = max(shares, key=shares.get)
             s.append(
-                f"Over all of {y}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{y}', 'pct')} of workers."
+                f"Over all of {oy}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{oy}', 'pct')} of workers."
+            )
+        elif y < 2011:
+            s.append(
+                f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
             )
         else:
             s.append(
-                f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
+                f"There are no job-type figures for {y}: {missing_reason('work.occ.prof', y)}."
             )
         return " ".join(s)
     if topic == "earnings":
@@ -1032,10 +1055,13 @@ def headline(facts, num, topic, y, gb=True):
             f"In January {y}, the average class in an English state primary school had {num(f'school.primary.{y}', 'dp1')} pupils; "
             f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}."
         )
-        if has(f"school.wales.infant.{y}"):
-            s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{y}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{y}', 'dp1')}."
-        if has(f"school.scotland.primary.{y}"):
-            s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{y}', 'dp1')} pupils at the September {y} census."
+        wy = _latest_upto(facts, lambda yr: f"school.wales.infant.{yr}", y) if latest else y
+        if wy and has(f"school.wales.infant.{wy}"):
+            when = "" if wy == y else f" in January {wy}"
+            s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{wy}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{wy}', 'dp1')}{when}."
+        ty = _latest_upto(facts, lambda yr: f"school.scotland.primary.{yr}", y) if latest else y
+        if ty and has(f"school.scotland.primary.{ty}"):
+            s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{ty}', 'dp1')} pupils at the September {ty} census."
         return s
     return ""
 
@@ -1387,6 +1413,16 @@ def missing_reason(mkey, y):
         return "the latest published overcrowding average ends in 2022-23"
     if mkey.startswith("house.") and y > 2024:
         return f"the English Housing Survey for {sy(y)} is not yet published"
+    if mkey.startswith("nat.house.") and y > 2025:
+        return f"figures for {sy(y)} are not yet published"
+    if mkey.startswith(("work.place.", "work.occ.")) and y > 2025:
+        return f"the Annual Population Survey for January to December {y} is not yet published"
+    if mkey.startswith("earn.place.") and y > 2025:
+        return f"pay by nation for April {y} is not yet in the tables used here"
+    if mkey.startswith(("school.wales.", "school.scotland")) and y > 2025:
+        return f"the January {y} census for this nation is not yet in the tables used here"
+    if mkey.startswith("hol.") and y > 2025:
+        return f"travel figures for {y} are not yet published"
     if mkey.startswith("hol.gb"):
         if y in (2020, 2021):
             return "the Great Britain Tourism Survey has no full-year figures for 2020 and 2021"
@@ -1743,7 +1779,7 @@ def compare_page(facts, d, num, sources, a, b):
     )
 
 
-def compare_index(sources):
+def compare_index(sources, facts):
     from .pages_ranges import DEFAULT_RULE, pair_context
 
     body = [
@@ -1760,7 +1796,8 @@ def compare_index(sources):
             f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
             f'<p class="small">{esc(DEFAULT_RULE)}{esc(pair_context(a, b))} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
             f'For the years since the pandemic, see <a href="{RECENT}-{LAST}.html">{RECENT} compared with {LAST}</a>, where some topics cannot be compared. '
-            "Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods), and housing figures for 2025 are not yet published.</p></div>"
+            "Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods). "
+            f"Housing figures after {latest_year(facts, lambda y: f'house.private.{y}')} and holiday figures after {_hol_last(facts)} are not yet published.</p></div>"
         )
     body.append(
         '<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>'
@@ -1909,7 +1946,7 @@ def _work(facts, d, num, sources):
         f'men\'s from {num(f"work.men.{wf}", "pct")} to {num(f"work.men.{y}", "pct")}.</p>'
     )
     answer = (
-        f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>{sex}'
+        f'<div class="answer"><p>{headline(facts, num, "work", y, latest=True)}{newer}</p>{sex}'
         f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
         f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>'
     )
@@ -2256,24 +2293,29 @@ def _hol_cell(facts, num, y):
     return num(f"hol.world.holiday.{y}", "millions")
 
 
+def _hol_last(facts):
+    return latest_year(facts, lambda y: f"hol.world.holiday.{y}")
+
+
 def _top_holiday_countries(facts, d, num):
     """The most visited countries in the latest year. Holiday-only figures by country
     start in 2024; before that only visits for any purpose exist, and the text says so."""
     names = d["countries"]["names"]
+    y = _hol_last(facts)
     hl = (
-        top_countries(facts, d, LAST, 3, kind="holiday")
-        if d["countries"].get("holiday", {}).get(LAST)
+        top_countries(facts, d, y, 3, kind="holiday")
+        if d["countries"].get("holiday", {}).get(y)
         else []
     )
     if len(hl) == 3:
         return (
-            f'In {LAST} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} visits), '
-            f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).'
+            f'In {y} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{y}", "millions")} visits), '
+            f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{y}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{y}", "millions")}).'
         )
-    tl = top_countries(facts, d, LAST, 3)
+    tl = top_countries(facts, d, y, 3)
     return (
-        f'In {LAST} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
-        f'({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}); there are no holiday-only figures by country for that year.'
+        f'In {y} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{y}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
+        f'({num(f"hol.cty.{tl[1]}.all.{y}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{y}", "millions")}); there are no holiday-only figures by country for that year.'
     )
 
 
@@ -2284,12 +2326,13 @@ def _holidays(facts, d, num, sources):
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
     # The most visited countries get their own short paragraph near the top, with a link
     # to their section, as readers missed them inside a longer one (audit 11 gap 6).
-    answer = f"""<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
+    hy = _hol_last(facts)
+    answer = f"""<div class="answer"><p>{headline(facts, num, "holidays", hy)}</p>
 <p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
-<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad (not compared with {LAST}: different residents and survey method). There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad (not compared with {hy}: different residents and survey method). There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
 </div>"""
 
-    body.append(U.topic_line(num, "holidays", LAST))
+    body.append(U.topic_line(num, "holidays", hy))
     body.append(
         "<p>These count trips, not people, so “per 100 residents” is an average, not a typical experience.</p>"
     )
@@ -2377,15 +2420,15 @@ def _holidays(facts, d, num, sources):
         body.append(
             f"<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year from {min(d['countries']['all'])} to {max(d['countries']['all'])} with figures by country on this site.</p>"
         )
-    body.append(country_table(facts, num, d, LAST, 10))
-    cyears = [2009, 2019, LAST]
-    top = top_countries(facts, d, LAST, 10)
+    body.append(country_table(facts, num, d, hy, 10))
+    cyears = [2009, 2019, hy]
+    top = top_countries(facts, d, hy, 10)
     body.append(
         details_table(
             "Show the same countries in 2009 and 2019",
             "Visits abroad by main country visited (all purposes), millions",
             ["Country"]
-            + [f"{y} (new method)" if y == LAST and LAST >= 2024 else str(y) for y in cyears],
+            + [f"{y} (new method)" if y == hy and hy >= 2024 else str(y) for y in cyears],
             [
                 [esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears]
                 for s in top
@@ -2426,7 +2469,7 @@ def _schools(facts, d, num, sources):
     )
     first = FIRST_YEAR["schools"]
     answer = (
-        f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
+        f'<div class="answer"><p>{headline(facts, num, "schools", LAST, latest=True)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
         f"{_infant_limit(facts, num, d)}</div>"
     )
     body.append(U.topic_line(num, "schools", LAST))
@@ -2672,7 +2715,7 @@ def topic_page(facts, d, num, sources, key):
 
 def _hub_holidays(facts, d, num):
     """The holidays answer, shortened for the hub: the latest year only."""
-    return f'<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p></div>'
+    return f'<div class="answer"><p>{headline(facts, num, "holidays", _hol_last(facts))}</p></div>'
 
 
 def _hub_schools(facts, d, num):
@@ -2681,7 +2724,7 @@ def _hub_schools(facts, d, num):
         "schools"
     ]  # the first year of the series, not the explorer's first year (audit 12)
     return (
-        f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {y0}, the first year of this series, the figures were '
+        f'<div class="answer"><p>{headline(facts, num, "schools", LAST, latest=True)} In January {y0}, the first year of this series, the figures were '
         f'{num(f"school.primary.{y0}", "dp1")} and {num(f"school.secondary.{y0}", "dp1")}.</p></div>'
     )
 
@@ -2702,18 +2745,20 @@ def _hub_work(facts, d, num):
     """The work answer, shortened for the hub: manufacturing's share stays on the topic page."""
     # Kept to two short sentences, so the first chart stays within two phone screens
     # under the questions at the top of the hub.
-    y = LAST
-    sc = occ_scheme(y)
+    y = latest_year(facts, lambda yr: f"work.rate.{yr}")
+    # Job types come from a survey of the whole calendar year, so they can end a year earlier.
+    oy = latest_year(facts, _occ_prof)
+    sc = occ_scheme(oy)
     shares = {
-        c: facts[f"work.occshare.{sc}.{c}.{y}"].value
+        c: facts[f"work.occshare.{sc}.{c}.{oy}"].value
         for c in OCC_NAMES[sc]
-        if c != "0" and _val(facts, f"work.occshare.{sc}.{c}.{y}") is not None
+        if c != "0" and _val(facts, f"work.occshare.{sc}.{c}.{oy}") is not None
     }
     top = max(shares, key=shares.get)
     return (
         f'<div class="answer"><p>In April to June {y}, {num(f"work.rate.{y}", "pct")} of people aged 16 to 64 were in work '
         f'(men {num(f"work.men.{y}", "pct")}, women {num(f"work.women.{y}", "pct")}). '
-        f'The largest group of jobs in {y} was {esc(OCC_NAMES[sc][top].lower())} ({num(f"work.occshare.{sc}.{top}.{y}", "pct")}).</p></div>'
+        f'The largest group of jobs in {oy} was {esc(OCC_NAMES[sc][top].lower())} ({num(f"work.occshare.{sc}.{top}.{oy}", "pct")}).</p></div>'
     )
 
 

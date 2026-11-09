@@ -498,6 +498,47 @@ def check_downloads():
     return files
 
 
+# The year explorer's bounds, stated here rather than read from the pages a build wrote,
+# so a whole year that was never written is reported as missing.
+ANNUAL_FIRST, EXPLORER_FIRST, ANNUAL_LAST = 1971, 2008, 2026
+SPAN_YEARS = 3  # each set of years on the range pages
+LIFE_TOPICS = ("work", "earnings", "housing", "holidays", "schools")
+
+
+def expected_life_pages():
+    """Every annual, pair and range page the year explorer must have, by kind."""
+    years = range(ANNUAL_FIRST, ANNUAL_LAST + 1)
+    spans = [(s, s + SPAN_YEARS - 1) for s in range(EXPLORER_FIRST, ANNUAL_LAST - SPAN_YEARS + 2)]
+    return {
+        "year": {f"life/{y}.html" for y in years},
+        "pair": {f"life/compare/{a}-{b}.html" for a in years for b in years if a < b},
+        "span": {
+            f"life/compare/spans/{a[0]}-{a[1]}-and-{b[0]}-{b[1]}.html"
+            for a in spans
+            for b in spans
+            if b[0] > a[1]
+        },
+    }
+
+
+def _life_heading(path):
+    """The h1 a year explorer page must have, worked out from its address."""
+    stem = Path(path).stem
+    if "-and-" in stem:
+        a0, a1, b0, b1 = stem.replace("-and-", "-").split("-")
+        return f"{a0} to {a1} compared with {b0} to {b1}"
+    if "-" in stem:
+        a, b = stem.split("-")
+        return f"{a} compared with {b}"
+    return f"Everyday life in {stem}"
+
+
+def _report(kind, label, paths):
+    if paths:
+        shown = ", ".join(sorted(paths)[:5])
+        fail(f"{len(paths)} {label} {kind} pages, for example {shown}")
+
+
 def check_structure():
     want = [
         "index.html",
@@ -527,24 +568,36 @@ def check_structure():
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
-    pages = sorted(int(p.stem) for p in (SITE / "life").glob("[0-9]*.html"))
-    # Every pair of years has a comparison page, including the years before 2008.
-    compare = list((SITE / "life/compare").glob("*-*.html"))
-    years = sorted({int(x) for p in compare for x in p.stem.split("-")})
-    pairs = len(compare)
-    if pairs != len(years) * (len(years) - 1) // 2:
-        fail(f"{pairs} comparison pages for {len(years)} years")
-    # Every pair of three-year spans that do not overlap has a comparison page.
-    spans = [p.stem for p in (SITE / "life/compare/spans").glob("*-and-*.html")]
-    n = len([y for y in years if y >= 2008]) - 2
-    if len(spans) != (n - 3) * (n - 2) // 2:
-        fail(f"{len(spans)} span comparison pages for {n} spans")
-    for y in years:
-        if y not in pages:
-            fail(f"missing year page life/{y}.html")
-    if pages != list(range(pages[0], pages[-1] + 1)):
-        fail("year pages are not one per year")
-    return len(pages), pairs
+    expected = expected_life_pages()
+    found = {
+        "year": (SITE / "life").glob("[0-9]*.html"),
+        "pair": (SITE / "life/compare").glob("*-*.html"),
+        "span": (SITE / "life/compare/spans").glob("*-and-*.html"),
+    }
+    # Each index must link every page of its kind, so no-JavaScript readers reach them all.
+    indexes = {
+        "year": "life/index.html",
+        "pair": "life/compare/index.html",
+        "span": "life/compare/spans/index.html",
+    }
+    for kind, paths in found.items():
+        have = {p.relative_to(SITE).as_posix() for p in paths}
+        _report(kind, "missing", expected[kind] - have)
+        _report(kind, "unexpected", have - expected[kind])
+        index = SITE / indexes[kind]
+        html = index.read_text(encoding="utf-8") if index.exists() else ""
+        base = Path(indexes[kind]).parent
+        linked = {(base / h).as_posix() for h in re.findall(r'href="([^"#?]+)', html)}
+        _report(kind, f"unlinked from {indexes[kind]}", expected[kind] - linked)
+        for rel in sorted(expected[kind] & have):
+            page_html = (SITE / rel).read_text(encoding="utf-8")
+            m = re.search(r"<h1[^>]*>(.*?)</h1>", page_html, re.S)
+            if not m or html_unescape(re.sub(r"<[^>]+>", "", m.group(1))) != _life_heading(rel):
+                fail(f"{rel}: heading does not name {_life_heading(rel)!r}")
+            missing = [t for t in LIFE_TOPICS if f'<h2 id="{t}"' not in page_html]
+            if missing:
+                fail(f"{rel}: no section for {', '.join(missing)}")
+    return len(expected["year"]), len(expected["pair"])
 
 
 # Pages whose first chart must start high enough on a 360 x 640 phone that at
@@ -568,6 +621,7 @@ CHART_EARLY = [
     "life/2008.html",
     "life/2015.html",
     "life/2021.html",
+    "life/2026.html",
 ]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
 # Pages that must stay short on a 360px phone with every "More on ..." section closed,
@@ -1000,14 +1054,18 @@ def main():
                 "life/2008.html",
                 "life/2015.html",
                 "life/2021.html",
+                "life/2026.html",
                 "life/compare/2010-2025.html",
                 "life/compare/2019-2024.html",
                 "life/compare/1985-2025.html",
                 "life/compare/2002-2025.html",
+                "life/compare/1971-2026.html",
+                "life/compare/2015-2026.html",
                 "life/compare/index.html",
                 "life/compare/spans/index.html",
                 "life/compare/spans/2009-2011-and-2017-2019.html",
                 "life/compare/spans/2011-2013-and-2022-2024.html",
+                "life/compare/spans/2008-2010-and-2024-2026.html",
                 "figures/etb.html",
             ]
         )
