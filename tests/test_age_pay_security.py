@@ -279,6 +279,14 @@ def test_job_security_section_does_not_relabel_other_measures(site_pages):
         assert claim not in section.lower(), claim
 
 
+def test_short_answer_states_the_age_band_and_limits(site_pages):
+    page = site_pages[pages_generations.PAGE]
+    answer = _text(re.search(r'<div class="answer"[^>]*>.*?</div>', page, re.S).group(0))
+    assert "Pay is published for ages 30 to 39, not 30 alone" in answer
+    assert "no single change is worked out" in answer
+    assert "No official measure of job security at 25 to 34 goes back to 1992." in answer
+
+
 def test_cannot_yet_list_drops_pay_and_job_security(site_pages):
     page = site_pages[pages_generations.PAGE]
     section = _section(page, "cannot-yet", "about")

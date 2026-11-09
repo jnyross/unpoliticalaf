@@ -96,7 +96,7 @@ def page_body(facts, d, num, sources):
         "<li>Pensions, and what income people can expect when they stop work.</li>"
         "<li>The public services children use, such as school classes.</li>"
         "<li>How long people live.</li></ul>",
-        "<h2 id='same-age'>Same age, different years</h2>",
+        "<h2 id='same-age'>Same age, different years: work, pay and job security</h2>",
         _same_age_chart(facts, num),
         FOLD,
         table(
