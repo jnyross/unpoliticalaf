@@ -55,8 +55,7 @@ def _staff_nationality(num, sources):
         "<p>Nationality is not the same as country of birth. These figures do not show whether or when anyone moved to the UK.</p>",
         "<h3>NHS hospital and community health services, 31 August 2026</h3>",
         "<p>NHS England counts staff directly employed by NHS trusts and other core organisations in England. "
-        "Staff of GP practices are counted in NHS England's separate GP workforce statistics, so they are not in these figures, "
-        "and nor are other primary care staff such as dental and pharmacy staff. "
+        "Staff of GP practices are counted in NHS England's separate GP workforce statistics, so they are not in these figures. "
         "Headcount counts people. Full time equivalent counts contracted hours, so someone working half time counts as 0.5.</p>",
         "<p>Counted as full time equivalent, the share of staff with a recorded nationality who were not UK nationals "
         f"was {num('nhs.nat.fte.nonuk.share.aug2026', 'pct')}.</p>",
