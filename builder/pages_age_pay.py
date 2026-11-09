@@ -1,7 +1,8 @@
 """Pay around the age of 30 and job security at 25 to 34, for the generations page.
 
 Both are h3 parts of the page's "same age" section, inside its fold, so the page stays within
-its phone-length limit (check.MAX_SCREENS); the short answer carries the headline figures. Pay is shown for each April on its own ASHE basis, with changes after inflation only within
+its phone-length limit (check.MAX_SCREENS); the short answer carries the headline figures.
+Pay is shown for each April on its own ASHE basis, with changes after inflation only within
 one basis (data_age_pay.RUNS). The job security section shows the nearest official measures
 under their own names and says why none of them is job security since 1992.
 """
@@ -16,7 +17,7 @@ WORK_FIRST = 1992  # the first year of the quarterly Labour Force Survey, for th
 def pay_answer(num):
     """One sentence for the page's short answer."""
     return (
-        f"Pay is published for ages 30 to 39, not 30 alone: full-time employees aged 30 to 39 had median pay of {num(pay_fid(FIRST), 'pounds')} a week in April {FIRST} "
+        f"Pay is published for ages 30 to 39, not for people aged exactly 30: full-time employees aged 30 to 39 had median pay of {num(pay_fid(FIRST), 'pounds')} a week in April {FIRST} "
         f"({num(real_fid(FIRST), 'pounds')} in April {BASE_YEAR} prices) and {num(pay_fid(LAST), 'pounds')} in April {LAST}; "
         "the survey changed its methods in between, so no single change is worked out. "
         "No official measure of job security at 25 to 34 goes back to 1992. "
