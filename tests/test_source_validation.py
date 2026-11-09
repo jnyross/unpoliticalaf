@@ -176,6 +176,27 @@ def test_ashe_table1_pack_contract_rejects_incompatible_zip(tmp_path, mutation):
         validate_source("ashe-2026-table1-provisional", staged, "application/zip", previous)
 
 
+@pytest.mark.parametrize("mutation", ["kept", "corrupt-member"])
+def test_ashe_table6_pack_with_legacy_xls_members(tmp_path, mutation):
+    import zipfile
+
+    import xlrd
+
+    previous = ROOT / "data/fetched/ons/ashe-table6-2002.zip"
+    staged = tmp_path / "ashe.zip"
+    with zipfile.ZipFile(previous) as original, zipfile.ZipFile(staged, "w") as output:
+        for name in original.namelist():
+            body = original.read(name)
+            if mutation == "corrupt-member" and name.endswith("Gross 2002.xls"):
+                body = b"not a workbook" * 64
+            output.writestr(name, body)
+    if mutation == "kept":
+        validate_source("ashe-2002-table6", staged, "application/zip", previous)
+        return
+    with pytest.raises((ValueError, xlrd.XLRDError)):
+        validate_source("ashe-2002-table6", staged, "application/zip", previous)
+
+
 def _copy_sheet(source, sheet, columns, target, change):
     """Write one retained sheet to a small workbook, apply a change and return its path."""
     workbook = openpyxl.load_workbook(source, read_only=True, data_only=True)

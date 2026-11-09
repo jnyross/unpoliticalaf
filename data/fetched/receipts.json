@@ -1,4 +1,58 @@
 {
+ "ashe-2002-table6": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip",
+  "file": "ons/ashe-table6-2002.zip",
+  "bytes": 252287,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "0f79e15174ac979c6e9f4406e05ae1999491bef022b5218b27d176f9ea901625",
+  "retrieved": "2026-11-09T08:18:54Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip"
+ },
+ "ashe-2006-table6-2007-methods": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip",
+  "file": "ons/ashe-table6-2006-2007-methods.zip",
+  "bytes": 359901,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "11ff16001dc83b107308a26e2618cd2e48387adc8339b38ac384d82131211193",
+  "retrieved": "2026-11-09T08:18:58Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip"
+ },
+ "ashe-2010-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip",
+  "file": "ons/ashe-table6-2010-revised.zip",
+  "bytes": 274252,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "9abbd7951d05567bb021bd4167ce0ba14f878e73bdc50f845d05ba3f4fca55ff",
+  "retrieved": "2026-11-09T08:19:01Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip"
+ },
+ "ashe-2011-table6-soc2010": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip",
+  "file": "ons/ashe-table6-2011-soc2010.zip",
+  "bytes": 270482,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "1a94ba7a044c33ed227328bca52f7f5ebbcdaf94c49b64d01e00f7c47473b397",
+  "retrieved": "2026-11-09T08:19:04Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip"
+ },
+ "ashe-2020-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip",
+  "file": "ons/ashe-table6-2020-revised.zip",
+  "bytes": 390839,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "a238a9e909cb24ca0e791f302421777ac7ef839c6247281ba35a5182a3bebf8f",
+  "retrieved": "2026-11-09T08:19:07Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip"
+ },
+ "ashe-2021-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip",
+  "file": "ons/ashe-table6-2021-revised.zip",
+  "bytes": 371469,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "31378b88c75b15e692f3c7906d51436e260f6427f0f0d621c202406474b96c59",
+  "retrieved": "2026-11-09T08:19:10Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip"
+ },
  "ashe-2025-fig1": {
   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/cfe85f05&format=csv",
   "file": "ons/ashe-2025-fig1.csv",
@@ -23,6 +77,15 @@
   "sha256": "688dcfe4c07dd7e6235c5dad8683107b2e83fcc1ae959d3ed1703317d19867ae",
   "retrieved": "2026-11-08T23:34:07Z",
   "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip"
+ },
+ "ashe-2025-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip",
+  "file": "ons/ashe-table6-2025-revised.zip",
+  "bytes": 835642,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "2ccc3b3703a2a1a9b0c8a9a837497eeb3f7425ea4e21219099b2d8e0e3363c03",
+  "retrieved": "2026-11-09T08:19:13Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip"
  },
  "ashe-2026-fig2": {
   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv",
@@ -989,6 +1052,15 @@
   "sha256": "9fe44451456cfcd6d6a2af06cb09a3400c6f34cf92eaef6a13ece9d84f264bff",
   "retrieved": "2026-11-02T11:14:12Z"
  },
+ "ons-emp07": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
+  "file": "ons/emp07aug2026.xls",
+  "bytes": 98304,
+  "content_type": "application/vnd.ms-excel;charset=utf-8",
+  "sha256": "420d9dfc4e4f23a4d47943e0b5f10591eb093e0b4ef6d5de5ee92de68041cab3",
+  "retrieved": "2026-11-09T08:19:20Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls"
+ },
  "ons-families-households": {
   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
   "file": "ons/families-households.xlsx",
@@ -1142,6 +1214,15 @@
   "content_type": "text/csv;charset=utf-8",
   "sha256": "7d1fc100fb19972c60448bf79bb2c41b130671f529e2511e02426427eabde096",
   "retrieved": "2026-11-02T16:23:45Z"
+ },
+ "ons-red02": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx",
+  "file": "ons/red02oct2026.xlsx",
+  "bytes": 220987,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "88a94773112c832c04105b9bf771193fb51a493fe4e62cafc1cfc351c56636e5",
+  "retrieved": "2026-11-09T08:19:17Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx"
  },
  "ons-ukpop": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",

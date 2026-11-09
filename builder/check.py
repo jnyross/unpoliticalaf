@@ -108,6 +108,32 @@ def _worksheet(src_file, sheet):
     return _zip_wb[(src_file, member)][name]
 
 
+def _zip_xls_cell(src_file, locator):
+    """A cell of a legacy .xls workbook in a publisher's zip pack ("member::sheet!A1"),
+    read with xlrd rather than the builder's code path."""
+    import xlrd
+    import zipfile
+
+    member, rest = locator.split("::", 1)
+    name, ref = rest.rsplit("!", 1)
+    if (src_file, member) not in _zip_wb:
+        with zipfile.ZipFile(ROOT / src_file) as archive:
+            _zip_wb[(src_file, member)] = xlrd.open_workbook(file_contents=archive.read(member))
+    m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
+    col = 0
+    for ch in m.group(1):
+        col = col * 26 + ord(ch) - 64
+    return _zip_wb[(src_file, member)].sheet_by_name(name).cell_value(int(m.group(2)) - 1, col - 1)
+
+
+def _workbook_cell(src_file, locator):
+    """A cell of an .xlsx file or of a workbook in a zip pack, whichever format the member is."""
+    if src_file.endswith(".zip") and locator.split("::", 1)[0].lower().endswith(".xls"):
+        return _zip_xls_cell(src_file, locator)
+    sheet, ref = locator.rsplit("!", 1)
+    return _worksheet(src_file, sheet)[ref].value
+
+
 def _csv_rows(cached):
     """Replay parsed rows, extending lazily so row locators still stop early."""
     # Reader errors abort check_facts, which discards this invocation's cache.
@@ -131,8 +157,7 @@ def cell_value(src_file, locator, source_cache=None):
     """Read independently, optionally reusing parsing within one check_facts call."""
     path = ROOT / src_file
     if src_file.endswith((".xlsx", ".zip")):
-        sheet, ref = locator.rsplit("!", 1)
-        return _worksheet(src_file, sheet)[ref].value
+        return _workbook_cell(src_file, locator)
     if src_file.endswith(".xls"):
         import xlrd  # legacy Excel: read with xlrd, not the builder's code path
 

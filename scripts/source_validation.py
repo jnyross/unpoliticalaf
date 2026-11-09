@@ -340,8 +340,17 @@ def _validate_zip_source(source_id, path):
         if archive.testzip():
             raise ValueError("corrupt zip archive")
         names = [n for n in archive.namelist() if n.lower().endswith(".xlsx")]
-        if not names:
+        # Older ASHE packs (before 2022) hold legacy .xls workbooks instead.
+        legacy = [n for n in archive.namelist() if n.lower().endswith(".xls")]
+        if not names and not legacy:
             raise ValueError("zip archive holds no workbooks")
+        for name in legacy:
+            book = xlrd.open_workbook(file_contents=archive.read(name))
+            try:
+                if book.nsheets == 0:
+                    raise ValueError(f"{name} has no sheets")
+            finally:
+                book.release_resources()
         for name in names:
             workbook = openpyxl.load_workbook(
                 io.BytesIO(archive.read(name)), read_only=True, data_only=True

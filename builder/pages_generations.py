@@ -15,9 +15,9 @@ from .html import page, source_line, table, FOLD
 from . import findings as F
 from .pages_life import CAUSE, groups_chart
 from .pages_life_extra import _chart
+from .pages_age_pay import WORK_FIRST, pay_answer, pay_section, security_section
 
 PAGE = "life/generations.html"
-WORK_FIRST = 1992  # the first year of the quarterly Labour Force Survey, for the age-group rates
 AFFORD_FIRST = (
     1999  # 1997 and 1998 earnings are weekly pay scaled up; not compared with later years
 )
@@ -52,7 +52,7 @@ def _answer(facts, num):
         f'where the household’s main person was aged 25 to 34, {num(f"own.hrp.25-34.{OWN_AGE_THEN}", "pct0")} owned in {OWN_AGE_THEN} and {num(f"own.hrp.25-34.{OWN_LAST}", "pct0")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}, from two different surveys. '
         f"University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. "
         f"State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. "
-        f"Pay, tax and life expectancy are not compared yet.</p></div>"
+        f"{pay_answer(num)}Tax and life expectancy are not compared yet.</p></div>"
     )
 
 
@@ -108,6 +108,8 @@ def page_body(facts, d, num, sources):
         "The rate for 18 to 24 year olds is lower partly because many of them are studying. "
         'The survey has changed over the years, so read small differences with care; <a href="work.html#work-age">the work page</a> lists the changes. '
         '<a href="work.html#work-age">Employment by age, every year</a>.</p>',
+        security_section(num, sources),
+        pay_section(num, sources),
         "<h2 id='housing-cost'>Buying a home, compared with earnings</h2>",
         "<p>The house price and earnings figures are for everyone, not for people of one age, so they show the position of the whole market. Home ownership around the age of 30 is further down this section.</p>",
         _afford_chart(facts, num),
@@ -215,12 +217,10 @@ def page_body(facts, d, num, sources):
         "<h2 id='cannot-yet'>What this page cannot show yet</h2>",
         "<p>These comparisons need figures that the site does not yet hold. Each is listed so it can be added, from the source named, when it is available:</p>",
         "<ul>"
-        "<li><strong>Pay at a given age</strong>: median pay of full-time employees by age group, with the breaks in the survey marked (Annual Survey of Hours and Earnings, by age).</li>"
         "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
         "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
         "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
         "<li><strong>Life expectancy at 30</strong>: national life tables, by year.</li>"
-        "<li><strong>Job security</strong>: how long people stay in a job, and the share on temporary or insecure contracts, by age.</li>"
         "</ul>",
         CAUSE,
         "<h2 id='about'>About these figures</h2>",

@@ -918,7 +918,32 @@
         {
           "id": "J12.7",
           "question": "How did pay after inflation for people aged 30 change between 2002 and 2025?",
-          "gap": "The site has pay figures for all full-time employees, not by age group. Needs median pay by age group from the Annual Survey of Hours and Earnings, with its survey breaks marked."
+          "options": {
+            "A": "It rose by about 4% after inflation for people aged exactly 30, from 2002 to 2025",
+            "B": "The site gives no single change. It has figures for full-time employees aged 30 to 39, not people aged exactly 30: median pay of £426 a week in April 2002 (£776 in April 2025 prices) and £807 in April 2025. ONS changed its survey methods in between, so changes after inflation are shown only between years measured the same way, such as -2.4% from April 2011 to April 2020",
+            "C": "It almost doubled after inflation, from £426 to £807 a week",
+            "D": "It fell by about a quarter after inflation for 30-year-olds"
+          },
+          "answer": "B",
+          "why": "Generations page, pay around the age of 30: ONS Annual Survey of Hours and Earnings Table 6 (Table 6.1a, full-time sheet, median column) groups employees in ten-year age bands, so the nearest figure is full-time employee jobs aged 30 to 39 in the UK. The only ONS estimates by single year of age that the site holds cover ages 16 to 25. Median gross weekly pay was £425.80 in April 2002 and £807.20 in April 2025 (£776 and £807 in April 2025 prices, CPIH, calculated). ASHE has breaks in 2004, 2006 and 2011 and recoded jobs in 2021, so the page works out changes after inflation only within one basis: -0.6% from April 2006 to April 2010, -2.4% from April 2011 to April 2020 and 0.1% from April 2021 to April 2025. Joining the 2002 and 2025 editions across those breaks would give about +4%, which the site does not publish.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "The nearest measure is full-time employees aged 30 to 39, not people aged exactly 30"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "Their median pay was £426 a week before tax in April 2002, which is £776 in April 2025 prices, and £807 in April 2025"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "No change from 2002 to 2025 is worked out"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "April 2011 to April 2020: -2.4%"
+            }
+          ]
         },
         {
           "id": "J12.8",
@@ -977,7 +1002,36 @@
         {
           "id": "J12.12",
           "question": "Has job security changed for people aged 25 to 34 since 1992?",
-          "gap": "Needs ONS labour market tables of temporary employees and job changes by age, from 1992. The site holds only the overall employment figures, not the age split of temporary work or job changes."
+          "options": {
+            "A": "Yes, job security fell: the share of people aged 25 to 34 in work dropped from 84.3% in 1992 to 73.6% in 2025",
+            "B": "Yes, job security rose, because the share of people aged 25 to 34 in work rose from 73.6% to 84.3%",
+            "C": "The site has no measure of job security for people aged 25 to 34 back to 1992. The nearest figures are the share in work (73.6% in April to June 1992 and 84.3% in April to June 2025), which is not job security, and a redundancy rate of 4.2 per 1,000 employees in April to June 2025, which ONS publishes by age only from 2009",
+            "D": "The redundancy rate for people aged 25 to 34 halved between 1992 and 2025"
+          },
+          "answer": "C",
+          "why": "Generations page, job security at 25 to 34: no official table the site holds measures job security by age back to 1992, so the page gives the nearest figures under their own names. The employment rate for ages 25 to 34 (ONS series YBUG) was 73.6% in April to June 1992 and 84.3% in April to June 2025; that is the share in work of any kind, not how secure that work is. ONS table RED02 gives 4.2 redundancies per 1,000 employees aged 25 to 34 in April to June 2025, but its figures by age start in January to March 2009, are official statistics in development and were reweighted in 2019. ONS table EMP07 of temporary employees has no age split, and the site holds no table of time in one job by age.",
+          "evidence": [
+            {
+              "page": "life/generations.html",
+              "text": "The site has no measure of job security for people aged 25 to 34 going back to 1992"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "84.3% of people aged 25 to 34 were in work in April to June 2025, against 73.6% in April to June 1992. This is the share in work of any kind, not how secure that work is"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "4.2 in every 1,000 employees aged 25 to 34 were made redundant"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "figures by age start in January to March 2009, so there is no 1992 figure"
+            },
+            {
+              "page": "life/generations.html",
+              "text": "not by age, so it cannot show temporary work at 25 to 34"
+            }
+          ]
         }
       ]
     },

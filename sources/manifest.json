@@ -830,6 +830,51 @@
    "id": "boe-form-er-definitions",
    "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf",
    "file": "boe/def_er2016.pdf"
+  },
+  {
+   "id": "ashe-2002-table6",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip",
+   "file": "ons/ashe-table6-2002.zip"
+  },
+  {
+   "id": "ashe-2006-table6-2007-methods",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip",
+   "file": "ons/ashe-table6-2006-2007-methods.zip"
+  },
+  {
+   "id": "ashe-2010-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip",
+   "file": "ons/ashe-table6-2010-revised.zip"
+  },
+  {
+   "id": "ashe-2011-table6-soc2010",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip",
+   "file": "ons/ashe-table6-2011-soc2010.zip"
+  },
+  {
+   "id": "ashe-2020-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip",
+   "file": "ons/ashe-table6-2020-revised.zip"
+  },
+  {
+   "id": "ashe-2021-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip",
+   "file": "ons/ashe-table6-2021-revised.zip"
+  },
+  {
+   "id": "ashe-2025-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip",
+   "file": "ons/ashe-table6-2025-revised.zip"
+  },
+  {
+   "id": "ons-red02",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx",
+   "file": "ons/red02oct2026.xlsx"
+  },
+  {
+   "id": "ons-emp07",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
+   "file": "ons/emp07aug2026.xls"
   }
  ]
 }
