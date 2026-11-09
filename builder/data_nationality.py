@@ -83,8 +83,8 @@ def sheet_rows(path, sheet, columns):
         workbook.close()
 
 
-def nhs_cells(rows):
-    """{(measure, group): (row index, column index, value)} for Table 14's group totals."""
+def _nhs_header(rows):
+    """(header row index, column index of all staff groups) for Table 14."""
     if (
         not str(rows[0][0] or "").startswith("Table 14: ")
         or "by nationality group" not in rows[0][0]
@@ -102,21 +102,10 @@ def nhs_cells(rows):
     )
     if head is None or NHS_ALL_COLUMN not in rows[head]:
         raise ValueError("NHS Table 14 header row not found")
-    j = rows[head].index(NHS_ALL_COLUMN)
-    out = {}
-    for i in range(head + 1, len(rows)):
-        month, measure, group, nationality = rows[i][:4]
-        for m, (label, _) in NHS_MEASURES.items():
-            for key, group_label, total_label in NHS_GROUPS:
-                if measure == label and group == group_label and nationality == total_label:
-                    if month != NHS_MONTH:
-                        raise ValueError(f"NHS Table 14 row {i + 1} is not for {NHS_PERIOD}")
-                    if (m, key) in out:
-                        raise ValueError(f"NHS Table 14 repeats {label} {group_label}")
-                    value = num(rows[i][j])
-                    if value is None or value < 0:
-                        raise ValueError(f"NHS Table 14 {label} {group_label} is not a count")
-                    out[(m, key)] = (i, j, value)
+    return head, rows[head].index(NHS_ALL_COLUMN)
+
+
+def _check_nhs_totals(out):
     missing = [(m, k) for m in NHS_MEASURES for k, _, _ in NHS_GROUPS if (m, k) not in out]
     if missing:
         raise ValueError(f"NHS Table 14 is missing group totals {missing}")
@@ -129,11 +118,36 @@ def nhs_cells(rows):
         slack = 0.01 if m == "fte" else 0.001 * total
         if not -0.01 <= groups - total <= slack:
             raise ValueError(f"NHS Table 14 {label} groups do not add up to the total")
+
+
+def nhs_cells(rows):
+    """{(measure, group): (row index, column index, value)} for Table 14's group totals."""
+    head, j = _nhs_header(rows)
+    wanted = {
+        (label, group_label, total_label): (m, key)
+        for m, (label, _) in NHS_MEASURES.items()
+        for key, group_label, total_label in NHS_GROUPS
+    }
+    out = {}
+    for i in range(head + 1, len(rows)):
+        month, measure, group, nationality = rows[i][:4]
+        if (measure, group, nationality) not in wanted:
+            continue
+        m, key = wanted[(measure, group, nationality)]
+        if month != NHS_MONTH:
+            raise ValueError(f"NHS Table 14 row {i + 1} is not for {NHS_PERIOD}")
+        if (m, key) in out:
+            raise ValueError(f"NHS Table 14 repeats {measure} {group}")
+        value = num(rows[i][j])
+        if value is None or value < 0:
+            raise ValueError(f"NHS Table 14 {measure} {group} is not a count")
+        out[(m, key)] = (i, j, value)
+    _check_nhs_totals(out)
     return out
 
 
-def asc_cells(rows):
-    """{(group or 'posts', sector): (row index, column index, value)} from Table 4.7.1."""
+def _asc_layout(rows):
+    """(label column, heading row, {sector: column}) for Table 4.7.1."""
     top = next((i for i, r in enumerate(rows) if ASC_TABLE in r), None)
     if top is None:
         raise ValueError("Skills for Care Table 4.7.1 not found")
@@ -148,6 +162,21 @@ def asc_cells(rows):
         if label not in rows[head]:
             raise ValueError(f"Skills for Care Table 4.7.1 has no {label} column")
         cols[key] = rows[head].index(label)
+    return lab, head, cols
+
+
+def _check_asc_shares(out, cols):
+    for sector in cols:
+        parts = sum(out[(k, sector)][2] for k in ("british", "eu", "noneu"))
+        non_british = out[("eu", sector)][2] + out[("noneu", sector)][2]
+        # Shares are rounded to whole per cent, so parts can miss 100% by a point.
+        if abs(parts - 1) > 0.011 or abs(non_british - out[("nonbritish", sector)][2]) > 0.011:
+            raise ValueError(f"Skills for Care Table 4.7.1 {sector} shares do not add up")
+
+
+def asc_cells(rows):
+    """{(group or 'posts', sector): (row index, column index, value)} from Table 4.7.1."""
+    lab, head, cols = _asc_layout(rows)
     labels = {}
     for i in range(head + 1, head + 8):
         labels.setdefault(rows[i][lab], i)
@@ -161,12 +190,7 @@ def asc_cells(rows):
             if value is None or value < 0 or (key != "posts" and value > 1):
                 raise ValueError(f"Skills for Care Table 4.7.1 {label} {sector} is not valid")
             out[(key, sector)] = (i, j, value)
-    for sector in cols:
-        parts = sum(out[(k, sector)][2] for k in ("british", "eu", "noneu"))
-        non_british = out[("eu", sector)][2] + out[("noneu", sector)][2]
-        # Shares are rounded to whole per cent, so parts can miss 100% by a point.
-        if abs(parts - 1) > 0.011 or abs(non_british - out[("nonbritish", sector)][2]) > 0.011:
-            raise ValueError(f"Skills for Care Table 4.7.1 {sector} shares do not add up")
+    _check_asc_shares(out, cols)
     return out
 
 
