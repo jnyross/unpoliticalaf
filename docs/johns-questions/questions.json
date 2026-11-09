@@ -621,7 +621,28 @@
         {
           "id": "J5.2",
           "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
-          "gap": "The defence comparison now uses the ten-year window the impartiality rule allows (2015-16 to 2025-26), so the page no longer compares with 2010-11, the year this question names. Whether John wants 2010-11 shown as well is a decision for him."
+          "options": {
+            "A": "Higher after inflation, and a higher share of GDP",
+            "B": "Higher after inflation, but a lower share of GDP",
+            "C": "Lower after inflation, but a higher share of GDP",
+            "D": "Lower after inflation, and a lower share of GDP"
+          },
+          "answer": "B",
+          "why": "PESA 2026 Tables 4.3 and 4.4, in the defence page's every-year table: £59.0bn in 2010-11 against £65.4bn in 2025-26 at 2025-26 prices, but 2.4% of GDP against 2.1%. The page's headline comparison stays on the fixed ten-year window, 2015-16 to 2025-26.",
+          "evidence": [
+            {
+              "page": "defence.html",
+              "text": "2010-11 £39.3bn £59.0bn 2.4%"
+            },
+            {
+              "page": "defence.html",
+              "text": "2025-26 £65.4bn £65.4bn 2.1%"
+            },
+            {
+              "page": "defence.html",
+              "text": "After inflation, £ billion (2025-26 prices) % of GDP"
+            }
+          ]
         },
         {
           "id": "J5.3",
