@@ -598,6 +598,7 @@ def table_for(facts, num, topic):
         rows = [
             [
                 f"{y} (Labour Force Survey)",
+                cell(f"house.lfs.owners.{y}", "pct"),
                 cell(f"house.lfs.outright.{y}", "pct"),
                 cell(f"house.lfs.mortgage.{y}", "pct"),
                 cell(f"house.lfs.social.{y}", "pct"),
@@ -608,6 +609,7 @@ def table_for(facts, num, topic):
         rows += [
             [
                 f"{L.sy(y)} (English Housing Survey)",
+                cell(f"house.owners.{y}", "pct"),
                 cell(f"house.outright.{y}", "pct"),
                 cell(f"house.mortgage.{y}", "pct"),
                 cell(f"house.social.{y}", "pct"),
@@ -619,7 +621,14 @@ def table_for(facts, num, topic):
         return details_table(
             "Show tenure for every year since 1981",
             "Housing tenure, England, % of households",
-            ["Year and survey", "Own outright", "Mortgage", "Social rent", "Private rent"],
+            [
+                "Year and survey",
+                "All owners",
+                "Own outright",
+                "Mortgage",
+                "Social rent",
+                "Private rent",
+            ],
             rows,
         )
     if topic == "holidays":
