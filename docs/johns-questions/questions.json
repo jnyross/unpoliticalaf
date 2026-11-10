@@ -1018,7 +1018,20 @@
         {
           "id": "J12.11",
           "question": "Did a person on the same real income pay more or less tax in 2025 than in 1992?",
-          "gap": "Needs income tax and employee National Insurance on one income level, in 1992-93 and 2025-26, from official rate tables. The site holds the 2025-26 rates, but not the 1992-93 rates, and the calculation needs a clearly labelled single-person illustration."
+          "options": {
+            "A": "Everyone paid less total tax in 2025-26",
+            "B": "In one hypothetical England employee example at the same April CPIH-adjusted gross pay, Income Tax plus employee NI took a smaller share in 2025-26; this is not an observed average or all taxes",
+            "C": "The page measures household tax incidence in 1992-93",
+            "D": "Employer NI and mortgage payments are included"
+          },
+          "answer": "B",
+          "why": "The fixed example compares £15,600 in 1992-93 with its April 2025 CPIH equivalent. Annual legal Income Tax bands and 52 equal weekly NI payments, without intermediate payroll rounding, give combined shares of 26.6% and 17.9%. It assumes a single age-30 England employee, standard allowances, not contracted out/category A, salary only. It excludes employer NI, other taxes, benefits and student loans. It is not a universal generational verdict or after-tax mortgage affordability.",
+          "evidence": [
+            {"page": "life/tax-comparison.html", "text": "One hypothetical employee, not an observed average"},
+            {"page": "life/tax-comparison.html", "text": "a smaller share in 2025-26"},
+            {"page": "life/tax-comparison.html", "text": "NI uses weekly limits on each payment, then multiplies by 52"},
+            {"page": "life/generations.html", "text": "Tax at the same real pay: one hypothetical employee"}
+          ]
         },
         {
           "id": "J12.12",

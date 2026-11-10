@@ -53,7 +53,8 @@ def _answer(facts, num):
         f'where the household’s main person was aged 25 to 34, {num(f"own.hrp.25-34.{OWN_AGE_THEN}", "pct0")} owned in {OWN_AGE_THEN} and {num(f"own.hrp.25-34.{OWN_LAST}", "pct0")} in {OWN_LAST}-{str(OWN_LAST + 1)[2:]}, from two different surveys. '
         f"University fees: up to £1,000 in 1998, paid up front; £9,535 for England in 2025-26. "
         f"State Pension age: 66 for people born in 1960, 68 for those born from 6 April 1978. "
-        f'{pay_answer(num)}<a href="#same-age">Life expectancy at 30 is under Same age below</a>. Tax is not compared yet.</p></div>'
+        f'{pay_answer(num)}<a href="#same-age">Life expectancy at 30 is under Same age below</a>. '
+        '<a href="tax-comparison.html">Tax at the same real pay: one hypothetical employee paid a smaller share in 2025-26 than in 1992-93</a>.</p></div>'
     )
 
 

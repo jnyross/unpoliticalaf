@@ -877,6 +877,26 @@
    "file": "ons/single-year-life-tables-uk.xlsx"
   },
   {
+   "id": "hmrc-historic-allowances",
+   "url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+   "file": "gov/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods"
+  },
+  {
+   "id": "hmrc-historic-rates",
+   "url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+   "file": "gov/Table_a2_-_Income_Tax_-_rates_and_allowances.ods"
+  },
+  {
+   "id": "hansard-ni-1992",
+   "url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance",
+   "file": "parl/hansard-national-insurance-1992-11-12.html"
+  },
+  {
+   "id": "gov-employer-rates-2025",
+   "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026",
+   "file": "gov/rates-and-thresholds-for-employers-2025-to-2026.html"
+  },
+  {
    "id": "ons-emp07",
    "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
    "file": "ons/emp07aug2026.xls"

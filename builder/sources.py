@@ -16,7 +16,14 @@ OECD_TERMS = "Creative Commons Attribution 4.0 International (CC BY 4.0), OECD"
 IMF_TERMS = "IMF data, copyright International Monetary Fund; may be reproduced with attribution under the IMF terms of use"
 GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
 SFC_TERMS = "Copyright Skills for Care. Its website terms allow material to be reproduced with acknowledgment for education and training purposes, not for sale or profit"
-PREFIX_TERMS = {"gbts-": GBTS_TERMS, "oecd-": OECD_TERMS, "imf-": IMF_TERMS, "sfc-": SFC_TERMS}
+OPEN_PARLIAMENT_LICENCE = "Open Parliament Licence v3.0"
+PREFIX_TERMS = {
+    "gbts-": GBTS_TERMS,
+    "oecd-": OECD_TERMS,
+    "imf-": IMF_TERMS,
+    "sfc-": SFC_TERMS,
+    "hansard-": OPEN_PARLIAMENT_LICENCE,
+}
 
 
 def _fetched(source_id):
@@ -204,6 +211,30 @@ SOURCES["nato-uk-table3"] = dict(
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
 FETCHED = {
+    "hmrc-historic-allowances": (
+        "HM Revenue and Customs",
+        "Table A.1: Income Tax Personal Allowances and Reliefs, 1990 to 1991 to 2026 to 2027 (updated July 2026)",
+        "United Kingdom",
+        "Individuals; non-aged and age-related personal allowances and reliefs by tax year",
+    ),
+    "hmrc-historic-rates": (
+        "HM Revenue and Customs",
+        "Table A.2: Income Tax rates and allowances by tax year",
+        "United Kingdom (territorial differences identified in the table)",
+        "Individuals; Income Tax rates and taxable-income bands by tax year",
+    ),
+    "hansard-ni-1992": (
+        "UK Parliament",
+        "National Insurance: House of Commons written answer, 12 November 1992",
+        "United Kingdom",
+        "Class 1 National Insurance contributors; current 1992 to 1993 rules and changes effective April 1993",
+    ),
+    "gov-employer-rates-2025": (
+        "HM Revenue and Customs",
+        "Rates and thresholds for employers 2025 to 2026",
+        "United Kingdom (Income Tax rates differ by nation)",
+        "Employees and employers; PAYE Income Tax and National Insurance thresholds and category rates for 2025 to 2026",
+    ),
     "ons-mye-uk-mid2025": (
         "Office for National Statistics",
         "Population estimates for the UK, England, Wales, Scotland and Northern Ireland: mid-2025 (statistical bulletin)",

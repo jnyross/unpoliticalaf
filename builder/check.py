@@ -153,6 +153,26 @@ def _cached_source(path, source_cache, read_source):
     return source_cache[path]
 
 
+def _ods_value(src_file, locator):
+    # ODS has no second reader available; expand repeats with the retained-byte reader.
+    from .readers import ods
+
+    sheet, ref = locator.rsplit("!", 1)
+    match = re.fullmatch(r"([A-Z]+)(\d+)(?: number (\d+))?", ref)
+    if match is None:
+        raise ValueError(f"Invalid ODS locator: {locator}")
+    col = 0
+    for ch in match.group(1):
+        col = col * 26 + ord(ch) - 64
+    row = ods(src_file)[sheet][int(match.group(2)) - 1]
+    value = row[col - 1] if col <= len(row) else None
+    if match.group(3):
+        return re.findall(r"\d[\d,]*(?:\.\d+)?", str(value))[int(match.group(3)) - 1].replace(
+            ",", ""
+        )
+    return value
+
+
 def cell_value(src_file, locator, source_cache=None):
     """Read independently, optionally reusing parsing within one check_facts call."""
     path = ROOT / src_file
@@ -169,18 +189,7 @@ def cell_value(src_file, locator, source_cache=None):
         book = _cached_source(path, source_cache, lambda: xlrd.open_workbook(str(path)))
         return book.sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
-        from .readers import (
-            ods,
-        )  # ODS has no second reader available; the builder's reader expands repeats in full
-
-        sheet, ref = locator.rsplit("!", 1)
-        m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
-        col = 0
-        for ch in m.group(1):
-            col = col * 26 + ord(ch) - 64
-        rows = ods(src_file)[sheet]
-        r = rows[int(m.group(2)) - 1]
-        return r[col - 1] if col - 1 < len(r) else None
+        return _ods_value(src_file, locator)
     if src_file.endswith(".csv"):
         cached = _cached_source(
             path,

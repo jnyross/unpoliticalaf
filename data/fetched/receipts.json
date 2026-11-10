@@ -706,6 +706,15 @@
   "sha256": "88ea35ba9131883ffd74af9fd067cd1e6c950afd33aa3605c71f7f1ecbf325da",
   "retrieved": "2026-11-02T09:54:49Z"
  },
+ "gov-employer-rates-2025": {
+  "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026",
+  "file": "gov/rates-and-thresholds-for-employers-2025-to-2026.html",
+  "bytes": 159376,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "d32543a3d63c3ab2e35db013a37a2debb6ba24d9e2dffe20a26f1668a48e63a1",
+  "retrieved": "2026-11-10T00:10:29Z",
+  "requested_url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026"
+ },
  "gov-income-tax-rates": {
   "url": "https://www.gov.uk/income-tax-rates",
   "file": "gov/income-tax-rates.html",
@@ -737,6 +746,33 @@
   "content_type": "text/html; charset=utf-8",
   "sha256": "54a0d9c5eb74205a47f189389c9c94945eaaaf30ee13e1de50942282ef6761d0",
   "retrieved": "2026-11-04T13:30:04Z"
+ },
+ "hansard-ni-1992": {
+  "url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance",
+  "file": "parl/hansard-national-insurance-1992-11-12.html",
+  "bytes": 13942,
+  "content_type": "text/html",
+  "sha256": "e86ebdc1a19654d17e34d37e6ec9b4284deb644caf22ed16cbce16ee330336b6",
+  "retrieved": "2026-11-10T00:10:26Z",
+  "requested_url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance"
+ },
+ "hmrc-historic-allowances": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+  "file": "gov/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+  "bytes": 10767,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "5b91e2bb93f0bc69c36a8dacb5605497fe169b5632dc4bdef255502daed8bde4",
+  "retrieved": "2026-11-10T00:10:20Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods"
+ },
+ "hmrc-historic-rates": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+  "file": "gov/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+  "bytes": 8823,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "31281efc152adf8c0e8ab56f73dcb80282f9542ec83b0289c93cd279dbb7eba2",
+  "retrieved": "2026-11-10T00:10:23Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods"
  },
  "hmrc-spi-2324-tables": {
   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",

@@ -2586,6 +2586,9 @@ def build_all():
     from . import data_age_pay
 
     d["age_pay"] = data_age_pay.build(facts)
+    from . import data_tax_comparison
+
+    data_tax_comparison.build(facts)
     from . import data_top_earners
 
     d["top_earners"] = data_top_earners.build(facts)

@@ -16,6 +16,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
+from . import pages_tax_comparison
 from .logging import get_logger, run_logged
 from . import pages_money_extra, pages_generations, pages_manifesto, version, feature_flags
 from . import (
@@ -104,6 +105,7 @@ def render(settings=None):
     pages["life/house-prices.html"] = pages_life.afford_page(facts, d, num, sources)
     pages["life/housing-places.html"] = pages_life.places_page(facts, d, num, sources)
     pages[pages_generations.PAGE] = pages_generations.generations_page(facts, d, num, sources)
+    pages[pages_tax_comparison.PAGE] = pages_tax_comparison.comparison_page(num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for y in EARLY_YEARS:
