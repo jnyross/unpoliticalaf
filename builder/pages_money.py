@@ -942,19 +942,9 @@ def who_pays_page(facts, d, num, sources):
         keyfigs(
             [
                 (
-                    num(f"hmrc.share.top1.{y}", "pct"),
-                    f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}",
-                    True,
-                ),
-                (
-                    num("etb.2a.alltax.q1", "pounds"),
-                    f'household taxes a year, averaged across people in the lowest-income fifth: {num("etb.t8.gross.all.q1", "pct")} of gross household income, 2023/24. Not a personal bill',
-                    False,
-                ),
-                (
                     "Not established",
                     'the richest fifth’s share of all UK household taxes. Our former 46.0% claim is withdrawn. <a href="#richest-share">Why we cannot give that share</a>',
-                    False,
+                    True,
                 ),
             ]
         )
@@ -1098,7 +1088,7 @@ The ONS table used here does not establish the richest fifth's share of all taxe
 Our former 46.0% claim is withdrawn, not replaced by another estimate.
 <a href="corrections.html#household-tax-withdrawal">Read the correction</a>.</p></div>
 <p>ONS averages household amounts across people, not households. These person-weighted means cannot give actual household-tax totals using either household or person counts.</p>
-<p>What is supported: taxes were {num("etb.t8.gross.all.q5", "pct")} of gross household income for the highest-income fifth.
+<p>What is supported: taxes were {num("etb.t8.gross.all.q1", "pct")} of gross household income for the lowest-income fifth and {num("etb.t8.gross.all.q5", "pct")} for the highest-income fifth.
 That is a share of income, not a share of all taxes raised. See <a href="household-tax.html">Tax and income</a>.</p>
 """
     )
