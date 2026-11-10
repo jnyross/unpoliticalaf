@@ -67,7 +67,7 @@ nav.main li:first-child a{padding-left:0}
 @media (max-width:47.99rem){nav.main{margin:0}nav.main::after{display:none}nav.main ul{display:grid;grid-template-columns:repeat(4,1fr);gap:0 4px;padding:0 0 4px;overflow:visible}nav.main li{margin:0;min-width:0}nav.main a,nav.main li:first-child a{justify-content:center;text-align:center;white-space:normal;line-height:1.15;font-size:.86rem;padding:4px 2px;min-height:44px}}
 .wrap{max-width:44rem;margin:0 auto;padding-left:16px;padding-right:16px}
 main{padding-bottom:56px}
-h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px}
+h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px;overflow-wrap:anywhere}
 h2{font-size:1.38rem;line-height:1.25;letter-spacing:-.01em;margin:36px 0 10px;padding-top:16px;border-top:1px solid var(--line)}
 h3{font-size:1.1rem;line-height:1.3;margin:28px 0 8px}
 p{margin:0 0 12px}
@@ -791,6 +791,14 @@ def details_table(summary, caption, head, rows):
     return f"<details><summary>{summary}</summary>{table(caption, head, rows)}</details>"
 
 
+def _break_label_position(position, text_width, chart_width, plot_left=44):
+    """Keep a method annotation inside the SVG even near the left edge."""
+    right = position > chart_width * 0.65 or position + 3 + text_width > chart_width
+    end = max(text_width + plot_left + 3, position - 3) if right else position + 3 + text_width
+    end = min(chart_width - 3, end)
+    return end - text_width, end, right
+
+
 def _line_tick_indices(labels, x):
     """Keep round-year spacing on long axes without crowding endpoint labels."""
     n = len(labels)
@@ -929,19 +937,17 @@ def line_chart(
         )
         # Right-align the label when it would run past the chart's right edge.
         # Width is estimated for the 15px chart font (about 8.4 units a character).
-        w = len(text) * 8.4
-        right = bx > W * 0.65 or bx + 3 + w > W
-        lo_, hi_ = (bx - 3 - w, bx - 3) if right else (bx + 3, bx + 3 + w)
+        lo_, hi_, right = _break_label_position(bx, len(text) * 8.4, W)
         if any(lo_ < b + 4 and hi_ > a - 4 for a, b in taken):
             continue  # breaks close together share one label; the caption and summary name each
         taken.append((lo_, hi_))
         ty = T + 12
         if right:
             parts.append(
-                f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>'
+                f'<text x="{hi_:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>'
             )
         else:
-            parts.append(f'<text x="{bx + 3:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(f'<text x="{lo_:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
     for i, text in events:
         ex = x(i)
         parts.append(

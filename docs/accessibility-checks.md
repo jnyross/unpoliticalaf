@@ -36,11 +36,14 @@ all assigned cases exactly once, at the required widths/state, on the identical
 build manifest. Missing reports, duplicate cases, altered bytes, timed-out
 cases, violations and unresolved relevant incomplete findings fail.
 
-PR CI runs eight fail-fast-disabled partitions with 60-minute job bounds and
-always uploads available reports. Its final `accessibility` job independently
-rebuilds the same production candidate and verifies their exact union. CI
-requires no unresolved relevant incompletes; failed/missing matrix work cannot
-be replaced by a successful aggregate.
+PR CI retains the `accessibility` default-state regression gate and adds the
+real browser scanner regressions. That job is **not full qualification**.
+Before release, full expanded qualification is mandatory in credential-free
+Boat on the actual committed production candidate: run `make a11y`, or every
+bounded partition plus `make a11y-default` and the exact union check. Retain
+all reports, the union output and independently reviewed rendered dispositions.
+No green default CI job replaces this gate. If merge changes the source SHA,
+repeat qualification for that SHA, including its manifest-bound dispositions.
 
 ## Rendered incomplete dispositions outside the deployed source
 

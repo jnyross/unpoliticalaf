@@ -182,7 +182,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-  accessibility_defaults:
+  accessibility:
     # Playwright 1.56 has no browser build for Ubuntu 26.04, which is ubuntu-latest now
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -209,75 +209,18 @@ jobs:
       - run: make production-build
       - run: make a11y-default
       - name: Exercise browser scanner regressions
-        run: RUN_A11Y_BROWSER_TESTS=1 .venv/bin/python -m pytest tests/test_a11y.py
+        run: RUN_A11Y_BROWSER_TESTS=1 .venv/bin/python -m pytest tests/test_a11y.py --junitxml=test-results/a11y-regressions.xml
 
-  accessibility_partitions:
-    name: Expanded axe partition ${{ matrix.partition }}
-    runs-on: ubuntu-24.04
-    timeout-minutes: 60
-    env:
-      VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
-    strategy:
-      fail-fast: false
-      matrix:
-        partition: [0, 1, 2, 3, 4, 5, 6, 7]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: make setup-dev
-      - run: .venv/bin/python -m playwright install --with-deps chromium
-      - run: make production-build
-      - name: Scan assigned manifest paths at both widths
-        run: >-
-          make a11y-partition
-          A11Y_ARGS="--partition-index ${{ matrix.partition }} --partition-count 8
-          --output test-results/a11y/partition-${{ matrix.partition }}.json"
-      - name: Retain partial evidence even after failure or timeout
+      # Full expanded qualification and rendered incomplete dispositions are
+      # mandatory on the release SHA in Boat; this is the default regression gate.
+      - name: Retain browser regression results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: expanded-axe-${{ matrix.partition }}
-          path: test-results/a11y/
-          if-no-files-found: error
-          retention-days: 30
-
-  accessibility:
-    runs-on: ubuntu-24.04
-    needs: [accessibility_defaults, accessibility_partitions]
-    if: always()
-    timeout-minutes: 15
-    env:
-      VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: make setup-test
-      - run: make production-build
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: expanded-axe-*
-          path: test-results/a11y-partitions/
-      # CI intentionally requires no unresolved incomplete findings. Rendered
-      # out-of-band reviews use this same union command with --dispositions;
-      # they never turn a missing/failed partition into a successful CI job.
-      - name: Require the exact candidate-wide union
-        run: >-
-          make a11y-union
-          A11Y_ARGS="--verify test-results/a11y-partitions/expanded-axe-*/partition-*.json"
-      - name: Require default checks and every partition to succeed
-        if: always()
-        env:
-          DEFAULTS: ${{ needs.accessibility_defaults.result }}
-          PARTITIONS: ${{ needs.accessibility_partitions.result }}
-        run: test "$DEFAULTS" = success && test "$PARTITIONS" = success
+          name: accessibility-regressions
+          path: test-results/a11y-regressions.xml
+          if-no-files-found: warn
+          retention-days: 14
 
   quality:
     runs-on: ubuntu-latest

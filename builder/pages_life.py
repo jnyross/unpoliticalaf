@@ -2659,7 +2659,7 @@ def year_finder(facts, num, key):
     def item(y):
         if has_year_figure(facts, num, key, y):
             return f'<li><a href="{y}.html#{key}">{y}</a></li>'
-        return f'<li><span class="missing" aria-label="{y}: no figure">{y}</span></li>'
+        return f'<li><span class="missing" role="img" aria-label="{y}: no figure">{y}</span></li>'
 
     recent = "".join(item(y) for y in YEARS)
     early = "".join(item(y) for y in EARLY_YEARS)

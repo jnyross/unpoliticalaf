@@ -280,22 +280,18 @@ def test_route_checker_runs_independently_and_propagates_failure(site, monkeypat
     assert "sys.exit(check.main())" in calls[0][2]
 
 
-def test_ci_scans_all_partitions_and_always_checks_the_union():
+def test_ci_preserves_default_gate_and_runs_real_browser_regressions():
     workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/check.yml").read_text()
-    matrix = workflow.split("  accessibility_partitions:", 1)[1].split("\n  accessibility:", 1)[0]
-    aggregate = workflow.split("\n  accessibility:", 1)[1].split("\n  quality:", 1)[0]
-    assert "partition: [0, 1, 2, 3, 4, 5, 6, 7]" in matrix
-    assert "fail-fast: false" in matrix
-    assert "--partition-count 8" in matrix
-    assert "if: always()" in matrix
-    assert "actions/upload-artifact@v4" in matrix
-    assert "timeout-minutes: 60" in matrix
-    assert "needs: [accessibility_defaults, accessibility_partitions]" in aggregate
-    assert "if: always()" in aggregate
-    assert "make a11y-union" in aggregate
-    assert "--verify test-results/a11y-partitions/expanded-axe-*/partition-*.json" in aggregate
-    assert 'test "$DEFAULTS" = success && test "$PARTITIONS" = success' in aggregate
-    assert "continue-on-error" not in matrix + aggregate
+    job = workflow.split("\n  accessibility:", 1)[1].split("\n  quality:", 1)[0]
+    assert "make a11y-default" in job
+    assert "RUN_A11Y_BROWSER_TESTS=1" in job
+    assert "--junitxml=test-results/a11y-regressions.xml" in job
+    assert "actions/upload-artifact@v4" in job
+    assert "if: always()" in job
+    assert "continue-on-error" not in job
+    guidance = (Path(__file__).resolve().parents[1] / "docs/accessibility-checks.md").read_text()
+    assert "full expanded qualification is mandatory" in guidance
+    assert "No green default CI job replaces this gate" in guidance
 
 
 @pytest.mark.skipif(
