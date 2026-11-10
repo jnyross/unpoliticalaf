@@ -13,9 +13,9 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
-from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows, pdf_number
+from .readers import ROOT, xlsx, ods, ref, ons_series, csv_rows, pdf_number, zip_sheet
 
-YEARS = list(range(2008, 2026))  # year explorer range (calendar years)
+YEARS = list(range(2008, 2027))  # year explorer range (calendar years)
 # Years before the explorer's full range. Only some series reach back this far;
 # their figures are read by history() and shown on the topic pages and the
 # earlier-year pages, each with its own survey and break.
@@ -50,7 +50,26 @@ class Facts(dict):
         return self[fid].value
 
     def to_json(self):
-        return [asdict(f) for f in self.values()]
+        return [
+            asdict(f)
+            | ({"input_statuses": self.input_statuses(f.id)} if f.status == "calculated" else {})
+            for f in self.values()
+        ]
+
+    def input_statuses(self, fid):
+        """Retain leaf-source statuses separately from the calculation method."""
+        statuses, seen, pending = set(), set(), list(self[fid].inputs)
+        while pending:
+            operand = pending.pop()
+            if operand in seen:
+                continue
+            seen.add(operand)
+            fact = self[operand]
+            if fact.status == "calculated":
+                pending.extend(fact.inputs)
+            else:
+                statuses.add(fact.status)
+        return sorted(statuses)
 
 
 def num(v):
@@ -665,6 +684,7 @@ def who_pays(facts):
                         "etb",
                         f"{sheet}!{ref(i, j)}",
                         "outturn",
+                        note="Person-analysis counts; household amounts are person-weighted household means, not once-per-household totals.",
                     )
                 )
         for q in gcols:
@@ -682,6 +702,7 @@ def who_pays(facts):
                     "etb",
                     f"{d.locator} + {ind.locator}",
                     "calculated",
+                    note="Sum of person-weighted household tax means; not an aggregate tax total.",
                     formula=f"{d.id} + {ind.id}",
                     inputs=[d.id, ind.id],
                 )
@@ -925,6 +946,16 @@ def _q2(data, year):
     return data.get(f"{year} Q2")
 
 
+def _complete_sum(values):
+    """A missing source cell cannot stand for zero in a group total."""
+    return None if None in values else sum(values)
+
+
+def _share_of_total(part, total):
+    """Keep a share missing when its source numerator or denominator is unavailable."""
+    return None if part is None or not total else 100 * part / total
+
+
 def work(facts):
     out = {"rate": {}, "men": {}, "women": {}, "level": {}, "ft": {}, "pt": {}, "occ": {}}
     for key, sid, path, unit in (
@@ -1034,7 +1065,7 @@ def work(facts):
                 facts.add(
                     Fact(
                         f"work.occshare.{scheme}.{code}.{y}",
-                        100 * part.value / total.value,
+                        _share_of_total(part.value, total.value),
                         "% of people in work",
                         f"January to December {y}",
                         sid,
@@ -1050,81 +1081,165 @@ def work(facts):
 
 # ---------------------------------------------------------------- life: earnings
 
+# ONS's ASHE Table 1 packs, read instead of the Nomis file for their April: the Nomis file
+# still holds the provisional 2025 estimates, which ONS revised in October 2026, and it
+# has no 2026 figures yet. Year -> (source id, file, pay workbook, CV workbook, status).
+ASHE_TABLE1 = {
+    2025: (
+        "ashe-2025-table1-revised",
+        "data/fetched/ons/ashetable12025revised.zip",
+        "Total Table 1.1a   Weekly pay - Gross 2025.xlsx",
+        "Total Table 1.1b   Weekly pay - Gross 2025 CV.xlsx",
+        "revised",
+    ),
+    2026: (
+        "ashe-2026-table1-provisional",
+        "data/fetched/ons/ashetable12026provisional.zip",
+        "PROV - Table 1.1a   Weekly pay - Gross 2026.xlsx",
+        "PROV - Table 1.1b   Weekly pay - Gross 2026 CV.xlsx",
+        "provisional",
+    ),
+}
+# All nine work-pattern and sex combinations: Nomis SEX code -> (Table 1 sheet, title words).
+ASHE_COMBINATIONS = {
+    "1": ("Male Full-Time", "male full-time"),
+    "2": ("Male Part-Time", "male part-time"),
+    "3": ("Female Full-Time", "female full-time"),
+    "4": ("Female Part-Time", "female part-time"),
+    "5": ("Male", "male"),
+    "6": ("Female", "female"),
+    "7": ("All", "all"),
+    "8": ("Full-Time", "full-time"),
+    "9": ("Part-Time", "part-time"),
+}
+# The combinations the site shows, by fact-id group.
+EARN_GROUPS = {"8": "ft", "9": "pt", "1": "ft_men", "3": "ft_women"}
+# The newest April of pay; every real-pay figure on the site is in this April's prices.
+EARN_LAST = max(ASHE_TABLE1)
+EARN_BASE_YEAR = EARN_LAST
+# ONS's bulletin figure of its own change from April EARN_LAST - 1 to April EARN_LAST.
+ASHE_PUBLISHED_CHANGE = ("ashe-2026-fig2", "data/fetched/ons/ashe-2026-fig2.csv")
+
+
+def ashe_table1_cell(y, code, cv=False, column="D", heading="Median"):
+    """(value, locator) of one combination's UK figure in the Table 1 pack for April y:
+    the median, or the percentile whose heading is in that column. Checks the sheet's
+    title, row label and column heading first."""
+    _, path, pay, cvs, _ = ASHE_TABLE1[y]
+    member = cvs if cv else pay
+    sheet, words = ASHE_COMBINATIONS[code]
+    ws = zip_sheet(path, member, sheet)
+    title = str(ws["A1"].value).strip()
+    if (
+        not re.search(rf"For {words} employee jobs.*United Kingdom,? {y}$", title)
+        or ws["A6"].value != "All Employees"
+        or ws[f"{column}5"].value != heading
+    ):
+        raise ValueError(f"{member} {sheet}: not the UK {heading} for {words} employee jobs in {y}")
+    return float(ws[f"{column}6"].value), f"{member}::{sheet}!{column}6"
+
+
+def _cpih_april(facts, cpih, y):
+    if f"cpih.apr.{y}" not in facts:
+        facts.add(
+            Fact(
+                f"cpih.apr.{y}",
+                cpih.get(f"{y} APR"),
+                "index (2015=100)",
+                f"April {y}",
+                "ons-l522",
+                f"L522 row '{y} APR'",
+            )
+        )
+    return facts[f"cpih.apr.{y}"].value
+
 
 def earnings(facts):
     rows = csv_rows("data/fetched/nomis/ashe-resident-uk-median-weekly.csv")
     meta, cpih = ons_series("data/fetched/ons/l522.csv")
-    base_year = max(int(r["DATE_NAME"]) for r in rows)
-    base = cpih[f"{base_year} APR"]
-    facts.add(
-        Fact(
-            f"cpih.apr.{base_year}",
-            base,
-            "index (2015=100)",
-            f"April {base_year}",
-            "ons-l522",
-            f"L522 row '{base_year} APR'",
-        )
-    )
-    groups = {"8": "ft", "9": "pt", "1": "ft_men", "3": "ft_women"}
+    base_year = EARN_BASE_YEAR
+    base = _cpih_april(facts, cpih, base_year)
     out = {
         "base_year": base_year,
-        "series": {g: {} for g in groups.values()},
-        "real": {g: {} for g in groups.values()},
+        "last": EARN_LAST,
+        "status": {y: edition[4] for y, edition in ASHE_TABLE1.items()},
+        "series": {g: {} for g in EARN_GROUPS.values()},
+        "real": {g: {} for g in EARN_GROUPS.values()},
     }
-    for line, r in enumerate(rows, start=2):
-        g = groups.get(r["SEX"])
-        if not g:
-            continue
-        y = int(r["DATE_NAME"])
-        if y not in YEARS and y not in EARLY_YEARS:
-            continue
+
+    def add(g, y, value, source, locator, status, note):
         fid = f"earn.{g}.{y}"
-        st = "published"  # ASHE 2025 is no longer provisional: ONS's October 2026 release kept it unchanged
-        facts.add(
-            Fact(
-                fid,
-                num(r["OBS_VALUE"]),
-                "£ a week",
-                f"April {y}",
-                "nomis-ashe-resident",
-                f"ashe-resident-uk-median-weekly.csv line {line}",
-                st,
-                note=r["SEX_NAME"] + ", median gross weekly pay",
-            )
-        )
+        facts.add(Fact(fid, value, "£ a week", f"April {y}", source, locator, status, note=note))
         out["series"][g][y] = fid
-        idx = cpih.get(f"{y} APR")
-        (
-            facts.add(
-                Fact(
-                    f"cpih.apr.{y}",
-                    idx,
-                    "index (2015=100)",
-                    f"April {y}",
-                    "ons-l522",
-                    f"L522 row '{y} APR'",
-                )
-            )
-            if f"cpih.apr.{y}" not in facts
-            else None
-        )
-        v = facts[fid].value
+        idx = _cpih_april(facts, cpih, y)
         rid = f"earn.real.{g}.{y}"
         facts.add(
             Fact(
                 rid,
-                None if v is None or idx is None else v * base / idx,
+                None if value is None or idx is None else value * base / idx,
                 f"£ a week, April {base_year} prices",
                 f"April {y}",
-                "nomis-ashe-resident",
-                facts[fid].locator,
+                source,
+                locator,
                 "calculated",
                 formula=f"{fid} × cpih.apr.{base_year} ÷ cpih.apr.{y}",
                 inputs=[fid, f"cpih.apr.{base_year}", f"cpih.apr.{y}"],
             )
         )
         out["real"][g][y] = rid
+
+    for line, r in enumerate(rows, start=2):
+        g = EARN_GROUPS.get(r["SEX"])
+        y = int(r["DATE_NAME"])
+        if not g or y in ASHE_TABLE1 or (y not in YEARS and y not in EARLY_YEARS):
+            continue
+        add(
+            g,
+            y,
+            num(r["OBS_VALUE"]),
+            "nomis-ashe-resident",
+            f"ashe-resident-uk-median-weekly.csv line {line}",
+            "published",
+            r["SEX_NAME"] + ", median gross weekly pay",
+        )
+    for y, (sid, _, _, _, status) in sorted(ASHE_TABLE1.items()):
+        for code, g in EARN_GROUPS.items():
+            value, locator = ashe_table1_cell(y, code)
+            add(
+                g,
+                y,
+                value,
+                sid,
+                locator,
+                status,
+                f"{ASHE_COMBINATIONS[code][0]}, median gross weekly pay ({status} estimate)",
+            )
+    # ONS's own published change over the newest year, beside the site's calculation.
+    sid, path = ASHE_PUBLISHED_CHANGE
+    fig = list(csv.reader(io.StringIO((ROOT / path).read_text("utf-8-sig"))))
+    if ["", f"{EARN_LAST - 1} to {EARN_LAST}"] not in fig:
+        raise ValueError(
+            f"{path}: not ONS's change from April {EARN_LAST - 1} to April {EARN_LAST}"
+        )
+    for key, row in (("nominal", "Full-time (nominal)"), ("real", "Full-time (real)")):
+        value = next(float(r[1]) for r in fig if r and r[0] == row)
+        facts.add(
+            Fact(
+                f"earn.ons.change.ft.{key}.{EARN_LAST}",
+                value,
+                "% change on a year",
+                f"April {EARN_LAST - 1} to April {EARN_LAST}",
+                sid,
+                f"fig2 row '{row}'",
+                "provisional",
+                note="ONS's published change for full-time employees, worked out from its own estimates"
+                + (
+                    f"; real terms adjusted with CPIH for April {EARN_LAST}"
+                    if key == "real"
+                    else ""
+                ),
+            )
+        )
     return out
 
 
@@ -1239,9 +1354,11 @@ def earnings_places(facts):
     path = "data/fetched/nomis/ashe-resident-nations-regions-ft-median-weekly.csv"
     meta, cpih = ons_series("data/fetched/ons/l522.csv")
     rows = csv_rows(path)
-    base_year = max(int(r["DATE_NAME"]) for r in rows)
-    base = cpih[f"{base_year} APR"]
-    out = {"cash": {}, "real": {}, "base_year": base_year}
+    # The file's latest April is provisional; its figures are shown in the site's one price base.
+    last = max(int(r["DATE_NAME"]) for r in rows)
+    base_year = EARN_BASE_YEAR
+    base = _cpih_april(facts, cpih, base_year)
+    out = {"cash": {}, "real": {}, "base_year": base_year, "last": last}
     for line, r in enumerate(rows, start=2):
         if r["MEASURES_NAME"] != "Value" or r["SEX_NAME"] != "Full Time Workers":
             continue
@@ -1249,7 +1366,7 @@ def earnings_places(facts):
         if key is None or y not in YEARS or f"earn.place.{key}.{y}" in facts:
             continue
         fid = f"earn.place.{key}.{y}"
-        st = "provisional" if y == base_year else "published"
+        st = "provisional" if y == last else "published"
         facts.add(
             Fact(
                 fid,
@@ -1352,7 +1469,7 @@ def housing(facts):
                 out["children"][y] = str(r[0])
     for y in out["children"]:
         total_ids = counts[(y, "all")]
-        total = sum(facts[i].value for i in total_ids)
+        total = _complete_sum([facts[i].value for i in total_ids])
         for key in ("owners", "social", "private"):
             ids = counts[(y, key)]
             if any(facts[i].value is None for i in ids):
@@ -1360,7 +1477,7 @@ def housing(facts):
             facts.add(
                 Fact(
                     f"house.kids.{key}.{y}",
-                    100 * sum(facts[i].value for i in ids) / total,
+                    _share_of_total(sum(facts[i].value for i in ids), total),
                     "% of households with dependent children",
                     f"{out['children'][y]} survey year",
                     "ehs-ft1241",
@@ -2497,6 +2614,12 @@ def build_all():
     from . import data_buyers
 
     d["buyers"] = data_buyers.build(facts)
+    from . import data_age_pay
+
+    d["age_pay"] = data_age_pay.build(facts)
+    from . import data_tax_comparison
+
+    data_tax_comparison.build(facts)
     from . import data_top_earners
 
     d["top_earners"] = data_top_earners.build(facts)
@@ -2511,6 +2634,9 @@ def build_all():
     from . import data_fiscal_margin
 
     data_fiscal_margin.build(facts)
+    from . import data_nationality
+
+    data_nationality.build(facts)
     holiday_rates(facts, d["gb_holidays"])
     d["history"] = history(facts)
     return facts, d

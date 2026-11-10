@@ -30,6 +30,11 @@ GROUPS = [
                 "Output per hour worked and per worker beside the other G7 countries.",
             ),
             (
+                "economy-options.html",
+                "What could improve the UK economy?",
+                "Options with model estimates, time horizons and limits, not a policy recommendation.",
+            ),
+            (
                 "borrowing.html",
                 "How do UK debt and borrowing costs compare with other major countries?",
                 "Debt, 10-year borrowing costs and debt interest beside the other G7 countries.",

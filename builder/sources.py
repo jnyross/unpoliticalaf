@@ -15,6 +15,15 @@ OGL = "Open Government Licence v3.0"
 OECD_TERMS = "Creative Commons Attribution 4.0 International (CC BY 4.0), OECD"
 IMF_TERMS = "IMF data, copyright International Monetary Fund; may be reproduced with attribution under the IMF terms of use"
 GBTS_TERMS = "Official statistics published by VisitEngland, VisitScotland and Visit Wales; figures quoted with attribution"
+SFC_TERMS = "Copyright Skills for Care. Its website terms allow material to be reproduced with acknowledgment for education and training purposes, not for sale or profit"
+OPEN_PARLIAMENT_LICENCE = "Open Parliament Licence v3.0"
+PREFIX_TERMS = {
+    "gbts-": GBTS_TERMS,
+    "oecd-": OECD_TERMS,
+    "imf-": IMF_TERMS,
+    "sfc-": SFC_TERMS,
+    "hansard-": OPEN_PARLIAMENT_LICENCE,
+}
 
 
 def _fetched(source_id):
@@ -202,6 +211,30 @@ SOURCES["nato-uk-table3"] = dict(
 # Sources downloaded by scripts/fetch_sources.py. URL, hash and retrieval time
 # come from data/fetched/receipts.json, written at download time.
 FETCHED = {
+    "hmrc-historic-allowances": (
+        "HM Revenue and Customs",
+        "Table A.1: Income Tax Personal Allowances and Reliefs, 1990 to 1991 to 2026 to 2027 (updated July 2026)",
+        "United Kingdom",
+        "Individuals; non-aged and age-related personal allowances and reliefs by tax year",
+    ),
+    "hmrc-historic-rates": (
+        "HM Revenue and Customs",
+        "Table A.2: Income Tax rates and allowances by tax year",
+        "United Kingdom (territorial differences identified in the table)",
+        "Individuals; Income Tax rates and taxable-income bands by tax year",
+    ),
+    "hansard-ni-1992": (
+        "UK Parliament",
+        "National Insurance: House of Commons written answer, 12 November 1992",
+        "United Kingdom",
+        "Class 1 National Insurance contributors; current 1992 to 1993 rules and changes effective April 1993",
+    ),
+    "gov-employer-rates-2025": (
+        "HM Revenue and Customs",
+        "Rates and thresholds for employers 2025 to 2026",
+        "United Kingdom (Income Tax rates differ by nation)",
+        "Employees and employers; PAYE Income Tax and National Insurance thresholds and category rates for 2025 to 2026",
+    ),
     "ons-mye-uk-mid2025": (
         "Office for National Statistics",
         "Population estimates for the UK, England, Wales, Scotland and Northern Ireland: mid-2025 (statistical bulletin)",
@@ -394,6 +427,30 @@ FETCHED = {
         "United Kingdom",
         "Employee jobs",
     ),
+    "ashe-2026-fig2": (
+        "Office for National Statistics",
+        "Employee earnings in the UK: 2026, Figure 2 data (annual change in median weekly pay, in cash and after CPIH inflation; 2026 provisional)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
+    "ashe-2026-table1-provisional": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 1, 2026 provisional: all employees (zip of workbooks; Table 1.1a gross weekly pay and Table 1.1b its coefficients of variation)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
+    "ashe-2025-table1-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 1, 2025 revised: all employees (zip of workbooks; Table 1.1a gross weekly pay and Table 1.1b its coefficients of variation)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence",
+    ),
+    "ons-single-year-life-tables-uk": (
+        "Office for National Statistics",
+        "Single-year life tables, United Kingdom, 1980 to 2024 (period expectation of life; published 10 December 2025)",
+        "United Kingdom",
+        "Males and females, by exact age; single-year tables are not accredited official statistics",
+    ),
     "dwp-spa-timetable": (
         "Department for Work and Pensions (GOV.UK)",
         "State Pension age timetables (DWP PDF, tables 1 to 5)",
@@ -448,17 +505,131 @@ FETCHED = {
         "England",
         "Recent first-time buyers (bought in the last three years)",
     ),
+    "ehs-annex-ch1": (
+        "Ministry of Housing, Communities and Local Government",
+        "English Housing Survey 2024-25 headline report, Chapter 1 annex tables (Annex Table 1.4: age of household reference person, by tenure, 2003-04 to 2024-25)",
+        "England",
+        "All households, by age of the household reference person",
+    ),
     "ehs-fc2101": (
         "Ministry of Housing, Communities and Local Government",
         "English Housing Survey live table FC2101: percentage of each age group that are owner occupiers, 2008-09 to 2021-22",
         "England",
-        "Each age group, all households",
+        "All households, by age of the household reference person (households, not people)",
     ),
     "boe-mortgage-rates": (
         "Bank of England",
         "Bank of England effective interest rates: effective rate on new mortgages, total (CFMZ6JM), monthly from January 2016",
         "United Kingdom",
         "Individuals and individual trusts taking out new mortgages",
+    ),
+    "ehs-0809-annex-ch1": (
+        "Ministry of Housing, Communities and Local Government",
+        "English Housing Survey 2008-09 household report, Chapter 1 annex tables (Annex Table 1.4: tenure by age of household reference person, 1981, 1991, 2001 and 2008-09)",
+        "England",
+        "All households, by age of the household reference person (head of household in the Labour Force Survey years)",
+    ),
+    "ehs-0809-report": (
+        "Ministry of Housing, Communities and Local Government",
+        "English Housing Survey 2008-09 household report (Figure 1.5 sources and the glossary definition of the household reference person)",
+        "England",
+        "All households",
+    ),
+    "ons-lfs-guide-household": (
+        "Office for National Statistics",
+        "Labour Force Survey User Guide, Volume 8: Household and Family Data (February 2003), head of household and household reference person",
+        "United Kingdom",
+        "Households in the Labour Force Survey",
+    ),
+    "boe-quoted-2yr-75ltv": (
+        "Bank of England",
+        "Bank of England quoted household interest rates: 2 year fixed rate mortgage, 75% loan to value (IUMBV34), monthly from January 2008",
+        "United Kingdom",
+        "Sterling two-year fixed-rate mortgages to households at 75% loan to value, quoted by UK monetary financial institutions",
+    ),
+    "boe-quoted-rates-notes": (
+        "Bank of England",
+        "Bank of England Database XML metadata for series IUMBV34: description, categories and the Bank's notes on method changes from January 2008 and January 2016",
+        "United Kingdom",
+        "Quoted mortgage rates to households from UK monetary financial institutions",
+    ),
+    "boe-effective-rates-notes": (
+        "Bank of England",
+        "Bank of England Database XML metadata for series CFMZ6JM: description, categories and first and last months",
+        "United Kingdom",
+        "New sterling loans secured on dwellings to individuals and individual trusts",
+    ),
+    "boe-rate-series-titles": (
+        "Bank of England",
+        "Bank of England Database CSV with the titles of series IUMBV34 and CFMZ6JM (January 2016 values only)",
+        "United Kingdom",
+        "Series titles, checked against the XML metadata and the monthly files",
+    ),
+    "boe-form-er-definitions": (
+        "Bank of England",
+        "Form ER definitions: effective interest rates (how banks report the rates behind CFMZ6JM)",
+        "United Kingdom",
+        "Sterling business of UK lenders with UK residents",
+    ),
+    "ashe-2002-table6": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2002: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2006-table6-2007-methods": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2006 on the 2007 methods: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2010-table6-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2010 revised: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2011-table6-soc2010": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2011 on the SOC 2010 occupation coding: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2020-table6-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2020 revised: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2021-table6-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2021 revised: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ashe-2025-table6-revised": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE) Table 6, 2025 revised: age group (zip of workbooks; Table 6.1a gross weekly pay)",
+        "United Kingdom",
+        "Employee jobs on adult rates whose pay was not affected by absence, by age group",
+    ),
+    "ons-ashe-age-single-year-adhoc": (
+        "Office for National Statistics",
+        "Annual Survey of Hours and Earnings (ASHE): estimates of median hourly pay (excluding overtime) for employee jobs by single year of employee age of those aged 16 to 25, 1997 to 2025 (ad hoc release page)",
+        "United Kingdom",
+        "Employee jobs, people aged 16 to 25",
+    ),
+    "ons-red02": (
+        "Office for National Statistics",
+        "Labour Force Survey table RED02: redundancies by industry, age, sex and re-employment rates (official statistics in development), from January to March 2009",
+        "United Kingdom",
+        "People aged 16 and over, by age group",
+    ),
+    "ons-emp07": (
+        "Office for National Statistics",
+        "Labour Force Survey table EMP07: temporary employees, by sex and full-time or part-time work (not by age)",
+        "United Kingdom",
+        "Temporary employees: people, men and women",
     ),
     "ehs-fa2555": (
         "Ministry of Housing, Communities and Local Government",
@@ -887,6 +1058,42 @@ FETCHED = {
         "United Kingdom",
         "Non-domiciled and deemed domiciled taxpayers who file Self Assessment returns",
     ),
+    "nhs-hchs-workforce-aug26": (
+        "NHS England",
+        "NHS Workforce Statistics, August 2026: staff in NHS trusts and other core organisations, data tables (Table 14, staff by nationality group; published 29 October 2026)",
+        "England",
+        "Staff directly employed by NHS trusts and other core organisations (hospital and community health services), as headcount and full time equivalent",
+    ),
+    "nhs-hchs-dqa-aug26": (
+        "NHS England",
+        "NHS Workforce Statistics, August 2026: data quality annex (published 29 October 2026)",
+        "England",
+        "NHS hospital and community health services staff, with notes on staff counted elsewhere, such as primary care",
+    ),
+    "sfc-asc-appendix-2026": (
+        "Skills for Care",
+        "The state of the adult social care sector and workforce in England 2026: statistical appendix (Table 4.7.1, nationality by sector; estimates for 2025/26, published 14 October 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients, not counting NHS-employed roles",
+    ),
+    "sfc-state-2026": (
+        "Skills for Care",
+        "The state of the adult social care sector and workforce in England 2026 (report, published 14 October 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients, not counting NHS-employed roles",
+    ),
+    "sfc-terms": (
+        "Skills for Care",
+        "Terms and conditions of the Skills for Care website, including reuse of its material",
+        "England",
+        "Material published by Skills for Care",
+    ),
+    "sfc-method-jun26": (
+        "Skills for Care",
+        "Methodology for estimating the size and characteristics of the adult social care workforce in England (June 2026)",
+        "England",
+        "Estimated filled posts in adult social care in local authorities, independent employers and for direct payment recipients",
+    ),
 }
 
 
@@ -929,14 +1136,8 @@ def all_sources():
             retrieved=r["retrieved"][:10],
             geography=geography,
             population=population,
-            licence=(
-                GBTS_TERMS
-                if key.startswith("gbts-")
-                else (
-                    OECD_TERMS
-                    if key.startswith("oecd-")
-                    else IMF_TERMS if key.startswith("imf-") else OGL
-                )
+            licence=next(
+                (terms for prefix, terms in PREFIX_TERMS.items() if key.startswith(prefix)), OGL
             ),
         )
     for alias, (key, title, geography, population) in FETCHED_ALIASES.items():

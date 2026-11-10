@@ -16,6 +16,7 @@ from .readers import ROOT
 from .sources import all_sources, verify_hashes
 from .explain import missing_quotes
 from .rates import read_rates
+from . import pages_tax_comparison
 from .logging import get_logger, run_logged
 from . import pages_money_extra, pages_generations, pages_manifesto, version, feature_flags
 from . import (
@@ -104,6 +105,7 @@ def render(settings=None):
     pages["life/house-prices.html"] = pages_life.afford_page(facts, d, num, sources)
     pages["life/housing-places.html"] = pages_life.places_page(facts, d, num, sources)
     pages[pages_generations.PAGE] = pages_generations.generations_page(facts, d, num, sources)
+    pages[pages_tax_comparison.PAGE] = pages_tax_comparison.comparison_page(num, sources)
     for y in YEARS:
         pages[f"life/{y}.html"] = pages_life.year_page(facts, d, num, sources, y)
     for y in EARLY_YEARS:
@@ -118,7 +120,7 @@ def render(settings=None):
         pages[f"life/compare/{a}-{b}.html"] = pages_early_compare.compare_page(
             facts, d, num, sources, a, b
         )
-    pages["life/compare/index.html"] = pages_life.compare_index(sources)
+    pages["life/compare/index.html"] = pages_life.compare_index(sources, facts)
     for a, b in pages_ranges.span_pairs():
         pages[f"life/compare/spans/{pages_ranges.slug(a, b)}.html"] = pages_ranges.span_page(
             facts, d, num, sources, a, b
@@ -136,7 +138,9 @@ def render(settings=None):
     used = Counter(facts[f].source for f in num.used)
     pages["methods.html"] = pages_home.methods_page(facts, sources, used)
     pages["sources.html"] = pages_home.sources_page(sources, used)
-    pages["uncertainty.html"] = uncertainty.uncertainty_page(facts, d, num, sources, YEARS[-1])
+    pages["uncertainty.html"] = uncertainty.uncertainty_page(
+        facts, d, num, sources, uncertainty.place_year(facts)
+    )
     pages["glossary.html"] = glossary.glossary_page()
     pages["corrections.html"] = trace.corrections_page()
     pages.update(trace.figure_pages(facts, sources, num.used))

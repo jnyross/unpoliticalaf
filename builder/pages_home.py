@@ -2,6 +2,7 @@
 
 import re
 
+from .data import EARN_BASE_YEAR, YEARS
 from .html import page, esc, bars, jump
 
 
@@ -9,6 +10,7 @@ def home_page(facts, d, num, sources):
     sp = d["spending"]["latest"]
     y = "2025-26"
     L = 2025
+    last_year = YEARS[-1]
     from .pages_money import fifth_indirect_caveat
 
     cav = fifth_indirect_caveat(facts, num)
@@ -84,7 +86,7 @@ def home_page(facts, d, num, sources):
     # Each card's small chart shows the topic's longest series (audit 11 gap 3).
     sparks = {
         "work": mini(long_spark(facts, num, "work", Lw, caption=False)),
-        "earnings": mini(long_spark(facts, num, "earnings", L, caption=False)),
+        "earnings": mini(long_spark(facts, num, "earnings", eb, caption=False)),
         "housing": mini(long_spark(facts, num, "housing", 2024, caption=False)),
         "holidays": mini(long_spark(facts, num, "holidays", caption=False)),
         "schools": mini(long_spark(facts, num, "schools", Ls, caption=False)),
@@ -165,14 +167,14 @@ def home_page(facts, d, num, sources):
 <p><a href="manifesto.html">Did Labour keep its 2024 manifesto?</a> Ten pledges on tax, public spending and everyday costs, each quoted, with what has happened and every reading the wording allows.</p>
 <p><a href="immigration.html">Is immigration a good or a bad thing?</a> What official evidence says about public money, public services and the economy, and where it cannot decide.</p>
 <h2 id="life">Everyday life, year by year</h2>
-<p>Pick any year from {E} to {L}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
+<p>Pick any year from {E} to {last_year}, or compare two. Work, earnings, housing and class sizes have figures from {FIRST} and holidays from {FIRST + 1}, and some reach further back. Each topic shows the latest figure and what it covers, with a small chart of its longest official series: the employment rate since {FY["work"]}, home ownership in England since {FY["housing"]}, visits abroad since {FY["holidays"]}, pay since {FY["earnings"]} and class sizes since {FY["schools"]}. In each small chart the dark dot is the latest year, a gap means no figure, and a dashed line means the definition or survey changed. The small charts do not start at zero.</p>
 <div class="cards">
-<a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages stop at {L}.</p>{sparks["work"]}</a>
-<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {L} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {L} prices. Compared from {ea}, when the survey last changed how it codes jobs. ONS has since published April 2026 pay, which this series does not yet include. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
+<a class="card" href="life/work.html"><h3>Work</h3><span class="big">{num(f"work.rate.{Lw}", "pct")}</span><p>of people aged 16 to 64 were in work, April to June {Lw}, UK. The year pages run to {last_year}.</p>{sparks["work"]}</a>
+<a class="card" href="life/earnings.html"><h3>Earnings after inflation</h3><p><strong>After inflation, pay in April {eb} was {pay_phrase(ech)} in April {ea}.</strong> In cash, weekly pay went from {num(f"earn.ft.{ea}", "pounds")} to {num(f"earn.ft.{eb}", "pounds")} over the same years.</p>{earn_before_after(num, ea, eb, ech)}<p>Both figures are a week before tax for the middle full-time employee, UK, in April {EARN_BASE_YEAR} prices. Compared from {ea}, when the survey last changed how it codes jobs. The April {eb} figure is ONS's provisional estimate. The small chart shows each year since {FY["earnings"]} after inflation.</p>{sparks["earnings"]}</a>
 <a class="card" href="life/housing.html"><h3>Housing</h3><span class="big">{num("house.owners.2024", "pct0")}</span><p>of households in England owned their home, 2024-25.</p>{sparks["housing"]}</a>
 <a class="card" href="life/holidays.html"><h3>Holidays</h3><span class="big">{num(f"hol.world.holiday.{L}", "millions")}</span><p>holiday visits abroad by Great Britain residents in {L}. The small chart shows visits abroad for any purpose per 100 UK residents, {FY["holidays"]} to 2023, the last years of the comparable series.</p>{sparks["holidays"]}</a>
-<a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages stop at {L}.</p>{sparks["schools"]}</a>
-<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {L} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
+<a class="card" href="life/schools.html"><h3>Class sizes</h3><span class="big">{num(f"school.primary.{Ls}", "dp1")}</span><p>pupils in the average state primary school class in England, January {Ls}. The year pages run to {last_year}.</p>{sparks["schools"]}</a>
+<a class="card" href="life/compare/index.html"><h3>Compare two years</h3><p>See any two years from {E} to {last_year} side by side, with what changed and where definitions changed. Before {FIRST} fewer figures exist.</p><span class="more">Choose two years</span></a>
 </div>
 <h2 id="how">How to read this site</h2>
 <ul class="principles">
@@ -208,7 +210,7 @@ def methods_page(facts, sources, used_counts):
         '<h2 id="calculations">Calculations</h2><ul>'
         "<li><strong>Per £100 of spending</strong>: spending on a function ÷ total spending on services × 100 (HM Treasury PESA Table 4.2). Interest on debt is part of general public services and is shown on the same basis; the spending page also gives it per £100 of total managed expenditure.</li>"
         "<li><strong>Real terms (spending)</strong>: HM Treasury’s own 2025-26 prices (PESA Table 4.3).</li>"
-        "<li><strong>Pay after inflation</strong>: cash pay × (CPIH in April 2025 ÷ CPIH in April of that year), using ONS series L522.</li>"
+        f"<li><strong>Pay after inflation</strong>: cash pay × (CPIH in April {EARN_BASE_YEAR} ÷ CPIH in April of that year), using ONS series L522. Every pay figure after inflation on the site is in April {EARN_BASE_YEAR} prices.</li>"
         "<li><strong>Changes in percentages</strong> are shown in percentage points; changes in money and counts as a percentage of the earlier figure.</li>"
         "<li><strong>Non-tax receipts</strong>: total current receipts minus taxes (OBR).</li>"
         "<li><strong>Families with children renting privately</strong>: private-renting families ÷ all families, adding couples, single lone parents and previously married lone parents (EHS FT1241).</li>"
@@ -219,7 +221,7 @@ def methods_page(facts, sources, used_counts):
         "<li><strong>Most visited countries</strong>: single countries ranked by visits in that year; groups such as “Rest of Europe” are left out.</li>"
         '<li><strong>Margins of error</strong>: shown only where the publisher gives one (95%). Where ONS gives a coefficient of variation (CV), margin = 1.96 × CV ÷ 100 × figure. Where it gives lower and upper limits, margin = half the gap between them, as a share of its estimate. A change is compared with the two margins combined, √(a² + b²). See <a href="uncertainty.html">how sure are these figures?</a></li></ul>',
         '<h2 id="data">Every figure, machine-readable</h2>',
-        f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Figures on each page are tagged with the same id.</p>',
+        f'<p><a href="data/facts.json">Download all {len(facts):,} figures as JSON</a>. Each has an id, value, unit, period, source id, the exact sheet and cell (or a description of the calculation and its inputs), and whether it is published outturn, a forecast, a projection or our calculation. Calculations also retain their source-input statuses in <code>input_statuses</code>. Figures on each page are tagged with the same id.</p>',
         '<p>Every chart and table also has a "Download this data (CSV)" link beside it. The file holds the same figures the page shows, written as they are shown, with their units. Tap a figure on the page to see where it comes from.</p>',
         '<h2 id="trace">Tracing a figure</h2><p>Tap or click any number on the site to see its source, period and the exact cell it was read from, or the calculation that produced it. The source line under each section leads to a record of every figure taken from that source. Without JavaScript, the source line still works. Mistakes we have fixed are listed on the <a href="corrections.html">corrections</a> page.</p>',
         '<h2 id="reproduce">How to reproduce the site</h2><p>With Python 3.10 or later: <code>make setup</code>, then <code>make build</code> and <code>make check</code>. The check re-opens every source file, re-reads each figure, and confirms that every number on every page matches its record.</p>',
@@ -293,13 +295,4 @@ def sources_page(sources, used_counts):
         "Every official file Unpolitical uses, grouped by publisher, with a full record for each.",
         folded=False,
         contents=False,
-        scripts=OPEN_TARGET_JS,
     )
-
-
-# Opens the publisher list that holds a linked source (sources.html#src-...), for browsers
-# that do not open a closed <details> on their own when its contents are the link target.
-OPEN_TARGET_JS = """<script>
-(function(){function go(){var h=location.hash.slice(1);if(!h)return;var e=document.getElementById(h);if(!e)return;
-var d=e.closest('details');if(d&&!d.open){d.open=true;e.scrollIntoView()}}go();window.addEventListener('hashchange',go)})();
-</script>"""

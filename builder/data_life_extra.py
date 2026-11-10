@@ -5,7 +5,8 @@ Each keeps its own run of years, set by its source, rather than the year
 explorer's range, so nothing is cut short or stretched.
 
 - Pay spread: ASHE resident analysis (via Nomis), gross weekly pay of full-time
-  employees at the 10th, 50th and 90th percentiles, April 2002 onwards.
+  employees at the 10th, 50th and 90th percentiles, April 2002 onwards; Aprils
+  with an ONS Table 1 pack (revised 2025, provisional 2026) are read from it.
 - House prices against earnings: ONS ratio of median house price to median
   full-time workplace-based annual earnings, England and Wales, 1997 onwards.
 - Jobs by industry: ONS JOBS02 workforce jobs by industry (SIC 2007),
@@ -16,13 +17,15 @@ import re
 
 import xlrd
 
-from .data import Fact, REGIONS, num
+from .data import ASHE_TABLE1, EARN_BASE_YEAR, Fact, REGIONS, ashe_table1_cell, num
 from .readers import ROOT, csv_rows, ons_series, ref, xlsx
 
 # ---------------------------------------------------------------- pay spread
 
 SPREAD_FILE = "data/fetched/nomis/ashe-resident-uk-weekly-percentiles.csv"
 SPREAD_ITEMS = {"6": "p10", "2": "p50", "15": "p90"}
+# The same three points in ONS's Table 1.1a: column and its heading in row 5.
+SPREAD_TABLE1_COLUMNS = {"p10": ("H", 10), "p50": ("D", "Median"), "p90": ("Q", 90)}
 # ONS: ASHE has breaks in 2004, 2006 and 2011 (ASHE QMI) and 2021 (SOC2020 coding).
 SPREAD_BREAKS = {
     2004: "Method change",
@@ -35,40 +38,16 @@ SPREAD_BREAKS = {
 def pay_spread(facts):
     rows = csv_rows(SPREAD_FILE)
     _, cpih = ons_series("data/fetched/ons/l522.csv")
-    years = sorted({int(r["DATE_NAME"]) for r in rows})
-    base_year = years[-1]
+    # Aprils with an ONS Table 1 pack are read from it, because the Nomis file stops at the
+    # provisional April 2025. ONS's Table 1 packs for April 2024 (revised) and April 2025
+    # (provisional), which are not kept here, gave the same UK figures as this file when
+    # compared on 9 November 2026.
+    years = sorted({int(r["DATE_NAME"]) for r in rows} | set(ASHE_TABLE1))
+    base_year = EARN_BASE_YEAR
     base_id = f"cpih.apr.{base_year}"
-    if base_id not in facts:
-        facts.add(
-            Fact(
-                base_id,
-                cpih[f"{base_year} APR"],
-                "index (2015=100)",
-                f"April {base_year}",
-                "ons-l522",
-                f"L522 row '{base_year} APR'",
-            )
-        )
     out = {"years": years, "base_year": base_year, "breaks": SPREAD_BREAKS}
-    for line, r in enumerate(rows, start=2):
-        key = SPREAD_ITEMS.get(r["ITEM"])
-        if r["SEX"] != "8" or key is None or r["MEASURES_NAME"] != "Value":
-            continue
-        y = int(r["DATE_NAME"])
-        fid = f"spread.{key}.{y}"
-        st = "provisional" if y == base_year else "published"
-        facts.add(
-            Fact(
-                fid,
-                num(r["OBS_VALUE"]),
-                "£ a week",
-                f"April {y}",
-                "nomis-ashe-percentiles",
-                f"{SPREAD_FILE.split('/')[-1]} line {line}",
-                st,
-                note=f"Full-time employees, gross weekly pay, {r['ITEM_NAME']}",
-            )
-        )
+
+    def cpih_fact(y):
         cid = f"cpih.apr.{y}"
         if cid not in facts:
             facts.add(
@@ -81,20 +60,55 @@ def pay_spread(facts):
                     f"L522 row '{y} APR'",
                 )
             )
-        v, idx = facts[fid].value, facts[cid].value
+        return facts[cid].value
+
+    cpih_fact(base_year)
+
+    def add(key, y, value, source, locator, status, note):
+        fid = f"spread.{key}.{y}"
+        facts.add(Fact(fid, value, "£ a week", f"April {y}", source, locator, status, note=note))
+        idx = cpih_fact(y)
         facts.add(
             Fact(
                 f"spread.real.{key}.{y}",
-                None if v is None or idx is None else v * facts[base_id].value / idx,
+                None if value is None or idx is None else value * facts[base_id].value / idx,
                 f"£ a week, April {base_year} prices",
                 f"April {y}",
-                "nomis-ashe-percentiles",
-                facts[fid].locator,
+                source,
+                locator,
                 "calculated",
-                formula=f"{fid} × {base_id} ÷ {cid}",
-                inputs=[fid, base_id, cid],
+                formula=f"{fid} × {base_id} ÷ cpih.apr.{y}",
+                inputs=[fid, base_id, f"cpih.apr.{y}"],
             )
         )
+
+    for line, r in enumerate(rows, start=2):
+        key = SPREAD_ITEMS.get(r["ITEM"])
+        y = int(r["DATE_NAME"])
+        if r["SEX"] != "8" or key is None or r["MEASURES_NAME"] != "Value" or y in ASHE_TABLE1:
+            continue
+        add(
+            key,
+            y,
+            num(r["OBS_VALUE"]),
+            "nomis-ashe-percentiles",
+            f"{SPREAD_FILE.split('/')[-1]} line {line}",
+            "published",
+            f"Full-time employees, gross weekly pay, {r['ITEM_NAME']}",
+        )
+    for y, (sid, _, _, _, status) in sorted(ASHE_TABLE1.items()):
+        for key, (column, heading) in SPREAD_TABLE1_COLUMNS.items():
+            value, locator = ashe_table1_cell(y, "8", column=column, heading=heading)
+            words = "Median" if heading == "Median" else f"{heading} percentile"
+            add(
+                key,
+                y,
+                value,
+                sid,
+                locator,
+                status,
+                f"Full-time employees, gross weekly pay, {words} ({status} estimate)",
+            )
     for y in years:
         hi, lo = facts[f"spread.p90.{y}"], facts[f"spread.p10.{y}"]
         facts.add(
@@ -103,7 +117,7 @@ def pay_spread(facts):
                 None if hi.value is None or lo.value is None else hi.value / lo.value,
                 "times",
                 f"April {y}",
-                "nomis-ashe-percentiles",
+                hi.source,
                 hi.locator,
                 "calculated",
                 formula=f"{hi.id} ÷ {lo.id}",
@@ -124,7 +138,7 @@ def pay_spread(facts):
                 ),
                 f"£ a week, April {base_year} prices",
                 f"April {y}",
-                "nomis-ashe-percentiles",
+                hi.source,
                 hi.locator,
                 "calculated",
                 formula=f"spread.real.p90.{y} − spread.real.p10.{y}",

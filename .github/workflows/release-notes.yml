@@ -14,18 +14,21 @@ concurrency:
 
 jobs:
   release:
+    # Dormant until reviewed delivery activation, like the site release writer.
+    # Without the variable a pushed version tag skips this job and publishes nothing.
+    if: vars.REVIEWED_PRODUCTION_DELIVERY == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # A version tag can point outside main. Execute only trusted main tools.
           ref: main
           persist-credentials: false
       - name: Generate notes and publish the tagged release
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             await require("./scripts/release_notes.cjs")({github, context, core});

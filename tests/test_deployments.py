@@ -99,7 +99,7 @@ def deployment(identifier=1, sha=SHA, when=PROVIDER["created_at"]):
     return {
         "id": identifier,
         "sha": sha,
-        "environment": "production",
+        "environment": deploy.ENVIRONMENT,
         "task": "deploy",
         "creator": ACTIONS_CREATOR,
         "payload": {
@@ -281,7 +281,9 @@ class Recording(unittest.TestCase):
         path, payload = create.args
         self.assertEqual(path, "deployments")
         self.assertEqual(payload["ref"], SHA)
-        self.assertTrue(payload["production_environment"])
+        self.assertEqual(payload["environment"], deploy.ENVIRONMENT)
+        self.assertFalse(payload["production_environment"])
+        self.assertFalse(payload["transient_environment"])
         self.assertFalse(payload["auto_merge"])
         self.assertEqual(payload["payload"]["provider_url"], PROVIDER["target_url"])
         self.assertEqual(payload["payload"]["deployed_at"], PROVIDER["created_at"])
@@ -320,7 +322,7 @@ class Recording(unittest.TestCase):
                 "state": "success",
                 "environment_url": deploy.check_live.DEFAULT_URL,
                 "log_url": new_run,
-                "auto_inactive": True,
+                "auto_inactive": False,
                 "description": "Vercel succeeded; every live file matches this commit",
             },
         )
@@ -363,6 +365,37 @@ class Recording(unittest.TestCase):
             with self.subTest(changes=changes):
                 self.assertEqual(deploy.record(api, SHA, PROVIDER, RUN, DIGEST), (42, True))
                 self.assertEqual(api.request.call_args_list[0].args[0], "deployments")
+
+    def test_receipt_environment_is_separate_from_vercel_deployment_records(self):
+        # GitHub environment names are case-insensitive; Vercel uses Production/Preview.
+        name = deploy.ENVIRONMENT.casefold()
+        for vercel in ("production", "preview"):
+            with self.subTest(vercel=vercel):
+                self.assertNotEqual(name, vercel)
+                self.assertFalse(name.startswith(vercel))
+        api = mock.Mock()
+        api.pages.return_value = []
+        api.request.return_value = {"id": 42}
+        deploy.record(api, SHA, PROVIDER, RUN, DIGEST)
+        query = api.pages.call_args_list[0].args[0]
+        self.assertIn(f"environment={deploy.ENVIRONMENT}&", query)
+        create, status = api.request.call_args_list
+        self.assertEqual(create.args[1]["environment"], deploy.ENVIRONMENT)
+        self.assertFalse(create.args[1]["production_environment"])
+        # A receipt status must never mark any other deployment record inactive.
+        self.assertIs(status.args[1]["auto_inactive"], False)
+        api.pages.reset_mock()
+        api.pages.return_value = []
+        deploy.frequency_report(api)
+        self.assertEqual(
+            api.pages.call_args_list[0].args[0],
+            f"deployments?environment={deploy.ENVIRONMENT}&task=deploy",
+        )
+
+    def test_vercel_or_other_environment_records_are_never_receipts(self):
+        for environment in ("Production", "production", "Preview", "Production – unpoliticalaf"):
+            with self.subTest(environment=environment):
+                self.assertFalse(deploy.owned({**deployment(), "environment": environment}))
 
     def test_malformed_success_statuses_cannot_authenticate_a_receipt(self):
         api = mock.Mock()

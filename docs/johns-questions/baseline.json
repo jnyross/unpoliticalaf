@@ -1,0 +1,565 @@
+{
+  "source_revision": "3e6e34f08a2233787d2a70e43a56fbaaa257501f",
+  "questions": [
+    {
+      "id": "J1",
+      "asked": "how does the UK tax, debt and spending compare to other major nations",
+      "also_asked": [
+        {
+          "added": "2026-11-03",
+          "source": "John, project chat, 2026-11-03",
+          "asked": "as part fo that question we should clearly answer \"what do the bond markets thing of the uk vs other countries e.g. how eassy is it to raise more moeny and how much interest do we pay? becuase it's a sign of how confident the markets are in how our economy is being run\""
+        }
+      ],
+      "probes": [
+        {
+          "id": "J1.1",
+          "question": "In 2024, how did total UK tax, as a share of the economy (GDP), compare with France, Germany and Italy?",
+          "was_open": false
+        },
+        {
+          "id": "J1.2",
+          "question": "In 2024, how did UK government spending, as a share of GDP, compare with the United States and France?",
+          "was_open": false
+        },
+        {
+          "id": "J1.3",
+          "question": "How does UK government debt, as a share of GDP, compare with the other G7 countries in the latest year shown?",
+          "was_open": false
+        },
+        {
+          "id": "J1.4",
+          "question": "Where does the UK rank among the G7 countries on tax as a share of GDP, and on spending?",
+          "was_open": false
+        },
+        {
+          "id": "J1.5",
+          "question": "In the latest year shown, does the UK government pay more or less to borrow for 10 years than the other G7 governments?",
+          "was_open": false
+        },
+        {
+          "id": "J1.6",
+          "question": "How does the interest the UK government pays on its debt, as a share of GDP, compare with the other G7 countries?",
+          "was_open": false
+        },
+        {
+          "id": "J1.7",
+          "question": "According to the site, which of these affect what a government pays to borrow?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J4",
+      "asked": "Are rish people really not paying enough tax?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J4.1",
+          "question": "In tax year 2023 to 2024, what share of all Income Tax did the top 1% of Income Tax payers owe?",
+          "was_open": false
+        },
+        {
+          "id": "J4.2",
+          "question": "Across 1999-00 to 2023-24, how did the top 1%'s share of Income Tax compare with their share of income?",
+          "was_open": false
+        },
+        {
+          "id": "J4.3",
+          "question": "What does the 46.0% figure for the richest fifth of people in 2023/24 measure?",
+          "was_open": false
+        },
+        {
+          "id": "J4.4",
+          "question": "In 2023/24, how did the share of gross household income that went on all taxes compare between the highest-income fifth and the lowest-income fifth?",
+          "was_open": false
+        },
+        {
+          "id": "J4.5",
+          "question": "In 2023/24, how much of the highest-income fifth's gross household income went on Income Tax alone?",
+          "was_open": false
+        },
+        {
+          "id": "J4.6",
+          "question": "According to the site, how much would the main proposals to tax wealth or capital gains more heavily raise each year?",
+          "was_open": false
+        },
+        {
+          "id": "J4.7",
+          "question": "According to the site, how do the UK's rates on top incomes compare with other large countries?",
+          "was_open": false
+        },
+        {
+          "id": "J4.8",
+          "question": "According to the site, what share of all taxes, including VAT and National Insurance, do the top 1% of people pay?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J2",
+      "asked": "Is immigration a good thing or a bad thing?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J2.1",
+          "question": "Does the site say whether immigration is a good thing or a bad thing?",
+          "was_open": false
+        },
+        {
+          "id": "J2.2",
+          "question": "According to official estimates, does a migrant’s effect on public finances depend on their age, visa route or employment?",
+          "was_open": false
+        },
+        {
+          "id": "J2.3",
+          "question": "Do official estimates of migrants’ effect on public finances differ between the short run and the long run?",
+          "was_open": false
+        },
+        {
+          "id": "J2.4",
+          "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
+          "was_open": false
+        },
+        {
+          "id": "J2.5",
+          "question": "In the latest official figures, what share of NHS and adult social care staff in England are non-UK nationals?",
+          "was_open": true
+        },
+        {
+          "id": "J2.6",
+          "question": "In the latest ONS population figures, what was the main reason the UK population grew?",
+          "was_open": false
+        },
+        {
+          "id": "J2.7",
+          "question": "According to official economic estimates, does migration raise GDP per person as much as it raises total GDP?",
+          "was_open": false
+        },
+        {
+          "id": "J2.8",
+          "question": "Where official sources give different estimates of the same thing, does the site show the range rather than one chosen figure?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J8",
+      "asked": "What are the empirical best ways to get the UK economy into a better position, a ranked list of ten things",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J8.1",
+          "question": "According to the OECD's modelling of UK structural reforms, which reform package raises the level of GDP most within ten years?",
+          "was_open": false
+        },
+        {
+          "id": "J8.2",
+          "question": "What does the OECD estimate the full combined UK reform package would raise the level of potential GDP by, after ten years and after 25 years?",
+          "was_open": false
+        },
+        {
+          "id": "J8.3",
+          "question": "What measure do the OECD's reform estimates use for the size of each effect?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J5",
+      "asked": "Why can't we afford to spend more money on defence",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J5.1",
+          "question": "In 2025-26, how much did the UK government spend on defence, and what share of GDP was that?",
+          "was_open": false
+        },
+        {
+          "id": "J5.2",
+          "question": "Compared with 2010-11, was UK defence spending in 2025-26 higher or lower after inflation, and was its share of GDP higher or lower?",
+          "was_open": true
+        },
+        {
+          "id": "J5.3",
+          "question": "In 2024, how did UK defence spending as a share of GDP compare with the other G7 countries that have a figure?",
+          "was_open": false
+        },
+        {
+          "id": "J5.4",
+          "question": "In 2025-26, of every £100 the government spent on services, roughly how much went on defence?",
+          "was_open": false
+        },
+        {
+          "id": "J5.5",
+          "question": "At 2025-26 levels, about how much would each extra 1% of GDP of defence spending cost in a year?",
+          "was_open": false
+        },
+        {
+          "id": "J5.6",
+          "question": "Which of these does the site set out as ways to pay for extra defence spending?",
+          "was_open": false
+        },
+        {
+          "id": "J5.7",
+          "question": "Does the site say whether the UK can afford more defence spending?",
+          "was_open": false
+        },
+        {
+          "id": "J5.8",
+          "question": "How much room do the government's fiscal rules leave for extra defence spending?",
+          "was_open": false
+        },
+        {
+          "id": "J5.9",
+          "question": "What does NATO's own figure show for UK defence spending as a share of GDP in 2025?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J12",
+      "asked": "did our parents have it easier than this generation?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J12.1",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 25 to 34 year olds in work change?",
+          "was_open": false
+        },
+        {
+          "id": "J12.2",
+          "question": "Between April to June 1992 and April to June 2025, how did the share of 18 to 24 year olds in work change?",
+          "was_open": false
+        },
+        {
+          "id": "J12.3",
+          "question": "How many times a year’s earnings did the middle-priced home in England and Wales cost in 1999, and in 2025?",
+          "was_open": false
+        },
+        {
+          "id": "J12.4",
+          "question": "Between 2008-09 and 2024-25, how did the share of households in England who own their home change? This is all households, not one age group.",
+          "was_open": false
+        },
+        {
+          "id": "J12.5",
+          "question": "What was the average primary class size in England in January 2006 and in January 2025?",
+          "was_open": false
+        },
+        {
+          "id": "J12.6",
+          "question": "Were people aged 30 more or less likely to own their home in the 1990s than people aged 30 now?",
+          "was_open": true
+        },
+        {
+          "id": "J12.7",
+          "question": "How did pay after inflation for people aged 30 change between 2002 and 2025?",
+          "was_open": true
+        },
+        {
+          "id": "J12.8",
+          "question": "How much did a university degree cost a student in tuition fees and loans in 1998, compared with 2025?",
+          "was_open": false
+        },
+        {
+          "id": "J12.9",
+          "question": "How has the state pension age changed for people born in 1960 compared with people born in 1990?",
+          "was_open": false
+        },
+        {
+          "id": "J12.10",
+          "question": "How long can a 30 year old now expect to live, compared with 30 years ago?",
+          "was_open": true
+        },
+        {
+          "id": "J12.11",
+          "question": "Did a person on the same real income pay more or less tax in 2025 than in 1992?",
+          "was_open": true
+        },
+        {
+          "id": "J12.12",
+          "question": "Has job security changed for people aged 25 to 34 since 1992?",
+          "was_open": true
+        }
+      ]
+    },
+    {
+      "id": "J13",
+      "asked": "Why do we have such high debt in this country?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J13.1",
+          "question": "Since 1900, in which year was UK public sector net debt highest as a share of GDP, according to the site?",
+          "was_open": false
+        },
+        {
+          "id": "J13.2",
+          "question": "Between 2007-08 and 2009-10, how did UK public sector net debt change, as a share of GDP?",
+          "was_open": false
+        },
+        {
+          "id": "J13.3",
+          "question": "How much did UK public sector borrowing reach as a share of GDP in 2020-21, the first year of the Covid pandemic?",
+          "was_open": false
+        },
+        {
+          "id": "J13.4",
+          "question": "According to the ONS, how much did the furlough schemes alone add to borrowing in the year to March 2021?",
+          "was_open": false
+        },
+        {
+          "id": "J13.5",
+          "question": "What does the OBR say pushed up borrowing and debt in 2020-21?",
+          "was_open": false
+        },
+        {
+          "id": "J13.6",
+          "question": "What is the difference between debt and borrowing, as the site uses the words?",
+          "was_open": false
+        },
+        {
+          "id": "J13.7",
+          "question": "According to the ONS, what raised interest payable on government debt by £34.0 billion in 2022-23?",
+          "was_open": false
+        },
+        {
+          "id": "J13.8",
+          "question": "What does the OBR project for the long term, if current policy settings continue?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J7",
+      "asked": "Have labour kept their electiion manifesto?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J7.1",
+          "question": "What did Labour’s 2024 manifesto say it would not increase?",
+          "was_open": false
+        },
+        {
+          "id": "J7.2",
+          "question": "Has the government changed the standard VAT rate of 20% since Labour took office?",
+          "was_open": false
+        },
+        {
+          "id": "J7.3",
+          "question": "Have the basic, higher and additional income tax rates on earnings changed since Labour took office?",
+          "was_open": false
+        },
+        {
+          "id": "J7.4",
+          "question": "What did Budget 2025 do to income tax on dividends, savings and property income?",
+          "was_open": false
+        },
+        {
+          "id": "J7.5",
+          "question": "Why do readers disagree on whether the National Insurance pledge was kept?",
+          "was_open": false
+        },
+        {
+          "id": "J7.6",
+          "question": "Did Budget 2025 extend the freeze on income tax and National Insurance thresholds?",
+          "was_open": false
+        },
+        {
+          "id": "J7.7",
+          "question": "Did Labour’s private school VAT measure take effect, and when?",
+          "was_open": false
+        },
+        {
+          "id": "J7.8",
+          "question": "What did Labour’s manifesto promise on defence spending?",
+          "was_open": false
+        },
+        {
+          "id": "J7.9",
+          "question": "How many net additional homes does the government estimate were added in England from 9 July 2024 to 20 September 2026, against the 1.5 million target?",
+          "was_open": false
+        },
+        {
+          "id": "J7.10",
+          "question": "In August 2026, what share of waiting pathways for consultant-led NHS treatment had waited up to 18 weeks?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J11",
+      "asked": "how much harder is it to buy a house now than it was in the past",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J11.1",
+          "question": "Measured as years of pay before tax, how did the middle-priced home in England and Wales change between 1999 and the year to September 2025?",
+          "was_open": false
+        },
+        {
+          "id": "J11.2",
+          "question": "In the year to September 2025, how many years of median full-time pay before tax would a 10% deposit on the middle-priced home come to?",
+          "was_open": false
+        },
+        {
+          "id": "J11.3",
+          "question": "After inflation, how did the average mortgage payment for owners with a mortgage in England change between 2008-09 and 2024-25?",
+          "was_open": false
+        },
+        {
+          "id": "J11.4",
+          "question": "Do the mortgage payment figures show what someone buying a home today would pay each week?",
+          "was_open": false
+        },
+        {
+          "id": "J11.5",
+          "question": "At what age do people today buy their first home, compared with earlier years?",
+          "was_open": false
+        },
+        {
+          "id": "J11.6",
+          "question": "How has home ownership changed for people of each age since the 1990s?",
+          "was_open": true
+        },
+        {
+          "id": "J11.7",
+          "question": "What share of take-home pay goes on a mortgage payment for households with a mortgage, now and in 2008-09?",
+          "was_open": true
+        },
+        {
+          "id": "J11.8",
+          "question": "How have mortgage interest rates changed since 2008?",
+          "was_open": true
+        },
+        {
+          "id": "J11.9",
+          "question": "Between 2008-09 and 2021-22, how did home ownership change for people aged 25 to 34, and for people aged 75 and over?",
+          "was_open": false
+        },
+        {
+          "id": "J11.10",
+          "question": "What share of household income, before tax, goes on mortgage payments for owner occupiers who make them, in 2010-11 and in 2024-25?",
+          "was_open": false
+        },
+        {
+          "id": "J11.11",
+          "question": "Between January 2016 and September 2026, how did the average rate on new mortgages change?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J9",
+      "asked": "How does UK productivity compare to other countries",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J9.1",
+          "question": "In 2021, how did UK output per hour worked compare with France and the United States?",
+          "was_open": false
+        },
+        {
+          "id": "J9.2",
+          "question": "From 2008 to 2021, after inflation, did UK output per hour worked rise more or less than the average of the other five G7 countries on the page?",
+          "was_open": false
+        },
+        {
+          "id": "J9.3",
+          "question": "What is the latest year of figures for this comparison, and why does the page stop there?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J10",
+      "asked": "How has welfare spending changed in the last 50 years",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J10.1",
+          "question": "Between 1955-56 and 2021-22, how did welfare spending (social security) change as a share of GDP?",
+          "was_open": false
+        },
+        {
+          "id": "J10.2",
+          "question": "After inflation, how did total welfare spending in 2021-22 compare with 1955-56?",
+          "was_open": false
+        },
+        {
+          "id": "J10.3",
+          "question": "In 2021-22, what share of social security spending went to pensioners?",
+          "was_open": false
+        },
+        {
+          "id": "J10.4",
+          "question": "After inflation, how much welfare spending was there per person in 2021-22?",
+          "was_open": false
+        },
+        {
+          "id": "J10.5",
+          "question": "On the site, what does the 'without pensions' measure of welfare leave out?",
+          "was_open": false
+        },
+        {
+          "id": "J10.6",
+          "question": "In 2021-22, how much of DWP benefit spending went on the State Pension?",
+          "was_open": false
+        },
+        {
+          "id": "J10.7",
+          "question": "In 2021-22, which of these took the largest share of DWP benefit spending after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?",
+          "was_open": false
+        }
+      ]
+    },
+    {
+      "id": "J6",
+      "asked": "How many people, espeicalyl high earners, need to leave the UK before tax receipts are meaningfully damaged?",
+      "also_asked": [],
+      "probes": [
+        {
+          "id": "J6.1",
+          "question": "In 2023-24, how many taxpayers had total income of £1 million or more?",
+          "was_open": false
+        },
+        {
+          "id": "J6.2",
+          "question": "In 2023-24, what share of all Income Tax did taxpayers with total income of £1 million or more pay?",
+          "was_open": false
+        },
+        {
+          "id": "J6.3",
+          "question": "If 1,000 taxpayers with total income of £1 million or more left the UK and nothing else changed, roughly how much Income Tax would be lost?",
+          "was_open": false
+        },
+        {
+          "id": "J6.4",
+          "question": "Does the site say exactly how many leavers would meaningfully damage receipts?",
+          "was_open": false
+        },
+        {
+          "id": "J6.5",
+          "question": "One per cent of public sector receipts in 2023-24 is roughly the tax of how many taxpayers with total income of £1 million or more?",
+          "was_open": false
+        },
+        {
+          "id": "J6.6",
+          "question": "After HMRC's analysis of how high earners responded, what did the OBR say the underlying yield of the 50p rate was for 2012-13?",
+          "was_open": false
+        },
+        {
+          "id": "J6.7",
+          "question": "What did the OBR's 2012 costing of the 50p rate say high earners might do in response?",
+          "was_open": false
+        },
+        {
+          "id": "J6.8",
+          "question": "By how much were 2024-25 receipts higher than the OBR's March 2023 forecast made two years before?",
+          "was_open": false
+        }
+      ]
+    }
+  ]
+}

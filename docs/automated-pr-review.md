@@ -29,14 +29,17 @@ impartiality, business logic or non-Python code.
 
 **Never check out the PR head in this workflow.** The manual workflow checks out
 its immutable trusted-main `github.sha`, with persisted credentials disabled.
-That trusted snapshot supplies the script and direct analyzer pins in
-`requirements-review.txt` (Ruff 0.14.3, Bandit 1.8.6). No PR dependencies install.
+That trusted snapshot supplies the script and the hash-locked analyzer closure in
+`requirements-review.txt` (Ruff 0.14.3, Bandit 1.8.6 and every transitive
+dependency, each with its PyPI wheel hashes). No PR dependencies install.
 Analyzers install as binary packages in a trusted Docker image before the
-token-bearing step. The minimal build context contains only trusted requirements.
-Publication pins the resulting immutable image ID. Transitive
-packages use their upstream dependency constraints, not a fully hash-locked
-supply-chain attestation. The Python base tag is mutable at image-build time;
-the completed image is immutable for the scan. The credentialed parent runs with `python -I -S`,
+token-bearing step, with `pip install --require-hashes --only-binary=:all:`
+followed by `pip check`, so an unpinned, unhashed or changed wheel stops the build.
+The minimal build context contains only that lock. Publication pins the resulting
+immutable image ID. Hashes prove the wheels match those resolved when the lock was
+generated; they are not a provenance attestation of the upstream projects. The
+Python base tag is mutable at image-build time; the completed image is immutable
+for the scan. The credentialed parent runs with `python -I -S`,
 loading only stdlib, never analyzer site packages or startup hooks. Analyzer
 containers have their own PID namespace, no network, no capabilities, no privilege
 escalation, a read-only root/input mount and no host credential/Docker socket
@@ -82,10 +85,14 @@ retry it; inspect actual reviews first. This is not a transactional state lock.
 ```sh
 make setup-test
 python3 -m venv /tmp/review-analyzers
-/tmp/review-analyzers/bin/python -m pip install --only-binary=:all: -r requirements-review.txt
+/tmp/review-analyzers/bin/python -m pip install --require-hashes --only-binary=:all: -r requirements-review.txt
+/tmp/review-analyzers/bin/python -m pip check
 .venv/bin/python -m pytest tests/test_review_pr.py
 REVIEW_ANALYZER_PYTHON=/tmp/review-analyzers/bin/python .venv/bin/python -m pytest tests/review_pr_integration.py
 ```
+
+Changing an analyzer version means regenerating the whole lock with the command
+in its header; `tests/test_workflow_hardening.py` checks its pins and hashes.
 
 Unit tests mock GitHub writes. The explicit integration suite exercises actual
 analyzers using safe fixtures and verifies PR code never executes. The existing

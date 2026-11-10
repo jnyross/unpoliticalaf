@@ -626,11 +626,12 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(workflow.count("runs-on:"), 1)
         dockerfile = (root / "config/review-analyzers.Dockerfile").read_text()
         self.assertIn("--only-binary=:all:", dockerfile)
+        self.assertIn("--require-hashes", dockerfile)
         self.assertNotIn("COPY .", dockerfile)
-        self.assertEqual(
-            (root / "requirements-review.txt").read_text().splitlines()[1:],
-            ["ruff==0.14.3", "bandit==1.8.6"],
-        )
+        lock = (root / "requirements-review.txt").read_text()
+        # tests/test_workflow_hardening.py checks every locked entry has sha256 hashes.
+        self.assertRegex(lock, r"(?m)^ruff==0\.14\.3 \\\n    --hash=sha256:[0-9a-f]{64}")
+        self.assertRegex(lock, r"(?m)^bandit==1\.8\.6 \\\n    --hash=sha256:[0-9a-f]{64}")
 
 
 if __name__ == "__main__":

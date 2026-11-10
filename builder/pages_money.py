@@ -61,7 +61,7 @@ def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
     return fid
 
 
-def per_person(facts, fid, pop, prefix, period, source):
+def per_person(facts, fid, pop, prefix, period, source, weekly=True):
     """£ billion spread across every UK resident: an average, not anyone's bill."""
     out = derive(
         facts,
@@ -74,6 +74,8 @@ def per_person(facts, fid, pop, prefix, period, source):
         f"{fid} × 1000000000 ÷ {pop}",
         note="Average across the whole UK population, including children; mid-year population estimate.",
     )
+    if not weekly:
+        return out
     derive(
         facts,
         f"{out}.week",
@@ -88,7 +90,7 @@ def per_person(facts, fid, pop, prefix, period, source):
     return out
 
 
-def per_household(facts, fid, hh, prefix, period, source):
+def per_household(facts, fid, hh, prefix, period, source, weekly=True):
     """£ billion spread across every UK household: an average, not any household's bill."""
     out = derive(
         facts,
@@ -101,6 +103,8 @@ def per_household(facts, fid, hh, prefix, period, source):
         f"{fid} × 1000000000 ÷ {hh}",
         note="Average across all UK private households (ONS, April to June), whatever their size or income.",
     )
+    if not weekly:
+        return out
     derive(
         facts,
         f"{out}.week",
@@ -453,7 +457,7 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     )
     body.append('<p class="small">* £ billion in 2025-26 prices.</p>')
     body.append(
-        '<p class="small">Other publications give slightly different totals for the same year because they are published at different times and use different scopes. For example, the OBR databank used on the <a href="taxes.html">taxes page</a> puts 2025-26 spending at £1,366bn.</p>'
+        f'<p class="small">Other publications give slightly different totals for the same year because they are published at different times and use different scopes. For example, the OBR databank used on the <a href="taxes.html">taxes page</a> puts 2025-26 spending at {num("agg.tme.2025-26", "bn")}.</p>'
     )
     return page(
         "spending.html",
@@ -601,11 +605,11 @@ def taxes_page(facts, d, num, sources):
     pop = f"pop.uk.{y[:4]}"
     tpp = per_person(facts, f"rec.taxes.{y}", pop, "rec.perperson.taxes", y, "obr")
     bpp = per_person(facts, f"agg.psnb.{y}", pop, "agg.perperson.psnb", y, "obr")
-    dpp = per_person(facts, f"agg.psnd.{y}", pop, "agg.perperson.psnd", y, "obr")
+    dpp = per_person(facts, f"agg.psnd.{y}", pop, "agg.perperson.psnd", y, "obr", weekly=False)
     hh = households_for(y)
     tph = per_household(facts, f"rec.taxes.{y}", hh, "rec.perhousehold.taxes", y, "obr")
     bph = per_household(facts, f"agg.psnb.{y}", hh, "agg.perhousehold.psnb", y, "obr")
-    dph = per_household(facts, f"agg.psnd.{y}", hh, "agg.perhousehold.psnd", y, "obr")
+    dph = per_household(facts, f"agg.psnd.{y}", hh, "agg.perhousehold.psnd", y, "obr", weekly=False)
     body = ["<h1>Which taxes raise the money?</h1>"]
     body.append(
         keyfigs(
@@ -942,25 +946,17 @@ def who_pays_page(facts, d, num, sources):
         keyfigs(
             [
                 (
-                    num(f"hmrc.share.top1.{y}", "pct"),
-                    f"of all Income Tax for the year was owed by the top 1% of Income Tax payers, tax year {y.replace(' to ', '-')}",
-                    True,
-                ),
-                (
-                    num("etb.2a.alltax.q1", "pounds"),
-                    f'household taxes a year, averaged across people in the lowest-income fifth: {num("etb.t8.gross.all.q1", "pct")} of gross household income, 2023/24. Not a personal bill',
-                    False,
-                ),
-                (
                     "Not established",
                     'the richest fifth’s share of all UK household taxes. Our former 46.0% claim is withdrawn. <a href="#richest-share">Why we cannot give that share</a>',
-                    False,
+                    True,
                 ),
             ]
         )
     )
     body.append(
         f"""<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
+<p><strong>Not all taxes.</strong> The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only.</p>
+<p><strong>No wealth-tax costing.</strong> The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p>
 </div>"""
     )
     # HMRC. The chart comes first on a phone; how it is counted follows it.
@@ -1064,7 +1060,7 @@ def who_pays_page(facts, d, num, sources):
         y[:4] + "-" + y[-2:] if " to " in y else y
     )  # the same tax year as the figures above, on the OBR's basis (2023-24 is not 2025-26)
     body.append(
-        f"""<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09. The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p></div>"""
+        f"""<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09.</p></div>"""
     )
     body.append(
         source_line(
@@ -1094,9 +1090,9 @@ def who_pays_page(facts, d, num, sources):
 <div class="limit"><p><strong>No supported total share.</strong>
 The ONS table used here does not establish the richest fifth's share of all taxes paid by UK households.
 Our former 46.0% claim is withdrawn, not replaced by another estimate.
-<a href="corrections.html">Read the correction</a>.</p></div>
+<a href="corrections.html#household-tax-withdrawal">Read the correction</a>.</p></div>
 <p>ONS averages household amounts across people, not households. These person-weighted means cannot give actual household-tax totals using either household or person counts.</p>
-<p>What is supported: taxes were {num("etb.t8.gross.all.q5", "pct")} of gross household income for the highest-income fifth.
+<p>What is supported: taxes were {num("etb.t8.gross.all.q1", "pct")} of gross household income for the lowest-income fifth and {num("etb.t8.gross.all.q5", "pct")} for the highest-income fifth.
 That is a share of income, not a share of all taxes raised. See <a href="household-tax.html">Tax and income</a>.</p>
 """
     )
@@ -1119,7 +1115,7 @@ That is a share of income, not a share of all taxes raised. See <a href="househo
         source_line(
             sources,
             ["etb", "explain-ons-etb-latest"],
-            "Table 2a C8:H9, C48:H48, C70:H70; Notes, note 3. Bulletin glossary: Equivalisation; Mean and median income.",
+            "Table 2a C41:H41, C48:H48, C70:H70; Notes, note 3. Bulletin glossary: Equivalisation; Mean and median income.",
         )
     )
     body.append(FOLD)

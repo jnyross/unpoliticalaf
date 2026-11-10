@@ -1,6 +1,7 @@
 """Margins of error: shown only where the publisher gives one, and checked honestly."""
 
 import unittest
+from unittest.mock import patch
 
 from builder import uncertainty as U
 from builder.data import Fact, Facts, build_all
@@ -45,6 +46,10 @@ class ChangeCheck(unittest.TestCase):
 class RealData(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        for state in (U.MARGINS, U.INFO):
+            preserved_state = patch.dict(state)
+            preserved_state.start()
+            cls.addClassCleanup(preserved_state.stop)
         cls.facts, cls.d = build_all()
         U.add_facts(cls.facts, cls.d)
 
@@ -52,6 +57,8 @@ class RealData(unittest.TestCase):
         allowed = {
             "nomis-aps-emp-places-ci",
             "nomis-ashe-resident-cv",
+            "ashe-2025-table1-revised",
+            "ashe-2026-table1-provisional",
             "nomis-ashe-places",
             "ott-2009to2019",
             "ott-2019to2023",
@@ -67,6 +74,7 @@ class RealData(unittest.TestCase):
     def test_headline_margins_exist(self):
         for fid in (
             "earn.ft.2025",
+            "earn.ft.2026",
             "earn.real.ft.2015",
             "work.place.wales.2025",
             "hol.world.holiday.2025",

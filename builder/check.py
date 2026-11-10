@@ -27,7 +27,7 @@ from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
 
-from .check_calculations import check_calculations
+from .check_calculations import check_calculations, check_input_statuses
 from .logging import get_logger, run_logged
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,6 +80,7 @@ def fail(msg):
 # ---------------------------------------------------------------- source cells
 
 _wb = {}
+_zip_wb = {}  # (zip file, member) -> workbook
 
 
 def workbook(path):
@@ -88,6 +89,49 @@ def workbook(path):
 
         _wb[path] = openpyxl.load_workbook(ROOT / path, data_only=True, read_only=False)
     return _wb[path]
+
+
+def _worksheet(src_file, sheet):
+    """A worksheet by name. In a publisher's zip pack the name is "member::sheet", and the
+    member workbook is reopened from the archive."""
+    if not src_file.endswith(".zip"):
+        return workbook(src_file)[sheet]
+    member, name = sheet.split("::", 1)
+    if (src_file, member) not in _zip_wb:
+        import openpyxl
+        import zipfile
+
+        with zipfile.ZipFile(ROOT / src_file) as archive:
+            _zip_wb[(src_file, member)] = openpyxl.load_workbook(
+                io.BytesIO(archive.read(member)), data_only=True, read_only=False
+            )
+    return _zip_wb[(src_file, member)][name]
+
+
+def _zip_xls_cell(src_file, locator):
+    """A cell of a legacy .xls workbook in a publisher's zip pack ("member::sheet!A1"),
+    read with xlrd rather than the builder's code path."""
+    import xlrd
+    import zipfile
+
+    member, rest = locator.split("::", 1)
+    name, ref = rest.rsplit("!", 1)
+    if (src_file, member) not in _zip_wb:
+        with zipfile.ZipFile(ROOT / src_file) as archive:
+            _zip_wb[(src_file, member)] = xlrd.open_workbook(file_contents=archive.read(member))
+    m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
+    col = 0
+    for ch in m.group(1):
+        col = col * 26 + ord(ch) - 64
+    return _zip_wb[(src_file, member)].sheet_by_name(name).cell_value(int(m.group(2)) - 1, col - 1)
+
+
+def _workbook_cell(src_file, locator):
+    """A cell of an .xlsx file or of a workbook in a zip pack, whichever format the member is."""
+    if src_file.endswith(".zip") and locator.split("::", 1)[0].lower().endswith(".xls"):
+        return _zip_xls_cell(src_file, locator)
+    sheet, ref = locator.rsplit("!", 1)
+    return _worksheet(src_file, sheet)[ref].value
 
 
 def _csv_rows(cached):
@@ -109,12 +153,31 @@ def _cached_source(path, source_cache, read_source):
     return source_cache[path]
 
 
+def _ods_value(src_file, locator):
+    # ODS has no second reader available; expand repeats with the retained-byte reader.
+    from .readers import ods
+
+    sheet, ref = locator.rsplit("!", 1)
+    match = re.fullmatch(r"([A-Z]+)(\d+)(?: number (\d+))?", ref)
+    if match is None:
+        raise ValueError(f"Invalid ODS locator: {locator}")
+    col = 0
+    for ch in match.group(1):
+        col = col * 26 + ord(ch) - 64
+    row = ods(src_file)[sheet][int(match.group(2)) - 1]
+    value = row[col - 1] if col <= len(row) else None
+    if match.group(3):
+        return re.findall(r"\d[\d,]*(?:\.\d+)?", str(value))[int(match.group(3)) - 1].replace(
+            ",", ""
+        )
+    return value
+
+
 def cell_value(src_file, locator, source_cache=None):
     """Read independently, optionally reusing parsing within one check_facts call."""
     path = ROOT / src_file
-    if src_file.endswith(".xlsx"):
-        sheet, ref = locator.rsplit("!", 1)
-        return workbook(src_file)[sheet][ref].value
+    if src_file.endswith((".xlsx", ".zip")):
+        return _workbook_cell(src_file, locator)
     if src_file.endswith(".xls"):
         import xlrd  # legacy Excel: read with xlrd, not the builder's code path
 
@@ -126,18 +189,7 @@ def cell_value(src_file, locator, source_cache=None):
         book = _cached_source(path, source_cache, lambda: xlrd.open_workbook(str(path)))
         return book.sheet_by_name(sheet).cell_value(int(m.group(2)) - 1, col - 1)
     if src_file.endswith(".ods"):
-        from .readers import (
-            ods,
-        )  # ODS has no second reader available; the builder's reader expands repeats in full
-
-        sheet, ref = locator.rsplit("!", 1)
-        m = re.fullmatch(r"([A-Z]+)(\d+)", ref)
-        col = 0
-        for ch in m.group(1):
-            col = col * 26 + ord(ch) - 64
-        rows = ods(src_file)[sheet]
-        r = rows[int(m.group(2)) - 1]
-        return r[col - 1] if col - 1 < len(r) else None
+        return _ods_value(src_file, locator)
     if src_file.endswith(".csv"):
         cached = _cached_source(
             path,
@@ -267,6 +319,7 @@ def check_facts(data):
         if digest != s["sha256"]:
             fail(f"hash changed: {s['file']}")
     counts = check_calculations(facts, fail)
+    check_input_statuses(facts, fail)
     print(
         f"Calculated facts: {counts.candidates:,} candidates; {counts.evaluated:,} recalculated; "
         f"{counts.missing:,} validated missing; {counts.literals:,} literal assumptions validated; "
@@ -480,6 +533,47 @@ def check_downloads():
     return files
 
 
+# The year explorer's bounds, stated here rather than read from the pages a build wrote,
+# so a whole year that was never written is reported as missing.
+ANNUAL_FIRST, EXPLORER_FIRST, ANNUAL_LAST = 1971, 2008, 2026
+SPAN_YEARS = 3  # each set of years on the range pages
+LIFE_TOPICS = ("work", "earnings", "housing", "holidays", "schools")
+
+
+def expected_life_pages():
+    """Every annual, pair and range page the year explorer must have, by kind."""
+    years = range(ANNUAL_FIRST, ANNUAL_LAST + 1)
+    spans = [(s, s + SPAN_YEARS - 1) for s in range(EXPLORER_FIRST, ANNUAL_LAST - SPAN_YEARS + 2)]
+    return {
+        "year": {f"life/{y}.html" for y in years},
+        "pair": {f"life/compare/{a}-{b}.html" for a in years for b in years if a < b},
+        "span": {
+            f"life/compare/spans/{a[0]}-{a[1]}-and-{b[0]}-{b[1]}.html"
+            for a in spans
+            for b in spans
+            if b[0] > a[1]
+        },
+    }
+
+
+def _life_heading(path):
+    """The h1 a year explorer page must have, worked out from its address."""
+    stem = Path(path).stem
+    if "-and-" in stem:
+        a0, a1, b0, b1 = stem.replace("-and-", "-").split("-")
+        return f"{a0} to {a1} compared with {b0} to {b1}"
+    if "-" in stem:
+        a, b = stem.split("-")
+        return f"{a} compared with {b}"
+    return f"Everyday life in {stem}"
+
+
+def _report(kind, label, paths):
+    if paths:
+        shown = ", ".join(sorted(paths)[:5])
+        fail(f"{len(paths)} {label} {kind} pages, for example {shown}")
+
+
 def check_structure():
     want = [
         "index.html",
@@ -509,24 +603,36 @@ def check_structure():
     for w in want:
         if not (SITE / w).exists():
             fail(f"missing page {w}")
-    pages = sorted(int(p.stem) for p in (SITE / "life").glob("[0-9]*.html"))
-    # Every pair of years has a comparison page, including the years before 2008.
-    compare = list((SITE / "life/compare").glob("*-*.html"))
-    years = sorted({int(x) for p in compare for x in p.stem.split("-")})
-    pairs = len(compare)
-    if pairs != len(years) * (len(years) - 1) // 2:
-        fail(f"{pairs} comparison pages for {len(years)} years")
-    # Every pair of three-year spans that do not overlap has a comparison page.
-    spans = [p.stem for p in (SITE / "life/compare/spans").glob("*-and-*.html")]
-    n = len([y for y in years if y >= 2008]) - 2
-    if len(spans) != (n - 3) * (n - 2) // 2:
-        fail(f"{len(spans)} span comparison pages for {n} spans")
-    for y in years:
-        if y not in pages:
-            fail(f"missing year page life/{y}.html")
-    if pages != list(range(pages[0], pages[-1] + 1)):
-        fail("year pages are not one per year")
-    return len(pages), pairs
+    expected = expected_life_pages()
+    found = {
+        "year": (SITE / "life").glob("[0-9]*.html"),
+        "pair": (SITE / "life/compare").glob("*-*.html"),
+        "span": (SITE / "life/compare/spans").glob("*-and-*.html"),
+    }
+    # Each index must link every page of its kind, so no-JavaScript readers reach them all.
+    indexes = {
+        "year": "life/index.html",
+        "pair": "life/compare/index.html",
+        "span": "life/compare/spans/index.html",
+    }
+    for kind, paths in found.items():
+        have = {p.relative_to(SITE).as_posix() for p in paths}
+        _report(kind, "missing", expected[kind] - have)
+        _report(kind, "unexpected", have - expected[kind])
+        index = SITE / indexes[kind]
+        html = index.read_text(encoding="utf-8") if index.exists() else ""
+        base = Path(indexes[kind]).parent
+        linked = {(base / h).as_posix() for h in re.findall(r'href="([^"#?]+)', html)}
+        _report(kind, f"unlinked from {indexes[kind]}", expected[kind] - linked)
+        for rel in sorted(expected[kind] & have):
+            page_html = (SITE / rel).read_text(encoding="utf-8")
+            m = re.search(r"<h1[^>]*>(.*?)</h1>", page_html, re.S)
+            if not m or html_unescape(re.sub(r"<[^>]+>", "", m.group(1))) != _life_heading(rel):
+                fail(f"{rel}: heading does not name {_life_heading(rel)!r}")
+            missing = [t for t in LIFE_TOPICS if f'<h2 id="{t}"' not in page_html]
+            if missing:
+                fail(f"{rel}: no section for {', '.join(missing)}")
+    return len(expected["year"]), len(expected["pair"])
 
 
 # Pages whose first chart must start high enough on a 360 x 640 phone that at
@@ -550,6 +656,7 @@ CHART_EARLY = [
     "life/2008.html",
     "life/2015.html",
     "life/2021.html",
+    "life/2026.html",
 ]
 PHONE_SCREEN, CHART_SHOWN = 640, 200
 # Pages that must stay short on a 360px phone with every "More on ..." section closed,
@@ -982,14 +1089,18 @@ def main():
                 "life/2008.html",
                 "life/2015.html",
                 "life/2021.html",
+                "life/2026.html",
                 "life/compare/2010-2025.html",
                 "life/compare/2019-2024.html",
                 "life/compare/1985-2025.html",
                 "life/compare/2002-2025.html",
+                "life/compare/1971-2026.html",
+                "life/compare/2015-2026.html",
                 "life/compare/index.html",
                 "life/compare/spans/index.html",
                 "life/compare/spans/2009-2011-and-2017-2019.html",
                 "life/compare/spans/2011-2013-and-2022-2024.html",
+                "life/compare/spans/2008-2010-and-2024-2026.html",
                 "figures/etb.html",
             ]
         )

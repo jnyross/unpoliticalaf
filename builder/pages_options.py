@@ -191,8 +191,10 @@ def options_page():
     sources = "".join(f'<li><a href="{url}">{title}</a></li>' for title, url in SOURCES)
     body = f"""
 <h1>Ways to improve the UK economy: ten options</h1>
+<div class="answer"><p class="lede">In the OECD's simulations for the UK, the largest ten-year gain comes from planning reform, extension of full expensing and access to finance: +2.1% of potential GDP.</p>
+<p>The OECD measures each of its effects as a percentage of baseline potential GDP. Its full package, combining the reform groups in Table 1.1, gives +4.0% of potential GDP after 10 years and +7.7% after 25 years.</p>
+<p>These are simulations using the OECD Long-Term Model, with many assumptions and uncertainties, not observed gains or extra growth each year. Only some reforms are covered. <a href="#oecd-source">See the OECD source (Table 1.1)</a>.</p></div>
 <p>Six options are ranked on one measure: the effect on the level of GDP after about ten years, as a percentage of GDP. The estimates come from different sources and models, so they are not like-for-like. The ranking shows the conversion for each. A second, separate list covers budget effects. Property taxes have budget figures but no GDP figure, so they appear in the budget list only. Grid and energy reform has only an industry plan figure, so it stays unranked.</p>
-<p>The OECD measures each of its effects as a percentage of baseline potential GDP. Its full package, combining these reforms, gives +4.0% of potential GDP after 10 years and +7.7% after 25 years.</p>
 <h2>Ranked: the GDP level after about ten years</h2>
 <ol>{ranked}</ol>
 <h2>Budget effects, shown separately</h2>
@@ -205,7 +207,7 @@ def options_page():
 <li>Net migration ranks high on total GDP, but the OBR's own figure gives no change in GDP per person. A ranking by GDP per person would put it last.</li>
 <li>&ldquo;Best&rdquo; depends on goals. Growth, fairness and the deficit can rank the options differently, and this page does not choose between them.</li>
 </ul>
-<h2>Sources</h2>
+<h2 id="oecd-source">Sources</h2>
 <ul>{sources}</ul>
 """
     return page(

@@ -3,10 +3,10 @@
 Two ONS methods are kept apart and never joined:
 
 - "households": ONS historical tables, 1977 to 2017/18. Households are ranked by their
-  size-adjusted disposable income and split into fifths with equal numbers of households.
+  size-adjusted disposable income and split into fifths of about the same number of households.
   Shares are calculated here as (total direct taxes + total indirect taxes) ÷ gross income.
 - "people": ONS yearly reference tables, Table 8. People are ranked by their household's
-  size-adjusted disposable income and split into fifths with equal numbers of people.
+  size-adjusted disposable income and split into fifths of about the same number of people.
   2017/18 is published both ways, so the effect of the ranking change can be seen.
   From 2018/19 the tables adjust for top earners being under-recorded in the survey.
 """

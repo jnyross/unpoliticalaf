@@ -10,7 +10,16 @@ definition are not calculated.
 
 import re
 
-from .data import YEARS, EARLY_YEARS, NATIONS, REGIONS, AGE_SERIES
+from .data import (
+    YEARS,
+    EARLY_YEARS,
+    NATIONS,
+    REGIONS,
+    AGE_SERIES,
+    ASHE_TABLE1,
+    EARN_BASE_YEAR,
+    EARN_LAST,
+)
 from . import explain
 from .html import (
     FOLD,
@@ -39,6 +48,8 @@ from .pages_life_extra import (
 )
 
 FIRST, LAST = YEARS[0], YEARS[-1]
+# Earnings run to their own newest April, which can be later than the year pages' last year.
+EARN_YEARS = list(range(FIRST, EARN_LAST + 1))
 RECENT = 2022  # the first year after the pandemic years (2020 and 2021), for a recent comparison beside the default pair
 # The first year each topic's longest series reaches (see pages_history.LONG).
 FIRST_YEAR = {"work": 1971, "earnings": 2002, "housing": 1981, "holidays": 1980, "schools": 2006}
@@ -234,7 +245,7 @@ def measures(d):
         (
             "earn.ft",
             "earnings",
-            "Median weekly pay, full-time employees (April 2025 prices)",
+            f"Median weekly pay, full-time employees (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft.{y}",
             "pounds",
             "pct",
@@ -254,7 +265,7 @@ def measures(d):
         (
             "earn.men",
             "earnings",
-            "Full-time men (April 2025 prices)",
+            f"Full-time men (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft_men.{y}",
             "pounds",
             "pct",
@@ -264,7 +275,7 @@ def measures(d):
         (
             "earn.women",
             "earnings",
-            "Full-time women (April 2025 prices)",
+            f"Full-time women (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.ft_women.{y}",
             "pounds",
             "pct",
@@ -274,7 +285,7 @@ def measures(d):
         (
             "earn.pt",
             "earnings",
-            "Part-time employees (April 2025 prices)",
+            f"Part-time employees (April {EARN_BASE_YEAR} prices)",
             lambda y: f"earn.real.pt.{y}",
             "pounds",
             "pct",
@@ -299,7 +310,7 @@ def measures(d):
             (
                 f"earn.place.{key}",
                 "earnings",
-                f"Full-time, living in {name} (April 2025 prices)",
+                f"Full-time, living in {name} (April {EARN_BASE_YEAR} prices)",
                 (lambda k: lambda y: f"earn.place.real.{k}.{y}")(key),
                 "pounds",
                 "pct",
@@ -631,7 +642,8 @@ TOPICS = [
     (
         "earnings",
         "Earnings",
-        "United Kingdom, and each nation by where employees live. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. Adjusted to April 2025 prices with the UK-wide CPIH inflation index.",
+        "United Kingdom, and each nation by where employees live. Median (middle) gross weekly pay before tax, from the Annual Survey of Hours and Earnings in April each year. "
+        f"Adjusted to April {EARN_BASE_YEAR} prices with the UK-wide CPIH inflation index.",
     ),
     (
         "housing",
@@ -668,7 +680,15 @@ TOPIC_SOURCES = {
         "aps2020",
         "ons-jobs02",
     ],
-    "earnings": ["nomis-ashe-resident", "nomis-ashe-places", "nomis-ashe-percentiles", "ons-l522"],
+    "earnings": [
+        "nomis-ashe-resident",
+        "ashe-2025-table1-revised",
+        "ashe-2026-table1-provisional",
+        "ashe-2026-fig2",
+        "nomis-ashe-places",
+        "nomis-ashe-percentiles",
+        "ons-l522",
+    ],
     "housing": [
         "ehs-ft1101",
         "ehs-ft1241",
@@ -708,9 +728,11 @@ TOPIC_SOURCES = {
     ],
 }
 
+# The Table 1 editions in use, newest first, for example "April 2026 provisional, April 2025 revised".
+EARN_EDITIONS = ", ".join(f"April {y} {e[4]}" for y, e in sorted(ASHE_TABLE1.items(), reverse=True))
 TOPIC_LIMITS = {
     "work": "Job types use the Standard Occupational Classification. It changed from SOC2010 to SOC2020 in 2021, so shares before and after 2021 are not compared here; 2021 is shown on both bases. Job-type figures start in 2011 in these tables. Labour Force Survey response rates fell sharply from 2020, which makes recent estimates less certain. Figures for each nation and region come from the Annual Population Survey, a larger survey over a whole calendar year, so they do not exactly match the UK figures for April to June. Wales and Northern Ireland have smaller samples, so year-to-year moves of a point or two there may be sampling noise. Ages 65 and over are not included in the 16 to 64 rates.",
-    "earnings": "Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has breaks in 2011 and 2021, when the coding of jobs changed, so pay is not compared across them; 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. ONS published April 2026 pay in October 2026; this series ends at April 2025 and does not yet include it. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
+    "earnings": f"Half of full-time employees earn more than the median and half earn less. Figures exclude the self-employed. ASHE has breaks in 2011 and 2021, when the coding of jobs changed, so pay is not compared across them; 2020 and 2021 were affected by furlough. From 2023 the ONS checks the returns of high earners more strictly and has not applied this to earlier years, so it advises caution when comparing 2022 with 2023, especially for higher pay. UK figures from April {min(ASHE_TABLE1)} come from ONS's Table 1 files ({EARN_EDITIONS}) and earlier ones from its resident analysis on Nomis. Figures by place can end at an earlier April. Figures for each nation are for employees who live there, wherever they work. The same UK-wide price index is used for every nation, because official inflation figures are not published for each nation; prices and living costs differ between places, so a higher wage in one place does not mean people there are better off.",
     "housing": "Housing is run separately in each nation, and Wales, Scotland and Northern Ireland measure it with their own surveys and records, which use different questions, dates and definitions. Housing costs, overcrowding and rooms are for England only: the other nations' surveys measure these differently, so they are not shown side by side here. Homes by tenure in each region and nation, with what each one counts, are on their own page. The English Housing Survey covers households in self-contained homes in England, not people in care homes or student halls. Figures for 2025-26 are not yet published. Families with children: our calculation adds three published groups (couples, single lone parents and previously married lone parents). Rents and mortgage payments are averages (means), so a few very high payments pull them up; they are not what a particular household pays, and mortgage payments depend on when the home was bought. A household is overcrowded under the bedroom standard if it has fewer bedrooms than the standard says its members need (one for each couple, one for each other person aged 21 or over, one for each pair of young people aged 10 to 20 of the same sex, and one for each pair of children under 10). Overcrowding figures are three-year averages, so neighbouring years share data; the latest published average ends in 2022-23. Rooms: the way rooms are counted changed in 2011-12 (utility rooms stopped being counted), so room figures are not compared across that change. Because of the pandemic, the 2020-21 survey interviewed people by phone instead of face to face, and its sample had more older people and owners and fewer renters and families with children. The publisher says these effects cannot be fully separated from real change, so figures that include 2020-21 are less certain.",
     "holidays": "Figures for 2008 are not in the tables used here. In 2020 and 2021 travel was restricted by the pandemic and the survey was paused from March 2020, so there are no full-year holiday figures for 2020: ONS’s 2020 figures by purpose cover only January to mid-March, and there is no breakdown by destination. From 2024 the figures cover Great Britain residents with a new method, so they are not compared with earlier years; ONS says annual 2024 mixes the old method (January to June) and the new one (July to December), so 2024 is not compared with 2025 either. Holidays within Great Britain come from a survey that changed method after 2019 and has no full-year figures for 2020 and 2021, so only 2022 onwards are compared with each other; 2019 is shown on its own. Trips per 100 residents is an average across everyone, including children and people who took no holiday: it does not say how many people went away, because these surveys count trips, not travellers. No official statistic, published each year, gives the share of people who took a holiday. The nearest, the share of people whose household could not afford a week’s holiday away, is shown for the 2005 to 2018 surveys, the only years with UK figures. Countries are ranked by all visits (holidays, family visits and business together) because holiday-only figures by country start in 2024.",
     "schools": "Education is run separately in each nation, and each counts classes in its own way, so figures for different nations are shown side by side but not compared. Wales reports infant classes (reception to year 2) and junior classes (years 3 to 6) rather than one primary figure, and the tables used here start in January 2023. Scotland counts classes at a September census and publishes an average for primary classes only. Northern Ireland's school statistics do not include an average class size. Average class size is not the same as the number of pupils per teacher. Averages for infant and key stage 2 classes, and counts of pupils in classes of more than 30 for each, start in January 2016 in the DfE data used here; shares of pupils in classes of more than 30 for primary and secondary schools start in January 2006. January 2008 to 2015 come from the DfE's 2015 national tables and January 2016 onwards from the DfE's current data; both use the same definition (classes taught by one teacher in state-funded schools).",
@@ -720,6 +742,21 @@ TOPIC_LIMITS = {
 def _val(facts, fid):
     f = facts.get(fid)
     return None if f is None else f.value
+
+
+def _occ_prof(y):
+    return f"work.occshare.{occ_scheme(y)}.2000000.{y}"
+
+
+def _latest_upto(facts, fid, y):
+    """The newest year up to y with a figure for fid(year), or None."""
+    return next((yr for yr in range(y, YEARS[0] - 1, -1) if _val(facts, fid(yr)) is not None), None)
+
+
+def latest_year(facts, fid):
+    """The newest explorer year with a figure for fid(year). Topics publish on their own
+    timetables, so a topic's latest figure can be older than the explorer's last year."""
+    return next(y for y in reversed(YEARS) if _val(facts, fid(y)) is not None)
 
 
 def change_cell(facts, num, a_id, b_id, style, kind):
@@ -941,8 +978,53 @@ def topic_block_for_year(facts, num, sources, topic, y, up):
     return f'<dl class="stats">{"".join(rows)}</dl>'
 
 
-def headline(facts, num, topic, y, gb=True):
-    """One or two plain sentences answering 'what was it like in year y?'."""
+def _occ_sentence(facts, num, y, latest):
+    """The largest group of jobs in year y, or why there is no figure. With latest,
+    the newest earlier year stands in and the sentence names it."""
+    oy = _latest_upto(facts, _occ_prof, y) if latest else y
+    if oy is None or _val(facts, _occ_prof(oy)) is None:
+        if y < 2011:
+            return f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
+        return f"There are no job-type figures for {y}: {missing_reason('work.occ.prof', y)}."
+    sc = occ_scheme(oy)
+    shares = {
+        c: v
+        for c in OCC_NAMES[sc]
+        if c != "0" and (v := _val(facts, f"work.occshare.{sc}.{c}.{oy}")) is not None
+    }
+    top = max(shares, key=shares.get)
+    return (
+        f"Over all of {oy}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: "
+        f"{num(f'work.occshare.{sc}.{top}.{oy}', 'pct')} of workers."
+    )
+
+
+def _nation_classes(facts, num, y, latest):
+    """Wales's and Scotland's class sizes for year y, or with latest their newest earlier year."""
+
+    def year_of(fid):
+        return (
+            _latest_upto(facts, fid, y)
+            if latest
+            else (y if _val(facts, fid(y)) is not None else None)
+        )
+
+    s = ""
+    wy = year_of(lambda yr: f"school.wales.infant.{yr}")
+    if wy is not None:
+        when = "" if wy == y else f" in January {wy}"
+        s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{wy}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{wy}', 'dp1')}{when}."
+    ty = year_of(lambda yr: f"school.scotland.primary.{yr}")
+    if ty is not None:
+        s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{ty}', 'dp1')} pupils at the September {ty} census."
+    return s
+
+
+def headline(facts, num, topic, y, gb=True, latest=False):
+    """One or two plain sentences answering 'what was it like in year y?'.
+
+    With latest (topic pages and the hub), a part with no figure for year y comes
+    from that part's own newest earlier year, which the sentence names."""
 
     def has(fid):
         return fid in facts and facts[fid].value is not None
@@ -953,28 +1035,14 @@ def headline(facts, num, topic, y, gb=True):
             s.append(
                 f"In April to June {y}, {num(f'work.rate.{y}', 'pct')} of people aged 16 to 64 were in work ({num(f'work.men.{y}', 'pct')} of men and {num(f'work.women.{y}', 'pct')} of women)."
             )
-        sc = occ_scheme(y)
-        if has(f"work.occshare.{sc}.2000000.{y}"):
-            shares = {
-                c: facts[f"work.occshare.{sc}.{c}.{y}"].value
-                for c in OCC_NAMES[sc]
-                if c != "0" and has(f"work.occshare.{sc}.{c}.{y}")
-            }
-            top = max(shares, key=shares.get)
-            s.append(
-                f"Over all of {y}, the largest group of jobs was {esc(OCC_NAMES[sc][top].lower())}: {num(f'work.occshare.{sc}.{top}.{y}', 'pct')} of workers."
-            )
-        else:
-            s.append(
-                f"Job-type figures for {y} are not in the tables used here (they start in 2011)."
-            )
+        s.append(_occ_sentence(facts, num, y, latest))
         return " ".join(s)
     if topic == "earnings":
         if not has(f"earn.real.ft.{y}"):
             return f"No earnings figure for {y}."
         return (
             f"In April {y}, the middle full-time employee earned {num(f'earn.ft.{y}', 'pounds')} a week before tax. "
-            f"In April 2025 prices that is {num(f'earn.real.ft.{y}', 'pounds')}."
+            f"In April {EARN_BASE_YEAR} prices that is {num(f'earn.real.ft.{y}', 'pounds')}."
         )
     if topic == "housing":
         if not has(f"house.private.{y}"):
@@ -1010,11 +1078,7 @@ def headline(facts, num, topic, y, gb=True):
             f"In January {y}, the average class in an English state primary school had {num(f'school.primary.{y}', 'dp1')} pupils; "
             f"in secondary schools it was {num(f'school.secondary.{y}', 'dp1')}."
         )
-        if has(f"school.wales.infant.{y}"):
-            s += f" In Wales, infant classes averaged {num(f'school.wales.infant.{y}', 'dp1')} pupils and junior classes {num(f'school.wales.junior.{y}', 'dp1')}."
-        if has(f"school.scotland.primary.{y}"):
-            s += f" In Scotland, primary classes averaged {num(f'school.scotland.primary.{y}', 'dp1')} pupils at the September {y} census."
-        return s
+        return s + _nation_classes(facts, num, y, latest)
     return ""
 
 
@@ -1349,6 +1413,27 @@ def near_sentence(
     )
 
 
+# Measures whose newer years are not yet published or not yet in the tables used here:
+# (measure key prefixes, last year with figures, reason). The first match applies.
+NOT_YET_PUBLISHED = (
+    (("house.crowd.",), 2022, "the latest published overcrowding average ends in 2022-23"),
+    (("house.",), 2024, "the English Housing Survey for {sy} is not yet published"),
+    (("nat.house.",), 2025, "figures for {sy} are not yet published"),
+    (
+        ("work.place.", "work.occ."),
+        2025,
+        "the Annual Population Survey for January to December {y} is not yet published",
+    ),
+    (("earn.place.",), 2025, "pay by nation for April {y} is not yet in the tables used here"),
+    (
+        ("school.wales.", "school.scotland"),
+        2025,
+        "the January {y} census for this nation is not yet in the tables used here",
+    ),
+    (("hol.",), 2025, "travel figures for {y} are not yet published"),
+)
+
+
 def missing_reason(mkey, y):
     """Why a measure has no figure for year y, in plain words."""
     if mkey.startswith("work.occ.") and y < 2011:
@@ -1361,10 +1446,9 @@ def missing_reason(mkey, y):
             if y < 2012
             else f"Northern Ireland’s figures for {sy(y)} are not yet published"
         )
-    if mkey.startswith("house.crowd.") and y > 2022:
-        return "the latest published overcrowding average ends in 2022-23"
-    if mkey.startswith("house.") and y > 2024:
-        return f"the English Housing Survey for {sy(y)} is not yet published"
+    for prefixes, last, reason in NOT_YET_PUBLISHED:
+        if mkey.startswith(prefixes) and y > last:
+            return reason.format(y=y, sy=sy(y))
     if mkey.startswith("hol.gb"):
         if y in (2020, 2021):
             return "the Great Britain Tourism Survey has no full-year figures for 2020 and 2021"
@@ -1721,7 +1805,7 @@ def compare_page(facts, d, num, sources, a, b):
     )
 
 
-def compare_index(sources):
+def compare_index(sources, facts):
     from .pages_ranges import DEFAULT_RULE, pair_context
 
     body = [
@@ -1738,7 +1822,8 @@ def compare_index(sources):
             f'<div class="answer"><p><strong>Suggested comparisons, with all five topics filled:</strong></p><ul>{links}</ul>'
             f'<p class="small">{esc(DEFAULT_RULE)}{esc(pair_context(a, b))} The others are the latest of these years compared with 10 and 5 years before it, where every topic can be compared. '
             f'For the years since the pandemic, see <a href="{RECENT}-{LAST}.html">{RECENT} compared with {LAST}</a>, where some topics cannot be compared. '
-            "Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods), and housing figures for 2025 are not yet published.</p></div>"
+            "Years from 2024 cannot be compared for holidays abroad, because the survey changed then (and 2024 mixes the old and new methods). "
+            f"Housing figures after {latest_year(facts, lambda y: f'house.private.{y}')} and holiday figures after {_hol_last(facts)} are not yet published.</p></div>"
         )
     body.append(
         '<p>Or <a href="spans/index.html">compare two sets of years</a>, for example the average of three years with the average of three later years.</p>'
@@ -1797,11 +1882,13 @@ def series_chart(
     num=None,
     point_label=str,
     finding=None,
+    years=None,
 ):
-    labels = [str(y) for y in YEARS]
-    series = [(name, [_val(facts, fid(y)) for y in YEARS], style) for name, fid, style in items]
+    years = YEARS if years is None else years
+    labels = [str(y) for y in years]
+    series = [(name, [_val(facts, fid(y)) for y in years], style) for name, fid, style in items]
     ids = [
-        [fid(y) if _val(facts, fid(y)) is not None else None for y in YEARS] for _, fid, _ in items
+        [fid(y) if _val(facts, fid(y)) is not None else None for y in years] for _, fid, _ in items
     ]
     return line_chart(
         title,
@@ -1815,7 +1902,7 @@ def series_chart(
         kind=kind,
         ids=ids,
         num=num,
-        point_labels=[point_label(y) for y in YEARS],
+        point_labels=[point_label(y) for y in years],
         finding=finding,
     )
 
@@ -1885,7 +1972,7 @@ def _work(facts, d, num, sources):
         f'men\'s from {num(f"work.men.{wf}", "pct")} to {num(f"work.men.{y}", "pct")}.</p>'
     )
     answer = (
-        f'<div class="answer"><p>{headline(facts, num, "work", y)}{newer}</p>{sex}'
+        f'<div class="answer"><p>{headline(facts, num, "work", y, latest=True)}{newer}</p>{sex}'
         f'<p>Manufacturing went from {num(f"jobs.share.C.{jf}", "pct")} of all jobs in June {jf} to {num(f"jobs.share.C.{jl}", "pct")} in June {jl}'
         f'{" (provisional)" if jl == jb["provisional"] else ""}. <a href="#work-industry">Jobs by industry</a></p></div>'
     )
@@ -2010,7 +2097,7 @@ def _how_short(ch):
 def earn_stretches(facts):
     """Each stretch of years the pay survey measured the same way, newest first,
     as (first, last, % change after inflation). Never crosses a break."""
-    years = list(range(FIRST_YEAR["earnings"], LAST + 1))
+    years = list(range(FIRST_YEAR["earnings"], EARN_LAST + 1))
     runs = same_basis_runs(facts, lambda y: f"earn.real.ft.{y}", years, earn_basis)
     return [
         (a, b, 100 * (_val(facts, f"earn.real.ft.{b}") / _val(facts, f"earn.real.ft.{a}") - 1))
@@ -2034,6 +2121,36 @@ def _change_words(facts, num, a, b):
     return f"{word} ({change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')})"
 
 
+EARN_STATUS_WORDS = {
+    "provisional": "ONS's first (provisional) estimates, which it may revise",
+    "revised": "ONS's revised estimates",
+}
+
+
+def earn_status_note(facts, num):
+    """Which Aprils of UK pay are provisional or revised estimates, in plain words."""
+    return " ".join(
+        f"April {y} figures are {EARN_STATUS_WORDS[edition[4]]}."
+        for y, edition in sorted(ASHE_TABLE1.items(), reverse=True)
+    )
+
+
+def earn_latest_year(facts, num):
+    """ONS's own published change over the newest year beside the change worked out from
+    ONS's weekly figures, so the two are never presented as one rate."""
+    a, b = EARN_LAST - 1, EARN_LAST
+    real, cash = f"earn.ons.change.ft.real.{b}", f"earn.ons.change.ft.nominal.{b}"
+    if _val(facts, real) is None or _val(facts, f"earn.real.ft.{a}") is None:
+        return ""
+    moved = "rose" if _val(facts, real) > 0 else "changed by"
+    return (
+        f"<p>ONS reports that from April {a} to April {b} the middle full-time employee's pay {moved} {num(real, 'pct')} after inflation ({num(cash, 'pct')} in cash). "
+        f"Worked out from ONS's weekly figures, given to the nearest 10p, and CPIH, the change is "
+        f"{change_cell(facts, num, f'earn.real.ft.{a}', f'earn.real.ft.{b}', 'pct', 'pounds')}; ONS works from its own estimates, so the two can differ slightly. "
+        f"{earn_status_note(facts, num)}</p>"
+    )
+
+
 def _earnings(facts, d, num, sources):
     """(answer box, detail parts) for the earnings topic."""
     body = []
@@ -2046,14 +2163,14 @@ def _earnings(facts, d, num, sources):
     )
     answer = (
         f'<div class="answer"><h2 class="ba-h">Pay after inflation: before and after</h2>'
-        f'<p class="small">Middle full-time employee, £ a week before tax, UK, both years in April {LAST} prices</p>'
+        f'<p class="small">Middle full-time employee, £ a week before tax, UK, both years in April {EARN_BASE_YEAR} prices</p>'
         + earn_before_after(num, a, b, ch)
         + f'<p>After allowing for rising prices, pay in April {b} was {_how(ch)} in April {a} ({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
         f'In cash, at the time, pay went from {num(f"earn.ft.{a}", "pounds")} to {num(f"earn.ft.{b}", "pounds")} a week.</p>'
-        f"<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>"
+        + f"<p>The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch. Earlier stretches:</p>"
         f'<ul class="ba-list">{earlier}</ul></div>'
     )
-    body.append(U.topic_line(num, "earnings", LAST))
+    body.append(U.topic_line(num, "earnings", EARN_LAST))
     body.append(
         series_chart(
             facts,
@@ -2062,8 +2179,9 @@ def _earnings(facts, d, num, sources):
                 ("Men", lambda y: f"earn.real.ft_men.{y}", "a"),
                 ("Women", lambda y: f"earn.real.ft_women.{y}", "b"),
             ],
-            "£ a week before tax, April each year, in April 2025 prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
-            breaks=[(YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS],
+            f"£ a week before tax, April each year, in April {EARN_BASE_YEAR} prices (adjusted with CPIH, the official consumer prices index that includes housing costs). The lines break in 2011 and 2021, when the survey changed the codes it uses to sort jobs into types (“jobs recoded”), so pay is not compared across them",
+            years=EARN_YEARS,
+            breaks=[(EARN_YEARS.index(y), "Jobs recoded") for y in EARN_BREAKS],
             split_breaks=True,
             kind="pounds",
             num=num,
@@ -2073,6 +2191,18 @@ def _earnings(facts, d, num, sources):
                 which="last",
             ),
         )
+    )
+    body.append(earn_latest_year(facts, num))
+    body.append(
+        f'<p class="small">UK pay through April {min(ASHE_TABLE1) - 1} comes from '
+        '<a href="https://www.nomisweb.co.uk/datasets/asher">Nomis resident analysis</a>; '
+        f"{EARN_EDITIONS} come from "
+        '<a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1">ASHE Table 1</a>. '
+        "Both routes publish the same ONS Annual Survey of Hours and Earnings: "
+        "employee jobs, gross weekly pay in April, with matching sex and full-time or part-time groups. "
+        "UK totals do not depend on where within the UK employees live or work. "
+        "This is a change of publication route and estimate vintage, not a new survey or a switch to household income. "
+        "The same applies to the pay-spread table. Survey and job-coding breaks still apply.</p>"
     )
     body.append(
         "<p><strong>Why the chart starts in 2002.</strong> The pay figures come from the Annual Survey of Hours and Earnings (ASHE). "
@@ -2092,7 +2222,7 @@ def _earnings(facts, d, num, sources):
             [
                 "Year",
                 "Full-time (cash)",
-                "Full-time (2025 prices)",
+                f"Full-time ({EARN_BASE_YEAR} prices)",
                 "Full-time men",
                 "Full-time women",
                 "Part-time",
@@ -2106,12 +2236,12 @@ def _earnings(facts, d, num, sources):
                     num(f"earn.real.ft_women.{y}", "pounds"),
                     num(f"earn.real.pt.{y}", "pounds"),
                 ]
-                for y in YEARS
+                for y in EARN_YEARS
             ],
         )
     )
     body.append(
-        '<p class="small">All columns except “Full-time (cash)” are in April 2025 prices.</p>'
+        f'<p class="small">All columns except “Full-time (cash)” are in April {EARN_BASE_YEAR} prices.</p>'
     )
     body.extend(spread_block(facts, num, d, a))
     body.extend(places_block(facts, num, "earnings"))
@@ -2200,24 +2330,29 @@ def _hol_cell(facts, num, y):
     return num(f"hol.world.holiday.{y}", "millions")
 
 
+def _hol_last(facts):
+    return latest_year(facts, lambda y: f"hol.world.holiday.{y}")
+
+
 def _top_holiday_countries(facts, d, num):
     """The most visited countries in the latest year. Holiday-only figures by country
     start in 2024; before that only visits for any purpose exist, and the text says so."""
     names = d["countries"]["names"]
+    y = _hol_last(facts)
     hl = (
-        top_countries(facts, d, LAST, 3, kind="holiday")
-        if d["countries"].get("holiday", {}).get(LAST)
+        top_countries(facts, d, y, 3, kind="holiday")
+        if d["countries"].get("holiday", {}).get(y)
         else []
     )
     if len(hl) == 3:
         return (
-            f'In {LAST} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{LAST}", "millions")} visits), '
-            f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{LAST}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{LAST}", "millions")}).'
+            f'In {y} the most visited countries for holidays were {esc(names[hl[0]])} ({num(f"hol.cty.{hl[0]}.holiday.{y}", "millions")} visits), '
+            f'{esc(names[hl[1]])} ({num(f"hol.cty.{hl[1]}.holiday.{y}", "millions")}) and {esc(names[hl[2]])} ({num(f"hol.cty.{hl[2]}.holiday.{y}", "millions")}).'
         )
-    tl = top_countries(facts, d, LAST, 3)
+    tl = top_countries(facts, d, y, 3)
     return (
-        f'In {LAST} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{LAST}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
-        f'({num(f"hol.cty.{tl[1]}.all.{LAST}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{LAST}", "millions")}); there are no holiday-only figures by country for that year.'
+        f'In {y} the most visited countries were {esc(names[tl[0]])} ({num(f"hol.cty.{tl[0]}.all.{y}", "millions")} visits for any purpose), {esc(names[tl[1]])} '
+        f'({num(f"hol.cty.{tl[1]}.all.{y}", "millions")}) and {esc(names[tl[2]])} ({num(f"hol.cty.{tl[2]}.all.{y}", "millions")}); there are no holiday-only figures by country for that year.'
     )
 
 
@@ -2228,12 +2363,13 @@ def _holidays(facts, d, num, sources):
     spain_first = all(top_countries(facts, d, y, 1) == ["spain"] for y in d["countries"]["all"])
     # The most visited countries get their own short paragraph near the top, with a link
     # to their section, as readers missed them inside a longer one (audit 11 gap 6).
-    answer = f"""<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p>
+    hy = _hol_last(facts)
+    answer = f"""<div class="answer"><p>{headline(facts, num, "holidays", hy)}</p>
 <p>{_top_holiday_countries(facts, d, num)} <a href="#holidays-countries">Top ten</a></p>
-<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad (not compared with {LAST}: different residents and survey method). There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
+<p>In 2019, before the pandemic, UK residents made {num("hol.world.holiday.2019", "millions")} holiday visits abroad (not compared with {hy}: different residents and survey method). There is no figure for all of 2020, as the survey stopped on 16 March ({num("hol.world.holiday.2020.part", "millions")} by then); in 2021 they made {num("hol.world.holiday.2021", "millions")}.</p>
 </div>"""
 
-    body.append(U.topic_line(num, "holidays", LAST))
+    body.append(U.topic_line(num, "holidays", hy))
     body.append(
         "<p>These count trips, not people, so “per 100 residents” is an average, not a typical experience.</p>"
     )
@@ -2321,15 +2457,15 @@ def _holidays(facts, d, num, sources):
         body.append(
             f"<p>Counting visits for any purpose (holidays, family visits and business), Spain has been the most visited country in every year from {min(d['countries']['all'])} to {max(d['countries']['all'])} with figures by country on this site.</p>"
         )
-    body.append(country_table(facts, num, d, LAST, 10))
-    cyears = [2009, 2019, LAST]
-    top = top_countries(facts, d, LAST, 10)
+    body.append(country_table(facts, num, d, hy, 10))
+    cyears = [2009, 2019, hy]
+    top = top_countries(facts, d, hy, 10)
     body.append(
         details_table(
             "Show the same countries in 2009 and 2019",
             "Visits abroad by main country visited (all purposes), millions",
             ["Country"]
-            + [f"{y} (new method)" if y == LAST and LAST >= 2024 else str(y) for y in cyears],
+            + [f"{y} (new method)" if y == hy and hy >= 2024 else str(y) for y in cyears],
             [
                 [esc(names[s])] + [num(f"hol.cty.{s}.all.{y}", "millions") for y in cyears]
                 for s in top
@@ -2370,7 +2506,7 @@ def _schools(facts, d, num, sources):
     )
     first = FIRST_YEAR["schools"]
     answer = (
-        f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
+        f'<div class="answer"><p>{headline(facts, num, "schools", LAST, latest=True)} In January {first} the figures were {num(f"school.primary.{first}", "dp1")} and {num(f"school.secondary.{first}", "dp1")}.{latest}</p>'
         f"{_infant_limit(facts, num, d)}</div>"
     )
     body.append(U.topic_line(num, "schools", LAST))
@@ -2523,7 +2659,7 @@ def year_finder(facts, num, key):
     def item(y):
         if has_year_figure(facts, num, key, y):
             return f'<li><a href="{y}.html#{key}">{y}</a></li>'
-        return f'<li><span class="missing" aria-label="{y}: no figure">{y}</span></li>'
+        return f'<li><span class="missing" role="img" aria-label="{y}: no figure">{y}</span></li>'
 
     recent = "".join(item(y) for y in YEARS)
     early = "".join(item(y) for y in EARLY_YEARS)
@@ -2616,7 +2752,7 @@ def topic_page(facts, d, num, sources, key):
 
 def _hub_holidays(facts, d, num):
     """The holidays answer, shortened for the hub: the latest year only."""
-    return f'<div class="answer"><p>{headline(facts, num, "holidays", LAST)}</p></div>'
+    return f'<div class="answer"><p>{headline(facts, num, "holidays", _hol_last(facts))}</p></div>'
 
 
 def _hub_schools(facts, d, num):
@@ -2625,7 +2761,7 @@ def _hub_schools(facts, d, num):
         "schools"
     ]  # the first year of the series, not the explorer's first year (audit 12)
     return (
-        f'<div class="answer"><p>{headline(facts, num, "schools", LAST)} In January {y0}, the first year of this series, the figures were '
+        f'<div class="answer"><p>{headline(facts, num, "schools", LAST, latest=True)} In January {y0}, the first year of this series, the figures were '
         f'{num(f"school.primary.{y0}", "dp1")} and {num(f"school.secondary.{y0}", "dp1")}.</p></div>'
     )
 
@@ -2635,7 +2771,7 @@ def _hub_earnings(facts, d, num):
     a, b, ch = earn_stretches(facts)[0]
     return (
         f'<div class="answer">{earn_before_after(num, a, b, ch)}'
-        f"<p>Pay of the middle full-time employee, £ a week before tax, UK, in April {LAST} prices: {_how_short(ch).lower()} "
+        f"<p>Pay of the middle full-time employee, £ a week before tax, UK, in April {EARN_BASE_YEAR} prices: {_how_short(ch).lower()} "
         f'({change_cell(facts, num, f"earn.real.ft.{a}", f"earn.real.ft.{b}", "pct", "pounds")}). '
         f"The survey changed how it codes jobs in 2011 and 2021, so pay is compared only within each stretch.</p></div>"
     )
@@ -2646,18 +2782,20 @@ def _hub_work(facts, d, num):
     """The work answer, shortened for the hub: manufacturing's share stays on the topic page."""
     # Kept to two short sentences, so the first chart stays within two phone screens
     # under the questions at the top of the hub.
-    y = LAST
-    sc = occ_scheme(y)
+    y = latest_year(facts, lambda yr: f"work.rate.{yr}")
+    # Job types come from a survey of the whole calendar year, so they can end a year earlier.
+    oy = latest_year(facts, _occ_prof)
+    sc = occ_scheme(oy)
     shares = {
-        c: facts[f"work.occshare.{sc}.{c}.{y}"].value
+        c: facts[f"work.occshare.{sc}.{c}.{oy}"].value
         for c in OCC_NAMES[sc]
-        if c != "0" and _val(facts, f"work.occshare.{sc}.{c}.{y}") is not None
+        if c != "0" and _val(facts, f"work.occshare.{sc}.{c}.{oy}") is not None
     }
     top = max(shares, key=shares.get)
     return (
         f'<div class="answer"><p>In April to June {y}, {num(f"work.rate.{y}", "pct")} of people aged 16 to 64 were in work '
         f'(men {num(f"work.men.{y}", "pct")}, women {num(f"work.women.{y}", "pct")}). '
-        f'The largest group of jobs in {y} was {esc(OCC_NAMES[sc][top].lower())} ({num(f"work.occshare.{sc}.{top}.{y}", "pct")}).</p></div>'
+        f'The largest group of jobs in {oy} was {esc(OCC_NAMES[sc][top].lower())} ({num(f"work.occshare.{sc}.{top}.{oy}", "pct")}).</p></div>'
     )
 
 
@@ -2778,6 +2916,13 @@ def work_ages_block(facts, num):
     return out
 
 
+def _places_end_note(b):
+    """Say so when pay by place stops before the UK pay figures."""
+    if b >= EARN_LAST:
+        return ""
+    return f'<p class="small">Figures by place end in April {b} (ONS\'s provisional estimates): the Nomis table used here has no April {EARN_LAST} figures yet.</p>'
+
+
 def places_block(facts, num, topic):
     """A nation-and-region table: first year, latest year and change, plus every year on request."""
     if topic == "work":
@@ -2790,7 +2935,7 @@ def places_block(facts, num, topic):
         fid, kind, style = (lambda k, y: f"earn.place.real.{k}.{y}"), "pounds", "pct"
         title, what = (
             "By nation and region",
-            "Median weekly pay of full-time employees, by where they live, April each year, in April 2025 prices",
+            f"Median weekly pay of full-time employees, by where they live, April each year, in April {EARN_BASE_YEAR} prices",
         )
     places = [(k, n) for k, n in NATIONS] + [(k, n) for k, n, _ in REGIONS]
     subject = "The employment rate" if topic == "work" else "After inflation, median full-time pay"
@@ -2833,6 +2978,7 @@ def places_block(facts, num, topic):
             f"and those in {names[lo]} the lowest ({num(fid(lo, b), kind)}).{noise} Within England, pay was highest for people living in {rnames[rtop]} ({num(fid(rtop, b), kind)}) and lowest in {rnames[rlo]} ({num(fid(rlo, b), kind)}). "
             f"Pay does not show what money buys: prices, especially housing costs, differ between places.</p></div>"
         )
+        out.append(_places_end_note(b))
     rows = []
     for k, n in places:
         mk = "pm_pp" if kind == "pct" else "pm_pounds"

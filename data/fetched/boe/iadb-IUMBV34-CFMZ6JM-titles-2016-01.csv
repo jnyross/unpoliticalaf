@@ -1,0 +1,7 @@
+SERIES,DESCRIPTION
+IUMBV34,Monthly interest rate of UK monetary financial institutions (excl. Central Bank) sterling 2 year (75% LTV) fixed rate mortgage to households (in percent) not seasonally adjusted
+CFMZ6JM,Monthly average of UK resident banks' sterling weighted average interest rate - loans secured on dwellings - new advances to Individuals and individual trusts (in percent) not seasonally adjusted
+
+DATE,SERIES,VALUE
+31 Jan 2016,IUMBV34,1.93
+31 Jan 2016,CFMZ6JM,2.47

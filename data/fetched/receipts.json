@@ -1,4 +1,58 @@
 {
+ "ashe-2002-table6": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip",
+  "file": "ons/ashe-table6-2002.zip",
+  "bytes": 252287,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "0f79e15174ac979c6e9f4406e05ae1999491bef022b5218b27d176f9ea901625",
+  "retrieved": "2026-11-09T08:18:54Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip"
+ },
+ "ashe-2006-table6-2007-methods": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip",
+  "file": "ons/ashe-table6-2006-2007-methods.zip",
+  "bytes": 359901,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "11ff16001dc83b107308a26e2618cd2e48387adc8339b38ac384d82131211193",
+  "retrieved": "2026-11-09T08:18:58Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip"
+ },
+ "ashe-2010-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip",
+  "file": "ons/ashe-table6-2010-revised.zip",
+  "bytes": 274252,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "9abbd7951d05567bb021bd4167ce0ba14f878e73bdc50f845d05ba3f4fca55ff",
+  "retrieved": "2026-11-09T08:19:01Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip"
+ },
+ "ashe-2011-table6-soc2010": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip",
+  "file": "ons/ashe-table6-2011-soc2010.zip",
+  "bytes": 270482,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "1a94ba7a044c33ed227328bca52f7f5ebbcdaf94c49b64d01e00f7c47473b397",
+  "retrieved": "2026-11-09T08:19:04Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip"
+ },
+ "ashe-2020-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip",
+  "file": "ons/ashe-table6-2020-revised.zip",
+  "bytes": 390839,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "a238a9e909cb24ca0e791f302421777ac7ef839c6247281ba35a5182a3bebf8f",
+  "retrieved": "2026-11-09T08:19:07Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip"
+ },
+ "ashe-2021-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip",
+  "file": "ons/ashe-table6-2021-revised.zip",
+  "bytes": 371469,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "31378b88c75b15e692f3c7906d51436e260f6427f0f0d621c202406474b96c59",
+  "retrieved": "2026-11-09T08:19:10Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip"
+ },
  "ashe-2025-fig1": {
   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2025/cfe85f05&format=csv",
   "file": "ons/ashe-2025-fig1.csv",
@@ -15,6 +69,60 @@
   "sha256": "b5848e0ecfeecc88237730a42242781e04a4e19d834526e5bd3f2849cd3465d9",
   "retrieved": "2026-11-02T08:58:35Z"
  },
+ "ashe-2025-table1-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip",
+  "file": "ons/ashetable12025revised.zip",
+  "bytes": 634797,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "688dcfe4c07dd7e6235c5dad8683107b2e83fcc1ae959d3ed1703317d19867ae",
+  "retrieved": "2026-11-08T23:34:07Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip"
+ },
+ "ashe-2025-table6-revised": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip",
+  "file": "ons/ashe-table6-2025-revised.zip",
+  "bytes": 835642,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "2ccc3b3703a2a1a9b0c8a9a837497eeb3f7425ea4e21219099b2d8e0e3363c03",
+  "retrieved": "2026-11-09T08:19:13Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip"
+ },
+ "ashe-2026-fig2": {
+  "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv",
+  "file": "ons/ashe-2026-fig2.csv",
+  "bytes": 1114,
+  "content_type": "application/octet-stream;charset=utf-8",
+  "sha256": "a72ae9c92c19c035471a34d94a4386ec85c9948c3d45fd773b8825c837b9d4c5",
+  "retrieved": "2026-11-08T23:34:00Z",
+  "requested_url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv"
+ },
+ "ashe-2026-table1-provisional": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip",
+  "file": "ons/ashetable12026provisional.zip",
+  "bytes": 635627,
+  "content_type": "application/zip;charset=utf-8",
+  "sha256": "b0143def67e3863a34421608608f63b77b7eebd8fbbd5f2109d6811eb184351d",
+  "retrieved": "2026-11-08T23:34:03Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip"
+ },
+ "boe-effective-rates-notes": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G",
+  "file": "boe/iadb-CFMZ6JM-metadata.xml",
+  "bytes": 1639,
+  "content_type": "text/xml",
+  "sha256": "78e058f0e8ca0359e2512a0f4b182109aacb821f8497ba74852c50d55fbe6c82",
+  "retrieved": "2026-11-09T07:10:56Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G"
+ },
+ "boe-form-er-definitions": {
+  "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf",
+  "file": "boe/def_er2016.pdf",
+  "bytes": 578994,
+  "content_type": "application/pdf",
+  "sha256": "0bda88f38f027579f1bc6f45942328b7896ccad95ee69b110f9ee29836551e6a",
+  "retrieved": "2026-11-09T07:11:03Z",
+  "requested_url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf"
+ },
  "boe-mortgage-rates": {
   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=CFMZ6JM,CFMZ6JO,CFMZ6JV,CFMZ6JX,CFMZ6K3&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
   "file": "boe/mortgage-rates-new-lending.csv",
@@ -22,6 +130,33 @@
   "content_type": "application/csv",
   "sha256": "20b1a82eeb111d81d722a112b6f270753d5658301704673ef952822bb83cea2b",
   "retrieved": "2026-11-04T13:30:12Z"
+ },
+ "boe-quoted-2yr-75ltv": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-FromShowColumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/quoted-rate-2yr-fixed-75ltv.csv",
+  "bytes": 4048,
+  "content_type": "application/csv",
+  "sha256": "2e16c3237cbb42c19e96794fe377e744771e1ec025d848a4468ce562e776ec92",
+  "retrieved": "2026-11-09T05:39:50Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N"
+ },
+ "boe-quoted-rates-notes": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G",
+  "file": "boe/iadb-IUMBV34-metadata.xml",
+  "bytes": 1983,
+  "content_type": "text/xml",
+  "sha256": "033b1dcaecefc1aa1697212ff78b429c30f3da8aaab36b911da487c06a6c259d",
+  "retrieved": "2026-11-09T07:10:52Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G"
+ },
+ "boe-rate-series-titles": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N",
+  "file": "boe/iadb-IUMBV34-CFMZ6JM-titles-2016-01.csv",
+  "bytes": 485,
+  "content_type": "application/csv",
+  "sha256": "183c58219b1eb8335df9abef804aef3f537534821f8093471e08ccb69c674c08",
+  "retrieved": "2026-11-09T07:11:00Z",
+  "requested_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N"
  },
  "data-gov-life-tables-historic": {
   "url": "https://www.data.gov.uk/dataset/historic_and_projected_data_from_the_period_and_cohort_life_tables",
@@ -79,6 +214,24 @@
   "content_type": "application/pdf",
   "sha256": "493afc7aa63961f0f0dba2bccf53bf1bd9aec20b1a29ee89f3b169d740a40385",
   "retrieved": "2026-11-04T13:32:50Z"
+ },
+ "ehs-0809-annex-ch1": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls",
+  "file": "ehs/2008-09-household-report-ch1-annex.xls",
+  "bytes": 181760,
+  "content_type": "application/vnd.ms-excel",
+  "sha256": "4616fd96efb91e6740b675f9137546b75f6e774f15114539986eea488b450f38",
+  "retrieved": "2026-11-09T05:39:36Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls"
+ },
+ "ehs-0809-report": {
+  "url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf",
+  "file": "ehs/2008-09-household-report.pdf",
+  "bytes": 3172357,
+  "content_type": "application/pdf",
+  "sha256": "375aa0ead9c51109ee9d4854fc25f1839bac3ea69352042c9ddb0c011f53a3b6",
+  "retrieved": "2026-11-09T05:39:40Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf"
  },
  "ehs-annex-ch1": {
   "url": "https://assets.publishing.service.gov.uk/media/6985b1dd6da2dee8230a9b0e/2024-25_EHS_Headline_Report_Chapter_1_Profile_of_households_and_dwellings_Annex_Tables.ods",
@@ -553,6 +706,15 @@
   "sha256": "88ea35ba9131883ffd74af9fd067cd1e6c950afd33aa3605c71f7f1ecbf325da",
   "retrieved": "2026-11-02T09:54:49Z"
  },
+ "gov-employer-rates-2025": {
+  "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026",
+  "file": "gov/rates-and-thresholds-for-employers-2025-to-2026.html",
+  "bytes": 159376,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "d32543a3d63c3ab2e35db013a37a2debb6ba24d9e2dffe20a26f1668a48e63a1",
+  "retrieved": "2026-11-10T00:10:29Z",
+  "requested_url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026"
+ },
  "gov-income-tax-rates": {
   "url": "https://www.gov.uk/income-tax-rates",
   "file": "gov/income-tax-rates.html",
@@ -585,6 +747,33 @@
   "sha256": "54a0d9c5eb74205a47f189389c9c94945eaaaf30ee13e1de50942282ef6761d0",
   "retrieved": "2026-11-04T13:30:04Z"
  },
+ "hansard-ni-1992": {
+  "url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance",
+  "file": "parl/hansard-national-insurance-1992-11-12.html",
+  "bytes": 13942,
+  "content_type": "text/html",
+  "sha256": "e86ebdc1a19654d17e34d37e6ec9b4284deb644caf22ed16cbce16ee330336b6",
+  "retrieved": "2026-11-10T00:10:26Z",
+  "requested_url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance"
+ },
+ "hmrc-historic-allowances": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+  "file": "gov/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+  "bytes": 10767,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "5b91e2bb93f0bc69c36a8dacb5605497fe169b5632dc4bdef255502daed8bde4",
+  "retrieved": "2026-11-10T00:10:20Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods"
+ },
+ "hmrc-historic-rates": {
+  "url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+  "file": "gov/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+  "bytes": 8823,
+  "content_type": "application/vnd.oasis.opendocument.spreadsheet",
+  "sha256": "31281efc152adf8c0e8ab56f73dcb80282f9542ec83b0289c93cd279dbb7eba2",
+  "retrieved": "2026-11-10T00:10:23Z",
+  "requested_url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods"
+ },
  "hmrc-spi-2324-tables": {
   "url": "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods",
   "file": "hmrc/spi-2023-24-tables-3-1-to-3-11.ods",
@@ -608,6 +797,24 @@
   "content_type": "application/pdf",
   "sha256": "efd05e4a7e715b361617390016356df04af83ea6febecb9475ce173bf2cffb75",
   "retrieved": "2026-11-04T13:30:25Z"
+ },
+ "nhs-hchs-dqa-aug26": {
+  "url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx",
+  "file": "nhs/nhs-hchs-workforce-statistics-data-quality-annex-august-2026.xlsx",
+  "bytes": 173245,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "b7b66efff2e769bd0208ee364088af94d52c2cde9792fc05d0757ff836dfe240",
+  "retrieved": "2026-11-09T02:59:17Z",
+  "requested_url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx"
+ },
+ "nhs-hchs-workforce-aug26": {
+  "url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx",
+  "file": "nhs/nhs-hchs-workforce-statistics-trusts-and-core-organisations-data-tables-august-2026.xlsx",
+  "bytes": 8540990,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "303f2915eb85dc964dfb9e0643e7dc354ebd32d8abab54f51e6eaa3ff5448351",
+  "retrieved": "2026-11-09T02:53:07Z",
+  "requested_url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx"
  },
  "ni-de-enrolments-2025-26": {
   "url": "https://www.education-ni.gov.uk/publications/school-enrolments-202526-statistical-bulletins",
@@ -881,6 +1088,15 @@
   "sha256": "9fe44451456cfcd6d6a2af06cb09a3400c6f34cf92eaef6a13ece9d84f264bff",
   "retrieved": "2026-11-02T11:14:12Z"
  },
+ "ons-emp07": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
+  "file": "ons/emp07aug2026.xls",
+  "bytes": 98304,
+  "content_type": "application/vnd.ms-excel;charset=utf-8",
+  "sha256": "420d9dfc4e4f23a4d47943e0b5f10591eb093e0b4ef6d5de5ee92de68041cab3",
+  "retrieved": "2026-11-09T08:19:20Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls"
+ },
  "ons-families-households": {
   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/families/datasets/familiesandhouseholdsfamiliesandhouseholds/current/familiesandhouseholdsuk2025.xlsx",
   "file": "ons/families-households.xlsx",
@@ -986,6 +1202,15 @@
   "sha256": "498868a2a2209acbc64c4f8cf59f72af6364f65f69f724be01a5e969978bb2fb",
   "retrieved": "2026-11-02T11:12:32Z"
  },
+ "ons-lfs-guide-household": {
+  "url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf",
+  "file": "ons/lfs-user-guide-vol8-household-2003.pdf",
+  "bytes": 391731,
+  "content_type": "application/pdf;charset=utf-8",
+  "sha256": "63a25bcad0d7e6ed2e1aeb7f74350b38cc4663c1278865ba8b0687916bf86aa1",
+  "retrieved": "2026-11-09T05:39:43Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf"
+ },
  "ons-life-tables-2024-related": {
   "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/bulletins/pastandprojecteddatafromtheperiodandcohortlifetables/2024baseduk1981to2074/relateddata",
   "file": "ons/life-tables-2024-related-data.html",
@@ -1025,6 +1250,24 @@
   "content_type": "text/csv;charset=utf-8",
   "sha256": "7d1fc100fb19972c60448bf79bb2c41b130671f529e2511e02426427eabde096",
   "retrieved": "2026-11-02T16:23:45Z"
+ },
+ "ons-red02": {
+  "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx",
+  "file": "ons/red02oct2026.xlsx",
+  "bytes": 220987,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "88a94773112c832c04105b9bf771193fb51a493fe4e62cafc1cfc351c56636e5",
+  "retrieved": "2026-11-09T08:19:17Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx"
+ },
+ "ons-single-year-life-tables-uk": {
+  "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+  "file": "ons/single-year-life-tables-uk.xlsx",
+  "bytes": 623585,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8",
+  "sha256": "34d2b0ee90ed78994e87d83a558caba977f0087a3ac306175c6a5cd24031730a",
+  "retrieved": "2026-11-09T22:55:41Z",
+  "requested_url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx"
  },
  "ons-ukpop": {
   "url": "https://www.ons.gov.uk/generator?format=csv&uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/timeseries/ukpop/pop",
@@ -1161,6 +1404,42 @@
   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
   "sha256": "b69149bdf5a5496cc9a79b109d2011ca7f8813c10f47eddd896fc5564002548b",
   "retrieved": "2026-11-02T15:17:34Z"
+ },
+ "sfc-asc-appendix-2026": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+  "file": "sfc/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+  "bytes": 1196112,
+  "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sha256": "e1dc74d7325d52a52255fbdb9d3d1c86843bc4325feeca05fc296d5d143fee6c",
+  "retrieved": "2026-11-09T02:53:13Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx"
+ },
+ "sfc-method-jun26": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+  "file": "sfc/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+  "bytes": 2146934,
+  "content_type": "application/pdf",
+  "sha256": "ede8ddcaeb6edfd3bd25f947246261f974f0dadf1e7d03e3a5e9b1d55cac5820",
+  "retrieved": "2026-11-09T02:53:20Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf"
+ },
+ "sfc-state-2026": {
+  "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+  "file": "sfc/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+  "bytes": 2646019,
+  "content_type": "application/pdf",
+  "sha256": "82fcdeab5de1575f1bafa533a6ea5651c30727adac2147fe7e3e036464a3edad",
+  "retrieved": "2026-11-09T02:53:17Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf"
+ },
+ "sfc-terms": {
+  "url": "https://www.skillsforcare.org.uk/Privacy-and-legal/Terms-and-conditions.aspx",
+  "file": "sfc/skills-for-care-terms-and-conditions.html",
+  "bytes": 158503,
+  "content_type": "text/html; charset=utf-8",
+  "sha256": "ae3136d5cb73d5d7f36efad74dd52c13c961bbb7e23dc6a3394a8c564d9324e3",
+  "retrieved": "2026-11-09T03:38:00Z",
+  "requested_url": "https://www.skillsforcare.org.uk/Privacy-and-legal/Terms-and-conditions.aspx"
  },
  "wales-dwelling-stock": {
   "url": "https://api.stats.gov.wales/v1/6476cc20-ddeb-46a5-be64-10a23c8a159f/download/csv",

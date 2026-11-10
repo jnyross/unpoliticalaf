@@ -18,7 +18,7 @@ from . import findings as F
 
 UK, AVG = "GBR", "OECD_REP"
 G7 = ["CAN", "FRA", "DEU", "ITA", "JPN", "GBR", "USA"]
-CASH_PAIR = 2015  # the start of the ten-year window used for the "compared with 2015-16" sentence (impartiality rule: ten years for spending by area)
+WINDOW_YEARS = 10  # impartiality rule: comparisons of spending by area use a fixed ten-year window
 
 
 def _ordinal_word(n):
@@ -52,12 +52,40 @@ def _years(facts, sp):
     ]
 
 
+def _moved(now, then):
+    """Words for a change, so the sentence reads the same way whichever way it moved."""
+    if now > then:
+        return "up from", "rise"
+    if now < then:
+        return "down from", "fall"
+    return "the same as", "change"
+
+
+def _real_size(facts, real, real_base, real_change, pair_year, latest):
+    """The size of the after-inflation change, shown without a sign whichever way it went."""
+    if facts[real].value >= facts[real_base].value:
+        return real_change
+    return derive(
+        facts,
+        f"defence.realfall.{pair_year}",
+        (1 - facts[real].value / facts[real_base].value) * 100,
+        "%",
+        latest,
+        "pesa4",
+        [real, real_base],
+        f"(1 − {real} ÷ {real_base}) × 100",
+        note="Fall in spending after inflation, 2025-26 prices.",
+    )
+
+
 def defence_page(facts, d, num, sources):
     sp, it, borrow = d["spending"], d["intl"], d["borrow"]
     latest = sp["latest"]  # 2025-26, outturn
     years = _years(facts, sp)
     first = years[0]
     names = it["names"]
+    pair_year = int(latest[:4]) - WINDOW_YEARS
+    pair = f"{pair_year}-{str(pair_year + 1)[-2:]}"
 
     # ------------------------------------------------------------- calculated figures
     cash, real, gdp = (
@@ -65,11 +93,11 @@ def defence_page(facts, d, num, sources):
         f"spend.real.defence.{latest}",
         f"spend.gdp.defence.{latest}",
     )
-    real_base = f"spend.real.defence.{CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}"
-    share_base = f"spend.gdp.defence.{CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}"
+    real_base = f"spend.real.defence.{pair}"
+    share_base = f"spend.gdp.defence.{pair}"
     real_change = derive(
         facts,
-        f"defence.realchange.{CASH_PAIR}",
+        f"defence.realchange.{pair_year}",
         (facts[real].value / facts[real_base].value - 1) * 100,
         "%",
         latest,
@@ -201,10 +229,15 @@ def defence_page(facts, d, num, sources):
     )
     gdp_v, gdp_base_v = facts[gdp].value, facts[share_base].value
     share_cmp = "lower" if gdp_v < gdp_base_v else ("higher" if gdp_v > gdp_base_v else "the same")
+    cash_base = f"spend.cash.defence.{pair}"
+    cash_moved, _ = _moved(facts[cash].value, facts[cash_base].value)
+    _, real_moved = _moved(facts[real].value, facts[real_base].value)
+    real_size = _real_size(facts, real, real_base, real_change, pair_year, latest)
     body.append(
-        f"<p>Defence spending was {num(cash, 'bn')} in {latest}, up from {num(f'spend.cash.defence.{CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}', 'bn')} in {CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}. "
-        f"After inflation the rise was {num(real_change, 'pct')}, from {num(real_base, 'bn')} to {num(real, 'bn')} at 2025-26 prices. "
-        f"Its share of GDP was {share_cmp} in {latest} than in {CASH_PAIR}-{str(CASH_PAIR + 1)[-2:]}: {num(gdp, 'pct')} against {num(share_base, 'pct')}.</p>"
+        f"<p>Defence spending was {num(cash, 'bn')} in {latest}, {cash_moved} {num(cash_base, 'bn')} in {pair}. "
+        f"After inflation the {real_moved} was {num(real_size, 'pct')}, from {num(real_base, 'bn')} to {num(real, 'bn')} at 2025-26 prices. "
+        f"Its share of GDP was {share_cmp} in {latest} than in {pair}: {num(gdp, 'pct')} against {num(share_base, 'pct')}. "
+        f"The two years are a fixed ten years apart, not chosen for the result. The table below has every year from {first} to {latest}, so other years can be compared there.</p>"
     )
     body.append(FOLD)
     rows = [
@@ -230,7 +263,7 @@ def defence_page(facts, d, num, sources):
         )
     )
     body.append(
-        "<p class='small'>Defence here is the government's official “defence” spending, the COFOG function in PESA. It excludes military pensions, which count as social protection, so it is lower than the figure NATO uses. The 2025-26 figures are outturn.</p>"
+        "<p class='small'>Defence here is the government's official “defence” spending, the COFOG function in PESA. It excludes military pensions, which count as social protection, so it is lower than the figure NATO uses. The 2025-26 figures are outturn. After inflation means at 2025-26 prices, using the GDP deflator from the Office for National Statistics (30 June 2026), as PESA does.</p>"
     )
     body.append(source_line(sources, ["pesa4"], "Financial years, April to March."))
 

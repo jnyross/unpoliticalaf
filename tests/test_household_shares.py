@@ -9,7 +9,7 @@ import unittest
 
 import openpyxl
 
-from builder import downloads
+from builder import downloads, uncertainty
 from builder.build import render
 from builder.data import Facts, who_pays
 from builder.readers import ROOT
@@ -20,12 +20,28 @@ WITHDRAWN_PREFIXES = ("etb.2a.hhtax.", "etb.2a.taxshare.")
 class HouseholdTaxShares(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.facts, _, cls.pages, _ = render()
+        # render() refills the shared margin table from its own facts; later tests rely on its
+        # earlier state, so put it back.
+        saved_margins = dict(uncertainty.MARGINS)
+        saved_info = dict(uncertainty.INFO)
+        try:
+            cls.facts, _, cls.pages, _ = render()
+        finally:
+            uncertainty.MARGINS.clear()
+            uncertainty.MARGINS.update(saved_margins)
+            uncertainty.INFO.clear()
+            uncertainty.INFO.update(saved_info)
 
     def test_person_ranked_means_are_not_household_totals(self):
         self.assertEqual([fid for fid in self.facts if fid.startswith(WITHDRAWN_PREFIXES)], [])
         for fact in self.facts.values():
             self.assertFalse(any(i.startswith(WITHDRAWN_PREFIXES) for i in fact.inputs))
+
+    def test_debt_stock_has_no_weekly_flow_derivatives(self):
+        self.assertFalse(any("psnd" in fid and fid.endswith(".week") for fid in self.facts))
+        self.assertIn('data-fact="agg.tme.2025-26"', self.pages["spending.html"])
+        self.assertNotIn("at least half the income", self.pages["who-pays.html"])
+        self.assertIn("at or above State Pension age", self.pages["who-pays-households.html"])
 
     def test_supported_means_explain_person_weighting(self):
         for group in ("q1", "q2", "q3", "q4", "q5", "all"):

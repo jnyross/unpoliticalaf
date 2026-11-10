@@ -3,7 +3,7 @@ VENV ?= .venv
 RUN_PYTHON := $(VENV)/bin/python
 PYTHON_SOURCES := builder scripts tests quality
 
-.PHONY: setup setup-test setup-dev-tools setup-dev hooks setup-typing setup-quality setup-architecture architecture complexity duplication tracing delivery build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality
+.PHONY: setup setup-test setup-release setup-dev-tools setup-dev hooks setup-typing setup-quality setup-architecture architecture complexity duplication tracing delivery build site benchmark check test test-stability coverage verify-coverage verify a11y fetch live lint format format-check typecheck check-deps quality quality-checks
 
 # Production install (used by Vercel): build libraries plus the live-check metrics client.
 setup:
@@ -14,6 +14,14 @@ setup:
 # Unit-test tools, without the optional browser accessibility dependencies.
 setup-test: setup
 	$(RUN_PYTHON) -m pip install -q -r requirements-test.txt
+
+# Privileged jobs: the setup-test closure from hash-checked wheels only, nothing
+# resolved at install time. Regenerate requirements-release.txt when pins change.
+setup-release:
+	$(PYTHON) -c 'import sys; assert sys.version_info[:2] == (3, 12), "The lock is resolved for Python 3.12"'
+	$(PYTHON) -m venv $(VENV)
+	$(RUN_PYTHON) -m pip install -q --require-hashes --only-binary=:all: -r requirements-release.txt
+	$(RUN_PYTHON) -m pip check
 
 # Containers share source with the outer checkout, never its installed hooks.
 setup-dev-tools: setup
@@ -103,9 +111,12 @@ check-deps:
 	$(RUN_PYTHON) -m deptry .
 	cd quality && $(abspath $(RUN_PYTHON)) -m deptry .
 
-# Extend this aggregate as further tooling lands; never replace existing gates.
-quality: lint format-check typecheck check-deps complexity duplication tracing delivery architecture test-stability
+# Extend these aggregates as further tooling lands; never replace existing gates.
+# CI runs quality-checks, test-stability and the metrics parts in parallel jobs.
+quality-checks: lint format-check typecheck check-deps complexity duplication tracing delivery architecture
 	$(RUN_PYTHON) scripts/check_agents.py
+
+quality: quality-checks test-stability
 	$(MAKE) -f quality/Makefile metrics
 
 verify: build check test
@@ -116,10 +127,20 @@ coverage:
 
 verify-coverage: coverage
 
-# axe-core accessibility checks at phone and desktop width.
-a11y:
+# Retain default-state/24px/phone checks, then scan every manifest HTML expanded.
+# For bounded runs: -m builder.a11y --partition-index N --partition-count K
+# --output <unique.json>; finish with --verify <all K reports>.
+.PHONY: a11y-default a11y-partition a11y-union
+a11y: a11y-default
+	$(MAKE) a11y-partition
+
+a11y-default:
 	$(RUN_PYTHON) -m builder.check --axe
 	$(RUN_PYTHON) scripts/a11y_benchmark.py --strict > /dev/null
+
+# Each direct invocation also runs the independent expected-route/page checker.
+a11y-partition a11y-union:
+	$(RUN_PYTHON) -m builder.a11y $(A11Y_ARGS)
 
 # Download the sources listed in sources/manifest.json (needs open network access).
 fetch:

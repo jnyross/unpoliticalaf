@@ -6,6 +6,13 @@ ticket. The site keeps improving until it answers them all.
 
 The questions live in [questions.json](questions.json).
 
+The [baseline inventory](baseline.json) retains all 94 probe IDs, original probe
+wording and John's unchanged `asked`/`also_asked` text from commit
+`3e6e34f08a2233787d2a70e43a56fbaaa257501f` (84 with evidence, 10 open).
+Tests reconcile the current population to it. Correcting an invalid premise
+requires retaining the original probe wording and reason in `history`, not
+silently dropping or easing the question. See the [evidence map](inventory.md).
+
 ## Adding a question
 
 John asks in the project chat, for example: "New question: how does the UK
@@ -30,6 +37,12 @@ Each probe is in one of two states:
   official source, not from the site, then adds the options, answer and
   evidence.
 
+An evidence-complete probe may give a precise, sourced limitation when retained
+official evidence cannot support the requested statistic, with any nearest
+measure clearly distinguished. That does not mean the statistic is measured.
+In particular, J4.3 withdraws the unsupported household-tax aggregate rather than
+replacing it with another percentage. This follows the current completion scope.
+
 Probes are written by whoever adds the question, before anyone works on the
 site, so the site is tested against the question rather than the other way
 round. Never change John's wording, and never drop a probe because the site
@@ -44,3 +57,9 @@ can't answer it.
 ## How audits use them
 
 See "John's questions" in [goal-rubric.md](../goal-rubric.md).
+
+An evidence string check is not source verification, reachability or reader
+comprehension. Source regressions and independent review supplement it. Final
+reader success remains an independent same-candidate evaluation: five readers,
+seven fresh grouped sessions each, every probe at least four of five correct.
+No comprehension score or final acceptance is claimed by this inventory.

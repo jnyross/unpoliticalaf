@@ -1,7 +1,12 @@
 # Release notes
 
-The **Publish release notes** workflow creates a GitHub release whenever a tag
-matching `v[0-9]*` is pushed. GitHub generates the notes from merged pull requests,
+The **Publish release notes** workflow is the only publisher of version notes.
+It is dormant until reviewed delivery activation sets the repository variable
+`REVIEWED_PRODUCTION_DELIVERY` to `true`, the same gate as the site release
+writer in `release.yml`. While the variable is unset, a pushed tag matching
+`v[0-9]*` starts a run whose only job is skipped: nothing is checked out and no
+release is written. After activation, each such tag creates a GitHub release.
+GitHub generates the notes from merged pull requests,
 including contributor credits and a full comparison link. It explicitly selects
 the newest published version release in the tag's ancestry, never a site archive
 or draft. Stable checkpoints also exclude prereleases. If no eligible version
@@ -12,7 +17,8 @@ No Conventional Commit format, npm publication or extra service token is needed.
 
 ## Publish a release
 
-After this workflow is merged into `main`:
+After this workflow is merged into `main` and reviewed delivery activation has
+set the variable:
 
 1. Choose a checked commit on `main`. Confirm **Build and check** has passed for
    that exact commit before tagging it.
@@ -30,8 +36,10 @@ After this workflow is merged into `main`:
    Stable releases explicitly become latest.
 
 The tag must include the workflow (tag an updated `main`, not an older commit
-from before it was added). Push it using your normal Git credentials: tags
-pushed by another workflow's `GITHUB_TOKEN` do not trigger this workflow.
+from before it was added). A tag pushed before activation stays without a
+release; use a new version tag after activation rather than moving it. Push
+tags using your normal Git credentials: tags pushed by another workflow's
+`GITHUB_TOKEN` do not trigger this workflow.
 The notes publisher rejects tags outside `main` ancestry before any release
 write, including retries of existing versions.
 The workflow loads the notes helper from trusted `main`, not tag-provided code.
@@ -63,7 +71,13 @@ timeout; CLI failures report only the exception type, never raw API output.
 Intended local GitHub configuration and ordinary GitHub credentials are retained.
 Only a reviewed gate may call it after independent exact-candidate/production
 checks and a real live-byte comparison, serialized per SHA. Neither a manifest
-nor a run-shaped URL independently proves those checks happened. The release
+nor a run-shaped URL independently proves those checks happened. The `contents: write`
+release job pins every action to a reviewed commit SHA, checks out without
+persisted credentials and installs Python packages only with
+`make setup-release`: hash-checked wheels from `requirements-release.txt`,
+which must include every `requirements-test.txt` pin at the same version. The
+lock is resolved for Python 3.12, which the target enforces. The venv's own
+bundled pip comes from the pinned setup-python interpreter, not the lock. The release
 automation remains disabled until explicitly reviewed activation; packaging and
 this documentation do not authorize a release, schedule, tag or API write.
 

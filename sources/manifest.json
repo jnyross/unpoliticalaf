@@ -47,6 +47,21 @@
    "file": "ons/ashe-2025-fig2.csv"
   },
   {
+   "id": "ashe-2026-fig2",
+   "url": "https://www.ons.gov.uk/generator?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/bulletins/annualsurveyofhoursandearnings/2026/46bc5567&format=csv",
+   "file": "ons/ashe-2026-fig2.csv"
+  },
+  {
+   "id": "ashe-2026-table1-provisional",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2026provisional/ashetable12026provisional.zip",
+   "file": "ons/ashetable12026provisional.zip"
+  },
+  {
+   "id": "ashe-2025-table1-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1/2025revised/ashetable12025revised.zip",
+   "file": "ons/ashetable12025revised.zip"
+  },
+  {
    "id": "nomis-ashe-resident",
    "url": "https://www.nomisweb.co.uk/api/v01/dataset/NM_30_1.data.csv?geography=2092957697&date=latestMINUS28-latest&sex=1,2,3,4,5,6,7,8,9&item=2&pay=1&measures=20100&select=date_name,geography_name,sex,sex_name,item_name,pay_name,measures_name,obs_value,obs_status,obs_status_name",
    "file": "nomis/ashe-resident-uk-median-weekly.csv"
@@ -672,9 +687,34 @@
    "file": "dwp/outturn-and-forecast-tables-spring-forecast-2026.xlsx"
   },
   {
-   "id": "nhs-staff-nationality-jun25",
-   "url": "https://digital.nhs.uk/binaries/content/assets/website-assets/supplementary-information/supplementary-info-2025/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25_ah5433---final.xlsx",
-   "file": "nhs/hchs-staff-by-nhse-region-staff-group-and-nationality-jun-25.xlsx"
+   "id": "nhs-hchs-workforce-aug26",
+   "url": "https://files.digital.nhs.uk/3A/94E271/NHS%20HCHS%20Workforce%20Statistics%2C%20Trusts%20and%20core%20organisations%20-%20data%20tables%2C%20August%202026.xlsx",
+   "file": "nhs/nhs-hchs-workforce-statistics-trusts-and-core-organisations-data-tables-august-2026.xlsx"
+  },
+  {
+   "id": "nhs-hchs-dqa-aug26",
+   "url": "https://files.digital.nhs.uk/7E/8D590F/NHS%20HCHS%20Workforce%20Statistics%20-%20Data%20Quality%20Annex%2C%20August%202026.xlsx",
+   "file": "nhs/nhs-hchs-workforce-statistics-data-quality-annex-august-2026.xlsx"
+  },
+  {
+   "id": "sfc-asc-appendix-2026",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/ASC-Workforce-Statistical-Appendix-2026.xlsx",
+   "file": "sfc/ASC-Workforce-Statistical-Appendix-2026.xlsx"
+  },
+  {
+   "id": "sfc-state-2026",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Reports/National/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf",
+   "file": "sfc/The-state-of-the-adult-social-care-sector-and-workforce-in-England-2026.pdf"
+  },
+  {
+   "id": "sfc-method-jun26",
+   "url": "https://www.skillsforcare.org.uk/Adult-Social-Care-Workforce-Data/workforceintelligence/resources/Our-data/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf",
+   "file": "sfc/Methodology-for-estimating-the-size-and-characteristics-of-the-adult-social-care-workforce-in-England-June-2026.pdf"
+  },
+  {
+   "id": "sfc-terms",
+   "url": "https://www.skillsforcare.org.uk/Privacy-and-legal/Terms-and-conditions.aspx",
+   "file": "sfc/skills-for-care-terms-and-conditions.html"
   },
   {
    "id": "ons-mye-uk-mid2025",
@@ -750,6 +790,116 @@
    "id": "oecd-pit-top-rates",
    "url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_TAX_PIT@DF_PIT_TOP_EARN_THRESH,/all?startPeriod=2000&format=csvfilewithlabels",
    "file": "oecd/pit-top-rates.csv"
+  },
+  {
+   "id": "ehs-0809-annex-ch1",
+   "url": "https://assets.publishing.service.gov.uk/media/5a796fa1ed915d07d35b5765/1750039.xls",
+   "file": "ehs/2008-09-household-report-ch1-annex.xls"
+  },
+  {
+   "id": "ehs-0809-report",
+   "url": "https://assets.publishing.service.gov.uk/media/5a79a0a6ed915d07d35b6eed/1750765.pdf",
+   "file": "ehs/2008-09-household-report.pdf"
+  },
+  {
+   "id": "ons-lfs-guide-household",
+   "url": "https://www.ons.gov.uk/file?uri=%2Femploymentandlabourmarket%2Fpeopleinwork%2Femploymentandemployeetypes%2Fmethodologies%2Flabourforcesurveyuserguidance%2Flfsugvoltcm77238281.pdf",
+   "file": "ons/lfs-user-guide-vol8-household-2003.pdf"
+  },
+  {
+   "id": "boe-quoted-2yr-75ltv",
+   "url": "https://www.bankofengland.co.uk/boeapps/iadb/fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2008&Dateto=now&SeriesCodes=IUMBV34&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/quoted-rate-2yr-fixed-75ltv.csv"
+  },
+  {
+   "id": "boe-quoted-rates-notes",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2008&Dateto=31/Jan/2008&SeriesCodes=IUMBV34&VPD=N&VFD=N&Omit=-G",
+   "file": "boe/iadb-IUMBV34-metadata.xml"
+  },
+  {
+   "id": "boe-effective-rates-notes",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?CodeVer=new&xml.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=CFMZ6JM&VPD=N&VFD=N&Omit=-G",
+   "file": "boe/iadb-CFMZ6JM-metadata.xml"
+  },
+  {
+   "id": "boe-rate-series-titles",
+   "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2016&Dateto=31/Jan/2016&SeriesCodes=IUMBV34,CFMZ6JM&CSVF=CT&UsingCodes=Y&VPD=Y&VFD=N",
+   "file": "boe/iadb-IUMBV34-CFMZ6JM-titles-2016-01.csv"
+  },
+  {
+   "id": "boe-form-er-definitions",
+   "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/data-collection/er/def_er2016.pdf",
+   "file": "boe/def_er2016.pdf"
+  },
+  {
+   "id": "ashe-2002-table6",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2002/2002-table-6.zip",
+   "file": "ons/ashe-table6-2002.zip"
+  },
+  {
+   "id": "ashe-2006-table6-2007-methods",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2006consistentw_007methodology/2006-table-6.zip",
+   "file": "ons/ashe-table6-2006-2007-methods.zip"
+  },
+  {
+   "id": "ashe-2010-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2010revised/2010-revised-table-6.zip",
+   "file": "ons/ashe-table6-2010-revised.zip"
+  },
+  {
+   "id": "ashe-2011-table6-soc2010",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2011revisedbasedonsoc2010/2011-provisional-table-6.zip",
+   "file": "ons/ashe-table6-2011-soc2010.zip"
+  },
+  {
+   "id": "ashe-2020-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2020revised/table62020revised.zip",
+   "file": "ons/ashe-table6-2020-revised.zip"
+  },
+  {
+   "id": "ashe-2021-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2021revised/ashetable62021revised.zip",
+   "file": "ons/ashe-table6-2021-revised.zip"
+  },
+  {
+   "id": "ashe-2025-table6-revised",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/agegroupashetable6/2025revised/ashetable62025revised.zip",
+   "file": "ons/ashe-table6-2025-revised.zip"
+  },
+  {
+   "id": "ons-red02",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peoplenotinwork/redundancies/datasets/redundanciesbyindustryagesexandreemploymentratesred02/current/red02oct2026.xlsx",
+   "file": "ons/red02oct2026.xlsx"
+  },
+  {
+   "id": "ons-single-year-life-tables-uk",
+   "url": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/datasets/singleyearlifetablesukandconstituentcountries/singleyearlifetablesuk/nltuk198020241.xlsx",
+   "file": "ons/single-year-life-tables-uk.xlsx"
+  },
+  {
+   "id": "hmrc-historic-allowances",
+   "url": "https://assets.publishing.service.gov.uk/media/6a54c97ba4890e65cce64db8/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods",
+   "file": "gov/Table_a1_-_Income_Tax_-_personal_allowances_and_reliefs.ods"
+  },
+  {
+   "id": "hmrc-historic-rates",
+   "url": "https://assets.publishing.service.gov.uk/media/6a54ca0b9e9c95844ae64d9a/Table_a2_-_Income_Tax_-_rates_and_allowances.ods",
+   "file": "gov/Table_a2_-_Income_Tax_-_rates_and_allowances.ods"
+  },
+  {
+   "id": "hansard-ni-1992",
+   "url": "https://api.parliament.uk/historic-hansard/written-answers/1992/nov/12/national-insurance",
+   "file": "parl/hansard-national-insurance-1992-11-12.html"
+  },
+  {
+   "id": "gov-employer-rates-2025",
+   "url": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2025-to-2026",
+   "file": "gov/rates-and-thresholds-for-employers-2025-to-2026.html"
+  },
+  {
+   "id": "ons-emp07",
+   "url": "https://www.ons.gov.uk/file?uri=/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/temporaryemployeesemp07/current/emp07aug2026.xls",
+   "file": "ons/emp07aug2026.xls"
   }
  ]
 }

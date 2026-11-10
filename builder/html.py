@@ -67,7 +67,7 @@ nav.main li:first-child a{padding-left:0}
 @media (max-width:47.99rem){nav.main{margin:0}nav.main::after{display:none}nav.main ul{display:grid;grid-template-columns:repeat(4,1fr);gap:0 4px;padding:0 0 4px;overflow:visible}nav.main li{margin:0;min-width:0}nav.main a,nav.main li:first-child a{justify-content:center;text-align:center;white-space:normal;line-height:1.15;font-size:.86rem;padding:4px 2px;min-height:44px}}
 .wrap{max-width:44rem;margin:0 auto;padding-left:16px;padding-right:16px}
 main{padding-bottom:56px}
-h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px}
+h1{font-size:1.85rem;line-height:1.15;letter-spacing:-.02em;margin:28px 0 14px;overflow-wrap:anywhere}
 h2{font-size:1.38rem;line-height:1.25;letter-spacing:-.01em;margin:36px 0 10px;padding-top:16px;border-top:1px solid var(--line)}
 h3{font-size:1.1rem;line-height:1.3;margin:28px 0 8px}
 p{margin:0 0 12px}
@@ -92,7 +92,7 @@ details.src{border:0;border-top:1px solid var(--line2);border-radius:0;padding:0
 .note{border-left:3px solid var(--bar2);padding:2px 0 2px 12px;margin:16px 0;color:var(--ink2);font-size:.95rem}
 .moe,.moe-in{color:var(--muted);font-size:.88em;white-space:nowrap;font-variant-numeric:tabular-nums}.sure{font-size:.93rem;color:var(--ink2);margin:-6px 0 16px}.sure-check{margin:4px 0 0}
 .switch{margin:12px 0 18px}.seg{display:none;border:0;padding:0;margin:0 0 8px;min-width:0}.seg legend{font-size:.87rem;color:var(--muted);padding:0;margin:0 0 6px}.seg .opts{display:flex;flex-wrap:wrap;gap:6px}.seg input{position:absolute;opacity:0;width:1px;height:1px;margin:0}.seg label{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:22px;font-size:.93rem;cursor:pointer;background:#fff}.seg input:checked+label{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}.seg input:focus-visible+label{outline:3px solid var(--focus);outline-offset:2px}.switch .vhead{font-weight:650;margin:14px 0 4px}.switch .vnote{font-size:.9rem;color:var(--ink2);margin:0 0 6px}
-@supports selector(:has(*)){.seg{display:block}.switch .panel{display:none}.switch .vhead{display:none}.switch:has(.v0:checked) .p0,.switch:has(.v1:checked) .p1,.switch:has(.v2:checked) .p2{display:block}}
+@supports selector(:has(*)){.seg{display:block}.switch .panel{display:none}.switch .vhead{display:none}.switch:has(.v0:checked) .p0,.switch:has(.v1:checked) .p1,.switch:has(.v2:checked) .p2,.switch:has(.v3:checked) .p3{display:block}}
 .limit{background:var(--warn);border-radius:var(--r);border-left:4px solid var(--warnline);padding:12px 14px 2px;margin:16px 0 8px;font-size:.93rem;line-height:1.5}
 .scale{border-left:4px solid var(--line);padding:2px 0 2px 12px;margin:0 0 18px;font-size:.96rem}
 .illustration{border:2px dashed var(--bar2);border-radius:var(--r);padding:14px 16px;margin:24px 0;background:#fff}
@@ -125,7 +125,7 @@ th:first-child,td:first-child{text-align:left;padding-left:0}
 thead th{border-bottom:2px solid var(--ink);vertical-align:bottom;font-weight:650}
 tbody th{font-weight:500}
 tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
-.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(90deg,#fff 30%,rgba(255,255,255,0)) left/32px 100% no-repeat local,linear-gradient(270deg,#fff 30%,rgba(255,255,255,0)) right/32px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.25),rgba(0,0,0,0)) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.25),rgba(0,0,0,0)) right/12px 100% no-repeat scroll}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(90deg,#fff 30%,rgba(255,255,255,0)) left/32px 100% no-repeat local,linear-gradient(270deg,#fff 30%,rgba(255,255,255,0)) right/32px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.05),rgba(0,0,0,0)) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.05),rgba(0,0,0,0)) right/12px 100% no-repeat scroll}
 .tablewrap table{min-width:100%}
 details{margin:10px 0 16px;border:1px solid var(--line);border-radius:var(--r);padding:0 14px}
 details[open]{padding-bottom:8px}
@@ -508,6 +508,7 @@ QUESTION_PAGES = {
     "household-tax.html",
     "international.html",
     "productivity.html",
+    "economy-options.html",
     "borrowing.html",
     "why-debt.html",
     "defence.html",
@@ -519,6 +520,21 @@ QUESTION_PAGES = {
     "life/house-prices.html",
     "life/generations.html",
 }
+
+# Open every containing disclosure, including a target that is itself <details>.
+# Native summaries remain usable without JavaScript.
+OPEN_TARGET_JS = """<script>
+(function(){
+function openTarget(){
+var id;try{id=decodeURIComponent(location.hash.slice(1))}catch(error){return}
+var target=document.getElementById(id);if(!target)return;
+var current=target,opened=false;
+while(current){if(current.tagName==='DETAILS'&&!current.open){current.open=true;opened=true}current=current.parentElement}
+if(opened)target.scrollIntoView();
+}
+openTarget();window.addEventListener('hashchange',openTarget);
+})();
+</script>"""
 
 
 def page(
@@ -551,6 +567,8 @@ def page(
     if "data-view=" in body:
         scripts = scripts + VIEW_LINK_JS
     scripts = scripts + BACKTOP_JS
+    if "<details" in body:
+        scripts = scripts + OPEN_TARGET_JS
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -773,6 +791,48 @@ def details_table(summary, caption, head, rows):
     return f"<details><summary>{summary}</summary>{table(caption, head, rows)}</details>"
 
 
+def _break_label_position(position, text_width, chart_width, plot_left=44):
+    """Keep a method annotation inside the SVG even near the left edge."""
+    right = position > chart_width * 0.65 or position + 3 + text_width > chart_width
+    end = max(text_width + plot_left + 3, position - 3) if right else position + 3 + text_width
+    end = min(chart_width - 3, end)
+    return end - text_width, end, right
+
+
+def _line_tick_indices(labels, x):
+    """Keep round-year spacing on long axes without crowding endpoint labels."""
+    n = len(labels)
+
+    def extent(i):
+        width = 8.2 * len(_short(labels[i]))
+        if i == 0:
+            return x(i), x(i) + width
+        if i == n - 1:
+            return x(i) - width, x(i)
+        return x(i) - width / 2, x(i) + width / 2
+
+    step = max(1, math.ceil(n / 5))
+    annual = n > 25 and all(re.fullmatch(r"\d{4}", str(label)) for label in labels)
+    candidates = list(range(0, n - 1, step))
+    if annual:
+        # Prioritise evenly spaced decade ticks over crowded endpoint labels.
+        # The summary/table still give exact endpoints (for example 1971–2026).
+        candidates = [i for i, label in enumerate(labels) if int(label) % 10 == 0]
+    indices = []
+    for i in candidates:
+        low, high = extent(i)
+        if indices and low < extent(indices[-1])[1] + 10:
+            continue
+        if not annual and n > 1 and high > extent(n - 1)[0] - 10:
+            continue
+        indices.append(i)
+    if not indices or extent(n - 1)[0] >= extent(indices[-1])[1] + 10:
+        indices.append(n - 1)
+    if annual and indices[0] != 0 and extent(0)[1] + 10 <= extent(indices[0])[0]:
+        indices.insert(0, 0)
+    return indices
+
+
 def line_chart(
     title,
     labels,
@@ -856,26 +916,7 @@ def line_chart(
         )
         v += step_v
 
-    # x labels: first, last and as many between as fit without touching
-    def extent(i):
-        w = 8.2 * len(_short(labels[i]))
-        if i == 0:
-            return x(i), x(i) + w
-        if i == n - 1:
-            return x(i) - w, x(i)
-        return x(i) - w / 2, x(i) + w / 2
-
-    step = max(1, math.ceil(n / 5))
-    idx = []
-    for i in list(range(0, n - 1, step)):
-        lo_, hi_ = extent(i)
-        if idx and lo_ < extent(idx[-1])[1] + 10:
-            continue
-        if n > 1 and hi_ > extent(n - 1)[0] - 10:
-            continue
-        idx.append(i)
-    idx.append(n - 1)
-    for i in idx:
+    for i in _line_tick_indices(labels, x):
         anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
         parts.append(
             f'<text x="{x(i):.1f}" y="{H - 10}" text-anchor="{anchor}">{esc(_short(labels[i]))}</text>'
@@ -896,19 +937,17 @@ def line_chart(
         )
         # Right-align the label when it would run past the chart's right edge.
         # Width is estimated for the 15px chart font (about 8.4 units a character).
-        w = len(text) * 8.4
-        right = bx > W * 0.65 or bx + 3 + w > W
-        lo_, hi_ = (bx - 3 - w, bx - 3) if right else (bx + 3, bx + 3 + w)
+        lo_, hi_, right = _break_label_position(bx, len(text) * 8.4, W)
         if any(lo_ < b + 4 and hi_ > a - 4 for a, b in taken):
             continue  # breaks close together share one label; the caption and summary name each
         taken.append((lo_, hi_))
         ty = T + 12
         if right:
             parts.append(
-                f'<text x="{bx - 3:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>'
+                f'<text x="{hi_:.1f}" y="{ty}" text-anchor="end" fill="#7a5c00">{esc(text)}</text>'
             )
         else:
-            parts.append(f'<text x="{bx + 3:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
+            parts.append(f'<text x="{lo_:.1f}" y="{ty}" fill="#7a5c00">{esc(text)}</text>')
     for i, text in events:
         ex = x(i)
         parts.append(
@@ -963,7 +1002,7 @@ def line_chart(
     if direct:
         parts.extend(_end_labels(series, x, y, T, H - B))
     elif len(series) == 1 and kind:
-        parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T))
+        parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T, taken))
     label = f"{heading}. {title}." if heading else f"{title}."
     label += f" {desc}" if desc else ""
     attrs = ""
@@ -983,6 +1022,7 @@ def line_chart(
             "names": names,
             "rows": rows,
             "fc": forecast_from,
+            "future": future,
         }
         attrs = _chart_attr(read)
         summary = chart_summary(
@@ -1007,6 +1047,8 @@ def line_chart(
         svg += downloads.chart_data(
             [nm for nm, _, _ in series],
             [[plabels[i]] + [downloads.raw(vals[i]) for _, vals, _ in series] for i in range(n)],
+            forecast_from=forecast_from,
+            future=future,
         )
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
@@ -1353,7 +1395,7 @@ def _caption(unit_label, lo, step):
 ZERO_NOTE = "The scale starts at {}, not at zero."
 
 
-def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
+def _end_value(raw_vals, vals, kind, forecast_from, x, y, top, annotations=()):
     """Write the latest measured value beside the end of a single line."""
     pts = [
         i
@@ -1363,9 +1405,17 @@ def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
     if not pts:
         return []
     i = pts[-1]
+    text = fmt(raw_vals[i], kind)
+    text_right = x(i) - 2
+    text_left = text_right - len(text) * 8.4
     ly = max(y(vals[i]) - 9, top + 12)
+    # Reserve a second row only where the value meets a drawn method label.
+    if ly < top + 34 and any(
+        text_left < right + 4 and text_right > left - 4 for left, right in annotations
+    ):
+        ly = top + 34
     return [
-        f'<text class="lbl" x="{x(i) - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(fmt(raw_vals[i], kind))}</text>'
+        f'<text class="lbl" x="{text_right:.1f}" y="{ly:.1f}" text-anchor="end">{esc(text)}</text>'
     ]
 
 
@@ -1504,8 +1554,8 @@ def _join(xs):
 def _end_labels(series, x, y, top, bottom):
     """Name each line beside its last point, so readers don't need a key.
 
-    Labels sit above the end of a line that rises into it and below one that
-    falls into it, then are nudged apart so they never overlap.
+    Labels are vertically centred beside their endpoints, then nudged apart
+    in endpoint order so they never overlap or exchange series identities.
     """
     labs = []
     for name, vals, style in series:
@@ -1513,10 +1563,10 @@ def _end_labels(series, x, y, top, bottom):
         if not pts:
             continue
         i, v = pts[-1]
-        prev = pts[-2][1] if len(pts) > 1 else v
-        ly = y(v) + (18 if prev > v else -9)
-        labs.append([ly, x(i), name, style])
-    labs.sort()
+        ly = y(v) + 5
+        labs.append([ly, x(i), name, style, y(v)])
+    # Keep the actual endpoint order even when labels need more space.
+    labs.sort(key=lambda lab: lab[4])
     for k in range(1, len(labs)):
         if labs[k][0] - labs[k - 1][0] < 17:
             labs[k][0] = labs[k - 1][0] + 17
@@ -1527,7 +1577,7 @@ def _end_labels(series, x, y, top, bottom):
             labs[k][0] = labs[k + 1][0] - 17
     return [
         f'<text class="lbl{" b" if st == "b" else ""}" x="{lx - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(nm)}</text>'
-        for ly, lx, nm, st in labs
+        for ly, lx, nm, st, _ in labs
     ]
 
 
@@ -1589,7 +1639,7 @@ var cap=el.parentNode.querySelector('figcaption');el.parentNode.insertBefore(out
 var gs=svgs.map(function(svg){var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);return g;});
 el.setAttribute('tabindex','0');
 function show(i){if(i<0||i>=d.x.length)return;cur=i;var r=d.rows[i];gs.forEach(function(g){g.setAttribute('x1',d.x[i]);g.setAttribute('x2',d.x[i]);g.style.display='';});
-out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' (forecast)':'')+': ';out.appendChild(b);
+out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' ('+(d.future||'forecast')+')':'')+': ';out.appendChild(b);
 out.appendChild(document.createTextNode(d.names.length>1?d.names.map(function(n,k){return n+' '+r[k+1];}).join('; '):r[1]));}
 svgs.forEach(function(svg){
 function near(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse()),best=0;

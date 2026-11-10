@@ -166,6 +166,7 @@ Python 3.10 or later.
 ```
 make setup     # create .venv and install production build dependencies
 make setup-test # add pytest and build dependencies, without browser tools
+make setup-release # the same set from hash-checked wheels only (privileged CI jobs)
 make build     # write the site to site/
 make production-build # use the complete reviewed production flag configuration
 make production-verify # production build + independent check + tests
@@ -177,6 +178,7 @@ make verify-coverage # same population under the combined 80% coverage gate
 make benchmark # time a fresh build, save JSON and enforce the 90-second budget
 npm ci --ignore-scripts # install locked Node 22 developer tools
 make setup-dev && make quality # lint, format, types, dependencies, complexity, duplication, tracing, stability, dashboard
+make quality-checks # the static part of make quality, without the timed suites
 make lint      # Ruff syntax/Pyflakes across all first-party Python
 make format    # Black writes maintained Python in builder/, scripts/, tests/, quality/
 make format-check # check formatting without rewriting files (also in quality/CI)
@@ -480,6 +482,10 @@ running `python -m pytest --collect-only tests/test_household_shares.py`.
 `make setup-dev` includes the test dependencies as well as the optional browser
 tools. Production deployments still use `make setup`, without either set of tools.
 CI checks the lightweight test setup, bounded pytest collection and `make verify`.
+CI runs the three-seed stability run and combined coverage once each, in parallel
+jobs. The `check` and `quality` jobs pass only when both of those jobs succeed;
+`quality` itself runs `make quality-checks` and the dashboard tooling tests, so
+CI covers every component of `make quality` without repeating a suite.
 
 ### Test timing and stability
 
@@ -585,9 +591,11 @@ Run it locally with `make -f quality/Makefile setup metrics`.
 
 ## Release notes
 
-Pushing a version tag such as `v1.0.0` automatically publishes a GitHub release
-with generated notes, contributor credits and a full comparison link. Pull
-requests are grouped by optional labels; unlabelled contributions are included.
+Once reviewed delivery activation sets `REVIEWED_PRODUCTION_DELIVERY`, pushing a
+version tag such as `v1.0.0` publishes a GitHub release with generated notes,
+contributor credits and a full comparison link. Until then a version tag
+publishes nothing. Pull requests are grouped by optional labels; unlabelled
+contributions are included.
 See [docs/releases.md](docs/releases.md) for tagging, prereleases and retries.
 This is separate from the site's deployments from `main`.
 

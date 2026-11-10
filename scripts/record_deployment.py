@@ -23,7 +23,10 @@ if str(ROOT) not in sys.path:
 from scripts import check_live  # noqa: E402
 
 SOURCE = "verified-vercel-deployment"
-ENVIRONMENT = "production"
+# GitHub environment names are case-insensitive, and Vercel's own GitHub
+# integration may use Production and Preview. Receipts stay in their own
+# non-production environment and never mark other deployments inactive.
+ENVIRONMENT = "verified-site-receipts"
 REPOSITORY = "jnyross/unpoliticalaf"
 VERCEL_PROJECT_PATH = "/johns-projects-d6b53aae/unpoliticalaf/"
 VERCEL_BOT_ID = 35613825
@@ -282,7 +285,7 @@ def record(api, sha, provider, run_url, build_sha256):
                 "task": "deploy",
                 "auto_merge": False,
                 "required_contexts": [],
-                "production_environment": True,
+                "production_environment": False,
                 "transient_environment": False,
                 "description": "Automatic Vercel deployment, verified byte for byte",
                 "payload": {
@@ -307,7 +310,7 @@ def record(api, sha, provider, run_url, build_sha256):
             "state": "success",
             "environment_url": check_live.DEFAULT_URL,
             "log_url": run_url,
-            "auto_inactive": True,
+            "auto_inactive": False,
             "description": "Vercel succeeded; every live file matches this commit",
         },
     )
@@ -318,7 +321,8 @@ def frequency_report(api, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     weeks = [set() for _ in range(4)]
     invalid = 0
-    for deployment in api.pages("deployments?environment=production&task=deploy"):
+    query = urlencode({"environment": ENVIRONMENT, "task": "deploy"})
+    for deployment in api.pages(f"deployments?{query}"):
         if not owned(deployment):
             invalid += int(marked(deployment))
             continue

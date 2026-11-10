@@ -241,7 +241,8 @@ GROUPS = [
                 "fifths",
                 "Fifths (quintiles)",
                 "Everyone is lined up from lowest to highest income and split into five groups with about the same number of people in each. "
-                "The “lowest-income fifth” is the bottom 20% of people. On this site the fifths hold about the same number of people, not of households.",
+                "The “lowest-income fifth” is the bottom 20% of people. On this site the current fifths hold about the same number of people, not of households. "
+                'The exception is the older years of the <a href="household-tax.html#over-time">household tax history</a>: in its older tables, up to 2017/18, the ONS ranked households instead, so each of those fifths holds about the same number of households. 2017/18 is also shown on the current method.',
                 ["fifths", "fifth of people", "quintiles"],
             ),
             (

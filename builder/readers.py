@@ -46,6 +46,20 @@ def xlsx_rows(path: str, sheet: str) -> list[list[object]]:
     return [[c.value for c in row] for row in ws.iter_rows()]
 
 
+@lru_cache(maxsize=None)
+def zip_xlsx(path: str, member: str) -> Workbook:
+    """A workbook inside a retained zip pack, such as ONS's ASHE tables."""
+    with zipfile.ZipFile(ROOT / path) as archive:
+        return openpyxl.load_workbook(io.BytesIO(archive.read(member)), data_only=True)
+
+
+def zip_sheet(path: str, member: str, sheet: str) -> Worksheet:
+    ws = zip_xlsx(path, member)[sheet]
+    if not isinstance(ws, Worksheet):
+        raise ValueError(f"{sheet!r} is not a worksheet")
+    return ws
+
+
 _NS = {
     "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
     "office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0",

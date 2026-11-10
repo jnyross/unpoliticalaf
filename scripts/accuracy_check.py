@@ -260,11 +260,19 @@ def ods_rows(body, sheet):
     raise KeyError(sheet)
 
 
+def _open_pack(body, ext, locator):
+    """A workbook inside a publisher's zip pack ("member::sheet!ref") is read as the xlsx it is."""
+    if ext != "zip":
+        return body, ext, locator
+    member, locator = locator.split("::", 1)
+    return zipfile.ZipFile(io.BytesIO(body)).read(member), "xlsx", locator
+
+
 def read_cell(body, file, locator, retained=None):
     """Read one value from a freshly downloaded file. `retained` is the copy in
     the repository, used only to find which row a 'line N' locator means, so
     that a newer edition with extra rows is still read at the right row."""
-    ext = file.rsplit(".", 1)[-1]
+    body, ext, locator = _open_pack(body, file.rsplit(".", 1)[-1], locator)
     if ext == "xlsx":
         import openpyxl
 

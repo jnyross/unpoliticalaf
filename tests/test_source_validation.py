@@ -49,6 +49,10 @@ def test_retained_source_formats_and_affected_contracts(name, source_id):
         (".json", b"invalid"),
         (".pdf", b"%PDF-not-a-real-document"),
         (".html", b"<html><title>Access denied</title></html>"),
+        (".xml", b"<html><title>Access denied</title></html>"),
+        (".xml", b"<Envelope xmlns='http://www.gesmes.org/xml/2002-08-01'><Cube/></Envelope>"),
+        (".xml", b"<?xml version='1.0'?><Other SCODE='IUMBV34'/>"),
+        (".xml", b"<Envelope"),
         (".bin", b"opaque download"),
     ],
 )
@@ -134,3 +138,130 @@ def test_csv_schema_change_fails_but_compatible_value_update_passes(tmp_path):
     shutil.copyfile(previous, staged)
     staged.write_text(staged.read_text().replace("2025,1", "2025,2"))
     validate_source("test", staged, "text/csv", previous)
+
+
+@pytest.mark.parametrize(
+    "mutation", ["corrupt", "no-workbooks", "missing-sheet", "label", "median"]
+)
+def test_ashe_table1_pack_contract_rejects_incompatible_zip(tmp_path, mutation):
+    import io
+    import zipfile
+
+    previous = ROOT / "data/fetched/ons/ashetable12026provisional.zip"
+    staged = tmp_path / "ashe.zip"
+    if mutation == "corrupt":
+        staged.write_bytes(previous.read_bytes()[:4096])
+    elif mutation == "no-workbooks":
+        with zipfile.ZipFile(staged, "w") as output:
+            output.writestr("readme.txt", "no tables")
+    else:
+        member = "PROV - Table 1.1a   Weekly pay - Gross 2026.xlsx"
+        with zipfile.ZipFile(previous) as original, zipfile.ZipFile(staged, "w") as output:
+            for name in original.namelist():
+                body = original.read(name)
+                if name == member:
+                    workbook = openpyxl.load_workbook(io.BytesIO(body))
+                    sheet = workbook["Female Part-Time"]
+                    if mutation == "missing-sheet":
+                        sheet.title = "Renamed"
+                    elif mutation == "label":
+                        sheet["A6"] = "Something else"
+                    else:
+                        sheet["D6"] = "x"
+                    buffer = io.BytesIO()
+                    workbook.save(buffer)
+                    body = buffer.getvalue()
+                output.writestr(name, body)
+    with pytest.raises((ValueError, zipfile.BadZipFile)):
+        validate_source("ashe-2026-table1-provisional", staged, "application/zip", previous)
+
+
+@pytest.mark.parametrize("mutation", ["kept", "corrupt-member"])
+def test_ashe_table6_pack_with_legacy_xls_members(tmp_path, mutation):
+    import zipfile
+
+    import xlrd
+
+    previous = ROOT / "data/fetched/ons/ashe-table6-2002.zip"
+    staged = tmp_path / "ashe.zip"
+    with zipfile.ZipFile(previous) as original, zipfile.ZipFile(staged, "w") as output:
+        for name in original.namelist():
+            body = original.read(name)
+            if mutation == "corrupt-member" and name.endswith("Gross 2002.xls"):
+                body = b"not a workbook" * 64
+            output.writestr(name, body)
+    if mutation == "kept":
+        validate_source("ashe-2002-table6", staged, "application/zip", previous)
+        return
+    with pytest.raises((ValueError, xlrd.XLRDError)):
+        validate_source("ashe-2002-table6", staged, "application/zip", previous)
+
+
+def _copy_sheet(source, sheet, columns, target, change):
+    """Write one retained sheet to a small workbook, apply a change and return its path."""
+    workbook = openpyxl.load_workbook(source, read_only=True, data_only=True)
+    rows = [
+        list(r) for r in workbook[sheet].iter_rows(min_row=1, max_col=columns, values_only=True)
+    ]
+    workbook.close()
+    if change:
+        change(rows)
+    output = openpyxl.Workbook()
+    output.active.title = sheet
+    for row in rows:
+        output.active.append(row)
+    output.save(target)
+    return target
+
+
+NHS_TABLES = ROOT / "data/fetched" / RECEIPTS["nhs-hchs-workforce-aug26"]["file"]
+SFC_APPENDIX = ROOT / "data/fetched" / RECEIPTS["sfc-asc-appendix-2026"]["file"]
+
+
+def _set_cell(row, col, value):
+    def change(rows):
+        rows[row - 1][col] = value
+
+    return change
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        None,
+        _set_cell(458, 2, "Not known"),
+        _set_cell(2, 0, "Staff in NHS trusts, core organisations and GP practices, England"),
+        _set_cell(233, 0, "2026-07-31"),
+        _set_cell(240, 4, "*"),
+        lambda rows: rows.append(list(rows[457])),
+    ],
+    ids=["unchanged-copy", "unknown-label", "scope", "month", "suppressed", "repeated-total"],
+)
+def test_nhs_nationality_contract(tmp_path, change):
+    staged = _copy_sheet(NHS_TABLES, "14", 5, tmp_path / "nhs.xlsx", change)
+    if change is None:
+        validate_source("nhs-hchs-workforce-aug26", staged, "application/octet-stream")
+        return
+    with pytest.raises(ValueError, match="NHS Table 14"):
+        validate_source("nhs-hchs-workforce-aug26", staged, "application/octet-stream")
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        None,
+        _set_cell(27, 1, "Source: Skills for Care's workforce estimates, 2024/25"),
+        _set_cell(29, 5, "Personal assistants"),
+        _set_cell(35, 1, "Not British"),
+        _set_cell(33, 2, 27),
+        _set_cell(30, 3, "*"),
+    ],
+    ids=["unchanged-copy", "period", "sector", "row-label", "count-as-share", "suppressed"],
+)
+def test_sfc_nationality_contract(tmp_path, change):
+    staged = _copy_sheet(SFC_APPENDIX, "4.7", 6, tmp_path / "sfc.xlsx", change)
+    if change is None:
+        validate_source("sfc-asc-appendix-2026", staged, "application/octet-stream")
+        return
+    with pytest.raises(ValueError, match="Skills for Care Table 4.7.1"):
+        validate_source("sfc-asc-appendix-2026", staged, "application/octet-stream")

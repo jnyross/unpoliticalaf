@@ -81,13 +81,13 @@ Where the site says it:
 - `household-tax.html`: "This person is invented to show how the rules work. They are not a typical or average person, and this is not a measured figure."
 - `household-tax.html`: "Together: £4,879"
 
-## 8. B: About the same
+## 8. B: A little higher, about 4%
 
-Year by year, Earnings: £767 a week in April 2025, about the same as April 2021 (£761 in April 2025 prices). Before allowing for prices it rose from £610, about a quarter, which is why A is wrong. Pay is compared from 2021 because the survey changed how it codes jobs in 2011 and 2021.
+Year by year, Earnings: £811 a week in April 2026 (ONS's provisional estimate), 4% more than April 2021 (£783 in April 2026 prices). Before allowing for prices it rose from £610, about a third, which is why A is wrong. Pay is compared from 2021 because the survey changed how it codes jobs in 2011 and 2021.
 
 Where the site says it:
 
-- `life/earnings.html`: "pay in April 2025 was about the same as in April 2021"
+- `life/earnings.html`: "pay in April 2026 was 4% more than in April 2021"
 
 ## 9. A: 27.1 pupils, England only
 

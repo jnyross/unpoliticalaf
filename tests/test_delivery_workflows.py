@@ -48,7 +48,7 @@ class DeliveryWorkflows(unittest.TestCase):
             'fromJSON(\'["push","workflow_dispatch"]\')',
             "ref: ${{ github.event.workflow_run.head_sha }}",
             "VERCEL_GIT_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}",
-            "make setup-test",
+            "make setup-release",
             "make production-verify",
             ".venv/bin/python scripts/release_evidence.py",
             ".venv/bin/python scripts/package_release.py",
@@ -56,6 +56,7 @@ class DeliveryWorkflows(unittest.TestCase):
             "cancel-in-progress: false",
         ):
             self.assertIn(text, workflow)
+        self.assertNotIn("make setup-test", workflow)
         self.assertNotIn("download-artifact", workflow)
         self.assertNotIn("schedule:", workflow)
         self.assertLess(workflow.index("release_evidence.py"), workflow.index("publish_release.sh"))
@@ -63,6 +64,8 @@ class DeliveryWorkflows(unittest.TestCase):
     def test_version_notes_use_separate_reviewed_helper(self):
         workflow = (WORKFLOWS / "release-notes.yml").read_text()
         self.assertIn('tags: ["v[0-9]*"]', workflow)
+        # A stray version tag publishes nothing before reviewed delivery activation.
+        self.assertIn("    if: vars.REVIEWED_PRODUCTION_DELIVERY == 'true'\n", workflow)
         self.assertIn('require("./scripts/release_notes.cjs")', workflow)
         self.assertIn("persist-credentials: false", workflow)
         self.assertNotIn("site-", workflow)

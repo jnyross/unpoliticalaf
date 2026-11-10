@@ -55,9 +55,18 @@ is accepted.
 
 ## Receipt identity and recovery
 
-The deployment uses `environment: production`, `task: deploy`, the exact SHA,
-`production_environment: true`, `transient_environment: false`,
-`auto_merge: false` and no requested status-context override. Its payload is:
+The deployment uses `environment: verified-site-receipts`, `task: deploy`, the
+exact SHA, `production_environment: false`, `transient_environment: false`,
+`auto_merge: false` and no requested status-context override. Each success
+status sets `auto_inactive: false`. GitHub environment names are
+case-insensitive and Vercel's GitHub integration may record `Production` or
+`Preview` deployments, so receipts use their own environment and never mark any
+other deployment inactive. The receipt jobs declare no workflow `environment:`,
+so Actions adds no deployment record of its own. Records in any other
+environment are never receipts. The first receipt makes GitHub create the
+`verified-site-receipts` environment with no protection rules; that is
+expected, and adding rules there would be a separate reviewed activation
+decision. Its payload is:
 
 | Field | Evidence |
 | --- | --- |
@@ -101,6 +110,11 @@ allowlists API paths, removes foreign-host/debug environment overrides, uses a
 60-second subprocess timeout, and never prints raw command output or tokens
 on failure. Use only the existing workflow token and its intentionally
 reviewed permissions: contents/statuses/actions read and deployments write.
+The writing job installs only the hash-checked wheel closure in
+`requirements-release.txt` (`make setup-release`), and its actions are pinned
+to reviewed commit SHAs. `live.yml` calls `deploy.yml` with deployments write
+for that job, so the read-only `live` job narrows its own token to contents
+read before its ordinary unhashed `make setup`.
 No Vercel API write, new credential, provider or endpoint configuration is
 needed. A local read-only report may use the existing authenticated `gh` CLI.
 
@@ -146,7 +160,8 @@ Synthetic fixtures are not production receipts. Exact-candidate CI and actual
 provider/API observation belong to reviewed qualification. No successful
 production receipt or deployment frequency is claimed by this document.
 
-The canonical writer in `deploy.yml` and downstream site archive workflow are
-gated by `vars.REVIEWED_PRODUCTION_DELIVERY == 'true'`. This integration does not
+The canonical writer in `deploy.yml`, the downstream site archive workflow and the
+version release-notes workflow are gated by
+`vars.REVIEWED_PRODUCTION_DELIVERY == 'true'`. This integration does not
 set that variable or authorize its activation. The legacy `live.yml` dispatch
 delegates to the same verifier; no daily schedule is introduced or restored.
