@@ -31,6 +31,7 @@ CORRECTIONS = [
         ],
         "was": "The 2021-22 benefit shares were labelled DWP benefit spending, although their denominator also includes the separate Non-DWP Welfare total, including tax credits and Child Benefit.",
         "now": "The label names benefit spending in the DWP tables including non-DWP welfare. The explanation states the mixed UK and Great Britain coverage and distinguishes the 1955-56 Table 1a-only denominator. Amounts, shares and rankings have not changed.",
+        "pr": 262,
     },
     {
         "date": "10 November 2026",
@@ -42,6 +43,7 @@ CORRECTIONS = [
         ],
         "was": "Chart CSV downloads left forecast and projection periods unmarked. Calculated figure records and the facts download named the calculation but did not retain the statuses of its source inputs. One retired-household summary said at least half of income, unlike the more-than-50% rule in the current ONS workbook. Retired and non-retired household means did not explain their person-analysis population. The facts download also included unused weekly versions of debt per person and household, although debt is a dated stock.",
         "now": "Chart downloads mark forecast and projection periods. Calculated records and downloads retain the transitive source-input statuses separately from the calculation method. The retired-household definition follows ONS's 2023/24 Notes, note 12, and the amounts are labelled person-weighted household means, not personal bills or group totals. Weekly debt derivatives are withdrawn; dated debt per person and household remain. No supported numerical value has changed.",
+        "pr": 262,
     },
     {
         "date": "9 November 2026",
@@ -51,6 +53,7 @@ CORRECTIONS = [
         ],
         "was": "The house prices page described home ownership by age as the share of people aged 25 to 34, 35 to 44 or 75 and over who owned their home. The English Housing Survey figures are for households, grouped by the age of the household reference person, not for everyone of that age.",
         "now": "The page and the figure notes say these are households grouped by the age of the household reference person. The percentages themselves have not changed. The page now also shows 1991 figures from the Labour Force Survey, with the difference in how that survey picked the household's main person stated beside them.",
+        "pr": 262,
     },
     {
         "date": "8 November 2026",
@@ -65,6 +68,7 @@ CORRECTIONS = [
         ],
         "was": "The 4 November 2026 correction said ONS's 2026 release kept April 2025 pay unchanged. It did not: in October 2026 ONS published revised April 2025 estimates and provisional April 2026 estimates. The earnings pages still showed the earlier provisional April 2025 figures, labelled as published rather than provisional, and stopped at April 2025.",
         "now": "UK pay for April 2025 uses ONS's revised estimates and April 2026 uses its provisional estimates, both read from ONS's ASHE Table 1 files, and each is labelled with its status. Every pay figure after inflation is in April 2026 prices. The earnings page gives ONS's own published change for the latest year beside the change worked out from ONS's weekly figures. The pay spread also uses the Table 1 files for April 2025 and 2026. Figures by place end at April 2025, ONS's provisional estimates, because the Nomis table they come from has no April 2026 figures yet.",
+        "pr": 262,
     },
     {
         "date": "7 November 2026",
