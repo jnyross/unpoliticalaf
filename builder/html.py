@@ -508,6 +508,7 @@ QUESTION_PAGES = {
     "household-tax.html",
     "international.html",
     "productivity.html",
+    "economy-options.html",
     "borrowing.html",
     "why-debt.html",
     "defence.html",
@@ -519,6 +520,21 @@ QUESTION_PAGES = {
     "life/house-prices.html",
     "life/generations.html",
 }
+
+# Open every containing disclosure, including a target that is itself <details>.
+# Native summaries remain usable without JavaScript.
+OPEN_TARGET_JS = """<script>
+(function(){
+function openTarget(){
+var id;try{id=decodeURIComponent(location.hash.slice(1))}catch(error){return}
+var target=document.getElementById(id);if(!target)return;
+var current=target,opened=false;
+while(current){if(current.tagName==='DETAILS'&&!current.open){current.open=true;opened=true}current=current.parentElement}
+if(opened)target.scrollIntoView();
+}
+openTarget();window.addEventListener('hashchange',openTarget);
+})();
+</script>"""
 
 
 def page(
@@ -551,6 +567,8 @@ def page(
     if "data-view=" in body:
         scripts = scripts + VIEW_LINK_JS
     scripts = scripts + BACKTOP_JS
+    if "<details" in body:
+        scripts = scripts + OPEN_TARGET_JS
     return f"""<!doctype html>
 <html lang="en-GB">
 <head>

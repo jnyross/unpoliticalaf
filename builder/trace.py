@@ -62,6 +62,7 @@ CORRECTIONS = [
     },
     {
         "date": "6 November 2026",
+        "id": "household-tax-withdrawal",
         "pages": [
             ("who-pays.html#richest-share", "Who pays?"),
             ("figures/etb.html", "ONS figure records"),
@@ -404,6 +405,7 @@ def figure_pages(facts, sources, used):
 def corrections_page():
     items = []
     for c in CORRECTIONS:
+        fragment = f' id="{esc(c["id"])}"' if "id" in c else ""
         where_ = ", ".join(f'<a href="{href}">{esc(t)}</a>' for href, t in c["pages"])
         change = (
             f'<a href="{REPO}/pull/{c["pr"]}">Change {c["pr"]} in the public repository</a>'
@@ -411,7 +413,7 @@ def corrections_page():
             else f'<a href="{REPO}/commits/main/builder/pages_money.py">Correction code history in the public repository</a>'
         )
         items.append(
-            f"""<section class="correction"><h2>{esc(c["date"])}</h2>
+            f"""<section class="correction"{fragment}><h2>{esc(c["date"])}</h2>
 <dl><dt>Page</dt><dd>{where_}</dd>
 <dt>What was wrong</dt><dd>{esc(c["was"])}</dd>
 <dt>What it says now</dt><dd>{esc(c["now"])}</dd>

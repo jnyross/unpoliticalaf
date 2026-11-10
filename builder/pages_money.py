@@ -961,6 +961,8 @@ def who_pays_page(facts, d, num, sources):
     )
     body.append(
         f"""<div class="answer"><p class="lede">Higher-income people pay most Income Tax. In tax year {y.replace(" to ", "-")}, the top 1% of Income Tax payers owed {num(f"hmrc.share.top1.{y}", "pct")} of all Income Tax, and had {num(f"hmrc.income.top1.{y}", "pct")} of all Income Tax payers' income.</p>
+<p><strong>Not all taxes.</strong> The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only.</p>
+<p><strong>No wealth-tax costing.</strong> The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p>
 </div>"""
     )
     # HMRC. The chart comes first on a phone; how it is counted follows it.
@@ -1064,7 +1066,7 @@ def who_pays_page(facts, d, num, sources):
         y[:4] + "-" + y[-2:] if " to " in y else y
     )  # the same tax year as the figures above, on the OBR's basis (2023-24 is not 2025-26)
     body.append(
-        f"""<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09. The site does not show the share of all taxes paid by the top 1%, because the official survey covers Income Tax only. The site does not estimate what a wealth tax or a change to Capital Gains Tax would raise each year.</p></div>"""
+        f"""<div class="limit"><p><strong>Limits.</strong> This covers Income Tax only, which raised about {num(f"rec.income_tax.{oy}", "bn")} of the {num(f"rec.taxes.{oy}", "bn")} of all taxes in {oy} (OBR). It leaves out people who owe no Income Tax. Rules for dividends changed in 2016-17, so years before and after are not directly comparable. There are no figures for 2008-09.</p></div>"""
     )
     body.append(
         source_line(
@@ -1094,7 +1096,7 @@ def who_pays_page(facts, d, num, sources):
 <div class="limit"><p><strong>No supported total share.</strong>
 The ONS table used here does not establish the richest fifth's share of all taxes paid by UK households.
 Our former 46.0% claim is withdrawn, not replaced by another estimate.
-<a href="corrections.html">Read the correction</a>.</p></div>
+<a href="corrections.html#household-tax-withdrawal">Read the correction</a>.</p></div>
 <p>ONS averages household amounts across people, not households. These person-weighted means cannot give actual household-tax totals using either household or person counts.</p>
 <p>What is supported: taxes were {num("etb.t8.gross.all.q5", "pct")} of gross household income for the highest-income fifth.
 That is a share of income, not a share of all taxes raised. See <a href="household-tax.html">Tax and income</a>.</p>

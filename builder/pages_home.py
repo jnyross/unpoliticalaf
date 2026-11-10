@@ -294,13 +294,4 @@ def sources_page(sources, used_counts):
         "Every official file Unpolitical uses, grouped by publisher, with a full record for each.",
         folded=False,
         contents=False,
-        scripts=OPEN_TARGET_JS,
     )
-
-
-# Opens the publisher list that holds a linked source (sources.html#src-...), for browsers
-# that do not open a closed <details> on their own when its contents are the link target.
-OPEN_TARGET_JS = """<script>
-(function(){function go(){var h=location.hash.slice(1);if(!h)return;var e=document.getElementById(h);if(!e)return;
-var d=e.closest('details');if(d&&!d.open){d.open=true;e.scrollIntoView()}}go();window.addEventListener('hashchange',go)})();
-</script>"""
