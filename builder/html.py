@@ -125,7 +125,7 @@ th:first-child,td:first-child{text-align:left;padding-left:0}
 thead th{border-bottom:2px solid var(--ink);vertical-align:bottom;font-weight:650}
 tbody th{font-weight:500}
 tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
-.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(90deg,#fff 30%,rgba(255,255,255,0)) left/32px 100% no-repeat local,linear-gradient(270deg,#fff 30%,rgba(255,255,255,0)) right/32px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.25),rgba(0,0,0,0)) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.25),rgba(0,0,0,0)) right/12px 100% no-repeat scroll}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(90deg,#fff 30%,rgba(255,255,255,0)) left/32px 100% no-repeat local,linear-gradient(270deg,#fff 30%,rgba(255,255,255,0)) right/32px 100% no-repeat local,radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.05),rgba(0,0,0,0)) left/12px 100% no-repeat scroll,radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.05),rgba(0,0,0,0)) right/12px 100% no-repeat scroll}
 .tablewrap table{min-width:100%}
 details{margin:10px 0 16px;border:1px solid var(--line);border-radius:var(--r);padding:0 14px}
 details[open]{padding-bottom:8px}

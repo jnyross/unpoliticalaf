@@ -6,6 +6,24 @@ from unittest.mock import patch
 from builder import html, pages_life
 
 
+def test_scroll_shadows_preserve_muted_text_contrast():
+    rule = re.search(r"(?:^|\n)\.tablewrap\{([^}]+)\}", html.CSS).group(1)
+    opacity = max(float(value) for value in re.findall(r"rgba\(0,0,0,([.\d]+)\)", rule))
+    muted = re.search(r"--muted:#([0-9a-f]{6})", html.CSS).group(1)
+
+    def luminance(channels):
+        linear = [
+            value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+            for value in channels
+        ]
+        return sum(value * weight for value, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+
+    foreground = luminance([int(muted[i : i + 2], 16) / 255 for i in (0, 2, 4)])
+    # Both edge gradients may theoretically overlap on a very narrow region.
+    background = luminance([(1 - opacity) ** 2] * 3)
+    assert (background + 0.05) / (foreground + 0.05) >= 4.5
+
+
 def test_missing_year_name_has_a_role_that_accepts_an_accessible_label():
     with patch.object(pages_life, "has_year_figure", return_value=False):
         markup = pages_life.year_finder(None, None, "housing")
