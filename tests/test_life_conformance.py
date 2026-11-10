@@ -79,6 +79,19 @@ class LifeConformance(unittest.TestCase):
         self.assertIn("https://www.nomisweb.co.uk/datasets/asher", html)
         self.assertIn("UK totals do not depend on where within the UK employees live or work", html)
 
+    def test_home_year_coverage_is_not_the_latest_full_year_holiday_period(self):
+        from builder.build import render
+
+        with patch.dict(uncertainty.MARGINS), patch.dict(uncertainty.INFO):
+            _, _, pages, _ = render()
+        html = pages["index.html"]
+        self.assertIn("Pick any year from 1971 to 2026", html)
+        self.assertIn("See any two years from 1971 to 2026", html)
+        self.assertEqual(html.count("The year pages run to 2026"), 2)
+        self.assertNotIn("The year pages stop at 2025", html)
+        self.assertIn('data-fact="hol.world.holiday.2025"', html)
+        self.assertNotIn('data-fact="hol.world.holiday.2026"', html)
+
     def test_2026_work_reopens_every_supported_split_at_q2(self):
         expected = {
             "rate": ("lf24", 75.1),
