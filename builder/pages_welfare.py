@@ -110,7 +110,7 @@ def welfare_page(facts, d, num, sources):
 
     body = ["<h1>Welfare spending over 50 years</h1>"]
     body.append(
-        f"""<div class="answer"><p class="lede">Welfare spending, measured as social security (benefits and the State Pension), was {num(f"wel.real.social.{first}", "bn")} in {first} and {num(f"wel.real.social.{last}", "bn")} in {last}, both after inflation. In 2021-22 the State Pension was {num("dwp.share.sp.2021-22", "pct")} of DWP benefit spending, and Universal Credit was the largest of the other benefits, at {num("dwp.share.uc.2021-22", "pct")}. Per person, after inflation, welfare spending was {num(f"wel.pp.social.{last}", "pounds")} in {last}.</p>
+        f"""<div class="answer"><p class="lede">Welfare spending, measured as social security (benefits and the State Pension), was {num(f"wel.real.social.{first}", "bn")} in {first} and {num(f"wel.real.social.{last}", "bn")} in {last}, both after inflation. In 2021-22 the State Pension was {num("dwp.share.sp.2021-22", "pct")} of benefit spending in the DWP tables, including tax credits and Child Benefit, and Universal Credit was the largest of the other benefits, at {num("dwp.share.uc.2021-22", "pct")}. Per person, after inflation, welfare spending was {num(f"wel.pp.social.{last}", "pounds")} in {last}.</p>
 <p>As a share of GDP it was {num(f"wel.gdp.social.{first}", "pct")} in {first}, peaked at {num(f"wel.gdp.social.{peak}", "pct")} in {peak}, and was {num(f"wel.gdp.social.{last}", "pct")} in {last}. As a share of all public spending it was {num(f"wel.share.social.{first}", "pct")} in {first} and {num(f"wel.share.social.{last}", "pct")} in {last}.</p>
 <p>Per person, after inflation, it was {num("wel.pp.social.1978-79", "pounds")} in 1978-79 and {num(f"wel.pp.social.{last}", "pounds")} in {last}. Pensioners received {num(f"wel.penssh.{last}", "pct0")} of social security in {last}, against {num("wel.penssh.1978-79", "pct0")} in 1978-79.</p>
 <p>The figures stop at {last}. The split by benefit for 2021-22 is in <a href="#benefits">the section below</a>.</p></div>"""
@@ -174,7 +174,7 @@ def welfare_page(facts, d, num, sources):
     dy = "2021-22"
     body.append('<h2 id="benefits">Which benefits made up welfare in %s?</h2>' % dy)
     body.append(
-        f"""<div class="answer"><p>In {dy} the State Pension was {num(f"dwp.share.sp.{dy}", "pct")} of DWP benefit spending: {num(f"dwp.cash.sp.{dy}", "bn1")} out of {num(f"dwp.cash.dwptotal.{dy}", "bn1")}. Universal Credit was {num(f"dwp.share.uc.{dy}", "pct")}, housing benefit (not Universal Credit) {num(f"dwp.share.hb.{dy}", "pct")}, disability and carers' benefits {num(f"dwp.share.disability.{dy}", "pct")}, tax credits {num(f"dwp.share.tc.{dy}", "pct")} and Child Benefit {num(f"dwp.share.cb.{dy}", "pct")}.</p></div>"""
+        f"""<div class="answer"><p>In {dy} the State Pension was {num(f"dwp.share.sp.{dy}", "pct")} of benefit spending in the DWP tables, including tax credits and Child Benefit: {num(f"dwp.cash.sp.{dy}", "bn1")} out of {num(f"dwp.cash.dwptotal.{dy}", "bn1")}. Universal Credit was {num(f"dwp.share.uc.{dy}", "pct")}, housing benefit (not Universal Credit) {num(f"dwp.share.hb.{dy}", "pct")}, disability and carers' benefits {num(f"dwp.share.disability.{dy}", "pct")}, tax credits {num(f"dwp.share.tc.{dy}", "pct")} and Child Benefit {num(f"dwp.share.cb.{dy}", "pct")}.</p></div>"""
     )
     rows = [
         ("State Pension", "sp"),
@@ -202,18 +202,18 @@ def welfare_page(facts, d, num, sources):
             "pct",
             num,
             maxval=facts[f"dwp.share.sp.{dy}"].value * 1.1,
-            caption=f"Share of DWP benefit spending by benefit, {dy}. DWP tables, cash terms. The State Pension has a darker bar.",
+            caption=f"Share of benefit spending in the DWP tables, including non-DWP welfare, {dy}. Cash terms. The State Pension has a darker bar.",
         )
     )
     body.append(
-        f"<p>The State Pension was {num('dwp.share.sp.1955-56', 'pct')} of DWP benefit spending in 1955-56, the first year of this page's series. In 1955-56 the DWP's main table is the only one with figures for that year, so the share uses it alone.</p>"
+        f"<p>The State Pension was {num('dwp.share.sp.1955-56', 'pct')} of spending in DWP Table 1a in 1955-56. Only that table has figures for that year: unlike 2021-22, this share excludes the separate Non-DWP Welfare total, so it is not on the same basis.</p>"
     )
     body.append(FOLD)
     body.append(
         f"""<div class="limit"><p><strong>Why one year.</strong></p><ul>
 <li>The split is for {dy}, the last year on the OBR series. The DWP tables report tax credits in a separate table from 1999-00, and that table is Great Britain only, while the other benefits are UK figures. A split across all the years would join figures measured on different bases, so it is not shown.</li>
-<li>Shares are of the DWP total: the main table's total benefit expenditure plus the separate table's total. The DWP total for {dy} is {num(f"dwp.cash.dwptotal.{dy}", "bn1")}, which is not the same as the OBR's social security figure for that year, because the two publications count some items differently.</li>
-<li>“Other benefits” is the DWP total minus the benefits named here, so it includes the smaller benefits, such as Winter Fuel Payments and statutory maternity and sick pay.</li>
+<li>Shares use a combined total: Table 1a's total benefit expenditure plus the Non-DWP Welfare total, including tax credits and Child Benefit. This mixes UK and Great Britain coverage, not a uniform UK total or DWP-administered benefits alone. The combined total for {dy} is {num(f"dwp.cash.dwptotal.{dy}", "bn1")}; it differs from the OBR's social security figure because the publications count some items differently.</li>
+<li>“Other benefits” is the combined total minus the benefits named here, so it includes the smaller benefits, such as Winter Fuel Payments and statutory maternity and sick pay.</li>
 </ul></div>"""
     )
     body.append(

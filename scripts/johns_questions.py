@@ -68,6 +68,12 @@ def validate(data):
                 problems.append(f"{pid}: answer {p.get('answer')} is not one of the options")
             if not p.get("why"):
                 problems.append(f"{pid}: missing why")
+            for evidence in p["evidence"]:
+                if not isinstance(evidence, dict) or any(
+                    not isinstance(evidence.get(key), str) or not evidence[key].strip()
+                    for key in ("page", "text")
+                ):
+                    problems.append(f"{pid}: evidence needs a nonempty page and text")
     return problems
 
 
@@ -75,6 +81,8 @@ def check(site=SITE, data=None):
     """Return problems: a broken file, or answered probes the built site no longer supports."""
     data = data or load()
     problems = validate(data)
+    if problems:
+        return problems
     cache = {}
     for _, p in probes(data):
         for ev in p.get("evidence") or []:

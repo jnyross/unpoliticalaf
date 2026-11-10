@@ -423,7 +423,7 @@
           "question": "Does the site show how much migrants use public services such as the NHS, schools and housing, using official figures?",
           "options": {
             "A": "Yes: it shows measured use of each public service by migrants",
-            "B": "No: the official sources do not give a measured figure for migrants' use of public services, and the site says so",
+            "B": "No: the official sources the site uses do not give a measured figure for migrants' use of public services, and the site says so",
             "C": "Yes: it shows use of the NHS only",
             "D": "No: it does not discuss public services"
           },
@@ -797,7 +797,7 @@
       "asked": "did our parents have it easier than this generation?",
       "added": "2026-11-04",
       "source": "John, project chat, 2026-11-04",
-      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where the site has no figures for a measure at the same age, the probe stays open until the figure is added from an official source. Where the nearest official figure covers a different group, such as households in a ten-year age band rather than people aged exactly 30, the answer says so.",
+      "reading": "“Easier” has no single meaning, so the site compares several measures and gives no overall verdict. Parents and this generation are read as people of the same age in two years (for example, people aged 25 to 34 in 1992 and in 2025), not the same people followed through life. The measures are work, buying a home, pay, the cost of university, pensions, tax, school classes, job security and how long people live. Where retained official evidence cannot support the exact measure, the answer states the precise sourced limitation and distinguishes any nearest supported measure; it does not claim the requested statistic is measured. This follows the approved November 2026 completion scope, not a claim that the data gap disappeared. Where the nearest official figure covers a different group, such as households in a ten-year age band rather than people aged exactly 30, the answer says so.",
       "probes": [
         {
           "id": "J12.1",
@@ -1600,6 +1600,13 @@
         },
         {
           "id": "J11.9",
+          "history": [
+            {
+              "corrected": "2026-11-09",
+              "question": "Between 2008-09 and 2021-22, how did home ownership change for people aged 25 to 34, and for people aged 75 and over?",
+              "reason": "The EHS groups households by the age of the household reference person, not all people of that age. The original age comparison is retained with its actual source population; see the 9 November public correction."
+            }
+          ],
           "question": "Between 2008-09 and 2021-22, how did home ownership change for households whose reference person was aged 25 to 34, and aged 75 and over?",
           "options": {
             "A": "It rose for both age groups",
@@ -1832,7 +1839,14 @@
         },
         {
           "id": "J10.6",
-          "question": "In 2021-22, how much of DWP benefit spending went on the State Pension?",
+          "question": "In 2021-22, how much of benefit spending in the DWP tables, including tax credits and Child Benefit, went on the State Pension?",
+          "history": [
+            {
+              "corrected": "2026-11-10",
+              "question": "In 2021-22, how much of DWP benefit spending went on the State Pension?",
+              "reason": "The denominator includes the separate Non-DWP Welfare total, not DWP-administered benefits alone. The percentage is unchanged; the original spending-composition intent remains."
+            }
+          ],
           "options": {
             "A": "About a fifth (20%)",
             "B": "About a third (33%)",
@@ -1840,17 +1854,24 @@
             "D": "About three-quarters (75%)"
           },
           "answer": "C",
-          "why": "DWP benefit expenditure tables, Spring Forecast 2026: in 2021-22 the State Pension was £104.7bn of £239.4bn, or 43.7%. The DWP tables cannot be joined into one split across 50 years, so the split is shown for 2021-22 only, with 1955-56 for the State Pension's share.",
+          "why": "DWP benefit expenditure tables, Spring Forecast 2026: in 2021-22 the State Pension was £104.7bn of £239.4bn, or 43.7%. This denominator adds Table 1a's total to the separate Non-DWP Welfare total (including tax credits and Child Benefit). It mixes UK benefits and Great Britain non-DWP welfare, not a uniform UK total or DWP-administered spending alone. The 1955-56 comparison uses Table 1a alone, a different basis; no consistent 50-year benefit split is established.",
           "evidence": [
             {
               "page": "welfare.html",
-              "text": "In 2021-22 the State Pension was 43.7% of DWP benefit spending: £104.7bn out of £239.4bn."
+              "text": "In 2021-22 the State Pension was 43.7% of benefit spending in the DWP tables, including tax credits and Child Benefit: £104.7bn out of £239.4bn."
             }
           ]
         },
         {
           "id": "J10.7",
-          "question": "In 2021-22, which of these took the largest share of DWP benefit spending after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?",
+          "question": "In 2021-22, which of these took the largest share of benefit spending in the DWP tables, including tax credits and Child Benefit, after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?",
+          "history": [
+            {
+              "corrected": "2026-11-10",
+              "question": "In 2021-22, which of these took the largest share of DWP benefit spending after the State Pension: Universal Credit, housing benefit, disability and carers' benefits, tax credits or Child Benefit?",
+              "reason": "The denominator includes non-DWP benefits reported separately by DWP. The benefits, ranking and original comparison intent are unchanged."
+            }
+          ],
           "options": {
             "A": "Housing benefit",
             "B": "Tax credits",
@@ -1858,7 +1879,7 @@
             "D": "Child Benefit"
           },
           "answer": "C",
-          "why": "Universal Credit was 17.0% of DWP benefit spending in 2021-22, ahead of disability and carers' benefits (12.2%), housing benefit (6.7%), Child Benefit (4.6%) and tax credits (4.3%).",
+          "why": "Universal Credit was 17.0% of the combined Table 1a and Non-DWP Welfare totals in 2021-22, ahead of disability and carers' benefits (12.2%), housing benefit (6.7%), Child Benefit (4.6%) and tax credits (4.3%). The denominator includes tax credits and Child Benefit, and mixes UK and Great Britain coverage.",
           "evidence": [
             {
               "page": "welfare.html",

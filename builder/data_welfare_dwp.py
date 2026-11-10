@@ -12,7 +12,7 @@ Two tables are used, and their figures are added together for the 2021-22 split:
 
 Each benefit is read from its own row, never from a row that adds other rows together, so no
 benefit is counted twice. Whatever the rows do not cover is shown as "other", calculated as the
-DWP total minus the named benefits. The 1955-56 share uses Table 1a alone, because the DWP tables
+combined total minus the named benefits. The 1955-56 share uses Table 1a alone, because the DWP tables
 report tax credits and Child Benefit separately only from later years.
 
 Amounts are nominal (cash) in the source. The page uses shares, which do not need adjusting for
@@ -68,7 +68,7 @@ BENEFITS = [
         False,
     ),
 ]
-# The DWP-coverage total used as the denominator: Table 1a's total plus the Non-DWP total.
+# The combined denominator: Table 1a's total plus the Non-DWP total.
 TOTAL_T1A = ("Table 1a", "Total benefit expenditure")
 TOTAL_NON = ("Non-DWP Welfare", "Total")
 DISABILITY = ["disab_dla", "disab_pip", "disab_aa", "carers"]
@@ -195,7 +195,7 @@ def build(facts):
         )
     )
     out["parts"]["disability"] = dis_fact.id
-    # Other: what the named rows do not cover, from the DWP total.
+    # Other: what the named rows do not cover, from the combined total.
     rest = [facts[f"dwp.cash.{k}.{YEAR}"] for k in ("sp", "uc", "hb", "esa", "pc", "tc", "cb")] + [
         dis_fact
     ]
@@ -209,7 +209,7 @@ def build(facts):
             SOURCE,
             "calculated",
             "calculated",
-            note="Other benefits: the DWP total minus the named benefits",
+            note="Other benefits: the combined Table 1a and Non-DWP Welfare total minus the named benefits",
             formula=f"{dwp_total.id} - (" + " + ".join(f.id for f in rest) + ")",
             inputs=[dwp_total.id] + [f.id for f in rest],
         )
@@ -221,7 +221,7 @@ def build(facts):
             Fact(
                 f"dwp.share.{key}.{YEAR}",
                 p.value * 100 / dwp_total.value,
-                "% of DWP benefit spending",
+                "% of the combined Table 1a and Non-DWP Welfare total",
                 YEAR,
                 SOURCE,
                 "calculated",

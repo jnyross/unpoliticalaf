@@ -25,6 +25,16 @@ CORRECTIONS = [
     {
         "date": "10 November 2026",
         "pages": [
+            ("welfare.html#benefits", "Welfare by benefit"),
+            ("figures/dwp-benefit-exp-sf2026.html", "Benefit figure records"),
+            ("data/facts.json", "Facts download"),
+        ],
+        "was": "The 2021-22 benefit shares were labelled DWP benefit spending, although their denominator also includes the separate Non-DWP Welfare total, including tax credits and Child Benefit.",
+        "now": "The label names benefit spending in the DWP tables including non-DWP welfare. The explanation states the mixed UK and Great Britain coverage and distinguishes the 1955-56 Table 1a-only denominator. Amounts, shares and rankings have not changed.",
+    },
+    {
+        "date": "10 November 2026",
+        "pages": [
             ("taxes.html", "Taxes and borrowing"),
             ("who-pays.html", "Who pays?"),
             ("who-pays-households.html", "Retired people and kinds of household"),
