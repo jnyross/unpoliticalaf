@@ -27,6 +27,21 @@ def housing_rows(facts):
     return html, re.findall(r"<tr>(.*?)</tr>", rows, re.S)
 
 
+def assert_published_row(facts, row, year, prefix, label):
+    assert downloads.table_rows(f"<tr>{row}</tr>")[0][0] == label
+    fact_ids = [
+        f"{prefix}.{key}.{year}" for key in ("owners", "outright", "mortgage", "social", "private")
+    ]
+    assert re.findall(r'data-fact="([^"]+)"', row) == fact_ids
+    for fid in fact_ids:
+        fact = facts[fid]
+        assert fact.source == "ehs-ft1101"
+        assert f'data-fact="{fid}" data-kind="pct">{fmt(fact.value, "pct")}</data>' in row
+        assert f'value="{fact.value!r}"' in row
+    assert facts[fact_ids[0]].status == "published"
+    assert facts[fact_ids[0]].inputs == []
+
+
 def test_all_housing_rows_use_published_totals_and_preserve_components(facts):
     html, rows = housing_rows(facts)
     assert downloads.table_rows(html)[0] == [
@@ -49,19 +64,7 @@ def test_all_housing_rows_use_published_totals_and_preserve_components(facts):
     ]
     assert len(rows) == len(periods)
     for row, (year, prefix, label) in zip(rows, periods):
-        assert downloads.table_rows(f"<tr>{row}</tr>")[0][0] == label
-        fact_ids = [
-            f"{prefix}.{key}.{year}"
-            for key in ("owners", "outright", "mortgage", "social", "private")
-        ]
-        assert re.findall(r'data-fact="([^"]+)"', row) == fact_ids
-        for fid in fact_ids:
-            fact = facts[fid]
-            assert fact.source == "ehs-ft1101"
-            assert f'data-fact="{fid}" data-kind="pct">{fmt(fact.value, "pct")}</data>' in row
-            assert f'value="{fact.value!r}"' in row
-        assert facts[fact_ids[0]].status == "published"
-        assert facts[fact_ids[0]].inputs == []
+        assert_published_row(facts, row, year, prefix, label)
     # The overlapping 2008 observations remain separate rows, not spliced or summed.
     assert "2008 (Labour Force Survey)" in html
     assert "2008-09 (English Housing Survey)" in html

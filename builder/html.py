@@ -1546,8 +1546,8 @@ def _join(xs):
 def _end_labels(series, x, y, top, bottom):
     """Name each line beside its last point, so readers don't need a key.
 
-    Labels sit above the end of a line that rises into it and below one that
-    falls into it, then are nudged apart so they never overlap.
+    Labels are vertically centred beside their endpoints, then nudged apart
+    in endpoint order so they never overlap or exchange series identities.
     """
     labs = []
     for name, vals, style in series:
@@ -1555,10 +1555,10 @@ def _end_labels(series, x, y, top, bottom):
         if not pts:
             continue
         i, v = pts[-1]
-        prev = pts[-2][1] if len(pts) > 1 else v
-        ly = y(v) + (18 if prev > v else -9)
-        labs.append([ly, x(i), name, style])
-    labs.sort()
+        ly = y(v) + 5
+        labs.append([ly, x(i), name, style, y(v)])
+    # Keep the actual endpoint order even when labels need more space.
+    labs.sort(key=lambda lab: lab[4])
     for k in range(1, len(labs)):
         if labs[k][0] - labs[k - 1][0] < 17:
             labs[k][0] = labs[k - 1][0] + 17
@@ -1569,7 +1569,7 @@ def _end_labels(series, x, y, top, bottom):
             labs[k][0] = labs[k + 1][0] - 17
     return [
         f'<text class="lbl{" b" if st == "b" else ""}" x="{lx - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(nm)}</text>'
-        for ly, lx, nm, st in labs
+        for ly, lx, nm, st, _ in labs
     ]
 
 
