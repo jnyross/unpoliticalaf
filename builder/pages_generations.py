@@ -222,7 +222,6 @@ def page_body(facts, d, num, sources):
         "<ul>"
         "<li><strong>Student loans for living costs</strong>: maintenance loans and the total a student borrows, in each year since the 1990s.</li>"
         "<li><strong>Pension coverage</strong>: the share of people with a workplace or private pension, by year.</li>"
-        "<li><strong>Tax at the same income</strong>: income tax and National Insurance for one income level, in each year.</li>"
         "</ul>",
         CAUSE,
         "<h2 id='about'>About these figures</h2>",

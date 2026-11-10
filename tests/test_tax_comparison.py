@@ -6,11 +6,28 @@ import html
 import re
 
 from builder import data_tax_comparison as tax
+from builder import uncertainty
+from builder.build import render
 from builder.pages_tax_comparison import comparison_page
 from builder.html import Num
 from builder.check import as_number, cell_value
 from builder.data import Facts
 from builder.sources import all_sources
+
+
+def test_generations_links_example_without_retaining_the_old_tax_gap():
+    saved_margins, saved_info = dict(uncertainty.MARGINS), dict(uncertainty.INFO)
+    try:
+        _, _, pages, _ = render()
+    finally:
+        uncertainty.MARGINS.clear()
+        uncertainty.MARGINS.update(saved_margins)
+        uncertainty.INFO.clear()
+        uncertainty.INFO.update(saved_info)
+    page = pages["life/generations.html"]
+    assert 'href="tax-comparison.html"' in page
+    assert "Tax is not compared yet" not in page
+    assert "Tax at the same income</strong>" not in page
 
 
 def test_retained_period_rules_and_independent_stepwise_calculation():

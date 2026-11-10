@@ -254,5 +254,9 @@ def test_candidate_calculated_population_is_fully_accounted_for():
     assert counts.candidates > 1000
     # The retained candidate currently has complete calculation operands.
     # Null propagation is exercised explicitly above, not invented in its data.
-    assert counts.literals == 5  # Matches the stated SCENARIOS in data_top_earners.py.
+    # Five leaver-count assumptions plus the fixed employee's salary and 52 payments.
+    assert counts.literals == 7
+    for fid in ("tax.example.gross.1992", "tax.example.weeks"):
+        assert facts[fid]["inputs"] == []
+        assert "Stated assumption" in facts[fid]["note"]
     print(f"Candidate calculations: {counts}")
