@@ -50,6 +50,16 @@ class File(unittest.TestCase):
         data["questions"][0]["probes"][0]["evidence"] = [{"page": "", "text": ""}]
         self.assertTrue(any("evidence" in x for x in jq.validate(data)))
 
+    def test_evidence_fields_require_nonempty_strings(self):
+        for key in ("page", "text"):
+            for value in (None, 0, [], {}, "", " \t\n"):
+                with self.subTest(key=key, value=value):
+                    data = copy.deepcopy(self.data)
+                    evidence = {"page": "index.html", "text": "A supported answer"}
+                    evidence[key] = value
+                    data["questions"][0]["probes"][0]["evidence"] = [evidence]
+                    self.assertTrue(any("evidence" in x for x in jq.validate(data)))
+
     def test_baseline_intent_and_all_94_ids_are_preserved(self):
         baseline = json.loads((jq.QUESTIONS.parent / "baseline.json").read_text())
         original = {q["id"]: q for q in baseline["questions"]}

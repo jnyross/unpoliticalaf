@@ -130,6 +130,39 @@ def test_wcag22_violation_cannot_be_dispositioned_as_incomplete(site):
     assert a11y.verify_reports(site, evidence, disposition)
 
 
+@pytest.mark.parametrize("field", ["reason", "evidence"])
+@pytest.mark.parametrize("value", [None, 42, True, [], {}, "   "])
+def test_disposition_requires_nonempty_string_fields(site, field, value):
+    evidence = reports(site)
+    item = {
+        "reason": "Rendered inspection",
+        "evidence": "rendered/inspection.json",
+        "finding_sha256": "example",
+        "cases": [],
+    }
+    item[field] = value
+    disposition = {
+        "manifest_sha256": evidence[0]["manifest_sha256"],
+        "findings": [item],
+    }
+    assert a11y.verify_reports(site, evidence, disposition)
+
+
+@pytest.mark.parametrize("value", ["", "reviewed", 42, False, []])
+def test_disposition_root_must_be_an_object(site, value):
+    assert a11y.verify_reports(site, reports(site), value)
+
+
+@pytest.mark.parametrize("value", [None, "reviewed", 42, []])
+def test_disposition_entry_must_be_an_object(site, value):
+    evidence = reports(site)
+    disposition = {
+        "manifest_sha256": evidence[0]["manifest_sha256"],
+        "findings": [value],
+    }
+    assert a11y.verify_reports(site, evidence, disposition)
+
+
 def test_bad_partition_is_rejected(site):
     for index, count in ((-1, 2), (2, 2), (0, 0)):
         with pytest.raises(ValueError):

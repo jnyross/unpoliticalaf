@@ -38,6 +38,10 @@ def is_open(p):
     return not p.get("evidence")
 
 
+def _is_nonempty_text(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
 def validate(data):
     """Problems with the file itself, whatever the site says."""
     problems = []
@@ -70,8 +74,7 @@ def validate(data):
                 problems.append(f"{pid}: missing why")
             for evidence in p["evidence"]:
                 if not isinstance(evidence, dict) or any(
-                    not isinstance(evidence.get(key), str) or not evidence[key].strip()
-                    for key in ("page", "text")
+                    not _is_nonempty_text(evidence.get(key)) for key in ("page", "text")
                 ):
                     problems.append(f"{pid}: evidence needs a nonempty page and text")
     return problems

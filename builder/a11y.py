@@ -140,17 +140,44 @@ def relevant(finding):
 
 
 def disposition_cases(dispositions, digest):
-    if not dispositions:
+    if dispositions is None:
         return set()
+    if not isinstance(dispositions, dict):
+        raise ValueError("rendered dispositions must be an object")
     if dispositions.get("manifest_sha256") != digest:
         raise ValueError("rendered dispositions belong to a different manifest")
     accepted = set()
     for item in dispositions["findings"]:
-        if not item.get("reason", "").strip() or not item.get("evidence", "").strip():
-            raise ValueError("disposition needs rendered evidence and a reason")
+        if not isinstance(item, dict):
+            raise ValueError("each rendered disposition must be an object")
+        for field in ("reason", "evidence"):
+            value = item.get(field)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError("disposition needs rendered evidence and a reason as strings")
         for case in item["cases"]:
             accepted.add((case["path"], case["width"], item["finding_sha256"]))
     return accepted
+
+
+def _result_problems(result, accepted):
+    """Validate one completed/error case independently of partition coverage."""
+    case = (result["path"], result["width"])
+    label = f"{case[0]} at {case[1]}px"
+    if result.get("error"):
+        return [f"{label}: {result['error']}"]
+    problems = []
+    if not result["axe_version"] or result["target_size_outcome"] not in RESULT_TYPES:
+        problems.append(f"{label}: missing axe version/target-size execution")
+    for key in ("violations", "incomplete"):
+        if not isinstance(result[key], list):
+            raise ValueError(f"{label}: missing axe result list")
+        for finding in result[key]:
+            if not relevant(finding):
+                continue
+            identity = (*case, finding_digest(finding))
+            if key == "violations" or identity not in accepted:
+                problems.append(f"{label}: {key} {finding['id']}")
+    return problems
 
 
 def verify_reports(site, reports, dispositions=None):
@@ -184,20 +211,7 @@ def verify_reports(site, reports, dispositions=None):
                     problems.append(f"{label}: duplicate, unassigned or wrong-state case")
                 seen.add(case)
                 local.add(case)
-                if result.get("error"):
-                    problems.append(f"{label}: {result['error']}")
-                    continue
-                if not result["axe_version"] or result["target_size_outcome"] not in RESULT_TYPES:
-                    problems.append(f"{label}: missing axe version/target-size execution")
-                for key in ("violations", "incomplete"):
-                    if not isinstance(result[key], list):
-                        raise ValueError(f"{label}: missing axe result list")
-                    for finding in result[key]:
-                        if not relevant(finding):
-                            continue
-                        identity = (*case, finding_digest(finding))
-                        if key == "violations" or identity not in accepted:
-                            problems.append(f"{label}: {key} {finding['id']}")
+                problems.extend(_result_problems(result, accepted))
             if local != assigned:
                 problems.append(f"partition {index}: missing assigned cases")
         if partitions != set(range(count)) or seen != expected:

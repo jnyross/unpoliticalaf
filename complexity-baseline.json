@@ -27,7 +27,7 @@
   "builder/glossary.py:link_terms": 22,
   "builder/html.py:chart_summary": 23,
   "builder/html.py:fmt": 25,
-  "builder/html.py:line_chart": 89,
+  "builder/html.py:line_chart": 84,
   "builder/html.py:small_multiples": 46,
   "builder/html.py:spark": 26,
   "builder/pages_borrow.py:borrowing_page": 35,
