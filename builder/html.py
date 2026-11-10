@@ -1002,7 +1002,7 @@ def line_chart(
     if direct:
         parts.extend(_end_labels(series, x, y, T, H - B))
     elif len(series) == 1 and kind:
-        parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T))
+        parts.extend(_end_value(raw[0][1], series[0][1], kind, forecast_from, x, y, T, taken))
     label = f"{heading}. {title}." if heading else f"{title}."
     label += f" {desc}" if desc else ""
     attrs = ""
@@ -1395,7 +1395,7 @@ def _caption(unit_label, lo, step):
 ZERO_NOTE = "The scale starts at {}, not at zero."
 
 
-def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
+def _end_value(raw_vals, vals, kind, forecast_from, x, y, top, annotations=()):
     """Write the latest measured value beside the end of a single line."""
     pts = [
         i
@@ -1405,9 +1405,17 @@ def _end_value(raw_vals, vals, kind, forecast_from, x, y, top):
     if not pts:
         return []
     i = pts[-1]
+    text = fmt(raw_vals[i], kind)
+    text_right = x(i) - 2
+    text_left = text_right - len(text) * 8.4
     ly = max(y(vals[i]) - 9, top + 12)
+    # Reserve a second row only where the value meets a drawn method label.
+    if ly < top + 34 and any(
+        text_left < right + 4 and text_right > left - 4 for left, right in annotations
+    ):
+        ly = top + 34
     return [
-        f'<text class="lbl" x="{x(i) - 2:.1f}" y="{ly:.1f}" text-anchor="end">{esc(fmt(raw_vals[i], kind))}</text>'
+        f'<text class="lbl" x="{text_right:.1f}" y="{ly:.1f}" text-anchor="end">{esc(text)}</text>'
     ]
 
 

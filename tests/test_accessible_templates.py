@@ -3,6 +3,8 @@
 import re
 from unittest.mock import patch
 
+import pytest
+
 from builder import html, pages_life
 
 
@@ -47,3 +49,39 @@ def test_long_method_break_label_is_not_positioned_outside_the_chart():
     position = re.search(r'<text x="([\d.]+)" y="26" text-anchor="end"[^>]*>' + label, chart)
     assert position is not None
     assert float(position.group(1)) - len(label) * 8.4 >= 44
+
+
+@pytest.mark.parametrize(
+    ("values", "forecast_from"),
+    [
+        ([20_000, 30_000, 40_000, 50_000, 58_400], None),
+        ([20_000, None, 40_000, 50_000, 58_400], None),
+        ([20_000, 30_000, 40_000, 58_400, 59_000], 4),
+    ],
+)
+def test_latest_value_clears_method_annotation_only_when_they_overlap(values, forecast_from):
+    def chart(breaks):
+        return html.line_chart(
+            "Holidays",
+            [str(year) for year in range(2020, 2025)],
+            [("Visits", values, "a")],
+            "Million visits",
+            kind="millions",
+            scale=1000,
+            breaks=breaks,
+            forecast_from=forecast_from,
+        )
+
+    def latest_baseline(markup):
+        label = re.search(r'<text class="lbl"[^>]* y="([\d.]+)"[^>]*>58.4 million</text>', markup)
+        assert label is not None
+        return float(label.group(1))
+
+    unannotated_baseline = latest_baseline(chart([]))
+    assert unannotated_baseline == 26
+    separate = chart([(1, "New method")])
+    assert latest_baseline(separate) == unannotated_baseline
+    overlapping = chart([(4, "New method")])
+    annotation = re.search(r'<text[^>]* y="([\d.]+)"[^>]*>New method</text>', overlapping)
+    assert annotation is not None
+    assert latest_baseline(overlapping) >= float(annotation.group(1)) + 22
