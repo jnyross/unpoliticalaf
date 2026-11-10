@@ -2194,6 +2194,17 @@ def _earnings(facts, d, num, sources):
     )
     body.append(earn_latest_year(facts, num))
     body.append(
+        f'<p class="small">UK pay through April {min(ASHE_TABLE1) - 1} comes from '
+        '<a href="https://www.nomisweb.co.uk/datasets/asher">Nomis resident analysis</a>; '
+        f"{EARN_EDITIONS} come from "
+        '<a href="https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/datasets/allemployeesashetable1">ASHE Table 1</a>. '
+        "Both routes publish the same ONS Annual Survey of Hours and Earnings: "
+        "employee jobs, gross weekly pay in April, with matching sex and full-time or part-time groups. "
+        "UK totals do not depend on where within the UK employees live or work. "
+        "This is a change of publication route and estimate vintage, not a new survey or a switch to household income. "
+        "The same applies to the pay-spread table. Survey and job-coding breaks still apply.</p>"
+    )
+    body.append(
         "<p><strong>Why the chart starts in 2002.</strong> The pay figures come from the Annual Survey of Hours and Earnings (ASHE). "
         "The ASHE table this site uses starts in 2002, so the chart does too. ONS holds older pay figures from the New Earnings Survey (1970 to 2003) and from earlier ASHE years (1997 onwards). "
         "This site does not use them, so it cannot show pay before 2002. Joining them to these figures would mean crossing survey changes, so this page does not do it.</p>"

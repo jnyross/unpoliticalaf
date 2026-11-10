@@ -925,6 +925,16 @@ def _q2(data, year):
     return data.get(f"{year} Q2")
 
 
+def _complete_sum(values):
+    """A missing source cell cannot stand for zero in a group total."""
+    return None if None in values else sum(values)
+
+
+def _share_of_total(part, total):
+    """Keep a share missing when its source numerator or denominator is unavailable."""
+    return None if part is None or not total else 100 * part / total
+
+
 def work(facts):
     out = {"rate": {}, "men": {}, "women": {}, "level": {}, "ft": {}, "pt": {}, "occ": {}}
     for key, sid, path, unit in (
@@ -1034,7 +1044,7 @@ def work(facts):
                 facts.add(
                     Fact(
                         f"work.occshare.{scheme}.{code}.{y}",
-                        100 * part.value / total.value,
+                        _share_of_total(part.value, total.value),
                         "% of people in work",
                         f"January to December {y}",
                         sid,
@@ -1438,7 +1448,7 @@ def housing(facts):
                 out["children"][y] = str(r[0])
     for y in out["children"]:
         total_ids = counts[(y, "all")]
-        total = sum(facts[i].value for i in total_ids)
+        total = _complete_sum([facts[i].value for i in total_ids])
         for key in ("owners", "social", "private"):
             ids = counts[(y, key)]
             if any(facts[i].value is None for i in ids):
@@ -1446,7 +1456,7 @@ def housing(facts):
             facts.add(
                 Fact(
                     f"house.kids.{key}.{y}",
-                    100 * sum(facts[i].value for i in ids) / total,
+                    _share_of_total(sum(facts[i].value for i in ids), total),
                     "% of households with dependent children",
                     f"{out['children'][y]} survey year",
                     "ehs-ft1241",
