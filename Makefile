@@ -127,10 +127,20 @@ coverage:
 
 verify-coverage: coverage
 
-# axe-core accessibility checks at phone and desktop width.
-a11y:
+# Retain default-state/24px/phone checks, then scan every manifest HTML expanded.
+# For bounded runs: -m builder.a11y --partition-index N --partition-count K
+# --output <unique.json>; finish with --verify <all K reports>.
+.PHONY: a11y-default a11y-partition a11y-union
+a11y: a11y-default
+	$(MAKE) a11y-partition
+
+a11y-default:
 	$(RUN_PYTHON) -m builder.check --axe
 	$(RUN_PYTHON) scripts/a11y_benchmark.py --strict > /dev/null
+
+# Each direct invocation also runs the independent expected-route/page checker.
+a11y-partition a11y-union:
+	$(RUN_PYTHON) -m builder.a11y $(A11Y_ARGS)
 
 # Download the sources listed in sources/manifest.json (needs open network access).
 fetch:

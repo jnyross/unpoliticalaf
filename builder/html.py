@@ -884,15 +884,24 @@ def line_chart(
         return x(i) - w / 2, x(i) + w / 2
 
     step = max(1, math.ceil(n / 5))
+    annual = n > 25 and all(re.fullmatch(r"\d{4}", str(label)) for label in labels)
+    candidates = list(range(0, n - 1, step))
+    if annual:
+        # Prioritise evenly spaced decade ticks over crowded endpoint labels.
+        # The summary/table still give exact endpoints (for example 1971–2026).
+        candidates = [i for i, label in enumerate(labels) if int(label) % 10 == 0]
     idx = []
-    for i in list(range(0, n - 1, step)):
+    for i in candidates:
         lo_, hi_ = extent(i)
         if idx and lo_ < extent(idx[-1])[1] + 10:
             continue
-        if n > 1 and hi_ > extent(n - 1)[0] - 10:
+        if not annual and n > 1 and hi_ > extent(n - 1)[0] - 10:
             continue
         idx.append(i)
-    idx.append(n - 1)
+    if not idx or extent(n - 1)[0] >= extent(idx[-1])[1] + 10:
+        idx.append(n - 1)
+    if annual and idx and idx[0] != 0 and extent(0)[1] + 10 <= extent(idx[0])[0]:
+        idx.insert(0, 0)
     for i in idx:
         anchor = "start" if i == 0 else ("end" if i == n - 1 else "middle")
         parts.append(
