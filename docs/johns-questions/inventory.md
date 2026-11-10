@@ -7,14 +7,18 @@ baseline commit named there, not a new question set. All 12 original questions,
 for all 94; no probe is open. The original 84 and the 10 formerly open probes
 are checked together against one build, not combined from historical results.
 
-## Probe → page → retained source
+## Probe → page → source
 
-Inclusive ranges below account for every ID. Source families identify the
-official originals, not new calculations. Each page's source lines lead to
-`figures/<source-id>.html`, where individual facts retain exact locators,
-period, status, formula/operands and original hash/download. Sources and receipts
-remain in `builder/sources.py` and `data/fetched/receipts.json`; this map does not
-replace those records.
+Inclusive ranges below account for every ID. Source families name the cited
+publications, including the explicitly secondary manifesto tracker. Registered
+facts link through `figures/<source-id>.html` to locators, period, status,
+formula/operands and original hash/download. Narrative citations can instead
+link through `sources.html` or directly to the publisher. In particular, the
+economy-options page uses hand-entered citations, not independently checked Fact
+records. Its J8 OECD Table 1.1 figures were reopened against the publisher for
+this reconciliation; that is not automated coverage of every option.
+Registry sources and receipts remain in `builder/sources.py` and
+`data/fetched/receipts.json`; this map does not replace those records.
 
 | Probes | Evidence page | Source and scope |
 | --- | --- | --- |
