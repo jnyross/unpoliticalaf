@@ -5,7 +5,25 @@ from unittest.mock import patch
 
 import pytest
 
-from builder import html, pages_life
+from builder import html, pages_life, pages_welfare
+
+
+@pytest.mark.parametrize("index", range(4))
+def test_every_welfare_switch_option_has_a_matching_visible_panel_rule(index):
+    views = [
+        (label, note, f"<p>Chart {view}</p>")
+        for view, (label, _, _, note) in pages_welfare.VIEWS.items()
+    ]
+    assert len(views) == 4
+    markup = html.switch("Show amounts as", views, default=index)
+    selected = re.search(
+        rf'<input type="radio"[^>]* id="([^"]+)" class="v{index}" checked>', markup
+    )
+    assert selected is not None
+    assert f'<label for="{selected.group(1)}">{views[index][0]}</label>' in markup
+    assert f'<div class="panel p{index}">' in markup
+    selector = f".switch:has(.v{index}:checked) .p{index}"
+    assert re.search(re.escape(selector) + r"(?=,|\{)[^{]*\{display:block\}", html.CSS)
 
 
 def test_scroll_shadows_preserve_muted_text_contrast():
