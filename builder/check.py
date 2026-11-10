@@ -27,7 +27,7 @@ from html import unescape as html_unescape
 from html.parser import HTMLParser
 from pathlib import Path
 
-from .check_calculations import check_calculations
+from .check_calculations import check_calculations, check_input_statuses
 from .logging import get_logger, run_logged
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -319,6 +319,7 @@ def check_facts(data):
         if digest != s["sha256"]:
             fail(f"hash changed: {s['file']}")
     counts = check_calculations(facts, fail)
+    check_input_statuses(facts, fail)
     print(
         f"Calculated facts: {counts.candidates:,} candidates; {counts.evaluated:,} recalculated; "
         f"{counts.missing:,} validated missing; {counts.literals:,} literal assumptions validated; "

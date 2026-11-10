@@ -61,7 +61,7 @@ def derive(facts, fid, value, unit, period, source, inputs, formula, note=""):
     return fid
 
 
-def per_person(facts, fid, pop, prefix, period, source):
+def per_person(facts, fid, pop, prefix, period, source, weekly=True):
     """£ billion spread across every UK resident: an average, not anyone's bill."""
     out = derive(
         facts,
@@ -74,6 +74,8 @@ def per_person(facts, fid, pop, prefix, period, source):
         f"{fid} × 1000000000 ÷ {pop}",
         note="Average across the whole UK population, including children; mid-year population estimate.",
     )
+    if not weekly:
+        return out
     derive(
         facts,
         f"{out}.week",
@@ -88,7 +90,7 @@ def per_person(facts, fid, pop, prefix, period, source):
     return out
 
 
-def per_household(facts, fid, hh, prefix, period, source):
+def per_household(facts, fid, hh, prefix, period, source, weekly=True):
     """£ billion spread across every UK household: an average, not any household's bill."""
     out = derive(
         facts,
@@ -101,6 +103,8 @@ def per_household(facts, fid, hh, prefix, period, source):
         f"{fid} × 1000000000 ÷ {hh}",
         note="Average across all UK private households (ONS, April to June), whatever their size or income.",
     )
+    if not weekly:
+        return out
     derive(
         facts,
         f"{out}.week",
@@ -453,7 +457,7 @@ As a share of the whole economy (GDP) it went from {num(f"spend.gdp.tme.{first}"
     )
     body.append('<p class="small">* £ billion in 2025-26 prices.</p>')
     body.append(
-        '<p class="small">Other publications give slightly different totals for the same year because they are published at different times and use different scopes. For example, the OBR databank used on the <a href="taxes.html">taxes page</a> puts 2025-26 spending at £1,366bn.</p>'
+        f'<p class="small">Other publications give slightly different totals for the same year because they are published at different times and use different scopes. For example, the OBR databank used on the <a href="taxes.html">taxes page</a> puts 2025-26 spending at {num("agg.tme.2025-26", "bn")}.</p>'
     )
     return page(
         "spending.html",
@@ -601,11 +605,11 @@ def taxes_page(facts, d, num, sources):
     pop = f"pop.uk.{y[:4]}"
     tpp = per_person(facts, f"rec.taxes.{y}", pop, "rec.perperson.taxes", y, "obr")
     bpp = per_person(facts, f"agg.psnb.{y}", pop, "agg.perperson.psnb", y, "obr")
-    dpp = per_person(facts, f"agg.psnd.{y}", pop, "agg.perperson.psnd", y, "obr")
+    dpp = per_person(facts, f"agg.psnd.{y}", pop, "agg.perperson.psnd", y, "obr", weekly=False)
     hh = households_for(y)
     tph = per_household(facts, f"rec.taxes.{y}", hh, "rec.perhousehold.taxes", y, "obr")
     bph = per_household(facts, f"agg.psnb.{y}", hh, "agg.perhousehold.psnb", y, "obr")
-    dph = per_household(facts, f"agg.psnd.{y}", hh, "agg.perhousehold.psnd", y, "obr")
+    dph = per_household(facts, f"agg.psnd.{y}", hh, "agg.perhousehold.psnd", y, "obr", weekly=False)
     body = ["<h1>Which taxes raise the money?</h1>"]
     body.append(
         keyfigs(
@@ -1111,7 +1115,7 @@ That is a share of income, not a share of all taxes raised. See <a href="househo
         source_line(
             sources,
             ["etb", "explain-ons-etb-latest"],
-            "Table 2a C8:H9, C48:H48, C70:H70; Notes, note 3. Bulletin glossary: Equivalisation; Mean and median income.",
+            "Table 2a C41:H41, C48:H48, C70:H70; Notes, note 3. Bulletin glossary: Equivalisation; Mean and median income.",
         )
     )
     body.append(FOLD)

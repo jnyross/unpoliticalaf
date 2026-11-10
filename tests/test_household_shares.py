@@ -37,6 +37,12 @@ class HouseholdTaxShares(unittest.TestCase):
         for fact in self.facts.values():
             self.assertFalse(any(i.startswith(WITHDRAWN_PREFIXES) for i in fact.inputs))
 
+    def test_debt_stock_has_no_weekly_flow_derivatives(self):
+        self.assertFalse(any("psnd" in fid and fid.endswith(".week") for fid in self.facts))
+        self.assertIn('data-fact="agg.tme.2025-26"', self.pages["spending.html"])
+        self.assertNotIn("at least half the income", self.pages["who-pays.html"])
+        self.assertIn("at or above State Pension age", self.pages["who-pays-households.html"])
+
     def test_supported_means_explain_person_weighting(self):
         for group in ("q1", "q2", "q3", "q4", "q5", "all"):
             for measure in ("gross", "direct", "indirect", "alltax"):

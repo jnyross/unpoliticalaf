@@ -28,9 +28,18 @@ _LIST = re.compile(r'<ul class="(bars(?: change)?|cmp-list)">(.*?)</ul>', re.S)
 _HEADING = re.compile(r"<h[2-4]\b[^>]*>(.*?)</h[2-4]>", re.S)
 
 
-def chart_data(names: Sequence[str], rows: Sequence[Sequence[str | float | None]]) -> str:
+def chart_data(
+    names: Sequence[str],
+    rows: Sequence[Sequence[str | float | None]],
+    forecast_from: int | None = None,
+    future: str = "forecast",
+) -> str:
     """A comment that carries a chart's figures to its CSV file. Removed before the page is written."""
-    text = json.dumps({"names": names, "rows": rows}, ensure_ascii=False, separators=(",", ":"))
+    text = json.dumps(
+        {"names": names, "rows": rows, "fc": forecast_from, "future": future},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
     return "<!--csv:" + text.replace("--", "-\\u002d") + "-->"
 
 
@@ -88,12 +97,16 @@ def figure_rows(inner: str) -> list[list[object]] | None:
     if not isinstance(data_rows, list):
         raise ValueError("Chart rows must be a list")
     rows: list[list[object]] = [["Period", *names]]
-    for row in data_rows:
+    forecast_from = payload.get("fc")
+    future = payload.get("future", "forecast")
+    for index, row in enumerate(data_rows):
         if not isinstance(row, list) or not row:
             raise ValueError("Chart rows must be non-empty lists")
         if not all(v is None or isinstance(v, (str, int, float)) for v in row):
             raise ValueError("Chart values must be text, numbers or null")
         csv_row: list[object] = [str(row[0])]
+        if isinstance(forecast_from, int) and index >= forecast_from:
+            csv_row[0] = f"{row[0]} ({future})"
         csv_row.extend("" if v == "no figure" else v for v in row[1:])
         rows.append(csv_row)
     return rows

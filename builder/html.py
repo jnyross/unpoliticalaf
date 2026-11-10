@@ -1001,6 +1001,7 @@ def line_chart(
             "names": names,
             "rows": rows,
             "fc": forecast_from,
+            "future": future,
         }
         attrs = _chart_attr(read)
         summary = chart_summary(
@@ -1025,6 +1026,8 @@ def line_chart(
         svg += downloads.chart_data(
             [nm for nm, _, _ in series],
             [[plabels[i]] + [downloads.raw(vals[i]) for _, vals, _ in series] for i in range(n)],
+            forecast_from=forecast_from,
+            future=future,
         )
     key = ""
     if (len(series) > 1 and not direct) or forecast_from is not None:
@@ -1607,7 +1610,7 @@ var cap=el.parentNode.querySelector('figcaption');el.parentNode.insertBefore(out
 var gs=svgs.map(function(svg){var g=document.createElementNS(ns,'line');g.setAttribute('y1',d.t);g.setAttribute('y2',d.b);g.setAttribute('stroke','#1a5fb4');g.setAttribute('stroke-width','1.5');g.style.display='none';svg.appendChild(g);return g;});
 el.setAttribute('tabindex','0');
 function show(i){if(i<0||i>=d.x.length)return;cur=i;var r=d.rows[i];gs.forEach(function(g){g.setAttribute('x1',d.x[i]);g.setAttribute('x2',d.x[i]);g.style.display='';});
-out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' (forecast)':'')+': ';out.appendChild(b);
+out.textContent='';var b=document.createElement('b');b.textContent=r[0]+(d.fc!==null&&i>=d.fc?' ('+(d.future||'forecast')+')':'')+': ';out.appendChild(b);
 out.appendChild(document.createTextNode(d.names.length>1?d.names.map(function(n,k){return n+' '+r[k+1];}).join('; '):r[1]));}
 svgs.forEach(function(svg){
 function near(e){var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;var q=p.matrixTransform(svg.getScreenCTM().inverse()),best=0;

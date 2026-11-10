@@ -50,7 +50,26 @@ class Facts(dict):
         return self[fid].value
 
     def to_json(self):
-        return [asdict(f) for f in self.values()]
+        return [
+            asdict(f)
+            | ({"input_statuses": self.input_statuses(f.id)} if f.status == "calculated" else {})
+            for f in self.values()
+        ]
+
+    def input_statuses(self, fid):
+        """Retain leaf-source statuses separately from the calculation method."""
+        statuses, seen, pending = set(), set(), list(self[fid].inputs)
+        while pending:
+            operand = pending.pop()
+            if operand in seen:
+                continue
+            seen.add(operand)
+            fact = self[operand]
+            if fact.status == "calculated":
+                pending.extend(fact.inputs)
+            else:
+                statuses.add(fact.status)
+        return sorted(statuses)
 
 
 def num(v):
@@ -665,6 +684,7 @@ def who_pays(facts):
                         "etb",
                         f"{sheet}!{ref(i, j)}",
                         "outturn",
+                        note="Person-analysis counts; household amounts are person-weighted household means, not once-per-household totals.",
                     )
                 )
         for q in gcols:
@@ -682,6 +702,7 @@ def who_pays(facts):
                     "etb",
                     f"{d.locator} + {ind.locator}",
                     "calculated",
+                    note="Sum of person-weighted household tax means; not an aggregate tax total.",
                     formula=f"{d.id} + {ind.id}",
                     inputs=[d.id, ind.id],
                 )

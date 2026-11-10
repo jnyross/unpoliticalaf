@@ -195,3 +195,28 @@ def check_calculations(
             else:
                 counts.evaluated += 1
     return counts
+
+
+def check_input_statuses(
+    facts: Mapping[str, Mapping[str, Any]], fail: Callable[[str], None]
+) -> None:
+    """Independently reopen dependency metadata, not the producer's status helper."""
+    for fid, fact in facts.items():
+        if fact["status"] != "calculated":
+            continue
+        pending, seen, statuses = list(fact.get("inputs", [])), set(), set()
+        while pending:
+            operand = pending.pop()
+            if operand in seen:
+                continue
+            seen.add(operand)
+            if operand not in facts:
+                fail(f"{fid}: status input {operand} missing")
+                continue
+            source = facts[operand]
+            if source["status"] == "calculated":
+                pending.extend(source.get("inputs", []))
+            else:
+                statuses.add(source["status"])
+        if fact.get("input_statuses") != sorted(statuses):
+            fail(f"{fid}: input_statuses must match source statuses {sorted(statuses)}")

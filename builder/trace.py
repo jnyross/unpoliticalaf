@@ -23,6 +23,17 @@ FIG_DIR = "figures"
 # a published figure, label or explanation is corrected.
 CORRECTIONS = [
     {
+        "date": "10 November 2026",
+        "pages": [
+            ("taxes.html", "Taxes and borrowing"),
+            ("who-pays.html", "Who pays?"),
+            ("who-pays-households.html", "Retired people and kinds of household"),
+            ("data/facts.json", "Facts download"),
+        ],
+        "was": "Chart CSV downloads left forecast and projection periods unmarked. Calculated figure records and the facts download named the calculation but did not retain the statuses of its source inputs. One retired-household summary said at least half of income, unlike the more-than-50% rule in the current ONS workbook. Retired and non-retired household means did not explain their person-analysis population. The facts download also included unused weekly versions of debt per person and household, although debt is a dated stock.",
+        "now": "Chart downloads mark forecast and projection periods. Calculated records and downloads retain the transitive source-input statuses separately from the calculation method. The retired-household definition follows ONS's 2023/24 Notes, note 12, and the amounts are labelled person-weighted household means, not personal bills or group totals. Weekly debt derivatives are withdrawn; dated debt per person and household remain. No supported numerical value has changed.",
+    },
+    {
         "date": "9 November 2026",
         "pages": [
             ("life/house-prices.html#owners-by-age", "House prices and earnings"),
@@ -299,6 +310,16 @@ def anchor(fid):
     return "f-" + re.sub(r"[^A-Za-z0-9_.-]", "_", fid)
 
 
+def status_text(facts, fid):
+    fact = facts[fid]
+    text = STATUS.get(fact.status, fact.status)
+    if fact.status == "calculated":
+        statuses = [s for s in facts.input_statuses(fid) if s not in ("outturn", "published")]
+        if statuses:
+            text += ". Input figures: " + "; ".join(STATUS.get(s, s) for s in statuses)
+    return text
+
+
 def record_href(facts, fid, up=""):
     return f"{up}{FIG_DIR}/{facts[fid].source}.html#{anchor(fid)}"
 
@@ -352,7 +373,7 @@ def figure_pages(facts, sources, used):
             dl = [
                 ("Value", esc(value_text(f))),
                 ("Period", esc(f.period)),
-                ("Status", esc(STATUS.get(f.status, f.status))),
+                ("Status", esc(status_text(facts, fid))),
             ]
             if f.formula:
                 dl.append(("Calculation", esc(f.formula)))
@@ -486,7 +507,7 @@ def add_trace(html, path, facts, sources):
     def blob(full):
         # Periods and statuses repeat across many figures, so each is listed once and referred to by number.
         periods = sorted({facts[i].period for i in ids})
-        statuses = sorted({STATUS.get(facts[i].status, facts[i].status) for i in ids})
+        statuses = sorted({status_text(facts, i) for i in ids})
         pi, ti = {v: n for n, v in enumerate(periods)}, {v: n for n, v in enumerate(statuses)}
         data = {
             "s": [[sid, f'{sources[sid]["publisher"]}: {sources[sid]["title"]}'] for sid in srcs],
@@ -495,7 +516,7 @@ def add_trace(html, path, facts, sources):
                     [
                         si[facts[i].source],
                         pi[facts[i].period],
-                        ti[STATUS.get(facts[i].status, facts[i].status)],
+                        ti[status_text(facts, i)],
                         facts[i].formula or where(facts[i]),
                         1 if facts[i].formula else 0,
                     ]

@@ -181,7 +181,7 @@ HOUSEHOLDS_PAGE = "who-pays-households.html"
 def retired_section(facts, d, num, sources):
     """ETB Tables 3a and 4a: all taxes for retired and non-retired people."""
     out = []
-    retired_def = f"""<p>Who counts as retired: people who live in a household where more than half of the income comes from people who say they are retired and are over 50, or who are not working because of sickness or injury and are over State Pension age. Everyone else counts as “non-retired”. In 2023/24, {num("etb.ret.people.all", "millions_people")} people lived in retired households and {num("etb.nonret.people.all", "millions_people")} in non-retired households.</p>"""
+    retired_def = f"""<p>Who counts as retired: people who live in a household where more than half of the income comes from people who say they are retired and are over 50, or who say they are sick or injured, are not seeking work and are at or above State Pension age. Everyone else counts as “non-retired”. In 2023/24, {num("etb.ret.people.all", "millions_people")} people lived in retired households and {num("etb.nonret.people.all", "millions_people")} in non-retired households.</p>"""
     out.append(
         f"""<h2 id="retired">Retired and non-retired people</h2>
 <p>From the same survey: retired households (where more than half the income comes from retired people) paid less tax on average, in cash, than non-retired households. They also had less income: average gross income was {num("etb.ret.gross.all", "pounds")} a year, against {num("etb.nonret.gross.all", "pounds")}, and {num("etb.ret.hhsize.all", "dp1")} people per household, against {num("etb.nonret.hhsize.all", "dp1")}. Gross income includes cash benefits such as the State Pension. Measured against each group's own gross income, taxes took {num("etb.ret.taxshare.all", "pct")} for retired households and {num("etb.nonret.taxshare.all", "pct")} for non-retired households. Both measures matter: the cash gap reflects income and household size, and the share shows the tax paid relative to income.</p>"""
@@ -807,7 +807,7 @@ def households_short(facts, d, num):
     by_share = sorted(types, key=lambda t: facts[f"etb.t12.{t[0]}.taxshare"].value)
     lo, hi = by_share[0], by_share[-1]
     return f"""<h2 id="household-type">3. Retired people and other kinds of household</h2>
-<div class="answer"><p class="lede">Retired households (where retired people bring in at least half the income) paid less tax in cash ({num("etb.ret.alltax.all", "pounds")} a year, against {num("etb.nonret.alltax.all", "pounds")}), but also had less income ({num("etb.ret.gross.all", "pounds")} gross, against {num("etb.nonret.gross.all", "pounds")}). Taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
+<div class="answer"><p class="lede">Retired households (where retired people bring in more than half the income) paid less tax in cash ({num("etb.ret.alltax.all", "pounds")} a year, against {num("etb.nonret.alltax.all", "pounds")}), but also had less income ({num("etb.ret.gross.all", "pounds")} gross, against {num("etb.nonret.gross.all", "pounds")}). Taxes took {num("etb.ret.taxshare.all", "pct")} of their gross income, against {num("etb.nonret.taxshare.all", "pct")}.</p>
 <p>Across the {len(types)} kinds of household shown, adjusted for size, taxes took {num(f"etb.t12.{lo[0]}.taxshare", "pct0")} ({esc(lo[1].lower())}) to {num(f"etb.t12.{hi[0]}.taxshare", "pct0")} ({esc(hi[1].lower())}) of gross income.</p></div>
 {NOFOLD}<p class="more-link"><a href="{HOUSEHOLDS_PAGE}">Retired people and kinds of household</a>: the taxes each group pays, who counts as retired, families with and without children, and the full tables.</p>"""
 
@@ -820,6 +820,7 @@ def households_page(facts, d, num, sources):
         '<p class="small"><a href="who-pays.html">Who pays?</a></p>',
         "<h1>How much tax do retired people and different kinds of household pay?</h1>",
         '<p>From the Office for National Statistics survey used in section 2 of <a href="who-pays.html#households">who pays</a>: the taxes paid by the households people live in, including VAT and other taxes on spending.</p>',
+        '<p class="small">Household amounts are person-weighted averages over the people in each group, not personal bills or once-per-household totals.</p>',
         (
             f'<div class="answer"><p class="lede">In 2023/24, retired households paid about {num("etb.ret.alltax.all", "pounds")} a year in all taxes on average, '
             f'and non-retired households about {num("etb.nonret.alltax.all", "pounds")}. Measured against their own gross income, taxes took {num("etb.ret.taxshare.all", "pct")} '

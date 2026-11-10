@@ -474,6 +474,12 @@ Written from the findings and the readers' confusion notes only.
 5. Make the home cards answer first in plain words: the £1,360bn against £1,228bn "accounting entries" sentence, 36.7% against 36.2% before its explanation, and pay "about the same" beside a cash rise confused all three informal readers.
 6. Fix the smaller points: spending as a share of GDP "fell" from 2020-21 when it bottomed in 2021-22 and rose; VAT refunds inside "all other taxes"; "higher than in 10 of the other 16 years" for home ownership with ties; the home page's 2026 work and class-size figures against the year-by-year page's 2025 without a note; retired households "over half" (ONS: at least half); 2025 pay not flagged provisional; a who-pays note setting 2023-24 Income Tax beside 2025-26 totals; the holidays source record's "UK residents"; the judge's minor points (the household-tax ONS explanation collapsed, housing pages comparing only private renting with 2008-09, the 53.3% net-recipients caveat collapsed, the who-pays tiles putting the highest-income fifth first, the schools lead starting at 2008 not 2006); and the 22-screen glossary.
 
+**10 November 2026 source resolution, not a revised historical score:** the retained
+2023/24 ONS workbook, Notes B15 (note 12), explicitly says **more than 50%**.
+The older “at least half” definition above does not apply to this vintage.
+The current pages follow note 12, including the at-or-above-State-Pension-age
+boundary for people reporting sickness/injury and not seeking work.
+
 John's questions: J1.2 failed on reading the G7 spending chart; none is open.
 
 ### What these results cannot prove
