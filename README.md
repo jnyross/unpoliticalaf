@@ -65,10 +65,12 @@ test or serve the site locally. There is no `.env` file to create or copy, and
 the build does not load `.env` files. The site is static: it needs no database,
 backend service or Vercel account for local development.
 
-Install Python 3.10 or later (including `venv`) and Make, then run `make setup-test`
-and `make verify` from the repository root. Setup installs the pinned packages
-in `requirements-test.txt` into `.venv`; subsequent build, check and test commands use
-that interpreter without needing to activate it.
+Install Python 3.10 or later (including `venv`) and Make. Run `make setup-test`
+and `make verify` from the repository root for the standard build, source/page
+check and test run. Setup installs the pinned packages in `requirements-test.txt`
+into `.venv`; subsequent build, check and test commands use that interpreter
+without needing to activate it. For strict core typing, run
+`make setup-typing && make typecheck` (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 For autonomous work, run project installation, builds and tests only in
 credential-free Boat (`--no-env`) from a reviewed tracked/index export, never
